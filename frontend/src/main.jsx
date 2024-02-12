@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
+import App from '/src/App.jsx'
 import reset from 'styled-reset'
 import { createGlobalStyle } from 'styled-components'
 
