@@ -1,6 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from '/src/App.jsx'
+import { RouterProvider } from 'react-router-dom'
+
+import router from '/src/router.jsx'
+
 import reset from 'styled-reset'
 import { createGlobalStyle } from 'styled-components'
 
@@ -25,6 +28,6 @@ const GlobalStyle = createGlobalStyle`
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <GlobalStyle />
-        <App />
+        <RouterProvider router={router} />
     </React.StrictMode>,
 )
