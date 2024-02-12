@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 
-import router from '/src/router.jsx'
+import router from '@/router'
 
 import reset from 'styled-reset'
 import { createGlobalStyle } from 'styled-components'
