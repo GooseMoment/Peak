@@ -3,6 +3,7 @@ import {
 } from "react-router-dom"
 
 import RootLayout from "@containers/RootLayout"
+import Notifications from "@pages/Notifications"
 
 const router = createBrowserRouter([
     {
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "notifications",
-                element: <div>This is /notifications</div>,
+                element: <Notifications />,
             },
             {
                 path: "tasks/:id",
