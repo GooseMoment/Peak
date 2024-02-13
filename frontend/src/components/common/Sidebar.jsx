@@ -70,16 +70,32 @@ const items = [
 
 const ItemBox = styled.div`
 font-size: 1em;
-padding: 1em 0 0em 1.1em;
+padding: 0.5em 0 0.5em 0.5em;
+margin: 0.25em 0.5em;
+
+border-radius: 10px;
 
 & svg {
     margin-right: 0.25em;
 }
+
+background-color: inherit;
 `
 
 const SidebarLink = styled(NavLink)`
 text-decoration: none;
 color: inherit;
+
+transition: background-color 0.1s;
+transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+&.active {
+    background-color: #D9D9D9;
+}
+
+&:hover {
+    background-color: #FFC6C6;
+}
 `
 
 const mockProjects = [
@@ -90,8 +106,10 @@ const mockProjects = [
 ]
 
 const ProjectItemBox = styled.div`
-padding-top: 1em;
-padding-left: 2em;
+padding: 0.25em 0.5em;
+margin: 0.25em 1.5em;
+background-color: inherit;
+border-radius: 10px;
 
 & svg {
     stroke: none;
