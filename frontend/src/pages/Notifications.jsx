@@ -25,7 +25,7 @@ gap: 0.25em;
 
 background-color: #F3F3F3;
 border-radius: 60px;
-padding: 0.5em;
+padding: 0.3em;
 `
 
 const FilterButton = styled.button`
