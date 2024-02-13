@@ -5,14 +5,20 @@ import FeatherIcon from "feather-icons-react"
 
 const Footer = ({user}) => {
     return <FooterBox>
+
         {user ? (
-        <CurrentUserProfile>
+        <SidebarLink to="/users/@minyoy">
+            <CurrentUserProfile>
                 <img src={user.profile_img_link} />
                 <Username>{user.username}</Username>
-        </CurrentUserProfile>) : null }
+            </CurrentUserProfile>
+        </SidebarLink>
+        ) : null }
+
         <SidebarLink to="/settings/account">
             <FeatherIcon icon="settings" />
         </SidebarLink>
+
     </FooterBox>
 }
 
