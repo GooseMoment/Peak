@@ -1,15 +1,15 @@
 import { Link, useRouteError } from "react-router-dom"
 
-import RootLayout from "@/containers/RootLayout"
+import Layout from "@/containers/Layout"
 
 const ErrorPage = () => {
     const error = useRouteError();
 
-    return <RootLayout noSidebar={true}>
+    return <Layout noSidebar={true}>
         <h1>{error.status}: {error.statusText}</h1>
         <p>To GooseMoment Dev, if you encouter this error, please check <code>@/router.jsx</code>.</p>
         <Link to="/">Go to index</Link>
-    </RootLayout>
+    </Layout>
 }
 
 export default ErrorPage
