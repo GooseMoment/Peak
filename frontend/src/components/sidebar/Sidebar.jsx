@@ -5,11 +5,11 @@ import Footer from "./Footer"
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-const Sidebar = ({hide, setHide}) => {
+const Sidebar = ({collapsed, setCollapsed}) => {
 
-    return <SidebarBox hide={hide}>
+    return <SidebarBox $collapsed={collapsed}>
                 <div>LOGO HERE</div>
-                <button onClick={() => setHide(previous => !previous)}>
+                <button onClick={() => setCollapsed(previous => !previous)}>
                 <FeatherIcon dominantBaseline="central" icon="chevrons-left" />
             </button>
         <Middle projects={mockProjects} />
@@ -24,8 +24,8 @@ flex-direction: column;
 justify-content: space-between;
 
 background-color: #F9F7F6;
-flex-basis: ${props => props.hide ? "0rem" : "18rem"};
-transform: ${props => props.hide ? "translateX(-0%)" : "none"};
+flex-basis: ${props => props.$collapsed ? "0rem" : "18rem"};
+transform: ${props => props.$collapsed ? "translateX(-0%)" : "none"};
 flex-grow: 1;
 
 transition: transform 1s, flex-basis 1s;
