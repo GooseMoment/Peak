@@ -1,19 +1,14 @@
-import SidebarLink from "./SidebarLink"
+import Header from "./Header"
 import Middle from "./Middle"
 import Footer from "./Footer"
 
 import styled from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
 const Sidebar = ({collapsed, setCollapsed}) => {
 
     return <SidebarBox $collapsed={collapsed}>
-                <div>LOGO HERE</div>
-                <button onClick={() => setCollapsed(previous => !previous)}>
-                <FeatherIcon dominantBaseline="central" icon="chevrons-left" />
-            </button>
+        <Header collapsed={collapsed} setCollapsed={setCollapsed} />
         <Middle projects={mockProjects} />
-
         <Footer user={mockUser} />
     </SidebarBox>
 }
