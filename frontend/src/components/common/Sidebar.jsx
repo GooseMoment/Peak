@@ -44,8 +44,8 @@ const items = [
 ]
 
 const ItemBox = styled.div`
-font-size: 24px;
-margin: 2em 0 1em 1em;
+font-size: 1em;
+margin: 2em 0 1em 1.1em;
 
 & svg {
     position: relative;
