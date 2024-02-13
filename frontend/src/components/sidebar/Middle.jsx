@@ -4,7 +4,7 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 const Middle = ({projects}) => {
-    return <div>
+    return <MiddleBox>
          {items.map(item => <SidebarLink to={item.to}>
             <ItemBox key={item.name}>   
                 <FeatherIcon icon={item.icon} />
@@ -18,7 +18,7 @@ const Middle = ({projects}) => {
                 {project.name}
             </ProjectItemBox>
         </SidebarLink>)}
-    </div>
+    </MiddleBox>
 }
 
 const items = [
@@ -28,6 +28,10 @@ const items = [
     {icon: "users", name: "Social", to: "/social"},
     {icon: "archive", name: "Projects", to: "/projects"},
 ]
+
+const MiddleBox = styled.div`
+flex-grow: 99;
+`
 
 const ItemBox = styled.div`
 font-size: 1em;
