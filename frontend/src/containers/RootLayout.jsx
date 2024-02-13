@@ -13,6 +13,7 @@ const RootLayout = ({noSidebar, children}) => {
         { noSidebar ? null : <Sidebar hide={hideSidebar} setHide={setHideSidebar} />}
         <Content $hideSidebar={hideSidebar}>
             <Outlet />
+            {children}
         </Content>
     </App>
     )
