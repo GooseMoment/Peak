@@ -1,18 +1,17 @@
 import { useState } from "react"
-import { Outlet } from "react-router-dom"
 
 import Sidebar from "@components/common/Sidebar"
 
 import styled from "styled-components"
 
-const RootLayout = ({noSidebar, children}) => {
+const Layout = ({noSidebar, children}) => {
     let [hideSidebar, setHideSidebar] = useState(false)
     
     return (
     <App>
         { noSidebar ? null : <Sidebar hide={hideSidebar} setHide={setHideSidebar} />}
         <Content $hideSidebar={hideSidebar}>
-            <Outlet />
+            {children}
         </Content>
     </App>
     )
@@ -35,4 +34,4 @@ transition-timing-function: cubic-bezier(.86,0,.07,1);
 
 // Reference: https://every-layout.dev/layouts/sidebar
 
-export default RootLayout
+export default Layout
