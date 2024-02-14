@@ -7,7 +7,7 @@ const Footer = ({user}) => {
     return <FooterBox>
 
         {user ? (
-        <SidebarLink to="/users/@minyoy">
+        <SidebarLink to="/users/@minyoy" draggable="false">
             <CurrentUserProfile>
                 <img src={user.profile_img_link} />
                 <Username>{user.username}</Username>
@@ -15,7 +15,7 @@ const Footer = ({user}) => {
         </SidebarLink>
         ) : null }
 
-        <SidebarLink to="/settings/account">
+        <SidebarLink to="/settings/account" draggable="false">
             <FeatherIcon icon="settings" />
         </SidebarLink>
 

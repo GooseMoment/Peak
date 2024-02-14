@@ -29,6 +29,13 @@ transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 & button {
     float: right;
 }
+
+& * {
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
 `
 
 const mockUser = {
