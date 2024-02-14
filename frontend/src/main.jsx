@@ -8,21 +8,31 @@ import reset from 'styled-reset'
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
-    ${reset}
+${reset}
 
-    html {
-        height: 100vh;
-        width: 100vw;
-    }
-    
-    #root {
-        background-color: #FEFDFC;
-        height: 100%;
-    }
+html {
+    height: 100vh;
+    width: 100vw;
+}
 
-    body, textarea {
-        font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif !important;
-    }
+#root {
+    background-color: #FEFDFC;
+    height: 100%;
+}
+
+body, textarea {
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif !important;
+}
+
+.feather {
+    position: relative;
+    top: .13em;
+    width: 1em;
+    height: 1em;
+    margin-right: .5em;
+    display: inline-block;
+    vertical-align: auto;
+}
 `
 
 ReactDOM.createRoot(document.getElementById('root')).render(
