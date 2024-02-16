@@ -56,7 +56,7 @@ class Task(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField()
     privacy = models.CharField()
-    is_completed = models.BooleanField()
+    completed_at = models.DateTimeField()
     drawer = models.ForeignKey(
         Drawer,
         on_delete=models.CASCADE,
@@ -132,6 +132,11 @@ class Comment(models.Model):
 
 class UserSetting(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    follow_request_approval_manually = models.BooleanField(default=False)
     # TODO: 만들고 추가하세요 구영서씨
 
 class Following(models.Model):
