@@ -16,11 +16,43 @@ const getProject = (id) => {
 
 }
 
+const postProject = (project) => {
+
+}
+
+const patchProject = (id, project) => {
+
+}
+
+const deleteProject = (id) => {
+
+}
+
+const getDrawersByProject = (project_id) => {
+
+}
+
+const getDrawer = (id) => {
+
+}
+
+const postDrawer = (drawer) => {
+
+}
+
+const patchDrawer = (id, drawer) => {
+
+}
+
+const deleteDrawer = (id) => {
+
+}
+
 const getTasksByDrawer = (drawerID) => {
 
 }
 
-const getTask = (id) => {
+const getTask = (id, isReactionIncluded) => {
 
 }
 
@@ -36,11 +68,13 @@ const deleteTask = (id) => {
 
 }
 
-// TODO: complete task
+const completeTask = (id) => {
+
+}
 
 // Notifications
 
-const getNotifications = (userID, limit) => {
+const getNotifications = (userID, fromID) => {
 
 }
 
@@ -72,7 +106,11 @@ const deleteFollowRequest = (userID) => {
 
 }
 
-const getProfile = (userID) => {
+const getUserByID = (userID) => {
+
+}
+
+const getUserByUsername = (username) => {
 
 }
 
@@ -93,10 +131,6 @@ const postBlock = (userID) => {
 }
 
 const deleteBlock = (userID) => {
-
-}
-
-const patchFollower = (userID) => {
 
 }
 
@@ -128,7 +162,7 @@ const postCommentToTask = (taskID, comment) => {
 
 }
 
-const postCommentToDailyComment = (dailyCommentID, comment) => {
+const postCommentToDailyComment = (date, comment) => {
 
 }
 
@@ -145,3 +179,5 @@ const patchUser = (user) => {
 const getSettings = (userID) => {
 
 }
+
+// TODO: search 
