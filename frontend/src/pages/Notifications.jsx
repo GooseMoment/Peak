@@ -62,7 +62,7 @@ const mockNotifications = [
         },
         emoji: "🥳", // Real character or just code (e.g. :celebration:) for system emojis?
     }},
-    {type: "reaction_set", notifiedAt: new Date(2024, 2, 14, 10, 33, 41), isRead: true, payload: {
+    {type: "reaction_group", notifiedAt: new Date(2024, 2, 14, 10, 33, 41), isRead: true, payload: {
         user: {
             username: "minyoy", profileImgURI: "https://avatars.githubusercontent.com/u/65756020?v=4"
         },
@@ -121,18 +121,5 @@ const mockNotifications = [
         than: "last week",
     }},
 ]
-
-const notificationToNotiDisplay = (notification) => {
-    let notiDisplay = {
-        icon: null,
-        title: "",
-        detail: "",
-        ago: "",
-    }
-
-    // TODO
-
-    return notiDisplay
-}
 
 export default Notifications

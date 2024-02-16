@@ -17,6 +17,34 @@ const Box = ({notification}) => {
     </BoxFrame>
 }
 
+const purifyNotificationForDisplay = (notification) => {
+    let purified = {
+        icon: null,
+        title: "",
+        detail: "",
+        ago: "",
+    }
+
+    if (notification.type in ["reaction", "reaction_group", "follow", "follow_request", "follow_request_accepted", "peaked"]) {
+        purified.title = "@" + notification.payload.user.username
+        purified.icon = <BoxIcon><img src={notification.payload.user.profileImgURI} /></BoxIcon>
+    }
+
+    if (notification.type === "reaction") {
+        purified.icon = <BoxIcon smallIcon={}></BoxIcon>
+    }
+    
+    if (notification.type === "task") {
+        purified.title = `Time to "${notification.payload.name}"`
+    }
+
+    if (notification.type === "trending_up") {
+        purified.title = `More than ${notification.payload.than}`
+    }
+
+    return purified
+}
+
 const BoxFrame = styled.article`
 display: flex;
 gap: 1em;
