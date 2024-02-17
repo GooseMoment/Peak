@@ -35,8 +35,8 @@ flex-grow: 99;
 
 const ItemBox = styled.div`
 font-size: 1em;
-padding: 0.5em 0 0.5em 0.5em;
-margin: 0.25em 0.5em;
+padding: 0.75em 0 0.75em 0.5em;
+margin: 0 0.75em;
 
 border-radius: 10px;
 
