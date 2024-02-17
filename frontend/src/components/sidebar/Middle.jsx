@@ -48,8 +48,8 @@ background-color: inherit;
 `
 
 const ProjectItemBox = styled.div`
-padding: 0.25em 0.5em;
-margin: 0.25em 1.5em;
+padding: 0.5em 0.5em;
+margin: 0 1.5em;
 background-color: inherit;
 border-radius: 10px;
 
