@@ -1,3 +1,9 @@
-from django.shortcuts import render
+def get_notifications(request, user_id, limit):
+    pass
 
-# Create your views here.
+def get_notification(request, id):
+    pass
+
+def delete_notification(request, id):
+    pass
+

@@ -1,3 +1,5 @@
-from django.shortcuts import render
+def get_projects_list(request, user_id):
+    pass
 
-# Create your views here.
+def get_project(request, id):
+    pass
