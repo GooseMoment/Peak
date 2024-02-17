@@ -48,7 +48,7 @@ export const getExploreFeed = (userID) => {
 
 }
 
-const getEmojis = () => {
+export const getEmojis = () => {
 
 }
 
@@ -60,14 +60,14 @@ export const deleteReaction = (taskID) => {
 
 }
 
-const postCommentToTask = (taskID, comment) => {
+export const postCommentToTask = (taskID, comment) => {
 
 }
 
-const postCommentToDailyComment = (date, comment) => {
+export const postCommentToDailyComment = (date, comment) => {
 
 }
 
-const postPeck = (taskID) => {
+export const postPeck = (taskID) => {
 
 }
