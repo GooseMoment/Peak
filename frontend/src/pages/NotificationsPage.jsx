@@ -2,7 +2,7 @@ import Box from "@components/notifications/Box"
 
 import styled from "styled-components"
 
-const Notifications = () => {
+const NotificationsPage = () => {
     return <>
     <PageTitle>Notifications</PageTitle>
     <FilterGroup>
@@ -122,4 +122,4 @@ const mockNotifications = [
     }},
 ]
 
-export default Notifications
+export default NotificationsPage

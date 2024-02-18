@@ -6,7 +6,7 @@ import {
 import Layout from "@containers/Layout"
 
 import ErrorPage from "@pages/ErrorPage"
-import Notifications from "@pages/Notifications"
+import NotificationsPage from "@pages/NotificationsPage"
 
 const router = createBrowserRouter([
     {
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "notifications",
-                element: <Notifications />,
+                element: <NotificationsPage />,
             },
             {
                 path: "tasks/:id",
