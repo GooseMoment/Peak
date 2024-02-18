@@ -4,7 +4,9 @@ import {
 } from "react-router-dom"
 
 import Layout from "@containers/Layout"
+
 import ErrorPage from "@pages/ErrorPage"
+import Notifications from "@pages/Notifications"
 
 const router = createBrowserRouter([
     {
