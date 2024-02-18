@@ -23,7 +23,7 @@ const Box = ({notification}) => {
 
 const purifyNotificationForDisplay = (notification) => {
     const socialTypesSmallIcon = {
-        "reaction": notification.payload.emoji || null,
+        "reaction": notification.payload.emoji ? <BoxIconSmallEmoji>{notification.payload.emoji}</BoxIconSmallEmoji> : null,
         "reaction_group": null,
         "follow": <FeatherIcon icon="plus-circle" />,
         "follow_request": <FeatherIcon icon="send" />, 
@@ -124,6 +124,7 @@ height: 3em;
 
 & svg {
     stroke: 2em;
+    margin-right: 0;
 }
 
 & img, & svg {
@@ -153,9 +154,16 @@ height: 1.25em;
 }
 
 & svg {
+    transform: translateX(20%);
     width: 80%;
     height: 80%;
 }
+`
+
+const BoxIconSmallEmoji = styled.p`
+transform: translate(20%, 20%);
+width: 80%;
+height: 80%;
 `
 
 const BoxTexts = styled.div`
