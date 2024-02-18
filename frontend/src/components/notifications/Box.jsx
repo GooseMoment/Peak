@@ -14,10 +14,10 @@ const Box = ({notification}) => {
             <BoxTitle>{purified.title}</BoxTitle>
             <BoxDetail>{purified.detail}</BoxDetail>
         </BoxTexts>
-        <div>
-            <BoxAgo>{purified.ago}</BoxAgo>
+        <BoxAgoAndMore>
+            <BoxAgo dateTime={notification.notifiedAt.toISOString()}>{purified.ago}</BoxAgo>
             <FeatherIcon icon="more-horizontal" />
-        </div>
+        </BoxAgoAndMore>
     </BoxFrame>
 }
 
@@ -101,7 +101,7 @@ display: flex;
 gap: 1em;
 
 border-bottom: 1px solid black;
-padding: 1.5em 2em;
+padding: 2em 2em;
 `
 
 const BoxIcon = ({children, smallIcon}) => {
@@ -184,8 +184,14 @@ font-size: 1em;
 font-weight: 400;
 `
 
-const BoxAgo = styled.time`
-font-size: 0.5em;
+const BoxAgoAndMore = styled.div`
+display: flex;
+gap: 0.5em;
+
+font-size: 0.75em;
+color: grey;
 `
+
+const BoxAgo = styled.time``
 
 export default Box
