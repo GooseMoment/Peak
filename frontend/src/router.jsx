@@ -1,14 +1,18 @@
 import {
+    Outlet,
     createBrowserRouter
 } from "react-router-dom"
 
-import RootLayout from "@containers/RootLayout"
-import Notifications from "@pages/Notifications"
+import Layout from "@containers/Layout"
+import ErrorPage from "@pages/ErrorPage"
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <RootLayout />,
+        element: <Layout>
+            <Outlet />
+        </Layout>,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: "/",
