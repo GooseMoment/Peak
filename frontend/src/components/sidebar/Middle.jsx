@@ -5,14 +5,14 @@ import FeatherIcon from "feather-icons-react"
 
 const Middle = ({projects}) => {
     return <MiddleBox>
-         {items.map(item => <SidebarLink to={item.to} draggable="false">
+         {items.map(item => <SidebarLink to={item.to} draggable="false" key={item.to}>
             <ItemBox key={item.name}>   
                 <FeatherIcon icon={item.icon} />
                 {item.name} 
             </ItemBox>
         </SidebarLink>)}
 
-        {projects && projects.map(project => <SidebarLink to={project.to} draggable="false">
+        {projects && projects.map(project => <SidebarLink to={project.to} draggable="false" key={project.to}>
             <ProjectItemBox>
                 <FeatherIcon icon="circle" fill={project.color} />
                 {project.name}
