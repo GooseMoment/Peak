@@ -1,45 +1,96 @@
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
+import { DateTime } from "luxon"
 
 const Box = ({notification}) => {
+
+    const purified = purifyNotificationForDisplay(notification)
+
     return <BoxFrame>
-        <BoxIcon smallIcon="🥳">
-            <img src="https://avatars.githubusercontent.com/u/65756020?v=4" />
+        <BoxIcon smallIcon={purified.smallIcon}>
+            {purified.icon}
         </BoxIcon>
         <BoxTexts>
-            <BoxTitle>@minyoy</BoxTitle>
-            <BoxDetail>18:00 | memo here</BoxDetail>
+            <BoxTitle>{purified.title}</BoxTitle>
+            <BoxDetail>{purified.detail}</BoxDetail>
         </BoxTexts>
         <div>
-            <BoxAgo>3 minutes ago</BoxAgo>
+            <BoxAgo>{purified.ago}</BoxAgo>
             <FeatherIcon icon="more-horizontal" />
         </div>
     </BoxFrame>
 }
 
 const purifyNotificationForDisplay = (notification) => {
+    const socialTypesSmallIcon = {
+        "reaction": notification.payload.emoji || null,
+        "reaction_group": null,
+        "follow": <FeatherIcon icon="plus-circle" />,
+        "follow_request": <FeatherIcon icon="send" />, 
+        "follow_request_accepted": <FeatherIcon icon="check-circle" />, 
+        "pecked": <FeatherIcon icon="help-circle" />, // TODO: replace to pecked icon 
+    }
+
     let purified = {
-        icon: null,
         title: "",
+        icon: null,
+        smallIcon: null,
         detail: "",
         ago: "",
     }
 
-    if (notification.type in ["reaction", "reaction_group", "follow", "follow_request", "follow_request_accepted", "peaked"]) {
+    purified.ago = DateTime.fromJSDate(notification.notifiedAt).setLocale("en").toRelative()
+
+    console.log(Object.keys(socialTypesSmallIcon))
+
+    if (notification.type in socialTypesSmallIcon) {
         purified.title = "@" + notification.payload.user.username
-        purified.icon = <BoxIcon><img src={notification.payload.user.profileImgURI} /></BoxIcon>
+        purified.icon = <img src={notification.payload.user.profileImgURI} />
+        purified.smallIcon = socialTypesSmallIcon[notification.type]
     }
 
     if (notification.type === "reaction") {
-        purified.icon = <BoxIcon smallIcon={}></BoxIcon>
-    }
-    
-    if (notification.type === "task") {
-        purified.title = `Time to "${notification.payload.name}"`
+        purified.detail = `reacted to ${notification.payload.task.name}`
     }
 
-    if (notification.type === "trending_up") {
-        purified.title = `More than ${notification.payload.than}`
+    else if (notification.type === "reaction_group") {
+        purified.detail = "reacted to " + notification.payload.taskEmojiPairs.
+            map(pair => pair.emoji + ' "' + pair.task.name + '"').join(', ')
+    }
+
+    else if (notification.type === "follow") {
+        purified.detail = "followed you"
+    }
+
+    else if (notification.type === "follow_request") {
+        purified.detail = "sent follow request"
+    }
+
+    else if (notification.type === "follow_request_accepted") {
+        purified.detail = "accepted follow request"
+    }
+
+    else if (notification.type === "pecked") {
+        purified.detail = "pecked you"
+    }
+    
+    else if (notification.type === "task") {
+        purified.title = `Time to "${notification.payload.name}"`
+        purified.icon = <FeatherIcon icon="clock" />
+        purified.detail = "Due to " + DateTime.fromJSDate(notification.payload.due).setLocale("en").toRelative() +
+            " | " + notification.payload.memo
+    }
+
+    else if (notification.type === "trending_up") {
+        purified.title = "More than " + notification.payload.than
+        purified.icon = <FeatherIcon icon="trending-up" />
+        purified.detail = notification.payload.figure + " more completion ratio? Keep it up!"
+    }
+
+    else if (notification.type === "trending_down") {
+        purified.title = "Less than " + notification.payload.than
+        purified.icon = <FeatherIcon icon="trending-down" />
+        purified.detail = "Too much tasks? Cheer up!"
     }
 
     return purified
@@ -99,6 +150,11 @@ height: 1.25em;
 
 & span {
     vertical-align: -0.25em;
+}
+
+& svg {
+    width: 80%;
+    height: 80%;
 }
 `
 

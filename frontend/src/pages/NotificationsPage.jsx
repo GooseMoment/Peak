@@ -12,7 +12,7 @@ const NotificationsPage = () => {
         <FilterButton>Follow</FilterButton>
     </FilterGroup>
 
-    {mockNotifications.map(notification => <Box notification={notification} />)}
+    {mockNotifications.map(notification => <Box key={notification.type} notification={notification} />)}
     </>
 }
 
@@ -51,7 +51,7 @@ filter: ${props => props.$active ? "drop-shadow(2px 2px 3px #00000041)" : "none"
 
 const mockNotifications = [
     {type: "task", notifiedAt: new Date(), isRead: false, payload: { // payload: task
-        id: "QWERTY", name: "설거지 하기", due: new Date(2024, 2, 14, 18, 0, 0), projectID: "홍대라이프", memo: "여기에 메모 입력", prority: 3
+        id: "QWERTY", name: "설거지 하기", due: new Date(2024, 3, 3), projectID: "홍대라이프", memo: "여기에 메모 입력", prority: 3
     }},
     {type: "reaction", notifiedAt: new Date(2024, 2, 14, 14, 11, 13), isRead: false, payload: {
         user: {
@@ -99,12 +99,12 @@ const mockNotifications = [
         },
         accepted: null,
     }},
-    {type: "follow_request_accpeted", notifiedAt: new Date(2024, 2, 14, 7, 11, 13), isRead: true, payload: {
+    {type: "follow_request_accepted", notifiedAt: new Date(2024, 2, 14, 7, 11, 13), isRead: true, payload: {
         user: {
             username: "aksae", profileImgURI: "https://avatars.githubusercontent.com/u/39623851?v=4"
         },
     }},
-    {type: "peaked", notifiedAt: new Date(2024, 2, 14, 1, 11, 13), isRead: false, payload: {
+    {type: "pecked", notifiedAt: new Date(2024, 2, 14, 1, 11, 13), isRead: false, payload: {
         user: {
             username: "minyoy", profileImgURI: "https://avatars.githubusercontent.com/u/65756020?v=4"
         },
