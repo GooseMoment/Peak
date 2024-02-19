@@ -1,35 +1,40 @@
 import SidebarLink from "./SidebarLink"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-const Footer = ({user}) => {
-    return <FooterBox>
+const Footer = ({user, collapsed}) => {
+    return <FooterBox $collapsed={collapsed}>
 
         {user ? (
         <SidebarLink to="/users/@minyoy" draggable="false">
             <CurrentUserProfile>
                 <img src={user.profile_img_link} />
-                <Username>{user.username}</Username>
+                {collapsed ? null : <Username>{user.username}</Username>}
             </CurrentUserProfile>
         </SidebarLink>
         ) : null }
 
+        {collapsed ? null :
         <SidebarLink to="/settings/account" draggable="false">
             <SettingIconContainer>
                 <FeatherIcon icon="settings" />
             </SettingIconContainer>
-        </SidebarLink>
+        </SidebarLink> }
 
     </FooterBox>
 }
 
 const FooterBox = styled.footer`
 display: flex;
-flex-direction: row;
+flex-direction: ${props => props.collapsed ? "column" : "row"};
 justify-content: space-between;
 
 margin: 1em;
+
+${({$collapsed}) => $collapsed ? css`
+    margin: 0.75em;
+` : null}
 `
 
 const CurrentUserProfile = styled.div`

@@ -8,8 +8,8 @@ const Sidebar = ({collapsed, setCollapsed}) => {
 
     return <SidebarBox $collapsed={collapsed}>
         <Header collapsed={collapsed} setCollapsed={setCollapsed} />
-        <Middle projects={mockProjects} />
-        <Footer user={mockUser} />
+        <Middle collapsed={collapsed} projects={mockProjects} />
+        <Footer collapsed={collapsed} user={mockUser} />
     </SidebarBox>
 }
 
@@ -23,7 +23,7 @@ flex-basis: ${props => props.$collapsed ? "0rem" : "18rem"};
 transform: ${props => props.$collapsed ? "translateX(-0%)" : "none"};
 flex-grow: 1;
 
-transition: transform 1s, flex-basis 1s;
+transition: transform 0.5s, flex-basis 0.5s;
 transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 
 & button {

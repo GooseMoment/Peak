@@ -6,7 +6,7 @@ const Header = ({collapsed, setCollapsed}) => {
         <button onClick={() => setCollapsed(previous => !previous)}>
             <FeatherIcon icon={collapsed ? "chevrons-right" : "chevrons-left"} />
         </button>
-        <LogoSkelton />
+        {collapsed ? null : <LogoSkelton />}
     </div>
 }
 
