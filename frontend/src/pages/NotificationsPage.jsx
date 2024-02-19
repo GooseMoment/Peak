@@ -1,16 +1,17 @@
+import { useState } from "react"
+
+import FilterButtonGroup from "@components/notifications/FilterButtonGroup"
 import Box from "@components/notifications/Box"
 
 import styled from "styled-components"
 
+
 const NotificationsPage = () => {
+    const [activeFilter, setActiveFilter] = useState("all")
+
     return <>
     <PageTitle>Notifications</PageTitle>
-    <FilterGroup>
-        <FilterButton>All</FilterButton>
-        <FilterButton>Tasks</FilterButton>
-        <FilterButton $active>Reactions</FilterButton>
-        <FilterButton>Follow</FilterButton>
-    </FilterGroup>
+    <FilterButtonGroup filters={filters} active={activeFilter} setActive={setActiveFilter} />
 
     {mockNotifications.map(notification => <Box key={notification.type} notification={notification} />)}
     </>
@@ -22,32 +23,20 @@ font-weight: bold;
 margin-bottom: 0.5em;
 `
 
-const FilterGroup = styled.div`
-display: inline-flex;
-justify-content: space-between;
-gap: 0.25em;
-
-background-color: #F3F3F3;
-border-radius: 60px;
-padding: 0.3em;
-`
-
-const FilterButton = styled.button`
-flex: 1 1 auto;
-
-color: inherit;
-border: none;
-font: inherit;
-outline: inherit;
-
-font-size: 0.9rem;
-font-weight: 500;
-border-radius: 50px;
-padding: 0.5rem 0.75rem;
-
-background-color: ${props => props.$active ? "white" : "inherit"};
-filter: ${props => props.$active ? "drop-shadow(2px 2px 3px #00000041)" : "none"};
-`
+const filters = {
+    "all": {
+        display: "All", types: ["task", "reaction", "reaction_group", "follow", "follow_request", "follow_request_accepted", "pecked", "trending_up", "trending_down"]
+    },
+    "tasks": {
+        display: "Tasks", types: ["task"]
+    },
+    "reactions": {
+        display: "Reactions", types: ["reaction", "reaction_group"]
+    },
+    "follow": {
+        display: "Follow", types: ["follow", "follow_request", "follow_request_accepted"]
+    }
+}
 
 const mockNotifications = [
     {type: "task", notifiedAt: new Date(), isRead: false, payload: { // payload: task
