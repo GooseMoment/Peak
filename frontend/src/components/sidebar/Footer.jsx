@@ -16,7 +16,9 @@ const Footer = ({user}) => {
         ) : null }
 
         <SidebarLink to="/settings/account" draggable="false">
-            <FeatherIcon icon="settings" />
+            <SettingIconContainer>
+                <FeatherIcon icon="settings" />
+            </SettingIconContainer>
         </SidebarLink>
 
     </FooterBox>
@@ -36,6 +38,10 @@ flex-direction: row;
 align-items: center;
 gap: 0.5em;
 
+padding: 0.5em;
+background-color: inherit;
+border-radius: 10px;
+
 & img {
     border-radius: 50%;
     width: auto;
@@ -45,6 +51,23 @@ gap: 0.5em;
 
 const Username = styled.span`
 font-weight: 500;
+`
+
+const SettingIconContainer = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+
+padding: 0.5em;
+margin: 0.35em;
+
+width: auto;
+
+& svg {
+    margin-right: 0;
+    width: auto;
+    height: 1.25em;
+}
 `
 
 export default Footer

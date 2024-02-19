@@ -40,10 +40,6 @@ margin: 0 0.75em;
 
 border-radius: 10px;
 
-& svg {
-    margin-right: 0.25em;
-}
-
 background-color: inherit;
 `
 
