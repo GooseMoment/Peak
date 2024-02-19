@@ -26,10 +26,6 @@ flex-grow: 1;
 transition: transform 0.5s, flex-basis 0.5s;
 transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 
-& button {
-    float: right;
-}
-
 & * {
     user-select: none;
     -ms-user-select: none;

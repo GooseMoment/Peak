@@ -5,7 +5,7 @@ import FeatherIcon from "feather-icons-react"
 
 const Middle = ({projects, collapsed}) => {
     return <MiddleBox>
-         {items.map(item => <SidebarLink to={item.to} draggable="false" key={item.to}>
+         {items.map(item => <SidebarLink to={item.to} draggable="false" key={item.to} end>
             <ItemBox $collapsed={collapsed} key={item.name}>   
                 <FeatherIcon icon={item.icon} />
                 {collapsed ? null : item.name}
