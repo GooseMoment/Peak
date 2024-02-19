@@ -4,7 +4,9 @@ import {
 } from "react-router-dom"
 
 import Layout from "@containers/Layout"
+
 import ErrorPage from "@pages/ErrorPage"
+import NotificationsPage from "@pages/NotificationsPage"
 
 const router = createBrowserRouter([
     {
@@ -24,7 +26,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "notifications",
-                element: <div>This is /notifications</div>,
+                element: <NotificationsPage />,
             },
             {
                 path: "tasks/:id",
