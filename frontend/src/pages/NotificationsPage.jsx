@@ -13,7 +13,9 @@ const NotificationsPage = () => {
     <PageTitle>Notifications</PageTitle>
     <FilterButtonGroup filters={filters} active={activeFilter} setActive={setActiveFilter} />
 
-    {mockNotifications.map(notification => <Box key={notification.type} notification={notification} />)}
+    {mockNotifications.map(notification => 
+        (filters[activeFilter].types.includes(notification.type) ? <Box key={notification.type} notification={notification} /> : null)
+    )}
     </>
 }
 
