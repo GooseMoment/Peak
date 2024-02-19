@@ -1,21 +1,21 @@
 import SidebarLink from "@components/sidebar/SidebarLink"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-const Middle = ({projects}) => {
+const Middle = ({projects, collapsed}) => {
     return <MiddleBox>
-         {items.map(item => <SidebarLink to={item.to} draggable="false">
-            <ItemBox key={item.name}>   
+         {items.map(item => <SidebarLink to={item.to} draggable="false" key={item.to} end>
+            <ItemBox $collapsed={collapsed} key={item.name}>   
                 <FeatherIcon icon={item.icon} />
-                {item.name} 
+                {collapsed ? null : item.name}
             </ItemBox>
         </SidebarLink>)}
 
-        {projects && projects.map(project => <SidebarLink to={project.to} draggable="false">
-            <ProjectItemBox>
+        {projects && projects.map(project => <SidebarLink to={project.to} draggable="false" key={project.to}>
+            <ProjectItemBox $collapsed={collapsed}>
                 <FeatherIcon icon="circle" fill={project.color} />
-                {project.name}
+                {collapsed ? null : project.name}
             </ProjectItemBox>
         </SidebarLink>)}
     </MiddleBox>
@@ -35,28 +35,43 @@ flex-grow: 99;
 
 const ItemBox = styled.div`
 font-size: 1em;
-padding: 0.5em 0 0.5em 0.5em;
-margin: 0.25em 0.5em;
+padding: 0.75em 0 0.75em 0.5em;
+margin: 0 0.75em;
 
 border-radius: 10px;
 
-& svg {
-    margin-right: 0.25em;
-}
-
 background-color: inherit;
+
+${({$collapsed}) => $collapsed ? css`
+    text-align: center;
+    padding: 0.5em 0.25em;
+    margin: 0 1em;
+
+    & svg {
+        margin-right: 0;
+    }
+` : null}
 `
 
 const ProjectItemBox = styled.div`
-padding: 0.25em 0.5em;
-margin: 0.25em 1.5em;
+padding: 0.5em 0.5em;
+margin: 0 1.5em;
 background-color: inherit;
 border-radius: 10px;
 
 & svg {
     stroke: none;
-    margin-right: 0.25em;
 }
+
+${({$collapsed}) => $collapsed ? css`
+    text-align: center;
+    padding: 0.5em 0.25em;
+    margin: 0 1em;
+
+    & svg {
+        margin-right: 0;
+    }
+` : null}
 `
 
 export default Middle;
