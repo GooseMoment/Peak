@@ -6,24 +6,24 @@ const Box = ({notification}) => {
 
     const purified = purifyNotificationForDisplay(notification)
 
-    return <BoxFrame>
-        <BoxIcon smallIcon={purified.smallIcon}>
+    return <Frame>
+        <Icon smallIcon={purified.smallIcon}>
             {purified.icon}
-        </BoxIcon>
-        <BoxTexts>
-            <BoxTitle>{purified.title}</BoxTitle>
-            <BoxDetail>{purified.detail}</BoxDetail>
-        </BoxTexts>
-        <BoxAgoAndMore>
-            <BoxAgo dateTime={notification.notifiedAt.toISOString()}>{purified.ago}</BoxAgo>
+        </Icon>
+        <Texts>
+            <TextsTitle>{purified.title}</TextsTitle>
+            <TextsDetail>{purified.detail}</TextsDetail>
+        </Texts>
+        <AgoAndMore>
+            <Ago dateTime={notification.notifiedAt.toISOString()}>{purified.ago}</Ago>
             <FeatherIcon icon="more-horizontal" />
-        </BoxAgoAndMore>
-    </BoxFrame>
+        </AgoAndMore>
+    </Frame>
 }
 
 const purifyNotificationForDisplay = (notification) => {
     const socialTypesSmallIcon = {
-        "reaction": notification.payload.emoji ? <BoxIconSmallEmoji>{notification.payload.emoji}</BoxIconSmallEmoji> : null,
+        "reaction": notification.payload.emoji ? <IconSmallEmoji>{notification.payload.emoji}</IconSmallEmoji> : null,
         "reaction_group": null,
         "follow": <FeatherIcon icon="plus-circle" />,
         "follow_request": <FeatherIcon icon="send" />, 
@@ -40,8 +40,6 @@ const purifyNotificationForDisplay = (notification) => {
     }
 
     purified.ago = DateTime.fromJSDate(notification.notifiedAt).setLocale("en").toRelative()
-
-    console.log(Object.keys(socialTypesSmallIcon))
 
     if (notification.type in socialTypesSmallIcon) {
         purified.title = "@" + notification.payload.user.username
@@ -96,7 +94,7 @@ const purifyNotificationForDisplay = (notification) => {
     return purified
 }
 
-const BoxFrame = styled.article`
+const Frame = styled.article`
 display: flex;
 gap: 1em;
 
@@ -104,16 +102,16 @@ border-bottom: 1px solid black;
 padding: 2em 2em;
 `
 
-const BoxIcon = ({children, smallIcon}) => {
-    return <BoxIconFrame>
+const Icon = ({children, smallIcon}) => {
+    return <IconFrame>
         {children}
-        {smallIcon ? <BoxIconSmall>
+        {smallIcon ? <IconSmall>
             <span>{smallIcon}</span>
-        </BoxIconSmall> : null}
-    </BoxIconFrame>
+        </IconSmall> : null}
+    </IconFrame>
 }
 
-const BoxIconFrame = styled.div`
+const IconFrame = styled.div`
 position: relative;
 width: auto;
 height: 3em;
@@ -133,7 +131,7 @@ height: 3em;
 }
 `
 
-const BoxIconSmall = styled.div`
+const IconSmall = styled.div`
 display: flex;
 justify-content: center;
 align-items: center;
@@ -160,13 +158,13 @@ height: 1.25em;
 }
 `
 
-const BoxIconSmallEmoji = styled.p`
+const IconSmallEmoji = styled.p`
 transform: translate(20%, 20%);
 width: 80%;
 height: 80%;
 `
 
-const BoxTexts = styled.div`
+const Texts = styled.div`
 flex-grow: 999;
 display: flex;
 flex-direction: column;
@@ -174,17 +172,17 @@ gap: 0.5em;
 justify-content: space-between;
 `
 
-const BoxTitle = styled.h3`
+const TextsTitle = styled.h3`
 font-size: 1em;
 font-weight: 600;
 `
 
-const BoxDetail = styled.p`
+const TextsDetail = styled.p`
 font-size: 1em;
 font-weight: 400;
 `
 
-const BoxAgoAndMore = styled.div`
+const AgoAndMore = styled.div`
 display: flex;
 gap: 0.5em;
 
@@ -192,6 +190,6 @@ font-size: 0.75em;
 color: grey;
 `
 
-const BoxAgo = styled.time``
+const Ago = styled.time``
 
 export default Box
