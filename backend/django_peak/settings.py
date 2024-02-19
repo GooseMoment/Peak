@@ -86,8 +86,12 @@ WSGI_APPLICATION = 'django_peak.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'peakdb',
+        'USER': 'peakuser',
+        'PASSWORD': 'PEAK_DEFAULT_PASSWORD',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
