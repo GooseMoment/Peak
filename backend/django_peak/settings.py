@@ -37,6 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'users',
+    'tasks',
+    'drawers',
+    'projects',
+    'social',
+    'notifications',
+
+    # 'today',
+    # 'search',
+    # 'user_setting',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +86,12 @@ WSGI_APPLICATION = 'django_peak.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'peakdb',
+        'USER': 'peakuser',
+        'PASSWORD': 'PEAK_DEFAULT_PASSWORD',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 

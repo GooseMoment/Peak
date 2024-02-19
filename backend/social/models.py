@@ -2,8 +2,8 @@ from django.db import models
 
 import uuid
 
-from ..users.models import User
-from ..tasks.models import Task
+from users.models import User
+from tasks.models import Task
 
 class Emoji(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -62,14 +62,16 @@ class Comment(models.Model):
 
 class Following(models.Model):
     # 보내는사람
-    follower = models.OneToOneField(
+    follower = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
+        related_name = "follower"
     )
     # 받는사람
-    followee = models.OneToOneField(
+    followee = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
+        related_name = "followee"
     )
     # 요청인가
     is_request = models.BooleanField(default=False)
@@ -80,11 +82,18 @@ class Following(models.Model):
         ]
 
 class Block(models.Model):
-    blocker = models.OneToOneField(
+    blocker = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
+        related_name = "blocker"
     )
-    blockee = models.OneToOneField(
+    blockee = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
+        related_name = "blockee"
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["blocker", "blockee"], name="constraint_blocker_blockee"),
+        ]
