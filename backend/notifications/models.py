@@ -2,9 +2,9 @@ from django.db import models
 
 import uuid
 
-from ..tasks.models import Task
-from ..users.models import User
-from ..social.models import Reaction, Following
+from tasks.models import Task
+from users.models import User
+from social.models import Reaction, Following
 
 class TaskReminder(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

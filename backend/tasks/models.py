@@ -2,8 +2,8 @@ from django.db import models
 
 import uuid
 
-from ..users.models import User
-from ..drawers.models import Drawer
+from users.models import User
+from drawers.models import Drawer
 
 class Repeat(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -41,5 +41,7 @@ class Task(models.Model):
         on_delete=models.CASCADE,
     )
     repeat = models.ForeignKey(
-        Repeat
+        Repeat,
+        on_delete=models.SET_NULL,
+        null=True,
     )

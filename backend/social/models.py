@@ -2,8 +2,8 @@ from django.db import models
 
 import uuid
 
-from ..users.models import User
-from ..tasks.models import Task
+from users.models import User
+from tasks.models import Task
 
 class Emoji(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
