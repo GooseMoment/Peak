@@ -32,19 +32,29 @@ class DailyComment(models.Model):
     date = models.DateField()
 
 class Reaction(models.Model):
+    FOR_TASK = "task"
+    FOR_DAILY_COMMENT = "daily_comment"
+
+    REACTION_TYPE = [
+        (FOR_TASK, "For task"),
+        (FOR_DAILY_COMMENT, "For daily comment"),
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
     )
-    parent_type = models.CharField()
+    parent_type = models.CharField(choices=REACTION_TYPE)
     task = models.ForeignKey(
         Task,
         on_delete=models.CASCADE,
+        null=True,
     )
     daily_comment = models.ForeignKey(
         DailyComment,
         on_delete=models.CASCADE,
+        null=True,
     )
     emoji = models.ManyToManyField(Emoji)
 
