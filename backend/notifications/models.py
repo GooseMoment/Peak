@@ -14,6 +14,10 @@ class TaskReminder(models.Model):
     )
     scheduled = models.DateTimeField()
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()
+
 class Notification(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     type = models.CharField()
@@ -33,5 +37,7 @@ class Notification(models.Model):
         Following,
         on_delete = models.CASCADE,
     )
+    
+    notified_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField()
-    updated_at = models.DateTimeField()

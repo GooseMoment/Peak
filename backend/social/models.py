@@ -10,6 +10,10 @@ class Emoji(models.Model):
     name = models.CharField()
     img_uri = models.URLField()
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()
+
 class Peck(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
@@ -22,6 +26,10 @@ class Peck(models.Model):
     )
     count = models.IntegerField()
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()
+
 class DailyComment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
@@ -30,6 +38,10 @@ class DailyComment(models.Model):
     )
     comment = models.TextField()
     date = models.DateField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()
 
 class Reaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -48,6 +60,10 @@ class Reaction(models.Model):
     )
     emoji = models.ManyToManyField(Emoji)
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()
+
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
@@ -59,6 +75,10 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
     )
     comment = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()
 
 class Following(models.Model):
     # 보내는사람
@@ -76,6 +96,10 @@ class Following(models.Model):
     # 요청인가
     is_request = models.BooleanField(default=False)
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["follower", "followee"], name="constraint_follower_followee"),
@@ -92,6 +116,10 @@ class Block(models.Model):
         on_delete = models.CASCADE,
         related_name = "blockee"
     )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()
 
     class Meta:
         constraints = [

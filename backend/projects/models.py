@@ -14,3 +14,7 @@ class Project(models.Model):
     order = models.IntegerField()
     color = models.CharField(max_length=6)
     type = models.CharField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()
