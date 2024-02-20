@@ -15,3 +15,7 @@ class Drawer(models.Model):
     privacy = models.CharField()
     uncompleted_task_count = models.IntegerField()
     completed_task_count = models.IntegerField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()

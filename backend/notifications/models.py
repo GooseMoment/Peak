@@ -14,6 +14,10 @@ class TaskReminder(models.Model):
     )
     scheduled = models.DateTimeField()
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()
+
 class Notification(models.Model):
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
 
@@ -59,5 +63,7 @@ class Notification(models.Model):
         on_delete = models.CASCADE,
         null=True,
     )
+    
+    notified_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
