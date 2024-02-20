@@ -1,8 +1,12 @@
+import { useState } from "react"
+
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 
 const Box = ({notification}) => {
+
+    const [isHover, setIsHover] = useState(false)
 
     const purified = purifyNotificationForDisplay(notification)
 
@@ -15,7 +19,9 @@ const Box = ({notification}) => {
             <TextsDetail>{purified.detail}</TextsDetail>
         </Texts>
         <AgoAndMore>
-            <Ago dateTime={notification.notifiedAt.toISOString()}>{purified.ago}</Ago>
+            <Ago onMouseEnter={e => setIsHover(true)} onMouseLeave={e => setIsHover(false)} dateTime={notification.notifiedAt.toISOString()}>
+                {isHover ? purified.datetime.toLocaleString(DateTime.DATETIME_MED) : purified.datetime.toRelative()}
+            </Ago>
             <FeatherIcon icon="more-horizontal" />
         </AgoAndMore>
     </Frame>
@@ -36,10 +42,10 @@ const purifyNotificationForDisplay = (notification) => {
         icon: null,
         smallIcon: null,
         detail: "",
-        ago: "",
+        datetime: "",
     }
 
-    purified.ago = DateTime.fromJSDate(notification.notifiedAt).setLocale("en").toRelative()
+    purified.datetime = DateTime.fromJSDate(notification.notifiedAt).setLocale("en")
 
     if (notification.type in socialTypesSmallIcon) {
         purified.title = "@" + notification.payload.user.username
