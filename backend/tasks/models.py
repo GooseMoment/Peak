@@ -26,8 +26,8 @@ class Repeat(models.Model):
 
 class Task(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField()
-    privacy = models.CharField()
+    name = models.CharField(max_length=128)
+    privacy = models.CharField(max_length=128)
     completed_at = models.DateTimeField()
     drawer = models.ForeignKey(
         Drawer,

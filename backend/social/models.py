@@ -7,7 +7,7 @@ from tasks.models import Task
 
 class Emoji(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField()
+    name = models.CharField(max_length=128)
     img_uri = models.URLField()
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -49,7 +49,7 @@ class Reaction(models.Model):
         User,
         on_delete=models.CASCADE,
     )
-    parent_type = models.CharField()
+    parent_type = models.CharField(max_length=128)
     task = models.ForeignKey(
         Task,
         on_delete=models.CASCADE,

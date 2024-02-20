@@ -20,7 +20,7 @@ class TaskReminder(models.Model):
 
 class Notification(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    type = models.CharField()
+    type = models.CharField(max_length=128)
     user = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
