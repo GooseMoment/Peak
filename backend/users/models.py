@@ -1,7 +1,16 @@
 from django.db import models
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 
 import uuid
+
+class UserManager(BaseUserManager):
+    def create_user(self, username, email, password=None):
+        user = User(username=username, email=email)
+        user.set_password(password)
+        user.objects.create()
+
+    def create_superuser(self, username, email, password=None):
+        self.create_user(username, email, password)
 
 class User(AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -35,5 +44,7 @@ class User(AbstractBaseUser):
     def get_short_name(self):
         return "@" + self.username
     
+    objects = UserManager()
+
     class Meta:
         abstract = False
