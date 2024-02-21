@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-import TaskCreateDetail from "@components/project/TaskCreateDetail";
+import TaskCreateDetail from "@/components/project/TaskCreateDetail/TaskCreateDetail";
 import TaskName from "./TaskName";
 import ModalPortal from "./ModalPortal";
 
@@ -18,14 +18,13 @@ function Task({task}){
             </CalendarText>}
             { isModalOpen &&
             <ModalPortal>
-                <TaskCreateDetail task={task} onClose={() => setIsModalOpen(false)} />,
-                document.body
+                <TaskCreateDetail task={task} onClose={() => setIsModalOpen(false)} />
             </ModalPortal>}
         </>
     );
 }
 
-const CalendarText = styled.h3`
+const CalendarText = styled.p`
     display: flex;
     margin-left: 3.6em;
     font-style: normal;
@@ -33,9 +32,9 @@ const CalendarText = styled.h3`
     color: #000;
 `
 
-const CalendarTextPlus = styled.h3`
+const CalendarTextPlus = styled.p`
     font-style: bold;
-    font-size: 0.6em;
+    font-size: 1em;
     color: #FF0000;
     padding-right: 0.5em;
 `

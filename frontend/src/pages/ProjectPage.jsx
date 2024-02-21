@@ -24,7 +24,7 @@ const ProjectPage = () => {
         ))}
         <TaskCreateButton>
             <FeatherIcon icon="plus-circle"/>
-            <h1>할 일 추가</h1>
+            <TaskCreateText>할 일 추가</TaskCreateText>
         </TaskCreateButton>
     </>
     )
@@ -59,20 +59,20 @@ const TaskCreateButton = styled.div`
     margin-left: 0.8em;
     margin-top: 0.5em;
 
-    & h1 {
-        text-align: center;
-        font-size: 1.1em;
-        font-weight: medium;
-        color: #000000;
-        margin-top: 0em;
-    }
-
     & svg {
         text-align: center;
         width: 1.3em;
         height: 1.3em;
         top: 0;
     } 
+`
+
+const TaskCreateText = styled.div`
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: medium;
+    color: #000000;
+    margin-top: 0em;
 `
 
 const mockProjects = [
