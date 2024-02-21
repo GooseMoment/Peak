@@ -2,7 +2,7 @@ import Header from "./Header"
 import Middle from "./Middle"
 import Footer from "./Footer"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 const Sidebar = ({collapsed, setCollapsed}) => {
 
@@ -14,14 +14,21 @@ const Sidebar = ({collapsed, setCollapsed}) => {
 }
 
 const SidebarBox = styled.nav`
+z-index: 999;
+
+position: fixed;
+height: 100vh;
+width: 18rem;
+
 display: flex;
 flex-direction: column;
 justify-content: space-between;
 
 background-color: #F9F7F6;
-flex-basis: ${props => props.$collapsed ? "0rem" : "18rem"};
-transform: ${props => props.$collapsed ? "translateX(-0%)" : "none"};
-flex-grow: 1;
+
+${({$collapsed}) => $collapsed ? css`
+    width: unset;
+` : null}
 
 & * {
     user-select: none;
