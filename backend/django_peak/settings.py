@@ -21,12 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-87%a)!2$$9_yizx8(%n%as513jq94o8(iuquctgpgxgic=+s7='
+# TODO: SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# TODO: DEBUG = False
 
 ALLOWED_HOSTS = []
-
+# TODO: fill with hosts after setting DEBUG as False.
 
 # Application definition
 
@@ -37,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'api',
 
     'users',
     'tasks',
@@ -54,11 +58,15 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    'api.middleware.JSONMiddleware'
 ]
+
+AUTH_USER_MODEL = "users.User"
 
 ROOT_URLCONF = 'django_peak.urls'
 
@@ -90,6 +98,7 @@ DATABASES = {
         'NAME': 'peakdb',
         'USER': 'peakuser',
         'PASSWORD': 'PEAK_DEFAULT_PASSWORD',
+        # TODO: 'PASSWORD': os.environ["PEAKUSER_SECRET_KEY"],
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -114,6 +123,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Authentication Backend
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "users.auth.UserBackend",
+]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -136,3 +151,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# TODO: EMAIL_BACKEND

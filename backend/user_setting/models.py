@@ -13,3 +13,6 @@ class UserSetting(models.Model):
     follow_request_approval_manually = models.BooleanField(default=False)
     # TODO: 만들고 추가하세요 구영서씨
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField()

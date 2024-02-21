@@ -3,8 +3,6 @@
 import os
 import sys
 
-sys.path.append(".")
-
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_peak.settings')
