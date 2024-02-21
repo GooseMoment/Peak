@@ -1,6 +1,17 @@
 import styled from "styled-components";
 import FeatherIcon from 'feather-icons-react';
 
+function Drawer({drawer, children}){
+    return (
+        <>
+            <DrawerBox $color = {drawer.color}>
+                <DrawerName>{drawer.name}</DrawerName>
+            </DrawerBox>
+            {children}
+        </>
+    );
+}
+
 const DrawerBox = styled.div`
     height: 3.5em;
     display: flex;
@@ -19,13 +30,5 @@ const DrawerName = styled.h1`
     stroke: #000000;
     stroke-opacity: 0.2;
 `
-
-function Drawer({name, color}){
-    return (
-        <DrawerBox $color = {color}>
-            <DrawerName>{name}</DrawerName>
-        </DrawerBox>
-    );
-}
 
 export default Drawer
