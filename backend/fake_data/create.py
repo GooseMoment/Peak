@@ -11,6 +11,23 @@ fake = Faker("ko_KR")
 seeder = Seed.seeder(locale="ko_KR")
 
 def create():
+    print("WARNING!")
+    print("이 작업은 테스트용 임시 데이터를 만듭니다.")
+    print("임시 데이터는 데이터 흉내만 낼뿐, 정합성은 맞지 않습니다.")
+    print("!!!! 개발 또는 테스트 서버에서만 실행되어야 합니다. !!!")
+    print("진행하려면 'create fake data'라고 입력하세요.")
+
+    answer = input("> ")
+
+    if answer != 'create fake data':
+        print("작업 취소됨.")
+        return
+    
+    __create()
+
+def __create():
+    print()
+
     try:
         from users.models import User
     except ModuleNotFoundError as e:
@@ -70,6 +87,8 @@ def create():
         "username": lambda _: fake.user_name(),
         "display_name": lambda _: fake.name(),
         "profile_img_uri": lambda _: random.choice(example_img_uris),
+        "followings_count": lambda _: random.randint(0, 100),
+        "followers_count": lambda _: random.randint(0, 100),
         "password": make_password("PASSWORD_DEFAULT"),
     })
         
@@ -112,4 +131,4 @@ def create():
     })
 
     inserted_pks = seeder.execute()
-    print(f"{len(inserted_pks)} rows inserted. DONE.")
+    print(f"DONE.")
