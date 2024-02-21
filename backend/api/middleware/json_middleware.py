@@ -31,7 +31,7 @@ class JSONMiddleware:
             if request.method == 'GET':
                 request.GET = q_data
 
-            if request.method == 'POST':
+            if request.method == 'POST' or request.method == 'PATCH':
                 request.POST = q_data
 
             return self.get_response(request)
