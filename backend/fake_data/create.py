@@ -26,7 +26,6 @@ def create():
     __create()
 
 def __create():
-    print()
 
     try:
         from users.models import User

@@ -55,7 +55,6 @@ def sign_in(request: HttpRequest):
     if user is None:
         return HttpResponseBadRequest("signed in failed")
     
-    print(user)
     login(request, user)
 
     return HttpResponse(status=200)
@@ -81,7 +80,6 @@ def sign_up(request: HttpRequest):
         setattr(new_user, field, payload[field])
     
     new_user.set_password(payload["password"])
-
     new_user.save()
 
     return HttpResponse(status=201)
@@ -93,11 +91,8 @@ def sign_out(request: HttpRequest):
 
 def get_current_user(request: HttpRequest):
     user = get_user(request)
-    print("get_user", user)
 
-    print(request.session.items)
     if request.user.is_anonymous:
-        print(request.user)
         return HttpResponse("login required", status=400)
 
     return UserJSONResponse(request, request.user._wrapped, personal=True)
