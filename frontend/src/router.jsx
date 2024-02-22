@@ -7,6 +7,7 @@ import Layout from "@containers/Layout"
 
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
+import ProjectPage from "@pages/ProjectPage"
 
 const router = createBrowserRouter([
     {
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "projects/:id",
-                element: <div>This is /projects/:id</div>,
+                element: <ProjectPage/>,
             },
             {
                 path: "users/:username",
