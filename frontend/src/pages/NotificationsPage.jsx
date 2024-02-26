@@ -27,9 +27,12 @@ const filters = {
     "reactions": {
         display: "Reactions", types: ["reaction", "reaction_group"]
     },
+    "pecking": {
+        display: "Pecking", types: ["pecked"]
+    },
     "follow": {
         display: "Follow", types: ["follow", "follow_request", "follow_request_accepted"]
-    }
+    },
 }
 
 const mockNotifications = [
