@@ -3,10 +3,8 @@ from django.utils.decorators import method_decorator
 
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
-from rest_framework import mixins
-from rest_framework import generics
 
 from .models import Notification
 from .serializers import NotificatonSerializer
@@ -28,7 +26,7 @@ class NotificationDetail(mixins.RetrieveModelMixin,
     queryset = Notification.objects.all()
     serializer_class = NotificatonSerializer
     lookup_field = "id"
-
+    
     def get(self, request, id, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
