@@ -1,8 +1,12 @@
 from django.urls import path
 
+from rest_framework.urlpatterns import format_suffix_patterns
+
 from . import views
 
 urlpatterns = [
     path("", views.get_notifications),
-    path("<str:id>", views.NotificationView.as_view()),
+    path("<str:id>", views.NotificationDetail.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
