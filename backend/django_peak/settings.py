@@ -62,6 +62,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'api.middleware.DisableCSRFMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -134,6 +135,13 @@ AUTHENTICATION_BACKENDS = [
     "users.auth.UserBackend",
 ]
 
+# CSRF
+# https://docs.djangoproject.com/en/5.0/howto/csrf/#how-to-use-django-s-csrf-protection
+# CSRF_USE_SESSIONS = False
+# CSRF_COOKIE_HTTPONLY = False
+# CSRF_COOKIE_NAME = "EXHALATION" # 임의의 이름...
+# CSRF_HEADER_NAME = "INHALATION"
+# TODO: Turn on CSRF
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
