@@ -22,8 +22,14 @@ export const patchUser = (user) => {
 }
 
 export const signIn = async (email, password) => {
-    return await axios.post("sign_in/", {
-        email: email,
-        password: password,
-    })
+    try {
+        await axios.post("sign_in/", {
+            email: email,
+            password: password,
+        })
+    } catch (e) {
+        return false
+    }
+
+    return true
 }

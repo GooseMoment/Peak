@@ -2,8 +2,7 @@ import { useState } from "react"
 
 import FilterButtonGroup from "@components/notifications/FilterButtonGroup"
 import Box from "@components/notifications/Box"
-
-import styled from "styled-components"
+import PageTitle from "@components/common/PageTitle"
 
 
 const NotificationsPage = () => {
@@ -12,18 +11,11 @@ const NotificationsPage = () => {
     return <>
     <PageTitle>Notifications</PageTitle>
     <FilterButtonGroup filters={filters} active={activeFilter} setActive={setActiveFilter} />
-
     {mockNotifications.map(notification => 
         (filters[activeFilter].types.includes(notification.type) ? <Box key={notification.type} notification={notification} /> : null)
     )}
     </>
 }
-
-const PageTitle = styled.h1`
-font-size: 2em;
-font-weight: bold;
-margin-bottom: 0.5em;
-`
 
 const filters = {
     "all": {
