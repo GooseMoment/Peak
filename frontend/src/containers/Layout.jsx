@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import Sidebar from "@components/sidebar/Sidebar"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 const Layout = ({noSidebar, children}) => {
     let [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -18,18 +18,17 @@ const Layout = ({noSidebar, children}) => {
 }
 
 const App = styled.div`
-display: flex;
-flex-wrap: wrap;
 height: 100vh;
 `
 
 const Content = styled.main`
-flex-basis: 0;
-flex-grow: 999;
-
-padding: 3rem ${props => props.$sidebarCollapsed ? "10rem" : "3rem"};
+padding: 3rem 3rem 3rem 22rem;
 transition: padding 0.25s;
 transition-timing-function: cubic-bezier(.86,0,.07,1);
+
+${({$sidebarCollapsed}) => $sidebarCollapsed ? css`
+    padding: 3rem 10rem;
+` : null}
 `
 
 // Reference: https://every-layout.dev/layouts/sidebar
