@@ -7,6 +7,7 @@ import Layout from "@containers/Layout"
 
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
+import SignInPage from "@pages/SignInPage"
 import ProjectPage from "@pages/ProjectPage"
 
 const router = createBrowserRouter([
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
             {
                 path: "/",
                 element: <div>This is /</div>,
+            },
+            {
+                path: "sign_in",
+                element: <SignInPage />, // TODO: REMOVE
             },
             {
                 path: "search",

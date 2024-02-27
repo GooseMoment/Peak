@@ -1,72 +1,56 @@
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.contrib.auth import authenticate, login, logout, get_user
-from django.shortcuts import get_object_or_404
-from django.views import View
+from django.contrib.auth import authenticate, login, logout
+
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework import status, mixins, generics
+from rest_framework.decorators import api_view
 
 from .models import User
-from .response import UserJSONResponse
+from .serializers import UserSerializer
 
 @method_decorator(login_required, name="dispatch")
-class UserView(View):
-    def get(self, request: HttpRequest, username: str):
-        user = get_object_or_404(User, username=username)
-        return UserJSONResponse(request, user)
+class UserDetail(mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    generics.GenericAPIView):
     
-    def post(self, request: HttpRequest, username: str):
-        pass
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = "username"
 
-    def patch(self, request: HttpRequest, username: str):
+    def get(self, request: Request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def patch(self, request: Request, username: str, *args, **kwargs):
         if request.user.username != username:
-            return HttpResponseBadRequest()
-        
-        user: User = request.user._wrapped
-        payload = request.POST
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
-        overidable_fields = ["username", "display_name", "bio", "profile_img_uri"]
+        # TODO: password change
 
-        for field in overidable_fields:
-            if field in payload:
-                setattr(user, field, payload[field])
+        return self.partial_update(request, *args, **kwargs)
 
-        if "password" in payload:
-            # TODO: 암호 규칙 검증
-            user.set_password(payload["password"])
-        
-        user.validate_constraints()
-        user.save()
-
-        return HttpResponse(status=200)
-
-
-    def delete(self, request: HttpRequest, username: str):
-        pass
-
-def sign_in(request: HttpRequest):
-    if request.method != "POST":
-        return HttpResponse("Method not allowed", status=405)
-    
-    email: str = request.POST["email"]
-    password: str = request.POST["password"]
+@api_view(["POST"])
+def sign_in(request: Request):
+    email: str = request.data["email"]
+    password: str = request.data["password"]
 
     user = authenticate(request, email=email, password=password)
 
     if user is None:
-        return HttpResponseBadRequest("signed in failed")
+        return Response(status=status.HTTP_400_BAD_REQUEST)
     
     login(request, user)
 
-    return HttpResponse(status=200)
+    return Response(status=status.HTTP_200_OK)
 
-def sign_up(request: HttpRequest):
-    if request.method != "POST":
-        return HttpResponse(status=405)
-    
+@api_view(["POST"])
+def sign_up(request: Request):
     if request.user.is_authenticated:
-        return HttpResponseBadRequest()
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
     
-    payload = request.POST
+    payload = request.data
     
     required_fields = [
         "username", "display_name", "password", "email"
@@ -75,24 +59,25 @@ def sign_up(request: HttpRequest):
     new_user = User()
     for field in required_fields:
         if field not in payload:
-            return HttpResponseBadRequest()
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         
         setattr(new_user, field, payload[field])
     
     new_user.set_password(payload["password"])
     new_user.save()
 
-    return HttpResponse(status=201)
+    return Response(status=status.HTTP_200_OK)
 
 @login_required
-def sign_out(request: HttpRequest):
+@api_view(["GET"])
+def sign_out(request: Request):
     logout(request)
-    return HttpResponse(status=200)
+    return Response(status=status.HTTP_200_OK)
 
-def get_current_user(request: HttpRequest):
-    user = get_user(request)
-
+@api_view(["GET"])
+def get_current_user(request: Request):
     if request.user.is_anonymous:
-        return HttpResponse("login required", status=400)
-
-    return UserJSONResponse(request, request.user._wrapped, personal=True)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+    
+    serializer = UserSerializer(request.user._wrapped, personal=True)
+    return Response(serializer.data)

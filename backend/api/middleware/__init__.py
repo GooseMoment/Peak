@@ -1,1 +1,1 @@
-from .json_middleware import JSONMiddleware
+from .DisableCSRFMiddleware import DisableCSRFMiddleware

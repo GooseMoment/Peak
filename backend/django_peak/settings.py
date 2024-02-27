@@ -52,11 +52,21 @@ INSTALLED_APPS = [
     # 'today',
     # 'search',
     # 'user_setting',
+
+    'rest_framework',
+    'corsheaders',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+
 MIDDLEWARE = [
+    'api.middleware.DisableCSRFMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -129,6 +139,27 @@ AUTHENTICATION_BACKENDS = [
     "users.auth.UserBackend",
 ]
 
+# CSRF
+# https://docs.djangoproject.com/en/5.0/howto/csrf/#how-to-use-django-s-csrf-protection
+# CSRF_USE_SESSIONS = False
+# CSRF_COOKIE_HTTPONLY = False
+# CSRF_COOKIE_NAME = "EXHALATION" # 임의의 이름...
+# CSRF_HEADER_NAME = "INHALATION"
+# TODO: Turn on CSRF
+
+# CORS
+# https://github.com/adamchainz/django-cors-headers?tab=readme-ov-file#configuration
+CORS_ALLOWED_ORIGINS = [
+    "https://peak.ooo",
+    "http://localhost:8000",
+]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^http:\/\/127\.0\.0\.1:((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$",
+    r"^http:\/\/localhost:((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$",
+]
+
+CORS_ALLOW_CREDENTIALS = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
