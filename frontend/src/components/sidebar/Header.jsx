@@ -8,7 +8,6 @@ const Header = ({collapsed, setCollapsed}) => {
                 <FeatherIcon icon={collapsed ? "chevrons-right" : "chevrons-left"} />
             </StyledButton>
         </ButtonContainer>
-        {collapsed ? null : <LogoSkelton />}
     </header>
 }
 
@@ -32,13 +31,6 @@ padding: 0;
 font: inherit;
 cursor: pointer;
 outline: inherit;
-`
-
-const LogoSkelton = styled.div`
-margin: 1em;
-width: auto;
-height: 5em;
-background-color: salmon;
 `
 
 export default Header
