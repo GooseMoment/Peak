@@ -22,12 +22,12 @@ class Repeat(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True, default=None)
 
 class Task(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField()
-    privacy = models.CharField()
+    name = models.CharField(max_length=128)
+    privacy = models.CharField(max_length=128)
     completed_at = models.DateTimeField()
     drawer = models.ForeignKey(
         Drawer,
@@ -51,4 +51,4 @@ class Task(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True, default=None)

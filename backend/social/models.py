@@ -7,12 +7,12 @@ from tasks.models import Task
 
 class Emoji(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField()
+    name = models.CharField(max_length=128)
     img_uri = models.URLField()
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True, default=None)
 
 class Peck(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -28,7 +28,7 @@ class Peck(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True, default=None)
 
 class DailyComment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -57,7 +57,7 @@ class Reaction(models.Model):
         User,
         on_delete=models.CASCADE,
     )
-    parent_type = models.CharField(choices=REACTION_TYPE)
+    parent_type = models.CharField(choices=REACTION_TYPE, max_length=128)
     task = models.ForeignKey(
         Task,
         on_delete=models.CASCADE,
@@ -72,7 +72,7 @@ class Reaction(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True, default=None)
 
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -88,7 +88,7 @@ class Comment(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True, default=None)
 
 class Following(models.Model):
     # 보내는사람
@@ -108,7 +108,7 @@ class Following(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True, default=None)
 
     class Meta:
         constraints = [
@@ -129,7 +129,7 @@ class Block(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True, default=None)
 
     class Meta:
         constraints = [

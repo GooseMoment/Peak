@@ -16,7 +16,7 @@ class TaskReminder(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True, default=None)
 
 class Notification(models.Model):
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
@@ -42,7 +42,7 @@ class Notification(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    type = models.CharField(choices=NOTIFICATION_TYPES)
+    type = models.CharField(choices=NOTIFICATION_TYPES, max_length=128)
     user = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
@@ -66,4 +66,4 @@ class Notification(models.Model):
     
     notified_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True, default=None)
