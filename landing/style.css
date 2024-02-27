@@ -1,0 +1,230 @@
+* {
+    margin: 0;
+    padding: 0;
+
+    font-family: "Pretendard"
+}
+
+body {
+    overflow-x: hidden;
+}
+
+#root {
+    background-color: #FEFDFC;
+    width: 100vw;
+}
+
+/* button from Airbnb */
+
+button {
+  background-color: #FFFFFF;
+  border: 1px solid #222222;
+  border-radius: 10px;
+  box-sizing: border-box;
+  color: #222222;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  line-height: 20px;
+  margin: 0;
+  outline: none;
+  padding: 0.5em 1em;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+  user-select: none;
+  -webkit-user-select: none;
+  width: auto;
+}
+
+button:focus-visible {
+  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+  transition: box-shadow .2s;
+}
+
+button:active {
+  background-color: #F7F7F7;
+  border-color: #000000;
+  transform: scale(.86);
+}
+
+button:disabled {
+  border-color: #DDDDDD;
+  color: #DDDDDD;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+button.start-now {
+    background-color: #FE4902;
+    color: white;
+    border-color: #FE4902;
+}
+
+/* nav */
+
+nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 999;
+
+    display: flex;
+    justify-content: space-between;
+
+    padding: 0.5em 1em;
+    width: 100vw;
+
+    font-size: 1rem;
+
+    background-color: #FEFDFC;
+}
+
+nav div {
+    display: flex;
+    gap: 0.5em;
+    font-size: 16px;
+    align-items: center
+}
+
+nav .left h1 {
+    font-size: 16px;
+    font-weight: 300;
+}
+
+nav .left img {
+    height: 2rem;
+}
+
+nav span.brand {
+    font-weight: 700;
+}
+
+nav .right {
+    gap: 0.75em;
+}
+
+nav a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* articles */
+
+article {
+    position: relative;
+    padding: 4rem;
+    padding-top: 5rem;
+    height: 45vh;
+    border-top: solid 0.75em rgb(255, 230, 230);
+}
+
+article h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+article img {
+    height: 50%;
+    position: absolute;
+}
+
+/* article 1 */
+
+article.first {
+    text-align: center;
+    height: 80vh;
+}
+
+article.first h2, article.first p {
+    margin-bottom: 20px;
+}
+
+article.first button {
+    margin-top: 50px;
+}
+
+article.first h2 {
+    margin-top: 15%;
+    font-size: 50px;
+}
+
+img.healthy {
+    height: 18%;
+    top: 67.5%;
+    left: 27%;
+}
+
+img.completed {
+    height: 25%;
+    top: 60%;
+    right: 27%;
+}
+
+/* article 2 */
+
+img.mobile {
+    top: 30%;
+    left: 30%;
+}
+
+/* article 3 */
+
+img.project {
+    left: 15%;
+    bottom: 10%;
+}
+
+/* article 4 */
+
+img.buddies {
+    left: 12.5%;
+    bottom: 7%;
+}
+
+/* article 5 */
+
+img.speed {
+    bottom: 10%;
+}
+
+/* last */
+
+.last {
+    background: linear-gradient(180deg, rgba(252, 245, 238, 0) 0%, #FCF5EE 10%);
+    padding: 1em;
+    padding-top: 5em;
+}
+
+.last article {
+    border-top: none;
+    text-align: center;
+    padding-top: 10rem;
+}
+
+.last article p {
+    margin-top: 2rem;
+    color: grey;
+    font-size: 1rem;
+}
+
+footer {
+    border-top: solid 0.1rem black;
+    margin: 1rem 1rem 0 1rem;
+    padding: 1rem 0;
+}
+
+footer p {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+}
+
+footer h3 {
+    font-weight: 300;
+}
+
+footer h3 span {
+    font-weight: 700;
+}
