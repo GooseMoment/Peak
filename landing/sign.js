@@ -186,3 +186,22 @@ document.querySelector("#already-have").addEventListener("click", e => {
 
     document.title = "Sign in to Peak"
 })
+
+axios.defaults.withCredentials = true
+
+document.querySelector("#form-sign-in").addEventListener("submit", e => {
+    e.preventDefault()
+    const data = new FormData(e.target);
+    const email = data.get("email")
+    const password = data.get("password")
+
+    axios.post("http://localhost:8000/sign_in/", {
+        "email": email,
+        "password": password,
+    }).then(res => {
+        alert("success")
+    }).catch(err => {
+        console.log(err)
+        alert(err)
+    })
+})
