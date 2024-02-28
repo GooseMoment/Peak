@@ -1,6 +1,5 @@
 <svg width="900" height="900" viewBox="0 0 900 900" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_685_4705)">
-<rect width="900" height="900" fill="white"/>
 <rect width="900" height="900" rx="130" fill="url(#paint0_linear_685_4705)"/>
 <path d="M142 121C142 140.882 125.882 157 106 157C86.1177 157 70 140.882 70 121C70 101.118 86.1177 85 106 85C125.882 85 142 101.118 142 121Z" fill="white"/>
 <path d="M142 305C142 324.882 125.882 341 106 341C86.1178 341 70.0001 324.882 70.0001 305C70.0001 285.118 86.1178 269 106 269C125.882 269 142 285.118 142 305Z" fill="white"/>
