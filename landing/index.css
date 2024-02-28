@@ -91,19 +91,25 @@ nav div {
 
 nav .left h1 {
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 700;
 }
 
 nav .left img {
     height: 2rem;
 }
 
-nav span.brand {
-    font-weight: 700;
+nav span.by {
+    font-weight: 300;
 }
 
 nav .right {
-    gap: 0.75em;
+    gap: 1rem;
+}
+
+@media screen and (max-width: 800px) {
+    nav span.by {
+        display: none;
+    }
 }
 
 nav a {
@@ -114,11 +120,15 @@ nav a {
 /* articles */
 
 article {
+    display: flex;
+
     position: relative;
     padding: 4rem;
     padding-top: 5rem;
-    height: 45vh;
+    height: max(45vh, 45vw);
     border-top: solid 0.75em rgb(255, 230, 230);
+
+    word-break: keep-all;
 }
 
 article h2 {
@@ -131,11 +141,38 @@ article img {
     position: absolute;
 }
 
+@media screen and (max-width: 800px) {
+    article {
+        justify-content: center;
+
+        padding: 2rem;
+        height: 30vh;
+    }
+
+    article .texts {
+        text-align: center;
+    }
+
+    article h2 {
+        font-size: 1.5rem;
+    }
+
+    article p {
+        font-size: 1rem;
+    }
+
+    article img {
+        height: 5rem;
+    }
+}
+
 /* article 1 */
 
 article.first {
+    display: block;
+
     text-align: center;
-    height: 80vh;
+    height: min(100vh, 100vh);
 }
 
 article.first h2, article.first p {
@@ -153,14 +190,24 @@ article.first h2 {
 
 img.healthy {
     height: 18%;
-    top: 67.5%;
+    bottom: 10%;
     left: 27%;
 }
 
 img.completed {
     height: 25%;
-    top: 60%;
+    bottom: 10%;
     right: 27%;
+}
+
+@media screen and (max-width: 800px) {
+    img.healthy {
+        left: 5%;
+    }
+
+    img.completed {
+        right: 5%;
+    }
 }
 
 /* article 2 */
@@ -199,6 +246,8 @@ img.speed {
 }
 
 .last article {
+    display: block;
+
     border-top: none;
     text-align: center;
     padding-top: 10rem;
@@ -212,7 +261,7 @@ img.speed {
 
 footer {
     border-top: solid 0.1rem black;
-    margin: 1rem 1rem 0 1rem;
+    margin: 10rem 1rem 0 1rem;
     padding: 1rem 0;
 }
 
