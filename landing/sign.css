@@ -19,6 +19,8 @@
 /* showcase */
 
 section.showcase {
+    position: relative;
+
     padding: 3rem;
     color: #FE4902;
     background-color: var(--background);
@@ -43,7 +45,8 @@ section.showcase {
     gap: var(--gap);
 
     height: 40%;
-    margin-top: 14%;
+    width: 100%;
+    margin-top: 20vh;
 }
 
 .screen {
