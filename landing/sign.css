@@ -1,6 +1,15 @@
 :root {
     --gap: 0.75rem;
     --background: #FFD7C7;
+    --goose: #FE4902;
+}
+
+html {
+    scrollbar-color: var(--goose) transparent;
+    scrollbar-width: thin;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 * {
@@ -11,27 +20,76 @@
 }
 
 #root {
-    display: flex;
+    position: relative;
     width: 100%;
     height: 100vh;
+
+    background-color: var(--background);
+
+    display: grid;
+    grid-template-columns: 1.75fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px; 
+}
+
+@media screen and (max-width: 800px) {
+    #root {
+        display: flex;
+    }
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+
+    z-index: 999;
+    position: absolute;
+    color: var(--goose);
+
+    top: 2rem;
+    left: 2rem;
+}
+
+.brand span {
+    font-weight: 300;
+}
+
+@media screen and (max-width: 800px) {
+    .brand {
+        color: black;
+    }
+
+    .brand span {
+        display: none;
+    }
+}
+
+.brand img {
+    height: 1em;
 }
 
 /* showcase */
 
 section.showcase {
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     padding: 3rem;
-    color: #FE4902;
-    background-color: var(--background);
+    color: var(--goose);
 
-    flex-grow: 5;
+    grid-area: 1 / 1 / 2 / 2;
 
     overflow-y: hidden;
 }
 
-.showcase h1 span {
-    font-weight: 300;
+@media screen and (max-width: 800px) {
+    section.showcase {
+        display: none;
+    }
 }
 
 .infinite {
@@ -46,7 +104,6 @@ section.showcase {
 
     height: 40%;
     width: 100%;
-    margin-top: 20vh;
 }
 
 .screen {
@@ -82,11 +139,12 @@ section.showcase {
     display: flex;
     align-items: center;
     gap: 1rem;
+
+    font-size: 1.5rem;
 }
 
 .log .activity .action {
-    font-weight: 600;
-    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 .log .activity .content {
@@ -111,10 +169,25 @@ section.showcase {
 /* forms */
 
 section.forms {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5rem;
+
     padding: 3rem;
     background-color: white;
 
-    flex-grow: 1;
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+@media screen and (max-width: 800px) {
+    .forms {
+        width: 100%;
+    }
+}
+
+.forms h2 {
+    font-size: 2rem;
 }
 
 .forms form {
@@ -123,10 +196,59 @@ section.forms {
     gap: 1rem;
 }
 
+.forms form p {
+    font-size: 1.25rem;
+
+    box-sizing: border-box;
+    clear: both;
+}
+
+/* bulma.io에서 훔쳐왔어 */
+p.has-icons-left {
+    position: relative;
+}
+
+.forms input {
+    width: 100%;
+    padding: 1em;
+    border: 1px solid var(--goose);
+    border-radius: 5000px;
+}
+
+.has-icons-left input {
+    padding-left: 3.25em;
+}
+
+.has-icons-left span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    top: 0;
+    left: 0.75em;
+    height: 100%;
+}
+
+.has-icons-left span img {
+    height: 1em;
+}
+
+.forms .links {
+    text-align: center;
+}
+
 .forms a {
     text-decoration: none;
     color: inherit;
     display: block;
+    margin-bottom: 0.5em;
+
+    cursor: pointer;
+}
+
+.hide {
+    display: none !important;
 }
 
 /* button */

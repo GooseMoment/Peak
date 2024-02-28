@@ -144,13 +144,13 @@ for (let i=0; i<20; i++) {
     const username = pick(usernames)
 
     let verb = pick(Object.keys(verbContentMap))
-    if (Math.random() > 0.5) {
+    if (Math.random() > 0.8) {
         verb = "reacted"
     }
 
     const content = pick(verbContentMap[verb])
     const timeUnit = pick(timeUnits)
-    const timeValue = Math.floor(Math.random() * 50)
+    const timeValue = Math.floor(Math.random() * 50) + 2
     logs.push(cloneLog("@" + username + " " + verb, content, timeValue + " " + timeUnit + " ago"))
 }
 
@@ -162,3 +162,27 @@ const infinite = document.querySelector(".infinite")
 const clonedTarget = target.cloneNode(true)
 clonedTarget.setAttribute("aria-hidden", "true")
 infinite.appendChild(clonedTarget)
+
+// ---
+
+
+document.querySelector("#forgot-password").addEventListener("click", e => {
+    alert("아직 준비 중입니다.")
+})
+
+const sectionSignIn = document.querySelector(".sign-in")
+const sectionSignUp = document.querySelector(".sign-up")
+
+document.querySelector("#create-account").addEventListener("click", e => {
+    sectionSignIn.classList.add("hide")
+    sectionSignUp.classList.remove("hide")
+
+    document.title = "Sign up to Peak"
+})
+
+document.querySelector("#already-have").addEventListener("click", e => {
+    sectionSignIn.classList.remove("hide")
+    sectionSignUp.classList.add("hide")
+
+    document.title = "Sign in to Peak"
+})
