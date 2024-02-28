@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+
+	<meta name="title" content="Peak by GooseMoment" />
+
+	<meta property="og:title" content="Sign in at Peak" />
+	<meta property="og:type" content="article" />
+	<meta property="og:url" content="https://peak.ooo" />
+	<meta property="og:image" content="[##_image_##]" />
+	<meta property="og:description" content="Plan, Organize and Cheer with Peak.ooo" />
+	<meta property="og:locale" content="ko_KR" />
+
+	<meta property="og:article:author" content="GooseMoment" />
+	<meta property="og:article:section" content="Product" />
+
+	<link href="https://unpkg.com/sanitize.css" rel="stylesheet" />
+    <link rel="stylesheet" as="style" crossorigin 
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+	<link rel="stylesheet" href="./sign.css" />
+</head>
+<body>
+	<template id="log-template">
+		<div class="log">
+			<p class="activity"><span class="action">{{action}}:</span> <span class="content">{{content}}</span></p>
+			<p class="ago">{{ago}}</p>
+		</div>
+	</template>
+    <div id="root">
+		<section class="showcase">
+			<h1>Peak <span>by GooseMoment</span></h1>
+			<div class="infinite">
+				<div class="screen"></div>
+				<div class="screen below"></div>
+				<div class="logs">
+				</div>
+			</div>
+		</section>
+		<section class="forms sign-in" hidden>
+			<h2>Sign in</h2>
+			<form>
+				<input type="email" />
+				<input type="password" />
+				<button>Go!</button>
+			</form>
+			<a href>Forgot password?</a>
+			<a href>Create an account</a>
+		</section>
+		<section class="forms sign-up">
+			<h2>Sign in</h2>
+			<form>
+				<input type="email" />
+				<input type="password" />
+				<button>Go!</button>
+			</form>
+			<a href>Forgot password?</a>
+			<a href>Create an account</a>
+		</section>
+	</div>
+
+	<script src="./sign.js"></script>
+</body>
