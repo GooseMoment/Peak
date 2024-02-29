@@ -143,6 +143,12 @@ section.showcase {
     font-size: 1.5rem;
 }
 
+.log .activity {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .log .activity .action {
     font-weight: 700;
 }
@@ -155,6 +161,10 @@ section.showcase {
 .log .ago {
     font-weight: 300;
     font-size: 0.75rem;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 @keyframes scroll {
