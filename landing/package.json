@@ -1,5 +1,9 @@
 {
   "devDependencies": {
-    "parcel": "^2.12.0"
+    "parcel": "^2.12.0",
+    "process": "^0.11.10"
+  },
+  "dependencies": {
+    "typewriter-effect": "^2.21.0"
   }
 }
