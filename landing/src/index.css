@@ -145,13 +145,29 @@ article .left {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    max-width: 50%;
 }
 
-@media screen and (max-width: 800px) {
+article img {
+    width: min(35vw, 100%);
+}
+
+article img.second {
+    width: 30vw;
+}
+
+@media screen and (max-width: 950px) {
     article {
         justify-content: center;
 
         padding: 2rem;
+    }
+
+    article .left {
+        max-width: unset;
+
+        align-items: center;
     }
 
     article .texts {
@@ -159,7 +175,7 @@ article .left {
     }
 
     article h2 {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
 
     article p {
@@ -168,6 +184,10 @@ article .left {
 
     article img {
         width: 80%;
+    }
+
+    article .right {
+        width: 50%;
     }
 }
 
@@ -215,7 +235,7 @@ img.completed {
     right: 27%;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 950px) {
     img.healthy {
         left: 5%;
     }
