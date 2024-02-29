@@ -207,6 +207,7 @@ article img.second {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 1em;
 
     padding: 2rem;
 
@@ -221,6 +222,7 @@ article img.second {
 
 .first h2 {
     font-size: 50px;
+    line-height: 1em;
 }
 
 .first button {
