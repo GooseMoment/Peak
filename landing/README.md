@@ -15,6 +15,6 @@ npm build
 ## TODO
 
 - [ ] Terms of service
-- [ ] Toast
-- [ ] Auto redirect
-- [ ] parcel 
+- [x] Toast
+- [x] Auto redirect
+- [x] parcel 
