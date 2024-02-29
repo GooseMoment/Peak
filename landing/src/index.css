@@ -192,8 +192,8 @@ article img.second {
         width: 80%;
     }
 
-    article .right {
-        width: 50%;
+    article .second, article .right {
+        width: min(90%, 700px);
     }
 }
 

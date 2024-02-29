@@ -184,10 +184,12 @@ section.forms {
     flex-direction: column;
     gap: 5rem;
 
-    padding: 3rem;
+    padding: 2.25rem;
     background-color: white;
 
     grid-area: 1 / 2 / 2 / 3;
+
+    font-size: 1rem;
 }
 
 @media screen and (max-width: 800px) {
@@ -207,7 +209,7 @@ section.forms {
 }
 
 .forms form p {
-    font-size: 1.25rem;
+    font-size: 1rem;
 
     box-sizing: border-box;
     clear: both;
@@ -220,13 +222,15 @@ p.has-icons-left {
 
 .forms input {
     width: 100%;
-    padding: 1em;
+    padding: 0.75em;
     border: 1px solid var(--goose);
     border-radius: 5000px;
+
+    font-size: inherit;
 }
 
 .has-icons-left input {
-    padding-left: 3.25em;
+    padding-left: 2.5em;
 }
 
 .has-icons-left span {
@@ -236,14 +240,8 @@ p.has-icons-left {
 
     position: absolute;
     top: 0;
-    left: 0.75em;
+    left: 1em;
     height: 100%;
-}
-
-@media screen and (max-width: 800px) {
-    .has-icons-left span {
-        left: 0.5em;
-    }
 }
 
 .has-icons-left span img {
