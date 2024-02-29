@@ -213,6 +213,28 @@ section.forms {
     clear: both;
 }
 
+.is-loading {
+    position: relative;
+    display: block;
+}
+
+.is-loading:after {
+    position: absolute;
+
+    z-index: 4;
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* bulma.io에서 훔쳐왔어 */
 p.has-icons-left {
     position: relative;
@@ -291,7 +313,7 @@ button:focus-visible {
     transition: box-shadow .2s;
 }
 
-button:active {
+button:active:hover:not([disabled]) {
     background-color: #F7F7F7;
     border-color: #000000;
     transform: scale(.86);
@@ -308,4 +330,44 @@ button.start-now {
     background-color: #FE4902;
     color: white;
     border-color: #FE4902;
+}
+
+/* alert */
+
+.alert-wrapper {
+    position: absolute;
+    bottom: 5%;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+}
+
+.alert {
+    z-index: 99;
+
+    font-weight: 500;
+
+    padding: 1rem;
+    border: 5px solid hsl(171, 100%, 41%);
+    border-radius: 12px;
+
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.success, .error {
+    font-weight: 600;
+}
+
+.success {
+    opacity: 100%;
+    border-color: hsl(171, 100%, 41%);
+    background-image: linear-gradient(to right, #43e97b 0%, #38f9d7 100%);
+}
+
+.error {
+    opacity: 100%;
+    border-color:  hsl(348, 100%, 61%);
+    background-image: linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);
 }
