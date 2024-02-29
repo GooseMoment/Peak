@@ -283,6 +283,17 @@ p.has-icons-left {
     display: none !important;
 }
 
+p.tos {
+    text-align: center;
+    font-size: 0.75em !important;
+    color: grey;
+}
+
+.tos a {
+    display: inline-block;
+    text-decoration: underline;
+}
+
 /* button */
 
 button {
