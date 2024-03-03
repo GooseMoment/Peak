@@ -7,12 +7,15 @@ import Reminder from "./Reminder"
 import Priority from "./Priority"
 import Drawer from "./Drawer"
 import Memo from "./Memo"
+import ModalPortal from "../ModalPortal"
 
 function Detail() {
+    const [isComponentOpen, setIsComponentOpen] = useState(false);
     // text클릭 시 알맞는 component 띄우기
     const [content, setContent] = useState();
 
     const handleClickContent = (e) => {
+        setIsComponentOpen(true);
         const name = e.target.id;
         setContent(name);
     };
@@ -26,7 +29,7 @@ function Detail() {
                 <ContentText id ={item.name} onClick={handleClickContent}>
                     {content === item.name || item.content}
                 </ContentText>
-                {content === item.name && <div>{item.component}</div>}
+                {(content === item.name && isComponentOpen) ? <ModalPortal>{item.component}</ModalPortal> : null}
             </ContentsBox>
             ))}
         </ContentsBlock>

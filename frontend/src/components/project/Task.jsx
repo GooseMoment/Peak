@@ -1,13 +1,11 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-import TaskCreateDetail from "@/components/project/TaskCreateDetail/TaskCreateDetail";
+import TaskCreateDetail from "@components/project/TaskCreate/TaskCreateDetail";
 import TaskName from "./TaskName";
 import ModalPortal from "./ModalPortal";
 
-function Task({task}){
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
+function Task({task, isModalOpen, setIsModalOpen}){
     return (
         <>
             <TaskName task={task} onClick={() => setIsModalOpen(true)} />
