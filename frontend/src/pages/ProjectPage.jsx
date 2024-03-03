@@ -1,10 +1,14 @@
 import FeatherIcon from "feather-icons-react";
+import { useState } from "react";
 
 import Task from "@components/project/Task"
 import styled from "styled-components";
 import Drawer from "@components/project/Drawer";
+import TaskCreateSimple from "@components/project/TaskCreate/TaskCreateSimple";
 
 const ProjectPage = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     return (
     <>
         <TitleBox>
@@ -16,12 +20,13 @@ const ProjectPage = () => {
                 <Drawer drawer={drawer}>
                     <TaskList>
                         {mockTasks.map((task) => (
-                            drawer.name === task.drawer_name && <Task task={task} />
+                            drawer.name === task.drawer_name && <Task task={task} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
                         ))}
                     </TaskList>
                 </Drawer>
             </>
         ))}
+        <TaskCreateSimple />
         <TaskCreateButton>
             <FeatherIcon icon="plus-circle"/>
             <TaskCreateText>할 일 추가</TaskCreateText>
@@ -57,7 +62,7 @@ const TaskCreateButton = styled.div`
     vertical-align: center;
     text-align: middle;
     margin-left: 0.8em;
-    margin-top: 0.5em;
+    margin-top: 1.5em;
 
     & svg {
         text-align: center;

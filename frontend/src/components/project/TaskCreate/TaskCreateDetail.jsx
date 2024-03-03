@@ -15,8 +15,8 @@ function TaskCreateDetail({task, onClose}) {
         }, []);
 
     return (
-        <ModalPortal>
-            <ModalBackdrop>
+        <ModalBackdrop>
+            <ModalPortal>
                 <TaskCreateDetailBox>
                     <TaskNameBox>
                         <TaskName task={task} />
@@ -27,13 +27,13 @@ function TaskCreateDetail({task, onClose}) {
                     </TaskNameBox>
                     <Detail />
                 </TaskCreateDetailBox>
-            </ModalBackdrop>
-        </ModalPortal>
+            </ModalPortal>
+        </ModalBackdrop>
     )
 }
 
 const TaskCreateDetailBox = styled.div`
-    z-index: 9999;
+    z-index: 4;
     width: 50em;
     height: 20em;
     background-color: #FFFFFF;
@@ -65,7 +65,7 @@ const Icons = styled.div`
 `
 
 const ModalBackdrop = styled.div`
-    z-index: 1;
+    z-index: 3;
     position: fixed;
     display: flex;
     justify-content: center;
