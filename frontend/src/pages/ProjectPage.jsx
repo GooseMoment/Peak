@@ -1,14 +1,11 @@
-import FeatherIcon from "feather-icons-react";
-import { useState } from "react";
-
 import Task from "@components/project/Task"
-import styled from "styled-components";
 import Drawer from "@components/project/Drawer";
 import TaskCreateSimple from "@components/project/TaskCreate/TaskCreateSimple";
 
-const ProjectPage = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+import styled from "styled-components";
+import FeatherIcon from "feather-icons-react";
 
+const ProjectPage = () => {
     return (
     <>
         <TitleBox>
@@ -20,7 +17,7 @@ const ProjectPage = () => {
                 <Drawer drawer={drawer}>
                     <TaskList>
                         {mockTasks.map((task) => (
-                            drawer.name === task.drawer_name && <Task task={task} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+                            drawer.name === task.drawer_name && <Task task={task}/>
                         ))}
                     </TaskList>
                 </Drawer>
