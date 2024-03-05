@@ -36,29 +36,32 @@ const Calendar = ({ onClose }) => {
 
 const CalendarBox = styled.div`
     z-index: 999;
-    position: relative;
+    position: absolute;
     width: 15em;
     height: 22em;
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
+    top: 40%;
+    left: 30%;
 `
 
 const TitleBox = styled.div`
     display: flex;
     justify-content: space-between;
-    margin: 0 1.3em;
+    margin: 0em 1.3em;
 
     & svg {
         width: 1em;
         height: 1em;
         stroke: #FF0000;
-        top: 0;
+        top: 1.2em;
+        cursor: pointer;
     }
 `
 
 const Title = styled.div`
-    font-style: normal;
+    font-weight: 550;
     font-size: 1em;
     color: #000000;
     margin-top: 1.3em;
@@ -92,8 +95,8 @@ const Circle = styled.div`
         height: 1em;
         stroke-width: 3px;
         stroke: #FFFFFF;
-        top: -18px;
-        left: 2.8px;
+        top: 2px;
+        left: 2.5px;
     }
 `
 
@@ -113,14 +116,13 @@ const ItemText = styled.p`
 
 const AddTime = styled.div`
     display: flex;
-    text-align: center;
     justify-content: center;
     width: 14em;
     height: 1.8em;
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
-    margin-left: 0.5em;
+    margin: 0em 0.5em;
 `
 
 const AddTimeText = styled.p`
@@ -130,7 +132,7 @@ const AddTimeText = styled.p`
     & svg {
         width: 1.2em;
         height: 1.2em;
-        top: 0;
+        top: 0.3em;
     }
 `
 
