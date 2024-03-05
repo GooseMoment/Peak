@@ -20,6 +20,33 @@ html {
     height: 100%;
 }
 
+#modal {
+    opacity: 0%;
+
+    transition: opacity 0.1s ease-in-out;
+}
+
+/* modal이 자손을 가질 때만 */
+#modal:has(div) {
+    opacity: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    padding: 0.5em;
+
+    z-index: 99;
+}
+
 body, textarea {
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif !important;
 }
