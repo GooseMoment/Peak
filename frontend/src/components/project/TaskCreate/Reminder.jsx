@@ -23,11 +23,15 @@ const Reminder = () => {
 }
 
 const ReminderBox = styled.div`
+    z-index: 999;
+    position: absolute;
     width: 15em;
-    height: 23.5em;
+    height: 24em;
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
+    top: 45%;
+    left: 30%;
 `
 
 const TitleBox = styled.div`
@@ -39,12 +43,13 @@ const TitleBox = styled.div`
         width: 1em;
         height: 1em;
         stroke: #FF0000;
-        top: 0;
+        top: 1.2em;
+        cursor: pointer;
     }
 `
 
 const Title = styled.div`
-    font-style: normal;
+    font-weight: 550;
     font-size: 1em;
     color: #000000;
     margin-top: 1.3em;
@@ -65,7 +70,7 @@ const ItemBlock = styled.div`
 
     & svg {
         stroke: #FF4A03;
-        margin-top: 1em;
+        top: 1.2em;
     }
 `
 

@@ -3,7 +3,7 @@ import FeatherIcon from 'feather-icons-react';
 import { useEffect } from "react";
 
 import TaskName from "../TaskName";
-import Detail from "./Detail";
+import Contents from "./Contents";
 import ModalPortal from "../ModalPortal";
 
 function TaskCreateDetail({task, onClose}) {
@@ -23,7 +23,7 @@ function TaskCreateDetail({task, onClose}) {
                     <FeatherIcon icon="x" onClick={onClose} />
                 </Icons>
             </TaskNameBox>
-            <Detail />
+            <Contents />
         </TaskCreateDetailBox>
     )
 }

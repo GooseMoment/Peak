@@ -27,9 +27,9 @@ function Task({task}){
 
 const CalendarText = styled.p`
     display: flex;
-    margin-left: 3.6em;
+    margin-left: 3em;
     font-style: normal;
-    font-size: 0.6em;
+    font-size: 0.7em;
     color: #000;
 `
 
