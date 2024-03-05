@@ -8,11 +8,13 @@ psql --version
 
 메타 DB에 접근:
 ```bash
-# for linux
+# Linux
 sudo -u postgres psql
-# for macos
+
+# macOS
 psql postgres
-# for windows 
+
+# Windows
 psql -U postgres
 ```
 
@@ -32,10 +34,23 @@ create user peakuser with encrypted password 'PEAK_DEFAULT_PASSWORD';
 grant all privileges on database peakdb to peakuser;
 ```
 
-## 패키지 설치
-PostgreSQL 사용에 필요한 패키지:
+## venv 초기화
 ```bash
-pip3 install psycopg
+python3 -m venv .venv
+```
+
+## venv 활성화
+```bash
+# macOS & Linux의 경우
+source .venv/bin/activate
+
+# Windows의 경우
+Scripts\activate.bat
+```
+
+## 파이썬 패키지 설치
+```bash
+pip install -r requirements.txt
 ```
 
 ## 서버 실행
