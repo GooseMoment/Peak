@@ -3,7 +3,7 @@ import FeatherIcon from 'feather-icons-react';
 import { useEffect } from "react";
 
 import TaskName from "../TaskName";
-import Detail from "./Detail";
+import Contents from "./Contents";
 import ModalPortal from "../ModalPortal";
 
 function TaskCreateDetail({task, onClose}) {
@@ -25,7 +25,7 @@ function TaskCreateDetail({task, onClose}) {
                             <FeatherIcon icon="x" onClick={onClose} />
                         </Icons>
                     </TaskNameBox>
-                    <Detail />
+                    <Contents />
                 </TaskCreateDetailBox>
             </ModalPortal>
         </ModalBackdrop>
@@ -34,12 +34,12 @@ function TaskCreateDetail({task, onClose}) {
 
 const TaskCreateDetailBox = styled.div`
     z-index: 4;
+    position: absolute;
     width: 50em;
     height: 20em;
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
-    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
