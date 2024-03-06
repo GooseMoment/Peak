@@ -1,5 +1,5 @@
 import FeatherIcon from "feather-icons-react";  
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useState } from "react";
 
 const TaskCreateSimple = () => {
@@ -15,7 +15,7 @@ const TaskCreateSimple = () => {
                 {items.map((val, index) => {
                     return (
                         <IndexBox
-                        className={tab === index ? "active" : ""}
+                        $active={tab === index}
                         key={val.id}
                         onClick={() => tabClick(index)}
                         >
@@ -23,9 +23,9 @@ const TaskCreateSimple = () => {
                         </IndexBox>
                 )})}
             </FlexBox>
-            <MainBox>
+            <FieldBox>
                 <p>{items[tab].content}</p>
-            </MainBox>
+            </FieldBox>
         </>
     )
 }
@@ -49,14 +49,15 @@ const IndexBox = styled.div`
     justify-content: center;
     text-align: center;
     margin-left: 5px;
-
-    &.active {
+    
+    ${(props) =>
+        props.$active && css`
         background-color: #FF4A03;
         border: solid 2px #FFD7D7;
 
         & svg {
             stroke: #FFFFFF;
-        }
+        }`
     }
 
     & svg {
@@ -67,7 +68,7 @@ const IndexBox = styled.div`
     }
 `
 
-const MainBox = styled.div`
+const FieldBox = styled.div`
     z-index: 2;
     position: relative;
     display: flex;
