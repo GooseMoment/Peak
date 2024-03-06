@@ -1,71 +1,31 @@
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-import ModalPortal from "../ModalPortal"
+import DetailFrame from "./DetailFrame"
 
-const Calendar = ({ onClose }) => {
+const Calendar = () => {
     return (
-        <ModalPortal>
-            <CalendarBox>
-                <TitleBox>
-                    <Title>기한 지정</Title>
-                    <FeatherIcon icon="x" onClick={onClose} />
-                </TitleBox>
-                <CLine />
-                {items.map(item => (
-                    <ItemBlock>
-                        <Circle>
-                            <FeatherIcon icon={item.icon} />
-                        </Circle>
-                        <ItemText>{item.content}</ItemText>
-                    </ItemBlock>
-                ))}
-                <CLine />
-                <div>달력이 들어갈 자리입니다</div>
-                <CLine />
-                <AddTime>
-                    <AddTimeText>
-                        <FeatherIcon icon="clock" />
-                        시간 추가
-                    </AddTimeText>
-                </AddTime>
-            </CalendarBox>
-        </ModalPortal>
+        <DetailFrame title="기한 지정">
+            {items.map(item => (
+                <ItemBlock key={item.id}>
+                    <Circle>
+                        <FeatherIcon icon={item.icon} />
+                    </Circle>
+                    <ItemText>{item.content}</ItemText>
+                </ItemBlock>
+            ))}
+            <CLine />
+            <div>달력이 들어갈 자리입니다</div>
+            <CLine />
+            <AddTime>
+                <AddTimeText>
+                    <FeatherIcon icon="clock" />
+                    시간 추가
+                </AddTimeText>
+            </AddTime>
+        </DetailFrame>
     )
 }
-
-const CalendarBox = styled.div`
-    z-index: 999;
-    position: absolute;
-    width: 15em;
-    height: 22em;
-    background-color: #FFFFFF;
-    border: solid 1px #D9D9D9;
-    border-radius: 15px;
-    top: 40%;
-    left: 30%;
-`
-
-const TitleBox = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin: 0em 1.3em;
-
-    & svg {
-        width: 1em;
-        height: 1em;
-        stroke: #FF0000;
-        top: 1.2em;
-        cursor: pointer;
-    }
-`
-
-const Title = styled.div`
-    font-weight: 550;
-    font-size: 1em;
-    color: #000000;
-    margin-top: 1.3em;
-`
 
 const CLine = styled.div`
     border-top: thin solid #D9D9D9;
@@ -122,7 +82,7 @@ const AddTime = styled.div`
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
-    margin: 0em 0.5em;
+    margin: 0.5em 0.5em;
 `
 
 const AddTimeText = styled.p`

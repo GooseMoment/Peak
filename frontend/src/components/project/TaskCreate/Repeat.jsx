@@ -1,10 +1,10 @@
-import ModalPortal from "../ModalPortal"
+import DetailFrame from "./DetailFrame"
 
 const Repeat = () => {
     return (
-        <ModalPortal>
+        <DetailFrame title="반복 설정">
             <div>Repeat 창입니다</div>
-        </ModalPortal>
+        </DetailFrame>
     )
 }
 
