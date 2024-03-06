@@ -1,26 +1,21 @@
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-import ModalPortal from "../ModalPortal"
-
-const Detail = ({title, children}) => {
+const Detail = ({title, children, onClose}) => {
     return (
-        <ModalPortal>
-            <DetailBox>
-                <TitleBox>
-                    <Title>{title}</Title>
-                    <FeatherIcon icon="x"/>
-                </TitleBox>
-                <CLine />
-                {children}
-            </DetailBox>
-        </ModalPortal>
+        <DetailBox>
+            <TitleBox>
+                <Title>{title}</Title>
+                <FeatherIcon icon="x" onClick={onClose}/>
+            </TitleBox>
+            <CLine />
+            {children}
+        </DetailBox>
     )
 }
 
 const DetailBox = styled.div`
     z-index: 999;
-    position: absolute;
     width: 15em;
     height: auto;
     background-color: #FFFFFF;

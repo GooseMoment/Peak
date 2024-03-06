@@ -4,7 +4,6 @@ import { useEffect } from "react";
 
 import TaskName from "../TaskName";
 import Contents from "./Contents";
-import ModalPortal from "../ModalPortal";
 
 function TaskCreateDetail({task, onClose}) {
 
