@@ -40,7 +40,7 @@ const IndexBox = styled.div`
     z-index: 1;
     position: relative;
     width: 2.3em;
-    height: 2.3em;
+    height: 2em;
     background-color: #FFFFFF;
     border: solid 2px #D9D9D9;
     border-top-right-radius: 15px;
@@ -49,11 +49,13 @@ const IndexBox = styled.div`
     justify-content: center;
     text-align: center;
     margin-left: 5px;
+    border-bottom: none;
     
     ${(props) =>
         props.$active && css`
         background-color: #FF4A03;
         border: solid 2px #FFD7D7;
+        border-bottom: none;
 
         & svg {
             stroke: #FFFFFF;
@@ -78,7 +80,7 @@ const FieldBox = styled.div`
     background-color: #FFFFFF;
     border: solid 2px #D9D9D9;
     border-radius: 15px;
-    margin-top: -8px;
+    margin-bottom: none;
 `
 
 const items = [

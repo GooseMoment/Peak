@@ -1,10 +1,10 @@
-import ModalPortal from "../ModalPortal"
+import DetailFrame from "./DetailFrame"
 
 const Memo = () => {
     return (
-        <ModalPortal>
+        <DetailFrame title="메모 설정">
             <div>Memo페이지입니다</div>
-        </ModalPortal>
+        </DetailFrame>
     )
 }
 

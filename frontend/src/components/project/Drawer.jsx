@@ -8,7 +8,7 @@ function Drawer({drawer, children}){
                 <DrawerName>{drawer.name}</DrawerName>
                 <DrawerIcon>
                     {DrawerIcons.map(item => (
-                        <FeatherIcon icon={item.icon} />
+                        <FeatherIcon key={item.icon} icon={item.icon} />
                     ))}
                 </DrawerIcon>
             </DrawerBox>

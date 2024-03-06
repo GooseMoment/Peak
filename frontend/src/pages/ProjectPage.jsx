@@ -14,10 +14,10 @@ const ProjectPage = () => {
         </TitleBox>
         {mockDrawers.map((drawer) => (
             <>
-                <Drawer drawer={drawer}>
+                <Drawer key={drawer.id} drawer={drawer}>
                     <TaskList>
                         {mockTasks.map((task) => (
-                            drawer.name === task.drawer_name && <Task task={task}/>
+                            drawer.name === task.drawer_name && <Task key={task.id} task={task}/>
                         ))}
                     </TaskList>
                 </Drawer>
@@ -85,13 +85,13 @@ const mockProjects = [
 ]
 
 const mockDrawers = [
-    {name: "수강신청", project:"홍대라이프", color: "#2E61DC", uncompleted_task_count: 1, completed_task_count: 1},
-    {name: "고스락", project:"홍대라이프", color: "#2E61DC", uncompleted_task_count: 0, completed_task_count: 0},
+    {id: 0, name: "수강신청", project:"홍대라이프", color: "#2E61DC", uncompleted_task_count: 1, completed_task_count: 1},
+    {id: 1, name: "고스락", project:"홍대라이프", color: "#2E61DC", uncompleted_task_count: 0, completed_task_count: 0},
 ]
 
 const mockTasks = [
-    {name: "수강신청", drawer_name: "수강신청", privacy: "public", completed: false, due_date: "01월 30일", priority: 2},
-    {name: "담아두기", drawer_name: "수강신청", privacy: "public", completed: true, due_date: "02월 20일", priority: 0},
+    {id: 0, name: "수강신청", drawer_name: "수강신청", privacy: "public", completed: false, due_date: "01월 30일", priority: 2},
+    {id: 1, name: "담아두기", drawer_name: "수강신청", privacy: "public", completed: true, due_date: "02월 20일", priority: 0},
 ]
 
 export default ProjectPage

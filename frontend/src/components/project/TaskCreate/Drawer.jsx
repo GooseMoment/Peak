@@ -1,10 +1,10 @@
-import ModalPortal from "../ModalPortal"
+import DetailFrame from "./DetailFrame"
 
 const Drawer = () => {
     return (
-        <ModalPortal>
+        <DetailFrame title="서랍 선택">
             <div>서랍선택 창입니다</div>
-        </ModalPortal>
+        </DetailFrame>
     )
 }
 
