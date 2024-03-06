@@ -22,7 +22,7 @@ const DetailBox = styled.div`
     z-index: 999;
     position: absolute;
     width: 15em;
-    height: 12em;
+    height: auto;
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;

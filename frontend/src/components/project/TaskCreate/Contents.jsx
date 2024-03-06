@@ -31,7 +31,7 @@ function Contents() {
                 </ContentText>
                 {(content === item.name && isComponentOpen) ? 
                 <ModalPortal>
-                    <Detail title={item.name} />
+                    <Detail title={item.name} children={item.children}/>
                 </ModalPortal> : null}
             </ContentsBox>
             ))}
@@ -89,11 +89,11 @@ const ContentText = styled.div`
 `
 
 const items = [
-    {id: 1, icon: "calendar", name: "Calendar", content: "2024년 02월 20일 18:00", component: <Calendar />},
-    {id: 2, icon: "clock", name: "Clock", content: "2024년 02월 20일 16:00", component: <Reminder />},
-    {id: 3, icon: "alert-circle", name: "Alert-circle", content: "매우 중요", component: <Priority /> },
-    {id: 4, icon: "archive", name: "Archive", content: "홍대라이프 / 수강신청", component: <Drawer /> },
-    {id: 5, icon: "edit", name: "Edit", content: "없음", component: <Memo />},
+    {id: 1, icon: "calendar", name: "Calendar", content: "2024년 02월 20일 18:00", children: "hi"},
+    {id: 2, icon: "clock", name: "Clock", content: "2024년 02월 20일 16:00", children: "hi"},
+    {id: 3, icon: "alert-circle", name: "Alert-circle", content: "매우 중요", children: "hi"},
+    {id: 4, icon: "archive", name: "Archive", content: "홍대라이프 / 수강신청", children: "hi"},
+    {id: 5, icon: "edit", name: "Edit", content: "없음", children: "hi"},
 ]
 
 export default Contents
