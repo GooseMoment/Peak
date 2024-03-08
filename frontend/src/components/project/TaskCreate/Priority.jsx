@@ -2,9 +2,9 @@ import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 import DetailFrame from "./DetailFrame"
 
-const Priority = () => {
+const Priority = ({ onClose }) => {
     return (
-        <DetailFrame title="중요도 설정">
+        <DetailFrame title="중요도 설정" onClose={onClose}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     <FeatherIcon icon={item.icon} />

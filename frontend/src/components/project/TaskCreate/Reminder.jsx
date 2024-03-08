@@ -3,9 +3,9 @@ import styled from "styled-components"
 
 import DetailFrame from "./DetailFrame"
 
-const Reminder = () => {
+const Reminder = ({ onClose }) => {
     return (
-        <DetailFrame title="알람 설정">
+        <DetailFrame title="알람 설정" onClose={onClose}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     <FeatherIcon icon={item.icon} />

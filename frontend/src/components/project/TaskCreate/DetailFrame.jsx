@@ -1,12 +1,12 @@
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-const DetailFrame = ({title, children}) => {
+const DetailFrame = ({title, children, onClose}) => {
     return (
         <DetailBox $calendar={title === '기한 지정'}>
             <TitleBox>
                 <Title>{title}</Title>
-                <FeatherIcon icon="x"/>
+                <FeatherIcon icon="x" onClick={onClose} />
             </TitleBox>
             <CLine />
             {children}
