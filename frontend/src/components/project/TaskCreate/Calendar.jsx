@@ -3,9 +3,9 @@ import styled from "styled-components"
 
 import DetailFrame from "./DetailFrame"
 
-const Calendar = () => {
+const Calendar = ({ onClose }) => {
     return (
-        <DetailFrame title="기한 지정">
+        <DetailFrame title="기한 지정" onClose={onClose}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     <Circle>

@@ -10,19 +10,48 @@ import Drawer from "./Drawer"
 import Memo from "./Memo"
 
 function Contents() {
-    const [isComponentOpen, setIsComponentOpen] = useState(false);
     // text클릭 시 알맞는 component 띄우기
     const [content, setContent] = useState();
-
-    const onClose = () => {
-        setIsComponentOpen(false);
-    }
-
+    
     const handleClickContent = (e) => {
         setIsComponentOpen(true);
         const name = e.target.id;
         setContent(name);
     };
+
+    // component modal
+    const [isComponentOpen, setIsComponentOpen] = useState(false);
+
+    const onClose = () => {
+        setIsComponentOpen(false);
+    }
+
+    const items = [
+        {id: 1,
+        icon: "calendar",
+        content: "2024년 02월 20일 18:00",
+        component: <Calendar onClose={onClose} />},
+    
+        {id: 2,
+        icon: "clock",
+        content: "2024년 02월 20일 16:00",
+        component: <Reminder onClose={onClose} />},
+    
+        {id: 3,
+        icon: "alert-circle",
+        content: "매우 중요",
+        component: <Priority onClose={onClose} />},
+    
+        {id: 4,
+        icon: "archive",
+        content: "홍대라이프 / 수강신청",
+        component: <Drawer onClose={onClose} />},
+    
+        {id: 5,
+        icon: "edit",
+        content: "없음",
+        component: <Memo onClose={onClose} />},
+    ]
     
     return (
         <ContentsBlock>
@@ -31,7 +60,7 @@ function Contents() {
                 <FeatherIcon icon={item.icon} />
                 <VLine $end={item.id === 1 || item.id === 5} />
                 <ContentText id ={item.icon} onClick={handleClickContent}>
-                    {content === item.icon || item.content}
+                    {item.content}
                 </ContentText>
                 {(content === item.icon && isComponentOpen) ? 
                 <ModalPortal>
@@ -90,32 +119,5 @@ const ContentText = styled.div`
     cursor: pointer;
     }
 `
-
-const items = [
-    {id: 1,
-    icon: "calendar",
-    content: "2024년 02월 20일 18:00",
-    component: <Calendar/>},
-
-    {id: 2,
-    icon: "clock",
-    content: "2024년 02월 20일 16:00",
-    component: <Reminder/>},
-
-    {id: 3,
-    icon: "alert-circle",
-    content: "매우 중요",
-    component: <Priority/>},
-
-    {id: 4,
-    icon: "archive",
-    content: "홍대라이프 / 수강신청",
-    component: <Drawer/>},
-
-    {id: 5,
-    icon: "edit",
-    content: "없음",
-    component: <Memo/>},
-]
 
 export default Contents
