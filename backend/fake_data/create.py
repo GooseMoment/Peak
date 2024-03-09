@@ -1,6 +1,7 @@
 from django_seed import Seed
 import random
-from datetime import date
+from datetime import date, datetime
+from django.utils import timezone
 from faker import Faker
 
 from django.contrib.auth.hashers import (
@@ -89,44 +90,57 @@ def __create():
         "followings_count": lambda _: random.randint(0, 100),
         "followers_count": lambda _: random.randint(0, 100),
         "password": make_password("PASSWORD_DEFAULT"),
+        "is_staff": False,
+        "is_superuser": False,
+        "deleted_at": lambda _: None,
     })
         
     print("Add Project...")
     from projects.models import Project
     seeder.add_entity(Project, 20, {
         "color": lambda _: fake.color()[1:],
+        "deleted_at": lambda _: random.choice([None, None, None, datetime.now(tz=timezone.utc)]),
     })
 
     print("Add Drawer...")
     from drawers.models import Drawer
-    seeder.add_entity(Drawer, 30)
+    seeder.add_entity(Drawer, 30, {
+        "deleted_at": lambda _: random.choice([None, None, None, datetime.now(tz=timezone.utc)]),
+    })
 
     # TODO: match Task.drawer.user and Task.user 
     print("Add Task...")
     from tasks.models import Task
-    seeder.add_entity(Task, 100)
+    seeder.add_entity(Task, 100, {
+        "deleted_at": lambda _: random.choice([None, None, None, datetime.now(tz=timezone.utc)]),
+    })
 
     print("Add DailyComment...")
     from social.models import DailyComment
     seeder.add_entity(DailyComment, 40, {
         "date": lambda _: date(2024, random.randint(2, 3), random.randint(1, 29)),
+        "deleted_at": lambda _: random.choice([None, None, None, datetime.now(tz=timezone.utc)]),
     })
 
     # TODO: real img uris for emoji
     print("Add Emoji...")
     from social.models import Emoji
-    seeder.add_entity(Emoji, 100)
+    seeder.add_entity(Emoji, 100, {
+        "deleted_at": lambda _: None,
+    })
 
     print("Add Reactions...")
     from social.models import Reaction
     seeder.add_entity(Reaction, 100, {
         "parent_type": lambda _: random.choice(Reaction.REACTION_TYPE)[0],
+        "deleted_at": lambda _: random.choice([None, None, None, datetime.now(tz=timezone.utc)]),
     })
 
     print("Add Notification...")
     from notifications.models import Notification
     seeder.add_entity(Notification, 100, {
         "type": lambda _: random.choice(Notification.NOTIFICATION_TYPES)[0],
+        "deleted_at": lambda _: random.choice([None, None, None, datetime.now(tz=timezone.utc)]),
     })
 
     inserted_pks = seeder.execute()
