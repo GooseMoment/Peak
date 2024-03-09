@@ -4,13 +4,14 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 import uuid
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, password=None):
-        user = User(username=username, email=email)
+    def create_user(self, display_name, username, email, password=None):
+        user = User(display_name=display_name, username=username, email=email)
         user.set_password(password)
-        user.objects.create()
+        user.save()
 
-    def create_superuser(self, username, email, password=None):
-        self.create_user(username, email, password)
+    def create_superuser(self, display_name, username, email, password=None):
+        # TODO: set is_staff
+        self.create_user(display_name, username, email, password)
 
 class User(AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
