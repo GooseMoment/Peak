@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 
 import uuid
 
@@ -10,10 +11,13 @@ class UserManager(BaseUserManager):
         user.save()
 
     def create_superuser(self, display_name, username, email, password=None):
-        # TODO: set is_staff
-        self.create_user(display_name, username, email, password)
+        user = User(display_name=display_name, username=username, email=email)
+        user.set_password(password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=18, unique=True)
     display_name = models.CharField(max_length=18, blank=True)
@@ -24,9 +28,11 @@ class User(AbstractBaseUser):
     profile_img_uri = models.URLField() # TODO: default profile img
     bio = models.TextField(max_length=50, blank=True)
 
+    is_staff = models.BooleanField(default=False)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     # ---
 
