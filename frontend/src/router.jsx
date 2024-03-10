@@ -9,6 +9,8 @@ import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 import SignInPage from "@pages/SignInPage"
 import ProjectPage from "@pages/ProjectPage"
+import SocialFollowingPage from "@/pages/SocialFollowingPage"
+import SocialExplorePage from "@/pages/SocialExplorePage"
 
 const router = createBrowserRouter([
     {
@@ -44,7 +46,17 @@ const router = createBrowserRouter([
             },
             {
                 path: "social",
-                element: <div>This is /social</div>,
+                children: [
+                    // TODO: Redirect?
+                    {
+                        path: "following",
+                        element: <SocialFollowingPage />,
+                    },
+                    {
+                        path: "explore",
+                        element: <SocialExplorePage />,
+                    },
+                ]
             },
             {
                 path: "projects",
@@ -52,7 +64,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "projects/:id",
-                element: <ProjectPage/>,
+                element: <ProjectPage />,
             },
             {
                 path: "users/:username",
@@ -64,7 +76,7 @@ const router = createBrowserRouter([
             },
         ]
     },
-    
+
 ])
 
 export default router

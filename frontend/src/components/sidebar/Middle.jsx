@@ -25,7 +25,7 @@ const items = [
     {icon: "search", name: "Search", to: "/search"},
     {icon: "bell", name: "Notifications", to: "/notifications"},
     {icon: "calendar", name: "Today", to: "/today"},
-    {icon: "users", name: "Social", to: "/social"},
+    {icon: "users", name: "Social", to: "/social/following"},
     {icon: "archive", name: "Projects", to: "/projects"},
 ]
 
