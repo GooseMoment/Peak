@@ -4,4 +4,4 @@ django-seed==0.3.1
 django-stubs==4.2.7
 django-stubs-ext==4.2.7
 djangorestframework==3.14.0
-psycopg==3.1.18
+psycopg-binary==3.1.18
