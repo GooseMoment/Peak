@@ -12,7 +12,7 @@ class TaskReminder(Base):
     )
     scheduled = models.DateTimeField()
 
-class Notification(models.Model):
+class Notification(Base):
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
 
     FOR_TASK = "task"
