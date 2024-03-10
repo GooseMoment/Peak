@@ -1,12 +1,16 @@
 import styled from "styled-components";
 import FeatherIcon from 'feather-icons-react';
 
-function TaskName({task, onClick}){
+function TaskName({task, modalOpen}){
     return (
         <>
-            <TaskNameBox onClick={onClick}>
-                <TaskCircle $completed={task.completed}>{task.completed && <FeatherIcon icon="check"/>}</TaskCircle>
-                <Text $completed={task.completed}>{task.name}</Text>
+            <TaskNameBox>
+                <TaskCircle $completed={task.completed}>
+                    {task.completed && <FeatherIcon icon="check"/>}
+                </TaskCircle>
+                <Text $completed={task.completed} onClick={modalOpen}>
+                    {task.name}
+                </Text>
             </TaskNameBox>
         </>
     );

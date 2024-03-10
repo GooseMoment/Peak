@@ -9,9 +9,13 @@ import styled from "styled-components";
 function Task({task}){
     const [isModalOpen, setIsModalOpen] = useState(false)
 
+    const modalHandler = () => {
+        setIsModalOpen(true);
+    };
+
     return (
         <>
-            <TaskName task={task} onClick={() => setIsModalOpen(true)} />
+            <TaskName task={task} modalOpen={modalHandler}/>
             {task.due_date && <CalendarText>    
                     {task.due_date === "02월 20일" && <CalendarTextPlus>오늘</CalendarTextPlus>}
                     {task.due_date === "02월 20일" && "| "}
