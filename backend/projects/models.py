@@ -2,9 +2,10 @@ from django.db import models
 
 import uuid
 
+from api.models import Base
 from users.models import User
 
-class Project(models.Model):
+class Project(Base):
     REGULAR = "regular"
     GOAL = "goal"
 
@@ -22,7 +23,3 @@ class Project(models.Model):
     order = models.IntegerField()
     color = models.CharField(max_length=6)
     type = models.CharField(choices=PROJECT_TYPE_CHOICES, max_length=128)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
