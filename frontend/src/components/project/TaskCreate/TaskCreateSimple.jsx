@@ -9,6 +9,18 @@ const TaskCreateSimple = () => {
         setTab(index)
     }
 
+    const [isClick, setClick] = useState(false);
+    const [inputText, setInputText] = useState("");
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            setInputText(e.target.value)
+            alert(inputText)
+            setClick(false)
+            // inputText로 값 바뀌게 수정해야함
+        }
+    }
+
     return (
         <>
             <FlexBox>
@@ -23,9 +35,15 @@ const TaskCreateSimple = () => {
                         </IndexBox>
                 )})}
             </FlexBox>
-            <FieldBox>
-                <p>{items[tab].content}</p>
-            </FieldBox>
+            <MainBox onClick={() => setClick(true)}>
+                {isClick ? 
+                    <FieldBox
+                        type="text"
+                        placeholder={items[tab].content}
+                        onChange={(e) => setInputText(e.target.value)}
+                        onKeyDown={(e) => activeEnter(e)}
+                    /> : items[tab].content}
+            </MainBox>
         </>
     )
 }
@@ -70,7 +88,7 @@ const IndexBox = styled.div`
     }
 `
 
-const FieldBox = styled.div`
+const MainBox = styled.div`
     z-index: 2;
     position: relative;
     display: flex;
@@ -81,6 +99,16 @@ const FieldBox = styled.div`
     border: solid 2px #D9D9D9;
     border-radius: 15px;
     margin-bottom: none;
+`
+
+const FieldBox = styled.input`
+    margin-left: 1em;
+    border-width: 0;
+    background-color: none;
+
+    &:focus {
+        outline: none;
+    }
 `
 
 const items = [
