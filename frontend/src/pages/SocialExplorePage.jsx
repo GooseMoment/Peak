@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom";
 
-import SocialCalendar from "@/components/social/SocialCalendar";
+import SocialCalendar from "@components/social/SocialCalendar";
 import styled from "styled-components"
 
 const SocialExplorePage = () => {

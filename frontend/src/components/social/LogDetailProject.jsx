@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import LogDetailTask from "@/components/social/LogDetailTask"
+import LogDetailTask from "@components/social/LogDetailTask"
 
 const LogDetailProject = ({project}) => {
     return <ProjectContainer>

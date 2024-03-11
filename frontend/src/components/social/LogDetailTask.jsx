@@ -2,9 +2,9 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react";
 import { DateTime } from "luxon"
 
-import ReactionEmoji from "@/components/social/ReactionEmoji";
-import AddEmoji from "@/components/social/AddEmoji";
-import AddPeak from "@/components/social/AddPeak";
+import ReactionEmoji from "@components/social/ReactionEmoji";
+import AddEmoji from "@components/social/AddEmoji";
+import AddPeak from "@components/social/AddPeak";
 
 const DisplayText = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength - 3) + '...' : text;

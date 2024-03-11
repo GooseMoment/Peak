@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-import ReactionEmoji from "@/components/social/ReactionEmoji";
-import AddEmoji from "@/components/social/AddEmoji";
+import ReactionEmoji from "@components/social/ReactionEmoji";
+import AddEmoji from "@components/social/AddEmoji";
 import LogDetailProject from "@components/social/LogDetailProject";
 
 const DisplayUsername = (username) => {

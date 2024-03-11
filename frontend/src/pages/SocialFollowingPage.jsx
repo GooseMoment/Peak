@@ -3,9 +3,9 @@ import { useState } from "react"
 import { Link } from "react-router-dom";
 import styled from "styled-components"
 
-import SocialCalendar from "@/components/social/SocialCalendar";
-import LogBox from "@/components/social/LogBox";
-import LogDetail from "@/components/social/LogDetail";
+import SocialCalendar from "@components/social/SocialCalendar";
+import LogBox from "@components/social/LogBox";
+import LogDetail from "@components/social/LogDetail";
 
 const SocialFollowingPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());

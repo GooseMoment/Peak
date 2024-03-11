@@ -3,7 +3,7 @@ import styled from "styled-components";
 import FeatherIcon from "feather-icons-react";
 import { createPortal } from "react-dom";
 
-import EmojiButton from "@/components/social/EmojiButton";
+import EmojiButton from "@components/social/EmojiButton";
 
 const EmojiModal = ({isModalOpen, setIsModalOpen}) => {
     if(!isModalOpen) 
