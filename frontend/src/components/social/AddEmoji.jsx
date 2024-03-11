@@ -10,13 +10,13 @@ const EmojiModal = ({isModalOpen, setIsModalOpen}) => {
         return null
 
     const [isHover, setIsHover] = useState(false)
-    const Emojis = [
+    const emojis = [
         "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "🥰", "😗", "😙", "🥲", "😚", "🤗", "🙂", "🤩", "🤔"
     ]
 
     return <EmojiLists>
         {
-            Emojis.map(emoji =>
+            emojis.map(emoji =>
                     <EmojiButton emoji={emoji} isHover={isHover} setIsHover={setIsHover} setIsModalOpen={setIsModalOpen}/>
             )
         }

@@ -18,7 +18,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
         setTempText(e.target.value)
     }
 
-    const HandleInputState = () => {
+    const handleInputState = () => {
         setInputState(!inputState)
     }
 
@@ -32,7 +32,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
                 @{DisplayUsername(userLogsDetail.user.username)}
             </Username>
         </Profile>
-        <CommentBox onClick={HandleInputState}>
+        <CommentBox onClick={handleInputState}>
             {userLogsDetail.dailyComment.name ? (
                 <Comment>{"\""+userLogsDetail.dailyComment.name+"\""}</Comment>
             ) : (

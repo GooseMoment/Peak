@@ -4,11 +4,11 @@ import styled from "styled-components"
 const ReactionEmoji = ({emoji}) => {
     const [emojiClick, setEmojiClick] = useState(false)
     
-    const HandleEmoji = () => {
+    const handleEmoji = () => {
         setEmojiClick(!emojiClick)
     }
     
-    return <EmojiBox onClick={HandleEmoji} style={{backgroundColor: emojiClick? "#FFD7C7" : "#F2F2F2"}}>
+    return <EmojiBox onClick={handleEmoji} style={{backgroundColor: emojiClick? "#FFD7C7" : "#F2F2F2"}}>
         {emoji.emoji} {emoji.reactionNum}
     </ EmojiBox>
 }
