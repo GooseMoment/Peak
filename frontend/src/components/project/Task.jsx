@@ -1,16 +1,21 @@
-import styled from "styled-components";
 import { useState } from "react";
 
-import TaskCreateDetail from "@/components/project/TaskCreateDetail/TaskCreateDetail";
+import TaskCreateDetail from "@components/project/TaskCreate/TaskCreateDetail";
 import TaskName from "./TaskName";
 import ModalPortal from "./ModalPortal";
 
+import styled from "styled-components";
+
 function Task({task}){
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false)
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
 
     return (
-        <>
-            <TaskName task={task} onClick={() => setIsModalOpen(true)} />
+        <TaskBox>
+            <TaskName task={task} openModal={openModal}/>
             {task.due_date && <CalendarText>    
                     {task.due_date === "02월 20일" && <CalendarTextPlus>오늘</CalendarTextPlus>}
                     {task.due_date === "02월 20일" && "| "}
@@ -20,15 +25,19 @@ function Task({task}){
             <ModalPortal>
                 <TaskCreateDetail task={task} onClose={() => setIsModalOpen(false)} />
             </ModalPortal>}
-        </>
+        </TaskBox>
     );
 }
 
+const TaskBox = styled.div`
+    margin-top: 1em;
+`
+
 const CalendarText = styled.p`
     display: flex;
-    margin-left: 3.6em;
+    margin-left: 3em;
     font-style: normal;
-    font-size: 0.6em;
+    font-size: 0.7em;
     color: #000;
 `
 

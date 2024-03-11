@@ -1,12 +1,16 @@
 import styled from "styled-components";
 import FeatherIcon from 'feather-icons-react';
 
-function TaskName({task, onClick}){
+function TaskName({task, openModal}){
     return (
         <>
-            <TaskNameBox onClick={onClick}>
-                <TaskCircle $completed={task.completed}>{task.completed && <FeatherIcon icon="check"/>}</TaskCircle>
-                <Text $completed={task.completed}>{task.name}</Text>
+            <TaskNameBox>
+                <TaskCircle $completed={task.completed}>
+                    {task.completed && <FeatherIcon icon="check"/>}
+                </TaskCircle>
+                <Text $completed={task.completed} onClick={openModal}>
+                    {task.name}
+                </Text>
             </TaskNameBox>
         </>
     );
@@ -16,7 +20,6 @@ const TaskNameBox = styled.div`
     display: flex;
     flex: 1;
     align-items: center;
-    padding-top: 0.8em;
 
     &:hover {
         cursor: pointer;
@@ -24,6 +27,7 @@ const TaskNameBox = styled.div`
 `
 
 const TaskCircle = styled.div`
+    top: 0.3em;
     width: 1.2em;
     height: 1.2em;
     border-radius: 50%;
