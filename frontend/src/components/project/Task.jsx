@@ -8,30 +8,26 @@ import styled from "styled-components";
 
 function Task({task}){
     const [isModalOpen, setIsModalOpen] = useState(false)
-
+    
     const openModal = () => {
         setIsModalOpen(true);
     };
 
     return (
-        <TaskBox>
+        <>
             <TaskName task={task} openModal={openModal}/>
             {task.due_date && <CalendarText>    
                     {task.due_date === "02월 20일" && <CalendarTextPlus>오늘</CalendarTextPlus>}
                     {task.due_date === "02월 20일" && "| "}
                     {task.due_date}
             </CalendarText>}
-            { isModalOpen &&
+            {isModalOpen &&
             <ModalPortal>
                 <TaskCreateDetail task={task} onClose={() => setIsModalOpen(false)} />
             </ModalPortal>}
-        </TaskBox>
+        </>
     );
 }
-
-const TaskBox = styled.div`
-    margin-top: 1em;
-`
 
 const CalendarText = styled.p`
     display: flex;
