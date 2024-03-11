@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from "styled-components"
 import CommonCalendar from "@components/common/CommonCalendar";
 import moment from 'moment';
@@ -17,7 +16,6 @@ const StyledSocialCalendar = styled(CommonCalendar)`
 `
 
 const SocialCalendar = ({newLogDates, selectedDate, setSelectedDate}) => {
-  //console.log(newLogDates);
   return <>
     <StyledSocialCalendar
       selectedDate={selectedDate}
@@ -27,15 +25,6 @@ const SocialCalendar = ({newLogDates, selectedDate, setSelectedDate}) => {
           return "highlight";
         }
       }}
-      /*
-      tileContent={({ date, view }) => {
-        let html = [];
-        if (mark.find((x) => x === moment(date).format("D-MM-YYYY"))) {
-          html.push(<div className="highlight"></div>);
-        }
-        return ({html});
-      }}
-      */
     />
   </>
 };
