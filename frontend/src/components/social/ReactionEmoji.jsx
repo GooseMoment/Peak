@@ -15,7 +15,7 @@ const ReactionEmoji = ({emoji}) => {
 
 const EmojiBox = styled.div`
 display: inline-block;
-text-algin: center;
+text-align: center;
 
 margin-right: 0.5em;
 padding: 0.5em;
