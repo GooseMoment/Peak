@@ -8,6 +8,7 @@ class Drawer(Base):
     project = models.ForeignKey(
         Project,
         on_delete=models.CASCADE,
+        related_name="drawers",
     )
     order = models.IntegerField()
     privacy = models.CharField(max_length=128)
