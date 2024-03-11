@@ -20,7 +20,6 @@ const TaskNameBox = styled.div`
     display: flex;
     flex: 1;
     align-items: center;
-    padding-top: 0.8em;
 
     &:hover {
         cursor: pointer;
@@ -28,6 +27,7 @@ const TaskNameBox = styled.div`
 `
 
 const TaskCircle = styled.div`
+    top: 0.3em;
     width: 1.2em;
     height: 1.2em;
     border-radius: 50%;

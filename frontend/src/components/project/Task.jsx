@@ -14,7 +14,7 @@ function Task({task}){
     };
 
     return (
-        <>
+        <TaskBox>
             <TaskName task={task} openModal={openModal}/>
             {task.due_date && <CalendarText>    
                     {task.due_date === "02월 20일" && <CalendarTextPlus>오늘</CalendarTextPlus>}
@@ -25,9 +25,13 @@ function Task({task}){
             <ModalPortal>
                 <TaskCreateDetail task={task} onClose={() => setIsModalOpen(false)} />
             </ModalPortal>}
-        </>
+        </TaskBox>
     );
 }
+
+const TaskBox = styled.div`
+    margin-top: 1em;
+`
 
 const CalendarText = styled.p`
     display: flex;
