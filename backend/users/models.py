@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 
-import uuid
+from api.models import Base
 
 class UserManager(BaseUserManager):
     def create_user(self, username, email, password=None):
@@ -12,8 +12,7 @@ class UserManager(BaseUserManager):
     def create_superuser(self, username, email, password=None):
         self.create_user(username, email, password)
 
-class User(AbstractBaseUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class User(AbstractBaseUser, Base):
     username = models.CharField(max_length=18, unique=True)
     display_name = models.CharField(max_length=18, blank=True)
     password = models.TextField()
@@ -22,10 +21,6 @@ class User(AbstractBaseUser):
     followers_count = models.IntegerField(default=0)
     profile_img_uri = models.URLField() # TODO: default profile img
     bio = models.TextField(max_length=50, blank=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
 
     # ---
 
@@ -45,6 +40,3 @@ class User(AbstractBaseUser):
         return "@" + self.username
     
     objects = UserManager()
-
-    class Meta:
-        abstract = False

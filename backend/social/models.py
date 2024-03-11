@@ -2,20 +2,15 @@ from django.db import models
 
 import uuid
 
+from api.models import Base
 from users.models import User
 from tasks.models import Task
 
-class Emoji(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class Emoji(Base):
     name = models.CharField(max_length=128)
     img_uri = models.URLField()
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
-
-class Peck(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class Peck(Base):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -26,12 +21,7 @@ class Peck(models.Model):
     )
     count = models.IntegerField()
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
-
-class DailyComment(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class DailyComment(Base):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -39,11 +29,7 @@ class DailyComment(models.Model):
     comment = models.TextField()
     date = models.DateField()
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
-
-class Reaction(models.Model):
+class Reaction(Base):
     FOR_TASK = "task"
     FOR_DAILY_COMMENT = "daily_comment"
 
@@ -52,7 +38,6 @@ class Reaction(models.Model):
         (FOR_DAILY_COMMENT, "For daily comment"),
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -70,12 +55,7 @@ class Reaction(models.Model):
     )
     emoji = models.ManyToManyField(Emoji)
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
-
-class Comment(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class Comment(Base):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -86,11 +66,7 @@ class Comment(models.Model):
     )
     comment = models.TextField()
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
-
-class Following(models.Model):
+class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
     # 보내는사람
     follower = models.ForeignKey(
         User,
@@ -108,14 +84,14 @@ class Following(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["follower", "followee"], name="constraint_follower_followee"),
         ]
 
-class Block(models.Model):
+class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
     blocker = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
