@@ -85,8 +85,8 @@ const mockProjects = [
 ]
 
 const mockDrawers = [
-    {id: 0, name: "수강신청", project:"홍대라이프", color: "#2E61DC", uncompleted_task_count: 1, completed_task_count: 1},
-    {id: 1, name: "고스락", project:"홍대라이프", color: "#2E61DC", uncompleted_task_count: 0, completed_task_count: 0},
+    {id: 0, name: "수강신청", project:"홍대라이프", color: "#2E61DC", task_count : 2, uncompleted_task_count: 1, completed_task_count: 1},
+    {id: 1, name: "고스락", project:"홍대라이프", color: "#2E61DC", task_count : 0, uncompleted_task_count: 0, completed_task_count: 0},
 ]
 
 const mockTasks = [

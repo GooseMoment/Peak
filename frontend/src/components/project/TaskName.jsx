@@ -20,6 +20,7 @@ const TaskNameBox = styled.div`
     display: flex;
     flex: 1;
     align-items: center;
+    padding-top: 0.8em;
 
     &:hover {
         cursor: pointer;
