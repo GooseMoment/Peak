@@ -9,8 +9,8 @@ import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 import SignInPage from "@pages/SignInPage"
 import ProjectPage from "@pages/ProjectPage"
-import SocialFollowingPage from "@/pages/SocialFollowingPage"
-import SocialExplorePage from "@/pages/SocialExplorePage"
+import SocialFollowingPage from "@pages/SocialFollowingPage"
+import SocialExplorePage from "@pages/SocialExplorePage"
 
 const router = createBrowserRouter([
     {
