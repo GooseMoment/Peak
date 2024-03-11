@@ -1,4 +1,5 @@
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
+from rest_framework.request import Request
 
 from .models import Project
 from .serializers import ProjectSerializer
@@ -34,5 +35,6 @@ class ProjectList(mixins.ListModelMixin,
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
     
-    def post(self, request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
+        request.data.update({"order": "0", "user": request.user.id})
         return self.create(request, *args, **kwargs)
