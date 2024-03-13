@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -102,13 +103,12 @@ WSGI_APPLICATION = 'django_peak.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'peakdb',
-        'USER': 'peakuser',
-        'PASSWORD': 'PEAK_DEFAULT_PASSWORD',
-        # TODO: 'PASSWORD': os.environ["PEAKUSER_SECRET_KEY"],
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': os.environ.get("SQL_ENGINE", 'django.db.backends.postgresql'),
+        'NAME': os.environ.get("SQL_DATABASE", 'peakdb'),
+        'USER': os.environ.get("SQL_USER", 'peakuser'),
+        'PASSWORD': os.environ.get("SQL_PASSWORD", 'PEAK_DEFAULT_PASSWORD'),
+        'HOST': os.environ.get("SQL_HOST", '127.0.0.1'),
+        'PORT': os.environ.get("SQL_PORT", '5432'),
     }
 }
 
