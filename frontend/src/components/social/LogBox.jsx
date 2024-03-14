@@ -16,9 +16,9 @@ const LogBox = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
         >
         {/* separate the "Profile" into a separate file? */}
         <Profile>
-            <ProfileImg $color={userLogSimple.isRead ? "#A4A4A4" : userLogSimple.task.projectColor} >
+            <ProfileImgWrapper $color={userLogSimple.isRead ? "#A4A4A4" : userLogSimple.task.projectColor} >
                 <img src={userLogSimple.user.profileImgURI}/>
-            </ProfileImg>
+            </ProfileImgWrapper>
             <Username>
                 @{DisplayText(userLogSimple.user.username, 11)}
             </Username>
@@ -46,7 +46,7 @@ text-align: center;
 
 `
 
-const ProfileImg = styled.div`
+const ProfileImgWrapper = styled.div`
 position: relative;
 width: auto;
 height: 3em;
