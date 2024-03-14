@@ -34,6 +34,14 @@ WSGI 프로그램으로는 [gunicorn](https://gunicorn.org)을 사용합니다.
 
 ## 실행
 
+### 준비
+
+```bash
+docker volume create caddy_data
+```
+
+### 개발 환경일시
+
 ```bash
 # Peak 디렉터리에서 실행
 docker-compose build # 도커 이미지 빌드
@@ -46,7 +54,7 @@ docker-compose stop # 종료
 docker-compose down # 종료 및 컨테이너 내리기 
 ```
 
-## 실행 (프로덕션)
+### 프로덕션일시
 
 실행 전, `.env.prod` 파일이 필요합니다. `.env.prod.example`을 `.env.prod`로 복사합시다.
 

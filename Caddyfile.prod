@@ -1,6 +1,6 @@
 # https://caddyserver.com/docs/caddyfile
 
-:8080 {
+peak.ooo {
 	# https://stackoverflow.com/a/71815382
 	encode zstd gzip
 
@@ -24,7 +24,7 @@
 	}
 }
 
-:8888 {
+api.peak.ooo {
 	# static files that django admin and rest_framework uses
 	handle_path /static/* {
 		root * /srv/django_static/static

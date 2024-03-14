@@ -11,6 +11,9 @@ WORKDIR /backend
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+RUN apk update
+RUN apk add curl
+
 RUN pip install --upgrade pip
 COPY . .
 # Peak/에서 docker-compose를 실행하더라도 경로는 ./backend가 아닌, 그냥 .

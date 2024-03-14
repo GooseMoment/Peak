@@ -3,17 +3,36 @@
 name: peak
 
 services:
+  web:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8080:8080
+      - 8888:8888
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    volumes:
+      - django_admin_static:/srv/django_static
+      - ./Caddyfile.prod:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
   api:
     build: ./backend
     command: gunicorn django_peak.wsgi:application --bind 0.0.0.0:8000
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://127.0.0.1:8000/health/ok"]
-      interval: 1m30s
-      timeout: 30s
+      interval: 10s
+      timeout: 3s
       retries: 5
-      start_period: 30s
     volumes:
       - ./backend/:/usr/src/backend/
+      - django_admin_static:/backend/static
     ports:
       - 8000:8000
     depends_on:
@@ -36,4 +55,8 @@ services:
       timeout: 5s
       retries: 10
 volumes:
+  django_admin_static:
   db_data:
+  caddy_data:
+    external: true
+  caddy_config:

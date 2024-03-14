@@ -12,12 +12,14 @@ services:
     cap_add:
       - NET_ADMIN
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
+      - 8080:8080
+      - 8888:8888
+      - 80:80
+      - 443:443
+      - 443:443/udp
     volumes:
-      - django_admin_static:/usr/share/caddy/django_static
-      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - django_admin_static:/srv/django_static
+      - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
   api:
@@ -25,10 +27,9 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://127.0.0.1:8000/health/ok"]
-      interval: 1m30s
-      timeout: 30s
+      interval: 10s
+      timeout: 3s
       retries: 5
-      start_period: 30s
     volumes:
       - ./backend/:/usr/src/backend/
       - django_admin_static:/backend/static
