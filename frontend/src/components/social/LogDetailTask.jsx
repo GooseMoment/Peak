@@ -3,7 +3,7 @@ import FeatherIcon from "feather-icons-react";
 import { DateTime } from "luxon"
 
 import ReactionEmoji from "@components/social/ReactionEmoji";
-import AddEmoji from "@components/social/AddEmoji";
+import EmojiAddButton from "@components/social/EmojiAddButton";
 import AddPeak from "@components/social/AddPeak";
 
 const DisplayText = (text, maxLength) => {
@@ -41,7 +41,7 @@ const LogDetailTask = ({ task, color }) => {
                     {task.reaction.map((LogDetailTaskEmoji) => (
                         <ReactionEmoji emoji={LogDetailTaskEmoji} />
                     ))}
-                    <AddEmoji />
+                    <EmojiAddButton />
                 </>
             ) : (
                 <AddPeak id={task.id} num={task.reaction[0].reactionNum}/>

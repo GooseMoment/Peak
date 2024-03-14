@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import ReactionEmoji from "@components/social/ReactionEmoji";
-import AddEmoji from "@components/social/AddEmoji";
+import EmojiAddButton from "@components/social/EmojiAddButton";
 import LogDetailProject from "@components/social/LogDetailProject";
 
 const DisplayUsername = (username) => {
@@ -55,7 +55,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
                 <ReactionEmoji emoji={dailyCommentEmoji}/>
             ))
             }
-            <AddEmoji />
+            <EmojiAddButton />
         </ReactionBox>
         {/* TODO: who and what emoji */}
         </ DetailHeader>

@@ -23,7 +23,7 @@ const EmojiModal = ({isModalOpen, setIsModalOpen}) => {
     </EmojiLists>
 }
 
-const AddEmoji = () => {
+const EmojiAddButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const modalBackground = useRef()
 
@@ -94,4 +94,4 @@ margin-left: 60%;
 padding: 1rem 0 1rem;
 `
 
-export default AddEmoji
+export default EmojiAddButton
