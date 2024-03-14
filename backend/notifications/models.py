@@ -1,24 +1,18 @@
 from django.db import models
 
-import uuid
-
+from api.models import Base
 from tasks.models import Task
 from users.models import User
 from social.models import Reaction, Following
 
-class TaskReminder(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class TaskReminder(Base):
     task = models.ForeignKey(
         Task,
         on_delete = models.CASCADE,
     )
     scheduled = models.DateTimeField()
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
-
-class Notification(models.Model):
+class Notification(Base):
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
 
     FOR_TASK = "task"
@@ -41,7 +35,6 @@ class Notification(models.Model):
         (FOR_TRENDING_DOWN, "for trending down"),
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     type = models.CharField(choices=NOTIFICATION_TYPES, max_length=128)
     user = models.ForeignKey(
         User,
@@ -63,7 +56,3 @@ class Notification(models.Model):
         on_delete = models.CASCADE,
         null=True,
     )
-    
-    notified_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
