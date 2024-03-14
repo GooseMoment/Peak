@@ -15,9 +15,12 @@ RUN apk update
 RUN apk add curl
 
 RUN pip install --upgrade pip
-COPY . .
+# requirements.txt를 분리해서 다른 파일이 변경되더라도 재install 하지 않음 
+COPY ./requirements.txt . 
 # Peak/에서 docker-compose를 실행하더라도 경로는 ./backend가 아닌, 그냥 .
 RUN pip install -r requirements.txt
+
+COPY . .
 
 # copy static files
 RUN mkdir /backend/static
