@@ -11,12 +11,13 @@
 
 	# frontend
 	handle /app/* {
-		reverse_proxy localhost:3000
+		# https://caddy.community/t/setting-reverse-proxy-from-withing-docker-caddy-to-localhost-service/15369/2
+		reverse_proxy host.docker.internal:3000
 	}
 
 	# landing
 	handle /* {
-		reverse_proxy localhost:1234
+		reverse_proxy host.docker.internal:1234
 	}
 
 	handle_errors {

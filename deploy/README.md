@@ -57,6 +57,8 @@ docker-compose stop # 종료
 docker-compose down # 종료 및 컨테이너 내리기 
 ```
 
+그 후, 프론트엔드는 [:8080](http://127.0.0.1:8080) 포트에, 백엔드는 [:8888](http://127.0.0.1:8888) 포트에서 확인할 수 있습니다.
+
 ### 프로덕션일시
 
 실행 전, `.env.prod` 파일이 필요합니다. `.env.prod.example`을 `.env.prod`로 복사합시다.
