@@ -4,7 +4,7 @@ import { DateTime } from "luxon"
 
 import ReactionEmoji from "@components/social/ReactionEmoji";
 import EmojiAddButton from "@components/social/EmojiAddButton";
-import AddPeak from "@components/social/AddPeak";
+import PeakButton from "@/components/social/PeakButton";
 
 const DisplayText = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength - 3) + '...' : text;
@@ -44,7 +44,7 @@ const LogDetailTask = ({ task, color }) => {
                     <EmojiAddButton />
                 </>
             ) : (
-                <AddPeak id={task.id} num={task.reaction[0].reactionNum}/>
+                <PeakButton id={task.id} num={task.reaction[0].reactionNum}/>
             )}
         </ReactionBox>
     </LogTaskBox>
