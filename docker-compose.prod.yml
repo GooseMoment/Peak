@@ -7,7 +7,7 @@ services:
     build: ./backend
     command: gunicorn django_peak.wsgi:application --bind 0.0.0.0:8000
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://127.0.0.1/health/ok"]
+      test: ["CMD", "curl", "--fail", "http://127.0.0.1:8000/health/ok"]
       interval: 1m30s
       timeout: 30s
       retries: 5
