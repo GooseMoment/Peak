@@ -15,6 +15,22 @@
 		reverse_proxy host.docker.internal:3000
 	}
 
+	handle /src/* {
+		reverse_proxy host.docker.internal:3000
+	}
+
+	handle /@vite/client {
+		reverse_proxy host.docker.internal:3000
+	}
+
+	handle /@react-refresh {
+		reverse_proxy host.docker.internal:3000
+	}
+
+	handle /node_modules/* {
+		reverse_proxy host.docker.internal:3000
+	}
+
 	# landing
 	handle /* {
 		reverse_proxy host.docker.internal:1234

@@ -10,7 +10,8 @@ services:
       - NET_ADMIN
     ports:
       - 8080:8080
-      - 8888:8888
+      - 8888:888
+      - 2019:2019
     volumes:
       - django_admin_static:/srv/django_static
       - ./Caddyfile:/etc/caddy/Caddyfile
