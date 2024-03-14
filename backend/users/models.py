@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 
-import uuid
+from api.models import Base
 
 class UserManager(BaseUserManager):
     def create_user(self, display_name, username, email, password=None):
@@ -17,8 +17,7 @@ class UserManager(BaseUserManager):
         user.is_superuser = True
         user.save()
 
-class User(AbstractBaseUser, PermissionsMixin):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class User(AbstractBaseUser, Base, PermissionsMixin):
     username = models.CharField(max_length=18, unique=True)
     display_name = models.CharField(max_length=18, blank=True)
     password = models.TextField()
@@ -29,11 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     bio = models.TextField(max_length=50, blank=True)
 
     is_staff = models.BooleanField(default=False)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
-
+    
     # ---
 
     # fields to substitute default Django's User
@@ -52,6 +47,3 @@ class User(AbstractBaseUser, PermissionsMixin):
         return "@" + self.username
     
     objects = UserManager()
-
-    class Meta:
-        abstract = False

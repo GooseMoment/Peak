@@ -1,18 +1,31 @@
 import styled from "styled-components";
 import FeatherIcon from 'feather-icons-react';
+import { useState } from "react";
 
 function Drawer({drawer, children}){
+    const [collapsed, setCollapsed] = useState(false);
+
+    const handleCollapsed = () => {
+        { drawer.task_count !== 0 && setCollapsed(prev => !prev)}
+    }
+
+    const DrawerIcons = [
+        {icon: "plus", click: () => setIsModalOpen(true)},
+        {icon: "more-horizontal", click: () => {}},
+        {icon: "chevron-down", click: handleCollapsed},
+    ]
+
     return (
         <>
             <DrawerBox $color = {drawer.color}>
                 <DrawerName>{drawer.name}</DrawerName>
                 <DrawerIcon>
                     {DrawerIcons.map(item => (
-                        <FeatherIcon icon={item.icon} />
+                        <FeatherIcon key={item.icon} icon={item.icon} onClick={item.click}/>
                     ))}
                 </DrawerIcon>
             </DrawerBox>
-            {children}
+            {collapsed ? null : children}
         </>
     );
 }
@@ -45,13 +58,8 @@ const DrawerIcon = styled.div`
     & svg {
         top: 0;
         margin-right: 1em;
+        cursor: pointer;
     }
 `
-
-const DrawerIcons = [
-    {icon: "plus"},
-    {icon: "more-horizontal"},
-    {icon: "chevron-down"},
-]
 
 export default Drawer

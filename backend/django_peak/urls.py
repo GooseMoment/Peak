@@ -23,5 +23,8 @@ from users import urls as users_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("notifications/", include("notifications.urls"))
+    path("notifications/", include("notifications.urls")),
+    path("projects/", include("projects.urls")),
+    path("drawers/", include("drawers.urls")),
+    path("tasks/", include("tasks.urls")),
 ] + users_urls.urlpatterns
