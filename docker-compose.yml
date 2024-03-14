@@ -4,19 +4,13 @@ name: peak
 
 services:
   web:
-    build: .
+    image: caddy:2.7.6-alpine
     restart: unless-stopped
-    depends_on:
-      api:
-        condition: service_healthy
     cap_add:
       - NET_ADMIN
     ports:
       - 8080:8080
       - 8888:8888
-      - 80:80
-      - 443:443
-      - 443:443/udp
     volumes:
       - django_admin_static:/srv/django_static
       - ./Caddyfile:/etc/caddy/Caddyfile
@@ -31,8 +25,8 @@ services:
       timeout: 3s
       retries: 5
     volumes:
-      - ./backend/:/usr/src/backend/
-      - django_admin_static:/backend/static
+      - ./backend/:/backend/
+      - django_admin_static:/static
     ports:
       - 8000:8000
     depends_on:
@@ -57,6 +51,7 @@ services:
 volumes:
   django_admin_static:
   db_data:
+    external: true
   caddy_data:
     external: true
   caddy_config:

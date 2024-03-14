@@ -10,17 +10,17 @@
 	}
 
 	# frontend
-	handle_path /app/* {
-		root * /srv/frontend
-		file_server
-		try_files {path} /index.html
+	handle /app/* {
+		reverse_proxy localhost:3000
 	}
 
 	# landing
 	handle /* {
-		root * /srv/landing
-		file_server
-		try_files {path} /index.html
+		reverse_proxy localhost:1234
+	}
+
+	handle_errors {
+		respond "{err.status_code} {err.status_text}"
 	}
 }
 
@@ -48,5 +48,9 @@
 
 	handle * {
 		reverse_proxy api:8000
+	}
+
+	handle_errors {
+		respond "{err.status_code} {err.status_text}"
 	}
 }

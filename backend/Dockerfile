@@ -23,6 +23,8 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # copy static files
-RUN mkdir /backend/static
-RUN cp -r /usr/local/lib/python3.12/site-packages/django/contrib/admin/static/ /backend/static
-RUN cp -r /usr/local/lib/python3.12/site-packages/rest_framework/static/ /backend/static
+WORKDIR /static
+RUN cp -r /usr/local/lib/python3.12/site-packages/django/contrib/admin/static/ /static
+RUN cp -r /usr/local/lib/python3.12/site-packages/rest_framework/static/ /static
+
+WORKDIR /backend

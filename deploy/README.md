@@ -38,9 +38,12 @@ WSGI 프로그램으로는 [gunicorn](https://gunicorn.org)을 사용합니다.
 
 ```bash
 docker volume create caddy_data
+docker volume create db_data
 ```
 
 ### 개발 환경일시
+
+다른 터미널(또는 VSCode +버튼 눌러서 터미널 탭 추가)에서 `landing`에서 `npm run start`, `frontend`에서 `npm run dev` 실행 
 
 ```bash
 # Peak 디렉터리에서 실행
