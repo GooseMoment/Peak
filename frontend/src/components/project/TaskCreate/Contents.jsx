@@ -2,31 +2,70 @@ import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { useState } from "react"
 
+import ModalPortal from "../ModalPortal"
 import Calendar from "./Calendar"
 import Reminder from "./Reminder"
 import Priority from "./Priority"
 import Drawer from "./Drawer"
 import Memo from "./Memo"
 
-function Detail() {
+function Contents() {
     // text클릭 시 알맞는 component 띄우기
     const [content, setContent] = useState();
-
+    
     const handleClickContent = (e) => {
+        setIsComponentOpen(true);
         const name = e.target.id;
         setContent(name);
     };
+
+    // component modal
+    const [isComponentOpen, setIsComponentOpen] = useState(false);
+
+    const onClose = () => {
+        setIsComponentOpen(false);
+    }
+
+    const items = [
+        {id: 1,
+        icon: "calendar",
+        content: "2024년 02월 20일 18:00",
+        component: <Calendar onClose={onClose} />},
+    
+        {id: 2,
+        icon: "clock",
+        content: "2024년 02월 20일 16:00",
+        component: <Reminder onClose={onClose} />},
+    
+        {id: 3,
+        icon: "alert-circle",
+        content: "매우 중요",
+        component: <Priority onClose={onClose} />},
+    
+        {id: 4,
+        icon: "archive",
+        content: "홍대라이프 / 수강신청",
+        component: <Drawer onClose={onClose} />},
+    
+        {id: 5,
+        icon: "edit",
+        content: "없음",
+        component: <Memo onClose={onClose} />},
+    ]
     
     return (
         <ContentsBlock>
             {items.map(item => (
-            <ContentsBox>
+            <ContentsBox key={item.id}>
                 <FeatherIcon icon={item.icon} />
                 <VLine $end={item.id === 1 || item.id === 5} />
-                <ContentText id ={item.name} onClick={handleClickContent}>
-                    {content === item.name || item.content}
+                <ContentText id ={item.icon} onClick={handleClickContent}>
+                    {item.content}
                 </ContentText>
-                {content === item.name && <div>{item.component}</div>}
+                {(content === item.icon && isComponentOpen) ? 
+                <ModalPortal>
+                    {item.component}
+                </ModalPortal> : null}
             </ContentsBox>
             ))}
         </ContentsBlock>
@@ -36,7 +75,6 @@ function Detail() {
 
 const ContentsBlock = styled.div`
     flex: 1;
-    display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin-left: 3.1em;
@@ -82,12 +120,4 @@ const ContentText = styled.div`
     }
 `
 
-const items = [
-    {id: 1, icon: "calendar", name: "Calendar", content: "2024년 02월 20일 18:00", component: <Calendar />},
-    {id: 2, icon: "clock", name: "Clock", content: "2024년 02월 20일 16:00", component: <Reminder />},
-    {id: 3, icon: "alert-circle", name: "Alert-circle", content: "매우 중요", component: <Priority /> },
-    {id: 4, icon: "archive", name: "Archive", content: "홍대라이프 / 수강신청", component: <Drawer /> },
-    {id: 5, icon: "edit", name: "Edit", content: "없음", component: <Memo />},
-]
-
-export default Detail
+export default Contents

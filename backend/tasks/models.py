@@ -2,11 +2,11 @@ from django.db import models
 
 import uuid
 
+from api.models import Base
 from users.models import User
 from drawers.models import Drawer
 
-class Repeat(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class Repeat(Base):
     # TODO: 자연어로 빠른 Repeat 지정
     startedAt = models.DateTimeField()
 
@@ -20,12 +20,7 @@ class Repeat(models.Model):
     month = models.IntegerField(default=0)
     day = models.IntegerField(default=0)
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
-
-class Task(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class Task(Base):
     name = models.CharField(max_length=128)
     privacy = models.CharField(max_length=128)
     completed_at = models.DateTimeField()
@@ -48,7 +43,3 @@ class Task(models.Model):
         on_delete=models.SET_NULL,
         null=True,
     )
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
