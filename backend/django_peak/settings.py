@@ -17,12 +17,18 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+env_check = os.environ.get("DEBUG")
+if env_check is None:
+    print("******************************************************************************")
+    print("*환경변수가 설정되지 않았습니다. 도커 환경이 아니거나 구성에 문제가 있습니다.*")
+    print("******************************************************************************")
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-87%a)!2$$9_yizx8(%n%as513jq94o8(iuquctgpgxgic=+s7=")
 
-DEBUG = bool(os.environ.get("DEBUG", 1))
+DEBUG = os.environ.get("DEBUG", "1") == "1"
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(" ")
 

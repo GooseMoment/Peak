@@ -1,0 +1,39 @@
+# https://docs.docker.com/compose/compose-file/
+
+name: peak
+
+services:
+  api:
+    build: ./backend
+    command: gunicorn django_peak.wsgi:application --bind 0.0.0.0:8000
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://127.0.0.1/health/ok"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - ./backend/:/usr/src/backend/
+    ports:
+      - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - path: ./.env.prod
+        required: true
+  db: 
+    image: postgres:16.2-alpine3.19
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    env_file:
+      - path: ./.env.prod
+        required: true
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"] 
+      # https://github.com/peter-evans/docker-compose-healthcheck/issues/16#issuecomment-1039718816
+      interval: 1s
+      timeout: 5s
+      retries: 10
+volumes:
+  db_data:
