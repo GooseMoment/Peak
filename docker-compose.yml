@@ -10,7 +10,7 @@ services:
       - NET_ADMIN
     ports:
       - 8080:8080
-      - 8888:888
+      - 8888:8888
       - 2019:2019
     volumes:
       - django_admin_static:/srv/django_static
@@ -20,11 +20,6 @@ services:
   api:
     build: ./backend
     command: python manage.py runserver 0.0.0.0:8000
-    healthcheck:
-      test: ["CMD", "curl", "--fail", "http://127.0.0.1:8000/health/ok"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
     volumes:
       - ./backend/:/backend/
       - django_admin_static:/static

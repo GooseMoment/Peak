@@ -28,3 +28,5 @@ RUN cp -r /usr/local/lib/python3.12/site-packages/django/contrib/admin/static/ /
 RUN cp -r /usr/local/lib/python3.12/site-packages/rest_framework/static/ /static
 
 WORKDIR /backend
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=2s --retries=5 CMD curl --fail http://127.0.0.1:8000/health/ok
