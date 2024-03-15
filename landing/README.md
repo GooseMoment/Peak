@@ -3,13 +3,13 @@
 ## Start
 
 ```bash
-npm start
+npm run start
 ```
 
 ## Build
 
 ```bash
-npm build
+npm run build
 ```
 
 ## TODO
