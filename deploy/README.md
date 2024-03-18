@@ -68,6 +68,16 @@ cp .env.prod.example .env.prod
 ```
 
 `.env.prod`의 설정값을 적절히 교체합니다.
+
+그 다음, `frontend`와 `landing`의 `npm run build`를 시행합니다.
+
+```bash
+./deploy/run-builder.sh frontend
+./deploy/run-builder.sh landing
+```
+
+(이후 `frontend` 또는 `landing`에 변경사항이 있으면 `docker-compose` 실행할 필요없이 해당 부분만 스크립트 돌리면 됩니다)
+
 그 후, 아래와 같이 docker-compose를 실행합니다.
 
 ```bash
