@@ -27,11 +27,6 @@ services:
   api:
     build: ./backend
     command: gunicorn django_peak.wsgi:application --bind 0.0.0.0:8000
-    healthcheck:
-      test: ["CMD", "curl", "--fail", "http://127.0.0.1:8000/health/ok"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
     volumes:
       - django_admin_static:/static
     ports:
