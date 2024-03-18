@@ -4,7 +4,7 @@ import { DateTime } from "luxon"
 
 import ReactionEmoji from "@components/social/ReactionEmoji";
 import EmojiAddButton from "@components/social/EmojiAddButton";
-import PeakButton from "@/components/social/PeakButton";
+import PeakButton from "@components/social/PeakButton";
 
 const DisplayText = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength - 3) + '...' : text;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import ReactionEmoji from "@components/social/ReactionEmoji";
 import EmojiAddButton from "@components/social/EmojiAddButton";
-import LogDetailProject from "@components/social/LogDetailProject";
+import LogDetailProject from "@components/social/LogDetail/LogDetailProject";
 
 const DisplayUsername = (username) => {
     return username.length > 11 ? username.substring(0, 9) + '...' : username;

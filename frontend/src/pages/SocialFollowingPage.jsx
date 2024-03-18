@@ -5,7 +5,7 @@ import styled from "styled-components"
 
 import SocialCalendar from "@components/social/SocialCalendar";
 import LogBox from "@components/social/LogBox";
-import LogDetail from "@components/social/LogDetail";
+import LogDetail from "@components/social/LogDetail/LogDetail";
 
 const SocialFollowingPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
