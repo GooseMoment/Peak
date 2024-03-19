@@ -8,7 +8,7 @@ const DisplayText = (text, maxLength) => {
 const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
     const HandleSelect = () => {
     // ~Log.index can be replaced with ~Log.task.id
-        setSelectedIndex(userLogSimple.index == selectedIndex ? null : userLogSimple.index)
+        setSelectedIndex(userLogSimple.index === selectedIndex ? null : userLogSimple.index)
     }
 
     return <Frame onClick={HandleSelect}
