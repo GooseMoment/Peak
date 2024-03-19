@@ -26,7 +26,7 @@ const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
         </Profile>
         <RecentTask>
             <TaskName>  {"\"" + putEllipsis(userLogSimple.task.name, 32) + "\" 완료!"} </TaskName>
-            <Ago> &nbsp;&nbsp;{DateTime.fromJSDate(userLogSimple.task.completedAt).setLocale("en").toRelative()} </Ago>
+            <Ago> {DateTime.fromJSDate(userLogSimple.task.completedAt).setLocale("en").toRelative()} </Ago>
             {/* Ago: Left align? */}
         </RecentTask>
     </ Frame>
@@ -90,6 +90,7 @@ font-size: 1.1em;
 `
 
 const Ago = styled.span`
+margin-left: 0.5em;
 display: inline;
 font-size: 0.9em;
 color: #A4A4A4;
