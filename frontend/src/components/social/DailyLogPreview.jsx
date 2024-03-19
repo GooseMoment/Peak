@@ -6,12 +6,13 @@ const putEllipsis = (text, maxLength) => {
 }
 
 const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
-    const HandleSelect = () => {
+    
+    const handleSelect = () => {
     // ~Log.index can be replaced with ~Log.task.id
         setSelectedIndex(userLogSimple.index === selectedIndex ? null : userLogSimple.index)
     }
 
-    return <Frame onClick={HandleSelect}
+    return <Frame onClick={handleSelect}
             style={{backgroundColor: userLogSimple.index === selectedIndex? "#ffd7c7" : "#FEFDFC", }}
         >
         {/* separate the "Profile" into a separate file? */}
