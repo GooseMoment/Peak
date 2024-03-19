@@ -39,10 +39,9 @@ const SocialFollowingPage = () => {
 
 const Container = styled.div`
 display: inline-block;
-margin-right: 1em;
+margin-right: 2em;
 height: 85vh;
 width: 50%;
-margin: 0 1rem 0;
 overflow: hidden;
 `
 
