@@ -13,7 +13,7 @@ const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
     }
 
     return <Frame onClick={handleSelect}
-            style={{backgroundColor: userLogSimple.index === selectedIndex? "#ffd7c7" : "#FEFDFC", }}
+            $bgcolor={userLogSimple.index === selectedIndex? "#ffd7c7" : "#FEFDFC"}
         >
         {/* separate the "Profile" into a separate file? */}
         <Profile>
@@ -38,6 +38,8 @@ gap: 1em;
 
 border-bottom: 1px solid black;
 padding: 1.2em 1em 1.2em;
+
+background-color: ${props => props.$bgcolor};
 `
 
 const Profile = styled.div`
