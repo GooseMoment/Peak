@@ -67,7 +67,7 @@ class Reaction(Base):
     emoji = models.ManyToManyField(Emoji)
 
     def __str__(self) -> str:
-        return f":{self.emoji.name}: by @{self.user.username} → {self.daily_comment and self.task.name})"
+        return f":{self.emoji.name}: by @{self.user.username} → {self.daily_comment or self.task})"
 
 class Comment(Base):
     user = models.ForeignKey(
