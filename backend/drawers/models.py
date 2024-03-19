@@ -22,4 +22,4 @@ class Drawer(Base):
     completed_task_count = models.IntegerField()
 
     def __str__(self) -> str:
-        return f"{self.name} by @{self.user.username}"
+        return f"{self.name} by {self.user}"

@@ -25,7 +25,7 @@ class Peck(Base):
     count = models.IntegerField()
 
     def __str__(self) -> str:
-        return f"{self.count} pecks by @{self.user.username} → '{self.task.name}'"
+        return f"{self.count} pecks by {self.user} → '{self.task.name}'"
 
 class DailyComment(Base):
     user = models.ForeignKey(
@@ -36,7 +36,7 @@ class DailyComment(Base):
     date = models.DateField()
 
     def __str__(self) -> str:
-        return f"DailyComment of {self.date} by @{self.user.username}"
+        return f"DailyComment of {self.date} by {self.user}"
 
 class Reaction(Base):
     FOR_TASK = "task"
@@ -67,7 +67,7 @@ class Reaction(Base):
     emoji = models.ManyToManyField(Emoji)
 
     def __str__(self) -> str:
-        return f":{self.emoji.name}: by @{self.user.username} → {self.daily_comment or self.task})"
+        return f":{self.emoji.name}: by {self.user} → {self.daily_comment or self.task})"
 
 class Comment(Base):
     user = models.ForeignKey(
@@ -81,7 +81,7 @@ class Comment(Base):
     comment = models.TextField()
 
     def __str__(self) -> str:
-        return f"Comment by @{self.user.username} → {self.task.name})"
+        return f"Comment by {self.user} → {self.task.name})"
 
 class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
     # 보내는사람
@@ -109,7 +109,7 @@ class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model
         ]
 
     def __str__(self) -> str:
-        return f"Following @{self.follower} → @{self.followee} (is_request: {self.is_request})"
+        return f"Following {self.follower} → {self.followee} (is_request: {self.is_request})"
 
 class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
     blocker = models.ForeignKey(
@@ -133,4 +133,4 @@ class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유
         ]
 
     def __str__(self) -> str:
-        return f"Block @{self.blocker} → @{self.blockee}"
+        return f"Block {self.blocker} → {self.blockee}"

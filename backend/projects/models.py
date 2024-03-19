@@ -25,4 +25,4 @@ class Project(Base):
     type = models.CharField(choices=PROJECT_TYPE_CHOICES, max_length=128)
 
     def __str__(self) -> str:
-        return f"{self.name} by @{self.user.username}"
+        return f"{self.name} by {self.user}"

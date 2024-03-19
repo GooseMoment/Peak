@@ -21,7 +21,7 @@ class Repeat(Base):
     day = models.IntegerField(default=0)
 
     def __str__(self) -> str:
-        return f"Repeat by @{self.user.username}"
+        return f"Repeat by {self.user}"
 
 class Task(Base):
     name = models.CharField(max_length=128)
@@ -49,4 +49,4 @@ class Task(Base):
     )
 
     def __str__(self) -> str:
-        return f"{self.name} by @{self.user.username}"
+        return f"{self.name} by {self.user}"

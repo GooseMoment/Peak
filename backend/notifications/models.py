@@ -65,4 +65,4 @@ class Notification(Base):
     )
 
     def __str__(self) -> str:
-        return f"{self.type} for @{self.user.username}"
+        return f"{self.type} for {self.user}"
