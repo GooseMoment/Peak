@@ -6,7 +6,7 @@ import ReactionEmoji from "@components/social/ReactionEmoji";
 import EmojiAddButton from "@components/social/EmojiAddButton";
 import PeakButton from "@components/social/PeakButton";
 
-const DisplayText = (text, maxLength) => {
+const putEllipsis = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength - 3) + '...' : text;
 }
 
@@ -22,9 +22,9 @@ const LogDetailTask = ({ task, color }) => {
         <TaskContainer>
             <TaskName>
                 {task.completedAt ? (
-                    "\"" + DisplayText(task.name, 32) + "\" 완료!"
+                    "\"" + putEllipsis(task.name, 32) + "\" 완료!"
                 ) : (
-                    DisplayText(task.name, 32)
+                    putEllipsis(task.name, 32)
                 )}
 
             </TaskName>

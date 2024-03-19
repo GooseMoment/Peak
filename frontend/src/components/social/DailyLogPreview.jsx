@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { DateTime } from "luxon"
 
-const DisplayText = (text, maxLength) => {
+const putEllipsis = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength-3) + '...' : text;
 }
 
@@ -20,11 +20,11 @@ const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
                 <img src={userLogSimple.user.profileImgURI}/>
             </ProfileImgWrapper>
             <Username>
-                @{DisplayText(userLogSimple.user.username, 11)}
+                @{putEllipsis(userLogSimple.user.username, 11)}
             </Username>
         </Profile>
         <RecentTask>
-            <TaskName>  {"\"" + DisplayText(userLogSimple.task.name, 32) + "\" 완료!"} </TaskName>
+            <TaskName>  {"\"" + putEllipsis(userLogSimple.task.name, 32) + "\" 완료!"} </TaskName>
             <Ago> &nbsp;&nbsp;{DateTime.fromJSDate(userLogSimple.task.completedAt).setLocale("en").toRelative()} </Ago>
             {/* Ago: Left align? */}
         </RecentTask>
