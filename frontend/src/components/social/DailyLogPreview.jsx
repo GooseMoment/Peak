@@ -5,7 +5,7 @@ const DisplayText = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength-3) + '...' : text;
 }
 
-const LogBox = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
+const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
     const HandleSelect = () => {
     // ~Log.index can be replaced with ~Log.task.id
         setSelectedIndex(userLogSimple.index == selectedIndex ? null : userLogSimple.index)
@@ -93,4 +93,4 @@ color: #A4A4A4;
 white-space: nowrap;
 `
 
-export default LogBox;
+export default DailyLogPreview;

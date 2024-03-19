@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components"
 
 import SocialCalendar from "@components/social/SocialCalendar";
-import LogBox from "@components/social/LogBox";
+import DailyLogPreview from "@components/social/DailyLogPreview";
 import LogDetail from "@components/social/LogDetail/LogDetail";
 
 const SocialFollowingPage = () => {
@@ -26,7 +26,7 @@ const SocialFollowingPage = () => {
             </SocialCalendar>
             <SocialBoxContainer>
                 {mockDailyFollowersLog.map((dailyFollowersLog) => (
-                    <LogBox userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+                    <DailyLogPreview userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                 ))}
             </SocialBoxContainer>
 
