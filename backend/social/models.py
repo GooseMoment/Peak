@@ -67,7 +67,7 @@ class Reaction(Base):
     emoji = models.ManyToManyField(Emoji)
 
     def __str__(self) -> str:
-        return f":{self.emoji.name}: by {self.user} → {self.daily_comment or self.task})"
+        return f":{self.emoji.name}: by {self.user} → {self.daily_comment or self.task}"
 
 class Comment(Base):
     user = models.ForeignKey(
@@ -81,7 +81,7 @@ class Comment(Base):
     comment = models.TextField()
 
     def __str__(self) -> str:
-        return f"Comment by {self.user} → {self.task.name})"
+        return f"Comment by {self.user} → {self.task.name}"
 
 class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
     # 보내는사람
