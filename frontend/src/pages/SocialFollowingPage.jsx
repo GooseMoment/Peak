@@ -29,7 +29,7 @@ const SocialFollowingPage = () => {
 
             {/* {selectedDate.toLocaleDateString()} */}
         </SocialContainer>
-        <SocialContainer style={{width: '350pt', marginLeft: '2rem'}}>
+        <SocialContainer>
             <LogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true}/>
         </SocialContainer>
         </div>
@@ -41,6 +41,8 @@ const SocialContainer = styled.div`
 display: inline-block;
 margin-right: 1em;
 height: 85vh;
+width: 50%;
+margin: 0 1rem 0;
 overflow: hidden;
 `
 
