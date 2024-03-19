@@ -14,7 +14,7 @@ const SocialFollowingPage = () => {
     return <>
         <SocialPageTitle active="following"/>
         <div style={{whiteSpace: 'nowrap'}}>
-        <SocialContainer>
+        <Container>
             <SocialCalendar
                 newLogDates={mockNewLogDates}
                 selectedDate={selectedDate}
@@ -28,16 +28,16 @@ const SocialFollowingPage = () => {
             </SocialBoxContainer>
 
             {/* {selectedDate.toLocaleDateString()} */}
-        </SocialContainer>
-        <SocialContainer>
+        </Container>
+        <Container>
             <LogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true}/>
-        </SocialContainer>
+        </Container>
         </div>
 
     </>
 }
 
-const SocialContainer = styled.div`
+const Container = styled.div`
 display: inline-block;
 margin-right: 1em;
 height: 85vh;
