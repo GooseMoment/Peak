@@ -20,3 +20,6 @@ class Drawer(Base):
     privacy = models.CharField(max_length=128)
     uncompleted_task_count = models.IntegerField()
     completed_task_count = models.IntegerField()
+
+    def __str__(self) -> str:
+        return f"{self.name} by @{self.user.username}"

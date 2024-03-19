@@ -47,3 +47,6 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
         return "@" + self.username
     
     objects = UserManager()
+
+    def __str__(self) -> str:
+        return f"User (@{self.username})"

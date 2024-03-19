@@ -20,6 +20,9 @@ class Repeat(Base):
     month = models.IntegerField(default=0)
     day = models.IntegerField(default=0)
 
+    def __str__(self) -> str:
+        return f"Repeat by @{self.user.username}"
+
 class Task(Base):
     name = models.CharField(max_length=128)
     privacy = models.CharField(max_length=128)
@@ -43,3 +46,6 @@ class Task(Base):
         on_delete=models.SET_NULL,
         null=True,
     )
+
+    def __str__(self) -> str:
+        return f"{self.name} by @{self.user.username}"

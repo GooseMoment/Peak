@@ -12,6 +12,9 @@ class TaskReminder(Base):
     )
     scheduled = models.DateTimeField()
 
+    def __str__(self) -> str:
+        return f"Reminder for {self.task.name} at {self.scheduled}"
+
 class Notification(Base):
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
 
@@ -56,3 +59,6 @@ class Notification(Base):
         on_delete = models.CASCADE,
         null=True,
     )
+
+    def __str__(self) -> str:
+        return f"{self.type} for @{self.user.username}"

@@ -10,6 +10,9 @@ class Emoji(Base):
     name = models.CharField(max_length=128)
     img_uri = models.URLField()
 
+    def __str__(self) -> str:
+        return f":{self.name}:"
+
 class Peck(Base):
     user = models.ForeignKey(
         User,
@@ -21,6 +24,9 @@ class Peck(Base):
     )
     count = models.IntegerField()
 
+    def __str__(self) -> str:
+        return f"{self.count} pecks by @{self.user.username} → '{self.task.name}'"
+
 class DailyComment(Base):
     user = models.ForeignKey(
         User,
@@ -28,6 +34,9 @@ class DailyComment(Base):
     )
     comment = models.TextField()
     date = models.DateField()
+
+    def __str__(self) -> str:
+        return f"DailyComment of {self.date} by @{self.user.username}"
 
 class Reaction(Base):
     FOR_TASK = "task"
@@ -55,6 +64,9 @@ class Reaction(Base):
     )
     emoji = models.ManyToManyField(Emoji)
 
+    def __str__(self) -> str:
+        return f":{self.emoji.name}: by @{self.user.username} → {self.daily_comment and self.task.name})"
+
 class Comment(Base):
     user = models.ForeignKey(
         User,
@@ -65,6 +77,9 @@ class Comment(Base):
         on_delete=models.CASCADE,
     )
     comment = models.TextField()
+
+    def __str__(self) -> str:
+        return f"Comment by @{self.user.username} → {self.task.name})"
 
 class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
     # 보내는사람
@@ -91,6 +106,9 @@ class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model
             models.UniqueConstraint(fields=["follower", "followee"], name="constraint_follower_followee"),
         ]
 
+    def __str__(self) -> str:
+        return f"Following @{self.follower} → @{self.followee} (is_request: {self.is_request})"
+
 class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
     blocker = models.ForeignKey(
         User,
@@ -111,3 +129,6 @@ class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유
         constraints = [
             models.UniqueConstraint(fields=["blocker", "blockee"], name="constraint_blocker_blockee"),
         ]
+
+    def __str__(self) -> str:
+        return f"Block @{self.blocker} → @{self.blockee}"
