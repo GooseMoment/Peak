@@ -56,11 +56,13 @@ class Reaction(Base):
         Task,
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
     )
     daily_comment = models.ForeignKey(
         DailyComment,
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
     )
     emoji = models.ManyToManyField(Emoji)
 

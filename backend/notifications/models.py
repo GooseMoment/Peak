@@ -43,21 +43,25 @@ class Notification(Base):
         User,
         on_delete = models.CASCADE,
         null=True,
+        blank=True,
     )
     task = models.ForeignKey(
         Task,
         on_delete = models.CASCADE,
         null=True,
+        blank=True,
     )
     reaction = models.ForeignKey(
         Reaction,
         on_delete = models.CASCADE,
         null=True,
+        blank=True,
     )
     follow_request = models.ForeignKey(
         Following,
         on_delete = models.CASCADE,
         null=True,
+        blank=True,
     )
 
     def __str__(self) -> str:

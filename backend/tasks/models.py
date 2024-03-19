@@ -45,6 +45,7 @@ class Task(Base):
         Repeat,
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
     )
 
     def __str__(self) -> str:
