@@ -21,11 +21,11 @@ const SocialFollowingPage = () => {
                 setSelectedDate={setSelectedDate}
             >
             </SocialCalendar>
-            <SocialBoxContainer>
+            <DailyLogContainer>
                 {mockDailyFollowersLog.map((dailyFollowersLog) => (
                     <DailyLogPreview userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                 ))}
-            </SocialBoxContainer>
+            </DailyLogContainer>
 
             {/* {selectedDate.toLocaleDateString()} */}
         </Container>
@@ -45,7 +45,7 @@ width: 50%;
 overflow: hidden;
 `
 
-const SocialBoxContainer = styled.div`
+const DailyLogContainer = styled.div`
 max-height: 50%;
 overflow-y: auto;
 
