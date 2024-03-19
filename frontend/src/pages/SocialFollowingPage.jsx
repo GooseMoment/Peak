@@ -1,21 +1,18 @@
 import { useState } from "react"
 
-import { Link } from "react-router-dom";
 import styled from "styled-components"
 
 import SocialCalendar from "@components/social/SocialCalendar";
 import DailyLogPreview from "@components/social/DailyLogPreview";
 import LogDetail from "@components/social/LogDetail/LogDetail";
+import SocialPageTitle from "@components/social/SocialPageTitle";
 
 const SocialFollowingPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedIndex, setSelectedIndex] = useState(null)
 
     return <>
-        <PageTitle>
-            <PageTitleButton to="/social/following">Following</PageTitleButton>
-            <PageTitleButton to="/social/explore" style={{ color: "#A4A4A4" }}>Explore</PageTitleButton>
-        </PageTitle>
+        <SocialPageTitle active="following"/>
         <div style={{whiteSpace: 'nowrap'}}>
         <SocialContainer>
             <SocialCalendar
@@ -39,18 +36,6 @@ const SocialFollowingPage = () => {
 
     </>
 }
-
-const PageTitle = styled.h1``
-
-const PageTitleButton = styled(Link)`
-display: inline-block;
-font-size: 2em;
-font-weight: bold;
-color: black;
-text-decoration: none;
-margin-bottom: 0.5em;
-margin-right: 0.7em;
-`
 
 const SocialContainer = styled.div`
 display: inline-block;
