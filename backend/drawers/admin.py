@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Drawer
 
-# Register your models here.
+@admin.register(Drawer)
+class DrawerAdmin(admin.ModelAdmin):
+    pass
