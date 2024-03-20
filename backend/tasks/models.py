@@ -24,16 +24,16 @@ class Repeat(Base):
 class Task(Base):
     name = models.CharField(max_length=128)
     privacy = models.CharField(max_length=128)
-    completed_at = models.DateTimeField()
+    completed_at = models.DateTimeField(null=True, blank=True)
     drawer = models.ForeignKey(
         Drawer,
         on_delete=models.CASCADE,
     )
-    due_date = models.DateField()
-    due_time = models.TimeField()
-    priority = models.IntegerField()
-    memo = models.TextField()
-    reminder_datetime = models.DateTimeField()
+    due_date = models.DateField(null=True, blank=True)
+    due_time = models.TimeField(null=True, blank=True)
+    priority = models.IntegerField(default=0)
+    memo = models.TextField(null=True, blank=True)
+    reminder_datetime = models.DateTimeField(null=True, blank=True)
 
     user = models.ForeignKey(
         User,
