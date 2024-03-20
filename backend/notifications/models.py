@@ -57,7 +57,7 @@ class Notification(Base):
         null=True,
         blank=True,
     )
-    follow_request = models.ForeignKey(
+    following = models.ForeignKey(
         Following,
         on_delete = models.CASCADE,
         null=True,
