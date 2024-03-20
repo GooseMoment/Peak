@@ -35,7 +35,7 @@ axios.defaults.withCredentials = true
 axios.defaults.baseURL = "https://api.peak.ooo/"
 
 if (process.env.NODE_ENV === "development") {
-    axios.defaults.baseURL = "http://localhost:8080/"
+    axios.defaults.baseURL = "http://localhost:8888/"
 }
 
 const newToast = (msg, level="success") => Toastify({
