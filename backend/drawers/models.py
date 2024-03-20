@@ -1,10 +1,10 @@
 from django.db import models
 
-from api.models import Base
+from api.models import Base, PrivacyMixin
 from projects.models import Project
 from users.models import User
 
-class Drawer(Base):
+class Drawer(Base, PrivacyMixin):
     name = models.CharField(max_length=128)
     user = models.ForeignKey(
         User,
@@ -17,7 +17,6 @@ class Drawer(Base):
         related_name="drawers",
     )
     order = models.IntegerField()
-    privacy = models.CharField(max_length=128)
     uncompleted_task_count = models.IntegerField(default=0)
     completed_task_count = models.IntegerField(default=0)
 

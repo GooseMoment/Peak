@@ -1,6 +1,6 @@
 from django.db import models
 
-from api.models import Base
+from api.models import Base, PrivacyMixin
 from users.models import User
 from drawers.models import Drawer
 
@@ -21,9 +21,8 @@ class Repeat(Base):
     def __str__(self) -> str:
         return f"Repeat by {self.user}"
 
-class Task(Base):
+class Task(Base, PrivacyMixin):
     name = models.CharField(max_length=128)
-    privacy = models.CharField(max_length=128)
     completed_at = models.DateTimeField(null=True, blank=True)
     drawer = models.ForeignKey(
         Drawer,
