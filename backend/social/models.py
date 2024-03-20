@@ -73,7 +73,7 @@ class Reaction(Base):
     )
 
     def __str__(self) -> str:
-        return f":{self.emoji.name}: by {self.user} → {self.daily_comment or self.task}"
+        return f":{self.emoji}: by {self.user} → {self.daily_comment or self.task}"
 
 class Comment(Base):
     user = models.ForeignKey(
