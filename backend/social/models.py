@@ -123,7 +123,7 @@ class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         constraints = [
