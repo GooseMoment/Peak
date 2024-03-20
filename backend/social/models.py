@@ -1,7 +1,5 @@
 from django.db import models
 
-import uuid
-
 from api.models import Base
 from users.models import User
 from tasks.models import Task

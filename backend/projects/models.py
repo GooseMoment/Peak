@@ -1,7 +1,5 @@
 from django.db import models
 
-import uuid
-
 from api.models import Base
 from users.models import User
 
@@ -14,7 +12,6 @@ class Project(Base):
         (GOAL, "Goal"),
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=128)
     user = models.ForeignKey(
         User,
