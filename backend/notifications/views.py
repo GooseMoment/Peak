@@ -1,24 +1,21 @@
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-
-from rest_framework.request import Request
-from rest_framework.response import Response
-from rest_framework import status, mixins, generics
-from rest_framework.decorators import api_view
+from rest_framework import mixins, generics, permissions
 
 from .models import Notification
 from .serializers import NotificatonSerializer
+from .permissions import IsUserMatch
 
-@api_view(["GET"])
-def get_notifications(request: Request, format=None):
-    if not request.user.is_authenticated:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
-    
-    notifications = Notification.objects.filter(user=request.user)
-    serializer = NotificatonSerializer(notifications, many=True)
-    return Response(serializer.data)
+class NotificationList(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  generics.GenericAPIView):
+    serializer_class = NotificatonSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-@method_decorator(login_required, name="dispatch")
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by("notified_at").all()
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
 class NotificationDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
@@ -26,6 +23,7 @@ class NotificationDetail(mixins.RetrieveModelMixin,
     queryset = Notification.objects.all()
     serializer_class = NotificatonSerializer
     lookup_field = "id"
+    permission_classes = [IsUserMatch]
     
     def get(self, request, id, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

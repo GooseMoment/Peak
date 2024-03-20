@@ -1,18 +1,23 @@
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 
 from api.models import Base
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, password=None):
-        user = User(username=username, email=email)
+    def create_user(self, display_name, username, email, password=None):
+        user = User(display_name=display_name, username=username, email=email)
         user.set_password(password)
-        user.objects.create()
+        user.save()
 
-    def create_superuser(self, username, email, password=None):
-        self.create_user(username, email, password)
+    def create_superuser(self, display_name, username, email, password=None):
+        user = User(display_name=display_name, username=username, email=email)
+        user.set_password(password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
 
-class User(AbstractBaseUser, Base):
+class User(AbstractBaseUser, Base, PermissionsMixin):
     username = models.CharField(max_length=18, unique=True)
     display_name = models.CharField(max_length=18, blank=True)
     password = models.TextField()
@@ -22,6 +27,8 @@ class User(AbstractBaseUser, Base):
     profile_img_uri = models.URLField() # TODO: default profile img
     bio = models.TextField(max_length=50, blank=True)
 
+    is_staff = models.BooleanField(default=False)
+    
     # ---
 
     # fields to substitute default Django's User

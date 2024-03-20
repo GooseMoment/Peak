@@ -5,7 +5,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 urlpatterns = [
-    path("", views.get_notifications),
+    path("", views.NotificationList.as_view()),
     path("<str:id>", views.NotificationDetail.as_view()),
 ]
 

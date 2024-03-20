@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 
+import re
+
 from .models import User
 from .serializers import UserSerializer
 
@@ -45,24 +47,50 @@ def sign_in(request: Request):
 
     return Response(status=status.HTTP_200_OK)
 
+username_validation = re.compile(r"^[a-z0-9_-]{4,15}$")
+
 @api_view(["POST"])
 def sign_up(request: Request):
     if request.user.is_authenticated:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
+        return Response({
+            "code": "SIGNUP_SIGNED_IN_USER",
+            "message": "You're already signed in."
+        }, status=status.HTTP_400_BAD_REQUEST)
     
     payload = request.data
     
     required_fields = [
-        "username", "display_name", "password", "email"
+        "username", "password", "email"
     ]
 
     new_user = User()
     for field in required_fields:
         if field not in payload:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "code": "SIGNUP_REQUIRED_FIELDS_MISSING",
+                "message": "There're some missing field(s)."
+            }, status=status.HTTP_400_BAD_REQUEST)
         
         setattr(new_user, field, payload[field])
     
+    if len(payload["username"]) < 4:
+        return Response({
+            "code": "SIGNUP_USERNAME_TOO_SHORT",
+            "message": "username should be longer than 4."
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    if not username_validation.match(payload["username"]):
+        return Response({
+            "code": "SIGNUP_USERNAME_WRONG",
+            "message": "username should contain alphabets, underscore and digits only."
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    if len(payload["password"]) < 8:
+        return Response({
+            "code": "SIGNUP_PASSWORD_TOO_SHORT",
+            "message": "password should be longer than 8."
+        }, status=status.HTTP_400_BAD_REQUEST)
+
     new_user.set_password(payload["password"])
     new_user.save()
 
