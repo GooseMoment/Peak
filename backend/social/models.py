@@ -62,7 +62,15 @@ class Reaction(Base):
         null=True,
         blank=True,
     )
-    emoji = models.ManyToManyField(Emoji)
+    emoji = models.ForeignKey(
+        Emoji,
+        null=True, 
+        # 입력 받을 때는 null=False인 것처럼.
+        # Emoji가 삭제되었을 때만 null
+        blank=True,
+        on_delete = models.SET_NULL,
+        related_name = "reactions"
+    )
 
     def __str__(self) -> str:
         return f":{self.emoji.name}: by {self.user} → {self.daily_comment or self.task}"
