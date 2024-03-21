@@ -9,7 +9,7 @@ export const getTasksByDrawer = async (drawerID) => {
     }
 }
 
-export const getTask = async (id, isReactionIncluded) => {
+export const getTask = async (id) => {
     try {
         const res = await axios.get(`tasks/${id}`)
         return res.data
