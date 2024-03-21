@@ -1,22 +1,66 @@
+import { useEffect, useState } from "react";
+
 import Task from "@components/project/Task"
 import Drawer from "@components/project/Drawer";
 import TaskCreateSimple from "@components/project/TaskCreate/TaskCreateSimple";
+import { getProject } from "@api/projects.api"
+import { getDrawersByProject } from "@api/drawers.api"
+import { getTasksByDrawer } from "@api/tasks.api"
 
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import FeatherIcon from "feather-icons-react";
 
 const ProjectPage = () => {
+    const { projectId } = useParams()
+    const [project, setProject] = useState([])
+    const [drawers, setDrawers] = useState([])
+    const [tasks, setTasks] = useState([])
+
+    async function fetchProject() {
+        try {
+            const res = await getProject(projectId)
+            setProject(res)
+        } catch (e) {
+            throw alert(e)
+        }
+    }
+
+    async function fetchDrawers() {
+        try {
+            const res = await getDrawersByProject(projectId)
+            setDrawers(res)
+        } catch (e) {
+            throw alert(e)
+        }
+    }
+
+    async function fetchTasks() {
+        try {
+            const res = await getTasksByDrawer(drawers.id)
+            setTasks(res)
+        } catch (e) {
+            throw alert(e)
+        }
+    }
+
+    useEffect(() => {
+        fetchProject()
+        fetchDrawers()
+        fetchTasks()
+    })
+
     return (
     <>
         <TitleBox>
-            <TitleName>홍대라이프</TitleName>
+            <TitleName>{project.name}</TitleName>
             <FeatherIcon icon="more-horizontal"/>
         </TitleBox>
-        {mockDrawers.map((drawer) => (
+        {drawers && drawers.map((drawer) => (
             <>
                 <Drawer key={drawer.id} drawer={drawer}>
                     <TaskList>
-                        {mockTasks.map((task) => (
+                        {tasks && tasks.map((task) => (
                             drawer.name === task.drawer_name && <Task key={task.id} task={task}/>
                         ))}
                     </TaskList>
@@ -82,16 +126,6 @@ const mockProjects = [
     {name: "홍대라이프", color: "#2E61DC", type: "regular", privacy: "public", to: "/projects/홍대라이프"},
     {name: "홍대기숙사총장일", color: "#DC2E2E", type: "regular", privacy: "followers", to: "/projects/홍대기숙사총장일"},
     {name: "장충동왕족발보쌈", color: "#D92EDC", type: "regular", privacy: "me", to: "/projects/장충동왕족발보쌈"},
-]
-
-const mockDrawers = [
-    {id: 0, name: "수강신청", project:"홍대라이프", color: "#2E61DC", task_count : 2, uncompleted_task_count: 1, completed_task_count: 1},
-    {id: 1, name: "고스락", project:"홍대라이프", color: "#2E61DC", task_count : 0, uncompleted_task_count: 0, completed_task_count: 0},
-]
-
-const mockTasks = [
-    {id: 0, name: "수강신청", drawer_name: "수강신청", privacy: "public", completed: false, due_date: "01월 30일", priority: 2},
-    {id: 1, name: "담아두기", drawer_name: "수강신청", privacy: "public", completed: true, due_date: "02월 20일", priority: 0},
 ]
 
 export default ProjectPage
