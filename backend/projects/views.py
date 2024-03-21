@@ -1,9 +1,9 @@
-from rest_framework import mixins, generics, status
-from rest_framework.request import Request
+from rest_framework import mixins, generics
 
 from .models import Project
 from .serializers import ProjectSerializer
 from api.permissions import IsUserMatch
+from api.views import CreateMixin
 
 class ProjectDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -23,8 +23,8 @@ class ProjectDetail(mixins.RetrieveModelMixin,
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     
-class ProjectList(mixins.ListModelMixin,
-                  mixins.CreateModelMixin,
+class ProjectList(CreateMixin,
+                  mixins.ListModelMixin,
                   generics.GenericAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [IsUserMatch]
@@ -35,6 +35,5 @@ class ProjectList(mixins.ListModelMixin,
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
     
-    def post(self, request: Request, *args, **kwargs):
-        request.data.update({"order": "0", "user": request.user.id})
-        return self.create(request, *args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        return self.create_with_user(request, order=0, *args, **kwargs)
