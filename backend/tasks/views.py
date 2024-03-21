@@ -3,6 +3,8 @@ from rest_framework import mixins, generics
 from .models import Task
 from .serializers import TaskSerializer
 from api.permissions import IsUserMatch
+from api.views import CreateMixin
+
 
 class TaskDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -22,7 +24,8 @@ class TaskDetail(mixins.RetrieveModelMixin,
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     
-class TaskList(mixins.ListModelMixin,
+class TaskList(CreateMixin,
+                  mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   generics.GenericAPIView):
     serializer_class = TaskSerializer
@@ -35,4 +38,4 @@ class TaskList(mixins.ListModelMixin,
         return self.list(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        return self.create_with_user(request, *args, **kwargs)
