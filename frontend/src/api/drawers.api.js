@@ -2,7 +2,7 @@ import axios from "axios"
 
 export const getDrawersByProject = async (project_id) => {
     try {
-        const res = await axios.get(`projects/${id}`)
+        const res = await axios.get(`projects/${project_id}`)
         return res.data.drawers
     } catch (e) {
         throw e
