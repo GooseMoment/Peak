@@ -4,7 +4,7 @@ from rest_framework import serializers
 from users.models import User
 
 class TaskSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False, queryset=User.objects.all())
+    user = serializers.PrimaryKeyRelatedField(required=False, queryset=User.objects.all())
 
     class Meta:
         model = Task

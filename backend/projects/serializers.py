@@ -6,7 +6,7 @@ from users.models import User
 
 class ProjectSerializer(serializers.ModelSerializer):
     drawers = DrawerSerializer(many=True, read_only=True)
-    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False, queryset=User.objects.all())
+    user = serializers.PrimaryKeyRelatedField(required=False, queryset=User.objects.all())
     order = serializers.IntegerField(min_value=0, required=False)
     
     class Meta:
