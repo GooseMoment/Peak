@@ -64,6 +64,10 @@ body {
     display: inline-block;
     vertical-align: auto;
 }
+
+:root {
+    --toastify-font-family: inherit;
+}
 `
 
 export default GlobalStyle
