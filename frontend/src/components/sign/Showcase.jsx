@@ -40,7 +40,7 @@ const DisplayArea = styled.div`
     flex-direction: column;
     overflow: hidden;
     user-select: none;
-    gap: 1rem;
+    gap: 2rem;
 
     height: 40%;
     width: 100%;
