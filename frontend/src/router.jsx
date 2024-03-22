@@ -8,8 +8,19 @@ import Layout from "@containers/Layout"
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 import ProjectPage from "@pages/ProjectPage"
+import LandingPage from "@pages/LandingPage"
 
 const routes = [
+    {
+        path: "/",
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                index: true,
+                element: <LandingPage />,
+            }
+        ]
+    },
     {
         path: "/app",
         element: <Layout>
