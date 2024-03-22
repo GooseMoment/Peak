@@ -1,7 +1,7 @@
 import LandingRoot from "@components/landing/LandingRoot"
 import TaskCreateDetail from "@components/project/TaskCreate/TaskCreateDetail"
 
-import icon from "@assets/icon.svg"
+import logo from "@assets/logo.svg"
 import projectComplete from "@assets/landing/undraw_project_complete_lwss.svg"
 import buddies from "@assets/landing/undraw_buddies_2ae5.svg"
 import speedTest from "@assets/landing/undraw_speed_test_re_pe1f.svg"
@@ -11,7 +11,7 @@ const LandingPage = () => {
     return <LandingRoot>
     <nav>
     <div className="left">
-        <img className="icon" src={icon} />
+        <img className="icon" src={logo} />
         <h1>Peak <span className="by">by GooseMoment</span></h1>
     </div>
     <div className="right">
