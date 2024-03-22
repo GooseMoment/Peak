@@ -2,18 +2,18 @@
 
 ## 엔트리포인트
 
-Peak은 내부적으로 세 가지 부분으로 나뉘어 있습니다.
+Peak은 크게 두 가지 부분으로 나뉩니다. (한 서버에서 실행됩니다.)
 
 - backend
-- frontend
-- landing
-
-외부적으로는 두 가지 엔트리포인트를 갖습니다. (한 서버에서 실행됩니다)
-
-- peak.ooo: frontend + landing
-    - 각각 build해서 정적 파일로 제공
-- api.peak.ooo: backend
+    - 이미지 이름: api
+    - 프로덕션 도메인: api.peak.ooo
+    - 개발 도메인: localhost:8888
     - wsgi로 장고와 서버 프로그램과 연결
+- frontend
+    - 이미지 이름: web
+    - 프로덕션 도메인: peak.ooo
+    - 개발 도메인: localhost:8080
+    - build해서 정적 파일로 제공
 
 ## 서버
 
@@ -29,7 +29,7 @@ WSGI 프로그램으로는 [gunicorn](https://gunicorn.org)을 사용합니다.
 도커 컨테이너는 이하와 같이 3개로 이뤄집니다.
 
 - api: gunicorn (backend 디렉터리 포함)
-- web: caddy (frontend와 landing의 react 빌드 포함)
+- web: caddy
 - db: postgresql
 
 ## 실행
@@ -43,7 +43,7 @@ docker volume create db_data
 
 ### 개발 환경일시
 
-다른 터미널(또는 VSCode +버튼 눌러서 터미널 탭 추가)에서 `landing`에서 `npm run start`, `frontend`에서 `npm run dev` 실행 
+다른 터미널(또는 VSCode +버튼 눌러서 터미널 탭 추가)에서 `frontend`에서 `npm run dev` 실행 
 
 ```bash
 # Peak 디렉터리에서 실행
@@ -69,14 +69,13 @@ cp .env.prod.example .env.prod
 
 `.env.prod`의 설정값을 적절히 교체합니다.
 
-그 다음, `frontend`와 `landing`의 `npm run build`를 시행합니다.
+그 다음, `frontend`의 `npm run build`를 시행합니다.
 
 ```bash
 ./deploy/run-builder.sh frontend
-./deploy/run-builder.sh landing
 ```
 
-(이후 `frontend` 또는 `landing`에 변경사항이 있으면 `docker-compose` 실행할 필요없이 해당 부분만 스크립트 돌리면 됩니다)
+(이후 `frontend`에 변경사항이 있으면 `docker-compose` 실행할 필요없이 해당 부분만 스크립트 돌리면 됩니다)
 
 그 후, 아래와 같이 docker-compose를 실행합니다.
 
