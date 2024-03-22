@@ -4,6 +4,10 @@ const background = "#FFD7C7"
 const goose = "#FE4902"
 
 const LandingRoot = styled.div`
+position: relative;
+width: 100%;
+height: 100%;
+
 & button {
     background-color: #FFFFFF;
     border: 1px solid #222222;
@@ -54,7 +58,7 @@ const LandingRoot = styled.div`
 /* nav */
 
 & nav {
-    position: fixed;
+    position: sticky;
     left: 0;
     top: 0;
     z-index: 999;
@@ -62,8 +66,7 @@ const LandingRoot = styled.div`
     display: flex;
     justify-content: space-between;
 
-    padding: 0.5em 1em;
-    width: 100%;
+    padding: 0.5em 1.5em 0.5em 1em;
 
     font-size: 1rem;
 
@@ -107,6 +110,10 @@ const LandingRoot = styled.div`
     }
 }
 
+& section {
+    position: relative;
+}
+
 /* articles */
 
 & article {
@@ -115,8 +122,6 @@ const LandingRoot = styled.div`
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 2rem;
-
-    width: 100%;
 
     position: relative;
     padding: 4rem;
