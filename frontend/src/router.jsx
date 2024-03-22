@@ -9,6 +9,7 @@ import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 import ProjectPage from "@pages/ProjectPage"
 import LandingPage from "@pages/LandingPage"
+import SignPage from "@pages/SignPage"
 
 const routes = [
     {
@@ -18,7 +19,11 @@ const routes = [
             {
                 index: true,
                 element: <LandingPage />,
-            }
+            },
+            {
+                path: "sign",
+                element: <SignPage />,
+            },
         ]
     },
     {
