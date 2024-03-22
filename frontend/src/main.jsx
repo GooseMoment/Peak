@@ -15,6 +15,12 @@ ${reset}
 html {
     height: 100vh;
     width: 100vw;
+
+    scrollbar-color: var(--goose) transparent;
+    scrollbar-width: thin;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
