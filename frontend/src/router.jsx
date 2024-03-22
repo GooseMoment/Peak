@@ -7,24 +7,19 @@ import Layout from "@containers/Layout"
 
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
-import SignInPage from "@pages/SignInPage"
 import ProjectPage from "@pages/ProjectPage"
 
 const routes = [
     {
-        path: "/",
+        path: "/app",
         element: <Layout>
             <Outlet />
         </Layout>,
         errorElement: <ErrorPage />,
         children: [
             {
-                path: "/",
+                index: true,
                 element: <div>This is /</div>,
-            },
-            {
-                path: "sign_in",
-                element: <SignInPage />, // TODO: REMOVE
             },
             {
                 path: "search",
@@ -66,9 +61,6 @@ const routes = [
     }
 ]
 
-const router = createBrowserRouter(routes, {
-    // https://reactrouter.com/en/main/routers/create-browser-router#basename
-    basename: "/app"
-})
+const router = createBrowserRouter(routes)
 
 export default router
