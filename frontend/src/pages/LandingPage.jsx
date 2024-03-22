@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom"
+
 import LandingRoot from "@components/landing/LandingRoot"
 import TaskCreateDetail from "@components/project/TaskCreate/TaskCreateDetail"
 
@@ -6,6 +8,7 @@ import projectComplete from "@assets/landing/undraw_project_complete_lwss.svg"
 import buddies from "@assets/landing/undraw_buddies_2ae5.svg"
 import speedTest from "@assets/landing/undraw_speed_test_re_pe1f.svg"
 import graphs from "@assets/landing/graphs.svg"
+
 
 const LandingPage = () => {
     return <LandingRoot>
@@ -17,7 +20,7 @@ const LandingPage = () => {
     <div className="right">
         <a className="ext-link" href="https://blog.peak.ooo">Blog</a>
         <a className="ext-link" href="https://support.peak.ooo">Support</a>
-        <a href="./sign.html"><button className="start-now">Start Now</button></a>
+        <NavLink to="/sign"><button className="start-now">Start Now</button></NavLink>
     </div>
     </nav> 
     <section>
@@ -28,7 +31,7 @@ const LandingPage = () => {
             <wbr/> 
             and cheer on your peers' progress, all in one convenient app.
         </p>
-        <a href="./sign.html"><button className="start-now">Start Now</button></a>
+        <NavLink to="/sign"><button className="start-now">Start Now</button></NavLink>
     </div>
     <article>
         <div className="left">
@@ -90,7 +93,7 @@ const LandingPage = () => {
     <div className="last">
         <article>
             <h2>손쉽게 지금 시작하세요.</h2>
-            <a href="./sign.html"><button className="start-now">Start Now</button></a>
+            <NavLink to="/sign"><button className="start-now">Start Now</button></NavLink>
             <p>스토어 출시 준비 중</p>
         </article>
         <footer>
