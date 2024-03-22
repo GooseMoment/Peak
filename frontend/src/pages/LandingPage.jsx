@@ -40,7 +40,9 @@ const LandingPage = () => {
             </div>
             <img className="second" src="./img/tasks.svg" />
         </div>
-        <TaskCreateDetail task={{completd: false, name: "집안일 하기"}} />
+        <div className="right" onClickCapture={e => e.stopPropagation()}>
+        <   TaskCreateDetail task={{completd: false, name: "집안일 하기"}} />
+        </div>
     </article>
     <article>
         <div className="left">
