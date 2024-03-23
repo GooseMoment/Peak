@@ -41,6 +41,8 @@ docker volume create caddy_data
 docker volume create db_data
 ```
 
+> Windows 환경에서 실행하는 경우, 앞으로의 명령어 중 `.sh` 파일 대신 `.ps1` 파일을 사용하십시오.
+
 ### 개발 환경일시
 
 다른 터미널(또는 VSCode +버튼 눌러서 터미널 탭 추가)에서 `landing`에서 `npm run start`, `frontend`에서 `npm run dev` 실행 
