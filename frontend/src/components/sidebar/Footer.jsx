@@ -7,16 +7,16 @@ const Footer = ({user, collapsed}) => {
     return <FooterBox $collapsed={collapsed}>
 
         {user ? (
-        <SidebarLink to="/users/@minyoy" draggable="false">
+        <SidebarLink to={`users/@${user.username}`} draggable="false">
             <CurrentUserProfile>
-                <img src={user.profile_img_link} />
+                <img src={user.profile_img_uri} />
                 {collapsed ? null : <Username>{user.username}</Username>}
             </CurrentUserProfile>
         </SidebarLink>
         ) : null }
 
         {collapsed ? null :
-        <SidebarLink to="/settings/account" draggable="false">
+        <SidebarLink to="settings/account" draggable="false">
             <SettingIconContainer>
                 <FeatherIcon icon="settings" />
             </SettingIconContainer>

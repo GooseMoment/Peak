@@ -10,6 +10,8 @@ import NotificationsPage from "@pages/NotificationsPage"
 import SignInPage from "@pages/SignInPage"
 import ProjectPage from "@pages/ProjectPage"
 
+import { getMe } from "@api/users.api"
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -17,6 +19,10 @@ const router = createBrowserRouter([
             <Outlet />
         </Layout>,
         errorElement: <ErrorPage />,
+        id: "app",
+        loader: async () => {
+            return getMe()
+        },
         children: [
             {
                 path: "/",
