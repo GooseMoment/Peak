@@ -1,8 +1,8 @@
-import axios from "axios"
+import client from "@/api/client"
 
-export const getCurrentUser = async () => {
+export const getMe = async () => {
     try {
-        const res = await axios.get("current_user/")
+        const res = await client.get("users/me")
         return res.data
     } catch (e) {
         throw e
@@ -23,7 +23,7 @@ export const patchUser = (user) => {
 
 export const signIn = async (email, password) => {
     try {
-        await axios.post("sign_in/", {
+        await client.post("sign_in/", {
             email: email,
             password: password,
         })

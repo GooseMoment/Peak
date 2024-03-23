@@ -103,7 +103,7 @@ def sign_out(request: Request):
     return Response(status=status.HTTP_200_OK)
 
 @api_view(["GET"])
-def get_current_user(request: Request):
+def get_me(request: Request):
     if request.user.is_anonymous:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
     
