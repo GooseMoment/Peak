@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate, login, logout
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -74,6 +76,14 @@ def sign_up(request: Request):
             }, status=status.HTTP_400_BAD_REQUEST)
         
         setattr(new_user, field, payload[field])
+
+    try:
+        validate_email(payload["email"])
+    except ValidationError as e:
+        return Response({
+            "code": "SIGNUP_EMAIL_WRONG",
+            "message": "email validation error occuered."
+        }, status=status.HTTP_400_BAD_REQUEST)
     
     if len(payload["username"]) < 4:
         return Response({
