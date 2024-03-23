@@ -22,8 +22,10 @@ class UserDetail(mixins.RetrieveModelMixin,
     serializer_class = UserSerializer
     lookup_field = "username"
 
-    def get(self, request: Request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+    def get(self, request: Request, username: str, *args, **kwargs):
+        instance = self.get_object()
+        serializer = UserSerializer(instance, context={"is_me": request.user.username == username})
+        return Response(serializer.data)
 
     def patch(self, request: Request, username: str, *args, **kwargs):
         if request.user.username != username:
