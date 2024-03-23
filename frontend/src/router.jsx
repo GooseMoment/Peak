@@ -9,8 +9,9 @@ import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 import SignInPage from "@pages/SignInPage"
 import ProjectPage from "@pages/ProjectPage"
+import UserPage from "@pages/UserPage"
 
-import { getMe } from "@api/users.api"
+import { getMe, getUserByUsername } from "@api/users.api"
 
 const router = createBrowserRouter([
     {
@@ -62,7 +63,10 @@ const router = createBrowserRouter([
             },
             {
                 path: "users/:username",
-                element: <div>This is /users/:username</div>,
+                loader: async ({params}) => {
+                    return getUserByUsername(params.username.slice(1))
+                },
+                element: <UserPage/>,
             },
             {
                 path: "settings/:section",

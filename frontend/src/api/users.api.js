@@ -9,16 +9,23 @@ export const getMe = async () => {
     }
 }
 
-export const getUserByID = (userID) => {
-
+export const getUserByUsername = async (username) => {
+    try {
+        const res = await client.get(`users/@${username}/`)
+        return res.data
+    } catch (e) {
+        throw e
+    }
 }
 
-export const getUserByUsername = (username) => {
-
-}
-
-export const patchUser = (user) => {
-
+export const patchUser = async (data) => {
+    try {
+        const me = await getMe()
+        const res = await client.patch(`users/@${me.username}/`, data)
+        return res.status
+    } catch (e) {
+        throw e
+    }
 }
 
 export const signIn = async (email, password) => {
