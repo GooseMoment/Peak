@@ -107,5 +107,5 @@ def get_me(request: Request):
     if request.user.is_anonymous:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
     
-    serializer = UserSerializer(request.user._wrapped, personal=True)
+    serializer = UserSerializer(request.user._wrapped, context={"is_me": True})
     return Response(serializer.data)
