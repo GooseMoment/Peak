@@ -1,7 +1,5 @@
 from django.db import models
 
-import uuid
-
 from api.models import Base
 from users.models import User
 from tasks.models import Task
@@ -9,6 +7,9 @@ from tasks.models import Task
 class Emoji(Base):
     name = models.CharField(max_length=128)
     img_uri = models.URLField()
+
+    def __str__(self) -> str:
+        return f":{self.name}:"
 
 class Peck(Base):
     user = models.ForeignKey(
@@ -21,6 +22,9 @@ class Peck(Base):
     )
     count = models.IntegerField()
 
+    def __str__(self) -> str:
+        return f"{self.count} pecks by {self.user} → '{self.task.name}'"
+
 class DailyComment(Base):
     user = models.ForeignKey(
         User,
@@ -28,6 +32,9 @@ class DailyComment(Base):
     )
     comment = models.TextField()
     date = models.DateField()
+
+    def __str__(self) -> str:
+        return f"DailyComment of {self.date} by {self.user}"
 
 class Reaction(Base):
     FOR_TASK = "task"
@@ -47,13 +54,26 @@ class Reaction(Base):
         Task,
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
     )
     daily_comment = models.ForeignKey(
         DailyComment,
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
     )
-    emoji = models.ManyToManyField(Emoji)
+    emoji = models.ForeignKey(
+        Emoji,
+        null=True, 
+        # 입력 받을 때는 null=False인 것처럼.
+        # Emoji가 삭제되었을 때만 null
+        blank=True,
+        on_delete = models.SET_NULL,
+        related_name = "reactions"
+    )
+
+    def __str__(self) -> str:
+        return f":{self.emoji}: by {self.user} → {self.daily_comment or self.task}"
 
 class Comment(Base):
     user = models.ForeignKey(
@@ -65,6 +85,9 @@ class Comment(Base):
         on_delete=models.CASCADE,
     )
     comment = models.TextField()
+
+    def __str__(self) -> str:
+        return f"Comment by {self.user} → {self.task.name}"
 
 class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
     # 보내는사람
@@ -91,6 +114,9 @@ class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model
             models.UniqueConstraint(fields=["follower", "followee"], name="constraint_follower_followee"),
         ]
 
+    def __str__(self) -> str:
+        return f"Following {self.follower} → {self.followee} (is_request: {self.is_request})"
+
 class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
     blocker = models.ForeignKey(
         User,
@@ -105,9 +131,12 @@ class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, default=None)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["blocker", "blockee"], name="constraint_blocker_blockee"),
         ]
+
+    def __str__(self) -> str:
+        return f"Block {self.blocker} → {self.blockee}"

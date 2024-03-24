@@ -12,6 +12,9 @@ class TaskReminder(Base):
     )
     scheduled = models.DateTimeField()
 
+    def __str__(self) -> str:
+        return f"Reminder for {self.task.name} at {self.scheduled}"
+
 class Notification(Base):
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
 
@@ -40,19 +43,26 @@ class Notification(Base):
         User,
         on_delete = models.CASCADE,
         null=True,
+        blank=True,
     )
     task = models.ForeignKey(
         Task,
         on_delete = models.CASCADE,
         null=True,
+        blank=True,
     )
     reaction = models.ForeignKey(
         Reaction,
         on_delete = models.CASCADE,
         null=True,
+        blank=True,
     )
-    follow_request = models.ForeignKey(
+    following = models.ForeignKey(
         Following,
         on_delete = models.CASCADE,
         null=True,
+        blank=True,
     )
+
+    def __str__(self) -> str:
+        return f"{self.type} for {self.user}"
