@@ -3,7 +3,7 @@ from django.db import models
 from api.models import Base
 from tasks.models import Task
 from users.models import User
-from social.models import Reaction, Following
+from social.models import Reaction, Following, Peck
 
 class TaskReminder(Base):
     task = models.ForeignKey(
@@ -59,6 +59,12 @@ class Notification(Base):
     )
     following = models.ForeignKey(
         Following,
+        on_delete = models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    peck = models.ForeignKey(
+        Peck,
         on_delete = models.CASCADE,
         null=True,
         blank=True,
