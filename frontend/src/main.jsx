@@ -46,7 +46,7 @@ html {
     height: 100%;
     padding: 0.5em;
 
-    z-index: 99;
+    z-index: 990;
 }
 
 body, textarea {
