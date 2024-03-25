@@ -5,6 +5,8 @@ from api.admin import fieldset_base, readonly_fields_base
 # https://docs.djangoproject.com/en/4.2/ref/contrib/admin/#django.contrib.admin.register
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
+    ordering = ["last_login", "updated_at"]
+    search_fields = ["username", "email"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
