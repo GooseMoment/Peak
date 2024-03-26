@@ -1,18 +1,10 @@
 import styled from "styled-components";
 import FeatherIcon from 'feather-icons-react';
-import { useEffect } from "react";
 
 import TaskName from "../TaskName";
 import Contents from "./Contents";
 
 function TaskCreateDetail({task, onClose}) {
-
-    useEffect(() => {
-        document.body.style.overflow = 'hidden';
-        document.querySelector('html').scrollTop = window.scrollY;
-            return () => document.body.style.overflow = null;
-        }, []);
-
     return (
         <TaskCreateDetailBox>
             <TaskNameBox>
