@@ -11,6 +11,7 @@ import SignInPage from "@pages/SignInPage"
 import ProjectPage from "@pages/ProjectPage"
 import SocialFollowingPage from "@pages/SocialFollowingPage"
 import SocialExplorePage from "@pages/SocialExplorePage"
+import SocialPage from "@pages/SocialPage"
 
 const routes = [
     {
@@ -47,7 +48,10 @@ const routes = [
             {
                 path: "social",
                 children: [
-                    // TODO: Redirect?
+                    {
+                        index: true,
+                        element: <SocialPage />
+                    },
                     {
                         path: "following",
                         element: <SocialFollowingPage />,
