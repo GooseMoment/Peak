@@ -11,24 +11,26 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+env_check = os.environ.get("DEBUG")
+if env_check is None:
+    print("******************************************************************************")
+    print("*환경변수가 설정되지 않았습니다. 도커 환경이 아니거나 구성에 문제가 있습니다.*")
+    print("******************************************************************************")
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-87%a)!2$$9_yizx8(%n%as513jq94o8(iuquctgpgxgic=+s7='
-# TODO: SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-87%a)!2$$9_yizx8(%n%as513jq94o8(iuquctgpgxgic=+s7=")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# TODO: DEBUG = False
+DEBUG = os.environ.get("DEBUG", "1") == "1"
 
-ALLOWED_HOSTS = []
-# TODO: fill with hosts after setting DEBUG as False.
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(" ")
 
 # Application definition
 
@@ -72,8 +74,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
-    'api.middleware.JSONMiddleware'
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -104,13 +104,12 @@ WSGI_APPLICATION = 'django_peak.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'peakdb',
-        'USER': 'peakuser',
-        'PASSWORD': 'PEAK_DEFAULT_PASSWORD',
-        # TODO: 'PASSWORD': os.environ["PEAKUSER_SECRET_KEY"],
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': os.environ.get("SQL_ENGINE", 'django.db.backends.postgresql'),
+        'NAME': os.environ.get("SQL_DATABASE", 'peakdb'),
+        'USER': os.environ.get("SQL_USER", 'peakuser'),
+        'PASSWORD': os.environ.get("SQL_PASSWORD", 'PEAK_DEFAULT_PASSWORD'),
+        'HOST': os.environ.get("SQL_HOST", '127.0.0.1'),
+        'PORT': os.environ.get("SQL_PORT", '5432'),
     }
 }
 

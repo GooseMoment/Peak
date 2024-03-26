@@ -4,7 +4,7 @@ from django.http import HttpRequest
 from .models import User
 
 class UserBackend(BaseBackend):
-    def authenticate(self, request: HttpRequest, email: str, password: str, **kwargs) -> User | None:
+    def authenticate(self, request: HttpRequest, email: str, password: str, **kwargs):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:

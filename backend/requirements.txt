@@ -1,0 +1,9 @@
+Django==4.2.7
+django-cors-headers==4.3.1
+django-seed==0.3.1
+django-stubs==4.2.7
+django-stubs-ext==4.2.7
+djangorestframework==3.14.0
+psycopg-binary==3.1.18
+psycopg==3.1.18
+gunicorn==21.2.0
