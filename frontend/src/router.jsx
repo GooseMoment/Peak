@@ -9,6 +9,9 @@ import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 import SignInPage from "@pages/SignInPage"
 import ProjectPage from "@pages/ProjectPage"
+import ProjectListPage from "@pages/ProjectListPage"
+
+import { getProject, getProjectsList } from "@api/projects.api"
 
 const routes = [
     {
@@ -17,6 +20,10 @@ const routes = [
             <Outlet />
         </Layout>,
         errorElement: <ErrorPage />,
+        id: "app",
+        loader: async () => {
+            return getProjectsList()
+        },
         children: [
             {
                 path: "/",
@@ -48,11 +55,20 @@ const routes = [
             },
             {
                 path: "projects",
-                element: <div>This is /projects</div>,
+                element: <ProjectListPage/>,
+                loader: async () => {
+                    return getProjectsList()
+                }
             },
             {
                 path: "projects/:id",
                 element: <ProjectPage/>,
+                loader: async ({params}) => {
+                    return [
+                        await getProject(params.id),
+                        await getDrawersByProject(),
+                    ]
+                }
             },
             {
                 path: "users/:username",
