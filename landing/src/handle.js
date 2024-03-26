@@ -32,7 +32,11 @@ document.querySelector("#already-have").addEventListener("click", e => {
 })
 
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = "http://localhost:8000/"
+axios.defaults.baseURL = "https://api.peak.ooo/"
+
+if (process.env.NODE_ENV === "development") {
+    axios.defaults.baseURL = "http://localhost:8888/"
+}
 
 const newToast = (msg, level="success") => Toastify({
     text: msg,
