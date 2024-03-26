@@ -1,4 +1,6 @@
 from django.contrib.auth.hashers import make_password
+from django.db.utils import IntegrityError
+from django.core.management.base import CommandError
 
 from users.models import User
 from projects.models import Project
@@ -17,6 +19,7 @@ import requests
 from bs4 import BeautifulSoup, NavigableString
 from faker import Faker
 fake = Faker("ko_KR")
+Faker.seed(775479)
 
 PASSWORD_DEFAULT = "PASSWORD_DEFAULT"
 
@@ -73,14 +76,19 @@ def create_users(n: int = 30) -> list[User]:
     users: list[User] = []
 
     for data in default_users_data:
-        user = User(
-            username=data["username"], display_name=data["display_name"],
-            password=make_password(data["password"]), email=data["email"],
-            bio=data["bio"], profile_img_uri=data["profile_img_uri"]
-        )
+        try:
+            user = User(
+                username=data["username"], display_name=data["display_name"],
+                password=make_password(data["password"]), email=data["email"],
+                bio=data["bio"], profile_img_uri=data["profile_img_uri"]
+            )
 
-        user.save()
-        users.append(user)
+            user.save()
+            users.append(user)
+        except IntegrityError:
+            # django.db.utils.IntegrityError: duplicate key value violates unique constraint "users_user_username_key"
+            # DETAIL:  Key (username)=(andless._.) already exists.
+            raise CommandError("createdummies 명령어는 시드가 고정되어 있어 faker를 사용하는 곳들에는 항상 똑같은 결과를 출력합니다. clearall을 실행 후 다시 실행하세요.")
 
     for _ in range(n-len(default_users_data)):
         user = factory_user()
