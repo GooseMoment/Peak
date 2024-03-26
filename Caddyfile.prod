@@ -1,0 +1,52 @@
+# https://caddyserver.com/docs/caddyfile
+
+peak.ooo {
+	# https://stackoverflow.com/a/71815382
+	encode zstd gzip
+
+	log {
+		level info
+		format console
+	}
+
+	# frontend
+	handle_path /app/* {
+		root * /srv/frontend
+		file_server
+		try_files {path} /index.html
+	}
+
+	# landing
+	handle /* {
+		root * /srv/landing
+		file_server
+		try_files {path} /index.html
+	}
+}
+
+api.peak.ooo {
+	# static files that django admin and rest_framework uses
+	handle_path /static/* {
+		root * /srv/django_static/static
+		file_server
+	}
+
+	@private_ips {
+		# https://caddyserver.com/docs/caddyfile/matchers#example-7
+		remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
+	}
+
+	handle /admin/* {
+		# https://caddy.community/t/restrict-ip-access-using-remote-ip-with-reverse-proxy/16365/2
+		handle @private_ips {
+			reverse_proxy @private_ips api:8000
+		}
+		handle {
+			abort
+		}
+	}
+
+	handle * {
+		reverse_proxy api:8000
+	}
+}

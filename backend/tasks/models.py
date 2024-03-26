@@ -1,8 +1,6 @@
 from django.db import models
 
-import uuid
-
-from api.models import Base
+from api.models import Base, PrivacyMixin
 from users.models import User
 from drawers.models import Drawer
 
@@ -20,19 +18,21 @@ class Repeat(Base):
     month = models.IntegerField(default=0)
     day = models.IntegerField(default=0)
 
-class Task(Base):
+    def __str__(self) -> str:
+        return f"Repeat by {self.user}"
+
+class Task(Base, PrivacyMixin):
     name = models.CharField(max_length=128)
-    privacy = models.CharField(max_length=128)
-    completed_at = models.DateTimeField()
+    completed_at = models.DateTimeField(null=True, blank=True)
     drawer = models.ForeignKey(
         Drawer,
         on_delete=models.CASCADE,
     )
-    due_date = models.DateField()
-    due_time = models.TimeField()
-    priority = models.IntegerField()
-    memo = models.TextField()
-    reminder_datetime = models.DateTimeField()
+    due_date = models.DateField(null=True, blank=True)
+    due_time = models.TimeField(null=True, blank=True)
+    priority = models.IntegerField(default=0)
+    memo = models.TextField(null=True, blank=True)
+    reminder_datetime = models.DateTimeField(null=True, blank=True)
 
     user = models.ForeignKey(
         User,
@@ -42,4 +42,8 @@ class Task(Base):
         Repeat,
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
     )
+
+    def __str__(self) -> str:
+        return f"{self.name} by {self.user}"

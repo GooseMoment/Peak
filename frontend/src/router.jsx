@@ -13,7 +13,7 @@ import UserPage from "@pages/UserPage"
 
 import { getMe, getUserByUsername } from "@api/users.api"
 
-const router = createBrowserRouter([
+const routes = [
     {
         path: "/",
         element: <Layout>
@@ -73,8 +73,12 @@ const router = createBrowserRouter([
                 element: <div>This is /settings/:section</div>,
             },
         ]
-    },
-    
-])
+    }
+]
+
+const router = createBrowserRouter(routes, {
+    // https://reactrouter.com/en/main/routers/create-browser-router#basename
+    basename: "/app"
+})
 
 export default router
