@@ -21,4 +21,4 @@ class Drawer(Base, PrivacyMixin):
     completed_task_count = models.IntegerField(default=0)
 
     def __str__(self) -> str:
-        return f"{self.name} by {self.user}"
+        return f"{self.name} in {self.project}"

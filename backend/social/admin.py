@@ -4,6 +4,8 @@ from api.admin import fieldset_base, readonly_fields_base
 
 @admin.register(Emoji)
 class EmojiAdmin(admin.ModelAdmin):
+    ordering = ["name", "updated_at"]
+    search_fields = ["name"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
@@ -17,6 +19,9 @@ class EmojiAdmin(admin.ModelAdmin):
 
 @admin.register(Peck)
 class PeckAdmin(admin.ModelAdmin):
+    ordering = ["updated_at"]
+    search_fields = ["user__username", "task"]
+    autocomplete_fields = ["user", "task"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
@@ -30,6 +35,9 @@ class PeckAdmin(admin.ModelAdmin):
 
 @admin.register(DailyComment)
 class DailyCommentAdmin(admin.ModelAdmin):
+    ordering = ["date", "updated_at"]
+    search_fields = ["user__username", "date"]
+    autocomplete_fields = ["user"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
@@ -43,6 +51,9 @@ class DailyCommentAdmin(admin.ModelAdmin):
 
 @admin.register(Reaction)
 class ReactionAdmin(admin.ModelAdmin):
+    ordering = ["created_at"]
+    search_fields = ["user__username", "emoji"]
+    autocomplete_fields = ["user", "task", "daily_comment", "emoji"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
@@ -62,6 +73,9 @@ class ReactionAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
+    ordering = ["created_at"]
+    search_fields = ["user__username", "task"]
+    autocomplete_fields = ["user", "task"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
@@ -75,6 +89,9 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Following)
 class FollowingAdmin(admin.ModelAdmin):
+    ordering = ["updated_at"]
+    search_fields = ["followee__username", "follower__username"]
+    autocomplete_fields = ["follower", "followee"]
     readonly_fields = ("created_at", "updated_at", "deleted_at", )
     fieldsets = [
         (
@@ -94,6 +111,9 @@ class FollowingAdmin(admin.ModelAdmin):
 
 @admin.register(Block)
 class BlockAdmin(admin.ModelAdmin):
+    ordering = ["updated_at"]
+    search_fields = ["blockee__username", "blocker__username"]
+    autocomplete_fields = ["blocker", "blockee"]
     readonly_fields = ("created_at", "updated_at", "deleted_at", )
     fieldsets = [
         (
