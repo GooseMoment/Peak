@@ -1,6 +1,12 @@
 import { createPortal } from "react-dom";
 
 const ModalPortal = ({ children }) => {
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        document.querySelector('html').scrollTop = window.scrollY;
+            return () => document.body.style.overflow = null;
+        }, []);
+
     const el = document.getElementById("modal");
     return createPortal(children, el);
 };
