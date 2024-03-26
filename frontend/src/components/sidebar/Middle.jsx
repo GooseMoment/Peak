@@ -5,7 +5,7 @@ import FeatherIcon from "feather-icons-react"
 
 const Middle = ({projects, collapsed}) => {
     return <MiddleBox>
-         {items.map(item => <SidebarLink to={item.to} draggable="false" key={item.to} end>
+         {items.map(item => <SidebarLink to={item.to} draggable="false" key={item.to} end={item.end}>
             <ItemBox $collapsed={collapsed} key={item.name}>   
                 <FeatherIcon icon={item.icon} />
                 {collapsed ? null : item.name}
@@ -22,11 +22,13 @@ const Middle = ({projects, collapsed}) => {
 }
 
 const items = [
-    {icon: "search", name: "Search", to: "/search"},
-    {icon: "bell", name: "Notifications", to: "/notifications"},
-    {icon: "calendar", name: "Today", to: "/today"},
-    {icon: "users", name: "Social", to: "/social/following"},
-    {icon: "archive", name: "Projects", to: "/projects"},
+    // end가 true:  경로가 to와 완전히 일치해야 active
+    //       false: to의 하위 경로에 있어도 active
+    {icon: "search", name: "Search", to: "/search", end: false},
+    {icon: "bell", name: "Notifications", to: "/notifications", end: false},
+    {icon: "calendar", name: "Today", to: "/today", end: false},
+    {icon: "users", name: "Social", to: "/social", end: false},
+    {icon: "archive", name: "Projects", to: "/projects", end: true},
 ]
 
 const MiddleBox = styled.div`

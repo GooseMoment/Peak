@@ -1,0 +1,21 @@
+{
+  "name": "landing",
+  "source": "src/index.html",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "start": "parcel -p 1234",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "parcel": "^2.12.0",
+    "process": "^0.11.10"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "grapheme-splitter": "^1.0.4",
+    "parcel-bundler": "^1.12.5",
+    "toastify-js": "^1.12.0",
+    "typewriter-effect": "^2.21.0"
+  }
+}
