@@ -116,11 +116,7 @@ def factory_drawer(project: Project, order: int) -> Drawer:
         order=order,
         user=project.user,
         name=fake.word(),
-        # TODO: random.choice()
-        privacy="public",
-        # TODO: remove belows after default=0
-        uncompleted_task_count=0,
-        completed_task_count=0,
+        privacy=random.choice(Drawer.PRIVACY_TYPES)[0],
     )
 
 def create_drawers(projects: list[Project]) -> list[Drawer]:
@@ -173,7 +169,7 @@ def factory_task(drawer: Drawer) -> Task:
 
     return Task(
         name=fake.sentence(),
-        privacy="public",
+        privacy=random.choice(Task.PRIVACY_TYPES)[0],
         created_at=created_at,
         updated_at=updated_at,
         deleted_at=deleted_at,
