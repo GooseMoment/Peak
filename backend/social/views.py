@@ -47,14 +47,18 @@ def get_followers(request: HttpRequest, username):
     followers = Following.objects.filter(followee__username=username).all()
     followerUsers = User.objects.filter(followings__in=followers.all()).all()
     
-    serializer = UserSerializer(followerUsers, many=True)
+    serializer = UserSerializer(followerUsers, many=True)    
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(["GET"])
+def get_followings(request: HttpRequest, username):
+    followings = Following.objects.filter(follower__username=username).all()
+    followingUsers = User.objects.filter(followers__in=followings.all()).all()
     
+    serializer = UserSerializer(followingUsers, many=True)    
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 def get_profile(request: HttpRequest, user_id):
-    pass
-
-def get_followings(request: HttpRequest, user_id):
     pass
 
 def get_blocks(request: HttpRequest):

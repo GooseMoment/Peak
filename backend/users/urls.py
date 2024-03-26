@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-from social.views import get_followers
+from social.views import get_followers, get_followings
 
 urlpatterns = [
     path("current_user/", views.get_current_user),
@@ -10,4 +10,5 @@ urlpatterns = [
     path("sign_up/", views.sign_up),
     path("users/@<str:username>/", views.UserDetail.as_view()),
     path("users/@<str:username>/followers/", get_followers),
+    path("users/@<str:username>/followings/", get_followings),
 ]
