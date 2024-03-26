@@ -10,58 +10,37 @@ from django.shortcuts import get_object_or_404
 from .models import *
 from .serializers import *
 
-# class FollowView(APIView):
-#     def get_object(self, pk):
-#         try:
-#             return Following.objects.get(pk=pk)
-#         except Following.DoesNotExist:
-#             raise Http404
-
-#     def get(self, request, pk, format=None):
-#         following = self.get_object(pk)
-#         serializer = FollowingSerializer(following)
-#         return Response(serializer.data)
-
-#     def put(self, request, pk, format=None):
-#         following = self.get_object(pk)
-#         serializer = FollowingSerializer(following, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#     def delete(self, request, pk, format=None):
-#         following = self.get_object(pk)
-#         following.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-
+# following 만드는 거
 class FollowView(APIView):
+    #request
     def put(self, request, follower, followee):
-        following, created = Following.objects.get_or_create(follower=follower, followee=followee)
-        if created:
-            return Response(status=status.HTTP_201_CREATED)
-        else:
+        followerUser = get_object_or_404(User, username=follower)
+        followeeUser = get_object_or_404(User, username=followee)
+        
+        try:
+            created = Following.objects.create(follower=followerUser, followee=followeeUser)
+        except:
             return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        
+        serializer = FollowingSerializer(created)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get(self, request, follower, followee):
-        following = get_object_or_404(Following, follower=follower, followee=followee)
+        following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
         serializer = FollowingSerializer(following)
-        return Response(serializer, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, follower, followee):
-        following = get_object_or_404(Following, follower=follower, followee=followee)
+        following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
         following.is_request = False
         following.save()
         return Response(status=status.HTTP_202_ACCEPTED)
-
-def post_follow_request(request: HttpRequest, user_id):
-    pass
-
-def patch_follow_request(request: HttpRequest, user_id):
-    pass
-
-def delete_follow_request(request: HttpRequest, user_id):
-    pass
+    
+    def delete(self, request, follower, followee):
+        following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
+        #soft delete
+        following.delete()
+        return Response(status=status.HTTP_200_OK)
 
 def get_profile(request: HttpRequest, user_id):
     pass
