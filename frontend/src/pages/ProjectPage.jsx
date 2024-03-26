@@ -1,39 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
+import { useLoaderData, useParams } from "react-router-dom"
 
 import Task from "@components/project/Task"
-import Drawer from "@components/project/Drawer";
-import TaskCreateSimple from "@components/project/TaskCreate/TaskCreateSimple";
-import { getProject } from "@api/projects.api"
-import { getDrawersByProject } from "@api/drawers.api"
+import Drawer from "@components/project/Drawer"
+import TaskCreateSimple from "@components/project/TaskCreate/TaskCreateSimple"
 import { getTasksByDrawer } from "@api/tasks.api"
 
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import FeatherIcon from "feather-icons-react";
 
 const ProjectPage = () => {
-    const { projectId } = useParams()
-    const [project, setProject] = useState([])
-    const [drawers, setDrawers] = useState([])
+    const { id } = useParams()
+    const [project, drawers] = useLoaderData()
     const [tasks, setTasks] = useState([])
-
-    async function fetchProject() {
-        try {
-            const res = await getProject(projectId)
-            setProject(res)
-        } catch (e) {
-            throw alert(e)
-        }
-    }
-
-    async function fetchDrawers() {
-        try {
-            const res = await getDrawersByProject(projectId)
-            setDrawers(res)
-        } catch (e) {
-            throw alert(e)
-        }
-    }
 
     async function fetchTasks() {
         try {
@@ -45,10 +24,8 @@ const ProjectPage = () => {
     }
 
     useEffect(() => {
-        fetchProject()
-        fetchDrawers()
         fetchTasks()
-    })
+    }, [id])
 
     return (
     <>
