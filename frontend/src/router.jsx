@@ -10,7 +10,9 @@ import NotificationsPage from "@pages/NotificationsPage"
 import SignInPage from "@pages/SignInPage"
 import ProjectPage from "@pages/ProjectPage"
 import ProjectListPage from "@pages/ProjectListPage"
+import UserPage from "@pages/UserPage"
 
+import { getMe, getUserByUsername } from "@api/users.api"
 import { getProject, getProjectsList } from "@api/projects.api"
 
 const routes = [
@@ -22,7 +24,10 @@ const routes = [
         errorElement: <ErrorPage />,
         id: "app",
         loader: async () => {
-            return getProjectsList()
+            return [
+                await getProjectsList(),
+                await getMe(),
+            ]
         },
         children: [
             {
@@ -72,7 +77,10 @@ const routes = [
             },
             {
                 path: "users/:username",
-                element: <div>This is /users/:username</div>,
+                loader: async ({params}) => {
+                    return getUserByUsername(params.username.slice(1))
+                },
+                element: <UserPage/>,
             },
             {
                 path: "settings/:section",
