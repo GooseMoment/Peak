@@ -23,7 +23,7 @@ const SocialFollowingPage = () => {
             </SocialCalendar>
             <DailyLogContainer>
                 {mockDailyFollowersLog.map((dailyFollowersLog) => (
-                    <DailyLogPreview userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+                    <DailyLogPreview key={dailyFollowersLog.index} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                 ))}
             </DailyLogContainer>
 
@@ -126,14 +126,14 @@ const mockDailyFollowerLogsDetail = [
             {
                 projectID: "개발", projectColor: "#2E61DC",
                 dailytasks: [
-                    { id: "TEMP1", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [ { emoji: "🥳", reactionNum: 2 } ] },
-                    { id: "TEMP2", name: "총장하기", completedAt: null, reaction: [ { emoji: null, reactionNum: 4 } ] }
+                    { id: "TEMP11", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [ { emoji: "🥳", reactionNum: 2 } ] },
+                    { id: "TEMP12", name: "총장하기", completedAt: null, reaction: [ { emoji: null, reactionNum: 4 } ] }
                 ]
             },
             {
                 projectID: "수강신청", projectColor: "#ff0022",
                 dailytasks: [
-                    { id: "TEMP1", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [ { emoji: "🥳", reactionNum: 2 }, { emoji: "😅", reactionNum: 3 } ] },
+                    { id: "TEMP15", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [ { emoji: "🥳", reactionNum: 2 }, { emoji: "😅", reactionNum: 3 } ] },
                 ]
             },
         ]

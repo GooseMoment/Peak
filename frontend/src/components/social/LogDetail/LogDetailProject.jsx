@@ -7,7 +7,7 @@ const LogDetailProject = ({project}) => {
             {project.projectID}
         </ProjectHeader>
         {project.dailytasks.map((task) => (
-            <LogDetailTask task={task} color={project.projectColor}/>
+            <LogDetailTask key={task.id} task={task} color={project.projectColor}/>
         ))}
 
 

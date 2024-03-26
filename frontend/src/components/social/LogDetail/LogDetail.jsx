@@ -52,7 +52,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
         <ReactionBox>
             {userLogsDetail.dailyComment.reaction.map((dailyCommentEmoji) => (
                 // <ReactionEmoji emojiClick={emojiClick} setEmojiClick={setEmojiClick} emoji={dailyCommentEmoji}/>
-                <ReactionEmoji emoji={dailyCommentEmoji}/>
+                <ReactionEmoji key={dailyCommentEmoji.id} emoji={dailyCommentEmoji}/>
             ))
             }
             <EmojiAddButton />
@@ -63,7 +63,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
         <DetailBody>
         {
             userLogsDetail.dailyProjects.map((dailyProject) => (
-                <LogDetailProject project={dailyProject}/>
+                <LogDetailProject key={dailyProject.id} project={dailyProject}/>
             ))
         }
         </ DetailBody>
