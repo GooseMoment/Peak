@@ -17,7 +17,7 @@ const EmojiModal = ({isModalOpen, setIsModalOpen}) => {
     return <EmojiLists>
         {
             emojis.map(emoji =>
-                    <EmojiButton emoji={emoji} isHover={isHover} setIsHover={setIsHover} setIsModalOpen={setIsModalOpen}/>
+                    <EmojiButton key={emoji} emoji={emoji} isHover={isHover} setIsHover={setIsHover} setIsModalOpen={setIsModalOpen}/>
             )
         }
     </EmojiLists>

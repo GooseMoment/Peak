@@ -39,7 +39,7 @@ const LogDetailTask = ({ task, color }) => {
             {task.completedAt ? (
                 <>
                     {task.reaction.map((LogDetailTaskEmoji) => (
-                        <ReactionEmoji emoji={LogDetailTaskEmoji} />
+                        <ReactionEmoji key={LogDetailTaskEmoji.emoji} emoji={LogDetailTaskEmoji} />
                     ))}
                     <EmojiAddButton />
                 </>
