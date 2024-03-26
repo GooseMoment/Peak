@@ -529,7 +529,7 @@ def create_notifications(
     # for peck
     for peck in pecks:
         noti = factory_notification(
-            peck.task.user, Notification.FOR_PECKED, peck, peck.updated_at,
+            peck.task.user, Notification.FOR_PECK, peck, peck.updated_at,
         )
         noti.save()
         notifications.append(noti)

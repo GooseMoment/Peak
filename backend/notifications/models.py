@@ -23,7 +23,7 @@ class Notification(Base):
     FOR_FOLLOW = "follow"
     FOR_FOLLOW_REQUEST = "follow_request"
     FOR_FOLLOW_REQUEST_ACCEPTED = "follow_request_accepted"
-    FOR_PECKED = "pecked"
+    FOR_PECK = "peck"
     FOR_TRENDING_UP = "trending_up"
     FOR_TRENDING_DOWN = "trending_down"
 
@@ -33,7 +33,7 @@ class Notification(Base):
         (FOR_FOLLOW, "for follow"),
         (FOR_FOLLOW_REQUEST, "for follow request"),
         (FOR_FOLLOW_REQUEST_ACCEPTED, "for follow request accpeted"),
-        (FOR_PECKED, "for pecked"),
+        (FOR_PECK, "for peck"),
         (FOR_TRENDING_UP, "for trending up"),
         (FOR_TRENDING_DOWN, "for trending down"),
     ]
