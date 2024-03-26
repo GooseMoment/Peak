@@ -13,7 +13,9 @@ class Command(BaseCommand):
     help = "더미 데이터를 생성합니다"
 
     def add_arguments(self, parser):
-        pass
+        # see: https://docs.python.org/3/library/argparse.html#module-argparse
+        parser.add_argument("--user", default=30, type=int, help="생성할 유저의 수를 지정합니다.")
+        parser.add_argument("--emoji", default=50, type=int, help="불러올 에모지의 수를 지정합니다.")
 
     def handle(self, *args, **options):
         self.stdout.write(
@@ -38,7 +40,7 @@ class Command(BaseCommand):
             "User를 생성합니다...", ending=" ",
         )
         stdout.flush()
-        users = create_users()
+        users = create_users(n=options["user"])
         self.stdout.write(
             self.style.SUCCESS(f"{len(users)}개 [OK]")
         )
@@ -101,7 +103,7 @@ class Command(BaseCommand):
             "Emoji를 인터넷에서 로드합니다...", ending=" ",
         )
         stdout.flush()
-        emojis = create_emojis()
+        emojis = create_emojis(limit=options["emoji"])
         self.stdout.write(
             self.style.SUCCESS(f"{len(emojis)}개 [OK]")
         )

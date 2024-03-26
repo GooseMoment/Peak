@@ -301,7 +301,7 @@ def fetch_emojis_from_emojos(instance="planet.moe", limit=50, parser="lxml") -> 
     n = 0
     name_img_uris = dict()
     for div in parent.children:
-        if n > limit:
+        if n >= limit:
             break
 
         if isinstance(div, NavigableString): # ignore whitespaces
