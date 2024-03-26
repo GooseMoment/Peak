@@ -19,13 +19,13 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, Base, PermissionsMixin):
     username = models.CharField(max_length=18, unique=True)
-    display_name = models.CharField(max_length=18, blank=True)
+    display_name = models.CharField(max_length=18, null=True, blank=True)
     password = models.TextField()
     email = models.EmailField(unique=True)
     followings_count = models.IntegerField(default=0)
     followers_count = models.IntegerField(default=0)
     profile_img_uri = models.URLField() # TODO: default profile img
-    bio = models.TextField(max_length=50, blank=True)
+    bio = models.TextField(max_length=50, null=True, blank=True)
 
     is_staff = models.BooleanField(default=False)
     
@@ -47,3 +47,6 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
         return "@" + self.username
     
     objects = UserManager()
+
+    def __str__(self) -> str:
+        return f"@{self.username}"
