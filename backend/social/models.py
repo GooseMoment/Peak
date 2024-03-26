@@ -94,13 +94,13 @@ class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model
     follower = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
-        related_name = "follower"
+        related_name = "followings"
     )
     # 받는사람
     followee = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
-        related_name = "followee"
+        related_name = "followers"
     )
     # 요청인가
     is_request = models.BooleanField(default=False)

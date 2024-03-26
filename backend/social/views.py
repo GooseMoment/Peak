@@ -3,12 +3,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from django.views import View
-from django.utils import timezone
+from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 
 from .models import *
 from .serializers import *
+from users.serializers import UserSerializer
 
 # following 만드는 거
 class FollowView(APIView):
@@ -16,7 +16,7 @@ class FollowView(APIView):
     def put(self, request, follower, followee):
         followerUser = get_object_or_404(User, username=follower)
         followeeUser = get_object_or_404(User, username=followee)
-        
+
         try:
             created = Following.objects.create(follower=followerUser, followee=followeeUser)
         except:
@@ -42,10 +42,16 @@ class FollowView(APIView):
         following.delete()
         return Response(status=status.HTTP_200_OK)
 
-def get_profile(request: HttpRequest, user_id):
-    pass
+@api_view(["GET"])
+def get_followers(request: HttpRequest, username):
+    followers = Following.objects.filter(followee__username=username).all()
+    followerUsers = User.objects.filter(followings__in=followers.all()).all()
+    
+    serializer = UserSerializer(followerUsers, many=True)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-def get_followers(request: HttpRequest, user_id):
+def get_profile(request: HttpRequest, user_id):
     pass
 
 def get_followings(request: HttpRequest, user_id):
