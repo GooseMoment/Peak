@@ -1,14 +1,28 @@
 import styled from "styled-components"
 import DetailFrame from "./DetailFrame"
 
-const Drawer = () => {
+import { useRouteLoaderData } from "react-router-dom"
+import { Fragment } from "react"
+import FeatherIcon from "feather-icons-react"
+
+const Drawer = ({ onClose }) => {
+    const {projects} = useRouteLoaderData("app")
+
     return (
-        <DetailFrame title="서랍 선택">
-            {mockDrawers.map(drawer => (
-                <ItemBox key={drawer.id}>
-                    <Circle $color={drawer.color}/>
-                    <ItemText>{drawer.name}</ItemText>
-                </ItemBox>
+        <DetailFrame title="서랍 선택" onClose={onClose}>
+            {projects.map((project) => (
+                <Fragment key={project.id}>
+                    <ItemBox>
+                        <Circle $color={project.color}/>
+                        <ItemText $is_project={true}>{project.name}</ItemText>
+                    </ItemBox>
+                    {project.drawers && project.drawers.map(drawer => (
+                        <ItemBox key={drawer.id}>
+                            <FeatherIcon icon="arrow-right"/>
+                            <ItemText $is_project={false}>{drawer.name}</ItemText>
+                        </ItemBox>
+                    ))}
+                </Fragment>
             ))}
         </DetailFrame>
     )
@@ -18,7 +32,7 @@ const Circle = styled.div`
     position: relative;
     width: 1.1em;
     height: 1.1em;
-    background-color: ${props => props.$color};
+    background-color: #${props => props.$color};
     border-radius: 50%;
     margin-right: 0.6em;
 `
@@ -26,12 +40,18 @@ const Circle = styled.div`
 const ItemBox = styled.div`
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     margin-left: 1.2em;
     margin-top: 1.2em;
+
+    & svg {
+        margin-left: 1.3em;
+        top: 0;
+    }
 `
 
-const ItemText = styled.p`
-    font-weight: normal;
+const ItemText = styled.div`
+    font-weight: ${props => props.$is_project ? '500' : 'normal'};
     font-size: 1em;
     color: #000000;
 
@@ -41,10 +61,5 @@ const ItemText = styled.p`
         cursor: pointer;
     }
 `
-
-const mockDrawers = [
-    {id: 0, name: "수강신청", project:"홍대라이프", color: "#2E61DC", uncompleted_task_count: 1, completed_task_count: 1},
-    {id: 1, name: "고스락", project:"홍대라이프", color: "#2E61DC", uncompleted_task_count: 0, completed_task_count: 0},
-]
 
 export default Drawer
