@@ -1,32 +1,61 @@
 import {
     Outlet,
-    createBrowserRouter
+    createBrowserRouter,
+    redirect,
 } from "react-router-dom"
 
 import Layout from "@containers/Layout"
+import AuthGuard from "@components/auth/AuthGuard"
 
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
-import SignInPage from "@pages/SignInPage"
 import ProjectPage from "@pages/ProjectPage"
 import SocialFollowingPage from "@pages/SocialFollowingPage"
 import SocialExplorePage from "@pages/SocialExplorePage"
+import UserPage from "@pages/UserPage"
+import LandingPage from "@pages/LandingPage"
+import SignPage from "@pages/SignPage"
+
+import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
 
 const routes = [
     {
         path: "/",
-        element: <Layout>
-            <Outlet />
-        </Layout>,
+        errorElement: <ErrorPage />,
+        loader: () => {
+            if (isSignedIn()) {
+                return redirect("/app/")
+            }
+
+            return null
+        },
+        children: [
+            {
+                index: true,
+                element: <LandingPage />,
+            },
+            {
+                path: "sign",
+                element: <SignPage />,
+            },
+        ]
+    },
+    {
+        path: "/app",
+        element: <AuthGuard>
+            <Layout>
+                <Outlet />
+            </Layout>
+        </AuthGuard>,
+        id: "app",
+        loader: async () => {
+            return getMe()
+        },
         errorElement: <ErrorPage />,
         children: [
             {
-                path: "/",
+                index: true,
                 element: <div>This is /</div>,
-            },
-            {
-                path: "sign_in",
-                element: <SignInPage />, // TODO: REMOVE
             },
             {
                 path: "search",
@@ -68,19 +97,28 @@ const routes = [
             },
             {
                 path: "users/:username",
-                element: <div>This is /users/:username</div>,
+                loader: async ({params}) => {
+                    return getUserByUsername(params.username.slice(1))
+                },
+                element: <UserPage/>,
             },
             {
                 path: "settings/:section",
                 element: <div>This is /settings/:section</div>,
             },
+            {
+                // TODO: remove this and add signOut api callback
+                path: "sign_out",
+                loader: () => {
+                    localStorage.removeItem("is_signed_in")
+                    return redirect("/")
+                },
+                element: <div>Goodbye</div>,
+            },
         ]
     }
 ]
 
-const router = createBrowserRouter(routes, {
-    // https://reactrouter.com/en/main/routers/create-browser-router#basename
-    basename: "/app"
-})
+const router = createBrowserRouter(routes)
 
 export default router
