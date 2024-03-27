@@ -41,7 +41,7 @@ const CLine = styled.div`
 
 const ItemBlock = styled.div`
     display: flex;
-    gap: 0.7em;
+    gap: 0.5em;
     align-items: center;
     margin-left: 1.2em;
     margin-top: 1.2em;
