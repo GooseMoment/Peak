@@ -2,7 +2,7 @@ import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { useState } from "react"
 
-import ModalPortal from "../ModalPortal"
+import ModalPortal from "@components/common/ModalPortal"
 import Calendar from "./Calendar"
 import Reminder from "./Reminder"
 import Priority from "./Priority"
@@ -63,7 +63,7 @@ function Contents() {
                     {item.content}
                 </ContentText>
                 {(content === item.icon && isComponentOpen) ? 
-                <ModalPortal>
+                <ModalPortal closeModal={onClose}>
                     {item.component}
                 </ModalPortal> : null}
             </ContentsBox>
