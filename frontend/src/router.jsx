@@ -1,9 +1,11 @@
 import {
     Outlet,
-    createBrowserRouter
+    createBrowserRouter,
+    redirect,
 } from "react-router-dom"
 
 import Layout from "@containers/Layout"
+import AuthGuard from "@components/auth/AuthGuard"
 
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
@@ -11,10 +13,19 @@ import ProjectPage from "@pages/ProjectPage"
 import LandingPage from "@pages/LandingPage"
 import SignPage from "@pages/SignPage"
 
+import { isSignedIn } from "@api/users.api"
+
 const routes = [
     {
         path: "/",
         errorElement: <ErrorPage />,
+        loader: () => {
+            if (isSignedIn()) {
+                return redirect("/app/")
+            }
+
+            return null
+        },
         children: [
             {
                 index: true,
@@ -28,9 +39,11 @@ const routes = [
     },
     {
         path: "/app",
-        element: <Layout>
-            <Outlet />
-        </Layout>,
+        element: <AuthGuard>
+            <Layout>
+                <Outlet />
+            </Layout>
+        </AuthGuard>,
         errorElement: <ErrorPage />,
         children: [
             {
@@ -72,6 +85,15 @@ const routes = [
             {
                 path: "settings/:section",
                 element: <div>This is /settings/:section</div>,
+            },
+            {
+                // TODO: remove this and add signOut api callback
+                path: "sign_out",
+                loader: () => {
+                    localStorage.removeItem("is_signed_in")
+                    return redirect("/")
+                },
+                element: <div>Goodbye</div>,
             },
         ]
     }

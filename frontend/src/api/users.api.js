@@ -21,6 +21,13 @@ export const patchUser = (user) => {
 
 }
 
+const KEY_IS_SIGNED_IN = "is_signed_in"
+const VALUE_IS_SIGNED_IN = "yeah"
+
+export const isSignedIn = () => {
+    return localStorage.getItem(KEY_IS_SIGNED_IN) === VALUE_IS_SIGNED_IN ? true : false
+}
+
 export const signIn = async (email, password) => {
     try {
         await axios.post("sign_in/", {
@@ -31,6 +38,7 @@ export const signIn = async (email, password) => {
         return false
     }
 
+    localStorage.setItem(KEY_IS_SIGNED_IN, VALUE_IS_SIGNED_IN)
     return true
 }
 

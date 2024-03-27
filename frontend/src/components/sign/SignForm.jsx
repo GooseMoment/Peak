@@ -44,7 +44,7 @@ const SignInForm = ({setActive}) => {
             if (res) {
                 notify.success("Login succeed. Welcome back!")
                 await sleep(1000)
-                navigate("/app")
+                navigate("/app/")
             } else {
                 notify.error("Login failed. Please check your email and password.")
                 setIsLoading(false)
