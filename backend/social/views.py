@@ -12,7 +12,8 @@ from users.serializers import UserSerializer
 
 # following 만드는 거
 class FollowView(APIView):
-    #request
+    #request 확인 기능 넣기
+    #block 검사
     def put(self, request, follower, followee):
         followerUser = get_object_or_404(User, username=follower)
         followeeUser = get_object_or_404(User, username=followee)
@@ -23,23 +24,29 @@ class FollowView(APIView):
             return Response(status=status.HTTP_208_ALREADY_REPORTED)
         
         serializer = FollowingSerializer(created)
+        
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get(self, request, follower, followee):
         following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
+        
         serializer = FollowingSerializer(following)
+        
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, follower, followee):
         following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
+        
         following.is_request = False
         following.save()
+        
         return Response(status=status.HTTP_202_ACCEPTED)
     
     def delete(self, request, follower, followee):
         following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
         #soft delete
         following.delete()
+        
         return Response(status=status.HTTP_200_OK)
 
 @api_view(["GET"])
@@ -48,6 +55,7 @@ def get_followers(request: HttpRequest, username):
     followerUsers = User.objects.filter(followings__in=followers.all()).all()
     
     serializer = UserSerializer(followerUsers, many=True)    
+    
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
@@ -56,19 +64,37 @@ def get_followings(request: HttpRequest, username):
     followingUsers = User.objects.filter(followers__in=followings.all()).all()
     
     serializer = UserSerializer(followingUsers, many=True)    
+    
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-def get_profile(request: HttpRequest, user_id):
-    pass
+class BlockView(APIView):
+    #상대 볼 수 없게/
+    def put(self, request, blocker, blockee):
+        blockerUser = get_object_or_404(User, username=blocker)
+        blockeeUser = get_object_or_404(User, username=blockee)
+        
+        try:
+            created = Block.objects.create(blocker=blockerUser, blockee=blockeeUser)
+        except:
+            return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        
+        serializer = BlockSerializer(created)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-def get_blocks(request: HttpRequest):
-    pass
-
-def post_block(request: HttpRequest, user_id):
-    pass
-
-def delete_block(request: HttpRequest, user_id):
-    pass
+    def get(self, request, blocker, blockee):
+        blocking = get_object_or_404(Block, blocker__username=blocker, blockee__username=blockee)
+        
+        serializer = BlockSerializer(blocking)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def delete(self, request, blocker, blockee):
+        blocking = get_object_or_404(Block, blocker__username=blocker, blockee__username=blockee)
+        #soft delete
+        blocking.delete()
+        
+        return Response(status=status.HTTP_200_OK)
 
 def get_daily_report(request: HttpRequest, user_id, date):
     pass
