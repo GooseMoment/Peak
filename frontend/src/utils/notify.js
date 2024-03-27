@@ -1,32 +1,23 @@
 import { toast } from "react-toastify"
 
 const position = "bottom-left"
+const commonOption = {}
 
 class notify {
-    static any(msg) {
-        return toast(msg, {
-            position: position,
-        })
+    static any(msg, option) {
+        return toast(msg, Object.assign(option, commonOption))
     }
-    static success(msg) {
-        return toast.success(msg, {
-            position: position,
-        })
+    static success(msg, option) {
+        return toast.success(msg, Object.assign(option, commonOption))
     }
-    static error(msg) {
-        return toast.error(msg, {
-            position: position,
-        })
+    static error(msg, option) {
+        return toast.error(msg, Object.assign(option, commonOption))
     }
-    static warn(msg) {
-        return toast.warn(msg, {
-            position: position,
-        })
+    static warn(msg, option) {
+        return toast.warn(msg, Object.assign(option, commonOption))
     }
-    static info(msg) {
-        return toast.info(msg, {
-            position: position,
-        })
+    static info(msg, option) {
+        return toast.info(msg, Object.assign(option, commonOption))
     }
 }
 
