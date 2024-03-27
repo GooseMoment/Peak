@@ -10,10 +10,11 @@ import AuthGuard from "@components/auth/AuthGuard"
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 import ProjectPage from "@pages/ProjectPage"
+import UserPage from "@pages/UserPage"
 import LandingPage from "@pages/LandingPage"
 import SignPage from "@pages/SignPage"
 
-import { isSignedIn } from "@api/users.api"
+import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
 
 const routes = [
     {
@@ -44,6 +45,10 @@ const routes = [
                 <Outlet />
             </Layout>
         </AuthGuard>,
+        id: "app",
+        loader: async () => {
+            return getMe()
+        },
         errorElement: <ErrorPage />,
         children: [
             {
@@ -80,7 +85,10 @@ const routes = [
             },
             {
                 path: "users/:username",
-                element: <div>This is /users/:username</div>,
+                loader: async ({params}) => {
+                    return getUserByUsername(params.username.slice(1))
+                },
+                element: <UserPage/>,
             },
             {
                 path: "settings/:section",

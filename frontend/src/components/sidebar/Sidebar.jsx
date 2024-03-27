@@ -1,3 +1,5 @@
+import { useRouteLoaderData } from "react-router-dom"
+
 import Header from "./Header"
 import Middle from "./Middle"
 import Footer from "./Footer"
@@ -5,11 +7,12 @@ import Footer from "./Footer"
 import styled, { css } from "styled-components"
 
 const Sidebar = ({collapsed, setCollapsed}) => {
+    const user = useRouteLoaderData("app")
 
     return <SidebarBox $collapsed={collapsed}>
         <Header collapsed={collapsed} setCollapsed={setCollapsed} />
         <Middle collapsed={collapsed} projects={mockProjects} />
-        <Footer collapsed={collapsed} user={mockUser} />
+        <Footer collapsed={collapsed} user={user} />
     </SidebarBox>
 }
 
@@ -37,11 +40,6 @@ ${({$collapsed}) => $collapsed ? css`
     -webkit-user-select: none;
 }
 `
-
-const mockUser = {
-    username: "minyoy",
-    profile_img_link: "https://avatars.githubusercontent.com/u/65756020?v=4",
-}
 
 const mockProjects = [
     {name: "Inbox", color: "#6E6E6E", type: "regular", privacy: "public", to: "projects/inbox"},
