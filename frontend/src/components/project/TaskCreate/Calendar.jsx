@@ -3,14 +3,18 @@ import styled from "styled-components"
 
 import DetailFrame from "./DetailFrame"
 
+import today from "@/assets/project/calendar/today.svg"
+import tomorrow from "@/assets/project/calendar/tomorrow.svg"
+import next_week from "@/assets/project/calendar/next_week.svg"
+import repeat from "@/assets/project/calendar/repeat.svg"
+import slach from "@/assets/project/slach.svg"
+
 const Calendar = ({ onClose }) => {
     return (
         <DetailFrame title="기한 지정" onClose={onClose}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
-                    <Circle>
-                        <FeatherIcon icon={item.icon} />
-                    </Circle>
+                    {item.icon}
                     <ItemText>{item.content}</ItemText>
                 </ItemBlock>
             ))}
@@ -37,35 +41,16 @@ const CLine = styled.div`
 
 const ItemBlock = styled.div`
     display: flex;
-    justify-content: flex-start;
+    gap: 0.7em;
+    align-items: center;
     margin-left: 1.2em;
-`
-
-const Circle = styled.div`
-    position: relative;
-    width: 1.3em;
-    height: 1.3em;
-    background-color: #FF4A03;
-    margin-top: 1em;
-    border-radius: 50%;
-    
-    & svg {
-        position: absolute;
-        width: 1em;
-        height: 1em;
-        stroke-width: 3px;
-        stroke: #FFFFFF;
-        top: 2px;
-        left: 2.5px;
-    }
+    margin-top: 1.2em;
 `
 
 const ItemText = styled.p`
     font-weight: normal;
     font-size: 1em;
     color: #000000;
-    margin-top: 1.05em;
-    margin-left: 0.7em;
 
     &:hover {
         font-weight: bolder;
@@ -97,11 +82,11 @@ const AddTimeText = styled.p`
 `
 
 const items = [
-    {id: 0, icon: "arrow-down", content: "오늘"},
-    {id: 1, icon: "arrow-right", content: "내일"},
-    {id: 2, icon: "chevrons-right", content: "다음 주"},
-    {id: 3, icon: "rotate-cw", content: "반복"},
-    {id: 4, icon: "slash", content: "날짜없음"},
+    {id: 0, icon: <img src={today}/>, content: "오늘"},
+    {id: 1, icon: <img src={tomorrow}/>, content: "내일"},
+    {id: 2, icon: <img src={next_week}/>, content: "다음 주"},
+    {id: 3, icon: <img src={repeat}/>, content: "반복"},
+    {id: 4, icon: <img src={slach}/>, content: "날짜없음"},
 ]
 
 export default Calendar
