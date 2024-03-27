@@ -17,7 +17,7 @@ const Sidebar = ({collapsed, setCollapsed}) => {
 }
 
 const SidebarBox = styled.nav`
-z-index: 999;
+z-index: 99;
 
 position: fixed;
 height: 100vh;
