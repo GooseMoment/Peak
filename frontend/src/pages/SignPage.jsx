@@ -1,12 +1,29 @@
-import Brand from "@/components/sign/Brand"
+import { useEffect, useState } from "react"
+import { useSearchParams } from "react-router-dom"
+
+import Brand from "@components/sign/Brand"
 import Showcase from "@components/sign/Showcase"
 import SignForm from "@components/sign/SignForm"
 
 import activities from "@components/sign/activities"
 
+import notify from "@utils/notify"
+
 import styled from "styled-components"
 
 const SignPage = () => {
+    const [searchParams, setSearchParams] = useSearchParams()
+    const [flag, setFlag] = useState(searchParams.get("flag"))
+
+    useEffect(() => {
+        setSearchParams({})
+        switch (flag) {
+            case "401":
+                notify.error("Please sign in again.")
+                break
+        }
+    }, [])
+
     return <Root>
         <Brand />
         <Showcase activities={activities} />
