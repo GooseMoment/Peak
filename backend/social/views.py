@@ -96,6 +96,15 @@ class BlockView(APIView):
         
         return Response(status=status.HTTP_200_OK)
 
+@api_view(["GET"])
+def get_blocks(request: HttpRequest, username):
+    blocks = Block.objects.filter(blocker__username=username).all()
+    blockUsers = User.objects.filter(blockers__in=blocks.all()).all()
+    
+    serializer = UserSerializer(blockUsers, many=True)    
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 def get_daily_report(request: HttpRequest, user_id, date):
     pass
 
