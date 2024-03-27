@@ -3,7 +3,7 @@ from django.db import models
 from api.models import Base
 from tasks.models import Task
 from users.models import User
-from social.models import Reaction, Following
+from social.models import Reaction, Following, Peck
 
 class TaskReminder(Base):
     task = models.ForeignKey(
@@ -11,6 +11,9 @@ class TaskReminder(Base):
         on_delete = models.CASCADE,
     )
     scheduled = models.DateTimeField()
+
+    def __str__(self) -> str:
+        return f"Reminder for {self.task.name} at {self.scheduled}"
 
 class Notification(Base):
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
@@ -20,7 +23,7 @@ class Notification(Base):
     FOR_FOLLOW = "follow"
     FOR_FOLLOW_REQUEST = "follow_request"
     FOR_FOLLOW_REQUEST_ACCEPTED = "follow_request_accepted"
-    FOR_PECKED = "pecked"
+    FOR_PECK = "peck"
     FOR_TRENDING_UP = "trending_up"
     FOR_TRENDING_DOWN = "trending_down"
 
@@ -30,7 +33,7 @@ class Notification(Base):
         (FOR_FOLLOW, "for follow"),
         (FOR_FOLLOW_REQUEST, "for follow request"),
         (FOR_FOLLOW_REQUEST_ACCEPTED, "for follow request accpeted"),
-        (FOR_PECKED, "for pecked"),
+        (FOR_PECK, "for peck"),
         (FOR_TRENDING_UP, "for trending up"),
         (FOR_TRENDING_DOWN, "for trending down"),
     ]
@@ -40,19 +43,32 @@ class Notification(Base):
         User,
         on_delete = models.CASCADE,
         null=True,
+        blank=True,
     )
     task = models.ForeignKey(
         Task,
         on_delete = models.CASCADE,
         null=True,
+        blank=True,
     )
     reaction = models.ForeignKey(
         Reaction,
         on_delete = models.CASCADE,
         null=True,
+        blank=True,
     )
-    follow_request = models.ForeignKey(
+    following = models.ForeignKey(
         Following,
         on_delete = models.CASCADE,
         null=True,
+        blank=True,
     )
+    peck = models.ForeignKey(
+        Peck,
+        on_delete = models.CASCADE,
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self) -> str:
+        return f"{self.type} for {self.user}"
