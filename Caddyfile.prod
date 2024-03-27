@@ -10,15 +10,8 @@ peak.ooo {
 	}
 
 	# frontend
-	handle_path /app/* {
-		root * /srv/frontend
-		file_server
-		try_files {path} /index.html
-	}
-
-	# landing
 	handle /* {
-		root * /srv/landing
+		root * /srv/frontend
 		file_server
 		try_files {path} /index.html
 	}

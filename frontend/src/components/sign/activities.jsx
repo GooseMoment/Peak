@@ -1,16 +1,6 @@
+import Activity from '@components/sign/Activity'
+
 import GraphemeSplitter from 'grapheme-splitter'
-
-const logTemplate = document.querySelector("#log-template")
-const target = document.querySelector(".logs")
-
-const cloneLog = (action, content, ago) => {
-    const clone = logTemplate.content.cloneNode(true)
-    clone.children[0].innerHTML = clone.children[0].innerHTML.replace("{{action}}", action)
-        .replace("{{content}}", content)
-        .replace("{{ago}}", ago)
-
-    return clone
-}
 
 const pick = array => {
     const random = Math.floor(Math.random() * array.length)
@@ -131,7 +121,7 @@ const comments = [
     // TODO: add comments
 ]
 
-const verbContentMap = {
+const verbDetailMap = {
     "reacted": emojis,
     "completed a task": tasks,
     "made a task": tasks,
@@ -139,35 +129,28 @@ const verbContentMap = {
     "put today's comment": comments,
 }
 
-const timeUnits = [
-    "minutes", "hours", "seconds", "days", "months",
-]
-
-let logs = []
-
-const AddLogs = (count=20) => {
-    for (let i=0; i<count; i++) {
-        const username = pick(usernames)
-
-        let verb = pick(Object.keys(verbContentMap))
-        if (Math.random() > 0.8) {
-            verb = "reacted"
-        }
-
-        const content = pick(verbContentMap[verb])
-        const timeUnit = pick(timeUnits)
-        const timeValue = Math.floor(Math.random() * 50) + 2
-        logs.push(cloneLog("@" + username + " " + verb, content, timeValue + " " + timeUnit + " ago"))
-    }
-
-    for (let log of logs) {
-        target.appendChild(log)
-    }
-
-    const infinite = document.querySelector(".infinite")
-    const clonedTarget = target.cloneNode(true)
-    clonedTarget.setAttribute("aria-hidden", "true")
-    infinite.appendChild(clonedTarget)
+const timeUnitsMap = {
+    "seconds": 59-2,
+    "minutes": 59-2,
+    "hours": 23-2,
+    "days": 29-2,
+    "months": 11-2,
 }
 
-export default AddLogs
+let activities = []
+
+for (let i=0; i<20; i++) {
+    const username = pick(usernames)
+
+    let verb = pick(Object.keys(verbDetailMap))
+    if (Math.random() > 0.8) {
+        verb = "reacted"
+    }
+
+    const detail = pick(verbDetailMap[verb])
+    const timeUnit = pick(Object.keys(timeUnitsMap))
+    const timeValue = Math.floor(Math.random() * timeUnitsMap[timeUnit]) + 2
+    activities.push(<Activity key={`activity-${i}`} action={"@" + username + " " + verb} detail={detail} ago={timeValue + " " + timeUnit + " ago"} />)
+}
+
+export default activities
