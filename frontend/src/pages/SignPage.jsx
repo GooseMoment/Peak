@@ -13,15 +13,15 @@ import styled from "styled-components"
 
 const SignPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [flag, setFlag] = useState(searchParams.get("flag"))
 
     useEffect(() => {
-        setSearchParams({})
+        const flag = searchParams.get("flag")
         switch (flag) {
             case "401":
                 notify.error("Please sign in again.")
                 break
         }
+        setSearchParams({})
     }, [])
 
     return <Root>

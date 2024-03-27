@@ -1,23 +1,23 @@
-import { Link, isRouteErrorResponse, useRouteError } from "react-router-dom"
+import { Link, isRouteErrorResponse, useNavigate, useRouteError } from "react-router-dom"
 
 import Layout from "@containers/Layout"
 import PageTitle from "@components/common/PageTitle"
 
 import { KEY_IS_SIGNED_IN } from "@api/client";
+import { useEffect } from "react";
 
 const ErrorPage = () => {
-    const error = useRouteError();
+    const error = useRouteError()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (isRouteErrorResponse(error) && error.status === 401) {
+            localStorage.removeItem(KEY_IS_SIGNED_IN)
+            navigate("/sign?flag=401")
+        }
+    }, [])
 
     if (isRouteErrorResponse(error)) {
-        if (error.status === 401) {
-            localStorage.removeItem(KEY_IS_SIGNED_IN)
-
-            return <Layout noSidebar>
-                <PageTitle>Please sign in again</PageTitle>
-                <Link to="/sign?flag=401">Go to sign page</Link>
-            </Layout>
-        }
-
         return <Layout>
             <PageTitle>{error.status}: {error.statusText}</PageTitle>
             <p>라우터 에러!</p>
