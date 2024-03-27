@@ -18,7 +18,7 @@ const SignPage = () => {
         const flag = searchParams.get("flag")
         switch (flag) {
             case "401":
-                notify.error("Please sign in again.")
+                notify.error("Please sign in again.", {toastId: "flag401"})
                 break
         }
         setSearchParams({})
