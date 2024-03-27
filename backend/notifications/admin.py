@@ -10,7 +10,7 @@ class TaskReminderAdmin(admin.ModelAdmin):
 class NotificationAdmin(admin.ModelAdmin):
     ordering = ["created_at", "updated_at"]
     search_fields = ["user__username"]
-    autocomplete_fields = ["user", "task", "reaction", "following"] # TODO: add peck here
+    autocomplete_fields = ["user", "task", "reaction", "following", "peck"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
@@ -22,7 +22,7 @@ class NotificationAdmin(admin.ModelAdmin):
         (
             "Payloads",
             {
-                "fields": ["task", "reaction", "following"], # TODO: add peck here
+                "fields": ["task", "reaction", "following", "peck"],
             },
         ),
         fieldset_base,
