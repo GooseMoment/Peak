@@ -1,4 +1,4 @@
-Django==4.2.7
+Django==4.2.11
 django-cors-headers==4.3.1
 django-seed==0.3.1
 django-stubs==4.2.7
