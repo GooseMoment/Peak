@@ -63,7 +63,7 @@ function Contents() {
                     {item.content}
                 </ContentText>
                 {(content === item.icon && isComponentOpen) ? 
-                <ModalPortal closeModal={onClose}>
+                <ModalPortal closeModal={onClose} isAdditional>
                     {item.component}
                 </ModalPortal> : null}
             </ContentsBox>
