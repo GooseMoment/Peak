@@ -70,7 +70,7 @@ html {
     opacity: 0%;
 }
 
-#modal.blank {
+#modal.with-animation {
     animation: modalFadeOut 0.15s ease-out;
 }
 
@@ -95,7 +95,7 @@ html {
 
     z-index: 99;
 
-    animation: modalFadeIn 0.15s ease-in-out;
+    animation: modalFadeIn 0.15s ease-in-out !important;
 }
 
 body, textarea {

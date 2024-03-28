@@ -14,12 +14,11 @@ const ModalPortal = ({ children, closeModal, isRouteModal }) => {
 
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)
-        el.classList.remove("blank")
+        el.classList.add("with-animation")
         isOpen.current = true
 
         return () => {
             el.removeEventListener("click", handleOutsideClick)
-            el.classList.add("blank")
         }
     }, [])
 
