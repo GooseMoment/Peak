@@ -1,5 +1,7 @@
 import { keyframes } from "styled-components"
 
+// from: https://codepen.io/designcouch/pen/obvKxm
+
 export const cubicBeizer = "cubic-bezier(0.165, 0.840, 0.440, 1.000)"
 
 export const scaleUp = keyframes`
