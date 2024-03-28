@@ -1,6 +1,6 @@
 import reset from 'styled-reset'
 
-import { scaleForward, scaleBack, modalFadeOut, scaleUp, modalFadeIn, cubicBeizer } from './keyframes'
+import { scaleForward, scaleBack, modalFadeOut, scaleUp, modalFadeIn, cubicBeizer } from '@assets/keyframes'
 
 import { createGlobalStyle } from 'styled-components'
 
