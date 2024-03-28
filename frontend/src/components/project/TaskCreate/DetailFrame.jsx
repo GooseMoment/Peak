@@ -1,3 +1,4 @@
+import { cubicBeizer } from "@assets/keyframes"
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 

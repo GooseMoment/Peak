@@ -1,4 +1,7 @@
 import reset from 'styled-reset'
+
+import { scaleForward, scaleBack, modalFadeOut, scaleUp, modalFadeIn, cubicBeizer } from './keyframes'
+
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
@@ -15,55 +18,18 @@ html {
     -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
+#root > div > main {
+    transform: scale(1);
+
     background-color: #FEFDFC;
     height: 100%;
+
+    animation: ${scaleForward} .5s ${cubicBeizer} forwards;
 }
 
-@keyframes modalFadeIn {
-    0% {
-        opacity: 0%;
-        backdrop-filter: unset;
-        background-color: unset;
-    }
-
-    100% {
-        opacity: 100%;
-        backdrop-filter: blur(1.5px);
-        background-color: rgba(0, 0, 0, 0.4);
-    }
-}
-
-@keyframes modalFadeOut {
-    0% {
-        opacity: 100%;
-        backdrop-filter: blur(1.5px);
-        background-color: rgba(0, 0, 0, 0.4);
-
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        padding: 0.5em;
-
-        z-index: 99;
-    }
-
-    100% {
-        opacity: 0%;
-        backdrop-filter: unset;
-        background-color: unset;
-
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        padding: 0.5em;
-
-        z-index: 99;
-    }
+#root.has-modal > div > main {
+    transform: scale(0.95);
+    animation: ${scaleBack} .5s ${cubicBeizer} forwards;
 }
 
 #modal {
@@ -71,7 +37,11 @@ html {
 }
 
 #modal.with-animation {
-    animation: modalFadeOut 0.15s ease-out;
+    animation: ${modalFadeOut} 0.5s ${cubicBeizer};
+}
+
+#modal > div {
+    animation: ${scaleUp} 0.5s ${cubicBeizer};
 }
 
 /* modal이 자손을 가질 때만 */
@@ -83,7 +53,6 @@ html {
     align-items: center;
     gap: 1em;
 
-    backdrop-filter: blur(1.5px);
     background-color: rgba(0, 0, 0, 0.4);
     position: absolute;
     top: 0;
@@ -95,7 +64,7 @@ html {
 
     z-index: 99;
 
-    animation: modalFadeIn 0.15s ease-in-out !important;
+    animation: ${modalFadeIn} 0.5s ${cubicBeizer} forwards !important;
 }
 
 body, textarea {
