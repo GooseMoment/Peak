@@ -20,10 +20,58 @@ html {
     height: 100%;
 }
 
+@keyframes modalFadeIn {
+    0% {
+        opacity: 0%;
+        backdrop-filter: unset;
+        background-color: unset;
+    }
+
+    100% {
+        opacity: 100%;
+        backdrop-filter: blur(1.5px);
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+}
+
+@keyframes modalFadeOut {
+    0% {
+        opacity: 100%;
+        backdrop-filter: blur(1.5px);
+        background-color: rgba(0, 0, 0, 0.4);
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 0.5em;
+
+        z-index: 99;
+    }
+
+    100% {
+        opacity: 0%;
+        backdrop-filter: unset;
+        background-color: unset;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 0.5em;
+
+        z-index: 99;
+    }
+}
+
 #modal {
     opacity: 0%;
+}
 
-    transition: opacity 0.1s ease-in-out;
+#modal.blank {
+    animation: modalFadeOut 0.15s ease-out;
 }
 
 /* modal이 자손을 가질 때만 */
@@ -35,7 +83,8 @@ html {
     align-items: center;
     gap: 1em;
 
-    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(1.5px);
+    background-color: rgba(0, 0, 0, 0.4);
     position: absolute;
     top: 0;
     left: 0;
@@ -45,6 +94,8 @@ html {
     padding: 0.5em;
 
     z-index: 99;
+
+    animation: modalFadeIn 0.15s ease-in-out;
 }
 
 body, textarea {
