@@ -1,23 +1,45 @@
-import styled from "styled-components"
-import DetailFrame from "./DetailFrame"
-
 import { useRouteLoaderData } from "react-router-dom"
-import { Fragment } from "react"
+import { useState, Fragment } from "react"
+
+import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-const Drawer = ({ onClose }) => {
+import DetailFrame from "./DetailFrame"
+
+import { patchTask } from "@api/tasks.api"
+
+const Drawer = ({ taskId, setTasks, onClose }) => {
     const {projects} = useRouteLoaderData("app")
+    const [collapsed, setCollapsed] = useState(false)
+
+    const changeDrawer = (id, drawerId) => {
+        return async () => {
+            const edit = {
+                'drawer': drawerId,
+            }
+            await patchTask(id, edit)
+            setTasks(prev => prev.map((task) => {
+                if (task.id === taskId) {
+                    task.drawer = drawerId
+                    return task
+                }
+                return task
+            }))
+            location.reload()
+        }
+    }
 
     return (
         <DetailFrame title="서랍 선택" onClose={onClose}>
             {projects.map((project) => (
                 <Fragment key={project.id}>
-                    <ItemBox>
+                    <ItemBox onClick={() => setCollapsed(prev => !prev)}>
                         <Circle $color={project.color}/>
                         <ItemText $is_project={true}>{project.name}</ItemText>
                     </ItemBox>
-                    {project.drawers && project.drawers.map(drawer => (
-                        <ItemBox key={drawer.id}>
+                    {collapsed ? null : 
+                        project.drawers && project.drawers.map(drawer => (
+                        <ItemBox key={drawer.id} onClick={changeDrawer(taskId, drawer.id)}>
                             <FeatherIcon icon="arrow-right"/>
                             <ItemText $is_project={false}>{drawer.name}</ItemText>
                         </ItemBox>
