@@ -51,7 +51,8 @@ const TaskCreateSimple = () => {
 const FlexBox = styled.div`
     display: flex;
     justify-content: flex-start;
-    margin-left: 10px;
+    margin-left: 1em;
+    margin-top: 1em;
 `
 
 const IndexBox = styled.div`

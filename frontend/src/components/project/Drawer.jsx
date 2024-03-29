@@ -89,8 +89,7 @@ const DrawerIcon = styled.div`
 
 const TaskList = styled.div`
     flex: 1;
-    padding: 12px;
-    overflow-y: auto;
+    margin-left: 1.1em;
 `
 
 export default Drawer

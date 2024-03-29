@@ -19,7 +19,7 @@ function Task({task, setTasks, color}){
     }
 
     return (
-        <>
+        <Box>
             <TaskName task={task} setTasks={setTasks} color={color} due_date={task.due_date} openModal={openModal}/>
             {task.due_date && <CalendarText>
                     {task.due_date === today.toISOString().slice(0, 10) && <CalendarTextPlus>오늘</CalendarTextPlus>}
@@ -30,9 +30,14 @@ function Task({task, setTasks, color}){
             <ModalPortal>
                 <TaskCreateDetail task={task} color={color} setTasks={setTasks} isModalOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             </ModalPortal>}
-        </>
+        </Box>
     );
 }
+
+const Box = styled.div`
+    margin-top: 1em;
+    margin-bottom: 2em;
+`
 
 const CalendarText = styled.p`
     display: flex;
