@@ -7,7 +7,6 @@ import { patchTask } from "@api/tasks.api"
 import today from "@/assets/project/calendar/today.svg"
 import tomorrow from "@/assets/project/calendar/tomorrow.svg"
 import next_week from "@/assets/project/calendar/next_week.svg"
-import repeat from "@/assets/project/calendar/repeat.svg"
 import slach from "@/assets/project/slach.svg"
 
 const Calendar = ({ taskId, setTasks, onClose }) => {
@@ -17,7 +16,7 @@ const Calendar = ({ taskId, setTasks, onClose }) => {
         {id: 0, icon: <img src={today}/>, content: "오늘", set: 0},
         {id: 1, icon: <img src={tomorrow}/>, content: "내일", set: 1},
         {id: 2, icon: <img src={next_week}/>, content: "다음 주", set: 7},
-        {id: 3, icon: <img src={repeat}/>, content: "반복", set: null},
+        {id: 3, icon: <img src={next_week}/>, content: "2주 뒤", set: 14},
         {id: 4, icon: <img src={slach}/>, content: "날짜없음", set: null},
     ]
 
