@@ -1,5 +1,7 @@
+import { useRouteLoaderData } from "react-router-dom"
+
 const ProjectListPage = () => {
-    const projects = useLoaderData()
+    const {projects} = useRouteLoaderData("app")
 
     return(
         <>

@@ -14,6 +14,7 @@ import UserPage from "@pages/UserPage"
 
 import { getMe, getUserByUsername } from "@api/users.api"
 import { getProject, getProjectsList } from "@api/projects.api"
+import { getDrawersByProject } from "@api/drawers.api"
 
 const routes = [
     {
@@ -24,10 +25,10 @@ const routes = [
         errorElement: <ErrorPage />,
         id: "app",
         loader: async () => {
-            return [
-                await getProjectsList(),
-                await getMe(),
-            ]
+            return {
+                projects: await getProjectsList(),
+                user: await getMe(),
+            }
         },
         children: [
             {
@@ -61,18 +62,12 @@ const routes = [
             {
                 path: "projects",
                 element: <ProjectListPage/>,
-                loader: async () => {
-                    return getProjectsList()
-                }
             },
             {
                 path: "projects/:id",
                 element: <ProjectPage/>,
                 loader: async ({params}) => {
-                    return [
-                        await getProject(params.id),
-                        await getDrawersByProject(),
-                    ]
+                    return getProject(params.id)
                 }
             },
             {

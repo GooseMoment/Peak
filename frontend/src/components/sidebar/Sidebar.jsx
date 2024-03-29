@@ -5,10 +5,9 @@ import Middle from "./Middle"
 import Footer from "./Footer"
 
 import styled, { css } from "styled-components"
-import { useRouteLoaderData } from "react-router-dom"
 
 const Sidebar = ({collapsed, setCollapsed}) => {
-    const [projects, user] = useRouteLoaderData("app")
+    const {projects, user} = useRouteLoaderData("app")
 
     return <SidebarBox $collapsed={collapsed}>
         <Header collapsed={collapsed} setCollapsed={setCollapsed} />
