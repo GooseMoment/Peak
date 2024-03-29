@@ -14,7 +14,7 @@ import UserPage from "@pages/UserPage"
 import LandingPage from "@pages/LandingPage"
 import SignPage from "@pages/SignPage"
 
-import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
+import { getMe, getUserByUsername, isSignedIn, patchUser } from "@api/users.api"
 
 const routes = [
     {
@@ -85,6 +85,10 @@ const routes = [
             },
             {
                 path: "users/:username",
+                action: async ({request}) => {
+                    const formData = await request.formData()
+                    return patchUser(Object.fromEntries(formData))
+                },
                 loader: async ({params}) => {
                     return getUserByUsername(params.username.slice(1))
                 },

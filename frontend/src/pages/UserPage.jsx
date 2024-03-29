@@ -1,16 +1,10 @@
 import { useState } from "react"
-import { useLoaderData } from "react-router-dom"
-
-import { patchUser } from "@api/users.api"
+import { Form, useLoaderData, useSubmit } from "react-router-dom"
 
 const UserPage = () => {
     const user = useLoaderData()
-    const [bio, setBio] = useState(user.bio)
-
-    const changeBio = async e => {
-        const res = await patchUser({bio})
-        if (res === 200) alert("OK")
-    }
+    const submit = useSubmit()
+    const [profile_img_uri, setProfile_img_uri] = useState(user.profile_img_uri)
 
     // TODO: @andless2004 영서의 페이지
 
@@ -19,11 +13,22 @@ const UserPage = () => {
         <ul>
             <img src={user.profile_img_uri} />
             <li>display_name: {user.display_name}</li>
+            <li>bio: {user.bio}</li>
         </ul>
         <br/>
-        <h1>Let's edit bio!</h1>
-        <textarea value={bio} onChange={e => setBio(e.target.value)} />
-        <button onClick={changeBio}>Change Bio</button>
+        {/* action을 발동시키기 위해서는 */}
+        {/* 방법 1. React Router에서 제공하는 Form 사용 (html 기존 form의 대체제) */}
+        <Form method="patch">
+            <label>display_name</label>
+            <input name="display_name" type="text" defaultValue={user.display_name} />
+            <label>bio</label>
+            <textarea name="bio" defaultValue={user.bio} />
+            <button type="submit">Patch with Form</button>
+        </Form>
+        {/* 방법 2. React Router에서 제공하는 useSubmit 사용 */}
+        <label>profile_img_uri</label>
+        <input type="url" value={profile_img_uri} onChange={e => setProfile_img_uri(e.target.value)} />
+        <button onClick={() => submit({profile_img_uri}, {method: "PATCH"})}>Patch with useSubmit</button>
     </>
 }
 
