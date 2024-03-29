@@ -2,6 +2,7 @@ import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
 import DetailFrame from "./DetailFrame"
+import { patchTask } from "@api/tasks.api"
 
 import today from "@/assets/project/calendar/today.svg"
 import tomorrow from "@/assets/project/calendar/tomorrow.svg"
@@ -9,13 +10,40 @@ import next_week from "@/assets/project/calendar/next_week.svg"
 import repeat from "@/assets/project/calendar/repeat.svg"
 import slach from "@/assets/project/slach.svg"
 
-const Calendar = ({ onClose }) => {
+const Calendar = ({ taskId, setTasks, onClose }) => {
+    let date = new Date()
+
+    const items = [
+        {id: 0, icon: <img src={today}/>, content: "오늘", set: 0},
+        {id: 1, icon: <img src={tomorrow}/>, content: "내일", set: 1},
+        {id: 2, icon: <img src={next_week}/>, content: "다음 주", set: 7},
+        {id: 3, icon: <img src={repeat}/>, content: "반복", set: null},
+        {id: 4, icon: <img src={slach}/>, content: "날짜없음", set: null},
+    ]
+
+    const changeDueDate = (id, set) => {
+        return async () => {
+            date.setDate(date.getDate() + set)
+            const edit = {
+                'due_date': set === null ? null : date.toISOString().slice(0, 10),
+            }
+            await patchTask(id, edit)
+            setTasks(prev => prev.map((task) => {
+                if (task.id === taskId) {
+                    task.due_date = date.toISOString().slice(0, 10)
+                    return task
+                }
+                return task
+            }))
+        }
+    }
+
     return (
         <DetailFrame title="기한 지정" onClose={onClose}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
-                    <ItemText>{item.content}</ItemText>
+                    <ItemText onClick={changeDueDate(taskId, item.set)}>{item.content}</ItemText>
                 </ItemBlock>
             ))}
             <CLine />
@@ -80,13 +108,5 @@ const AddTimeText = styled.p`
         top: 0.3em;
     }
 `
-
-const items = [
-    {id: 0, icon: <img src={today}/>, content: "오늘"},
-    {id: 1, icon: <img src={tomorrow}/>, content: "내일"},
-    {id: 2, icon: <img src={next_week}/>, content: "다음 주"},
-    {id: 3, icon: <img src={repeat}/>, content: "반복"},
-    {id: 4, icon: <img src={slach}/>, content: "날짜없음"},
-]
 
 export default Calendar
