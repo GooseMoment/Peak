@@ -1,4 +1,5 @@
 import { useLoaderData, useParams } from "react-router-dom"
+import { useState } from "react";
 
 import Drawer from "@components/project/Drawer"
 import TaskCreateSimple from "@components/project/TaskCreate/TaskCreateSimple"
@@ -11,6 +12,12 @@ const ProjectPage = () => {
     const project = useLoaderData()
     const drawers = project.drawers
 
+    const [isSimpleOpen, setIsSimpleOpen] = useState(false)
+
+    const handleisSimpleOpen = () => {
+        setIsSimpleOpen(prev => !prev)
+    }
+
     return (
     <>
         <TitleBox>
@@ -20,8 +27,10 @@ const ProjectPage = () => {
         {drawers && drawers.map((drawer) => (
             <Drawer key={drawer.id} id={id} drawer={drawer} color={project.color}/>
         ))}
-        <TaskCreateSimple />
-        <TaskCreateButton>
+        { isSimpleOpen &&
+            <TaskCreateSimple />
+        }
+        <TaskCreateButton onClick={handleisSimpleOpen}>
             <FeatherIcon icon="plus-circle"/>
             <TaskCreateText>할 일 추가</TaskCreateText>
         </TaskCreateButton>
@@ -49,8 +58,12 @@ const TaskCreateButton = styled.div`
     align-items: center;
     vertical-align: center;
     text-align: middle;
-    margin-left: 0.8em;
-    margin-top: 1.5em;
+    margin-left: 1.3em;
+    margin-top: 1.3em;
+    
+    &:hover {
+        cursor: pointer;
+    }
 
     & svg {
         text-align: center;
