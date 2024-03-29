@@ -4,17 +4,17 @@ import FeatherIcon from 'feather-icons-react';
 import TaskName from "../TaskName";
 import Contents from "./Contents";
 
-function TaskCreateDetail({task, onClose}) {
+function TaskCreateDetail({task, color, setTasks, isModalOpen, onClose}) {
     return (
         <TaskCreateDetailBox>
             <TaskNameBox>
-                <TaskName task={task} />
+                <TaskName task={task} color={color} isModalOpen={isModalOpen}/>
                 <Icons>
                     <FeatherIcon icon="trash-2" />
                     <FeatherIcon icon="x" onClick={onClose} />
                 </Icons>
             </TaskNameBox>
-            <Contents />
+            <Contents task={task} setTasks={setTasks}/>
         </TaskCreateDetailBox>
     )
 }

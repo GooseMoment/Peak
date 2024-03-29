@@ -1,14 +1,20 @@
-import styled from "styled-components";
-import FeatherIcon from 'feather-icons-react';
+import styled from "styled-components"
+import FeatherIcon from "feather-icons-react"
 
-function TaskName({task, openModal}){
+function TaskName({task, setTasks, color, due_date, openModal}){
+    const date = new Date()
+
     return (
         <>
             <TaskNameBox>
-                <TaskCircle $completed={task.completed}>
+                <TaskCircle 
+                    $completed={task.completed_at ? true : false}
+                    $color={color}
+                    $due_date={due_date}
+                >
                     {task.completed && <FeatherIcon icon="check"/>}
                 </TaskCircle>
-                <Text $completed={task.completed} onClick={openModal}>
+                <Text $completed={task.completed_at ? true : false} onClick={openModal}>
                     {task.name}
                 </Text>
             </TaskNameBox>
@@ -28,11 +34,11 @@ const TaskNameBox = styled.div`
 `
 
 const TaskCircle = styled.div`
-    top: 0.3em;
+    top: ${(props) => (props.$due_date ? 0.3 : 0)}em;
     width: 1.2em;
     height: 1.2em;
     border-radius: 50%;
-    border: 3px solid ${(props) => (props.$completed ? '#A4A4A4':'#2E61DC')};
+    border: 3px solid ${(props) => (props.$completed ? '#A4A4A4': `#${props.$color}`)};
     position: relative;
     margin-right: 0.6em;
     font-size: 1em;

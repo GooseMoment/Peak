@@ -9,48 +9,54 @@ import Priority from "./Priority"
 import Drawer from "./Drawer"
 import Memo from "./Memo"
 
-function Contents() {
+function Contents({task, setTasks}) {
     // text클릭 시 알맞는 component 띄우기
-    const [content, setContent] = useState();
+    const [content, setContent] = useState()
     
     const handleClickContent = (e) => {
         setIsComponentOpen(true);
         const name = e.target.id;
         setContent(name);
-    };
+    }
 
     // component modal
-    const [isComponentOpen, setIsComponentOpen] = useState(false);
+    const [isComponentOpen, setIsComponentOpen] = useState(false)
 
     const onClose = () => {
         setIsComponentOpen(false);
     }
 
+    const task_due = new Date(`${task.due_date}${task.due_time ? "T"+task.due_time : ""}`)
+    const reminder_date_time = new Date(task.reminder_datetime)
+    const new_due_date = `${task_due.getFullYear()}년 ${task_due.getMonth()+1}월 ${task_due.getDate()}일`
+    const new_due_time = `${task_due.getHours()}시 ${task_due.getMinutes()}분`
+    const new_reminder_datetime = `${reminder_date_time.getFullYear()}년 ${reminder_date_time.getMonth()+1}월 ${reminder_date_time.getDate()}일 ${reminder_date_time.getHours()}시 ${reminder_date_time.getMinutes()}분`
+
     const items = [
         {id: 1,
         icon: "calendar",
-        content: "2024년 02월 20일 18:00",
-        component: <Calendar onClose={onClose} />},
+        content: task.due_date && new_due_time ? new_due_date + ' ' + new_due_time : "없음",
+        component: <Calendar taskId={task.id} setTasks={setTasks} onClose={onClose} />},
     
         {id: 2,
         icon: "clock",
-        content: "2024년 02월 20일 16:00",
-        component: <Reminder onClose={onClose} />},
+        content: task.reminder_datetime ? new_reminder_datetime : "없음",
+        component: <Reminder task={task} setTasks={setTasks} onClose={onClose} />},
     
         {id: 3,
         icon: "alert-circle",
-        content: "매우 중요",
-        component: <Priority onClose={onClose} />},
+        content: priorities[task.priority],
+        component: <Priority taskId={task.id} setTasks={setTasks} onClose={onClose} />},
     
         {id: 4,
         icon: "archive",
-        content: "홍대라이프 / 수강신청",
-        component: <Drawer onClose={onClose} />},
+        content: task.drawer_name ? `${task.project_name} / ${task.drawer_name}` : "없음",
+        component: <Drawer taskId={task.id} setTasks={setTasks} onClose={onClose} />},
     
         {id: 5,
         icon: "edit",
-        content: "없음",
-        component: <Memo onClose={onClose} />},
+        content: task.memo ? task.memo : "없음",
+        component: <Memo taskId={task.id} setTasks={setTasks} onClose={onClose} />},
     ]
     
     return (
@@ -119,5 +125,11 @@ const ContentText = styled.div`
     cursor: pointer;
     }
 `
+
+const priorities = [
+    '보통',
+    '중요',
+    '매우 중요'
+]
 
 export default Contents

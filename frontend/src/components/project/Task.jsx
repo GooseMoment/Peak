@@ -6,7 +6,8 @@ import ModalPortal from "./ModalPortal";
 
 import styled from "styled-components";
 
-function Task({task}){
+function Task({task, setTasks, color}){
+    const today = new Date()
     const [isModalOpen, setIsModalOpen] = useState(false)
     
     const openModal = () => {
@@ -15,15 +16,15 @@ function Task({task}){
 
     return (
         <>
-            <TaskName task={task} openModal={openModal}/>
-            {task.due_date && <CalendarText>    
-                    {task.due_date === "02월 20일" && <CalendarTextPlus>오늘</CalendarTextPlus>}
-                    {task.due_date === "02월 20일" && "| "}
+            <TaskName task={task} setTasks={setTasks} color={color} due_date={task.due_date} openModal={openModal}/>
+            {task.due_date && <CalendarText>
+                    {task.due_date === today.toISOString().slice(0, 10) && <CalendarTextPlus>오늘</CalendarTextPlus>}
+                    {task.due_date === today.toISOString().slice(0, 10) && "| "}
                     {task.due_date}
             </CalendarText>}
             {isModalOpen &&
             <ModalPortal>
-                <TaskCreateDetail task={task} onClose={() => setIsModalOpen(false)} />
+                <TaskCreateDetail task={task} color={color} setTasks={setTasks} isModalOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             </ModalPortal>}
         </>
     );
