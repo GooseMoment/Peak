@@ -51,7 +51,7 @@ export const signIn = async (email, password) => {
 
 export const signUp = async (email, password, username) => {
     try {
-        const res = await axios.post("sign_up/", {email, password, username})
+        const res = await client.post("sign_up/", {email, password, username})
         return res
     } catch (err) {
         let msg = ""
