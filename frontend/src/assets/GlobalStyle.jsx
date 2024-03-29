@@ -40,10 +40,6 @@ html {
     animation: ${modalFadeOut} 0.5s ${cubicBeizer};
 }
 
-#modal > div {
-    animation: ${scaleUp} 0.5s ${cubicBeizer};
-}
-
 /* modal이 자손을 가질 때만 */
 #modal:has(div) {
     opacity: 100%;
