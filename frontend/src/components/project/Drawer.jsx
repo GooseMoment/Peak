@@ -1,10 +1,15 @@
+import { useState, useEffect } from "react";
+
 import styled from "styled-components";
 import FeatherIcon from 'feather-icons-react';
-import { useState } from "react";
 
-function Drawer({drawer, children}){
+import { getTasksByDrawer } from "@api/tasks.api"
+import Task from "@components/project/Task"
+
+function Drawer({id, drawer, color}){
     const [collapsed, setCollapsed] = useState(false);
-
+    const [tasks, setTasks] = useState([])
+    
     const handleCollapsed = () => {
         { drawer.task_count !== 0 && setCollapsed(prev => !prev)}
     }
@@ -15,9 +20,22 @@ function Drawer({drawer, children}){
         {icon: "chevron-down", click: handleCollapsed},
     ]
 
+    async function fetchTasks() {
+        try {
+            let res = await getTasksByDrawer(drawer.id)
+            setTasks(res)
+        } catch (e) {
+            throw alert(e)
+        }
+    }
+
+    useEffect(() => {
+        fetchTasks()
+    }, [id])
+
     return (
         <>
-            <DrawerBox $color = {drawer.color}>
+            <DrawerBox $color = {color}>
                 <DrawerName>{drawer.name}</DrawerName>
                 <DrawerIcon>
                     {DrawerIcons.map(item => (
@@ -25,7 +43,13 @@ function Drawer({drawer, children}){
                     ))}
                 </DrawerIcon>
             </DrawerBox>
-            {collapsed ? null : children}
+            {collapsed ? null :
+                <TaskList>
+                    {tasks && tasks.map((task) => (
+                        drawer.id === task.drawer && <Task key={task.id} task={task} setTasks={setTasks} color={color}/>
+                    ))}
+                </TaskList>
+            }
         </>
     );
 }
@@ -36,7 +60,8 @@ const DrawerBox = styled.div`
     align-items: center;
     justify-content: space-between;
     margin-top: 1.5em;
-    background-color: ${props => props.$color};
+    text-decoration: double;
+    background-color: #${props => props.$color};
     border-radius: 17px 17px 0px 0px;
 `
 
@@ -60,6 +85,12 @@ const DrawerIcon = styled.div`
         margin-right: 1em;
         cursor: pointer;
     }
+`
+
+const TaskList = styled.div`
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
 `
 
 export default Drawer
