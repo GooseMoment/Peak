@@ -1,4 +1,5 @@
 import { createPortal } from "react-dom";
+import { useEffect } from "react";
 
 const ModalPortal = ({ children }) => {
     useEffect(() => {
