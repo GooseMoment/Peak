@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import TaskCreateDetail from "@components/project/TaskCreate/TaskCreateDetail";
 import TaskName from "./TaskName";
-import ModalPortal from "./ModalPortal";
+import ModalPortal from "@components/common/ModalPortal";
 
 import styled from "styled-components";
 
@@ -11,8 +11,12 @@ function Task({task, setTasks, color}){
     const [isModalOpen, setIsModalOpen] = useState(false)
     
     const openModal = () => {
-        setIsModalOpen(true);
-    };
+        setIsModalOpen(true)
+    }
+
+    const closeModal = () => {
+        setIsModalOpen(false)
+    }
 
     return (
         <>

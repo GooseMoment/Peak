@@ -3,6 +3,7 @@ import FeatherIcon from 'feather-icons-react';
 
 import TaskName from "../TaskName";
 import Contents from "./Contents";
+import { cubicBeizer } from "@assets/keyframes";
 
 function TaskCreateDetail({task, color, setTasks, isModalOpen, onClose}) {
     return (
@@ -25,6 +26,8 @@ const TaskCreateDetailBox = styled.div`
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
+
+    transition: left 0.5s ${cubicBeizer}, width 0.5s ${cubicBeizer};
 `
 
 const TaskNameBox = styled.div`

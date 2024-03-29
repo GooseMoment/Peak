@@ -24,11 +24,11 @@ const Middle = ({projects, collapsed}) => {
 const items = [
     // end가 true:  경로가 to와 완전히 일치해야 active
     //       false: to의 하위 경로에 있어도 active
-    {icon: "search", name: "Search", to: "/search", end: false},
-    {icon: "bell", name: "Notifications", to: "/notifications", end: false},
-    {icon: "calendar", name: "Today", to: "/today", end: false},
-    {icon: "users", name: "Social", to: "/social", end: false},
-    {icon: "archive", name: "Projects", to: "/projects", end: true},
+    {icon: "search", name: "Search", to: "search", end: false},
+    {icon: "bell", name: "Notifications", to: "notifications", end: false},
+    {icon: "calendar", name: "Today", to: "today", end: false},
+    {icon: "users", name: "Social", to: "social", end: false},
+    {icon: "archive", name: "Projects", to: "projects", end: true},
 ]
 
 const MiddleBox = styled.div`
