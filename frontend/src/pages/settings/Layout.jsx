@@ -76,6 +76,11 @@ const menuItems = [
         to: "appearance",
     },
     {
+        icon: "heart",
+        display: "Reactions",
+        to: "reactions",
+    },
+    {
         icon: "shield",
         display: "Blocks",
         to: "blocks",

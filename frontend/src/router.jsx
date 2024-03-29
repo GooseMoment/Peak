@@ -111,6 +111,10 @@ const routes = [
                         Component: settings.Appearance,
                     },
                     {
+                        path: "reactions",
+                        Component: settings.Reactions,
+                    },
+                    {
                         path: "notifications",
                         Component: settings.Notifications,
                     },
