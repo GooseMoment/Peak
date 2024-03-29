@@ -5,13 +5,23 @@ import FeatherIcon from 'feather-icons-react';
 
 import { getTasksByDrawer } from "@api/tasks.api"
 import Task from "@components/project/Task"
+import TaskCreateSimple from "./TaskCreate/TaskCreateSimple";
 
 function Drawer({id, drawer, color}){
-    const [collapsed, setCollapsed] = useState(false);
     const [tasks, setTasks] = useState([])
+
+    //Drawer collapsed handle
+    const [collapsed, setCollapsed] = useState(false);
     
     const handleCollapsed = () => {
         { drawer.task_count !== 0 && setCollapsed(prev => !prev)}
+    }
+
+    //simpleCreateTask handle
+    const [isSimpleOpen, setIsSimpleOpen] = useState(false)
+
+    const handleisSimpleOpen = () => {
+        setIsSimpleOpen(prev => !prev)
     }
 
     const DrawerIcons = [
@@ -50,6 +60,13 @@ function Drawer({id, drawer, color}){
                     ))}
                 </TaskList>
             }
+            { isSimpleOpen &&
+                <TaskCreateSimple/>
+            }
+            <TaskCreateButton onClick={handleisSimpleOpen}>
+                <FeatherIcon icon="plus-circle"/>
+                <TaskCreateText>할 일 추가</TaskCreateText>
+            </TaskCreateButton>
         </>
     );
 }
@@ -90,6 +107,32 @@ const DrawerIcon = styled.div`
 const TaskList = styled.div`
     flex: 1;
     margin-left: 1.1em;
+`
+
+const TaskCreateButton = styled.div`
+    flex: 1;
+    display: flex;
+    align-items: center;
+    margin-left: 1.3em;
+    margin-top: 1.3em;
+    
+    &:hover {
+        cursor: pointer;
+    }
+
+    & svg {
+        text-align: center;
+        width: 1.1em;
+        height: 1.1em;
+        top: 0;
+    } 
+`
+
+const TaskCreateText = styled.div`
+    font-size: 1em;
+    font-weight: medium;
+    color: #000000;
+    margin-top: 0em;
 `
 
 export default Drawer
