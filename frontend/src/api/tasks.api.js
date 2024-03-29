@@ -1,8 +1,8 @@
-import axios from "axios"
+import client from "./client"
 
 export const getTasksByDrawer = async (drawerID) => {
     try {
-        const res = await axios.get(`tasks?drawer=${drawerID}`)
+        const res = await client.get(`tasks?drawer=${drawerID}`)
         return res.data.results
     } catch (e) {
         throw e
@@ -11,7 +11,7 @@ export const getTasksByDrawer = async (drawerID) => {
 
 export const getTask = async (id) => {
     try {
-        const res = await axios.get(`tasks/${id}`)
+        const res = await client.get(`tasks/${id}`)
         return res.data
     } catch (e) {
         throw e
@@ -20,7 +20,7 @@ export const getTask = async (id) => {
 
 export const postTask = async (task) => {
     try {
-        const res = await axios.post("tasks/", task)
+        const res = await client.post("tasks/", task)
         return res.status
     } catch (e) {
         throw e
@@ -29,7 +29,7 @@ export const postTask = async (task) => {
 
 export const patchTask = async (id, edit) => {
     try {
-        const res = await axios.patch(`tasks/${id}`, edit)
+        const res = await client.patch(`tasks/${id}`, edit)
         return res.data
     } catch (e) {
         throw e
@@ -38,7 +38,7 @@ export const patchTask = async (id, edit) => {
 
 export const deleteTask = async (id) => {
     try {
-        const res = await axios.delete(`tasks/${id}`)
+        const res = await client.delete(`tasks/${id}`)
         return res.data
     } catch (e) {
         throw e
@@ -46,9 +46,24 @@ export const deleteTask = async (id) => {
 }
 
 export const completeTask = async (id) => {
-    const date = new Date();
-    const edit = {
-        "completed_at": date.toISOString()
+    try {
+        const date = new Date();
+        const edit = {
+            "completed_at": date.toISOString()
+        }
+        return await patchTask(id, edit)
+    } catch (e) {
+        throw e
     }
-    return await patchTask(id, edit)
+}
+
+export const uncompleteTask = async (id) => {
+    try {
+        const edit = {
+            "completed_at": null
+        }
+        return await patchTask(id, edit)
+    } catch (e) {
+        throw e
+    }
 }

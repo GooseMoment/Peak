@@ -1,8 +1,8 @@
-import axios from "axios"
+import client from "./client"
 
 export const getDrawersByProject = async (project_id) => {
     try {
-        const res = await axios.get(`projects/${project_id}`)
+        const res = await client.get(`projects/${project_id}`)
         return res.data.drawers
     } catch (e) {
         throw e
@@ -11,7 +11,7 @@ export const getDrawersByProject = async (project_id) => {
 
 export const getDrawer = async (id) => {
     try {
-        const res = await axios.get(`drawers/${id}`)
+        const res = await client.get(`drawers/${id}`)
         return res.data
     } catch (e) {
         throw e
@@ -20,7 +20,7 @@ export const getDrawer = async (id) => {
 
 export const postDrawer = async (drawer) => {
     try {
-        const res = await axios.post("drawers/", drawer)
+        const res = await client.post("drawers/", drawer)
         return res.status
     } catch (e) {
         throw e
@@ -29,7 +29,7 @@ export const postDrawer = async (drawer) => {
 
 export const patchDrawer = async (id, edit) => {
     try {
-        const res = await axios.patch(`drawers/${id}`, edit)
+        const res = await client.patch(`drawers/${id}`, edit)
         return res.data
     } catch (e) {
         throw e
@@ -39,7 +39,7 @@ export const patchDrawer = async (id, edit) => {
 
 export const deleteDrawer = async (id) => {
     try {
-        const res = await axios.delete(`drawers/${id}`)
+        const res = await client.delete(`drawers/${id}`)
         return res.data
     } catch (e) {
         throw e
