@@ -1,11 +1,9 @@
 import {
-    Outlet,
     createBrowserRouter,
     redirect,
 } from "react-router-dom"
 
-import Layout from "@containers/Layout"
-import AuthGuard from "@components/auth/AuthGuard"
+import AppLayout from "@containers/AppLayout"
 
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
@@ -13,6 +11,8 @@ import ProjectPage from "@pages/ProjectPage"
 import UserPage from "@pages/UserPage"
 import LandingPage from "@pages/LandingPage"
 import SignPage from "@pages/SignPage"
+
+import settings from "@pages/settings/settings"
 
 import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
 
@@ -40,11 +40,7 @@ const routes = [
     },
     {
         path: "/app",
-        element: <AuthGuard>
-            <Layout>
-                <Outlet />
-            </Layout>
-        </AuthGuard>,
+        element: <AppLayout />,
         id: "app",
         loader: async () => {
             return getMe()
@@ -90,9 +86,39 @@ const routes = [
                 },
                 element: <UserPage/>,
             },
-            {
-                path: "settings/:section",
-                element: <div>This is /settings/:section</div>,
+            { /* TODO: split settings */
+                path: "settings",
+                Component: settings.Layout,
+                children: [
+                    {
+                        index: true,
+                        loader: () => redirect("/app/settings/account"),
+                    },
+                    {
+                        path: "account",
+                        Component: settings.Account,
+                    },
+                    {
+                        path: "privacy",
+                        Component: settings.Privacy,
+                    },
+                    {
+                        path: "languages-and-region",
+                        Component: settings.LanguagesAndRegion,
+                    },
+                    {
+                        path: "appearance",
+                        Component: settings.Appearance,
+                    },
+                    {
+                        path: "notifications",
+                        Component: settings.Notifications,
+                    },
+                    {
+                        path: "blocks",
+                        Component: settings.Blocks,
+                    },
+                ]
             },
             {
                 // TODO: remove this and add signOut api callback
