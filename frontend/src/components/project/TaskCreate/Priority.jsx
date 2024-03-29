@@ -1,18 +1,35 @@
-import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
+
 import DetailFrame from "./DetailFrame"
+import { patchTask } from "@api/tasks.api"
 
 import normal from "@/assets/project/priority/normal.svg"
 import important from "@/assets/project/priority/important.svg"
 import critical from "@/assets/project/priority/critical.svg"
 
-const Priority = ({ onClose }) => {
+const Priority = ({ taskId, setTasks, onClose }) => {
+    const changePriority = (id, priority) => {
+        return async () => {
+            const edit = {
+                'priority': priority,
+            }
+            await patchTask(id, edit)
+            setTasks(prev => prev.map((task) => {
+                if (task.id === taskId) {
+                    task.priority = priority
+                    return task
+                }
+                return task
+            }))
+        }
+    }
+
     return (
         <DetailFrame title="중요도 설정" onClose={onClose}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
-                    <ItemText>{item.content}</ItemText>
+                    <ItemText onClick={changePriority(taskId, item.id)}>{item.content}</ItemText>
                 </ItemBlock>
             ))}
         </DetailFrame>
