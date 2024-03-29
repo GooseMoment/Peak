@@ -1,10 +1,11 @@
 import { useState } from "react"
-import { Form, useLoaderData, useSubmit } from "react-router-dom"
+import { Form, useLoaderData, useRevalidator, useSubmit } from "react-router-dom"
 
 const UserPage = () => {
     const user = useLoaderData()
     const submit = useSubmit()
     const [profile_img_uri, setProfile_img_uri] = useState(user.profile_img_uri)
+    const revalidator = useRevalidator()
 
     // TODO: @andless2004 영서의 페이지
 
@@ -29,6 +30,10 @@ const UserPage = () => {
         <label>profile_img_uri</label>
         <input type="url" value={profile_img_uri} onChange={e => setProfile_img_uri(e.target.value)} />
         <button onClick={() => submit({profile_img_uri}, {method: "PATCH"})}>Patch with useSubmit</button>
+
+        {/* 번외. useRevalidate */}
+        {revalidator.state === "loading" ? <p>유저 정보 불러오는 중!!</p> : null}
+        <button onClick={() => revalidator.revalidate()}>유저 정보 다시 로드</button>
     </>
 }
 
