@@ -15,6 +15,8 @@ import UserPage from "@pages/UserPage"
 import LandingPage from "@pages/LandingPage"
 import SignPage from "@pages/SignPage"
 
+import taskCreates from "@pages/taskCreates/taskCreates"
+
 import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
 import { getProject, getProjectsList } from "@api/projects.api"
 
@@ -90,6 +92,32 @@ const routes = [
                 loader: async ({params}) => {
                     return getProject(params.id)
                 }
+            },
+            {
+                path: "projects/:id/taskcreates",
+                Component: taskCreates.TaskCreateDetail,
+                children: [
+                    {
+                        path: "due",
+                        Component: taskCreates.Calendar,
+                    },
+                    {
+                        path: "reminder",
+                        Component: taskCreates.Calendar,
+                    },
+                    {
+                        path: "priority",
+                        Component: taskCreates.Priority,
+                    },
+                    {
+                        path: "Drawer",
+                        Component: taskCreates.Drawer,
+                    },
+                    {
+                        path: "memo",
+                        Component: taskCreates.Memo,
+                    },
+                ]
             },
             {
                 path: "users/:username",
