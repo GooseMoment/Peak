@@ -11,14 +11,15 @@ export const Name = styled.h2`
 `
 
 export const Description = styled.span`
-    margin-top: 1.25em;
+    display: block;
+    margin-top: 1em;
     font-weight: 400;
     font-size: 0.8em;
     color: grey;
 `
 
 export const Value = styled.div`
-    margin-top: 1.25em;
+    margin-top: 1.5em;
 `
 
 const SyncStyleIcon = styled.img`
