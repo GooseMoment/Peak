@@ -20,10 +20,12 @@ class UserSetting(Base):
     favorite_emojis = models.ManyToManyField(
         to=Emoji,
         related_name="favorites",
+        blank=True,
     )
     dislikable_emojis = models.ManyToManyField(
         to=Emoji,
-        related_name="dislikables"
+        related_name="dislikables",
+        blank=True,
     )
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
