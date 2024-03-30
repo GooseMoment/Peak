@@ -10,9 +10,11 @@ class UserSettingDetail(mixins.RetrieveModelMixin,
     
     queryset = UserSetting.objects.all()
     serializer_class = UserSettingSerializer
-    lookup_field = "user__username"
-    lookup_url_kwarg = "username"
-    permission_classes = [IsUserMatch]
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = queryset.filter(user=self.request.user).get()
+        return obj
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
