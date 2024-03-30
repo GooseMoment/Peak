@@ -12,7 +12,7 @@ class UserSetting(Base):
     )
     follow_request_approval_manually = models.BooleanField(default=False)
     follow_request_approval_for_followings = models.BooleanField(default=True)
-    follow_list_privacy = models.CharField(max_length=128, choices=PrivacyMixin.PRIVACY_TYPES)
+    follow_list_privacy = models.CharField(max_length=128, default=PrivacyMixin.FOR_PUBLIC, choices=PrivacyMixin.PRIVACY_TYPES)
     favorite_emojis = models.ManyToManyField(
         to=Emoji,
         related_name="favorites",
