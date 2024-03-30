@@ -19,7 +19,7 @@ const Footer = ({user, collapsed}) => {
         ) : null }
 
         {collapsed ? null :
-        <SidebarLink to="settings" draggable="false" state={{background: location}}>
+        <SidebarLink to="settings" draggable="false" state={{previous: location}}>
             <SettingIconContainer>
                 <FeatherIcon icon="settings" />
             </SettingIconContainer>

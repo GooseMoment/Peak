@@ -92,7 +92,7 @@ const routes = [
                 children: [
                     {
                         index: true,
-                        loader: () => redirect("/app/settings/account"),
+                        Component: settings.Redirect,
                     },
                     {
                         path: "account",

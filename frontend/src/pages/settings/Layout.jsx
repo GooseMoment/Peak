@@ -14,7 +14,7 @@ const pathRoot = "/app/settings/"
 const Layout = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const previousPathname = useRef(location.state?.background?.pathname)
+    const previousPathname = useRef(location.state?.previous?.pathname)
 
     const goPreviousOrIndex = () => {
         navigate(previousPathname.current || "/app/")
@@ -105,6 +105,8 @@ const ModalFrame = styled.div`
 `
 
 const Sidebar = styled(SidebarBox)`
+    overflow-y: auto;
+
     position: sticky;
     z-index: unset;
     width: 16rem;

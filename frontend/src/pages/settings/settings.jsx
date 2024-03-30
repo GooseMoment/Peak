@@ -1,4 +1,5 @@
 import Layout from "./Layout"
+import Redirect from "./Redirect"
 import Account from "./Account"
 import Privacy from "./Privacy"
 import LanguagesAndRegion from "./LanguagesAndRegion"
@@ -8,7 +9,7 @@ import Notifications from "./Notifications"
 import Blocks from "./Blocks"
 
 const settings = {
-    Layout,
+    Layout, Redirect,
     Account, Privacy, LanguagesAndRegion, Appearance, Reactions, Notifications, Blocks,
 }
 
