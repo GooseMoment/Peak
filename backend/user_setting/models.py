@@ -1,4 +1,8 @@
 from django.db import models
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 
 from api.models import Base, PrivacyMixin
 from users.models import User
@@ -21,3 +25,8 @@ class UserSetting(Base):
         to=Emoji,
         related_name="dislikables"
     )
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_user_setting(sender, instance=None, created=False, **kwargs):
+    if created:
+        UserSetting.objects.create(user=instance)
