@@ -1,12 +1,13 @@
 import { useState } from "react";
 
-import TaskCreateDetail from "@components/project/TaskCreate/TaskCreateDetail";
-import TaskName from "./TaskName";
-import ModalPortal from "@components/common/ModalPortal";
-
 import styled from "styled-components";
 
-function Task({task, setTasks, color}){
+import TaskCreateDetail from "@pages/taskCreates/TaskCreateDetail";
+
+import ModalPortal from "@components/common/ModalPortal";
+import TaskName from "./TaskName";
+
+function Task({id, task, setTasks, color}){
     const today = new Date()
     const [isModalOpen, setIsModalOpen] = useState(false)
     
@@ -27,8 +28,8 @@ function Task({task, setTasks, color}){
                     {task.due_date}
             </CalendarText>}
             {isModalOpen &&
-            <ModalPortal>
-                <TaskCreateDetail task={task} color={color} setTasks={setTasks} isModalOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <ModalPortal closeModal={closeModal}>
+                <TaskCreateDetail id={id} task={task} color={color} setTasks={setTasks} isModalOpen={isModalOpen} onClose={closeModal} />
             </ModalPortal>}
         </Box>
     );
