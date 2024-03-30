@@ -53,11 +53,11 @@ const privacyChoices = [
     },
     {
         display: "Limit to my followers",
-        value: "private",
+        value: "protected",
     },
     {
         display: "Only me",
-        value: "me",
+        value: "private",
     },
 ]
 
