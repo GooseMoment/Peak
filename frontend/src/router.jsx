@@ -91,31 +91,33 @@ const routes = [
                 element: <ProjectPage/>,
                 loader: async ({params}) => {
                     return getProject(params.id)
-                }
-            },
-            {
-                path: "projects/:id/taskcreates",
-                Component: taskCreates.TaskCreateDetail,
+                },
                 children: [
                     {
-                        path: "due",
-                        Component: taskCreates.Calendar,
-                    },
-                    {
-                        path: "reminder",
-                        Component: taskCreates.Calendar,
-                    },
-                    {
-                        path: "priority",
-                        Component: taskCreates.Priority,
-                    },
-                    {
-                        path: "Drawer",
-                        Component: taskCreates.Drawer,
-                    },
-                    {
-                        path: "memo",
-                        Component: taskCreates.Memo,
+                        path: "tasks/:id/detail/",
+                        Component: taskCreates.TaskCreateDetail,
+                        children: [
+                            {
+                                path: "due",
+                                Component: taskCreates.Calendar,
+                            },
+                            {
+                                path: "reminder",
+                                Component: taskCreates.Calendar,
+                            },
+                            {
+                                path: "priority",
+                                Component: taskCreates.Priority,
+                            },
+                            {
+                                path: "Drawer",
+                                Component: taskCreates.Drawer,
+                            },
+                            {
+                                path: "memo",
+                                Component: taskCreates.Memo,
+                            },
+                        ]
                     },
                 ]
             },

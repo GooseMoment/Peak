@@ -12,7 +12,7 @@ import Drawer from "./Drawer"
 import Memo from "./Memo"
 
 function Contents({id, task, setTasks}) {
-    const pathRoot = `app/projects/${id}/taskCreates/`
+    const pathRoot = `/app/projects/${id}/tasks/${id}/detail/`
 
     const navigate = useNavigate()
     const location = useLocation()
@@ -82,7 +82,7 @@ function Contents({id, task, setTasks}) {
         },
     ]
 
-    const main =
+    return (
         <ContentsBlock>
             {items.map(item => (
             <ContentsBox key={item.id}>
@@ -100,11 +100,6 @@ function Contents({id, task, setTasks}) {
             </ContentsBox>
             ))}
         </ContentsBlock>
-    
-    return (
-        <ModalPortal closeModal={goPreviousOrIndex}>
-            {main}
-        </ModalPortal>
     )
 }
 
