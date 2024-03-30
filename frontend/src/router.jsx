@@ -15,6 +15,7 @@ import SignPage from "@pages/SignPage"
 import settings from "@pages/settings/settings"
 
 import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
+import { getSettings, patchSettings } from "@api/user_setting.api"
 
 const routes = [
     {
@@ -89,6 +90,14 @@ const routes = [
             { /* TODO: split settings */
                 path: "settings",
                 Component: settings.Layout,
+                id: "settings",
+                action: async ({request}) => {
+                    const formData = await request.formData()
+                    return patchSettings(Object.fromEntries(formData))
+                },
+                loader: async () => {
+                    return getSettings()
+                },
                 children: [
                     {
                         index: true,
