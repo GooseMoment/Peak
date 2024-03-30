@@ -46,6 +46,9 @@ const routes = [
         loader: async () => {
             return getMe()
         },
+        shouldRevalidate: ({currentUrl}) => {
+            return currentUrl.pathname.startsWith("/app/users/")
+        },
         errorElement: <ErrorPage />,
         children: [
             {
