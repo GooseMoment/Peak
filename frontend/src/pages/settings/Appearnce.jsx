@@ -1,45 +1,71 @@
-import Switch from "@components/settings/Switch"
 import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
-import { useState } from "react"
+import Select from "@components/settings/Select"
+import Switch from "@components/settings/Switch"
 
 const Appearance = () => {
-    const [test, setTest] = useState(false)
 
     return <>
         <PageTitle>Appearance</PageTitle>
         <Section>
             <Name>Theme perference</Name>
             <Value>
-                <select>
-                    <option>Light</option>
-                    <option>Dark</option>
-                    <option>Indigo Blue</option>
-                    <option>Passion Red</option>
-                </select>
+                <Select choices={themeChoices} name="theme" />
             </Value>
         </Section>
 
         <Section>
             <Name>Content width</Name>
             <Value>
-                <select>
-                    <option>More Narrow</option>
-                    <option>Narrow</option>
-                    <option>Normal</option>
-                    <option>Wide</option>
-                    <option>More Wide</option>
-                </select>
+                <Select choices={widthChoices} name="main_width" />
             </Value>
         </Section>
 
         <Section>
-            <Name>Close sidebar by default</Name>
+            <Name>Close sidebar on start up</Name>
             <Value>
-                <Switch isActive={test} setIsActive={setTest} />
+                <Switch name="close_sidebar_on_startup" />
             </Value>
         </Section>
     </>
 }
+
+const themeChoices = [
+    {
+        display: "Same as system",
+        value: "system",
+    },
+    {
+        display: "Light",
+        value: "light",
+    },
+    {
+        display: "Dark",
+        value: "dark",
+    },
+]
+
+const widthChoices = [
+    {
+        display: "More narrow",
+        value: "-2",
+    }, 
+    {
+        display: "Narrow",
+        value: "-1",
+    }, 
+    {
+        display: "Normal",
+        value: "0",
+    }, 
+    {
+        display: "Wide",
+        value: "1",
+    }, 
+    {
+        display: "Wider",
+        value: "2",
+    }, 
+]
 
 export default Appearance

@@ -1,10 +1,8 @@
 import Switch from "@components/settings/Switch"
 import PageTitle from "@components/common/PageTitle"
-import Section, { Name, Description, Value, Sync } from "@components/settings/Section"
-import { useState } from "react"
+import Section, { Name, Description, Value } from "@components/settings/Section"
 
 const Notifications = () => {
-    const [allowPushNotification, setAllowPushNotification] = useState(true)
 
     return <>
         <PageTitle>Notifications</PageTitle>
@@ -12,13 +10,13 @@ const Notifications = () => {
             <Name>Send push notifications</Name>
             <Description>If you disallow push notification permission of Peak, this option has no effect.</Description>
             <Value>
-                <Switch isActive={allowPushNotification} setIsActive={setAllowPushNotification} />
+                <Switch name="send_push_notifications" />
             </Value>
         </Section>
         <Section>
-            <Name>Notification sound</Name>
+            <Name>Play notification sound</Name>
             <Value>
-                <Switch isActive={allowPushNotification} setIsActive={setAllowPushNotification} />
+                <Switch name="play_notification_sound" />
             </Value>
         </Section>
     </>
