@@ -6,7 +6,7 @@ const Redirect = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        navigate("/app/settings/", {
+        navigate("/app/settings/account", {
             state: {
                 previous: location?.state?.previous,
             }
