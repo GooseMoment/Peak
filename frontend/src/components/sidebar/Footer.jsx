@@ -11,10 +11,10 @@ const Footer = ({user, collapsed}) => {
 
         {user ? (
         <SidebarLink to={`users/@${user.username}`} draggable="false">
-            <CurrentUserProfile>
+            <MeProfile>
                 <img src={user.profile_img_uri} />
                 {collapsed ? null : <Username>{user.username}</Username>}
-            </CurrentUserProfile>
+            </MeProfile>
         </SidebarLink>
         ) : null }
 
@@ -40,7 +40,7 @@ ${({$collapsed}) => $collapsed ? css`
 ` : null}
 `
 
-const CurrentUserProfile = styled.div`
+const MeProfile = styled.div`
 display: flex;
 flex-direction: row;
 align-items: center;
@@ -52,7 +52,7 @@ border-radius: 10px;
 
 & img {
     border-radius: 50%;
-    width: auto;
+    width: 2em;
     height: 2em;
 }
 `
