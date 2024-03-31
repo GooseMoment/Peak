@@ -121,6 +121,8 @@ const FooterBox = styled(MiddleBox)`
 `
 
 const Main = styled.main`
+    overflow-y: auto;
+
     box-sizing: border-box;
     padding: 2em;
     width: 32rem;
