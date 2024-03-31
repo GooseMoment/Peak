@@ -17,7 +17,7 @@ import custom from "@/assets/project/reminder/custom.svg"
 const Reminder = ({ task, setTasks, onClose }) => {
     let DueDateTime = new Date(`${task.due_date}T${task.due_time}`)
 
-    const changeReminder = (id, item_id, set, day, hour, minute) => {
+    const changeReminder = (id, set, day, hour, minute) => {
         return async () => {
             { task.due_date && DueDateTime.setDate(DueDateTime.getDate() - day)}
             { task.due_time && DueDateTime.setHours(DueDateTime.getHours() - hour)}

@@ -5,7 +5,7 @@ import TaskName from "@components/project/TaskName";
 import Contents from "./Contents";
 import { cubicBeizer } from "@assets/keyframes";
 
-function TaskCreateDetail({id, task, color, setTasks, isModalOpen, onClose}) {
+function TaskCreateDetail({projectId, task, color, setTasks, isModalOpen, onClose}) {
     return (
         <TaskCreateDetailBox>
             <TaskNameBox>
@@ -15,7 +15,7 @@ function TaskCreateDetail({id, task, color, setTasks, isModalOpen, onClose}) {
                     <FeatherIcon icon="x" onClick={onClose} />
                 </Icons>
             </TaskNameBox>
-            <Contents id={id} task={task} setTasks={setTasks}/>
+            <Contents projectId={projectId} task={task} setTasks={setTasks}/>
         </TaskCreateDetailBox>
     )
 }

@@ -11,14 +11,14 @@ import Priority from "./Priority"
 import Drawer from "./Drawer"
 import Memo from "./Memo"
 
-function Contents({id, task, setTasks}) {
-    const pathRoot = `/app/projects/${id}/tasks/${id}/detail/`
+function Contents({projectId, task, setTasks}) {
+    const pathRoot = `/app/projects/${projectId}/tasks/${task.id}/detail/`
 
     const navigate = useNavigate()
     const location = useLocation()
 
     const goPreviousOrIndex = () => {
-        navigate(`/app/projects/${id}`)
+        navigate(`/app/projects/${projectId}`)
     }
 
     // text클릭 시 알맞는 component 띄우기
@@ -109,6 +109,7 @@ const ContentsBlock = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    margin-left: 3.8em;
 `
 
 const ContentsBox = styled.div`
