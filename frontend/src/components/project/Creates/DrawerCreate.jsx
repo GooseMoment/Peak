@@ -1,14 +1,27 @@
+import { useState } from "react"
+
 import styled from "styled-components"
 
 import { cubicBeizer } from "@assets/keyframes"
 import TitleFrame from "@components/project/common/TitleFrame"
 import MiddleFrame from "@components/project/common/MiddleFrame"
+import Privacy from "./Privacy"
 
 const DrawerCreate = ({onClose}) => {
+    const [isComponentOpen, setIsComponentOpen] = useState(false)
+
+    const closeComponent = () => {
+        setIsComponentOpen(false)
+    }
+
+    const items = [
+        {icon: "server", display: "전체공개", component: <Privacy closeComponent={closeComponent}/>},
+    ]
+
     return (
         <DrawerBox>
             <TitleFrame title="수강신청" icon="inbox" onClose={onClose}/>
-            <MiddleFrame items={items}/>
+            <MiddleFrame items={items} isComponentOpen={isComponentOpen} setIsComponentOpen={setIsComponentOpen}/>
         </DrawerBox>
     )
 }
@@ -22,9 +35,5 @@ const DrawerBox = styled.div`
 
     transition: left 0.5s ${cubicBeizer}, width 0.5s ${cubicBeizer};
 `
-
-const items = [
-    {icon: "server", display: "전체공개"},
-]
 
 export default DrawerCreate
