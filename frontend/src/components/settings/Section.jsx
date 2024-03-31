@@ -7,7 +7,6 @@ const Section = styled.section`
 `
 
 export const Name = styled.h2`
-    font-weight: 600;
 `
 
 export const Description = styled.span`
@@ -15,6 +14,7 @@ export const Description = styled.span`
     margin-top: 1em;
     font-weight: 400;
     font-size: 0.8em;
+    line-height: 140%;
     color: grey;
 `
 
