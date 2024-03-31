@@ -1,27 +1,30 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"
 
 import styled from "styled-components";
 
-import TaskCreateDetail from "@pages/taskCreates/TaskCreateDetail";
-
+import TaskCreateDetail from "@/pages/taskDetails/TaskCreateDetail";
 import ModalPortal from "@components/common/ModalPortal";
 import TaskName from "./TaskName";
 
-function Task({id, task, setTasks, color}){
+function Task({projectId, task, setTasks, color}){
     const today = new Date()
     const [isModalOpen, setIsModalOpen] = useState(false)
+
+    const navigate = useNavigate()
     
     const openModal = () => {
         setIsModalOpen(true)
     }
 
     const closeModal = () => {
+        navigate(`/app/projects/${projectId}`)
         setIsModalOpen(false)
     }
 
     return (
         <Box>
-            <TaskName task={task} setTasks={setTasks} color={color} due_date={task.due_date} openModal={openModal}/>
+            <TaskName projectId={projectId} task={task} setTasks={setTasks} color={color} due_date={task.due_date} isModalOpen={isModalOpen} openModal={openModal}/>
             {task.due_date && <CalendarText>
                     {task.due_date === today.toISOString().slice(0, 10) && <CalendarTextPlus>오늘</CalendarTextPlus>}
                     {task.due_date === today.toISOString().slice(0, 10) && "| "}
@@ -29,7 +32,7 @@ function Task({id, task, setTasks, color}){
             </CalendarText>}
             {isModalOpen &&
             <ModalPortal closeModal={closeModal}>
-                <TaskCreateDetail id={id} task={task} color={color} setTasks={setTasks} isModalOpen={isModalOpen} onClose={closeModal} />
+                <TaskCreateDetail projectId={projectId} task={task} color={color} setTasks={setTasks} isModalOpen={isModalOpen} onClose={closeModal} />
             </ModalPortal>}
         </Box>
     );

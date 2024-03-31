@@ -1,22 +1,51 @@
+import { Link } from "react-router-dom";
+import { useState } from "react";
+
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-function TaskName({task, setTasks, color, due_date, openModal}){
+function TaskName({projectId, task, color, due_date, isModalOpen, openModal}){
     const date = new Date()
+    const pathRoot = `/app/projects/${projectId}/tasks/${task.id}/detail`
+
+    const [text, setText] = useState(task.name)
+    
+    const onchange = (e) => {
+        setText(e.target.value)
+        console.log(text)
+    }
+
+    const EditView = (
+        <InputText 
+            $completed={task.completed_at ? true : false} 
+            onClick={openModal}
+            type='text'
+            onChange={onchange}
+            value={text}
+        />
+    )
+
+    const TextView = (
+        <Text $completed={task.completed_at ? true : false} onClick={openModal}>
+            {task.name}
+        </Text>
+    )
 
     return (
         <>
             <TaskNameBox>
-                <TaskCircle 
+                <TaskCircle
                     $completed={task.completed_at ? true : false}
                     $color={color}
                     $due_date={due_date}
                 >
-                    {task.completed && <FeatherIcon icon="check"/>}
+                    {task.completed_at && <FeatherIcon icon="check"/>}
                 </TaskCircle>
-                <Text $completed={task.completed_at ? true : false} onClick={openModal}>
-                    {task.name}
-                </Text>
+                { isModalOpen ? EditView :
+                <Link to={pathRoot} style={{ textDecoration: 'none' }}> 
+                    {TextView}
+                </Link>}
+
             </TaskNameBox>
         </>
     );
@@ -54,6 +83,18 @@ const Text = styled.div`
     font-style: normal;
     font-size: 1em;
     color: ${(props) => (props.$completed ? '#A4A4A4' : '#000000')};
+`
+
+const InputText = styled.input`
+    font-weight: normal;
+    font-size: 1em;
+    color: '#000000';
+    border: none;
+    margin-top: 0.1em;
+
+    &:focus {
+        outline: none;
+    }
 `
 
 export default TaskName
