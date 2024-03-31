@@ -6,10 +6,8 @@ import FeatherIcon from 'feather-icons-react';
 import { getTasksByDrawer } from "@api/tasks.api"
 import Task from "@components/project/Task"
 import TaskCreateSimple from "@components/project/Creates/TaskCreateSimple";
-import DrawerCreate from "@components/project/Creates/DrawerCreate";
-import ModalPortal from "@components/common/ModalPortal";
 
-function Drawer({id, drawer, color}){
+function Drawer({projectId, drawer, color}){
     const [tasks, setTasks] = useState([])
 
     //Drawer collapsed handle
@@ -26,11 +24,8 @@ function Drawer({id, drawer, color}){
         setIsSimpleOpen(prev => !prev)
     }
 
-    //Create
-    const [isCreateOpen, setsIsCreateOpen] = useState(false)
-
     const DrawerIcons = [
-        {icon: "plus", click: () => setsIsCreateOpen(true)},
+        {icon: "plus", click: () => {setsIsCreateOpen(true)}},
         {icon: "more-horizontal", click: () => {}},
         {icon: "chevron-down", click: handleCollapsed},
     ]
@@ -46,7 +41,7 @@ function Drawer({id, drawer, color}){
 
     useEffect(() => {
         fetchTasks()
-    }, [id])
+    }, [projectId])
 
     return (
         <>
@@ -61,7 +56,7 @@ function Drawer({id, drawer, color}){
             {collapsed ? null :
                 <TaskList>
                     {tasks && tasks.map((task) => (
-                        drawer.id === task.drawer && <Task key={task.id} id={id} task={task} setTasks={setTasks} color={color}/>
+                        drawer.id === task.drawer && <Task key={task.id} projectId={projectId} task={task} setTasks={setTasks} color={color}/>
                     ))}
                 </TaskList>
             }
@@ -72,10 +67,6 @@ function Drawer({id, drawer, color}){
                 <FeatherIcon icon="plus-circle"/>
                 <TaskCreateText>할 일 추가</TaskCreateText>
             </TaskCreateButton>
-            { isCreateOpen &&
-            <ModalPortal closeModal={() => {setsIsCreateOpen(false)}}>
-                <DrawerCreate onClose={() => {setsIsCreateOpen(false)}}/>
-            </ModalPortal>}
         </>
     );
 }
