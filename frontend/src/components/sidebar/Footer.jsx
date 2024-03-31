@@ -30,7 +30,7 @@ const Footer = ({user, collapsed}) => {
 
 const FooterBox = styled.footer`
 display: flex;
-flex-direction: ${props => props.collapsed ? "column" : "row"};
+flex-direction: ${props => props.$collapsed ? "column" : "row"};
 justify-content: space-between;
 
 margin: 1em;
