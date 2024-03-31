@@ -3,17 +3,22 @@ import { useState } from "react"
 import styled from "styled-components"
 
 import { cubicBeizer } from "@assets/keyframes"
-import ModalPortal from "@components/common/ModalPortal"
 import TitleFrame from "@components/project/common/TitleFrame"
 import MiddleFrame from "@components/project/common/MiddleFrame"
 import Color from "./Color"
+import Type from "./Type"
 
 const ProjectCreate = ({onClose}) => {
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
-    const ComponentClose = () => {
-        setisComponentOpen(false)
+    const closeComponent = () => {
+        setIsComponentOpen(false)
     }
+
+    const items = [
+        {icon: "circle", color: 'FD99D9', display: "파랑", component: <Color closeComponent={closeComponent}/>},
+        {icon: "award", display: "상시 프로젝트", component: <Type closeComponent={closeComponent}/>}
+    ]
 
     return (
         <>
@@ -34,10 +39,5 @@ const ProjectBox = styled.div`
 
     transition: left 0.5s ${cubicBeizer}, width 0.5s ${cubicBeizer};
 `
-
-const items = [
-    {icon: "circle", display: "파랑", component: <Color/>},
-    {icon: "award", display: "상시 프로젝트", component: null}
-]
 
 export default ProjectCreate

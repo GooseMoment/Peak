@@ -1,14 +1,16 @@
 import styled from "styled-components"
 
 import DetailFrame from "@components/project/common/DetailFrame"
-import FeatherIcon from "feather-icons-react"
 
-const Color = ({closeComponent}) => {
+import goal from "@assets/project/type/goal.svg"
+import regular from "@assets/project/type/regular.svg"
+
+const Type = ({closeComponent}) => {
     return (
-        <DetailFrame title="색깔 설정" onClose={closeComponent}>
+        <DetailFrame title="프로젝트 설정" onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
-                    <FeatherIcon icon="circle" fill={'#'+item.color}/>
+                    {item.icon}
                     <ItemText>{item.display}</ItemText>
                 </ItemBlock>
             ))}
@@ -44,13 +46,8 @@ const ItemText = styled.p`
 `
 
 const items = [
-    {color: "DC2E2E", display: "빨강"},
-    {color: "FF4A03", display: "주황"},
-    {color: "FFD703", display: "노랑"},
-    {color: "26AA1B", display: "초록"},
-    {color: "2E61DC", display: "파랑"},
-    {color: "8F2EDC", display: "보라"},
-    {color: "000000", display: "사용자 지정"},
+    {icon: <img src={regular}/>, display: "상시 프로젝트"},
+    {icon: <img src={goal}/>, display: "목표 프로젝트"}
 ]
 
-export default Color
+export default Type
