@@ -1,8 +1,24 @@
+import { useEffect, useRef } from "react"
+
+import useScreenSize from "@utils/useScreenSize"
+
 import FeatherIcon from "feather-icons-react"
 import styled, { css } from "styled-components"
 import MildButton from "@components/common/MildButton"
 
+const autoCollapseWidth = 950
+
 const Header = ({collapsed, setCollapsed}) => {
+    const screenSize = useScreenSize()
+    const previousScreenSize = useRef(screenSize)
+
+    useEffect(() => {
+        if (previousScreenSize.current.width > autoCollapseWidth && screenSize.width <= autoCollapseWidth ) {
+            setCollapsed(true)
+        }
+        previousScreenSize.current = screenSize
+    }, [screenSize])
+
     return <header>
         <ButtonContainer $collapsed={collapsed}>
             <MildButton onClick={() => setCollapsed(previous => !previous)}>
