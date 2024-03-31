@@ -19,7 +19,9 @@ const MiddleFrame = ({items, isComponentOpen, setIsComponentOpen}) => {
             {items.map(item => (
             <>
             <ContentsBox key={item.icon}>
-                <FeatherIcon icon={item.icon} />
+                {(item.icon === "circle") ? 
+                <FeatherIcon icon={item.icon} fill={'#'+item.color} stroke="none"/> :
+                <FeatherIcon icon={item.icon} />}
                 <VLine/>
                 <ContentText id ={item.icon} onClick={handleClickContent}>
                     {item.display}
@@ -46,7 +48,6 @@ const ContentsBox = styled.div`
     & svg {
         width: 1.3em;
         height: 1.3em;
-        stroke: #000000;
         margin-top: 1.3em;
         top: 0;
     }

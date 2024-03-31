@@ -1,12 +1,24 @@
+import { useState } from "react"
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 const TitleFrame = ({title, icon, onClose}) => {
+    const [text, setText] = useState('')
+    
+    const onchange = (e) => {
+        setText(e.target.value)
+        console.log(text)
+    }
+
     return (
         <TitleFrameBox>
             <TitleBox>
                 <FeatherIcon icon={icon}/>
-                <TitleText>{title}</TitleText>
+                <InputText
+                    type='text'
+                    onChange={onchange}
+                    value={text}
+                />
             </TitleBox>
             <Icons>
                 <FeatherIcon icon="trash-2" />
@@ -41,10 +53,15 @@ const TitleBox = styled.div`
     }
 `
 
-const TitleText = styled.div`
+const InputText = styled.input`
     font-weight: 480;
     font-size: 1.1em;
     color: #000000;
+    border: none;
+
+    &:focus {
+        outline: none;
+    }
 `
 
 const Icons = styled.div`
