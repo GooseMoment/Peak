@@ -15,7 +15,7 @@ import UserPage from "@pages/UserPage"
 import LandingPage from "@pages/LandingPage"
 import SignPage from "@pages/SignPage"
 
-import taskCreates from "@pages/taskCreates/taskCreates"
+import taskCreates from "@pages/taskDetails/taskCreates"
 
 import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
 import { getProject, getProjectsList } from "@api/projects.api"
@@ -95,8 +95,11 @@ const routes = [
                 children: [
                     {
                         path: "tasks/:id/detail/",
-                        Component: taskCreates.TaskCreateDetail,
                         children: [
+                            {
+                                path: "true",
+                                Component: taskCreates.TaskCreateDetail,
+                            },
                             {
                                 path: "due",
                                 Component: taskCreates.Calendar,

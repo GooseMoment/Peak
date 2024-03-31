@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom"
 
 import LandingRoot from "@components/landing/LandingRoot"
-import TaskCreateDetail from "@pages/taskCreates/TaskCreateDetail"
+import TaskCreateDetail from "@pages/taskDetails/TaskCreateDetail"
 
 import logo from "@assets/logo.svg"
 import projectComplete from "@assets/landing/undraw_project_complete_lwss.svg"
