@@ -18,5 +18,5 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = [
             'id', 'name', 'privacy', 'completed_at', 'drawer', 'drawer_name', 'due_date', 'due_time', 'priority', 'memo', 
-            'reminder_datetime', 'user', 'repeat', 'created_at', 'updated_at', 'deleted_at', 'project_name',
+            'reminders', 'user', 'repeat', 'created_at', 'updated_at', 'deleted_at', 'project_name',
         ]
