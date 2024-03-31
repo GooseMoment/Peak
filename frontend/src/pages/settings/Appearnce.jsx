@@ -2,6 +2,8 @@ import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/Switch"
+import Button from "@components/sign/Button"
+import styled from "styled-components"
 
 const Appearance = () => {
 
@@ -27,8 +29,17 @@ const Appearance = () => {
                 <Switch name="close_sidebar_on_startup" />
             </Value>
         </Section>
+
+        <Reload onClick={() => window.location.reload()}>Reload to apply</Reload>
     </>
 }
+
+const Reload = styled(Button)`
+    border-color: red;
+    color: red;
+    float: right;
+    margin-top: 2rem;
+` 
 
 const themeChoices = [
     {
@@ -47,24 +58,16 @@ const themeChoices = [
 
 const widthChoices = [
     {
-        display: "More narrow",
-        value: "-2",
+        display: "narrow",
+        value: "7rem",
     }, 
     {
-        display: "Narrow",
-        value: "-1",
+        display: "normal",
+        value: "5rem",
     }, 
     {
-        display: "Normal",
-        value: "0",
-    }, 
-    {
-        display: "Wide",
-        value: "1",
-    }, 
-    {
-        display: "Wider",
-        value: "2",
+        display: "wide",
+        value: "2rem",
     }, 
 ]
 
