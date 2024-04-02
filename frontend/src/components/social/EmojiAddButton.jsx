@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import styled from "styled-components";
 import FeatherIcon from "feather-icons-react";
-import { createPortal } from "react-dom";
 
 import EmojiButton from "@components/social/EmojiButton";
 
