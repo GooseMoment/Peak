@@ -86,7 +86,8 @@ const TaskNameBox = styled.div`
 `
 
 const TaskCircle = styled.div`
-    align-items: center;
+    display: flex;
+    justify-content: center;
     top: ${(props) => (props.$due_date ? 0.3 : 0)}em;
     width: 1.2em;
     height: 1.2em;
@@ -97,9 +98,11 @@ const TaskCircle = styled.div`
     font-size: 1em;
 
     & svg {
-    width: inherit;
-    height: inherit;
+    width: 1em;
+    height: 1em;
     stroke: #A4A4A4;
+    stroke-width: 0.2em;
+    margin-right: 0;
 }
 `
 
