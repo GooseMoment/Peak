@@ -7,13 +7,14 @@ import Button from "@components/sign/Button"
 import Input from "@components/sign/Input"
 
 import notify from "@utils/notify"
+import { patchPassword } from "@api/users.api"
 
 import { Key, RotateCw } from "feather-icons-react"
 import styled from "styled-components"
 
 const Account = () => {
     const user = useRouteLoaderData("app")
-    const [resetFormOpened, setResetFormOpened] = useState(false)
+    const [passwordFormOpened, setPasswordFormOpened] = useState(false)
     const [currentPassword, setCurrentPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [newPasswordAgain, setNewPasswordAgain] = useState("")
@@ -34,9 +35,20 @@ const Account = () => {
             return
         }
 
+        try {
+            const result = await patchPassword(currentPassword, newPassword)
+            if (result === true) {
+                notify.success("Password was changed.")
+                return
+            }
+        } catch (e) {
+            if (e.response?.data?.code === "PATCHPASSWORD_WRONG_CURRENT_PASSWORD") {
+                notify.error("Current password does not match!")
+                return
+            }
+            notify.error("Password was not changed.")
+        }
 
-        // TODO: send reset request
-        notify.success("Password was changed.")
     }
 
     return <>
@@ -70,14 +82,14 @@ const Account = () => {
 
         <Section>
             <Name>
-                Reset password
-                <ToggleButton onClick={() => setResetFormOpened(prev => !prev)}>
-                    {resetFormOpened ? "Close" : "Open"}
+                Change password
+                <ToggleButton onClick={() => setPasswordFormOpened(prev => !prev)}>
+                    {passwordFormOpened ? "Close" : "Open"}
                 </ToggleButton>
             </Name>
             <Value>
 
-                {resetFormOpened ? <PasswordResetInputs>
+                {passwordFormOpened ? <PasswordChangeInputs>
                     <Input 
                         icon={<Key />} name="password" type="password" placeholder="Current password" required
                         value={currentPassword} onChange={e => setCurrentPassword(e.target.value)}
@@ -91,9 +103,9 @@ const Account = () => {
                         value={newPasswordAgain} onChange={e => setNewPasswordAgain(e.target.value)}
                     />
                     <div>
-                        <SubmitButton onClick={resetPassword}>Reset</SubmitButton>
+                        <SubmitButton onClick={resetPassword}>Change</SubmitButton>
                     </div>
-                </PasswordResetInputs> : null}
+                </PasswordChangeInputs> : null}
             </Value>
         </Section>
     </>
@@ -149,7 +161,7 @@ const ToggleButton = styled(Button)`
     margin-left: 1em;
 `
 
-const PasswordResetInputs = styled.div`
+const PasswordChangeInputs = styled.div`
     margin-top: 1em;
     display: flex;
     flex-direction: column;

@@ -94,3 +94,18 @@ export const signOut = async () => {
 
     return false
 }
+
+export const patchPassword = async (current_password, new_password) => {
+    try {
+        const res = await client.patch("users/me/password/", {
+            current_password, new_password
+        })
+        if (res.status === 200) {
+            return true
+        }
+
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
