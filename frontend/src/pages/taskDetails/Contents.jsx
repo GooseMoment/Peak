@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
@@ -11,7 +11,8 @@ import Priority from "./Priority"
 import Drawer from "./Drawer"
 import Memo from "./Memo"
 
-function Contents({projectId, task, setTasks}) {
+function Contents({task, setTasks}) {
+    const { id: projectId } = useParams()
     const pathRoot = `/app/projects/${projectId}/tasks/${task.id}/detail/`
 
     const navigate = useNavigate()
