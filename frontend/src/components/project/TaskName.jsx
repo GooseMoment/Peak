@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link } from "react-router-dom"
+import { useState } from "react"
 
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-function TaskName({projectId, task, color, due_date, isModalOpen, openModal}){
+import { completeTask, uncompleteTask } from "@/api/tasks.api"
+
+function TaskName({projectId, task, setTasks, color, due_date, isModalOpen, openModal}){
     const date = new Date()
     const pathRoot = `/app/projects/${projectId}/tasks/${task.id}/detail`
 
@@ -15,6 +17,25 @@ function TaskName({projectId, task, color, due_date, isModalOpen, openModal}){
         console.log(text)
     }
 
+    const toComplete = (id) => {
+        return async () => {
+            let completed_at = null
+            if (task.completed_at) {
+                await uncompleteTask(id)
+            }
+            else {
+                await completeTask(id)
+                completed_at = date.toISOString()
+            }
+            setTasks(prev => prev.map(task => {
+                if (task.id === id) {
+                    task.completed_at = completed_at
+                }
+                return task
+            }))
+        }
+    }
+
     const EditView = (
         <InputText 
             $completed={task.completed_at ? true : false} 
@@ -22,6 +43,7 @@ function TaskName({projectId, task, color, due_date, isModalOpen, openModal}){
             type='text'
             onChange={onchange}
             value={text}
+            placeholder="할 일의 이름을 입력해주세요."
         />
     )
 
@@ -38,6 +60,7 @@ function TaskName({projectId, task, color, due_date, isModalOpen, openModal}){
                     $completed={task.completed_at ? true : false}
                     $color={color}
                     $due_date={due_date}
+                    onClick={toComplete(task.id)}
                 >
                     {task.completed_at && <FeatherIcon icon="check"/>}
                 </TaskCircle>
@@ -63,6 +86,7 @@ const TaskNameBox = styled.div`
 `
 
 const TaskCircle = styled.div`
+    align-items: center;
     top: ${(props) => (props.$due_date ? 0.3 : 0)}em;
     width: 1.2em;
     height: 1.2em;
@@ -88,7 +112,7 @@ const Text = styled.div`
 const InputText = styled.input`
     font-weight: normal;
     font-size: 1.1em;
-    color: '#000000';
+    color: ${(props) => (props.$completed ? '#A4A4A4' : '#000000')};
     border: none;
     margin-top: 0.1em;
 

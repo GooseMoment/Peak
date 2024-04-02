@@ -9,7 +9,7 @@ function TaskCreateDetail({projectId, task, color, setTasks, isModalOpen, onClos
     return (
         <TaskCreateDetailBox>
             <TaskNameBox>
-                <TaskName task={task} color={color} isModalOpen={isModalOpen}/>
+                <TaskName task={task} setTasks={setTasks} color={color} isModalOpen={isModalOpen}/>
                 <Icons>
                     <FeatherIcon icon="trash-2" />
                     <FeatherIcon icon="x" onClick={onClose} />
