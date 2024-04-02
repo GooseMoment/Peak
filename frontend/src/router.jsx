@@ -94,7 +94,7 @@ const routes = [
                 },
                 children: [
                     {
-                        path: "tasks/:id/detail/",
+                        path: "tasks/:task_id/detail/",
                         children: [
                             {
                                 path: "true",
