@@ -1,13 +1,10 @@
-import { useState } from "react"
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-const TitleFrame = ({title, icon, onClose}) => {
-    const [text, setText] = useState('')
-    
+const TitleFrame = ({name, setName, icon, onClose}) => {    
     const onchange = (e) => {
-        setText(e.target.value)
-        console.log(text)
+        setName(e.target.value)
+        console.log(name)
     }
 
     return (
@@ -16,12 +13,12 @@ const TitleFrame = ({title, icon, onClose}) => {
                 <FeatherIcon icon={icon}/>
                 <InputText
                     type='text'
+                    value={name}
                     onChange={onchange}
-                    value={text}
+                    placeholder="이름을 입력하세요"
                 />
             </TitleBox>
             <Icons>
-                <FeatherIcon icon="trash-2" />
                 <FeatherIcon icon="x" onClick={onClose}/>
             </Icons>
         </TitleFrameBox>
@@ -61,6 +58,10 @@ const InputText = styled.input`
 
     &:focus {
         outline: none;
+    }
+
+    &::placeholder {
+        font-size: 0.9em;
     }
 `
 

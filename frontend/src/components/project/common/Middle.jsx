@@ -4,8 +4,9 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 import ModalPortal from "@components/common/ModalPortal"
+import Button from "@components/sign/Button"
 
-const MiddleFrame = ({items, isComponentOpen, setIsComponentOpen}) => {
+const MiddleFrame = ({items, submit, isComponentOpen, setIsComponentOpen}) => {
     const [content, setContent] = useState()
     
     const handleClickContent = (e) => {
@@ -24,7 +25,7 @@ const MiddleFrame = ({items, isComponentOpen, setIsComponentOpen}) => {
                 <FeatherIcon icon={item.icon} />}
                 <VLine/>
                 <ContentText id ={item.icon} onClick={handleClickContent}>
-                    {item.display}
+                    {item.display ? item.display : "없음"}
                 </ContentText>
             </ContentsBox>
             {(content === item.icon && isComponentOpen) ? 
@@ -33,7 +34,7 @@ const MiddleFrame = ({items, isComponentOpen, setIsComponentOpen}) => {
                 </ModalPortal> : null}
             </>
             ))}
-            
+            <AddButton onClick={submit}>추가하기</AddButton>
         </>
     )
 }
@@ -72,6 +73,11 @@ const ContentText = styled.div`
     &:hover {
     cursor: pointer;
     }
+`
+
+const AddButton = styled(Button)`
+    float: right;
+    margin: 1em;
 `
 
 export default MiddleFrame
