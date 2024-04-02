@@ -19,7 +19,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
     }
 
     const handleInputState = () => {
-        setInputState(!inputState)
+        setInputState(prev => !prev)
     }
 
     return <>
@@ -44,7 +44,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
                     placeholder="Write your daily comments"
                 />
                 ) : (
-                    <Comment style={{color: "#A4A4A4", fontStyle: "italic",}}>{"No daily comments yet"}</Comment>
+                    <Comment $color="#A4A4A4" $fontstyle="italic">{"No daily comments yet"}</Comment>
                 )
             )}
         </CommentBox>
@@ -58,7 +58,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
             <EmojiAddButton />
         </ReactionBox>
         {/* TODO: who and what emoji */}
-        </ DetailHeader>
+        </DetailHeader>
         
         <DetailBody>
         {
@@ -66,7 +66,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
                 <LogDetailProject key={dailyProject.projectID} project={dailyProject}/>
             ))
         }
-        </ DetailBody>
+        </DetailBody>
     </>
 }
 
@@ -126,6 +126,8 @@ align-items: center;
 
 const Comment = styled.div`
 white-space: normal;
+color: ${props => props.$color};
+font-style: ${props => props.$fontstyle};
 `
 
 const CommentInput = styled.input`
