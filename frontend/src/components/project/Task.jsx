@@ -7,13 +7,11 @@ import TaskCreateDetail from "@/pages/taskDetails/TaskCreateDetail";
 import ModalPortal from "@components/common/ModalPortal";
 import TaskName from "./TaskName";
 
-import priority2 from "@assets/project/priority/priority2.svg"
-import priority1 from "@assets/project/priority/priority1.svg"
+import Priority from "./Priority";
 
 function Task({projectId, task, setTasks, color}){
     const today = new Date()
     const [isModalOpen, setIsModalOpen] = useState(false)
-
     const navigate = useNavigate()
     
     const openModal = () => {
@@ -27,14 +25,15 @@ function Task({projectId, task, setTasks, color}){
 
     return (
         <Box>
-            {(task.priority === 2) ? <img src={priority2}/> : 
-            (task.priority === 1) ? <img src={priority1}/> : <div/>}
-            <TaskName projectId={projectId} task={task} setTasks={setTasks} color={color} due_date={task.due_date} isModalOpen={isModalOpen} openModal={openModal}/>
-            {task.due_date && <CalendarText>
-                    {task.due_date === today.toISOString().slice(0, 10) && <CalendarTextPlus>오늘</CalendarTextPlus>}
-                    {task.due_date === today.toISOString().slice(0, 10) && "| "}
-                    {task.due_date}
-            </CalendarText>}
+            <Priority priority={task.priority}/>
+            <div>
+                <TaskName projectId={projectId} task={task} setTasks={setTasks} color={color} due_date={task.due_date} isModalOpen={isModalOpen} openModal={openModal}/>
+                {task.due_date && <CalendarText>
+                        {task.due_date === today.toISOString().slice(0, 10) && <CalendarTextPlus>오늘</CalendarTextPlus>}
+                        {task.due_date === today.toISOString().slice(0, 10) && "| "}
+                        {task.due_date}
+                </CalendarText>}
+            </div>
             {isModalOpen &&
             <ModalPortal closeModal={closeModal}>
                 <TaskCreateDetail projectId={projectId} task={task} color={color} setTasks={setTasks} isModalOpen={isModalOpen} onClose={closeModal} />
@@ -44,8 +43,17 @@ function Task({projectId, task, setTasks, color}){
 }
 
 const Box = styled.div`
+    display: flex;
+    align-items: center;
     margin-top: 1em;
     margin-bottom: 2em;
+
+    & img {
+        width: 1em;
+        height: 1em;
+        margin-top: 0.4em;
+        margin-right: 0.2em;
+    }
 `
 
 const CalendarText = styled.p`
