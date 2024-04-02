@@ -3,7 +3,7 @@ import Section, { Name, Value, Sync } from "@components/settings/Section"
 
 const Blocks = () => {
     return <>
-        <PageTitle>Blocks</PageTitle>
+        <PageTitle>Blocks <Sync /></PageTitle>
         <Section>
             <Name>Users blocked by me</Name>
             <Value>

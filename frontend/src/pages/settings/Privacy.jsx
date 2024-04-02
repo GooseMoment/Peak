@@ -10,9 +10,9 @@ const Privacy = () => {
     const submit = useSubmit()
 
     return <>
-        <PageTitle>Privacy</PageTitle>
+        <PageTitle>Privacy <Sync /></PageTitle>
         <Section>
-            <Name>Accept follow manually <Sync /></Name>
+            <Name>Accept follow manually</Name>
             <Description>Follow requests will be pending until you accept them.</Description>
             <Value>
                 <Switch 
@@ -23,7 +23,7 @@ const Privacy = () => {
         </Section>
 
         <Section>
-            <Name>Accept follows of your followings automatically <Sync /></Name>
+            <Name>Accept follows of your followings automatically</Name>
             <Description>If one of your followings sends you follow request, you accept it without your action.</Description>
             <Value>
                 <Switch 
@@ -34,7 +34,7 @@ const Privacy = () => {
         </Section>
 
         <Section>
-            <Name>Visibility of my followings & followers list <Sync /></Name>
+            <Name>Visibility of my followings & followers list</Name>
             <Description>You can set who can see your personal connections.</Description>
             <Value>
                 <Select
