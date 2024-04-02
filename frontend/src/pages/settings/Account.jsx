@@ -105,7 +105,7 @@ const Account = () => {
                     <div>
                         <SubmitButton onClick={resetPassword}>Change</SubmitButton>
                     </div>
-                </PasswordChangeInputs> : null}
+                </PasswordChangeInputs> : <PasswordChangeInputsEmpty />}
             </Value>
         </Section>
     </>
@@ -166,6 +166,12 @@ const PasswordChangeInputs = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1em;
+`
+
+const PasswordChangeInputsEmpty = styled.div`
+    margin-top: 1em;
+    width: 100%;
+    height: calc(1em * 4 + 0.75em * 7 + 1em * 3 + 0.5em * 2 + 1em);
 `
 
 export default Account
