@@ -11,9 +11,10 @@ const root = document.getElementById("root")
 
 // see: https://github.com/remix-run/react-router/discussions/9864#discussioncomment-6350903
 
-const ModalPortal = ({ children, closeModal, additional }) => {
+const ModalPortal = ({ children, closeModal, additional=false }) => {
     const [isOpen, setIsOpen] = useState(true)
-    const shouldRender = useDelayUnmount(isOpen, 100, closeModal)
+    
+    const shouldRender = !additional ? useDelayUnmount(isOpen, 100, closeModal) : true
 
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)
