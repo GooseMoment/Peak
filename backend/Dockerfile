@@ -13,6 +13,9 @@ ENV PYTHONUNBUFFERED 1
 
 RUN apk update
 RUN apk add curl
+RUN apk add gcc
+RUN apk add libc-dev
+RUN apk add libffi-dev
 
 RUN pip install --upgrade pip
 # requirements.txt를 분리해서 다른 파일이 변경되더라도 재install 하지 않음 
