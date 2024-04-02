@@ -5,7 +5,7 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.SerializerMethodField(read_only=True)
     is_me = serializers.SerializerMethodField(read_only=True)
-    profile_img = serializers.ImageField(read_only=True)
+    profile_img = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
@@ -22,3 +22,10 @@ class UserSerializer(serializers.ModelSerializer):
     
     def get_is_me(self, obj):
         return self.context.get("is_me", False)
+    
+    def get_profile_img(self, obj):
+        if obj.profile_img:
+            return obj.profile_img
+        
+        return "https://assets-dev.peak.ooo/user_profile_imgs%2Fdefault.jpg"
+    
