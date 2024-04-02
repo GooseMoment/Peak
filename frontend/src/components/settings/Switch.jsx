@@ -9,26 +9,27 @@ const Switch = ({settings=getClientSettings(), submit, name, online=false}) => {
     const [value, setValue] = useState(settings[name])
     const timer = useRef(null)
 
-    const doChange = () => {
-        if (online) {
-            let data = {}
-            data[name] = !value
-            submit(data, {action: "..", method: "PATCH", navigate: false})
-            return
-        }
-
-        setClientSettingsByName(name, value)
+    const sendChangeOnline = () => {
+        let data = {}
+        data[name] = value
+        submit(data, {action: "..", method: "PATCH", navigate: false})
+        timer.current = null
     }
 
     const onChange = e => {
         const checked = e.target.checked
         setValue(checked)
 
+        if (!online) {
+            setClientSettingsByName(name, checked)
+            return
+        }
+
         if (timer.current !== null) {
             clearTimeout(timer.current)
         }
 
-        timer.current = setTimeout(doChange, 1000)
+        timer.current = setTimeout(sendChangeOnline, 1000)
     }
 
     return <ToggleSwitch>
