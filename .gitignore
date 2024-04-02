@@ -1,4 +1,5 @@
 .DS_Store
+.env.dev
 .env.prod
 .parcel-cache
 dist
