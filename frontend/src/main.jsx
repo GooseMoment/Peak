@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <GlobalStyle />
-        <ToastContainer />
+        <ToastContainer position="bottom-left" stacked hideProgressBar />
         <RouterProvider router={router} />
     </React.StrictMode>,
 )

@@ -16,17 +16,19 @@ import SignPage from "@pages/SignPage"
 
 import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
 
+const redirectIfSignedIn = () => {
+    if (isSignedIn()) {
+        return redirect("/app/")
+    }
+
+    return null
+}
+
 const routes = [
     {
         path: "/",
         errorElement: <ErrorPage />,
-        loader: () => {
-            if (isSignedIn()) {
-                return redirect("/app/")
-            }
-
-            return null
-        },
+        loader: redirectIfSignedIn,
         children: [
             {
                 index: true,
