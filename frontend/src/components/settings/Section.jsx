@@ -4,6 +4,13 @@ import styled from "styled-components"
 
 const Section = styled.section`
     margin-top: 2em;
+
+    &::after {
+        display: block; 
+        height: 0; 
+        content: ' ';
+        clear: both;
+    }
 `
 
 export const Name = styled.h2`

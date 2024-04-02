@@ -22,7 +22,7 @@ const Box = styled.p`
 
 const StyledInput = styled.input`
     width: 100%;
-    padding: 0.75em;
+    padding: 0.75em 1.25em;
     border: 1px solid #FE4902;
     border-radius: 5000px;
     
@@ -45,7 +45,7 @@ const IconBox = styled.span`
     left: 1em;
     height: 100%;
 
-    & svg {
+    & svg, & img {
         height: 1em;
     }
 `
