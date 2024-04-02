@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
@@ -16,7 +16,6 @@ function Contents({task, setTasks}) {
     const pathRoot = `/app/projects/${projectId}/tasks/${task.id}/detail/`
 
     const navigate = useNavigate()
-    const location = useLocation()
 
     const goPreviousOrIndex = () => {
         navigate(`/app/projects/${projectId}`)

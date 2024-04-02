@@ -54,12 +54,10 @@ const ProjectCreate = ({onClose}) => {
     }
 
     return (
-        <>
         <ProjectBox>
             <TitleFrame name={name} setName={setName} icon="archive" onClose={onClose}/>
             <MiddleFrame items={items} submit={submit} isComponentOpen={isComponentOpen} setIsComponentOpen={setIsComponentOpen}/>
         </ProjectBox>
-        </>
     )
 }
 
