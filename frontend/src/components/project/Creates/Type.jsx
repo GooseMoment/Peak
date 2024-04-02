@@ -1,17 +1,26 @@
 import styled from "styled-components"
 
-import DetailFrame from "@components/project/common/DetailFrame"
+import DetailFrame from "@components/project/common/Detail"
 
 import goal from "@assets/project/type/goal.svg"
 import regular from "@assets/project/type/regular.svg"
 
-const Type = ({closeComponent}) => {
+const Type = ({setType, setDisplayType, closeComponent}) => {
+
+    const changeType = (type, displaytype) => {
+        return async () => {
+            await setType(type)
+            await setDisplayType(displaytype)
+            closeComponent()
+        }
+    }
+
     return (
         <DetailFrame title="프로젝트 설정" onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
-                    <ItemText>{item.display}</ItemText>
+                    <ItemText onClick={changeType(item.type, item.display)}>{item.display}</ItemText>
                 </ItemBlock>
             ))}
         </DetailFrame>
@@ -46,8 +55,8 @@ const ItemText = styled.p`
 `
 
 const items = [
-    {icon: <img src={regular}/>, display: "상시 프로젝트"},
-    {icon: <img src={goal}/>, display: "목표 프로젝트"}
+    {icon: <img src={regular}/>, display: "상시 프로젝트", type: "regular"},
+    {icon: <img src={goal}/>, display: "목표 프로젝트", type: "goal"}
 ]
 
 export default Type

@@ -1,18 +1,27 @@
 import styled from "styled-components"
 
-import DetailFrame from "@components/project/common/DetailFrame"
+import DetailFrame from "@components/project/common/Detail"
 
 import publicsvg from "@assets/project/privacy/public.svg"
 import protectedsvg from "@assets/project/privacy/protected.svg"
 import privatesvg from "@assets/project/privacy/private.svg"
 
-const Privacy = ({closeComponent}) => {
+const Privacy = ({setPrivacy, setDisplayPrivacy, closeComponent}) => {
+
+    const changePrivacy = (privacy, displayPrivacy) => {
+        return async () => {
+            await setPrivacy(privacy)
+            await setDisplayPrivacy(displayPrivacy)
+            closeComponent()
+        }
+    }
+
     return (
         <DetailFrame title="프로젝트 설정" onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
-                    <ItemText>{item.display}</ItemText>
+                    <ItemText onClick={changePrivacy(item.privacy, item.display)}>{item.display}</ItemText>
                 </ItemBlock>
             ))}
         </DetailFrame>
@@ -47,9 +56,9 @@ const ItemText = styled.p`
 `
 
 const items = [
-    {icon: <img src={publicsvg}/>, display: "전체공개"},
-    {icon: <img src={protectedsvg}/>, display: "팔로워공개"},
-    {icon: <img src={privatesvg}/>, display: "비공개"}
+    {icon: <img src={publicsvg}/>, display: "전체공개", privacy: "public"},
+    {icon: <img src={protectedsvg}/>, display: "팔로워공개", privacy: "protected"},
+    {icon: <img src={privatesvg}/>, display: "비공개", privacy: "private"}
 ]
 
 export default Privacy

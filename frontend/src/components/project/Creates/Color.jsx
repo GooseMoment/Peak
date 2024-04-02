@@ -1,15 +1,24 @@
 import styled from "styled-components"
 
-import DetailFrame from "@components/project/common/DetailFrame"
+import DetailFrame from "@components/project/common/Detail"
 import FeatherIcon from "feather-icons-react"
 
-const Color = ({closeComponent}) => {
+const Color = ({setColor, setDisplayColor, closeComponent}) => {
+
+    const changeColor = (color, displayColor) => {
+        return async () => {
+            await setColor(color)
+            await setDisplayColor(displayColor)
+            closeComponent()
+        }
+    }
+
     return (
         <DetailFrame title="색깔 설정" onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     <FeatherIcon icon="circle" fill={'#'+item.color}/>
-                    <ItemText>{item.display}</ItemText>
+                    <ItemText onClick={changeColor(item.color, item.display)}>{item.display}</ItemText>
                 </ItemBlock>
             ))}
         </DetailFrame>
