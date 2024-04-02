@@ -81,13 +81,13 @@ const TaskCircle = styled.div`
 
 const Text = styled.div`
     font-style: normal;
-    font-size: 1em;
+    font-size: 1.1em;
     color: ${(props) => (props.$completed ? '#A4A4A4' : '#000000')};
 `
 
 const InputText = styled.input`
     font-weight: normal;
-    font-size: 1em;
+    font-size: 1.1em;
     color: '#000000';
     border: none;
     margin-top: 0.1em;
