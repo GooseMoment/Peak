@@ -53,10 +53,11 @@ INSTALLED_APPS = [
 
     # 'today',
     # 'search',
-    # 'user_setting',
+    'user_setting',
 
     'rest_framework',
     'corsheaders',
+    'dummies',
 ]
 
 REST_FRAMEWORK = {

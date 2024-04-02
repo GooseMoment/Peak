@@ -1,9 +1,11 @@
 from django.urls import path
 
 from . import views
+from user_setting.views import UserSettingDetail
 
 urlpatterns = [
-    path("current_user/", views.get_current_user),
+    path("users/me/", views.get_me),
+    path("users/me/setting/", UserSettingDetail.as_view()),
     path("sign_in/", views.sign_in),
     path("sign_out/", views.sign_out),
     path("sign_up/", views.sign_up),

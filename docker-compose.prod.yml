@@ -23,7 +23,6 @@ services:
       - caddy_data:/data
       - caddy_config:/config
       - frontend-dist:/srv/frontend
-      - landing-dist:/srv/landing
   api:
     build: ./backend
     command: gunicorn django_peak.wsgi:application --bind 0.0.0.0:8000
@@ -58,6 +57,4 @@ volumes:
     external: true
   caddy_config:
   frontend-dist:
-    external: true
-  landing-dist:
     external: true

@@ -7,7 +7,8 @@
          "@api/*": ["src/api/*"],
          "@components/*": ["src/components/*"],
          "@utils/*": ["src/utils/*"],
-         "@containers/*": ["src/containers/*"]
+         "@containers/*": ["src/containers/*"],
+         "@assets/*": ["src/assets/*"]
        }
     }
 }
