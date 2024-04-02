@@ -113,8 +113,9 @@ const Account = () => {
 
 const ImgNameEmailContainer = styled.div`
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 3em;
+    gap: 2.5em;
 `
 
 const ProfileImg = styled.img`
