@@ -30,7 +30,7 @@ const LogDetailTask = ({ task, color }) => {
             </TaskName>
 
             {task.completedAt ? (
-                <Ago> &nbsp;{DateTime.fromJSDate(task.completedAt).setLocale("en").toRelative()} </Ago>
+                <Ago> {DateTime.fromJSDate(task.completedAt).setLocale("en").toRelative()} </Ago>
             ) : null}
         </TaskContainer>
                 </div>
@@ -70,6 +70,7 @@ font-size: 1.1em;
 `
 
 const Ago = styled.span`
+margin-left: 0.5em;
 display: inline;
 font-size: 0.9em;
 color: #A4A4A4;
