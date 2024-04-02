@@ -16,12 +16,13 @@ const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
             $bgcolor={userLogSimple.index === selectedIndex? "#ffd7c7" : "#FEFDFC"}
         >
         {/* separate the "Profile" into a separate file? */}
+        {/* TODO: 화면 너비 줄이면 프로필 배열 망가지는 문제 해결 */}
         <Profile>
             <ProfileImgWrapper $color={userLogSimple.isRead ? "#A4A4A4" : userLogSimple.task.projectColor} >
                 <img src={userLogSimple.user.profileImgURI}/>
             </ProfileImgWrapper>
             <Username>
-                @{putEllipsis(userLogSimple.user.username, 11)}
+                @{userLogSimple.user.username}
             </Username>
         </Profile>
         <RecentTask>
@@ -75,6 +76,9 @@ padding-bottom: 0.5em;
 const Username = styled.div`
 font-size: 1em;
 text-align: center;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
 `
 
 const RecentTask = styled.div`

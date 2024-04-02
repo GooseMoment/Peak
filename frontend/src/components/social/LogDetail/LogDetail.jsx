@@ -5,10 +5,6 @@ import ReactionEmoji from "@components/social/ReactionEmoji";
 import EmojiAddButton from "@components/social/EmojiAddButton";
 import LogDetailProject from "@components/social/LogDetail/LogDetailProject";
 
-const DisplayUsername = (username) => {
-    return username.length > 11 ? username.substring(0, 9) + '...' : username;
-}
-
 const LogDetail = ({userLogsDetail, isSelf}) => {
     const [tempText, setTempText] = useState(null)
     const [inputState, setInputState] = useState(false)
@@ -29,7 +25,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
                 <img src={userLogsDetail.user.profileImgURI}/>
             </ProfileImg>
             <Username>
-                @{DisplayUsername(userLogsDetail.user.username)}
+                @{userLogsDetail.user.username}
             </Username>
         </Profile>
         <CommentBox onClick={handleInputState}>
@@ -110,6 +106,9 @@ padding-bottom: 0.5em;
 const Username = styled.div`
 font-size: 1em;
 text-align: center;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
 `
 
 const CommentBox = styled.div`
