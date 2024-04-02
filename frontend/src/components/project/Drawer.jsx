@@ -5,7 +5,7 @@ import FeatherIcon from 'feather-icons-react';
 
 import { getTasksByDrawer } from "@api/tasks.api"
 import Task from "@components/project/Task"
-import TaskCreateSimple from "@components/project/Creates/TaskCreateSimple";
+import TaskCreateSimple from "@components/project/creates/TaskCreateSimple";
 
 function Drawer({projectId, drawer, color}){
     const [tasks, setTasks] = useState([])
@@ -26,8 +26,8 @@ function Drawer({projectId, drawer, color}){
 
     const DrawerIcons = [
         {icon: "plus", click: () => {setsIsCreateOpen(true)}},
-        {icon: "more-horizontal", click: () => {}},
         {icon: "chevron-down", click: handleCollapsed},
+        {icon: "more-horizontal", click: () => {}},
     ]
 
     async function fetchTasks() {

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import FeatherIcon from "feather-icons-react";
 
 import Drawer from "@components/project/Drawer"
-import DrawerCreate from "@components/project/Creates/DrawerCreate";
+import DrawerCreate from "@components/project/creates/DrawerCreate";
 import ModalPortal from "@components/common/ModalPortal";
 
 const ProjectPage = () => {

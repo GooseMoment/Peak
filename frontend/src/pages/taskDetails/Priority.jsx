@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import DetailFrame from "@components/project/common/DetailFrame"
+import DetailFrame from "@components/project/common/Detail"
 import { patchTask } from "@api/tasks.api"
 
 import normal from "@/assets/project/priority/normal.svg"

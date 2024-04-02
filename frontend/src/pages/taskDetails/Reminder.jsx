@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 
 import styled from "styled-components"
 
-import DetailFrame from "@components/project/common/DetailFrame"
+import DetailFrame from "@components/project/common/Detail"
 import { patchTask } from "@api/tasks.api"
 
 import before_5 from "@/assets/project/reminder/before_5.svg"

@@ -4,7 +4,7 @@ import { useState, Fragment } from "react"
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-import DetailFrame from "@components/project/common/DetailFrame"
+import DetailFrame from "@components/project/common/Detail"
 
 import { patchTask } from "@api/tasks.api"
 

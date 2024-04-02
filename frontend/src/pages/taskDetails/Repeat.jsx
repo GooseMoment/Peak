@@ -1,4 +1,4 @@
-import DetailFrame from "@components/project/common/DetailFrame"
+import DetailFrame from "@components/project/common/Detail"
 
 const Repeat = ( { onClose } ) => {
     return (
