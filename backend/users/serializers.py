@@ -5,12 +5,13 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.SerializerMethodField(read_only=True)
     is_me = serializers.SerializerMethodField(read_only=True)
+    profile_img = serializers.ImageField(read_only=True)
 
     class Meta:
         model = User
         fields = [
             "username", "display_name", "followings_count", "followers_count",
-            "profile_img_uri", "bio", "email", "is_me",
+            "profile_img", "bio", "email", "is_me",
         ]
 
     def get_email(self, obj):

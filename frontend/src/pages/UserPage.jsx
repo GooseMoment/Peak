@@ -17,7 +17,7 @@ const UserPage = () => {
     return <>
         <h1>@{user.username}'s profile</h1>
         <ul>
-            <img src={user.profile_img_uri} />
+            <img src={user.profile_img} />
             <li>display_name: {user.display_name}</li>
         </ul>
         <br/>

@@ -4,6 +4,9 @@ from django.contrib.auth.models import PermissionsMixin
 
 from api.models import Base
 
+import uuid
+import os
+
 class UserManager(BaseUserManager):
     def create_user(self, display_name, username, email, password=None):
         user = User(display_name=display_name, username=username, email=email)
@@ -17,6 +20,12 @@ class UserManager(BaseUserManager):
         user.is_superuser = True
         user.save()
 
+# from: https://stackoverflow.com/a/2677474
+def get_file_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return os.path.join('user_profile_imgs', filename)
+
 class User(AbstractBaseUser, Base, PermissionsMixin):
     username = models.CharField(max_length=18, unique=True)
     display_name = models.CharField(max_length=18, null=True, blank=True)
@@ -24,7 +33,11 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
     email = models.EmailField(unique=True)
     followings_count = models.IntegerField(default=0)
     followers_count = models.IntegerField(default=0)
-    profile_img_uri = models.URLField() # TODO: default profile img
+    profile_img = models.ImageField(
+        upload_to=get_file_path,
+        null=True,
+        blank=True,
+    )
     bio = models.TextField(max_length=50, null=True, blank=True)
 
     is_staff = models.BooleanField(default=False)

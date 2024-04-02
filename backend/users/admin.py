@@ -12,7 +12,7 @@ class UserAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ["username", "display_name", "email", "profile_img_uri", "bio"],
+                "fields": ["username", "display_name", "email", "profile_img", "bio"],
             },
         ),
         (
