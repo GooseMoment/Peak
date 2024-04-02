@@ -12,30 +12,36 @@ const SocialFollowingPage = () => {
     const [selectedIndex, setSelectedIndex] = useState(null)
 
     return <>
-        <SocialPageTitle active="following"/>
-        <div style={{whiteSpace: 'nowrap'}}>
-        <Container>
-            <SocialCalendar
-                newLogDates={mockNewLogDates}
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-            >
-            </SocialCalendar>
-            <DailyLogContainer>
-                {mockDailyFollowersLog.map((dailyFollowersLog) => (
-                    <DailyLogPreview key={dailyFollowersLog.index} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
-                ))}
-            </DailyLogContainer>
+        <SocialPageTitle active="following" />
 
-            {/* {selectedDate.toLocaleDateString()} */}
-        </Container>
-        <Container>
-            <LogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true}/>
-        </Container>
-        </div>
+        <Wrapper>
 
+            <Container>
+                <SocialCalendar
+                    newLogDates={mockNewLogDates}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                >
+                </SocialCalendar>
+                <DailyLogContainer>
+                    {mockDailyFollowersLog.map((dailyFollowersLog) => (
+                        <DailyLogPreview key={dailyFollowersLog.index} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+                    ))}
+                </DailyLogContainer>
+
+                {/* {selectedDate.toLocaleDateString()} */}
+            </Container>
+            <Container>
+                <LogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true} />
+            </Container>
+
+        </Wrapper>
     </>
 }
+
+const Wrapper = styled.div`
+    white-space: nowrap;
+`
 
 const Container = styled.div`
 display: inline-block;
@@ -112,28 +118,27 @@ const mockDailyFollowersLog = [
 const mockDailyFollowerLogsDetail = [
     {
         user: {
-            username: "minyoy", profileImgURI: "https://avatars.githubusercontent.com/u/65756020?v=4", 
+            username: "minyoy", profileImgURI: "https://avatars.githubusercontent.com/u/65756020?v=4",
         },
         dailyComment: {
             name: "오늘도 열시미 살아보았나 내가 보기엔 아닌 거 같은데 너가 보기엔 어떻니",
-            // name: null,
             reaction: [
-                {emoji: "🥳", reactionNum: 2},
-                {emoji: "😅", reactionNum: 3}
+                { emoji: "🥳", reactionNum: 2 },
+                { emoji: "😅", reactionNum: 3 }
             ]
         },
         dailyProjects: [
             {
                 projectID: "개발", projectColor: "#2E61DC",
                 dailytasks: [
-                    { id: "TEMP11", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [ { emoji: "🥳", reactionNum: 2 } ] },
-                    { id: "TEMP12", name: "총장하기", completedAt: null, reaction: [ { emoji: null, reactionNum: 4 } ] }
+                    { id: "TEMP11", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }] },
+                    { id: "TEMP12", name: "총장하기", completedAt: null, reaction: [{ emoji: null, reactionNum: 4 }] }
                 ]
             },
             {
                 projectID: "수강신청", projectColor: "#ff0022",
                 dailytasks: [
-                    { id: "TEMP15", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [ { emoji: "🥳", reactionNum: 2 }, { emoji: "😅", reactionNum: 3 } ] },
+                    { id: "TEMP15", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }, { emoji: "😅", reactionNum: 3 }] },
                 ]
             },
         ]

@@ -15,7 +15,4 @@ const SocialExplorePage = () => {
     </>
 }
 
-const PageTitle = styled.h1`
-`
-
 export default SocialExplorePage

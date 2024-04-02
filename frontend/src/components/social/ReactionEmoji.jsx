@@ -8,7 +8,7 @@ const ReactionEmoji = ({emoji}) => {
         setEmojiClick(prev => !prev)
     }
     
-    return <EmojiBox onClick={handleEmoji} style={{backgroundColor: emojiClick? "#FFD7C7" : "#F2F2F2"}}>
+    return <EmojiBox onClick={handleEmoji} $bgcolor={emojiClick? "#FFD7C7" : "#F2F2F2"}>
         {emoji.emoji} {emoji.reactionNum}
     </ EmojiBox>
 }
@@ -22,6 +22,7 @@ padding: 0.5em;
 height: 1em;
 
 border-radius: 0.5em;
+background-color: ${props => props.$bgcolor};
 `
 
 export default ReactionEmoji

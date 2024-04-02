@@ -5,7 +5,7 @@ const EmojiButton = ({emoji, isHover, setIsHover, setIsModalOpen}) => {
     return <EmojiBox 
         onMouseEnter={e => setIsHover(emoji)}
         onClick={() => setIsModalOpen(false)}
-        style={{backgroundColor: isHover==emoji ? "#FFD7C7" : "inherit" }}
+        $bgcolor = {isHover===emoji ? "#FFD7C7" : "inherit" }
     >
         {emoji}
     </EmojiBox>
@@ -20,6 +20,8 @@ font-size: 1.2rem;
 text-align: center;
 
 border-radius: 0.5rem;
+
+background-color: ${props => props.$bgcolor};
 `
 
 export default EmojiButton

@@ -12,7 +12,7 @@ const putEllipsis = (text, maxLength) => {
 
 const LogDetailTask = ({ task, color }) => {
     return <LogTaskBox>
-        <div style={{display: "flex", flexDirection: "row"}}>
+        <TaskHeader>
         {task.completedAt ? (
             <FeatherIcon icon="check-circle" />
         ) : (
@@ -33,7 +33,7 @@ const LogDetailTask = ({ task, color }) => {
                 <Ago> {DateTime.fromJSDate(task.completedAt).setLocale("en").toRelative()} </Ago>
             ) : null}
         </TaskContainer>
-                </div>
+        </TaskHeader>
 
         <ReactionBox>
             {task.completedAt ? (
@@ -56,6 +56,11 @@ gap: 1em;
 flex-direction: column;
 
 padding: 1.2em 1em 1em;
+`
+
+const TaskHeader = styled.div`
+display: flex;
+flex-direction: row;
 `
 
 const TaskContainer = styled.div`
