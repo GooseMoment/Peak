@@ -31,11 +31,11 @@ const items = [
     {icon: "archive", name: "Projects", to: "projects", end: true},
 ]
 
-const MiddleBox = styled.div`
+export const MiddleBox = styled.div`
 flex-grow: 99;
 `
 
-const ItemBox = styled.div`
+export const ItemBox = styled.div`
 font-size: 1em;
 padding: 0.75em 0 0.75em 0.5em;
 margin: 0 0.75em;

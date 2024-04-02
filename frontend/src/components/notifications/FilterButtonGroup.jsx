@@ -1,3 +1,5 @@
+import MildButton from "@components/common/MildButton"
+
 import styled from "styled-components"
 
 const FilterButtonGroup = ({active, setActive, filters}) => {
@@ -19,13 +21,8 @@ border-radius: 60px;
 padding: 0.3em;
 `
 
-const FilterButton = styled.button`
+const FilterButton = styled(MildButton)`
 flex: 1 1 auto;
-
-color: inherit;
-border: none;
-font: inherit;
-outline: inherit;
 
 font-size: 0.9rem;
 font-weight: 500;
