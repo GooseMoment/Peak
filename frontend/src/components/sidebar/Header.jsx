@@ -1,12 +1,13 @@
 import FeatherIcon from "feather-icons-react"
 import styled, { css } from "styled-components"
+import MildButton from "@components/common/MildButton"
 
 const Header = ({collapsed, setCollapsed}) => {
     return <header>
         <ButtonContainer $collapsed={collapsed}>
-            <StyledButton onClick={() => setCollapsed(previous => !previous)}>
+            <MildButton onClick={() => setCollapsed(previous => !previous)}>
                 <FeatherIcon icon={collapsed ? "chevrons-right" : "chevrons-left"} />
-            </StyledButton>
+            </MildButton>
         </ButtonContainer>
     </header>
 }
@@ -21,16 +22,6 @@ margin: 0 0.75em;
 ${({$collapsed}) => $collapsed ? css`
     justify-content: center;
 ` : null}
-`
-
-const StyledButton = styled.button`
-background: none;
-color: inherit;
-border: none;
-padding: 0;
-font: inherit;
-cursor: pointer;
-outline: inherit;
 `
 
 export default Header

@@ -16,7 +16,7 @@ const Sidebar = ({collapsed, setCollapsed}) => {
     </SidebarBox>
 }
 
-const SidebarBox = styled.nav`
+export const SidebarBox = styled.nav`
 z-index: 99;
 
 position: fixed;

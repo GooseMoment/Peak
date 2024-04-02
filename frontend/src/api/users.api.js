@@ -1,4 +1,4 @@
-import client from "@api/client"
+import client, { KEY_IS_SIGNED_IN, VALUE_IS_SIGNED_IN } from "@api/client"
 
 export const getMe = async () => {
     try {
@@ -27,9 +27,6 @@ export const patchUser = async (data) => {
         throw e
     }
 }
-
-const KEY_IS_SIGNED_IN = "is_signed_in"
-const VALUE_IS_SIGNED_IN = "yeah"
 
 export const isSignedIn = () => {
     return localStorage.getItem(KEY_IS_SIGNED_IN) === VALUE_IS_SIGNED_IN ? true : false
@@ -81,4 +78,19 @@ export const signUp = async (email, password, username) => {
 
         throw new Error(msg)
     }
+}
+
+export const signOut = async () => {
+    localStorage.removeItem(KEY_IS_SIGNED_IN)
+
+    try {
+        const res = await client.get("sign_out/")
+        if (res.status === 200) {
+            return true
+        }
+    } catch (e) {
+        return false
+    }
+
+    return false
 }
