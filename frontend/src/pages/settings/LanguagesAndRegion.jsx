@@ -1,12 +1,9 @@
 import Switch from "@components/settings/Switch"
 import PageTitle from "@components/common/PageTitle"
-import Section, { Name, Description, Value, Sync } from "@components/settings/Section"
-import { useState } from "react"
-import Select from "@/components/settings/Select"
+import Section, { Name, Value } from "@components/settings/Section"
+import Select from "@components/settings/Select"
 
 const LanguagesAndRegion = () => {
-    const [test, setTest] = useState(true)
-
     return <>
         <PageTitle>Languages & Region</PageTitle>
         <Section>
