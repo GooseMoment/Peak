@@ -45,6 +45,14 @@ docker volume create db_data
 
 ### 개발 환경일시
 
+실행 전, `.env.dev` 파일이 필요합니다. `.env.dev.example`을 `.env.dev`로 복사합시다.
+
+```bash
+cp .env.dev.example .env.dev
+```
+
+@JedBeom 에게 전달받은 값들로 `.env.dev`를 수정합니다. (특히 S3 부분)
+
 다른 터미널(또는 VSCode +버튼 눌러서 터미널 탭 추가)에서 `frontend`에서 `npm run dev` 실행 
 
 ```bash
