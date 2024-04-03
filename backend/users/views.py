@@ -150,20 +150,13 @@ def patch_password(request: Request):
 
 @api_view(["POST"])
 def upload_profile_img(request: Request):
-    profile_img = request.FILES.get("profile_img")
-
-    if not profile_img:
-        return Response({
-            "code": "UPLOADPROFILEIMG_NO_IMG",
-            "message": "profile_img is required."
-        }, status=status.HTTP_400_BAD_REQUEST)
+    profile_img = request.FILES.get("profile_img", None) # None: only removes old profile_img
 
     old = request.user.profile_img
+    if old:
+        old.delete()
 
     request.user.profile_img = profile_img
     request.user.save()
 
-    if old:
-        old.delete()
-        
     return Response(status=status.HTTP_200_OK)
