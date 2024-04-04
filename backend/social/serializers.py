@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import *
 
 from users.serializers import UserSerializer
+from tasks.serializers import TaskSerializer
 
 class EmojiSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,6 +17,9 @@ class PeckSerializer(serializers.ModelSerializer):
     class Meta:
         model = Peck
         fields = ["id", "user", "task", "count"]
+
+class DailyReportSerializer(serializers.Serializer):
+    task = TaskSerializer()
 
 class DailyCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)

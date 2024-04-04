@@ -5,8 +5,9 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 urlpatterns = [
-    path('follow/@<str:follower>/@<str:followee>/', views.FollowView.as_view(), name='follow'),
-    path('block/@<str:blocker>/@<str:blockee>/', views.BlockView.as_view(), name='block'),
+    path('follow/@<str:follower>/@<str:followee>/', views.FollowView.as_view()),
+    path('block/@<str:blocker>/@<str:blockee>/', views.BlockView.as_view()),
+    path('daily/report/@<str:username>/<str:day>/', views.get_daily_report),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
