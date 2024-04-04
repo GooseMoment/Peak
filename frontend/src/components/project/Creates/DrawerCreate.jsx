@@ -41,7 +41,7 @@ const DrawerCreate = ({onClose}) => {
             await postDrawer(edit)
             notify.success("서랍 생성에 성공하였습니다.")
         } catch (e) {
-            notify.err("서랍 생성에 실패했습니다.")
+            notify.error("서랍 생성에 실패했습니다.")
         }
     }
 
