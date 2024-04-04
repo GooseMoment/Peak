@@ -3,16 +3,16 @@ import FeatherIcon from "feather-icons-react";
 import { DateTime } from "luxon"
 
 import ReactionEmoji from "@components/social/ReactionEmoji";
-import AddEmoji from "@components/social/AddEmoji";
-import AddPeak from "@components/social/AddPeak";
+import EmojiAddButton from "@components/social/EmojiAddButton";
+import PeakButton from "@components/social/PeakButton";
 
-const DisplayText = (text, maxLength) => {
+const putEllipsis = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength - 3) + '...' : text;
 }
 
 const LogDetailTask = ({ task, color }) => {
     return <LogTaskBox>
-        <div style={{display: "flex", flexDirection: "row"}}>
+        <TaskHeader>
         {task.completedAt ? (
             <FeatherIcon icon="check-circle" />
         ) : (
@@ -22,29 +22,29 @@ const LogDetailTask = ({ task, color }) => {
         <TaskContainer>
             <TaskName>
                 {task.completedAt ? (
-                    "\"" + DisplayText(task.name, 32) + "\" 완료!"
+                    "\"" + putEllipsis(task.name, 32) + "\" 완료!"
                 ) : (
-                    DisplayText(task.name, 32)
+                    putEllipsis(task.name, 32)
                 )}
 
             </TaskName>
 
             {task.completedAt ? (
-                <Ago> &nbsp;{DateTime.fromJSDate(task.completedAt).setLocale("en").toRelative()} </Ago>
+                <Ago> {DateTime.fromJSDate(task.completedAt).setLocale("en").toRelative()} </Ago>
             ) : null}
         </TaskContainer>
-                </div>
+        </TaskHeader>
 
         <ReactionBox>
             {task.completedAt ? (
                 <>
                     {task.reaction.map((LogDetailTaskEmoji) => (
-                        <ReactionEmoji emoji={LogDetailTaskEmoji} />
+                        <ReactionEmoji key={LogDetailTaskEmoji.emoji} emoji={LogDetailTaskEmoji} />
                     ))}
-                    <AddEmoji />
+                    <EmojiAddButton />
                 </>
             ) : (
-                <AddPeak id={task.id} num={task.reaction[0].reactionNum}/>
+                <PeakButton id={task.id} num={task.reaction[0].reactionNum}/>
             )}
         </ReactionBox>
     </LogTaskBox>
@@ -56,6 +56,11 @@ gap: 1em;
 flex-direction: column;
 
 padding: 1.2em 1em 1em;
+`
+
+const TaskHeader = styled.div`
+display: flex;
+flex-direction: row;
 `
 
 const TaskContainer = styled.div`
@@ -70,6 +75,7 @@ font-size: 1.1em;
 `
 
 const Ago = styled.span`
+margin-left: 0.5em;
 display: inline;
 font-size: 0.9em;
 color: #A4A4A4;

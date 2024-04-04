@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import TaskCreateDetail from "@components/project/TaskCreate/TaskCreateDetail";
 import TaskName from "./TaskName";
-import ModalPortal from "./ModalPortal";
+import ModalPortal from "@components/common/ModalPortal";
 
 import styled from "styled-components";
 
@@ -10,8 +10,12 @@ function Task({task}){
     const [isModalOpen, setIsModalOpen] = useState(false)
     
     const openModal = () => {
-        setIsModalOpen(true);
-    };
+        setIsModalOpen(true)
+    }
+
+    const closeModal = () => {
+        setIsModalOpen(false)
+    }
 
     return (
         <>
@@ -22,8 +26,8 @@ function Task({task}){
                     {task.due_date}
             </CalendarText>}
             {isModalOpen &&
-            <ModalPortal>
-                <TaskCreateDetail task={task} onClose={() => setIsModalOpen(false)} />
+            <ModalPortal closeModal={closeModal}>
+                <TaskCreateDetail task={task} onClose={closeModal} />
             </ModalPortal>}
         </>
     );

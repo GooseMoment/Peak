@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import styled from "styled-components";
 import FeatherIcon from "feather-icons-react";
-import { createPortal } from "react-dom";
 
 import EmojiButton from "@components/social/EmojiButton";
 
@@ -17,13 +16,13 @@ const EmojiModal = ({isModalOpen, setIsModalOpen}) => {
     return <EmojiLists>
         {
             emojis.map(emoji =>
-                    <EmojiButton emoji={emoji} isHover={isHover} setIsHover={setIsHover} setIsModalOpen={setIsModalOpen}/>
+                    <EmojiButton key={emoji} emoji={emoji} isHover={isHover} setIsHover={setIsHover} setIsModalOpen={setIsModalOpen}/>
             )
         }
     </EmojiLists>
 }
 
-const AddEmoji = () => {
+const EmojiAddButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const modalBackground = useRef()
 
@@ -94,4 +93,4 @@ margin-left: 60%;
 padding: 1rem 0 1rem;
 `
 
-export default AddEmoji
+export default EmojiAddButton

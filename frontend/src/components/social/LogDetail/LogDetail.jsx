@@ -2,12 +2,8 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import ReactionEmoji from "@components/social/ReactionEmoji";
-import AddEmoji from "@components/social/AddEmoji";
-import LogDetailProject from "@components/social/LogDetailProject";
-
-const DisplayUsername = (username) => {
-    return username.length > 11 ? username.substring(0, 9) + '...' : username;
-}
+import EmojiAddButton from "@components/social/EmojiAddButton";
+import LogDetailProject from "@components/social/LogDetail/LogDetailProject";
 
 const LogDetail = ({userLogsDetail, isSelf}) => {
     const [tempText, setTempText] = useState(null)
@@ -19,7 +15,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
     }
 
     const handleInputState = () => {
-        setInputState(!inputState)
+        setInputState(prev => !prev)
     }
 
     return <>
@@ -29,7 +25,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
                 <img src={userLogsDetail.user.profileImgURI}/>
             </ProfileImg>
             <Username>
-                @{DisplayUsername(userLogsDetail.user.username)}
+                @{userLogsDetail.user.username}
             </Username>
         </Profile>
         <CommentBox onClick={handleInputState}>
@@ -44,7 +40,7 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
                     placeholder="Write your daily comments"
                 />
                 ) : (
-                    <Comment style={{color: "#A4A4A4", fontStyle: "italic",}}>{"No daily comments yet"}</Comment>
+                    <Comment $color="#A4A4A4" $fontstyle="italic">{"No daily comments yet"}</Comment>
                 )
             )}
         </CommentBox>
@@ -52,21 +48,21 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
         <ReactionBox>
             {userLogsDetail.dailyComment.reaction.map((dailyCommentEmoji) => (
                 // <ReactionEmoji emojiClick={emojiClick} setEmojiClick={setEmojiClick} emoji={dailyCommentEmoji}/>
-                <ReactionEmoji emoji={dailyCommentEmoji}/>
+                <ReactionEmoji key={dailyCommentEmoji.emoji} emoji={dailyCommentEmoji}/>
             ))
             }
-            <AddEmoji />
+            <EmojiAddButton />
         </ReactionBox>
         {/* TODO: who and what emoji */}
-        </ DetailHeader>
+        </DetailHeader>
         
         <DetailBody>
         {
             userLogsDetail.dailyProjects.map((dailyProject) => (
-                <LogDetailProject project={dailyProject}/>
+                <LogDetailProject key={dailyProject.projectID} project={dailyProject}/>
             ))
         }
-        </ DetailBody>
+        </DetailBody>
     </>
 }
 
@@ -110,6 +106,9 @@ padding-bottom: 0.5em;
 const Username = styled.div`
 font-size: 1em;
 text-align: center;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
 `
 
 const CommentBox = styled.div`
@@ -126,6 +125,8 @@ align-items: center;
 
 const Comment = styled.div`
 white-space: normal;
+color: ${props => props.$color};
+font-style: ${props => props.$fontstyle};
 `
 
 const CommentInput = styled.input`

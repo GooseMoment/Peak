@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import LogDetailTask from "@components/social/LogDetailTask"
+import LogDetailTask from "@components/social/LogDetail/LogDetailTask"
 
 const LogDetailProject = ({project}) => {
     return <ProjectContainer>
@@ -7,7 +7,7 @@ const LogDetailProject = ({project}) => {
             {project.projectID}
         </ProjectHeader>
         {project.dailytasks.map((task) => (
-            <LogDetailTask task={task} color={project.projectColor}/>
+            <LogDetailTask key={task.id} task={task} color={project.projectColor}/>
         ))}
 
 

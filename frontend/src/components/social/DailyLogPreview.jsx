@@ -1,31 +1,33 @@
 import styled from "styled-components"
 import { DateTime } from "luxon"
 
-const DisplayText = (text, maxLength) => {
+const putEllipsis = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength-3) + '...' : text;
 }
 
-const LogBox = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
-    const HandleSelect = () => {
+const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
+    
+    const handleSelect = () => {
     // ~Log.index can be replaced with ~Log.task.id
-        setSelectedIndex(userLogSimple.index == selectedIndex ? null : userLogSimple.index)
+        setSelectedIndex(userLogSimple.index === selectedIndex ? null : userLogSimple.index)
     }
 
-    return <Frame onClick={HandleSelect}
-            style={{backgroundColor: userLogSimple.index === selectedIndex? "#ffd7c7" : "#FEFDFC", }}
+    return <Frame onClick={handleSelect}
+            $bgcolor={userLogSimple.index === selectedIndex? "#ffd7c7" : "#FEFDFC"}
         >
         {/* separate the "Profile" into a separate file? */}
+        {/* TODO: 화면 너비 줄이면 프로필 배열 망가지는 문제 해결 */}
         <Profile>
-            <ProfileImg $color={userLogSimple.isRead ? "#A4A4A4" : userLogSimple.task.projectColor} >
+            <ProfileImgWrapper $color={userLogSimple.isRead ? "#A4A4A4" : userLogSimple.task.projectColor} >
                 <img src={userLogSimple.user.profileImgURI}/>
-            </ProfileImg>
+            </ProfileImgWrapper>
             <Username>
-                @{DisplayText(userLogSimple.user.username, 11)}
+                @{userLogSimple.user.username}
             </Username>
         </Profile>
         <RecentTask>
-            <TaskName>  {"\"" + DisplayText(userLogSimple.task.name, 32) + "\" 완료!"} </TaskName>
-            <Ago> &nbsp;&nbsp;{DateTime.fromJSDate(userLogSimple.task.completedAt).setLocale("en").toRelative()} </Ago>
+            <TaskName>  {"\"" + putEllipsis(userLogSimple.task.name, 32) + "\" 완료!"} </TaskName>
+            <Ago> {DateTime.fromJSDate(userLogSimple.task.completedAt).setLocale("en").toRelative()} </Ago>
             {/* Ago: Left align? */}
         </RecentTask>
     </ Frame>
@@ -37,6 +39,8 @@ gap: 1em;
 
 border-bottom: 1px solid black;
 padding: 1.2em 1em 1.2em;
+
+background-color: ${props => props.$bgcolor};
 `
 
 const Profile = styled.div`
@@ -46,7 +50,7 @@ text-align: center;
 
 `
 
-const ProfileImg = styled.div`
+const ProfileImgWrapper = styled.div`
 position: relative;
 width: auto;
 height: 3em;
@@ -72,6 +76,9 @@ padding-bottom: 0.5em;
 const Username = styled.div`
 font-size: 1em;
 text-align: center;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
 `
 
 const RecentTask = styled.div`
@@ -87,10 +94,11 @@ font-size: 1.1em;
 `
 
 const Ago = styled.span`
+margin-left: 0.5em;
 display: inline;
 font-size: 0.9em;
 color: #A4A4A4;
 white-space: nowrap;
 `
 
-export default LogBox;
+export default DailyLogPreview;

@@ -1,65 +1,57 @@
 import { useState } from "react"
 
-import { Link } from "react-router-dom";
 import styled from "styled-components"
 
 import SocialCalendar from "@components/social/SocialCalendar";
-import LogBox from "@components/social/LogBox";
-import LogDetail from "@components/social/LogDetail";
+import DailyLogPreview from "@components/social/DailyLogPreview";
+import LogDetail from "@components/social/LogDetail/LogDetail";
+import SocialPageTitle from "@components/social/SocialPageTitle";
 
 const SocialFollowingPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedIndex, setSelectedIndex] = useState(null)
 
     return <>
-        <PageTitle>
-            <PageTitleButton to="/social/following">Following</PageTitleButton>
-            <PageTitleButton to="/social/explore" style={{ color: "#A4A4A4" }}>Explore</PageTitleButton>
-        </PageTitle>
-        <div style={{whiteSpace: 'nowrap'}}>
-        <SocialContainer>
-            <SocialCalendar
-                newLogDates={mockNewLogDates}
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-            >
-            </SocialCalendar>
-            <SocialBoxContainer>
-                {mockDailyFollowersLog.map((dailyFollowersLog) => (
-                    <LogBox userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
-                ))}
-            </SocialBoxContainer>
+        <SocialPageTitle active="following" />
 
-            {/* {selectedDate.toLocaleDateString()} */}
-        </SocialContainer>
-        <SocialContainer style={{width: '350pt', marginLeft: '2rem'}}>
-            <LogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true}/>
-        </SocialContainer>
-        </div>
+        <Wrapper>
 
+            <Container>
+                <SocialCalendar
+                    newLogDates={mockNewLogDates}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                >
+                </SocialCalendar>
+                <DailyLogContainer>
+                    {mockDailyFollowersLog.map((dailyFollowersLog) => (
+                        <DailyLogPreview key={dailyFollowersLog.index} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+                    ))}
+                </DailyLogContainer>
+
+                {/* {selectedDate.toLocaleDateString()} */}
+            </Container>
+            <Container>
+                <LogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true} />
+            </Container>
+
+        </Wrapper>
     </>
 }
 
-const PageTitle = styled.h1``
-
-const PageTitleButton = styled(Link)`
-display: inline-block;
-font-size: 2em;
-font-weight: bold;
-color: black;
-text-decoration: none;
-margin-bottom: 0.5em;
-margin-right: 0.7em;
+const Wrapper = styled.div`
+    white-space: nowrap;
 `
 
-const SocialContainer = styled.div`
+const Container = styled.div`
 display: inline-block;
-margin-right: 1em;
+margin-right: 2em;
 height: 85vh;
+width: 50%;
 overflow: hidden;
 `
 
-const SocialBoxContainer = styled.div`
+const DailyLogContainer = styled.div`
 max-height: 50%;
 overflow-y: auto;
 
@@ -126,28 +118,27 @@ const mockDailyFollowersLog = [
 const mockDailyFollowerLogsDetail = [
     {
         user: {
-            username: "minyoy", profileImgURI: "https://avatars.githubusercontent.com/u/65756020?v=4", 
+            username: "minyoy", profileImgURI: "https://avatars.githubusercontent.com/u/65756020?v=4",
         },
         dailyComment: {
             name: "오늘도 열시미 살아보았나 내가 보기엔 아닌 거 같은데 너가 보기엔 어떻니",
-            // name: null,
             reaction: [
-                {emoji: "🥳", reactionNum: 2},
-                {emoji: "😅", reactionNum: 3}
+                { emoji: "🥳", reactionNum: 2 },
+                { emoji: "😅", reactionNum: 3 }
             ]
         },
         dailyProjects: [
             {
                 projectID: "개발", projectColor: "#2E61DC",
                 dailytasks: [
-                    { id: "TEMP1", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [ { emoji: "🥳", reactionNum: 2 } ] },
-                    { id: "TEMP2", name: "총장하기", completedAt: null, reaction: [ { emoji: null, reactionNum: 4 } ] }
+                    { id: "TEMP11", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }] },
+                    { id: "TEMP12", name: "총장하기", completedAt: null, reaction: [{ emoji: null, reactionNum: 4 }] }
                 ]
             },
             {
                 projectID: "수강신청", projectColor: "#ff0022",
                 dailytasks: [
-                    { id: "TEMP1", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [ { emoji: "🥳", reactionNum: 2 }, { emoji: "😅", reactionNum: 3 } ] },
+                    { id: "TEMP15", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }, { emoji: "😅", reactionNum: 3 }] },
                 ]
             },
         ]

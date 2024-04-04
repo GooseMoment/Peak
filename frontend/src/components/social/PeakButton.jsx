@@ -1,7 +1,7 @@
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-const AddPeak = ({id, num}) => {
+const PeakButton = ({id, num}) => {
     return <Peak>
         <PeakNum>{num}</PeakNum>
         <FeatherIcon icon="send"/>
@@ -18,4 +18,4 @@ display: inline-block;
 margin-right: 1rem;
 `
 
-export default AddPeak
+export default PeakButton
