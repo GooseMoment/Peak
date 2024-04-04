@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import styled from "styled-components";
+import styled from "styled-components"
 
-import TaskCreateDetail from "@/pages/taskDetails/TaskCreateDetail";
-import ModalPortal from "@components/common/ModalPortal";
-import TaskName from "./TaskName";
+import TaskCreateDetail from "@/pages/taskDetails/TaskCreateDetail"
+import ModalPortal from "@components/common/ModalPortal"
+import TaskName from "./TaskName"
 
-import Priority from "./Priority";
+import Priority from "./Priority"
 
 function Task({projectId, task, setTasks, color}){
     const today = new Date()

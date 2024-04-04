@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import FeatherIcon from 'feather-icons-react';
+import styled from "styled-components"
+import FeatherIcon from 'feather-icons-react'
 
-import TaskName from "@components/project/TaskName";
-import Contents from "./Contents";
-import { cubicBeizer } from "@assets/keyframes";
+import TaskName from "@components/project/TaskName"
+import Contents from "./Contents"
+import { cubicBeizer } from "@assets/keyframes"
 
 function TaskCreateDetail({projectId, task, color, setTasks, isModalOpen, onClose}) {
     return (

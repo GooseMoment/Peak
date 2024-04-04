@@ -47,7 +47,7 @@ export const deleteTask = async (id) => {
 
 export const completeTask = async (id) => {
     try {
-        const date = new Date();
+        const date = new Date()
         const edit = {
             "completed_at": date.toISOString()
         }

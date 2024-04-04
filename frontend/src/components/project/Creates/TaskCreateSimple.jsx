@@ -1,16 +1,16 @@
-import FeatherIcon from "feather-icons-react";  
-import styled, { css } from "styled-components";
-import { useState } from "react";
+import FeatherIcon from "feather-icons-react"
+import styled, { css } from "styled-components"
+import { useState } from "react"
 
 const TaskCreateSimple = () => {
-    const [tab, setTab] = useState(0);
+    const [tab, setTab] = useState(0)
 
     const tabClick = (index) => {
         setTab(index)
     }
 
-    const [isClick, setClick] = useState(false);
-    const [inputText, setInputText] = useState("");
+    const [isClick, setClick] = useState(false)
+    const [inputText, setInputText] = useState("")
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
