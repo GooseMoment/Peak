@@ -4,10 +4,10 @@ import styled from "styled-components"
 import DetailFrame from "@components/project/common/Detail"
 import { patchTask } from "@api/tasks.api"
 
-import today from "@/assets/project/calendar/today.svg"
-import tomorrow from "@/assets/project/calendar/tomorrow.svg"
-import next_week from "@/assets/project/calendar/next_week.svg"
-import slach from "@/assets/project/slach.svg"
+import today from "@assets/project/calendar/today.svg"
+import tomorrow from "@assets/project/calendar/tomorrow.svg"
+import next_week from "@assets/project/calendar/next_week.svg"
+import slach from "@assets/project/slach.svg"
 
 const Calendar = ({ taskId, setTasks, onClose }) => {
     let date = new Date()

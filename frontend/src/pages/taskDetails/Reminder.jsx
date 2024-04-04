@@ -5,14 +5,14 @@ import styled from "styled-components"
 import DetailFrame from "@components/project/common/Detail"
 import { patchTask } from "@api/tasks.api"
 
-import before_5 from "@/assets/project/reminder/before_5.svg"
-import before_15 from "@/assets/project/reminder/before_15.svg"
-import before_30 from "@/assets/project/reminder/before_30.svg"
-import before_1h from "@/assets/project/reminder/before_1h.svg"
-import before_D from "@/assets/project/reminder/before_D.svg"
-import before_1D from "@/assets/project/reminder/before_1D.svg"
-import before_2D from "@/assets/project/reminder/before_2D.svg"
-import custom from "@/assets/project/reminder/custom.svg"
+import before_5 from "@assets/project/reminder/before_5.svg"
+import before_15 from "@assets/project/reminder/before_15.svg"
+import before_30 from "@assets/project/reminder/before_30.svg"
+import before_1h from "@assets/project/reminder/before_1h.svg"
+import before_D from "@assets/project/reminder/before_D.svg"
+import before_1D from "@assets/project/reminder/before_1D.svg"
+import before_2D from "@assets/project/reminder/before_2D.svg"
+import custom from "@assets/project/reminder/custom.svg"
 
 const Reminder = ({ task, setTasks, onClose }) => {
     let DueDateTime = new Date(`${task.due_date}T${task.due_time}`)

@@ -3,9 +3,9 @@ import styled from "styled-components"
 import DetailFrame from "@components/project/common/Detail"
 import { patchTask } from "@api/tasks.api"
 
-import normal from "@/assets/project/priority/normal.svg"
-import important from "@/assets/project/priority/important.svg"
-import critical from "@/assets/project/priority/critical.svg"
+import normal from "@assets/project/priority/normal.svg"
+import important from "@assets/project/priority/important.svg"
+import critical from "@assets/project/priority/critical.svg"
 
 const Priority = ({ taskId, setTasks, onClose }) => {
     const changePriority = (id, priority) => {
