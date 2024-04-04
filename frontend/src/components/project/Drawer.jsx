@@ -5,7 +5,7 @@ import FeatherIcon from 'feather-icons-react';
 
 import { getTasksByDrawer } from "@api/tasks.api"
 import Task from "@components/project/Task"
-import TaskCreateSimple from "@components/project/creates/TaskCreateSimple";
+import TaskCreateSimple from "@components/project/Creates/TaskCreateSimple";
 
 function Drawer({projectId, drawer, color}){
     const [tasks, setTasks] = useState([])

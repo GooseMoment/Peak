@@ -5,7 +5,7 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 import ModalPortal from "@components/common/ModalPortal"
-import ProjectCreate from "@components/project/creates/ProjectCreate"
+import ProjectCreate from "@components/project/Creates/ProjectCreate"
 
 const ProjectListPage = () => {
     const {projects} = useRouteLoaderData("app")
