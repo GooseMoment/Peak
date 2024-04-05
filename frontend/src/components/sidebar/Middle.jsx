@@ -12,9 +12,9 @@ const Middle = ({projects, collapsed}) => {
             </ItemBox>
         </SidebarLink>)}
 
-        {projects && projects.map(project => <SidebarLink to={project.to} draggable="false" key={project.to}>
+        {projects && projects.map(project => <SidebarLink to={`projects/` + project.id} draggable="false" key={project.id}>
             <ProjectItemBox $collapsed={collapsed}>
-                <FeatherIcon icon="circle" fill={project.color} />
+                <FeatherIcon icon="circle" fill={`#` + project.color} />
                 {collapsed ? null : project.name}
             </ProjectItemBox>
         </SidebarLink>)}

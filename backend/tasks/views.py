@@ -19,7 +19,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
         return self.retrieve(request, *args, **kwargs)
     
     def patch(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+        return self.partial_update(request, *args, **kwargs)
     
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
@@ -32,7 +32,11 @@ class TaskList(CreateMixin,
     permission_classes = [IsUserMatch]
 
     def get_queryset(self):
-        return Task.objects.filter(user=self.request.user).order_by("created_at").all()
+        queryset = Task.objects.filter(user=self.request.user).order_by("created_at").all()
+        drawer_id = self.request.query_params.get("drawer", None)
+        if drawer_id is not None:
+            queryset = queryset.filter(drawer__id=drawer_id)
+        return queryset
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

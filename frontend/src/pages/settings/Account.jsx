@@ -11,7 +11,7 @@ import PasswordSection from "@components/settings/PasswordSection"
 import styled from "styled-components"
 
 const Account = () => {
-    const user = useRouteLoaderData("app")
+    const {user} = useRouteLoaderData("app")
     const revalidator = useRevalidator()
 
     return <>

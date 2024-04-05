@@ -1,23 +1,51 @@
-import styled from "styled-components";
-import FeatherIcon from 'feather-icons-react';
-import { useState } from "react";
+import { useState, useEffect } from "react"
 
-function Drawer({drawer, children}){
+import styled from "styled-components"
+import FeatherIcon from 'feather-icons-react'
+
+import { getTasksByDrawer } from "@api/tasks.api"
+import Task from "@components/project/Task"
+import TaskCreateSimple from "@components/project/Creates/TaskCreateSimple"
+
+function Drawer({projectId, drawer, color}){
+    const [tasks, setTasks] = useState([])
+
+    //Drawer collapsed handle
     const [collapsed, setCollapsed] = useState(false);
-
+    
     const handleCollapsed = () => {
         { drawer.task_count !== 0 && setCollapsed(prev => !prev)}
     }
 
+    //simpleCreateTask handle
+    const [isSimpleOpen, setIsSimpleOpen] = useState(false)
+
+    const handleisSimpleOpen = () => {
+        setIsSimpleOpen(prev => !prev)
+    }
+
     const DrawerIcons = [
-        {icon: "plus", click: () => setIsModalOpen(true)},
-        {icon: "more-horizontal", click: () => {}},
+        {icon: "plus", click: () => {setsIsCreateOpen(true)}},
         {icon: "chevron-down", click: handleCollapsed},
+        {icon: "more-horizontal", click: () => {}},
     ]
+
+    async function fetchTasks() {
+        try {
+            let res = await getTasksByDrawer(drawer.id)
+            setTasks(res)
+        } catch (e) {
+            throw alert(e)
+        }
+    }
+
+    useEffect(() => {
+        fetchTasks()
+    }, [projectId])
 
     return (
         <>
-            <DrawerBox $color = {drawer.color}>
+            <DrawerBox $color = {color}>
                 <DrawerName>{drawer.name}</DrawerName>
                 <DrawerIcon>
                     {DrawerIcons.map(item => (
@@ -25,7 +53,20 @@ function Drawer({drawer, children}){
                     ))}
                 </DrawerIcon>
             </DrawerBox>
-            {collapsed ? null : children}
+            {collapsed ? null :
+                <TaskList>
+                    {tasks && tasks.map((task) => (
+                        drawer.id === task.drawer && <Task key={task.id} projectId={projectId} task={task} setTasks={setTasks} color={color}/>
+                    ))}
+                </TaskList>
+            }
+            { isSimpleOpen &&
+                <TaskCreateSimple/>
+            }
+            <TaskCreateButton onClick={handleisSimpleOpen}>
+                <FeatherIcon icon="plus-circle"/>
+                <TaskCreateText>할 일 추가</TaskCreateText>
+            </TaskCreateButton>
         </>
     );
 }
@@ -36,7 +77,8 @@ const DrawerBox = styled.div`
     align-items: center;
     justify-content: space-between;
     margin-top: 1.5em;
-    background-color: ${props => props.$color};
+    text-decoration: double;
+    background-color: #${props => props.$color};
     border-radius: 17px 17px 0px 0px;
 `
 
@@ -60,6 +102,37 @@ const DrawerIcon = styled.div`
         margin-right: 1em;
         cursor: pointer;
     }
+`
+
+const TaskList = styled.div`
+    flex: 1;
+    margin-left: 1.1em;
+`
+
+const TaskCreateButton = styled.div`
+    flex: 1;
+    display: flex;
+    align-items: center;
+    margin-left: 1.3em;
+    margin-top: 1.3em;
+    
+    &:hover {
+        cursor: pointer;
+    }
+
+    & svg {
+        text-align: center;
+        width: 1.1em;
+        height: 1.1em;
+        top: 0;
+    } 
+`
+
+const TaskCreateText = styled.div`
+    font-size: 1em;
+    font-weight: medium;
+    color: #000000;
+    margin-top: 0em;
 `
 
 export default Drawer

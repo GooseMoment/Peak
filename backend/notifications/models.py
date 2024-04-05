@@ -9,6 +9,7 @@ class TaskReminder(Base):
     task = models.ForeignKey(
         Task,
         on_delete = models.CASCADE,
+        related_name = 'reminders'
     )
     scheduled = models.DateTimeField()
 

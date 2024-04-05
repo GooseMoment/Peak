@@ -8,16 +8,21 @@ import AppLayout from "@containers/AppLayout"
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 import ProjectPage from "@pages/ProjectPage"
+import ProjectListPage from "@pages/ProjectListPage"
+import SocialPage from "@pages/SocialPage"
+import SocialFollowingPage from "@pages/SocialFollowingPage"
+import SocialExplorePage from "@pages/SocialExplorePage"
 import UserPage from "@pages/UserPage"
 import LandingPage from "@pages/LandingPage"
 import SignPage from "@pages/SignPage"
-
-import settings from "@pages/settings/settings"
+import taskCreates from "@pages/taskDetails/taskCreates"
 
 import notify from "@utils/notify"
 
 import { getMe, getUserByUsername, isSignedIn, patchUser } from "@api/users.api"
 import { getSettings, patchSettings } from "@api/user_setting.api"
+import { getProject, getProjectsList } from "@api/projects.api"
+import settings from "@pages/settings/settings"
 
 const redirectIfSignedIn = () => {
     if (isSignedIn()) {
@@ -48,7 +53,10 @@ const routes = [
         element: <AppLayout />,
         id: "app",
         loader: async () => {
-            return getMe()
+            return {
+                projects: await getProjectsList(),
+                user: await getMe(),
+            }
         },
         shouldRevalidate: ({currentUrl}) => {
             return currentUrl.pathname.startsWith("/app/settings/account")
@@ -77,15 +85,62 @@ const routes = [
             },
             {
                 path: "social",
-                element: <div>This is /social</div>,
+                children: [
+                    {
+                        index: true,
+                        element: <SocialPage />
+                    },
+                    {
+                        path: "following",
+                        element: <SocialFollowingPage />,
+                    },
+                    {
+                        path: "explore",
+                        element: <SocialExplorePage />,
+                    },
+                ]
             },
             {
                 path: "projects",
-                element: <div>This is /projects</div>,
+                element: <ProjectListPage/>,
             },
             {
                 path: "projects/:id",
                 element: <ProjectPage/>,
+                loader: async ({params}) => {
+                    return getProject(params.id)
+                },
+                children: [
+                    {
+                        path: "tasks/:task_id/detail/",
+                        children: [
+                            {
+                                path: "true",
+                                Component: taskCreates.TaskCreateDetail,
+                            },
+                            {
+                                path: "due",
+                                Component: taskCreates.Calendar,
+                            },
+                            {
+                                path: "reminder",
+                                Component: taskCreates.Calendar,
+                            },
+                            {
+                                path: "priority",
+                                Component: taskCreates.Priority,
+                            },
+                            {
+                                path: "Drawer",
+                                Component: taskCreates.Drawer,
+                            },
+                            {
+                                path: "memo",
+                                Component: taskCreates.Memo,
+                            },
+                        ]
+                    },
+                ]
             },
             {
                 path: "users/:username",

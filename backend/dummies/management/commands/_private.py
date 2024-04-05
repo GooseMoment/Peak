@@ -164,13 +164,6 @@ def factory_task(drawer: Drawer) -> Task:
         if random.randint(1, 2) == 1:
             due_time = fake.time_object()
 
-    reminder_datetime = None
-    if random.randint(1, 4) == 1:
-        reminder_datetime = fake.date_time_between_dates(
-            datetime_start=created_at, datetime_end=created_at + timedelta(days=random.randint(1, 30)),
-            tzinfo=timezone.utc,
-        )
-
     memo = None
     if random.randint(1, 4) == 1:
         memo = fake.paragraph()
@@ -188,7 +181,6 @@ def factory_task(drawer: Drawer) -> Task:
         priority=random.randint(0, 2),
         memo=memo,
         user=drawer.user,
-        reminder_datetime=reminder_datetime,
     )
 
 def create_tasks(drawers: list[Drawer]) -> list[Task]:
@@ -471,20 +463,6 @@ def create_notifications(
     ) -> list[Notification]:
     
     notifications: list[Notification] = []
-
-    # for tasks (not all)
-    n = random.randint(1, len(tasks)//15)
-    task_indexes = random.sample(range(len(tasks)), n)
-    for task_index in task_indexes:
-        task = tasks[task_index]
-        if not task.reminder_datetime:
-            continue
-
-        noti = factory_notification(
-            task.user, Notification.FOR_TASK, task, task.reminder_datetime,
-        )
-        noti.save()
-        notifications.append(noti)
 
     # for reactions
     for reaction in reactions:
