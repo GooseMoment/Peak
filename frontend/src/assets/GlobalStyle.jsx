@@ -50,12 +50,12 @@ html {
     gap: 1em;
 
     background-color: rgba(0, 0, 0, 0.4);
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
 
     width: 100%;
-    height: 100%;
+    height: 100vh;
     padding: 0.5em;
 
     z-index: 99;
