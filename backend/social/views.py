@@ -107,12 +107,12 @@ def get_blocks(request: HttpRequest, username):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 # TODO: isRead는 redis로
-# GET social/daily/report/@username/YYYYMMDD/
+# GET social/daily/report/@username/YYYY-MM-DD/
 @api_view(["GET"])
 def get_daily_report(request: HttpRequest, username, day):
     followings = Following.objects.filter(follower__username=username).all()
     followingUsers = User.objects.filter(followers__in=followings.all()).all()
-    day = datetime.strptime(day, "%Y%m%d").date()
+    day = datetime.strptime(day, "%Y-%m-%d").date()
     
     day_min = datetime.combine(day, time.min)
     day_max = datetime.combine(day, time.max)
