@@ -20,6 +20,7 @@ import taskCreates from "@pages/taskDetails/taskCreates"
 import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
 import { getSettings, patchSettings } from "@api/user_setting.api"
 import { getProject, getProjectsList } from "@api/projects.api"
+import { getDailyReport } from "@api/social.api"
 import settings from "@pages/settings/settings"
 
 const redirectIfSignedIn = () => {
@@ -91,6 +92,12 @@ const routes = [
                     {
                         path: "following",
                         element: <SocialFollowingPage />,
+                        // id: 'social',
+                        // loader: async () => {
+                        //     return {
+                        //         dailyLogPreview: await getDailyReport(),
+                        //     }
+                        // },
                     },
                     {
                         path: "explore",

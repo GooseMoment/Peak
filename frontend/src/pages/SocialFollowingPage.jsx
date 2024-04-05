@@ -1,15 +1,36 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouteLoaderData } from "react-router-dom"
 
 import styled from "styled-components"
+import moment from "moment";
 
 import SocialCalendar from "@components/social/SocialCalendar";
 import DailyLogPreview from "@components/social/DailyLogPreview";
 import LogDetail from "@components/social/LogDetail/LogDetail";
 import SocialPageTitle from "@components/social/SocialPageTitle";
 
+import { getDailyReport } from "@api/social.api";
+
 const SocialFollowingPage = () => {
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(new Date())
     const [selectedIndex, setSelectedIndex] = useState(null)
+    const [dailyReport, setDailyReport] = useState([])
+    
+    const {user} = useRouteLoaderData("app")
+
+    const getPreview = async(date) => {
+        const day = moment(date).format('YYYY-MM-DD')
+        try {
+            const res = await getDailyReport(user.username, day)
+            setDailyReport(res)
+        } catch (e) {
+            throw alert(e)
+        }
+    }
+
+    useEffect(() => {
+        getPreview(selectedDate)
+    }, [selectedDate])
 
     return <>
         <SocialPageTitle active="following" />
@@ -24,12 +45,10 @@ const SocialFollowingPage = () => {
                 >
                 </SocialCalendar>
                 <DailyLogContainer>
-                    {mockDailyFollowersLog.map((dailyFollowersLog) => (
-                        <DailyLogPreview key={dailyFollowersLog.index} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+                    {dailyReport.map((dailyFollowersLog) => (
+                        <DailyLogPreview key={dailyFollowersLog.id} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                     ))}
                 </DailyLogContainer>
-
-                {/* {selectedDate.toLocaleDateString()} */}
             </Container>
             <Container>
                 <LogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true} />
