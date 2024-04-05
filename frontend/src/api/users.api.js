@@ -109,3 +109,12 @@ export const patchPassword = async (current_password, new_password) => {
         throw e
     }
 }
+
+export const uploadProfileImg = async (formData) => {
+    try {
+        const res = await client.post("users/me/profile_img", formData)
+        return res.status
+    } catch (e) {
+        throw e
+    }
+}
