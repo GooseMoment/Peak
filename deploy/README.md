@@ -41,17 +41,17 @@ docker volume create caddy_data
 docker volume create db_data
 ```
 
+오브젝트 스토리지에 접근하기 위해 `.env.s3` 파일이 필요합니다. `.env.s3.example`을 `.env.s3`로 복사합시다.
+
+```bash
+cp .env.s3.example .env.s3
+```
+
+@JedBeom 에게 전달받은 값들로 `.env.s3`를 수정합니다.
+
 > Windows 환경에서 실행하는 경우, 앞으로의 명령어 중 `.sh` 파일 대신 `.ps1` 파일을 사용하십시오.
 
 ### 개발 환경일시
-
-실행 전, `.env.dev` 파일이 필요합니다. `.env.dev.example`을 `.env.dev`로 복사합시다.
-
-```bash
-cp .env.dev.example .env.dev
-```
-
-@JedBeom 에게 전달받은 값들로 `.env.dev`를 수정합니다. (특히 S3 부분)
 
 다른 터미널(또는 VSCode +버튼 눌러서 터미널 탭 추가)에서 `frontend`에서 `npm run dev` 실행 
 
