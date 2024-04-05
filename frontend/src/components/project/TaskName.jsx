@@ -1,54 +1,40 @@
-import { Link } from "react-router-dom"
+import { Link, useSubmit } from "react-router-dom"
 import { useState } from "react"
 
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-import { completeTask, uncompleteTask } from "@/api/tasks.api"
-
-function TaskName({projectId, task, setTasks, color, due_date, isModalOpen, openModal}){
+function TaskName({projectId, task, color, editable}){
     const date = new Date()
+    const submit = useSubmit()
     const pathRoot = `/app/projects/${projectId}/tasks/${task.id}/detail`
 
-    const [text, setText] = useState(task.name)
+    const [taskName, setTaskName] = useState(task.name)
     
     const onchange = (e) => {
-        setText(e.target.value)
-        console.log(text)
+        setTaskName(e.target.value)
     }
 
-    const toComplete = (id) => {
-        return async () => {
-            let completed_at = null
-            if (task.completed_at) {
-                await uncompleteTask(id)
-            }
-            else {
-                await completeTask(id)
-                completed_at = date.toISOString()
-            }
-            setTasks(prev => prev.map(task => {
-                if (task.id === id) {
-                    task.completed_at = completed_at
-                }
-                return task
-            }))
+    const toComplete = () => {
+        let completed_at = "null"
+        if (!(task.completed_at)) {
+            completed_at = date.toISOString()
         }
+        submit({id: task.id, completed_at}, {method: "PATCH"})
     }
 
     const EditView = (
         <InputText 
-            $completed={task.completed_at ? true : false} 
-            onClick={openModal}
+            $completed={task.completed_at ? true : false}
             type='text'
             onChange={onchange}
-            value={text}
+            value={taskName}
             placeholder="할 일의 이름을 입력해주세요."
         />
     )
 
     const TextView = (
-        <Text $completed={task.completed_at ? true : false} onClick={openModal}>
+        <Text $completed={task.completed_at ? true : false}>
             {task.name}
         </Text>
     )
@@ -56,19 +42,18 @@ function TaskName({projectId, task, setTasks, color, due_date, isModalOpen, open
     return (
         <>
             <TaskNameBox>
-                <TaskCircle
+                <TaskCircle 
                     $completed={task.completed_at ? true : false}
                     $color={color}
-                    $due_date={due_date}
-                    onClick={toComplete(task.id)}
+                    $due_date={task.due_date}
+                    onClick={toComplete}
                 >
                     {task.completed_at && <FeatherIcon icon="check"/>}
                 </TaskCircle>
-                { isModalOpen ? EditView :
+                { editable ? EditView :
                 <Link to={pathRoot} style={{ textDecoration: 'none' }}> 
                     {TextView}
                 </Link>}
-
             </TaskNameBox>
         </>
     );

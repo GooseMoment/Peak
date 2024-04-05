@@ -21,6 +21,8 @@ import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
 import { getSettings, patchSettings } from "@api/user_setting.api"
 import { getProject, getProjectsList } from "@api/projects.api"
 import settings from "@pages/settings/settings"
+import ModalPortal from "@components/common/ModalPortal"
+import { getTasksByDrawer, getTask, patchTask } from "@api/tasks.api"
 
 const redirectIfSignedIn = () => {
     if (isSignedIn()) {
@@ -105,16 +107,46 @@ const routes = [
             {
                 path: "projects/:id",
                 element: <ProjectPage/>,
+                action: async ({request}) => {
+                    const formData = await request.formData()
+                    let data = {}
+                    for (const [k, v] of Object.entries(Object.fromEntries(formData))) {
+                        if (v === "null") {
+                            data[k] = null
+                            continue
+                        }
+                        
+                        data[k] = v
+                    }
+                    return patchTask(data.id, data)
+                },
                 loader: async ({params}) => {
-                    return getProject(params.id)
+                    const tasksByDrawer = new Map()
+                    const project = await getProject(params.id)
+                    for (const drawer of project.drawers) {
+                        let tasks = await getTasksByDrawer(drawer.id)
+                        tasksByDrawer.set(drawer.id, tasks)
+                    }
+                    return {project, tasksByDrawer}
                 },
                 children: [
                     {
                         path: "tasks/:task_id/detail/",
+                        id: "task",
+                        action: async ({request, params}) => {
+                            const formData = await request.formData()
+                            return patchTask(params.task_id, Object.fromEntries(formData))
+                        },
+                        loader: async ({params}) => {
+                            const task = await getTask(params.task_id)
+                            return task
+                        },
                         children: [
                             {
-                                path: "true",
-                                Component: taskCreates.TaskCreateDetail,
+                                index: true,
+                                element: <ModalPortal>
+                                    <taskCreates.TaskCreateDetail />
+                                </ModalPortal>,
                             },
                             {
                                 path: "due",

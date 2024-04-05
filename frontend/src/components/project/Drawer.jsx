@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
+import { useLoaderData } from "react-router-dom"
 
 import styled from "styled-components"
 import FeatherIcon from 'feather-icons-react'
 
-import { getTasksByDrawer } from "@api/tasks.api"
 import Task from "@components/project/Task"
 import TaskCreateSimple from "@components/project/Creates/TaskCreateSimple"
 
 function Drawer({projectId, drawer, color}){
-    const [tasks, setTasks] = useState([])
+    const {tasksByDrawer} = useLoaderData()
+    const tasks = tasksByDrawer.get(drawer.id)
 
     //Drawer collapsed handle
     const [collapsed, setCollapsed] = useState(false);
@@ -30,19 +31,6 @@ function Drawer({projectId, drawer, color}){
         {icon: "more-horizontal", click: () => {}},
     ]
 
-    async function fetchTasks() {
-        try {
-            let res = await getTasksByDrawer(drawer.id)
-            setTasks(res)
-        } catch (e) {
-            throw alert(e)
-        }
-    }
-
-    useEffect(() => {
-        fetchTasks()
-    }, [projectId])
-
     return (
         <>
             <DrawerBox $color = {color}>
@@ -56,7 +44,7 @@ function Drawer({projectId, drawer, color}){
             {collapsed ? null :
                 <TaskList>
                     {tasks && tasks.map((task) => (
-                        drawer.id === task.drawer && <Task key={task.id} projectId={projectId} task={task} setTasks={setTasks} color={color}/>
+                        <Task key={task.id} projectId={projectId} task={task} color={color}/>
                     ))}
                 </TaskList>
             }
@@ -114,7 +102,7 @@ const TaskCreateButton = styled.div`
     display: flex;
     align-items: center;
     margin-left: 1.3em;
-    margin-top: 1.3em;
+    margin-top: 1.8em;
     
     &:hover {
         cursor: pointer;
@@ -129,7 +117,7 @@ const TaskCreateButton = styled.div`
 `
 
 const TaskCreateText = styled.div`
-    font-size: 1em;
+    font-size: 1.1em;
     font-weight: medium;
     color: #000000;
     margin-top: 0em;
