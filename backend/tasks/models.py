@@ -37,6 +37,7 @@ class Task(Base, PrivacyMixin):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name='tasks',
     )
     repeat = models.ForeignKey(
         Repeat,
