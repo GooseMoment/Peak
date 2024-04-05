@@ -42,8 +42,7 @@ const SocialFollowingPage = () => {
                     newLogDates={mockNewLogDates}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
-                >
-                </SocialCalendar>
+                />
                 <DailyLogContainer>
                     {dailyReport.map((dailyFollowersLog) => (
                         <DailyLogPreview key={dailyFollowersLog.id} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
@@ -89,50 +88,6 @@ scrollbar-width: none;
 const mockNewLogDates = [
     "27-02-2024", "01-03-2024", "22-03-2024",
 ];
-
-const mockDailyFollowersLog = [
-    {
-        index: 0,
-        isRead: false,
-        user: {
-            username: "minyoy", profileImgURI: "https://avatars.githubusercontent.com/u/65756020?v=4"
-        },
-        task: {
-            id: "TEMP1", name: "빨래 하기", completedAt: new Date(2024, 2, 2, 17, 4, 1), projectID: "홍대라이프", projectColor: "#2E61DC", reactionNum: 3
-        }
-    },
-    {
-        index: 1,
-        isRead: false,
-        user: {
-            username: "aksae", profileImgURI: "https://avatars.githubusercontent.com/u/39623851?v=4"
-        },
-        task: {
-            id: "TEMP2", name: "ㅆㅣ...", completedAt: new Date(2024, 2, 2, 7, 4, 1), projectID: "개발", projectColor: "#ff0022", reactionNum: 3
-        }
-    },
-    {
-        index: 2,
-        isRead: true,
-        user: {
-            username: "supercalifragilisticexpialidocious", profileImgURI: "https://avatars.githubusercontent.com/u/39623851?v=4"
-        },
-        task: {
-            id: "TEMP3", name: "우산 타고 날아가기", completedAt: new Date(2024, 2, 1, 19, 4, 1), projectID: "개발", projectColor: "#ff7f00", reactionNum: 3
-        }
-    },
-    {
-        index: 3,
-        isRead: true,
-
-        user: {
-            username: "supercalifragilisticexpialidocious", profileImgURI: "https://avatars.githubusercontent.com/u/39623851?v=4"
-        },
-        task: {
-            id: "TEMP4", name: "아주아주아주아주멀리그리고높이이카루스처럼태양을향해한번더날아가기", completedAt: new Date(2024, 2, 1, 19, 4, 1), projectID: "개발", projectColor: "#ff7f00", reactionNum: 3
-        }
-    },
-]
 
 const mockDailyFollowerLogsDetail = [
     {
