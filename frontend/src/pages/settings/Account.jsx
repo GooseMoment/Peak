@@ -8,8 +8,9 @@ import Input from "@components/sign/Input"
 
 import notify from "@utils/notify"
 import { patchPassword } from "@api/users.api"
+import { cubicBeizer } from "@assets/keyframes"
 
-import { Key, RotateCw } from "feather-icons-react"
+import { Key, RotateCw, Image } from "feather-icons-react"
 import styled from "styled-components"
 
 const Account = () => {
@@ -18,6 +19,10 @@ const Account = () => {
     const [currentPassword, setCurrentPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [newPasswordAgain, setNewPasswordAgain] = useState("")
+
+    const openProfileImgEdit = () => {
+        alert("edit")
+    }
 
     const resetPassword = async () => {
         if (newPassword.length < 8) {
@@ -55,7 +60,12 @@ const Account = () => {
         <PageTitle>Account <Sync /></PageTitle>
         <Section>
             <ImgNameEmailContainer>
-                <ProfileImg src={user.profile_img} />
+                <ProfileImgContainer>
+                    <ProfileImg src={user.profile_img} />
+                    <ProfileImgOverlay onClick={openProfileImgEdit}>
+                        <Image />
+                    </ProfileImgOverlay>
+                </ProfileImgContainer> 
                 <NameEmail>
                     <Username>@{user.username}</Username>
                     <Email>{user.email}</Email>
@@ -110,6 +120,42 @@ const Account = () => {
         </Section>
     </>
 }
+
+const ProfileImgContainer = styled.div`
+    position: relative;
+`
+
+const ProfileImgOverlay = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 7em;
+    height: 7em;
+    
+    border-radius: 999px;
+    color: white;
+    background-color: black;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    opacity: 0;
+
+    &:hover {
+        opacity: 75%;
+    }
+
+    cursor: pointer;
+
+    transition: opacity ${cubicBeizer} 0.25s;
+
+    & svg {
+        margin-right: 0;
+        width: 2em;
+        height: 2em;
+    }
+`
 
 const ImgNameEmailContainer = styled.div`
     display: flex;
