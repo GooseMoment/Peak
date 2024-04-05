@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useRouteLoaderData } from "react-router-dom"
 
-import styled from "styled-components"
+import { styled, css } from "styled-components"
 import moment from "moment";
 
 import SocialCalendar from "@components/social/SocialCalendar";
@@ -36,53 +36,58 @@ const SocialFollowingPage = () => {
         <SocialPageTitle active="following" />
 
         <Wrapper>
-
             <Container>
-                <SocialCalendar
-                    newLogDates={mockNewLogDates}
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                />
+                <CalendarContainer>
+                    <SocialCalendar
+                        newLogDates={mockNewLogDates}
+                        selectedDate={selectedDate}
+                        setSelectedDate={setSelectedDate}
+                    />
+                </CalendarContainer>
+
                 <DailyLogContainer>
                     {dailyReport.map((dailyFollowersLog) => (
                         <DailyLogPreview key={dailyFollowersLog.id} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                     ))}
                 </DailyLogContainer>
             </Container>
-            <Container>
+
+            <Container $isSticky={true}>
                 <LogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true} />
             </Container>
-
         </Wrapper>
     </>
 }
 
 const Wrapper = styled.div`
-    white-space: nowrap;
+    display: flex;
 `
 
 const Container = styled.div`
-display: inline-block;
-margin-right: 2em;
-height: 85vh;
-width: 50%;
-overflow: hidden;
+    width: 50%;
+    min-width: 30rem;
+    ${props => props.$isSticky ? css`
+        /* align-self: flex-start; */
+        position: sticky;
+        top: 2.5rem;
+    ` : null}
+    margin-bottom: auto;
+
+    padding: 0 1rem 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    overflow: hidden;
+`
+
+const CalendarContainer = styled.div`
+    margin-left: auto;
+    margin-right: auto;
 `
 
 const DailyLogContainer = styled.div`
-max-height: 50%;
-overflow-y: auto;
-
-// IE and Edge
--ms-overflow-style: none;
-// Firefox
-scrollbar-width: none;
-// Chrome, Safari, Opera
-&::-webkit-scrollbar {
-    display: none;
-}
-    
-
 `
 
 const mockNewLogDates = [
