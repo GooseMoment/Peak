@@ -1,3 +1,4 @@
+from typing import Iterable
 from django.db import models
 
 from api.models import Base
@@ -94,13 +95,13 @@ class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model
     follower = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
-        related_name = "follower"
+        related_name = "followings"
     )
     # 받는사람
     followee = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
-        related_name = "followee"
+        related_name = "followers"
     )
     # 요청인가
     is_request = models.BooleanField(default=False)
@@ -121,13 +122,20 @@ class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유
     blocker = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
-        related_name = "blocker"
+        related_name = "blockees"
     )
     blockee = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
-        related_name = "blockee"
+        related_name = "blockers"
     )
+    
+    def save(self, force_insert: bool = False, force_update: bool = False, using: str | None = None, update_fields: Iterable[str] | None = None) -> None:
+        #soft delete
+        Following.objects.filter(followee=self.blocker, follower=self.blockee).delete()
+        Following.objects.filter(followee=self.blockee, follower=self.blocker).delete()
+        print(force_insert, force_update)
+        return super().save(force_insert, force_update, using, update_fields)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

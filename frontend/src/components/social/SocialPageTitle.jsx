@@ -7,13 +7,13 @@ const SocialPageTitle = ({active}) => {
 
     if (active === "following")
         return <PageTitle>
-            <PageTitleButton to="/social/following">Following</PageTitleButton>
-            <PageTitleButton to="/social/explore" $color="#A4A4A4">Explore</PageTitleButton>
+            <PageTitleButton to="../following">Following</PageTitleButton>
+            <PageTitleButton to="../explore" $color="#A4A4A4">Explore</PageTitleButton>
         </PageTitle>
 
     return <PageTitle>
-        <PageTitleButton to="/social/explore">Explore</PageTitleButton >
-        <PageTitleButton to="/social/following" $color="#A4A4A4">Following</PageTitleButton>
+        <PageTitleButton to="../explore">Explore</PageTitleButton>
+        <PageTitleButton to="../following" $color="#A4A4A4">Following</PageTitleButton>
     </PageTitle>
 
 }
