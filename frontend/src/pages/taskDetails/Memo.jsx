@@ -1,4 +1,4 @@
-import DetailFrame from "./DetailFrame"
+import DetailFrame from "@components/project/common/Detail"
 
 const Memo = ({ onClose }) => {
     return (

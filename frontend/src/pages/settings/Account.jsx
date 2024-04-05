@@ -5,7 +5,7 @@ import Section, { Name, Value, Sync } from "@components/settings/Section"
 import Button from "@components/sign/Button"
 
 const Account = () => {
-    const user = useRouteLoaderData("app")
+    const {user} = useRouteLoaderData("app")
 
     return <>
         <PageTitle>Account</PageTitle>

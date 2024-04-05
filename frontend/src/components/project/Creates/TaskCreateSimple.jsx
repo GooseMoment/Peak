@@ -1,16 +1,16 @@
-import FeatherIcon from "feather-icons-react";  
-import styled, { css } from "styled-components";
-import { useState } from "react";
+import FeatherIcon from "feather-icons-react"
+import styled, { css } from "styled-components"
+import { useState } from "react"
 
 const TaskCreateSimple = () => {
-    const [tab, setTab] = useState(0);
+    const [tab, setTab] = useState(0)
 
     const tabClick = (index) => {
         setTab(index)
     }
 
-    const [isClick, setClick] = useState(false);
-    const [inputText, setInputText] = useState("");
+    const [isClick, setClick] = useState(false)
+    const [inputText, setInputText] = useState("")
 
     const activeEnter = (e) => {
         if (e.key === "Enter") {
@@ -39,10 +39,10 @@ const TaskCreateSimple = () => {
                 {isClick ? 
                     <FieldBox
                         type="text"
-                        placeholder={items[tab].content}
+                        placeholder={items[tab].display}
                         onChange={(e) => setInputText(e.target.value)}
                         onKeyDown={(e) => activeEnter(e)}
-                    /> : items[tab].content}
+                    /> : items[tab].display}
             </MainBox>
         </>
     )
@@ -51,7 +51,8 @@ const TaskCreateSimple = () => {
 const FlexBox = styled.div`
     display: flex;
     justify-content: flex-start;
-    margin-left: 10px;
+    margin-left: 1em;
+    margin-top: 1em;
 `
 
 const IndexBox = styled.div`
@@ -112,12 +113,12 @@ const FieldBox = styled.input`
 `
 
 const items = [
-    {id: 0, icon: "tag", name: "Tag", content: "추가할 이름"},
-    {id: 1, icon: "calendar", name: "Calendar", content: "2024년 02월 20일 18:00"},
-    {id: 2, icon: "clock", name: "Clock", content: "2024년 02월 20일 16:00"},
-    {id: 3, icon: "alert-circle", name: "Alert-circle", content: "매우 중요"},
-    {id: 4, icon: "archive", name: "Archive", content: "홍대라이프 / 수강신청"},
-    {id: 5, icon: "edit", name: "Edit", content: "없음"},
+    {id: 0, icon: "tag", name: "Tag", display: "추가할 이름"},
+    {id: 1, icon: "calendar", name: "Calendar", display: "2024년 02월 20일 18:00"},
+    {id: 2, icon: "clock", name: "Clock", display: "2024년 02월 20일 16:00"},
+    {id: 3, icon: "alert-circle", name: "Alert-circle", display: "매우 중요"},
+    {id: 4, icon: "archive", name: "Archive", display: "홍대라이프 / 수강신청"},
+    {id: 5, icon: "edit", name: "Edit", display: "없음"},
 ]
 
 export default TaskCreateSimple

@@ -1,29 +1,21 @@
-import styled from "styled-components";
-import FeatherIcon from 'feather-icons-react';
-import { useEffect } from "react";
+import styled from "styled-components"
+import FeatherIcon from 'feather-icons-react'
 
-import TaskName from "../TaskName";
-import Contents from "./Contents";
-import { cubicBeizer } from "@assets/keyframes";
+import TaskName from "@components/project/TaskName"
+import Contents from "./Contents"
+import { cubicBeizer } from "@assets/keyframes"
 
-function TaskCreateDetail({task, onClose}) {
-
-    useEffect(() => {
-        document.body.style.overflow = 'hidden';
-        document.querySelector('html').scrollTop = window.scrollY;
-            return () => document.body.style.overflow = null;
-        }, []);
-
+function TaskCreateDetail({projectId, task, color, setTasks, isModalOpen, onClose}) {
     return (
         <TaskCreateDetailBox>
             <TaskNameBox>
-                <TaskName task={task} />
+                <TaskName task={task} setTasks={setTasks} color={color} isModalOpen={isModalOpen}/>
                 <Icons>
                     <FeatherIcon icon="trash-2" />
                     <FeatherIcon icon="x" onClick={onClose} />
                 </Icons>
             </TaskNameBox>
-            <Contents />
+            <Contents projectId={projectId} task={task} setTasks={setTasks}/>
         </TaskCreateDetailBox>
     )
 }

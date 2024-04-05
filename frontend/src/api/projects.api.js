@@ -1,19 +1,46 @@
-export const getProjectsList = (userID) => {
+import client from "@api/client"
 
+export const getProjectsList = async () => {
+    try {
+        const res = await client.get("projects/")
+        return res.data.results
+    } catch (e) {
+        throw e
+    }
 }
 
-export const getProject = (id) => {
-
+export const getProject = async (id) => {
+    try {
+        const res = await client.get(`projects/${id}`)
+        return res.data
+    } catch (e) {
+        throw e
+    }
 }
 
-export const postProject = (project) => {
-
+export const postProject = async (project) => {
+    try {
+        const res = await client.post("projects/", project)
+        return res.status
+    } catch (e) {
+        throw e
+    }
 }
 
-export const patchProject = (id, project) => {
-
+export const patchProject = async (id, edit) => {
+    try {
+        const res = await client.patch(`projects/${id}`, edit)
+        return res.data
+    } catch (e) {
+        throw e
+    }
 }
 
-export const deleteProject = (id) => {
-
+export const deleteProject = async (id) => {
+    try {
+        const res = await client.delete(`projects/${id}`)
+        return res.data
+    } catch (e) {
+        throw e
+    }
 }

@@ -50,12 +50,12 @@ html {
     gap: 1em;
 
     background-color: rgba(0, 0, 0, 0.4);
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
 
     width: 100%;
-    height: 100%;
+    height: 100vh;
     padding: 0.5em;
 
     z-index: 99;
@@ -63,8 +63,9 @@ html {
     animation: ${modalFadeIn} 0.5s ${cubicBeizer} forwards !important;
 }
 
-body, textarea {
+body, textarea, input {
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif !important;
+    padding: 0;
 }
 
 body {
