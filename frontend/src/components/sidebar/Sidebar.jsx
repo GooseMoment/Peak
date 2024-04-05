@@ -7,11 +7,11 @@ import Footer from "./Footer"
 import styled, { css } from "styled-components"
 
 const Sidebar = ({collapsed, setCollapsed}) => {
-    const user = useRouteLoaderData("app")
+    const {projects, user} = useRouteLoaderData("app")
 
     return <SidebarBox $collapsed={collapsed}>
         <Header collapsed={collapsed} setCollapsed={setCollapsed} />
-        <Middle collapsed={collapsed} projects={mockProjects} />
+        <Middle collapsed={collapsed} projects={projects} />
         <Footer collapsed={collapsed} user={user} />
     </SidebarBox>
 }

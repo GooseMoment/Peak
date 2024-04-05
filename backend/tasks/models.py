@@ -32,8 +32,6 @@ class Task(Base, PrivacyMixin):
     due_time = models.TimeField(null=True, blank=True)
     priority = models.IntegerField(default=0)
     memo = models.TextField(null=True, blank=True)
-    reminder_datetime = models.DateTimeField(null=True, blank=True)
-
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

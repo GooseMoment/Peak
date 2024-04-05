@@ -18,7 +18,7 @@ class TaskAdmin(admin.ModelAdmin):
         (
             "Date & Time",
             {
-                "fields": ["completed_at", "due_date", "due_time", "reminder_datetime"],
+                "fields": ["completed_at", "due_date", "due_time"],
             },
         ),
         fieldset_base,

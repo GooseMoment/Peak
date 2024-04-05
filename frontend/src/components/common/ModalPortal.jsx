@@ -17,6 +17,12 @@ const ModalPortal = ({ children, closeModal, additional=false }) => {
     const shouldRender = !additional ? useDelayUnmount(isOpen, 100, closeModal) : true
 
     useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        document.querySelector('html').scrollTop = window.scrollY;
+            return () => document.body.style.overflow = null;
+    }, [])
+
+    useEffect(() => {
         el.addEventListener("click", handleOutsideClick)
 
         if (!additional) {
