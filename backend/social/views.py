@@ -1,31 +1,109 @@
-from django.http import HttpRequest
+from django.http import HttpRequest, Http404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
-def post_follow_request(request: HttpRequest, user_id):
-    pass
+from rest_framework.decorators import api_view
+from django.shortcuts import get_object_or_404
 
-def patch_follow_request(request: HttpRequest, user_id):
-    pass
+from .models import *
+from .serializers import *
+from users.serializers import UserSerializer
 
-def delete_follow_request(request: HttpRequest, user_id):
-    pass
+# following 만드는 거
+class FollowView(APIView):
+    #request 확인 기능 넣기
+    #block 검사
+    def put(self, request, follower, followee):
+        followerUser = get_object_or_404(User, username=follower)
+        followeeUser = get_object_or_404(User, username=followee)
 
-def get_profile(request: HttpRequest, user_id):
-    pass
+        try:
+            created = Following.objects.create(follower=followerUser, followee=followeeUser)
+        except:
+            return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        
+        serializer = FollowingSerializer(created)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-def get_followers(request: HttpRequest, user_id):
-    pass
+    def get(self, request, follower, followee):
+        following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
+        
+        serializer = FollowingSerializer(following)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-def get_followings(request: HttpRequest, user_id):
-    pass
+    def patch(self, request, follower, followee):
+        following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
+        
+        following.is_request = False
+        following.save()
+        
+        return Response(status=status.HTTP_202_ACCEPTED)
+    
+    def delete(self, request, follower, followee):
+        following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
+        #soft delete
+        following.delete()
+        
+        return Response(status=status.HTTP_200_OK)
 
-def get_blocks(request: HttpRequest):
-    pass
+@api_view(["GET"])
+def get_followers(request: HttpRequest, username):
+    followers = Following.objects.filter(followee__username=username).all()
+    followerUsers = User.objects.filter(followings__in=followers.all()).all()
+    
+    serializer = UserSerializer(followerUsers, many=True)    
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-def post_block(request: HttpRequest, user_id):
-    pass
+@api_view(["GET"])
+def get_followings(request: HttpRequest, username):
+    followings = Following.objects.filter(follower__username=username).all()
+    followingUsers = User.objects.filter(followers__in=followings.all()).all()
+    
+    serializer = UserSerializer(followingUsers, many=True)    
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-def delete_block(request: HttpRequest, user_id):
-    pass
+class BlockView(APIView):
+    #상대 볼 수 없게/
+    def put(self, request, blocker, blockee):
+        blockerUser = get_object_or_404(User, username=blocker)
+        blockeeUser = get_object_or_404(User, username=blockee)
+        
+        try:
+            created = Block.objects.create(blocker=blockerUser, blockee=blockeeUser)
+        except:
+            return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        
+        serializer = BlockSerializer(created)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def get(self, request, blocker, blockee):
+        blocking = get_object_or_404(Block, blocker__username=blocker, blockee__username=blockee)
+        
+        serializer = BlockSerializer(blocking)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def delete(self, request, blocker, blockee):
+        blocking = get_object_or_404(Block, blocker__username=blocker, blockee__username=blockee)
+        #soft delete
+        blocking.delete()
+        
+        return Response(status=status.HTTP_200_OK)
+
+@api_view(["GET"])
+def get_blocks(request: HttpRequest, username):
+    blocks = Block.objects.filter(blocker__username=username).all()
+    blockUsers = User.objects.filter(blockers__in=blocks.all()).all()
+    
+    serializer = UserSerializer(blockUsers, many=True)    
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 def get_daily_report(request: HttpRequest, user_id, date):
     pass

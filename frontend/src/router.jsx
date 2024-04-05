@@ -9,6 +9,9 @@ import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 import ProjectPage from "@pages/ProjectPage"
 import ProjectListPage from "@pages/ProjectListPage"
+import SocialPage from "@pages/SocialPage"
+import SocialFollowingPage from "@pages/SocialFollowingPage"
+import SocialExplorePage from "@pages/SocialExplorePage"
 import UserPage from "@pages/UserPage"
 import LandingPage from "@pages/LandingPage"
 import SignPage from "@pages/SignPage"
@@ -80,7 +83,20 @@ const routes = [
             },
             {
                 path: "social",
-                element: <div>This is /social</div>,
+                children: [
+                    {
+                        index: true,
+                        element: <SocialPage />
+                    },
+                    {
+                        path: "following",
+                        element: <SocialFollowingPage />,
+                    },
+                    {
+                        path: "explore",
+                        element: <SocialExplorePage />,
+                    },
+                ]
             },
             {
                 path: "projects",
