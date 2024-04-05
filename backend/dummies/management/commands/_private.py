@@ -23,11 +23,6 @@ Faker.seed(775479)
 
 PASSWORD_DEFAULT = "PASSWORD_DEFAULT"
 
-# from: https://docs.gravatar.com/gravatar-images/django/
-def gravatar_url(email, size=40):
-    default = "identicon"
-    return "https://www.gravatar.com/avatar/%s?%s" % (md5(email.lower().encode()).hexdigest(), urlencode({'d':default, 's':str(size)}))
-
 def factory_user() -> User:
     email = fake.email()
     return User(
@@ -35,7 +30,6 @@ def factory_user() -> User:
         display_name=fake.name(),
         password=make_password(PASSWORD_DEFAULT),
         email=fake.email(),
-        profile_img_uri=gravatar_url(email),
         bio=fake.sentence(),
     )
 
@@ -45,31 +39,26 @@ def create_users(n: int = 30) -> list[User]:
             "username": "andless._.", "display_name": "구우구우",
             "password": PASSWORD_DEFAULT, "email": "andys2004@example.com",
             "bio": "두 사람은 여관으로 돌아왔다.",
-            "profile_img_uri": "https://avatars.githubusercontent.com/u/129763673?s=100&v=4"
         },
         {
             "username": "raccoon_nut_", "display_name": "🦝🌰",
             "password": PASSWORD_DEFAULT, "email": "dksgo@example.com",
             "bio": "청년이 목욕을 하러 세면장으로 들어가자,",
-            "profile_img_uri": "https://avatars.githubusercontent.com/u/64053782?v=4"
         },
         {
             "username": "bmbwhl", "display_name": "범고래",
             "password": PASSWORD_DEFAULT, "email": "bmbwhl@example.com",
             "bio": "나카타 상은 이불 속으로 들어가",
-            "profile_img_uri": "https://avatars.githubusercontent.com/u/20675630?v=4",
         },
         {
             "username": "minyeong2675", "display_name": "주민요이",
             "password": PASSWORD_DEFAULT, "email": "minyoy@example.com",
             "bio": "이내 잠들어 버렸다.",
-            "profile_img_uri": "https://avatars.githubusercontent.com/u/65756020?v=4",
         },
         {
             "username": "aksae", "display_name": "(주) 구스피",
             "password": PASSWORD_DEFAULT, "email": "jinyoung3635@example.com",
             "bio": "청년은 텔레비전 야구 중계를",
-            "profile_img_uri": "https://avatars.githubusercontent.com/u/39623851?v=4",
         },
     ]
 
@@ -80,7 +69,7 @@ def create_users(n: int = 30) -> list[User]:
             user = User(
                 username=data["username"], display_name=data["display_name"],
                 password=make_password(data["password"]), email=data["email"],
-                bio=data["bio"], profile_img_uri=data["profile_img_uri"]
+                bio=data["bio"], 
             )
 
             user.save()
