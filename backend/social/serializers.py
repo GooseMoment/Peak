@@ -18,8 +18,23 @@ class PeckSerializer(serializers.ModelSerializer):
         model = Peck
         fields = ["id", "user", "task", "count"]
 
-class DailyReportSerializer(serializers.Serializer):
-    task = TaskSerializer()
+class DailyReportSerializer(serializers.ModelSerializer):
+    recent_task = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'display_name', 'profile_img_uri', 'recent_task']
+    
+    def get_recent_task(self, obj):
+        day_min = self.context.get('day_min', None)
+        day_max = self.context.get('day_max', None)
+        
+        recent_task = obj.tasks.filter(
+            completed_at__range=(day_min, day_max)
+        ).all().order_by("-completed_at").first()
+        
+        return TaskSerializer(recent_task).data if recent_task else None
+        
 
 class DailyCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
