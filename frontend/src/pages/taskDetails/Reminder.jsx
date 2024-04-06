@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router-dom"
+import { useOutletContext, useSubmit } from "react-router-dom"
 
 import styled from "styled-components"
 
@@ -15,6 +15,7 @@ import custom from "@assets/project/reminder/custom.svg"
 
 const Reminder = ({ task }) => {
     const [closeComponent] = useOutletContext()
+    const submit = useSubmit()
 
     /*
     let DueDateTime = new Date(`${task.due_date}T${task.due_time}`)

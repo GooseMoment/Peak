@@ -1,4 +1,4 @@
-import { useRouteLoaderData, useNavigate, useOutletContext } from "react-router-dom"
+import { useRouteLoaderData, useNavigate, useOutletContext, useSubmit } from "react-router-dom"
 import { useState, Fragment } from "react"
 
 import styled from "styled-components"
@@ -9,13 +9,17 @@ import Detail from "@components/project/common/Detail"
 const Drawer = ({ projectId, task }) => {
     const { projects } = useRouteLoaderData("app")
     const navigate = useNavigate()
+    const submit = useSubmit()
     const [closeComponent] = useOutletContext()
 
     const [collapsed, setCollapsed] = useState(false)
 
     const changeDrawer = (drawerId) => {
         return async () => {
-            submit({drawer: drawerId}, {method: "PATCH"})
+            submit({drawer: drawerId}, {
+                method: "PATCH",
+                action: "..",
+            })
             navigate(`/app/projects/${projectId}/tasks/${task.id}/detail/drawer`)
         }
     }

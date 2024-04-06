@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router-dom"
+import { useOutletContext, useSubmit } from "react-router-dom"
 
 import styled from "styled-components"
 
@@ -10,10 +10,14 @@ import critical from "@assets/project/priority/critical.svg"
 
 const Priority = () => {
     const [closeComponent] = useOutletContext()
+    const submit = useSubmit()
 
     const changePriority = (priority) => {
         return async () => {
-            submit({priority}, {method: "PATCH"})
+            submit({priority}, {
+                method: "PATCH",
+                action: "..",
+            })
         }
     }
 
