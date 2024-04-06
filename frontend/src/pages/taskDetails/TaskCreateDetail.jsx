@@ -3,7 +3,6 @@ import { useNavigate, useOutletContext, useRouteLoaderData } from "react-router-
 import styled from "styled-components"
 import FeatherIcon from 'feather-icons-react'
 
-import ModalPortal from "@components/common/ModalPortal"
 import TaskName from "@components/project/TaskName"
 import Contents from "./Contents"
 
@@ -17,18 +16,16 @@ function TaskCreateDetail({ setIsComponentOpen }) {
     }
 
     return (
-        <ModalPortal closeModal={onClose}>
-            <TaskCreateDetailBox>
-                <TaskNameBox>
-                    <TaskName projectId={projectId} task={task} color={color} editable={true}/>
-                    <Icons>
-                        <FeatherIcon icon="trash-2" />
-                        <FeatherIcon icon="x" onClick={onClose} />
-                    </Icons>
-                </TaskNameBox>
-                <Contents task={task} setIsComponentOpen={setIsComponentOpen}/>
-            </TaskCreateDetailBox>
-        </ModalPortal>
+        <TaskCreateDetailBox>
+            <TaskNameBox>
+                <TaskName projectId={projectId} task={task} color={color} editable={true}/>
+                <Icons>
+                    <FeatherIcon icon="trash-2" />
+                    <FeatherIcon icon="x" onClick={onClose} />
+                </Icons>
+            </TaskNameBox>
+            <Contents task={task} setIsComponentOpen={setIsComponentOpen}/>
+        </TaskCreateDetailBox>
     )
 }
 
