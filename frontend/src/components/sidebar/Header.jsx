@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react"
 
+import MildButton from "@components/common/MildButton"
+import { cubicBeizer } from "@assets/keyframes"
 import useScreenSize from "@utils/useScreenSize"
 
+import styled, { css, keyframes } from "styled-components"
 import FeatherIcon from "feather-icons-react"
-import styled, { css } from "styled-components"
-import MildButton from "@components/common/MildButton"
 
 const autoCollapseWidth = 950
 
@@ -41,9 +42,9 @@ const Header = ({collapsed, setCollapsed}) => {
 
     return <header>
         <ButtonContainer $collapsed={collapsed}>
-            <MildButton onClick={onClickCollapseButton}>
-                <FeatherIcon icon={collapsed ? "chevrons-right" : "chevrons-left"} />
-            </MildButton>
+            <CollapseButton onClick={onClickCollapseButton} $collapsed={collapsed} >
+                <FeatherIcon icon="chevrons-left" />
+            </CollapseButton>
         </ButtonContainer>
     </header>
 }
@@ -58,6 +59,37 @@ margin: 0 0.75em;
 ${({$collapsed}) => $collapsed ? css`
     justify-content: center;
 ` : null}
+`
+const rotateToLeft = keyframes`
+    0% {
+        transform: rotate(180deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+`
+
+const rotateToRight = keyframes`
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(180deg);
+    }
+`
+
+const CollapseButton = styled(MildButton)`
+    & svg {
+        animation: ${rotateToLeft} 0.1s ${cubicBeizer} forwards;
+    }
+
+    ${props => props.$collapsed && css`
+        & svg {
+            animation: ${rotateToRight} 0.5s ${cubicBeizer} forwards;
+        }
+    `}
 `
 
 export default Header
