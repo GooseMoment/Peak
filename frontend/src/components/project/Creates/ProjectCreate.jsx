@@ -3,7 +3,6 @@ import { useRevalidator } from "react-router-dom"
 
 import styled from "styled-components"
 
-import { cubicBeizer } from "@assets/keyframes"
 import TitleFrame from "@components/project/common/Title"
 import MiddleFrame from "@components/project/common/Middle"
 import notify from "@utils/notify"
@@ -16,10 +15,10 @@ const ProjectCreate = ({onClose}) => {
     const revalidator = useRevalidator()
 
     const [name, setName] = useState('')
-    const [color, setColor] = useState('')
-    const [displayColor, setDisplayColor] = useState('')
-    const [type, setType] = useState('')
-    const [displayType, setDisplayType] = useState('')
+    const [color, setColor] = useState('DC2E2E')
+    const [displayColor, setDisplayColor] = useState('빨강')
+    const [type, setType] = useState('regular')
+    const [displayType, setDisplayType] = useState('상시 프로젝트')
 
      //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
@@ -66,8 +65,6 @@ const ProjectBox = styled.div`
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
-
-    transition: left 0.5s ${cubicBeizer}, width 0.5s ${cubicBeizer};
     
     &::after {
         content: " ";

@@ -17,8 +17,8 @@ const DrawerCreate = ({onClose}) => {
     const revalidator = useRevalidator()
 
     const [name, setName] = useState('')
-    const [privacy, setPrivacy] = useState('')
-    const [displayPrivacy, setDisplayPrivacy] = useState('')
+    const [privacy, setPrivacy] = useState('public')
+    const [displayPrivacy, setDisplayPrivacy] = useState('전체공개')
 
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
