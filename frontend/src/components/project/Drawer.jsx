@@ -34,8 +34,8 @@ function Drawer({projectId, drawer, color}){
     return (
         <>
             <DrawerBox $color = {color}>
-                <DrawerName>{drawer.name}</DrawerName>
-                <DrawerIcon>
+                <DrawerName $color = {color}>{drawer.name}</DrawerName>
+                <DrawerIcon $color = {color}>
                     {DrawerIcons.map(item => (
                         <FeatherIcon key={item.icon} icon={item.icon} onClick={item.click}/>
                     ))}
@@ -66,8 +66,8 @@ const DrawerBox = styled.div`
     justify-content: space-between;
     margin-top: 1.5em;
     text-decoration: double;
-    background-color: #${props => props.$color};
-    border-radius: 17px 17px 0px 0px;
+    border: solid 0.25em #${props => props.$color};
+    border-radius: 15px;
 `
 
 const DrawerName = styled.h1`
@@ -75,8 +75,7 @@ const DrawerName = styled.h1`
     font-weight: bold;
     text-align: left;
     margin-left: 1.45em;
-    color: #FFFFFF;
-    stroke: #000000;
+    color: #${props => props.$color};
     stroke-opacity: 0.2;
 `
 
@@ -88,6 +87,7 @@ const DrawerIcon = styled.div`
     & svg {
         top: 0;
         margin-right: 1em;
+        color: #${props => props.$color};
         cursor: pointer;
     }
 `
