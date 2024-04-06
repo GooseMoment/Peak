@@ -1,4 +1,5 @@
 import {
+    Outlet,
     createBrowserRouter,
     redirect,
 } from "react-router-dom"
@@ -141,12 +142,10 @@ const routes = [
                             const task = await getTask(params.task_id)
                             return task
                         },
+                        element: <taskCreates.TaskDetailElement />,
                         children: [
                             {
                                 index: true,
-                                element: <ModalPortal>
-                                    <taskCreates.TaskCreateDetail />
-                                </ModalPortal>,
                             },
                             {
                                 path: "due",
@@ -154,7 +153,7 @@ const routes = [
                             },
                             {
                                 path: "reminder",
-                                Component: taskCreates.Calendar,
+                                Component: taskCreates.Reminder,
                             },
                             {
                                 path: "priority",

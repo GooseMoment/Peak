@@ -1,4 +1,4 @@
-import { useLoaderData, useParams } from "react-router-dom"
+import { Outlet, useLoaderData, useParams } from "react-router-dom"
 import { useState } from "react"
 
 import styled from "styled-components"
@@ -10,7 +10,7 @@ import ModalPortal from "@components/common/ModalPortal"
 
 const ProjectPage = () => {
     const { id } = useParams()
-    const project = useLoaderData()
+    const { project } = useLoaderData()
     const drawers = project.drawers
 
     const [isDrawerCreateOpen, setisDrawerCreateOpen] = useState(false)
@@ -31,6 +31,7 @@ const ProjectPage = () => {
             <ModalPortal closeModal={() => {setisDrawerCreateOpen(false)}}>
                 <DrawerCreate onClose={() => {setisDrawerCreateOpen(false)}}/>
             </ModalPortal>}
+        <Outlet context={[id, project.color]} />
     </>
     )
 }
