@@ -14,7 +14,11 @@ const TaskDetailElement = () => {
         navigate(`.`)
     }
 
-    return <ModalPortal>
+    const closeDetail = () => {
+        navigate(`..`)
+    }
+
+    return <ModalPortal closeModal={closeDetail}>
         <TaskCreateDetail setIsComponentOpen={setIsComponentOpen}/>
         { isComponentOpen && <ModalPortal additional>
             <Outlet context={[closeComponent]} />
