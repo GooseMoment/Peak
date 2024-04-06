@@ -122,12 +122,16 @@ const VLine = styled.div`
 `
 
 const ContentText = styled.div`
+    width: 31em;
     font-style: normal;
     font-size: 1.2em;
     color: #000000;
     margin-top: 1.1em;
     margin-left: 1.3em;
     text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &:hover {
     cursor: pointer;

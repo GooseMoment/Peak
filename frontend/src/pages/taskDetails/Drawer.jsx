@@ -68,9 +68,13 @@ const ItemBox = styled.div`
 `
 
 const ItemText = styled.div`
+    width: 10em;
     font-weight: ${props => props.$is_project ? '500' : 'normal'};
     font-size: 1em;
     color: #000000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &:hover {
         font-weight: bolder;

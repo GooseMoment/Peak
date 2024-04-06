@@ -71,12 +71,16 @@ const DrawerBox = styled.div`
 `
 
 const DrawerName = styled.h1`
+    width: 42em;
     font-size: 1.4em;
     font-weight: bold;
     text-align: left;
     margin-left: 1.45em;
     color: #${props => props.$color};
     stroke-opacity: 0.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 
 const DrawerIcon = styled.div`
