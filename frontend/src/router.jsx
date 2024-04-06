@@ -60,7 +60,7 @@ const routes = [
             }
         },
         shouldRevalidate: ({currentUrl}) => {
-            return currentUrl.pathname.startsWith("/app/users/")
+            return currentUrl.pathname.startsWith("/app/users/") || currentUrl.pathname === "/app/projects"
         },
         errorElement: <ErrorPage />,
         children: [
