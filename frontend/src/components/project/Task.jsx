@@ -36,7 +36,7 @@ const Box = styled.div`
 
 const CalendarText = styled.p`
     display: flex;
-    margin-left: 2.8em;
+    margin-left: 2.75em;
     font-style: normal;
     font-size: 0.8em;
     color: ${(props) => (props.$completed ? '#A4A4A4' : '#000000')};

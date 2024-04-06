@@ -94,14 +94,14 @@ const DrawerIcon = styled.div`
 
 const TaskList = styled.div`
     flex: 1;
-    margin-left: 1.1em;
+    margin-left: 0.5em;
 `
 
 const TaskCreateButton = styled.div`
     flex: 1;
     display: flex;
     align-items: center;
-    margin-left: 1.3em;
+    margin-left: 1.9em;
     margin-top: 1.8em;
     
     &:hover {

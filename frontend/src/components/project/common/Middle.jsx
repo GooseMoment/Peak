@@ -78,6 +78,8 @@ const ContentText = styled.div`
 const AddButton = styled(Button)`
     float: right;
     margin: 1em;
+    margin-right: 2.5em;
+    margin-bottom: 2em;
 `
 
 export default MiddleFrame
