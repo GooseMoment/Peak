@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom"
 
 import LandingRoot from "@components/landing/LandingRoot"
-import TaskCreateDetail from "@pages/taskDetails/TaskCreateDetail"
 
 import logo from "@assets/logo.svg"
 import projectComplete from "@assets/landing/undraw_project_complete_lwss.svg"
@@ -44,7 +43,6 @@ const LandingPage = () => {
             <img className="second" src="./img/tasks.svg" />
         </div>
         <div className="right" onClickCapture={e => e.stopPropagation()}>
-        <   TaskCreateDetail task={{completd: false, name: "집안일 하기"}} />
         </div>
     </article>
     <article>
