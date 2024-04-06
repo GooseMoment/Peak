@@ -75,6 +75,10 @@ margin: 0 1.5em;
 background-color: inherit;
 border-radius: 10px;
 
+text-overflow: ellipsis;
+overflow: hidden;
+white-space: nowrap;
+
 & svg {
     stroke: none;
 }
