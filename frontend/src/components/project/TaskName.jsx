@@ -1,7 +1,7 @@
 import { Link, useSubmit } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-import styled from "styled-components"
+import styled, {keyframes, css} from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 function TaskName({projectId, task, color, editable}){
@@ -10,12 +10,18 @@ function TaskName({projectId, task, color, editable}){
     const pathRoot = `/app/projects/${projectId}/tasks/${task.id}/detail`
 
     const [taskName, setTaskName] = useState(task.name)
+    const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        setIsLoading(false)
+    }, [task]);
     
     const onchange = (e) => {
         setTaskName(e.target.value)
     }
 
     const toComplete = () => {
+        setIsLoading(true)
         let completed_at = "null"
         if (!(task.completed_at)) {
             completed_at = date.toISOString()
@@ -46,6 +52,7 @@ function TaskName({projectId, task, color, editable}){
                     $completed={task.completed_at ? true : false}
                     $color={color}
                     $due_date={task.due_date}
+                    $isLoading={isLoading}
                     onClick={toComplete}
                 >
                     {task.completed_at && <FeatherIcon icon="check"/>}
@@ -70,6 +77,18 @@ const TaskNameBox = styled.div`
     }
 `
 
+const rotateAnimation = keyframes`
+    100% {
+        transform: rotate(360deg);
+    }
+`;
+
+const reverseRotateAnimation = keyframes`
+    100% {
+        transform: rotate(-360deg);
+    }
+`;
+
 const TaskCircle = styled.div`
     display: flex;
     justify-content: center;
@@ -83,12 +102,22 @@ const TaskCircle = styled.div`
     font-size: 1em;
 
     & svg {
-    width: 1em;
-    height: 1em;
-    stroke: #A4A4A4;
-    stroke-width: 0.2em;
-    margin-right: 0;
-}
+        width: 1em;
+        height: 1em;
+        stroke: #A4A4A4;
+        stroke-width: 0.2em;
+        margin-right: 0;
+        animation: none;
+    }
+
+    ${({$isLoading}) => $isLoading ? css`
+        border: 3px dashed ${(props) => (props.$completed ? '#A4A4A4': `#${props.$color}`)};
+        animation: ${rotateAnimation} 6s linear infinite;
+
+        & svg {
+            animation: ${reverseRotateAnimation} 6s linear infinite;
+        }
+    `: null}
 `
 
 const Text = styled.div`
