@@ -67,10 +67,14 @@ const FlexBox = styled.div`
 `
 
 const NameText = styled.div`
+    max-width: 35em;
     font-weight: normal;
     font-size: 1.25em;
     margin-left: 0.3em;
     color: #000000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &:hover {
         color: #FF4A03;
