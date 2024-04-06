@@ -5,19 +5,21 @@ import FeatherIcon from "feather-icons-react"
 
 const Middle = ({projects, collapsed}) => {
     return <MiddleBox>
-         {items.map(item => <SidebarLink to={item.to} draggable="false" key={item.to} end={item.end}>
+        {items.map(item => <SidebarLink to={item.to} draggable="false" key={item.to} end={item.end}>
             <ItemBox $collapsed={collapsed} key={item.name}>   
                 <FeatherIcon icon={item.icon} />
                 {collapsed ? null : item.name}
             </ItemBox>
         </SidebarLink>)}
 
-        {projects && projects.map(project => <SidebarLink to={`projects/` + project.id} draggable="false" key={project.id}>
-            <ProjectItemBox $collapsed={collapsed}>
-                <FeatherIcon icon="circle" fill={`#` + project.color} />
-                {collapsed ? null : project.name}
-            </ProjectItemBox>
-        </SidebarLink>)}
+        <ProjectItemsContainer $collapsed={collapsed}>
+            {projects && projects.map(project => <SidebarLink to={`projects/` + project.id} draggable="false" key={project.id}>
+                <ProjectItemBox $collapsed={collapsed}>
+                    <FeatherIcon icon="circle" fill={`#` + project.color} />
+                    {collapsed ? null : project.name}
+                </ProjectItemBox>
+            </SidebarLink>)}
+        </ProjectItemsContainer>
     </MiddleBox>
 }
 
@@ -53,6 +55,18 @@ ${({$collapsed}) => $collapsed ? css`
         margin-right: 0;
     }
 ` : null}
+`
+
+const ProjectItemsContainer = styled.div`
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: #FFC6C6 #F9F7F6;
+    height: calc(100vh - 22em);
+
+    ${props => props.$collapsed && css`
+        scrollbar-width: none;
+    `}
 `
 
 const ProjectItemBox = styled.div`
