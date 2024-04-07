@@ -12,7 +12,7 @@ class TaskReminderSerializer(serializers.ModelSerializer):
         fields = ["task", "scheduled"]
 
 class NotificatonSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    username = serializers.PrimaryKeyRelatedField(read_only=True, source="user.username")
     task_reminder = TaskReminderSerializer()
     reaction = ReactionSerializer()
     following = FollowingSerializer()
@@ -21,4 +21,4 @@ class NotificatonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         depth = 1
-        fields = ["id", "type", "user", "task_reminder", "reaction", "following", "peck"]
+        fields = ["id", "type", "username", "task_reminder", "reaction", "following", "peck"]
