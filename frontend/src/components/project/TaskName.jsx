@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import styled, {keyframes, css} from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
+import notify from "@utils/notify"
+
 function TaskName({projectId, task, color, editable}){
     const date = new Date()
     const submit = useSubmit()
@@ -28,7 +30,7 @@ function TaskName({projectId, task, color, editable}){
     const onEnter = async (e) => {
         if(e.key === 'Enter') {
             changeTaskName(taskName)
-            navigate(`/app/projects/${projectId}`)
+            notify.success("이름이 변경되었습니다.")
         }
     }
 
