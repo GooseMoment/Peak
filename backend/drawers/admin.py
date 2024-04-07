@@ -4,7 +4,7 @@ from api.admin import fieldset_base, readonly_fields_base
 
 @admin.register(Drawer)
 class DrawerAdmin(admin.ModelAdmin):
-    ordering = ["user", "updated_at"]
+    ordering = ["-updated_at"]
     search_fields = ["user__username", "name"]
     autocomplete_fields = ["user", "project"]
     readonly_fields = readonly_fields_base
