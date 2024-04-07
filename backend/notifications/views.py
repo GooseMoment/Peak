@@ -17,7 +17,9 @@ class NotificationList(mixins.ListModelMixin,
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Notification.objects.filter(user=self.request.user).order_by("-created_at").all()
+        types = self.request.query_params.get("types", "").split("|")       
+
+        return Notification.objects.filter(user=self.request.user).order_by("-created_at").filter(type__in=types).all()
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
