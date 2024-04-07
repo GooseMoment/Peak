@@ -1,15 +1,18 @@
+import { useOutletContext, useSubmit } from "react-router-dom"
+
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-import DetailFrame from "@components/project/common/Detail"
-import { patchTask } from "@api/tasks.api"
+import Detail from "@components/project/common/Detail"
 
 import today from "@assets/project/calendar/today.svg"
 import tomorrow from "@assets/project/calendar/tomorrow.svg"
 import next_week from "@assets/project/calendar/next_week.svg"
 import slach from "@assets/project/slach.svg"
 
-const Calendar = ({ taskId, setTasks, onClose }) => {
+const Calendar = () => {
+    const [closeComponent] = useOutletContext()
+    const submit = useSubmit()
     let date = new Date()
 
     const items = [
@@ -20,29 +23,26 @@ const Calendar = ({ taskId, setTasks, onClose }) => {
         {id: 4, icon: <img src={slach}/>, content: "날짜없음", set: null},
     ]
 
-    const changeDueDate = (id, set) => {
+    const changeDueDate = (set) => {
         return async () => {
             date.setDate(date.getDate() + set)
-            const edit = {
-                'due_date': set === null ? null : date.toISOString().slice(0, 10),
+            let due_date = "null"
+            if (!(set === null)) {
+                due_date = date.toISOString().slice(0, 10)
             }
-            await patchTask(id, edit)
-            setTasks(prev => prev.map((task) => {
-                if (task.id === taskId) {
-                    task.due_date = date.toISOString().slice(0, 10)
-                    return task
-                }
-                return task
-            }))
+            submit({due_date}, {
+                method: "PATCH",
+                action: "..",
+            })
         }
     }
 
     return (
-        <DetailFrame title="기한 지정" onClose={onClose}>
+        <Detail title="기한 지정" onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
-                    <ItemText onClick={changeDueDate(taskId, item.set)}>{item.content}</ItemText>
+                    <ItemText onClick={changeDueDate(item.set)}>{item.content}</ItemText>
                 </ItemBlock>
             ))}
             <CLine />
@@ -54,7 +54,7 @@ const Calendar = ({ taskId, setTasks, onClose }) => {
                     시간 추가
                 </AddTimeText>
             </AddTime>
-        </DetailFrame>
+        </Detail>
     )
 }
 

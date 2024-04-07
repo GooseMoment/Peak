@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react"
+import { useOutletContext, useSubmit } from "react-router-dom"
 
 import styled from "styled-components"
 
-import DetailFrame from "@components/project/common/Detail"
-import { patchTask } from "@api/tasks.api"
+import Detail from "@components/project/common/Detail"
 
 import before_5 from "@assets/project/reminder/before_5.svg"
 import before_15 from "@assets/project/reminder/before_15.svg"
@@ -14,7 +13,11 @@ import before_1D from "@assets/project/reminder/before_1D.svg"
 import before_2D from "@assets/project/reminder/before_2D.svg"
 import custom from "@assets/project/reminder/custom.svg"
 
-const Reminder = ({ task, setTasks, onClose }) => {
+const Reminder = ({ task }) => {
+    const [closeComponent] = useOutletContext()
+    const submit = useSubmit()
+
+    /*
     let DueDateTime = new Date(`${task.due_date}T${task.due_time}`)
 
     const changeReminder = (id, set, day, hour, minute) => {
@@ -24,32 +27,21 @@ const Reminder = ({ task, setTasks, onClose }) => {
             { task.due_time && DueDateTime.setMinutes(DueDateTime.getMinutes() - minute)}
             { set && DueDateTime.setHours(9)}
             { set && DueDateTime.setMinutes(0)}
-
-            const edit = {
-                'reminder_datetime': DueDateTime,
-            }
-            await patchTask(id, edit)
-            setTasks(prev => prev.map((prevTask) => {
-                if (prevTask.id === task.id) {
-                    prevTask.reminder_datetime = DueDateTime
-                    return prevTask
-                }
-                return prevTask
-            }))
         }
-    }
+    }*/
+    /* 수정해야함 */
 
     return (
-        <DetailFrame title="알람 설정" onClose={onClose}>
+        <Detail title="알람 설정" onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
-                    <ItemText onClick={changeReminder(task.id, item.id, item.set, item.day, item.hour, item.minute)}>
+                    <ItemText>
                         {item.content}
                     </ItemText>
                 </ItemBlock>
             ))}
-        </DetailFrame>
+        </Detail>
     )
 }
 

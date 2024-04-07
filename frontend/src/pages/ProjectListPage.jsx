@@ -9,7 +9,7 @@ import ProjectCreate from "@components/project/Creates/ProjectCreate"
 
 const ProjectListPage = () => {
     const {projects} = useRouteLoaderData("app")
-    const [isCreateOpen, setsIsCreateOpen] = useState(false)
+    const [isCreateOpen, setIsCreateOpen] = useState(false)
 
     return(
         <>
@@ -28,13 +28,13 @@ const ProjectListPage = () => {
                     </FlexBox>
                 </Box>
             ))}
-            <TaskCreateButton onClick={() => {setsIsCreateOpen(true)}}>
+            <TaskCreateButton onClick={() => {setIsCreateOpen(true)}}>
                 <FeatherIcon icon="plus-circle"/>
                 <TaskCreateText>프로젝트 추가</TaskCreateText>
             </TaskCreateButton>
             { isCreateOpen &&
-            <ModalPortal closeModal={() => {setsIsCreateOpen(false)}}>
-                <ProjectCreate onClose={() => {setsIsCreateOpen(false)}}/>
+            <ModalPortal closeModal={() => {setIsCreateOpen(false)}}>
+                <ProjectCreate onClose={() => {setIsCreateOpen(false)}}/>
             </ModalPortal>}
         </>
     )
@@ -51,6 +51,7 @@ const Box = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 3.7em;
 `
 
 const FlexBox = styled.div`
@@ -67,10 +68,14 @@ const FlexBox = styled.div`
 `
 
 const NameText = styled.div`
+    max-width: 10em;
     font-weight: normal;
     font-size: 1.25em;
     margin-left: 0.3em;
     color: #000000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &:hover {
         color: #FF4A03;
@@ -94,8 +99,8 @@ const TaskCreateButton = styled.div`
     flex: 1;
     display: flex;
     align-items: center;
+    padding: 1.3em 0em;
     margin-left: 1.2em;
-    margin-top: 1.3em;
     
     &:hover {
         cursor: pointer;

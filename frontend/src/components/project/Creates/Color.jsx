@@ -1,9 +1,22 @@
-import styled from "styled-components"
+import { useState } from "react"
 
-import DetailFrame from "@components/project/common/Detail"
+import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
+import Detail from "@components/project/common/Detail"
+import ModalPortal from "@components/common/ModalPortal"
+import CustomColor from "./CustomColor"
+
 const Color = ({setColor, setDisplayColor, closeComponent}) => {
+    const [isCustomOpen, setIsCustomOpen] = useState(false)
+
+    const openCustom = () => {
+        setIsCustomOpen(true)
+    }
+
+    const closeCustom = () => {
+        setIsCustomOpen(false)
+    }
 
     const changeColor = (color, displayColor) => {
         return async () => {
@@ -14,14 +27,20 @@ const Color = ({setColor, setDisplayColor, closeComponent}) => {
     }
 
     return (
-        <DetailFrame title="색깔 설정" onClose={closeComponent}>
+        <Detail title="색깔 설정" onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     <FeatherIcon icon="circle" fill={'#'+item.color}/>
-                    <ItemText onClick={changeColor(item.color, item.display)}>{item.display}</ItemText>
+                    <ItemText onClick={(item.display === "사용자 지정") ? openCustom : changeColor(item.color, item.display)}>
+                        {item.display}
+                    </ItemText>
+                    { item.display ===  "사용자 지정" && isCustomOpen ?
+                    <ModalPortal closeModal={closeCustom} additional>
+                        <CustomColor closeCustom={closeCustom} changeColor={changeColor}/>
+                    </ModalPortal> : null }
                 </ItemBlock>
             ))}
-        </DetailFrame>
+        </Detail>
     )
 }
 

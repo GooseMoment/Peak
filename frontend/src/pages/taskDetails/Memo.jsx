@@ -1,10 +1,14 @@
-import DetailFrame from "@components/project/common/Detail"
+import { useOutletContext } from "react-router-dom"
 
-const Memo = ({ onClose }) => {
+import Detail from "@components/project/common/Detail"
+
+const Memo = () => {
+    const [closeComponent] = useOutletContext()
+
     return (
-        <DetailFrame title="메모 설정" onClose={onClose}>
+        <Detail title="메모 설정" onClose={closeComponent}>
             <div>Memo페이지입니다</div>
-        </DetailFrame>
+        </Detail>
     )
 }
 
