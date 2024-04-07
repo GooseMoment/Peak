@@ -75,7 +75,7 @@ function Contents({task, setIsComponentOpen}) {
                 <FeatherIcon icon={item.icon} />
                 <VLine $end={item.id === 1 || item.id === 5} />
                 <Link to={pathRoot+item.to} style={{ textDecoration: 'none' }}>
-                    <ContentText id ={item.icon} onClick={handleClickContent}>
+                    <ContentText id={item.icon} onClick={handleClickContent}>
                         {item.display}
                     </ContentText>
                 </Link>

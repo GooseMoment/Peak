@@ -18,7 +18,7 @@ const DetailBox = styled.div`
     z-index: 999;
     width: 15em;
     height: auto;
-    max-height: 25em;
+    max-height: 30em;
     overflow-y: auto;
     overflow-x: hidden;
     background-color: #FFFFFF;

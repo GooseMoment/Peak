@@ -51,6 +51,7 @@ const Box = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 3.7em;
 `
 
 const FlexBox = styled.div`
@@ -67,7 +68,7 @@ const FlexBox = styled.div`
 `
 
 const NameText = styled.div`
-    max-width: 35em;
+    max-width: 10em;
     font-weight: normal;
     font-size: 1.25em;
     margin-left: 0.3em;
@@ -98,8 +99,8 @@ const TaskCreateButton = styled.div`
     flex: 1;
     display: flex;
     align-items: center;
+    padding: 1.3em 0em;
     margin-left: 1.2em;
-    margin-top: 1.3em;
     
     &:hover {
         cursor: pointer;
