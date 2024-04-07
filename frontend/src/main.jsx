@@ -16,7 +16,7 @@ initClientSettings()
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <GlobalStyle />
-        <ToastContainer position="bottom-left" stacked hideProgressBar />
+        <ToastContainer position="bottom-right" stacked hideProgressBar />
         <RouterProvider router={router} />
     </React.StrictMode>,
 )
