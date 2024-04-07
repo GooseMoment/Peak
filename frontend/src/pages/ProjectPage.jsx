@@ -13,14 +13,14 @@ const ProjectPage = () => {
     const { project } = useLoaderData()
     const drawers = project.drawers
 
-    const [isDrawerCreateOpen, setisDrawerCreateOpen] = useState(false)
+    const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
 
     return (
     <>
         <TitleBox>
             <TitleName $color = {project.color}>{project.name}</TitleName>
             <Icons>
-                <FeatherIcon icon="plus" onClick={() => {setisDrawerCreateOpen(true)}}/>
+                <FeatherIcon icon="plus" onClick={() => {setIsDrawerCreateOpen(true)}}/>
                 <FeatherIcon icon="more-horizontal"/>
             </Icons>
         </TitleBox>
@@ -28,8 +28,8 @@ const ProjectPage = () => {
             <Drawer key={drawer.id} projectId={id} drawer={drawer} color={project.color}/>
         ))}
         { isDrawerCreateOpen &&
-            <ModalPortal closeModal={() => {setisDrawerCreateOpen(false)}}>
-                <DrawerCreate onClose={() => {setisDrawerCreateOpen(false)}}/>
+            <ModalPortal closeModal={() => {setIsDrawerCreateOpen(false)}}>
+                <DrawerCreate onClose={() => {setIsDrawerCreateOpen(false)}}/>
             </ModalPortal>}
         <Outlet context={[id, project.color]} />
     </>

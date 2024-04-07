@@ -1,4 +1,4 @@
-import { Link, useSubmit, useNavigate } from "react-router-dom"
+import { Link, useSubmit } from "react-router-dom"
 import { useState, useEffect } from "react"
 
 import styled, {keyframes, css} from "styled-components"
@@ -9,7 +9,6 @@ import notify from "@utils/notify"
 function TaskName({projectId, task, color, editable}){
     const date = new Date()
     const submit = useSubmit()
-    const navigate = useNavigate()
     const pathRoot = `/app/projects/${projectId}/tasks/${task.id}/detail`
 
     const [taskName, setTaskName] = useState(task.name)

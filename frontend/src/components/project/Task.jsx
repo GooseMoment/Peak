@@ -18,7 +18,7 @@ function Task({projectId, task, color}){
                 </CalendarText>}
             </div>
         </Box>
-    );
+    )
 }
 
 const Box = styled.div`

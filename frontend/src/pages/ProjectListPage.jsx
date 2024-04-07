@@ -9,7 +9,7 @@ import ProjectCreate from "@components/project/Creates/ProjectCreate"
 
 const ProjectListPage = () => {
     const {projects} = useRouteLoaderData("app")
-    const [isCreateOpen, setsIsCreateOpen] = useState(false)
+    const [isCreateOpen, setIsCreateOpen] = useState(false)
 
     return(
         <>
@@ -28,13 +28,13 @@ const ProjectListPage = () => {
                     </FlexBox>
                 </Box>
             ))}
-            <TaskCreateButton onClick={() => {setsIsCreateOpen(true)}}>
+            <TaskCreateButton onClick={() => {setIsCreateOpen(true)}}>
                 <FeatherIcon icon="plus-circle"/>
                 <TaskCreateText>프로젝트 추가</TaskCreateText>
             </TaskCreateButton>
             { isCreateOpen &&
-            <ModalPortal closeModal={() => {setsIsCreateOpen(false)}}>
-                <ProjectCreate onClose={() => {setsIsCreateOpen(false)}}/>
+            <ModalPortal closeModal={() => {setIsCreateOpen(false)}}>
+                <ProjectCreate onClose={() => {setIsCreateOpen(false)}}/>
             </ModalPortal>}
         </>
     )

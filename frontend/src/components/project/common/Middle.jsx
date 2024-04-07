@@ -6,7 +6,7 @@ import FeatherIcon from "feather-icons-react"
 import ModalPortal from "@components/common/ModalPortal"
 import Button from "@components/sign/Button"
 
-const MiddleFrame = ({items, submit, isComponentOpen, setIsComponentOpen}) => {
+const Middle = ({items, submit, isComponentOpen, setIsComponentOpen}) => {
     const [content, setContent] = useState()
     
     const handleClickContent = (e) => {
@@ -82,4 +82,4 @@ const AddButton = styled(Button)`
     margin-bottom: 2em;
 `
 
-export default MiddleFrame
+export default Middle

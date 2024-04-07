@@ -1,7 +1,7 @@
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-const DetailFrame = ({title, children, onClose}) => {
+const Detail = ({title, children, onClose}) => {
     return (
         <DetailBox $calendar={title === '기한 지정'}>
             <TitleBox>
@@ -69,4 +69,4 @@ const CLine = styled.div`
     margin-left: 1em;
 `
 
-export default DetailFrame
+export default Detail

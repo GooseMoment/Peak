@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import DetailFrame from "@components/project/common/Detail"
+import Detail from "@components/project/common/Detail"
 
 import goal from "@assets/project/type/goal.svg"
 import regular from "@assets/project/type/regular.svg"
@@ -16,14 +16,14 @@ const Type = ({setType, setDisplayType, closeComponent}) => {
     }
 
     return (
-        <DetailFrame title="프로젝트 설정" onClose={closeComponent}>
+        <Detail title="프로젝트 설정" onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
                     <ItemText onClick={changeType(item.type, item.display)}>{item.display}</ItemText>
                 </ItemBlock>
             ))}
-        </DetailFrame>
+        </Detail>
     )
 }
 

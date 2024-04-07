@@ -1,6 +1,7 @@
+import { useState } from "react"
+
 import FeatherIcon from "feather-icons-react"
 import styled, { css } from "styled-components"
-import { useState } from "react"
 
 const TaskCreateSimple = () => {
     const [tab, setTab] = useState(0)

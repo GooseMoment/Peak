@@ -3,20 +3,19 @@ import { useState } from "react"
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-import DetailFrame from "@components/project/common/Detail"
+import Detail from "@components/project/common/Detail"
 import ModalPortal from "@components/common/ModalPortal"
 import CustomColor from "./CustomColor"
 
 const Color = ({setColor, setDisplayColor, closeComponent}) => {
-    const [isCustomOpen, setisCustomOpen] = useState(false)
+    const [isCustomOpen, setIsCustomOpen] = useState(false)
 
     const openCustom = () => {
-        console.log("open")
-        setisCustomOpen(true)
+        setIsCustomOpen(true)
     }
 
     const closeCustom = () => {
-        setisCustomOpen(false)
+        setIsCustomOpen(false)
     }
 
     const changeColor = (color, displayColor) => {
@@ -28,7 +27,7 @@ const Color = ({setColor, setDisplayColor, closeComponent}) => {
     }
 
     return (
-        <DetailFrame title="색깔 설정" onClose={closeComponent}>
+        <Detail title="색깔 설정" onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     <FeatherIcon icon="circle" fill={'#'+item.color}/>
@@ -41,7 +40,7 @@ const Color = ({setColor, setDisplayColor, closeComponent}) => {
                     </ModalPortal> : null }
                 </ItemBlock>
             ))}
-        </DetailFrame>
+        </Detail>
     )
 }
 

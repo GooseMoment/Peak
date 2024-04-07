@@ -1,8 +1,8 @@
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-const TitleFrame = ({name, setName, icon, onClose}) => {    
-    const onchange = (e) => {
+const Title = ({name, setName, icon, onClose}) => {    
+    const changeName = (e) => {
         setName(e.target.value)
     }
 
@@ -13,7 +13,7 @@ const TitleFrame = ({name, setName, icon, onClose}) => {
                 <InputText
                     type='text'
                     value={name}
-                    onChange={onchange}
+                    onChange={changeName}
                     placeholder="이름을 입력하세요"
                 />
             </TitleBox>
@@ -79,4 +79,4 @@ const Icons = styled.div`
 `
 
 
-export default TitleFrame
+export default Title

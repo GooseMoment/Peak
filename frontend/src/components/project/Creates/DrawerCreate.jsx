@@ -4,8 +4,8 @@ import { useRevalidator, useParams } from "react-router-dom"
 import styled from "styled-components"
 
 import { cubicBeizer } from "@assets/keyframes"
-import TitleFrame from "@components/project/common/Title"
-import MiddleFrame from "@components/project/common/Middle"
+import Title from "@components/project/common/Title"
+import Middle from "@components/project/common/Middle"
 import Privacy from "./Privacy"
 
 import { postDrawer } from "@api/drawers.api"
@@ -53,8 +53,8 @@ const DrawerCreate = ({onClose}) => {
 
     return (
         <DrawerBox>
-            <TitleFrame name={name} setName={setName} icon="inbox" onClose={onClose}/>
-            <MiddleFrame items={items} submit={submit} isComponentOpen={isComponentOpen} setIsComponentOpen={setIsComponentOpen}/>
+            <Title name={name} setName={setName} icon="inbox" onClose={onClose}/>
+            <Middle items={items} submit={submit} isComponentOpen={isComponentOpen} setIsComponentOpen={setIsComponentOpen}/>
         </DrawerBox>
     )
 }

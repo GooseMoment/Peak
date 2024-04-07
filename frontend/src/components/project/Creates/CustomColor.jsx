@@ -4,7 +4,7 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 import Detail from "@components/project/common/Detail"
-import palettes from "./Palettes"
+import palettes from "./palettes"
 
 const CustomColor = ({closeCustom, changeColor}) => {
     const [activeTab, setActiveTab] = useState('기본')

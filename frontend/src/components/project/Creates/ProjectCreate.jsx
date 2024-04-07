@@ -3,8 +3,8 @@ import { useRevalidator } from "react-router-dom"
 
 import styled from "styled-components"
 
-import TitleFrame from "@components/project/common/Title"
-import MiddleFrame from "@components/project/common/Middle"
+import Title from "@components/project/common/Title"
+import Middle from "@components/project/common/Middle"
 import notify from "@utils/notify"
 import Color from "./Color"
 import Type from "./Type"
@@ -54,8 +54,8 @@ const ProjectCreate = ({onClose}) => {
 
     return (
         <ProjectBox>
-            <TitleFrame name={name} setName={setName} icon="archive" onClose={onClose}/>
-            <MiddleFrame items={items} submit={submit} isComponentOpen={isComponentOpen} setIsComponentOpen={setIsComponentOpen}/>
+            <Title name={name} setName={setName} icon="archive" onClose={onClose}/>
+            <Middle items={items} submit={submit} isComponentOpen={isComponentOpen} setIsComponentOpen={setIsComponentOpen}/>
         </ProjectBox>
     )
 }

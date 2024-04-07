@@ -25,7 +25,7 @@ function Drawer({projectId, drawer, color}){
         setIsSimpleOpen(prev => !prev)
     }
 
-    const DrawerIcons = [
+    const drawerIcons = [
         {icon: "plus", click: () => {setsIsCreateOpen(true)}},
         {icon: "chevron-down", click: handleCollapsed},
         {icon: "more-horizontal", click: () => {}},
@@ -36,7 +36,7 @@ function Drawer({projectId, drawer, color}){
             <DrawerBox $color = {color}>
                 <DrawerName $color = {color}>{drawer.name}</DrawerName>
                 <DrawerIcon $color = {color}>
-                    {DrawerIcons.map(item => (
+                    {drawerIcons.map(item => (
                         <FeatherIcon key={item.icon} icon={item.icon} onClick={item.click}/>
                     ))}
                 </DrawerIcon>
