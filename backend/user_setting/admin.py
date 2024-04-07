@@ -4,7 +4,7 @@ from api.admin import fieldset_base, readonly_fields_base
 
 @admin.register(UserSetting)
 class UserSettingAdmin(admin.ModelAdmin):
-    ordering = ["user"]
+    ordering = ["-updated_at"]
     search_fields = ["user__username", "id"]
     autocomplete_fields = ["user"]
     readonly_fields = readonly_fields_base

@@ -8,7 +8,7 @@ class TaskReminderAdmin(admin.ModelAdmin):
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    ordering = ["created_at", "updated_at"]
+    ordering = ["-updated_at"]
     search_fields = ["user__username"]
     autocomplete_fields = ["user", "task", "reaction", "following", "peck"]
     readonly_fields = readonly_fields_base
