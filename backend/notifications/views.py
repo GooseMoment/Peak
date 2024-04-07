@@ -1,13 +1,19 @@
 from rest_framework import mixins, generics, permissions
+from rest_framework.pagination import CursorPagination
 
 from .models import Notification
 from .serializers import NotificatonSerializer
 from .permissions import IsUserMatch
 
+class NotificationListPagination(CursorPagination):
+    page_size = 20
+    ordering = "-created_at"
+
 class NotificationList(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   generics.GenericAPIView):
     serializer_class = NotificatonSerializer
+    pagination_class = NotificationListPagination
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
