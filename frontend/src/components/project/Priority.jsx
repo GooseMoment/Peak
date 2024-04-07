@@ -1,10 +1,10 @@
 import priority2 from "@assets/project/priority/priority2.svg"
 import priority1 from "@assets/project/priority/priority1.svg"
-import styled from "styled-components"
+import priority0 from "@assets/project/priority/priority0.svg"
 
 const Priority = ({priority, completed}) => {
     const prioritys = [
-        <MarginBlock/>,
+        <img src={priority0}/>,
         <img src={priority1}/>,
         <img src={priority2}/>,
     ]
@@ -13,9 +13,5 @@ const Priority = ({priority, completed}) => {
         prioritys[priority]
     )
 }
-
-const MarginBlock = styled.div`
-    margin: 0.6em;
-`
 
 export default Priority
