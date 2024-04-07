@@ -1,4 +1,7 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
+
+import { cubicBeizer } from "@assets/keyframes"
 
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
@@ -19,7 +22,7 @@ const Box = ({notification}) => {
             <TextsDetail>{purified.detail}</TextsDetail>
         </Texts>
         <AgoAndMore>
-            <Ago onMouseEnter={e => setIsHover(true)} onMouseLeave={e => setIsHover(false)} dateTime={notification.notifiedAt.toISOString()}>
+            <Ago onMouseEnter={e => setIsHover(true)} onMouseLeave={e => setIsHover(false)} dateTime={notification.created_at}>
                 {isHover ? purified.datetime.toLocaleString(DateTime.DATETIME_MED) : purified.datetime.toRelative()}
             </Ago>
             <FeatherIcon icon="more-horizontal" />
@@ -29,12 +32,11 @@ const Box = ({notification}) => {
 
 const purifyNotificationForDisplay = (notification) => {
     const socialTypesSmallIcon = {
-        "reaction": notification.payload.emoji ? <IconSmallEmoji>{notification.payload.emoji}</IconSmallEmoji> : null,
-        "reaction_group": null,
+        "reaction": notification.reaction?.emoji ? <IconSmallEmoji src={notification.reaction.emoji.img_uri} /> : null,
         "follow": <FeatherIcon icon="plus-circle" />,
         "follow_request": <FeatherIcon icon="send" />, 
         "follow_request_accepted": <FeatherIcon icon="check-circle" />, 
-        "pecked": <FeatherIcon icon="help-circle" />, // TODO: replace to pecked icon 
+        "peck": <FeatherIcon icon="help-circle" />, // TODO: replace to pecked icon 
     }
 
     let purified = {
@@ -45,21 +47,31 @@ const purifyNotificationForDisplay = (notification) => {
         datetime: "",
     }
 
-    purified.datetime = DateTime.fromJSDate(notification.notifiedAt).setLocale("en")
+    const payload = notification.task_reminder || notification.reaction || notification.peck || notification.following 
+    const createdAt = new Date(notification.created_at)
+
+    purified.datetime = DateTime.fromJSDate(createdAt).setLocale("en")
 
     if (notification.type in socialTypesSmallIcon) {
-        purified.title = "@" + notification.payload.user.username
-        purified.icon = <img src={notification.payload.user.profileImgURI} />
+        purified.title = "@" + payload.user.username
+        purified.icon = <ProfileImg src={payload.user.profile_img_uri} />
         purified.smallIcon = socialTypesSmallIcon[notification.type]
     }
 
     if (notification.type === "reaction") {
-        purified.detail = `reacted to ${notification.payload.task.name}`
-    }
 
-    else if (notification.type === "reaction_group") {
-        purified.detail = "reacted to " + notification.payload.taskEmojiPairs.
-            map(pair => pair.emoji + ' "' + pair.task.name + '"').join(', ')
+        if (payload.task) {
+            purified.detail = <>
+                reacted to {" "}
+                {/* TODO: correct daily report link */}
+                <Link to="/app/social/following">{payload.task.name}</Link>
+            </>
+        } else if (payload.daily_comment) {
+            purified.detail = <>
+                reacted to {" "}
+                <Link to="/app/social/following">{payload.daily_comment.comment}</Link>
+            </>
+        }
     }
 
     else if (notification.type === "follow") {
@@ -74,27 +86,15 @@ const purifyNotificationForDisplay = (notification) => {
         purified.detail = "accepted follow request"
     }
 
-    else if (notification.type === "pecked") {
+    else if (notification.type === "peck") {
         purified.detail = "pecked you"
     }
     
-    else if (notification.type === "task") {
-        purified.title = `Time to "${notification.payload.name}"`
+    else if (notification.type === "task_reminder") {
+        purified.title = `Time to "${payload.name}"`
         purified.icon = <FeatherIcon icon="clock" />
-        purified.detail = "Due to " + DateTime.fromJSDate(notification.payload.due).setLocale("en").toRelative() +
-            " | " + notification.payload.memo
-    }
-
-    else if (notification.type === "trending_up") {
-        purified.title = "More than " + notification.payload.than
-        purified.icon = <FeatherIcon icon="trending-up" />
-        purified.detail = notification.payload.figure + " more completion ratio? Keep it up!"
-    }
-
-    else if (notification.type === "trending_down") {
-        purified.title = "Less than " + notification.payload.than
-        purified.icon = <FeatherIcon icon="trending-down" />
-        purified.detail = "Too much tasks? Cheer up!"
+        purified.detail = "Due to " + DateTime.fromJSDate(payload.due).setLocale("en").toRelative() +
+            " | " + payload.memo
     }
 
     return purified
@@ -102,7 +102,7 @@ const purifyNotificationForDisplay = (notification) => {
 
 const Frame = styled.article`
 display: flex;
-gap: 1em;
+gap: 2em;
 
 border-bottom: 1px solid black;
 padding: 2em 2em;
@@ -122,19 +122,19 @@ position: relative;
 width: auto;
 height: 3em;
 
-& img {
-    border-radius: 50%;
-}
-
 & svg {
     stroke: 2em;
     margin-right: 0;
-}
 
-& img, & svg {
     width: auto;
     height: 3em;
 }
+`
+
+const ProfileImg = styled.img`
+    width: 3em;
+    height: 3em;
+    border-radius: 50%;
 `
 
 const IconSmall = styled.div`
@@ -148,7 +148,6 @@ bottom: -2px;
 
 background-color: white;
 box-sizing: border-box;
-border-radius: 100%;
 
 width: 1.25em;
 height: 1.25em;
@@ -164,10 +163,17 @@ height: 1.25em;
 }
 `
 
-const IconSmallEmoji = styled.p`
+const IconSmallEmoji = styled.img`
 transform: translate(20%, 20%);
-width: 80%;
-height: 80%;
+
+width: 2.5em;
+height: auto;
+
+&:hover {
+    transform: translate(20%, 20%) scale(1.3);
+}
+
+transition: transform 0.5s ${cubicBeizer};
 `
 
 const Texts = styled.div`
