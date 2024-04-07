@@ -2,7 +2,6 @@ from .models import TaskReminder, Notification
 from rest_framework import serializers
 
 from tasks.serializers import TaskSerializer
-from users.serializers import UserSerializer
 from social.serializers import ReactionSerializer, FollowingSerializer, PeckSerializer
 
 class TaskReminderSerializer(serializers.ModelSerializer):
@@ -13,7 +12,7 @@ class TaskReminderSerializer(serializers.ModelSerializer):
         fields = ["task", "scheduled"]
 
 class NotificatonSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     task_reminder = TaskReminderSerializer()
     reaction = ReactionSerializer()
     following = FollowingSerializer()
@@ -21,4 +20,5 @@ class NotificatonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notification
+        depth = 1
         fields = ["id", "type", "user", "task_reminder", "reaction", "following", "peck"]
