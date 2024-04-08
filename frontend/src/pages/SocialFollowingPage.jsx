@@ -12,14 +12,14 @@ import SocialPageTitle from "@components/social/SocialPageTitle";
 import { getDailyReport } from "@api/social.api";
 
 const SocialFollowingPage = () => {
-    const [selectedDate, setSelectedDate] = useState(new Date())
+    const [selectedDate, setSelectedDate] = useState(moment(new Date()).format('YYYY-MM-DD'))
     const [selectedIndex, setSelectedIndex] = useState(null)
     const [dailyReport, setDailyReport] = useState([])
     
     const {user} = useRouteLoaderData("app")
 
     const getPreview = async(date) => {
-        const day = moment(date).format('YYYY-MM-DD')
+        const day = date
         try {
             const res = await getDailyReport(user.username, day)
             setDailyReport(res)
@@ -83,6 +83,7 @@ const Container = styled.div`
 `
 
 const CalendarContainer = styled.div`
+    width: 80%;
     margin-left: auto;
     margin-right: auto;
 `
