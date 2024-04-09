@@ -7,6 +7,10 @@ class TaskSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(required=False, queryset=User.objects.all())
     drawer_name = serializers.SerializerMethodField(read_only=True)
     project_name = serializers.SerializerMethodField(read_only=True)
+    project_id = serializers.SerializerMethodField(read_only=True)
+
+    def get_project_id(self, obj):
+        return obj.drawer.project.id
 
     def get_drawer_name(self, obj):
         return obj.drawer.name
@@ -17,6 +21,6 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = [
-            'id', 'name', 'privacy', 'completed_at', 'drawer', 'drawer_name', 'due_date', 'due_time', 'priority', 'memo', 
-            'reminders', 'user', 'repeat', 'created_at', 'updated_at', 'deleted_at', 'project_name',
+            'id', 'name', 'privacy', 'completed_at', 'drawer', 'drawer_name', 'due_date', 'due_time', 'priority', 
+            'memo', 'reminders', 'user', 'repeat', 'created_at', 'updated_at', 'deleted_at', 'project_name', 'project_id',
         ]
