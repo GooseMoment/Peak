@@ -2,11 +2,8 @@ import SidebarLink from "./SidebarLink"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
-import { useLocation } from "react-router-dom"
 
 const Footer = ({user, collapsed}) => {
-    const location = useLocation()
-
     return <FooterBox $collapsed={collapsed}>
 
         {user ? (
@@ -19,11 +16,11 @@ const Footer = ({user, collapsed}) => {
         ) : null }
 
         {collapsed ? null :
-        <SidebarLink to="settings" draggable="false" state={{previous: location}}>
+        <SettingLink to="#/settings/account" draggable="false" reloadDocument>
             <SettingIconContainer>
                 <FeatherIcon icon="settings" />
             </SettingIconContainer>
-        </SidebarLink> }
+        </SettingLink> }
 
     </FooterBox>
 }
@@ -76,6 +73,12 @@ width: auto;
     width: auto;
     height: 1.25em;
 }
+`
+
+const SettingLink = styled(SidebarLink)`
+    &.active {
+        background-color: inherit;
+    }
 `
 
 export default Footer

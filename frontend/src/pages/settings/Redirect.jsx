@@ -1,16 +1,11 @@
 import { useEffect } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const Redirect = () => {
-    const location = useLocation()
     const navigate = useNavigate()
 
     useEffect(() => {
-        navigate("/app/settings/account", {
-            state: {
-                previous: location?.state?.previous,
-            }
-        })
+        navigate("/settings/account")
     }, [])
 
     return null

@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 
 import { SidebarBox } from "@components/sidebar/Sidebar"
 import { ItemBox, MiddleBox } from "@components/sidebar/Middle"
@@ -7,17 +7,14 @@ import ModalPortal from "@components/common/ModalPortal"
 
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
-import { useRef } from "react"
 
-const pathRoot = "/app/settings/"
+const pathRoot = "/settings/"
 
 const Layout = () => {
     const navigate = useNavigate()
-    const location = useLocation()
-    const previousPathname = useRef(location.state?.previous?.pathname)
 
-    const goPreviousOrIndex = () => {
-        navigate(previousPathname.current || "/app/")
+    const goOutside = () => {
+        navigate("/")
     }
 
     const content = <ModalFrame>
@@ -40,13 +37,9 @@ const Layout = () => {
         </Main>
     </ModalFrame>
 
-    return <>
-        <ModalPortal closeModal={goPreviousOrIndex}>
-            {content}
-        </ModalPortal>
-        <p>배경</p>
-        {/* TODO: background skelton */}
-    </>
+    return <ModalPortal closeModal={goOutside}>
+        {content}
+    </ModalPortal>
 }
 
 const menuItems = [
