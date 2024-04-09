@@ -1,6 +1,11 @@
-import settings from "@pages/settings/settings"
-import { getSettings, patchSettings } from "@api/user_setting.api"
 import { createHashRouter } from "react-router-dom"
+
+import settings from "@pages/settings/settings"
+
+import { getSettings, patchSettings } from "@api/user_setting.api"
+import { getMe } from "@api/users.api"
+
+import { toast } from "react-toastify"
 
 const routes = [
     {
@@ -16,11 +21,14 @@ const routes = [
             const data = Object.fromEntries(formData)
 
             await patchSettings(data)
-            notify.success("Settings were saved.")
+            toast.success("Settings were saved.")
             return null
         },
         loader: async () => {
-            return getSettings()
+            return {
+                settings: await getSettings(),
+                user: await getMe(),
+            }
         },
         children: [
             {
