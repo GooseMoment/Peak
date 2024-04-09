@@ -31,7 +31,7 @@ function TaskCreateDetail({ setIsComponentOpen }) {
 
 const TaskCreateDetailBox = styled.div`
     width: 50em;
-    height: 20em;
+    height: 22em;
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
