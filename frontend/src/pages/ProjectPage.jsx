@@ -24,7 +24,8 @@ const ProjectPage = () => {
                 <FeatherIcon icon="more-horizontal"/>
             </Icons>
         </TitleBox>
-        {drawers && drawers.map((drawer) => (
+        {drawers && (drawers.length === 0) ? <NoDrawerText>서랍을 생성하고 어서 투두를 작성해보세요😊</NoDrawerText> 
+        : drawers.map((drawer) => (
             <Drawer key={drawer.id} projectId={id} drawer={drawer} color={project.color}/>
         ))}
         { isDrawerCreateOpen &&
@@ -58,6 +59,12 @@ const Icons = styled.div`
         cursor: pointer;
         margin-left: 1em;
     }
+`
+
+const NoDrawerText = styled.div`
+    margin-top: 2em;
+    font-weight: 600;
+    font-size: 1.4em;
 `
 
 export default ProjectPage
