@@ -1,4 +1,4 @@
-import SidebarLink from "./SidebarLink"
+import SidebarLink, { SidebarA } from "./SidebarLink"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
@@ -16,11 +16,11 @@ const Footer = ({user, collapsed}) => {
         ) : null }
 
         {collapsed ? null :
-        <SettingLink to="#/settings/account" draggable="false" reloadDocument>
+        <SidebarA href="#/settings/account" draggable="false">
             <SettingIconContainer>
                 <FeatherIcon icon="settings" />
             </SettingIconContainer>
-        </SettingLink> }
+        </SidebarA> }
 
     </FooterBox>
 }
@@ -73,12 +73,6 @@ width: auto;
     width: auto;
     height: 1.25em;
 }
-`
-
-const SettingLink = styled(SidebarLink)`
-    &.active {
-        background-color: inherit;
-    }
 `
 
 export default Footer

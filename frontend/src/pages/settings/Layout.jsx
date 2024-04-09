@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom"
 
 import { SidebarBox } from "@components/sidebar/Sidebar"
 import { ItemBox, MiddleBox } from "@components/sidebar/Middle"
-import SidebarLink from "@components/sidebar/SidebarLink"
+import SidebarLink, { SidebarA } from "@components/sidebar/SidebarLink"
 import ModalPortal from "@components/common/ModalPortal"
 
 import styled from "styled-components"
@@ -27,9 +27,9 @@ const Layout = () => {
                 ))}
             </MiddleBox>
             <FooterBox>
-                <SidebarLink to="/app/sign_out">
+                <SidebarA href="/app/sign_out">
                     <ItemBox><FeatherIcon icon="log-out" />Sign out</ItemBox>
-                </SidebarLink>
+                </SidebarA>
             </FooterBox>
         </Sidebar>
         <Main>
