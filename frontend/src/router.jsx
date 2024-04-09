@@ -153,10 +153,15 @@ const routes = [
                         children: [
                             {
                                 index: true,
+                                element: null,
                             },
                             {
                                 path: "due",
                                 Component: taskCreates.Calendar,
+                            },
+                            {
+                                path: "assigned_at",
+                                Component: taskCreates.Assigned,
                             },
                             {
                                 path: "reminder",
