@@ -21,6 +21,7 @@ const Frame = styled.article`
     display: flex;
     gap: 2.5em;
 
+    min-width: 400px;
     height: 7em;
     padding: 1em;
     margin: 1em;

@@ -19,19 +19,15 @@ const Content = ({type, payload, actionUser, skeleton=false}) => {
 
     switch (type) {
         case "reaction":
-            detail = <>
-                reacted to <ContentDetailLink to={"/app/social/following/"}>
-                    {payload.task?.name || payload.daily_comment?.comment}
+            detail = <ContentDetailLink to={"/app/social/following/"}>
+                    {payload.task?.name || "Daily Comment of " + payload.daily_comment?.date}
                     {/* TODO: daily comment는 날짜로  */}
                 </ContentDetailLink>
-            </>
             break
         case "peck":
-            detail = <>
-                pecked {payload.count} times to <ContentDetailLink to={"/app/social/following/"}>
+            detail = <ContentDetailLink to={"/app/social/following/"}>
                     {payload.task?.name}
                 </ContentDetailLink>
-            </>
             break
         default:
             detail = ""
