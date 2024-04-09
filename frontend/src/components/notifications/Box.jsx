@@ -53,7 +53,7 @@ const purifyNotificationForDisplay = (notification) => {
 
     if (notification.type in socialTypesSmallIcon) {
         purified.title = <UsernameLink to={`/app/users/@${payload.user.username}`}>@{payload.user.username}</UsernameLink>
-        purified.icon = <ProfileImg src={payload.user.profile_img_uri} />
+        purified.icon = <ProfileImg src={payload.user.profile_img} />
         purified.smallIcon = socialTypesSmallIcon[notification.type]
     }
 
