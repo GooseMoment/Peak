@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 
-import { Frame, Icon, IconSmallEmoji, ProfileImg, Texts, TextsTitle, TextsDetail, AgoAndMore, Ago } from "./Elements"
+import { Frame, Icon, IconSmallEmoji, ProfileImg, Texts, TextsTitle, TextsDetail, AgoAndMore, Ago, UsernameLink } from "./Elements"
 
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
@@ -52,7 +52,7 @@ const purifyNotificationForDisplay = (notification) => {
     purified.datetime = DateTime.fromJSDate(createdAt).setLocale("en")
 
     if (notification.type in socialTypesSmallIcon) {
-        purified.title = "@" + payload.user.username
+        purified.title = <UsernameLink to={`/app/users/@${payload.user.username}`}>@{payload.user.username}</UsernameLink>
         purified.icon = <ProfileImg src={payload.user.profile_img_uri} />
         purified.smallIcon = socialTypesSmallIcon[notification.type]
     }

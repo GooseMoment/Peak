@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 import { cubicBeizer } from "@assets/keyframes"
 
 import styled from "styled-components"
@@ -89,6 +91,11 @@ export const Texts = styled.div`
 export const TextsTitle = styled.h3`
     font-size: 1em;
     font-weight: 600;
+`
+
+export const UsernameLink = styled(Link)`
+    color: inherit;
+    text-decoration: none;
 `
 
 export const TextsDetail = styled.p`
