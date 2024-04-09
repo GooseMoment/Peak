@@ -5,9 +5,14 @@ import Section, { Name, Value, Sync } from "@components/settings/Section"
 import Button from "@components/sign/Button"
 
 import styled from "styled-components"
+import { toast } from "react-toastify"
 
 const Blocks = () => {
     const blocks = useLoaderData()
+
+    const onClick = () => {
+        toast.warn("Not implemented yet!")
+    }
 
     return <>
         <PageTitle>Blocks <Sync /></PageTitle>
@@ -19,7 +24,7 @@ const Blocks = () => {
                         <ProfileImg src={user.profile_img} />
                         <Username>@{user.username}</Username>
                     </Profile>
-                    <Button>Unblock</Button>
+                    <Button onClick={onClick}>Unblock</Button>
                 </UserContainer>)}
             </Value>
         </Section>
