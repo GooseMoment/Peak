@@ -63,7 +63,7 @@ html {
     animation: ${modalFadeIn} 0.5s ${cubicBeizer} forwards !important;
 }
 
-body, textarea, input {
+body, textarea, input, button {
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif !important;
     padding: 0;
 }

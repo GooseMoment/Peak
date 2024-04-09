@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import DetailFrame from "@components/project/common/Detail"
+import Detail from "@components/project/common/Detail"
 
 import publicsvg from "@assets/project/privacy/public.svg"
 import protectedsvg from "@assets/project/privacy/protected.svg"
@@ -17,14 +17,14 @@ const Privacy = ({setPrivacy, setDisplayPrivacy, closeComponent}) => {
     }
 
     return (
-        <DetailFrame title="프로젝트 설정" onClose={closeComponent}>
+        <Detail title="프로젝트 설정" onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
                     <ItemText onClick={changePrivacy(item.privacy, item.display)}>{item.display}</ItemText>
                 </ItemBlock>
             ))}
-        </DetailFrame>
+        </Detail>
     )
 }
 

@@ -23,7 +23,6 @@ const Layout = ({noSidebar, children}) => {
 }
 
 const App = styled.div`
-height: 100vh;
 `
 
 const Content = styled.main`

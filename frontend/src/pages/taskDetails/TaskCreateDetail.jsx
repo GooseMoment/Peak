@@ -1,21 +1,30 @@
+import { useNavigate, useOutletContext, useRouteLoaderData } from "react-router-dom"
+
 import styled from "styled-components"
 import FeatherIcon from 'feather-icons-react'
 
 import TaskName from "@components/project/TaskName"
 import Contents from "./Contents"
-import { cubicBeizer } from "@assets/keyframes"
 
-function TaskCreateDetail({projectId, task, color, setTasks, isModalOpen, onClose}) {
+function TaskCreateDetail({ setIsComponentOpen }) {
+    const [projectId, color] = useOutletContext()
+    const task = useRouteLoaderData("task")
+    const navigate = useNavigate()
+
+    const onClose = () => {
+        navigate(`/app/projects/${projectId}`)
+    }
+
     return (
         <TaskCreateDetailBox>
             <TaskNameBox>
-                <TaskName task={task} setTasks={setTasks} color={color} isModalOpen={isModalOpen}/>
+                <TaskName projectId={projectId} task={task} color={color} editable={true}/>
                 <Icons>
                     <FeatherIcon icon="trash-2" />
                     <FeatherIcon icon="x" onClick={onClose} />
                 </Icons>
             </TaskNameBox>
-            <Contents projectId={projectId} task={task} setTasks={setTasks}/>
+            <Contents task={task} setIsComponentOpen={setIsComponentOpen}/>
         </TaskCreateDetailBox>
     )
 }
@@ -26,8 +35,6 @@ const TaskCreateDetailBox = styled.div`
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
-
-    transition: left 0.5s ${cubicBeizer}, width 0.5s ${cubicBeizer};
 `
 
 const TaskNameBox = styled.div`
@@ -43,6 +50,7 @@ const Icons = styled.div`
     align-items: center;
 
     & svg {
+        top: 0.4em;
         cursor: pointer;
         stroke: #FF0000;
         margin-left: 1em;

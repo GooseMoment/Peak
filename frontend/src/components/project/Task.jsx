@@ -1,52 +1,30 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-
 import styled from "styled-components"
 
-import TaskCreateDetail from "@/pages/taskDetails/TaskCreateDetail"
-import ModalPortal from "@components/common/ModalPortal"
 import TaskName from "./TaskName"
-
 import Priority from "./Priority"
 
-function Task({projectId, task, setTasks, color}){
+function Task({projectId, task, color}){
     const today = new Date()
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const navigate = useNavigate()
     
-    const openModal = () => {
-        setIsModalOpen(true)
-    }
-
-    const closeModal = () => {
-        navigate(`/app/projects/${projectId}`)
-        setIsModalOpen(false)
-    }
-
     return (
         <Box>
-            <Priority priority={task.priority}/>
+            <Priority priority={task.priority} completed={task.completed_at ? true : false}/>
             <div>
-                <TaskName projectId={projectId} task={task} setTasks={setTasks} color={color} due_date={task.due_date} isModalOpen={isModalOpen} openModal={openModal}/>
-                {task.due_date && <CalendarText>
+                <TaskName projectId={projectId} task={task} color={color} editable={false}/>
+                {task.due_date && <CalendarText $completed={task.completed_at ? true : false}>
                         {task.due_date === today.toISOString().slice(0, 10) && <CalendarTextPlus>오늘</CalendarTextPlus>}
                         {task.due_date === today.toISOString().slice(0, 10) && "| "}
                         {task.due_date}
                 </CalendarText>}
             </div>
-            {isModalOpen &&
-            <ModalPortal closeModal={closeModal}>
-                <TaskCreateDetail projectId={projectId} task={task} color={color} setTasks={setTasks} isModalOpen={isModalOpen} onClose={closeModal} />
-            </ModalPortal>}
         </Box>
-    );
+    )
 }
 
 const Box = styled.div`
     display: flex;
     align-items: center;
     margin-top: 1em;
-    margin-bottom: 2em;
 
     & img {
         width: 1em;
@@ -58,10 +36,10 @@ const Box = styled.div`
 
 const CalendarText = styled.p`
     display: flex;
-    margin-left: 2.8em;
+    margin-left: 2.75em;
     font-style: normal;
     font-size: 0.8em;
-    color: #000;
+    color: ${(props) => (props.$completed ? '#A4A4A4' : '#000000')};
 `
 
 const CalendarTextPlus = styled.p`

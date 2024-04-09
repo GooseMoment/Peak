@@ -31,11 +31,13 @@ class DailyCommentSerializer(serializers.ModelSerializer):
 class ReactionSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     emoji = EmojiSerializer(many=False, read_only=True)
+
+    task = TaskSerializer()
+    daily_comment = DailyCommentSerializer()
     
     class Meta:
         model = Reaction
         fields = ["id", "user", "parent_type", "task", "daily_comment", "emoji"]
-        #task와 daily_comment는 id로
         
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)

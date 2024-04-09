@@ -6,7 +6,7 @@ const FilterButtonGroup = ({active, setActive, filters}) => {
 
     return <FilterGroup>
         {Object.entries(filters).map(([name, filter]) => 
-            <FilterButton onClick={e => setActive(name)} $active={active === name}>{filter.display}</FilterButton>)
+            <FilterButton key={name} onClick={e => setActive(name)} $active={active === name}>{filter.display}</FilterButton>)
         }
     </FilterGroup>
 }

@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
+import { useLoaderData } from "react-router-dom"
 
 import styled from "styled-components"
 import FeatherIcon from 'feather-icons-react'
 
-import { getTasksByDrawer } from "@api/tasks.api"
 import Task from "@components/project/Task"
 import TaskCreateSimple from "@components/project/Creates/TaskCreateSimple"
 
 function Drawer({projectId, drawer, color}){
-    const [tasks, setTasks] = useState([])
+    const {tasksByDrawer} = useLoaderData()
+    const tasks = tasksByDrawer.get(drawer.id)
 
     //Drawer collapsed handle
     const [collapsed, setCollapsed] = useState(false);
@@ -24,31 +25,18 @@ function Drawer({projectId, drawer, color}){
         setIsSimpleOpen(prev => !prev)
     }
 
-    const DrawerIcons = [
+    const drawerIcons = [
         {icon: "plus", click: () => {setsIsCreateOpen(true)}},
         {icon: "chevron-down", click: handleCollapsed},
         {icon: "more-horizontal", click: () => {}},
     ]
 
-    async function fetchTasks() {
-        try {
-            let res = await getTasksByDrawer(drawer.id)
-            setTasks(res)
-        } catch (e) {
-            throw alert(e)
-        }
-    }
-
-    useEffect(() => {
-        fetchTasks()
-    }, [projectId])
-
     return (
         <>
             <DrawerBox $color = {color}>
-                <DrawerName>{drawer.name}</DrawerName>
-                <DrawerIcon>
-                    {DrawerIcons.map(item => (
+                <DrawerName $color = {color}>{drawer.name}</DrawerName>
+                <DrawerIcon $color = {color}>
+                    {drawerIcons.map(item => (
                         <FeatherIcon key={item.icon} icon={item.icon} onClick={item.click}/>
                     ))}
                 </DrawerIcon>
@@ -56,7 +44,7 @@ function Drawer({projectId, drawer, color}){
             {collapsed ? null :
                 <TaskList>
                     {tasks && tasks.map((task) => (
-                        drawer.id === task.drawer && <Task key={task.id} projectId={projectId} task={task} setTasks={setTasks} color={color}/>
+                        <Task key={task.id} projectId={projectId} task={task} color={color}/>
                     ))}
                 </TaskList>
             }
@@ -78,18 +66,21 @@ const DrawerBox = styled.div`
     justify-content: space-between;
     margin-top: 1.5em;
     text-decoration: double;
-    background-color: #${props => props.$color};
-    border-radius: 17px 17px 0px 0px;
+    border: solid 0.25em #${props => props.$color};
+    border-radius: 15px;
 `
 
 const DrawerName = styled.h1`
+    width: 42em;
     font-size: 1.4em;
     font-weight: bold;
     text-align: left;
     margin-left: 1.45em;
-    color: #FFFFFF;
-    stroke: #000000;
+    color: #${props => props.$color};
     stroke-opacity: 0.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 
 const DrawerIcon = styled.div`
@@ -100,21 +91,22 @@ const DrawerIcon = styled.div`
     & svg {
         top: 0;
         margin-right: 1em;
+        color: #${props => props.$color};
         cursor: pointer;
     }
 `
 
 const TaskList = styled.div`
     flex: 1;
-    margin-left: 1.1em;
+    margin-left: 0.5em;
 `
 
 const TaskCreateButton = styled.div`
     flex: 1;
     display: flex;
     align-items: center;
-    margin-left: 1.3em;
-    margin-top: 1.3em;
+    margin-left: 1.9em;
+    margin-top: 1.8em;
     
     &:hover {
         cursor: pointer;
@@ -129,7 +121,7 @@ const TaskCreateButton = styled.div`
 `
 
 const TaskCreateText = styled.div`
-    font-size: 1em;
+    font-size: 1.1em;
     font-weight: medium;
     color: #000000;
     margin-top: 0em;

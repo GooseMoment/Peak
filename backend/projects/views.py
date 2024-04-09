@@ -1,4 +1,5 @@
 from rest_framework import mixins, generics
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Project
 from .serializers import ProjectSerializer
@@ -23,10 +24,14 @@ class ProjectDetail(mixins.RetrieveModelMixin,
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     
+class ProjectListPagination(PageNumberPagination):
+    page_size = 1000
+
 class ProjectList(CreateMixin,
                   mixins.ListModelMixin,
                   generics.GenericAPIView):
     serializer_class = ProjectSerializer
+    pagination_class = ProjectListPagination
     permission_classes = [IsUserMatch]
 
     def get_queryset(self):

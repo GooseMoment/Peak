@@ -4,13 +4,26 @@ from api.admin import fieldset_base, readonly_fields_base
 
 @admin.register(TaskReminder)
 class TaskReminderAdmin(admin.ModelAdmin):
-    pass
+    ordering = ["created_at", "updated_at"]
+    search_fields = ["task__user__username", "task__id"]
+    autocomplete_fields = ["task"]
+    readonly_fields = readonly_fields_base
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ["task", "scheduled"],
+            },
+        ),
+        fieldset_base,
+    ]
+
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    ordering = ["created_at", "updated_at"]
+    ordering = ["-updated_at"]
     search_fields = ["user__username"]
-    autocomplete_fields = ["user", "task", "reaction", "following", "peck"]
+    autocomplete_fields = ["user", "task_reminder", "reaction", "following", "peck"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
@@ -22,7 +35,7 @@ class NotificationAdmin(admin.ModelAdmin):
         (
             "Payloads",
             {
-                "fields": ["task", "reaction", "following", "peck"],
+                "fields": ["task_reminder", "reaction", "following", "peck"],
             },
         ),
         fieldset_base,
