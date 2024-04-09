@@ -25,6 +25,9 @@ import settings from "@pages/settings/settings"
 import ModalPortal from "@components/common/ModalPortal"
 import { getTasksByDrawer, getTask, patchTask } from "@api/tasks.api"
 
+import { QueryClientProvider } from "@tanstack/react-query"
+import queryClient from "@queries/queryClient"
+
 const redirectIfSignedIn = () => {
     if (isSignedIn()) {
         return redirect("/app/")
@@ -74,7 +77,9 @@ const routes = [
             },
             {
                 path: "notifications",
-                element: <NotificationsPage />,
+                element: <QueryClientProvider client={queryClient}>
+                    <NotificationsPage />
+                </QueryClientProvider>,
             },
             {
                 path: "tasks/:id",
