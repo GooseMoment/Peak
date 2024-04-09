@@ -11,7 +11,7 @@ const root = document.getElementById("root")
 
 // see: https://github.com/remix-run/react-router/discussions/9864#discussioncomment-6350903
 
-const ModalPortal = ({ children, closeModal, additional=false }) => {
+const ModalPortal = ({ children, closeModal, additional=false, closeESC=true }) => {
     const [isOpen, setIsOpen] = useState(true)
     
     const shouldRender = !additional ? useDelayUnmount(isOpen, 100, closeModal) : true
@@ -24,6 +24,7 @@ const ModalPortal = ({ children, closeModal, additional=false }) => {
 
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)
+        document.addEventListener("keydown", handleKeyDown)
 
         if (!additional) {
             el.classList.add("with-animation")
@@ -33,6 +34,7 @@ const ModalPortal = ({ children, closeModal, additional=false }) => {
 
         return () => {
             el.removeEventListener("click", handleOutsideClick)
+            document.removeEventListener("keydown", handleKeyDown)
 
             if (!additional) {
                 el.classList.remove("has-modal")
@@ -50,8 +52,15 @@ const ModalPortal = ({ children, closeModal, additional=false }) => {
         setIsOpen(false)
     }
 
+    const handleKeyDown = e => {
+        e.preventDefault()
+        if (e.key === "Escape") {
+            setIsOpen(false)
+        }
+    }
+
     return createPortal(
-        <AnimationProvider $open={isOpen}>{ shouldRender ? children : null}</AnimationProvider>, el
+        <AnimationProvider onKeyDown={handleKeyDown} $open={isOpen}>{ shouldRender ? children : null}</AnimationProvider>, el
     )
 }
 
