@@ -3,7 +3,7 @@ import { createHashRouter } from "react-router-dom"
 import settings from "@pages/settings/settings"
 
 import { getSettings, patchSettings } from "@api/user_setting.api"
-import { getMe } from "@api/users.api"
+import { getBlocks, getMe } from "@api/users.api"
 
 import { toast } from "react-toastify"
 
@@ -70,6 +70,10 @@ const routes = [
             {
                 path: "blocks",
                 Component: settings.Blocks,
+                loader: async () => {
+                    const user = await getMe()
+                    return getBlocks(user.username)
+                },
             },
         ]
     },
