@@ -82,7 +82,7 @@ const rotateToRight = keyframes`
 
 const CollapseButton = styled(MildButton)`
     & svg {
-        animation: ${rotateToLeft} 0.1s ${cubicBeizer} forwards;
+        animation: ${rotateToLeft} 0.5s ${cubicBeizer} forwards;
     }
 
     ${props => props.$collapsed && css`
