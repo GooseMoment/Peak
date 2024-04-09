@@ -86,7 +86,11 @@ const purifyNotificationForDisplay = (notification) => {
     }
 
     else if (notification.type === "peck") {
-        purified.detail = "pecked you"
+        purified.detail = <>
+            pecked {payload.count} times to {" "}
+            {/* TODO: correct daily report link */}
+            <Link to="/app/social/following">{payload.task.name}</Link>
+        </>
     }
     
     else if (notification.type === "task_reminder") {

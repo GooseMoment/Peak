@@ -12,7 +12,7 @@ class EmojiSerializer(serializers.ModelSerializer):
 
 class PeckSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
-    #TODO TaskSerializer
+    task = TaskSerializer()
     
     class Meta:
         model = Peck
