@@ -15,6 +15,7 @@ const Layout = () => {
 
     const goOutside = () => {
         navigate("/")
+        history.pushState("", document.title, window.location.pathname + window.location.search)
     }
 
     const content = <ModalFrame>
