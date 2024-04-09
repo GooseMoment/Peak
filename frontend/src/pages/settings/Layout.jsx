@@ -92,7 +92,6 @@ const ModalFrame = styled.div`
     overflow: hidden; // to make sidebar obey parent's radius
 
     background-color: white;
-    width: 70vw;
     height: 70vh;
 
     @media screen and (max-width: 800px) {
@@ -109,7 +108,7 @@ const Sidebar = styled(SidebarBox)`
 
     position: sticky;
     z-index: unset;
-    width: 16rem;
+    width: 14rem;
     height: 100%;
     padding-top: 1em;
     padding-bottom: 1em;
@@ -122,8 +121,11 @@ const FooterBox = styled(MiddleBox)`
 `
 
 const Main = styled.main`
+    overflow-y: auto;
+
     box-sizing: border-box;
     padding: 2em;
+    width: 32rem;
 `
 
 export default Layout

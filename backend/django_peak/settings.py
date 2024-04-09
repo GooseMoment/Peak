@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'dummies',
+    'storages',
 ]
 
 REST_FRAMEWORK = {
@@ -184,3 +185,21 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # TODO: EMAIL_BACKEND
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "bucket_name": "peak-ooo-dev",
+            "region_name": "auto",
+            "custom_domain": "assets-dev.peak.ooo",
+            "access_key": os.environ.get("AWS_S3_ACCESS_KEY_ID"),
+            "secret_key": os.environ.get("AWS_S3_SECRET_ACCESS_KEY"),
+            "endpoint_url": os.environ.get("AWS_S3_ENDPOINT_URL"),
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+

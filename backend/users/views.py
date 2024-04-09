@@ -33,8 +33,6 @@ class UserDetail(mixins.RetrieveModelMixin,
         if request.user.username != username:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
-        # TODO: password change
-
         return self.partial_update(request, *args, **kwargs)
 
 @api_view(["POST"])
@@ -108,9 +106,11 @@ def sign_up(request: Request):
 
     return Response(status=status.HTTP_200_OK)
 
-@login_required
 @api_view(["GET"])
 def sign_out(request: Request):
+    if request.user.is_anonymous:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+    
     logout(request)
     return Response(status=status.HTTP_200_OK)
 
@@ -121,3 +121,42 @@ def get_me(request: Request):
     
     serializer = UserSerializer(request.user._wrapped, context={"is_me": True})
     return Response(serializer.data)
+
+@api_view(["PATCH"])
+def patch_password(request: Request):
+    if request.user.is_anonymous:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+    
+    payload = request.data
+    current_password = payload.get("current_password", "")
+    new_password = payload.get("new_password", "")
+
+    if not request.user.check_password(current_password):
+        return Response({
+            "code": "PATCHPASSWORD_WRONG_CURRENT_PASSWORD",
+            "message": "wrong current password",
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    if len(new_password) < 8:
+        return Response({
+            "code": "PATCHPASSWORD_PASSWORD_TOO_SHORT",
+            "message": "password should be longer than 8."
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    request.user.set_password(new_password)
+    request.user.save()
+
+    return Response(status=status.HTTP_200_OK)
+
+@api_view(["POST"])
+def upload_profile_img(request: Request):
+    profile_img = request.FILES.get("profile_img", None) # None: only removes old profile_img
+
+    old = request.user.profile_img
+    if old:
+        old.delete()
+
+    request.user.profile_img = profile_img
+    request.user.save()
+
+    return Response(status=status.HTTP_200_OK)

@@ -85,6 +85,11 @@ body {
 :root {
     --toastify-font-family: inherit;
 }
+
+.reactEasyCrop_Container {
+    position: fixed !important;
+    z-index: 999;
+}
 `
 
 export default GlobalStyle

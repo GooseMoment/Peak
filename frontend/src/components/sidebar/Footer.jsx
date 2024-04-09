@@ -12,7 +12,7 @@ const Footer = ({user, collapsed}) => {
         {user ? (
         <SidebarLink to={`users/@${user.username}`} draggable="false">
             <MeProfile>
-                <img src={user.profile_img_uri} />
+                <img src={user.profile_img} />
                 {collapsed ? null : <Username>{user.username}</Username>}
             </MeProfile>
         </SidebarLink>

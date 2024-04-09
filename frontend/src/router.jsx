@@ -18,7 +18,9 @@ import LandingPage from "@pages/LandingPage"
 import SignPage from "@pages/SignPage"
 import taskCreates from "@pages/taskDetails/taskCreates"
 
-import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
+import notify from "@utils/notify"
+
+import { getMe, getUserByUsername, isSignedIn, patchUser } from "@api/users.api"
 import { getSettings, patchSettings } from "@api/user_setting.api"
 import { getProject, getProjectsList } from "@api/projects.api"
 import settings from "@pages/settings/settings"
@@ -63,7 +65,7 @@ const routes = [
             }
         },
         shouldRevalidate: ({currentUrl}) => {
-            return currentUrl.pathname.startsWith("/app/users/") || currentUrl.pathname === "/app/projects"
+            return currentUrl.pathname.startsWith("/app/settings/account") || currentUrl.pathname === "/app/projects"
         },
         errorElement: <ErrorPage />,
         children: [
@@ -189,7 +191,11 @@ const routes = [
                 id: "settings",
                 action: async ({request}) => {
                     const formData = await request.formData()
-                    return patchSettings(Object.fromEntries(formData))
+                    const data = Object.fromEntries(formData)
+
+                    await patchSettings(data)
+                    notify.success("Settings were saved.")
+                    return null
                 },
                 loader: async () => {
                     return getSettings()
@@ -202,6 +208,14 @@ const routes = [
                     {
                         path: "account",
                         Component: settings.Account,
+                        action: async ({request}) => {
+                            const formData = await request.formData()
+                            const data = Object.fromEntries(formData)
+                            
+                            await patchUser(data)
+                            notify.success("Profile was edited.")
+                            return null
+                        },
                     },
                     {
                         path: "privacy",

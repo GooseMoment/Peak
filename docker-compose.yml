@@ -30,6 +30,7 @@ services:
         condition: service_healthy
     env_file:
       - ./.env.dev
+      - ./.env.s3
   db: 
     image: postgres:16.2-alpine3.19
     volumes:
