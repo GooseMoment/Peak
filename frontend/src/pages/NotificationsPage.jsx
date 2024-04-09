@@ -8,6 +8,8 @@ import { getNotifications } from "@api/notifications.api"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { ImpressionArea } from "@toss/impression-area"
+import styled from "styled-components"
+import { toast } from "react-toastify"
 
 const getCursorFromURL = (url) => {
     if (!url) return null
@@ -33,17 +35,21 @@ const NotificationsPage = () => {
     const header = <>
         <PageTitle>Notifications</PageTitle>
         <FilterButtonGroup filters={filters} active={activeFilter} setActive={setActiveFilter} />
+        <Blank />
     </>
 
     if (isError) {
-        console.log("error:", error)
-        return <div>Error!</div>
+        toast.error("Failed to load notifications.")
+        return <>
+        {header}
+        {[...Array(10)].map((e, i) => <Box key={i} skeleton />)}
+        </>
     } 
 
     return <>
     {header}
     {
-        isFetching && !isFetchingNextPage ? <div>TODO: add skeleton</div> : null
+        isFetching && !isFetchingNextPage ? [...Array(10)].map((e, i) => <Box key={i} skeleton />) : null
     }
     {data?.pages.map((group, i) => (
         <Fragment key={i}>
@@ -51,10 +57,27 @@ const NotificationsPage = () => {
         </Fragment>
     ))}
     <ImpressionArea onImpressionStart={() => fetchNextPage()} timeThreshold={200}>
-        {hasNextPage ? "Loading more..." : "No more notifications!"}
+        {hasNextPage ? <Box skeleton /> : <NoMore>No more notifications!</NoMore>}
     </ImpressionArea>
     </>
 }
+
+const Blank = styled.div`
+    height: 3em;
+`
+
+const NoMore = styled.div`
+    box-sizing: border-box;
+    
+    height: 7em;
+    padding: 1em;
+    margin: 1em;
+    margin-bottom: 3em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
 
 const filters = {
     "all": {
