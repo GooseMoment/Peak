@@ -1,6 +1,5 @@
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-//import "./CommonCalendar.css";
 import moment from 'moment';
 import styled from "styled-components"
 
@@ -15,30 +14,41 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
     }
     else {
       const startDate = moment(e).format("YYYY-MM-DD")
-      setSelectedStartDate(startDate)
+      if(selectedStartDate === startDate) {
+        setSelectedStartDate(null)
+      }
+      else setSelectedStartDate(startDate)
     }
   }
 
-  const setTileClassName = ({ date }) => {
-    if(date.getDay() === 0)
-      return 'sunday'
+  const setTileClassName = ({ date, view }) => {
+    const classes = []
 
-    if(date.getDay() === 6)
-      return 'saturday'
+    if(view === 'month') {
+      if(selectedStartDate && date === selectedStartDate)
+        classes.push('selected')
+    
+      if(date.getDay() === 0)
+        classes.push('sunday')
 
-    return;
-  }  
+      if(date.getDay() === 6)
+        classes.push('saturday')
+    }
+    return classes.length === 0 ? null : classes.join(' ')
+  }
 
   return <CalendarWrapper>
     <StyledCalendar
       selectRange={isSelectingRange}
       onChange={changeDate}
+      value={selectedStartDate}
       formatDay={(locale, date) => moment(date).format("D")}
       locale='en'
       // tileClassName={setTileClassName}
       next2Label={null}
       prev2Label={null}
     />
+    {selectedStartDate}
   </CalendarWrapper>
 };
 
@@ -89,13 +99,6 @@ const CalendarWrapper = styled.div`
     background-color: white;
   }
 
-  /* 네비게이션 비활성화 됐을때 스타일 */
-  .react-calendar__navigation button:disabled {
-    background-color: white;
-    color: ${(props) => props.theme.darkBlack};
-  }
-
-
 
   /* 요일 밑줄 제거 */
   .react-calendar__month-view__weekdays abbr {
@@ -111,46 +114,57 @@ const CalendarWrapper = styled.div`
     color: blue;
   }
 
-
-
-  .react-calendar__month-view__days {
-    //justify-content: space-around;
-    //gap: calc((100% - 3em*7) / 8)em;
-  }
+  /* 일 타일 */
   .react-calendar__month-view__days__day {
     flex-basis: 2.5em !important;
-    margin: 0.3em calc((100% - 7*2.5em)/14) 0.3em !important;
+    margin: 0.4em calc((100% - 7*2.5em)/14) 0.4em !important;
     height: 2.5em;
 
-    /* border: solid black; */
     border-radius: 3em;
     padding: 0.1em !important;
 
     background-color: #D9D9D9;
   }
 
-
-
-  /* 월 전체 폰트 */
+  /* 월 전체 */
   .react-calendar__month-view {
+    /* 폰트 */
     abbr {
       color: #000000;
     }
   }
-  /* 인접 월 폰트 */
+  /* 인접 월 */
   .react-calendar__month-view__days__day--neighboringMonth {
+    background-color: #E6E6E6;
+    /* 폰트 */
     abbr {
       color: #A4A4A4;
     }
   }
 
-  /* 오늘 날짜 폰트 컬러 */
+  /* 오늘 날짜 */
   .react-calendar__tile--now {
-    background: none;
+    background: #FF4A03;
     abbr {
-      color: black;
+      color: #ffffff;
     }
   }
+
+  /* 선택한 날짜 스타일 적용 */
+  /* .react-calendar__tile:enabled:hover,*/
+  /* .react-calendar__tile:enabled:focus-visible, */
+  .react-calendar__tile--active {
+    box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #D9D9D9;
+  }
+  
+  /* react-calendar__tile
+  react-calendar__tile--now 
+  react-calendar__tile--active 
+  react-calendar__tile--range 
+  react-calendar__tile--rangeStart 
+  react-calendar__tile--rangeEnd 
+  react-calendar__tile--rangeBothEnds
+  react-calendar__month-view__days__day */
 
   /* 네비게이션 월 스타일 적용 */
   .react-calendar__year-view__months__month {
@@ -176,14 +190,6 @@ const CalendarWrapper = styled.div`
     font-size: 1em;
     font-weight: 600;
     color: green;
-  }
-
-  /* 선택한 날짜 스타일 적용 */
-  .react-calendar__tile:enabled:hover,
-  .react-calendar__tile:enabled:focus,
-  .react-calendar__tile--active {
-    background-color: grey;
-    border-radius: 0.3rem;
   }
 `
 

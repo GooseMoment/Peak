@@ -20,7 +20,7 @@ const SocialFollowingPage = () => {
 
     const getPreview = async(date) => {
         const day = date
-        try {
+        if(date) try {
             const res = await getDailyReport(user.username, day)
             setDailyReport(res)
         } catch (e) {
