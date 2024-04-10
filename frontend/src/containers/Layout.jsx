@@ -7,7 +7,7 @@ import { getClientSettings } from "@utils/clientSettings"
 import styled, { css } from "styled-components"
 
 const closeSidebarOnStartUp = getClientSettings()["close_sidebar_on_startup"]
-const contentPadding = getClientSettings()["main_width"]
+const contentPadding = getClientSettings()["main_width"] || "5rem"
 
 const Layout = ({noSidebar, children}) => {
     const [sidebarCollapsed, setSidebarCollapsed] = useState(closeSidebarOnStartUp)
