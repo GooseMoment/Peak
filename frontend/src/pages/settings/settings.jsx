@@ -6,10 +6,11 @@ import Reactions from "./Reactions"
 import Appearance from "./Appearnce"
 import Notifications from "./Notifications"
 import Blocks from "./Blocks"
+import Info from "./Info"
 
 const settings = {
     Layout,
-    Account, Privacy, LanguagesAndRegion, Appearance, Reactions, Notifications, Blocks,
+    Account, Privacy, LanguagesAndRegion, Appearance, Reactions, Notifications, Blocks, Info
 }
 
 export default settings

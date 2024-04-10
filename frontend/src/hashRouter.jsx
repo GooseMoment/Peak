@@ -75,6 +75,10 @@ const routes = [
                     return getBlocks(user.username)
                 },
             },
+            {
+                path: "info",
+                Component: settings.Info,
+            },
         ]
     },
 ]

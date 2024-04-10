@@ -79,6 +79,11 @@ const menuItems = [
         display: "Blocks",
         to: "blocks",
     },
+    {
+        icon: "info",
+        display: "Info",
+        to: "info",
+    },
 ]
 
 const ModalFrame = styled.div`
