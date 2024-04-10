@@ -9,15 +9,22 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
     if(isSelectingRange) {
       const startDate = moment(e[0]).format("YYYY-MM-DD")
       const endDate = moment(e[1]).format("YYYY-MM-DD")
-      setSelectedStartDate(startDate)
-      setSelectedEndDate(endDate)
+      if(startDate === endDate) {
+        setSelectedStartDate(null)
+        setSelectedEndDate(null)
+      }
+      else {
+        setSelectedStartDate(startDate)
+        setSelectedEndDate(endDate)
+      }
     }
     else {
       const startDate = moment(e).format("YYYY-MM-DD")
       if(selectedStartDate === startDate) {
         setSelectedStartDate(null)
       }
-      else setSelectedStartDate(startDate)
+      else
+       setSelectedStartDate(startDate)
     }
   }
 
@@ -37,11 +44,13 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
     return classes.length === 0 ? null : classes.join(' ')
   }
 
+  const tempdate = null
+
   return <CalendarWrapper>
     <StyledCalendar
       selectRange={isSelectingRange}
       onChange={changeDate}
-      value={selectedStartDate}
+      value={isSelectingRange ? [selectedStartDate, selectedEndDate] : selectedStartDate}
       formatDay={(locale, date) => moment(date).format("D")}
       locale='en'
       // tileClassName={setTileClassName}
