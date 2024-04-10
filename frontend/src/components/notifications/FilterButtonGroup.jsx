@@ -6,7 +6,7 @@ import { cubicBeizer } from "@assets/keyframes"
 import styled from "styled-components"
 
 const FilterButtonGroup = ({active, setActive, filters}) => {
-    const [selectedButtonPosition, setSelectedButtonPosition] = useState({top: 0, left: 0, width: 0})
+    const [selectedButtonPosition, setSelectedButtonPosition] = useState({top: "0.5em", left: 0, width: 0})
 
     const onRefChange = useCallback(node => {
         if (!node) {
