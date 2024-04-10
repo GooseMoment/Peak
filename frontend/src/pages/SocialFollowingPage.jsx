@@ -65,7 +65,8 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
     width: 50%;
-    min-width: 30rem;
+    min-width: 32.5rem;
+    max-width: 40rem;
     ${props => props.$isSticky ? css`
         /* align-self: flex-start; */
         position: sticky;
