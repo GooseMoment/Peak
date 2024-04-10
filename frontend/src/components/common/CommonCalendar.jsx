@@ -217,6 +217,10 @@ const CalendarWrapper = styled.div`
     font-weight: 600;
   }
 
+  .react-calendar__navigation__label:disabled {
+    background-color: #FEFDFC;
+    color: black;
+  }
 `
 
 const StyledCalendar = styled(Calendar)``
