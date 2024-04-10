@@ -33,7 +33,7 @@ const routes = [
         children: [
             {
                 index: true,
-                Component: settings.Redirect,
+                element: null,
             },
             {
                 path: "account",
