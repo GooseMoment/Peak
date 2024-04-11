@@ -21,9 +21,6 @@ html {
 #root > div > main {
     transform: scale(1);
 
-    background-color: #FEFDFC;
-    height: 100%;
-
     animation: ${scaleForward} .5s ${cubicBeizer} forwards;
 }
 
