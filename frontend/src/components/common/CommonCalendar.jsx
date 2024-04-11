@@ -83,6 +83,21 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
   </CalendarWrapper>
 };
 
+const StyledContentDot = styled.div`
+  position: absolute;
+  top: -0.1em;
+  left: -0.1em;
+  
+  background-color: #FF4A03;
+  border-radius: 0.4em;
+  outline: solid 0.125em #FEFDFC;
+  width: 0.4em;
+  height: 0.4em;
+  transition-property: all;
+  transition-duration: 0.25s;
+  transition-timing-function: ease;
+`
+
 const CalendarWrapper = styled.div`
   position: relative;
 
@@ -149,14 +164,27 @@ const CalendarWrapper = styled.div`
 
   /* 일 타일 */
   .react-calendar__month-view__days__day {
+    position: relative;
     flex-basis: 2.5em !important;
     margin: 0.4em calc((100% - 7*2.5em)/14) 0.4em !important;
     height: 2.5em;
 
     border-radius: 3em;
     padding: 0.1em !important;
+    transition-property: all;
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
 
+    overflow: visible !important;
     background-color: #D9D9D9 !important;
+
+    &:hover > ${StyledContentDot} {
+      top: -0.3em;
+      left: -0.3em;
+
+      height: 0.6em;
+      width: 0.6em;
+    }
   }
 
   /* 월 전체 */
@@ -173,12 +201,6 @@ const CalendarWrapper = styled.div`
     abbr {
       color: #A4A4A4;
     }
-  }
-
-  .react-calendar__tile {
-    position: relative;
-
-    overflow: visible !important;
   }
 
   /* 오늘 날짜 */
@@ -227,13 +249,7 @@ const CalendarWrapper = styled.div`
   /* 달력 호버링 */
   .react-calendar__month-view__days__day:hover,
   .react-calendar__month-view__days__day:focus-visible {
-    background-color: #E6E6E6 !important;
-    box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #E6E6E6;
-    
-    &.react-calendar__tile--now {
-      background-color: #FFD7C7 !important;
-      box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #FFD7C7;
-    }
+    box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #FFC6C6;
   }
 
   /* react-calendar__tile
@@ -277,17 +293,6 @@ const CalendarWrapper = styled.div`
 `
 
 const StyledCalendar = styled(Calendar)``
-
-const StyledContentDot = styled.div`
-  position: absolute;
-  top: -0.1em;
-  left: -0.1em;
-  
-  background-color: #FF4A03;
-  border-radius: 0.4em;
-  width: 0.4em;
-  height: 0.4em;
-`
 
 const TodayButton = styled.button`
   position: absolute;
