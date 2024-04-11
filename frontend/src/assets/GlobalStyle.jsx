@@ -67,6 +67,7 @@ body, textarea, input, button {
 
 textarea, input {
     color: inherit;
+    background-color: inherit;
 }
 
 body {
