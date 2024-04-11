@@ -1,12 +1,13 @@
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import { useState } from 'react';
 import moment from 'moment';
 import styled from "styled-components"
-import { useState } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 // TODO: Design range selecting
 
 const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartDate, selectedEndDate, setSelectedEndDate, contentedDates }) => {
+  const [activeStartDate, setActiveStartDate] = useState(new Date())
 
   const changeDate = (e) => {
     if(isSelectingRange) {
@@ -56,7 +57,10 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
     return <>{contents}</>
   }
 
-  
+  const handleTodayClick = () => {
+    const today = new Date();
+    setActiveStartDate(today);
+  };
 
   return <CalendarWrapper>
     <StyledCalendar
@@ -70,7 +74,12 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
       next2Label={null}
       prev2Label={null}
       minDetail='year'
+      activeStartDate={activeStartDate? activeStartDate : undefined}
+      onActiveStartDateChange={({ activeStartDate }) =>
+        setActiveStartDate(activeStartDate)
+      }
     />
+    <TodayButton onClick={handleTodayClick}>오늘</TodayButton>
   </CalendarWrapper>
 };
 
@@ -273,5 +282,7 @@ const StyledContentDot = styled.div`
   /* top: 10em; */
   transform: translateX(-50%);
 `
+
+const TodayButton = styled.button``
 
 export default CommonCalendar;
