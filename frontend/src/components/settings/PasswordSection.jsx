@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import Button from "@components/sign/Button"
+import Button from "@/components/common/Button"
 import Section, { Name, Value } from "@components/settings/Section"
 import Input from "@components/sign/Input"
 

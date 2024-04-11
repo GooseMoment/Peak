@@ -1,14 +1,18 @@
-import { Outlet, useLocation } from "react-router-dom"
+import { Outlet } from "react-router-dom"
 
 import AuthGuard from "@components/auth/AuthGuard"
 import Layout from "@containers/Layout"
 
+import { defaultTheme } from "@assets/themes"
+import { ThemeProvider } from "styled-components"
+
 const AppLayout = () => {
-    const location = useLocation()
     return <AuthGuard>
-        <Layout>
-            <Outlet />
-        </Layout>
+        <ThemeProvider theme={defaultTheme}>
+            <Layout>
+                <Outlet />
+            </Layout>
+        </ThemeProvider>
     </AuthGuard>
 }
 

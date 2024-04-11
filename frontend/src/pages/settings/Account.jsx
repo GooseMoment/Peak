@@ -2,7 +2,7 @@ import { Form, useRouteLoaderData, useRevalidator } from "react-router-dom"
 
 import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value, Sync } from "@components/settings/Section"
-import Button from "@components/sign/Button"
+import Button, { buttonForms } from "@components/common/Button"
 import Input from "@components/sign/Input"
 
 import ProfileImg from "@components/settings/ProfileImg"
@@ -39,7 +39,7 @@ const Account = () => {
                 </Value>
             </Section>
             <Section>
-                <SubmitButton type="submit">Submit</SubmitButton>
+                <Button form={buttonForms.SUCCESS} type="submit">Submit</Button>
             </Section>
         </Form>
 

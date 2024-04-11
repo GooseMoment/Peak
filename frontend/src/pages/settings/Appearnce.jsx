@@ -2,7 +2,7 @@ import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/Switch"
-import Button from "@components/sign/Button"
+import Button from "@/components/common/Button"
 import styled from "styled-components"
 
 const Appearance = () => {

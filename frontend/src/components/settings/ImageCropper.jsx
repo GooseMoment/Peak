@@ -1,7 +1,10 @@
 import { useState } from "react"
+
+import Button, { buttonForms } from "@components/common/Button"
+
 import Cropper from "react-easy-crop"
 import styled from "styled-components"
-import Button from "@components/sign/Button"
+import { states } from "@/assets/themes"
 
 const ImageCropper = ({file, setCroppedAreaPixels, onClickOk}) => {
     const [crop, setCrop] = useState({ x: 0, y: 0 })
@@ -22,8 +25,8 @@ const ImageCropper = ({file, setCroppedAreaPixels, onClickOk}) => {
         onZoomChange={setZoom}
     />
     <ButtonGroup>
-        <CancelButton>Cancel</CancelButton>
-        <OkButton onClick={onClickOk}>Apply</OkButton>
+        <Button form={buttonForms.OUTLINED} state={states.DANGER}>Cancel</Button>
+        <Button form={buttonForms.FILLED} state={states.SUCCESS} onClick={onClickOk}>Apply</Button>
     </ButtonGroup>
     </>
 }
@@ -37,18 +40,6 @@ const ButtonGroup = styled.div`
 
     display: flex;
     gap: 2rem;
-`
-
-const CancelButton = styled(Button)`
-    background-color: red;
-    color: white;
-    border-color: red;
-`
-
-const OkButton = styled(Button)`
-    background-color: green;
-    color: white;
-    border-color: green;
 `
 
 export default ImageCropper

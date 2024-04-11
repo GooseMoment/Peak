@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import Form from "@components/sign/Form"
 import Input from "@components/sign/Input"
-import Button from "@components/sign/Button"
+import Button from "@/components/common/Button"
 
 import { signIn, signUp } from "@api/users.api"
 

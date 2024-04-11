@@ -4,7 +4,7 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 import ModalPortal from "@components/common/ModalPortal"
-import Button from "@components/sign/Button"
+import Button from "@components/common/Button"
 
 const Middle = ({items, submit, isComponentOpen, setIsComponentOpen}) => {
     const [content, setContent] = useState()
