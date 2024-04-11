@@ -11,6 +11,8 @@ export const defaultTheme = {
     },
     black: "#222222",
     white: "#FEFDFC",
+    textColor: "#222222",
+    backgroundColor: "#FEFDFC",
 }
 
 export const states = {
