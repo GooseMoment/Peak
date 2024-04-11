@@ -51,14 +51,11 @@ const ModalPortal = ({ children, closeModal, additional=false }) => {
     }
 
     return createPortal(
-        <ModalStyleProvider $open={isOpen}>{ shouldRender ? children : null}</ModalStyleProvider>, el
+        <AnimationProvider $open={isOpen}>{ shouldRender ? children : null}</AnimationProvider>, el
     )
 }
 
-const ModalStyleProvider = styled.div`
-    color: ${p => p.theme.textColor};
-    background-color: ${p => p.theme.backgroundColor};
-
+const AnimationProvider = styled.div`
     ${props => props.$open ? css`
         animation: ${scaleUp} 0.5s ${cubicBeizer};
     ` : css`
