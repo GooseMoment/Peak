@@ -10,10 +10,10 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
   const [activeStartDate, setActiveStartDate] = useState(new Date())
 
   const changeDate = (e) => {
-    if(isSelectingRange) {
+    if (isSelectingRange) {
       const startDate = moment(e[0]).format("YYYY-MM-DD")
       const endDate = moment(e[1]).format("YYYY-MM-DD")
-      if(startDate === endDate) {
+      if (startDate === endDate) {
         setSelectedStartDate(null)
         setSelectedEndDate(null)
       }
@@ -24,25 +24,25 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
     }
     else {
       const startDate = moment(e).format("YYYY-MM-DD")
-      if(selectedStartDate === startDate) {
+      if (selectedStartDate === startDate) {
         setSelectedStartDate(null)
       }
       else
-       setSelectedStartDate(startDate)
+        setSelectedStartDate(startDate)
     }
   }
 
   const setTileClassName = ({ date, view }) => {
     const classes = []
 
-    if(view === 'month') {
-      if(selectedStartDate && date === selectedStartDate)
+    if (view === 'month') {
+      if (selectedStartDate && date === selectedStartDate)
         classes.push('selected')
-    
-      if(date.getDay() === 0)
+
+      if (date.getDay() === 0)
         classes.push('sunday')
 
-      if(date.getDay() === 6)
+      if (date.getDay() === 6)
         classes.push('saturday')
     }
     return classes.length === 0 ? null : classes.join(' ')
@@ -50,10 +50,10 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
 
   const handleTileContent = ({ date, view }) => {
     let contents = []
-    const day =  moment(date).format("YYYY-MM-DD")
+    const day = moment(date).format("YYYY-MM-DD")
 
     if (contentedDates.find((x) => x === day))
-      contents.push(<StyledContentDot key={day}/>)
+      contents.push(<StyledContentDot key={day} />)
     return <>{contents}</>
   }
 
@@ -74,7 +74,7 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
       next2Label={null}
       prev2Label={null}
       minDetail='year'
-      activeStartDate={activeStartDate? activeStartDate : undefined}
+      activeStartDate={activeStartDate ? activeStartDate : undefined}
       onActiveStartDateChange={({ activeStartDate }) =>
         setActiveStartDate(activeStartDate)
       }
@@ -189,9 +189,10 @@ const CalendarWrapper = styled.div`
 
   /* 월 전체 */
   .react-calendar__month-view {    
+    overflow: hidden;
     /* 폰트 */
     abbr {
-      color: #000000;
+      color: #000000 !important;
     }
   }
   /* 인접 월 */
@@ -207,7 +208,7 @@ const CalendarWrapper = styled.div`
   .react-calendar__tile--now {
     background: #FF4A03 !important;
     abbr {
-      color: #ffffff;
+      color: #ffffff !important;
     }
 
     &.react-calendar__month-view__days__day--neighboringMonth {
@@ -215,9 +216,11 @@ const CalendarWrapper = styled.div`
     }
   }
 
+  /* .react-calendar__tile--active:not(.react-calendar__tile--rangeStart.react-calendar__tile--rangeEnd).react-calendar__tile--range */
   /* 선택한 날짜 스타일 적용 */
-  .react-calendar__tile--active {
-    box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #D9D9D9;
+  .react-calendar__tile--rangeStart.react-calendar__tile--rangeEnd,
+  .react-calendar__tile--active:not(.react-calendar__tile--range) {
+    box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #D9D9D9;  
     
     &.react-calendar__tile--now {
       box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #FF4A03;
@@ -225,30 +228,17 @@ const CalendarWrapper = styled.div`
 
     &.react-calendar__month-view__days__day--neighboringMonth {
       box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #E6E6E6; 
-    
+
       &.react-calendar__tile--now {
         box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #FFD7C7;
       }
     }
   }
 
-  /* 사파리 호환이 안 됨 */
-  /* .react-calendar__tile--active {
-    position: relative;
-    &::after {
-      content: "";
-      z-index: 999;
-      position: absolute;
-      top: -5px;
-      height: 3em;
-      width: 3em;
-      border: solid black;
-    }
-  } */
-
   /* 달력 호버링 */
   .react-calendar__month-view__days__day:hover,
   .react-calendar__month-view__days__day:focus-visible {
+    z-index: 300;
     box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #FFC6C6;
   }
 
@@ -261,6 +251,57 @@ const CalendarWrapper = styled.div`
   react-calendar__tile--rangeBothEnds
   react-calendar__month-view__days__day */
 
+  .react-calendar__tile--range:not(.react-calendar__tile--rangeStart):not(.react-calendar__tile--rangeStart) {
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      height: 3.15em;
+      width: 250%;
+      border-top: solid #D9D9D9 0.15em;
+      border-bottom: solid #D9D9D9 0.15em;
+    }
+  }
+/*         */
+  .react-calendar__tile--rangeStart:not(.react-calendar__tile--rangeEnd) {
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -0.3em;
+      transform: translate(0, -50%);
+
+      height: 3.15em;
+      width: 200%;
+      border-top: solid #D9D9D9 0.15em;
+      border-bottom: solid #D9D9D9 0.15em;
+      border-left: solid #D9D9D9 0.15em;
+      border-top-left-radius: 5em;
+      border-bottom-left-radius: 5em;
+    }
+  }
+
+  .react-calendar__tile--rangeEnd:not(.react-calendar__tile--rangeStart) {
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0.3em;
+      transform: translate(-75%, -50%) !important;
+
+      height: 3.15em;
+      width: 200%;
+      border-top: solid #D9D9D9 0.15em;
+      border-bottom: solid #D9D9D9 0.15em;
+      border-right: solid #D9D9D9 0.15em;
+      border-top-right-radius: 5em;
+      border-bottom-right-radius: 5em;
+    }
+  }
+
   /* 네비게이션 월 스타일 적용 */
   .react-calendar__year-view__months__month {
     border-radius: 0.8em;
@@ -269,7 +310,6 @@ const CalendarWrapper = styled.div`
 
   /* 네비게이션 현재 월 스타일 적용 */
   .react-calendar__tile--hasActive {
-    
     background-color: #FF4A03;
     abbr {
       color: white;
