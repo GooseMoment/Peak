@@ -39,7 +39,7 @@ ${({$sidebarCollapsed}) => $sidebarCollapsed ? css`
 
 height: 100vh;
 box-sizing: border-box;
-color: ${p => p.theme.black};
+color: ${p => p.theme.textColor};
 `
 
 // Reference: https://every-layout.dev/layouts/sidebar

@@ -65,6 +65,10 @@ body, textarea, input, button {
     padding: 0;
 }
 
+textarea, input {
+    color: inherit;
+}
+
 body {
     overflow-x: hidden;
 }

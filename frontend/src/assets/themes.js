@@ -13,6 +13,11 @@ export const defaultTheme = {
     white: "#FEFDFC",
     textColor: "#222222",
     backgroundColor: "#FEFDFC",
+    sidebar: {
+        activeColor: "#D9D9D9",
+        hoverColor: "#FFC6C6",
+        backgroundColor: "#F9F7F6",
+    }
 }
 
 export const states = {
