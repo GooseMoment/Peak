@@ -79,11 +79,13 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
         setActiveStartDate(activeStartDate)
       }
     />
-    <TodayButton onClick={handleTodayClick}>오늘</TodayButton>
+    <TodayButton onClick={handleTodayClick}>TODAY</TodayButton>
   </CalendarWrapper>
 };
 
 const CalendarWrapper = styled.div`
+  position: relative;
+
   display: flex;
 
   .react-calendar {
@@ -283,6 +285,22 @@ const StyledContentDot = styled.div`
   transform: translateX(-50%);
 `
 
-const TodayButton = styled.button``
+const TodayButton = styled.button`
+  position: absolute;
+  top: 1em;
+  right: 7em;
+  
+  width: 5em;
+  height: 2em;
+  border: 0;
+  border-radius: 0.5em;
+  background-color: #FF4A03;
+  color: #ffffff;
+  font-weight: bolder;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 export default CommonCalendar;
