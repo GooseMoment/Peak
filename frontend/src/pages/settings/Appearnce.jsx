@@ -2,8 +2,8 @@ import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/Switch"
-import Button from "@/components/common/Button"
-import styled from "styled-components"
+import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
+import { states } from "@assets/themes"
 
 const Appearance = () => {
 
@@ -30,16 +30,11 @@ const Appearance = () => {
             </Value>
         </Section>
 
-        <Reload onClick={() => window.location.reload()}>Reload to apply</Reload>
+        <ButtonGroup $justifyContent="right">
+            <Button $form={buttonForms.FILLED} $state={states.SUCCESS} onClick={() => window.location.reload()}>Apply</Button>
+        </ButtonGroup>
     </>
 }
-
-const Reload = styled(Button)`
-    border-color: red;
-    color: red;
-    float: right;
-    margin-top: 2rem;
-` 
 
 const themeChoices = [
     {

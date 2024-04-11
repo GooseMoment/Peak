@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import Button from "@/components/common/Button"
+import Button, { ButtonGroup } from "@/components/common/Button"
 import Section, { Name, Value } from "@components/settings/Section"
 import Input from "@components/sign/Input"
 
@@ -71,16 +71,14 @@ const PasswordSection = () => {
                     value={newPasswordAgain} onChange={e => setNewPasswordAgain(e.target.value)}
                 />
                 <div>
-                    <SubmitButton onClick={resetPassword}>Change</SubmitButton>
+                    <ButtonGroup $justifyContent="right">
+                        <Button onClick={resetPassword}>Change</Button>
+                    </ButtonGroup>
                 </div>
             </PasswordChangeInputs> : <PasswordChangeInputsEmpty />}
         </Value>
     </Section>
 }
-
-const SubmitButton = styled(Button)`
-    float: right;
-`
 
 const ToggleButton = styled(Button)`
     margin-left: 1em;
