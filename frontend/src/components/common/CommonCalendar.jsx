@@ -176,7 +176,9 @@ const CalendarWrapper = styled.div`
   }
 
   .react-calendar__tile {
-    /* position: relative; */
+    position: relative;
+
+    overflow: visible !important;
   }
 
   /* 오늘 날짜 */
@@ -251,6 +253,7 @@ const CalendarWrapper = styled.div`
 
   /* 네비게이션 현재 월 스타일 적용 */
   .react-calendar__tile--hasActive {
+    
     background-color: #FF4A03;
     abbr {
       color: white;
@@ -276,13 +279,14 @@ const CalendarWrapper = styled.div`
 const StyledCalendar = styled(Calendar)``
 
 const StyledContentDot = styled.div`
-  background-color: #FF4A03;
-  border-radius: 0.3em;
-  width: 0.3em;
-  height: 0.3em;
   position: absolute;
-  top: 5em;
-  /* transform: translateX(-50%); */
+  top: -0.1em;
+  left: -0.1em;
+  
+  background-color: #FF4A03;
+  border-radius: 0.4em;
+  width: 0.4em;
+  height: 0.4em;
 `
 
 const TodayButton = styled.button`
