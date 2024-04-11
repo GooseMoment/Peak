@@ -176,7 +176,7 @@ const CalendarWrapper = styled.div`
   }
 
   .react-calendar__tile {
-    position: relative;
+    /* position: relative; */
   }
 
   /* 오늘 날짜 */
@@ -278,11 +278,11 @@ const StyledCalendar = styled(Calendar)``
 const StyledContentDot = styled.div`
   background-color: #FF4A03;
   border-radius: 0.3em;
-  width: 1em;
-  height: 1em;
+  width: 0.3em;
+  height: 0.3em;
   position: absolute;
-  /* top: 10em; */
-  transform: translateX(-50%);
+  top: 5em;
+  /* transform: translateX(-50%); */
 `
 
 const TodayButton = styled.button`
