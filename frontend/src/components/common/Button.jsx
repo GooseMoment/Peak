@@ -15,6 +15,12 @@ const Button = (props) => {
     return <SelectedButton {...props} $state={$state}>{props.children}</SelectedButton>
 }
 
+export const ButtonGroup = styled.div`
+    display: flex;
+    gap: 1em;
+    justify-content: ${p => p.$justifyContent || "center"};
+`
+
 const CommonButton = styled(MildButton)`
     border: 1.5px solid transparent;
     border-radius: 10px;
@@ -39,7 +45,7 @@ const CommonButton = styled(MildButton)`
     }
 
     &:active:hover:enabled {
-        background-color: #F7F7F7;
+        filter: brightness(.9);
         transform: scale(.9);
     }
 
@@ -54,8 +60,7 @@ const CommonButton = styled(MildButton)`
 const FilledButton = styled(CommonButton)`
     background-color: ${p => p.theme.primaryColors[p.$state]};
     border-color: ${p => p.theme.primaryColors[p.$state]};
-    color: ${p => p.theme.primaryColors[p.$state]};
-    mix-blend-mode: difference;
+    color: ${p => p.theme.backgroundColor};
 `
 
 const OutlinedButton = styled(CommonButton)`
