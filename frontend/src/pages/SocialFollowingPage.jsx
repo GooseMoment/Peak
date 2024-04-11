@@ -93,7 +93,7 @@ const DailyLogContainer = styled.div`
 `
 
 const mockNewLogDates = [
-    "27-02-2024", "01-03-2024", "22-03-2024",
+    "2024-04-09", "2024-04-10", "2024-04-11",
 ];
 
 const mockDailyFollowerLogsDetail = [

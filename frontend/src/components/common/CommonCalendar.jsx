@@ -2,8 +2,11 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import styled from "styled-components"
+import { useState } from 'react';
 
-const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartDate, selectedEndDate, setSelectedEndDate }) => {
+// TODO: Design range selecting
+
+const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartDate, selectedEndDate, setSelectedEndDate, contentedDates }) => {
 
   const changeDate = (e) => {
     if(isSelectingRange) {
@@ -44,7 +47,16 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
     return classes.length === 0 ? null : classes.join(' ')
   }
 
-  const tempdate = null
+  const handleTileContent = ({ date, view }) => {
+    let contents = []
+    const day =  moment(date).format("YYYY-MM-DD")
+
+    if (contentedDates.find((x) => x === day))
+      contents.push(<StyledContentDot key={day}/>)
+    return <>{contents}</>
+  }
+
+  
 
   return <CalendarWrapper>
     <StyledCalendar
@@ -52,6 +64,7 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
       onChange={changeDate}
       value={isSelectingRange ? [selectedStartDate, selectedEndDate] : selectedStartDate}
       formatDay={(locale, date) => moment(date).format("D")}
+      tileContent={handleTileContent}
       locale='en'
       // tileClassName={setTileClassName}
       next2Label={null}
@@ -136,7 +149,7 @@ const CalendarWrapper = styled.div`
   }
 
   /* 월 전체 */
-  .react-calendar__month-view {
+  .react-calendar__month-view {    
     /* 폰트 */
     abbr {
       color: #000000;
@@ -149,6 +162,10 @@ const CalendarWrapper = styled.div`
     abbr {
       color: #A4A4A4;
     }
+  }
+
+  .react-calendar__tile {
+    position: relative;
   }
 
   /* 오늘 날짜 */
@@ -164,8 +181,6 @@ const CalendarWrapper = styled.div`
   }
 
   /* 선택한 날짜 스타일 적용 */
-  /* .react-calendar__tile:enabled:hover,*/
-  /* .react-calendar__tile:enabled:focus-visible, */
   .react-calendar__tile--active {
     box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #D9D9D9;
     
@@ -182,6 +197,20 @@ const CalendarWrapper = styled.div`
     }
   }
 
+  /* 사파리 호환이 안 됨 */
+  /* .react-calendar__tile--active {
+    position: relative;
+    &::after {
+      content: "";
+      z-index: 999;
+      position: absolute;
+      top: -5px;
+      height: 3em;
+      width: 3em;
+      border: solid black;
+    }
+  } */
+
   /* 달력 호버링 */
   .react-calendar__month-view__days__day:hover,
   .react-calendar__month-view__days__day:focus-visible {
@@ -193,6 +222,7 @@ const CalendarWrapper = styled.div`
       box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #FFD7C7;
     }
   }
+
   /* react-calendar__tile
   react-calendar__tile--now 
   react-calendar__tile--active 
@@ -233,5 +263,15 @@ const CalendarWrapper = styled.div`
 `
 
 const StyledCalendar = styled(Calendar)``
+
+const StyledContentDot = styled.div`
+  background-color: #FF4A03;
+  border-radius: 0.3em;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  /* top: 10em; */
+  transform: translateX(-50%);
+`
 
 export default CommonCalendar;
