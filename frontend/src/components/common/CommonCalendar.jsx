@@ -4,8 +4,6 @@ import styled from "styled-components"
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
-// TODO: Design range selecting
-
 const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartDate, selectedEndDate, setSelectedEndDate, contentedDates }) => {
   const [activeStartDate, setActiveStartDate] = useState(new Date())
 
@@ -32,24 +30,8 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
     }
   }
 
-  const setTileClassName = ({ date, view }) => {
-    const classes = []
-
-    if (view === 'month') {
-      if (selectedStartDate && date === selectedStartDate)
-        classes.push('selected')
-
-      if (date.getDay() === 0)
-        classes.push('sunday')
-
-      if (date.getDay() === 6)
-        classes.push('saturday')
-    }
-    return classes.length === 0 ? null : classes.join(' ')
-  }
-
   const handleTileContent = ({ date, view }) => {
-    let contents = []
+    const contents = []
     const day = moment(date).format("YYYY-MM-DD")
 
     if (contentedDates.find((x) => x === day))
@@ -70,7 +52,6 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
       formatDay={(locale, date) => moment(date).format("D")}
       tileContent={handleTileContent}
       locale='en'
-      // tileClassName={setTileClassName}
       next2Label={null}
       prev2Label={null}
       minDetail='year'
