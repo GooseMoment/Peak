@@ -1,18 +1,23 @@
+const black = "#222222"
+const white = "#FEFDFC"
+const goose = "rgb(255, 74, 3)"
+
 export const defaultTheme = {
     // from: https://bulma.io/documentation/helpers/palette-helpers/
     primaryColors: {
-        text: "rgb(64, 70, 84)",
+        text: black,
         link: "rgb(66, 88, 255)",
-        primary: "rgb(0, 209, 178)",
+        primary: "#2e6deb",
         info: "rgb(102, 209, 255)",
         success: "rgb(72, 199, 142)",
         warning: "rgb(255, 183, 15)",
         danger: "rgb(255, 102, 133)",
     },
-    black: "#222222",
-    white: "#FEFDFC",
-    textColor: "#222222",
-    backgroundColor: "#FEFDFC",
+    black,
+    white,
+    goose,
+    textColor: black,
+    backgroundColor: white,
     sidebar: {
         activeColor: "#D9D9D9",
         hoverColor: "#FFC6C6",
