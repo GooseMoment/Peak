@@ -129,13 +129,6 @@ class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유
         on_delete = models.CASCADE,
         related_name = "blockers"
     )
-    
-    def save(self, force_insert: bool = False, force_update: bool = False, using: str | None = None, update_fields: Iterable[str] | None = None) -> None:
-        #soft delete
-        Following.objects.filter(followee=self.blocker, follower=self.blockee).delete()
-        Following.objects.filter(followee=self.blockee, follower=self.blocker).delete()
-        print(force_insert, force_update)
-        return super().save(force_insert, force_update, using, update_fields)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
