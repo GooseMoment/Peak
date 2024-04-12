@@ -4,12 +4,18 @@ import { states } from "@assets/themes"
 import styled from "styled-components"
 
 export const buttonForms = {
-    FILLED: "filled",
-    OUTLINED: "outlined",
+    filled: "filled",
+    outlined: "outlined",
 }
 
+/**
+ * 공용 버튼 컴포넌트
+ * @param {Object} props - button의 모든 props 
+ * @param {?string} $form - buttonForms 목록 중 사용 (기본: outlined)
+ * @param {?string} $state - assets/themes/states 목록 중 사용 (기본: states.TEXT)
+ */
 const Button = (props) => {
-    const { $form=buttonForms.OUTLINED, $state=states.TEXT } = props
+    const { $form=buttonForms.outlined, $state=states.TEXT } = props
     const SelectedButton = buttons[$form]
 
     return <SelectedButton {...props} $state={$state}>{props.children}</SelectedButton>
