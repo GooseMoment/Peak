@@ -1,6 +1,8 @@
+import { css } from "styled-components"
+
 const black = "#222222"
 const white = "#FEFDFC"
-const goose = "rgb(255, 74, 3)"
+const goose = "#ff4a03"
 
 export const defaultTheme = {
     // from: https://bulma.io/documentation/helpers/palette-helpers/
@@ -18,9 +20,13 @@ export const defaultTheme = {
     goose,
     textColor: black,
     backgroundColor: white,
+    accentColor: goose,
+    scrollbarColor: "#FFC6C6",
     sidebar: {
-        activeColor: "#D9D9D9",
-        hoverColor: "#FFC6C6",
+        activeColor: black,
+        activeBackgroundColor: "#D9D9D9",
+        hoverColor: black,
+        hoverBackgroundColor: `rgb(255 74 3 / 0.35)`,
         backgroundColor: "#F9F7F6",
     }
 }

@@ -25,9 +25,7 @@ const Label = styled.label`
     --toggle-shadow-offset: 10px;
     --toggle-wider: 3em;
     --color-grey: #cccccc;
-    --color-green: #4296f4;
-
-
+    --color-green: ${p => p.theme.accentColor};
 `
 
 const Checkbox = styled.input`

@@ -11,7 +11,8 @@ html {
     height: 100vh;
     width: 100vw;
 
-    scrollbar-color: var(--goose) transparent;
+    accent-color: ${p => p.theme.accentColor};
+    scrollbar-color: ${p => p.theme.scrollbarColor} transparent;
     scrollbar-width: thin;
 
     -webkit-font-smoothing: antialiased;

@@ -10,11 +10,13 @@ transition: background-color 0.1s;
 transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
 
 &.active {
-    background-color: ${p => p.theme.sidebar.activeColor};
+    color: ${p => p.theme.sidebar.activeColor};
+    background-color: ${p => p.theme.sidebar.activeBackgroundColor};
 }
 
 &:hover {
-    background-color: ${p => p.theme.sidebar.hoverColor};
+    color: ${p => p.theme.sidebar.hoverColor};
+    background-color: ${p => p.theme.sidebar.hoverBackgroundColor};
 }
 `
 
