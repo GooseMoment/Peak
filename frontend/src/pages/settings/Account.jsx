@@ -41,7 +41,7 @@ const Account = () => {
             </Section>
             <Section>
                 <ButtonGroup $justifyContent="right">
-                    <Button $form={buttonForms.filled} $state={states.PRIMARY} type="submit">Submit</Button>
+                    <Button $form={buttonForms.filled} $state={states.primary} type="submit">Submit</Button>
                 </ButtonGroup>
             </Section>
         </Form>

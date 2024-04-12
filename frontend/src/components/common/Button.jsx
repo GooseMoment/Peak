@@ -15,7 +15,7 @@ export const buttonForms = {
  * @param {?string} $state - assets/themes/states 목록 중 사용 (기본: states.TEXT)
  */
 const Button = (props) => {
-    const { $form=buttonForms.outlined, $state=states.TEXT } = props
+    const { $form=buttonForms.outlined, $state=states.text } = props
     const SelectedButton = buttons[$form]
 
     return <SelectedButton {...props} $state={$state}>{props.children}</SelectedButton>
@@ -25,6 +25,7 @@ export const ButtonGroup = styled.div`
     display: flex;
     gap: 1em;
     justify-content: ${p => p.$justifyContent || "center"};
+    margin: ${p => p.$margin || "none"};
 `
 
 const CommonButton = styled(MildButton)`

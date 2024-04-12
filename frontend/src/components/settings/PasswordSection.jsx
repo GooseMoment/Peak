@@ -74,7 +74,7 @@ const PasswordSection = () => {
                 />
                 <div>
                     <ButtonGroup $justifyContent="right">
-                        <Button $form={buttonForms.filled} $state={states.PRIMARY} type="submit">Change</Button>
+                        <Button $form={buttonForms.filled} $state={states.primary} type="submit">Change</Button>
                     </ButtonGroup>
                 </div>
             </PasswordChangeForm> : <PasswordChangeInputsEmpty />}

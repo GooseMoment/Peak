@@ -31,7 +31,7 @@ const Appearance = () => {
         </Section>
 
         <ButtonGroup $justifyContent="right">
-            <Button $form={buttonForms.filled} $state={states.PRIMARY} onClick={() => window.location.reload()}>Apply</Button>
+            <Button $form={buttonForms.filled} $state={states.primary} onClick={() => window.location.reload()}>Apply</Button>
         </ButtonGroup>
     </>
 }

@@ -5,11 +5,11 @@ const white = "#FEFDFC"
 const goose = "#ff4a03"
 
 export const defaultTheme = {
-    // from: https://bulma.io/documentation/helpers/palette-helpers/
     primaryColors: {
         text: black,
+        primary: goose,
+        secondary: "#f78457",
         link: "rgb(66, 88, 255)",
-        primary: "#2e6deb",
         info: "rgb(102, 209, 255)",
         success: "rgb(72, 199, 142)",
         warning: "rgb(255, 183, 15)",
@@ -32,11 +32,12 @@ export const defaultTheme = {
 }
 
 export const states = {
-    TEXT: "text",
-    LINK: "link",
-    PRIMARY: "primary",
-    INFO: "info",
-    SUCCESS: "success",
-    WARNING: "warning",
-    DANGER: "danger",
+    text: "text",
+    link: "link",
+    primary: "primary",
+    secondary: "secondary",
+    info: "info",
+    success: "success",
+    warning: "warning",
+    danger: "danger",
 }
