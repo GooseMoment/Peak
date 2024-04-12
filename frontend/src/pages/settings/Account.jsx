@@ -8,6 +8,7 @@ import Input from "@components/sign/Input"
 import ProfileImg from "@components/settings/ProfileImg"
 import PasswordSection from "@components/settings/PasswordSection"
 
+import { states } from "@assets/themes"
 import styled from "styled-components"
 
 const Account = () => {
@@ -40,7 +41,7 @@ const Account = () => {
             </Section>
             <Section>
                 <ButtonGroup $justifyContent="right">
-                    <Button form={buttonForms.SUCCESS} type="submit">Submit</Button>
+                    <Button $form={buttonForms.filled} $state={states.PRIMARY} type="submit">Submit</Button>
                 </ButtonGroup>
             </Section>
         </Form>

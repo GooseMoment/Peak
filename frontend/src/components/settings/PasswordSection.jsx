@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import Button, { ButtonGroup } from "@/components/common/Button"
+import Button, { ButtonGroup, buttonForms } from "@/components/common/Button"
 import Section, { Name, Value } from "@components/settings/Section"
 import Input from "@components/sign/Input"
 
@@ -9,6 +9,7 @@ import { patchPassword } from "@api/users.api"
 
 import { Key, RotateCw } from "feather-icons-react"
 import styled from "styled-components"
+import { states } from "@/assets/themes"
 
 const PasswordSection = () => {
     const [passwordFormOpened, setPasswordFormOpened] = useState(false)
@@ -16,7 +17,9 @@ const PasswordSection = () => {
     const [newPassword, setNewPassword] = useState("")
     const [newPasswordAgain, setNewPasswordAgain] = useState("")
 
-    const resetPassword = async () => {
+    const changePassword = async e => {
+        e.preventDefault()
+
         if (newPassword.length < 8) {
             notify.error("New password is too short.")
             return
@@ -56,8 +59,7 @@ const PasswordSection = () => {
             </ToggleButton>
         </Name>
         <Value>
-
-            {passwordFormOpened ? <PasswordChangeInputs>
+            {passwordFormOpened ? <PasswordChangeForm onSubmit={changePassword}>
                 <Input 
                     icon={<Key />} name="password" type="password" placeholder="Current password" required
                     value={currentPassword} onChange={e => setCurrentPassword(e.target.value)}
@@ -72,10 +74,10 @@ const PasswordSection = () => {
                 />
                 <div>
                     <ButtonGroup $justifyContent="right">
-                        <Button onClick={resetPassword}>Change</Button>
+                        <Button $form={buttonForms.filled} $state={states.PRIMARY} type="submit">Change</Button>
                     </ButtonGroup>
                 </div>
-            </PasswordChangeInputs> : <PasswordChangeInputsEmpty />}
+            </PasswordChangeForm> : <PasswordChangeInputsEmpty />}
         </Value>
     </Section>
 }
@@ -84,7 +86,7 @@ const ToggleButton = styled(Button)`
     margin-left: 1em;
 `
 
-const PasswordChangeInputs = styled.div`
+const PasswordChangeForm = styled.form`
     margin-top: 1em;
     display: flex;
     flex-direction: column;

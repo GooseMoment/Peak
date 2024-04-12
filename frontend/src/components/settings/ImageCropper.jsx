@@ -25,8 +25,8 @@ const ImageCropper = ({file, setCroppedAreaPixels, onClickOk, onClickCancel}) =>
         onZoomChange={setZoom}
     />
     <StyledButtonGroup>
-        <Button $form={buttonForms.OUTLINED} $state={states.DANGER} onClick={onClickCancel}>Cancel</Button>
-        <Button $form={buttonForms.FILLED} $state={states.SUCCESS} onClick={onClickOk}>Apply</Button>
+        <Button $form={buttonForms.outlined} $state={states.DANGER} onClick={onClickCancel}>Cancel</Button>
+        <Button $form={buttonForms.filled} $state={states.SUCCESS} onClick={onClickOk}>Apply</Button>
     </StyledButtonGroup>
     </>
 }
