@@ -7,7 +7,7 @@ const SocialCalendar = ({newLogDates, selectedDate, setSelectedDate}) => {
   const [tempDate, setTempDate] = useState(new Date())
   return <>
     <StyledSocialCalendar
-      isSelectingRange={true}
+      isRangeSelectMode={false}
       selectedStartDate={selectedDate}
       setSelectedStartDate={setSelectedDate}
       selectedEndDate={tempDate}

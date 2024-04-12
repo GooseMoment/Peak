@@ -4,11 +4,11 @@ import styled from "styled-components"
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
-const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartDate, selectedEndDate, setSelectedEndDate, contentedDates }) => {
+const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStartDate, selectedEndDate, setSelectedEndDate, contentedDates }) => {
   const [activeStartDate, setActiveStartDate] = useState(new Date())
 
   const changeDate = (e) => {
-    if (isSelectingRange) {
+    if (isRangeSelectMode) {
       const startDate = moment(e[0]).format("YYYY-MM-DD")
       const endDate = moment(e[1]).format("YYYY-MM-DD")
       if (startDate === endDate) {
@@ -46,9 +46,9 @@ const CommonCalendar = ({ isSelectingRange, selectedStartDate, setSelectedStartD
 
   return <CalendarWrapper>
     <StyledCalendar
-      selectRange={isSelectingRange}
+      selectRange={isRangeSelectMode}
       onChange={changeDate}
-      value={isSelectingRange ? [selectedStartDate, selectedEndDate] : selectedStartDate}
+      value={isRangeSelectMode ? [selectedStartDate, selectedEndDate] : selectedStartDate}
       formatDay={(locale, date) => moment(date).format("D")}
       tileContent={handleTileContent}
       locale='en'
