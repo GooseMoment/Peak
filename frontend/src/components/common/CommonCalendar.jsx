@@ -197,10 +197,10 @@ const CalendarWrapper = styled.div`
   }
   /* 인접 월 */
   .react-calendar__month-view__days__day--neighboringMonth {
-    background-color: #E6E6E6;
+    background-color: #E6E6E6 !important;
     /* 폰트 */
     abbr {
-      color: #A4A4A4;
+      color: #A4A4A4 !important;
     }
   }
 
@@ -212,7 +212,7 @@ const CalendarWrapper = styled.div`
     }
 
     &.react-calendar__month-view__days__day--neighboringMonth {
-      background-color: #FFD7C7;
+      background-color: #FFD7C7 !important;
     }
   }
 
@@ -238,20 +238,11 @@ const CalendarWrapper = styled.div`
   /* 달력 호버링 */
   .react-calendar__month-view__days__day:hover,
   .react-calendar__month-view__days__day:focus-visible {
-    z-index: 300;
     box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #FFC6C6;
   }
 
-  /* react-calendar__tile
-  react-calendar__tile--now 
-  react-calendar__tile--active 
-  react-calendar__tile--range 
-  react-calendar__tile--rangeStart 
-  react-calendar__tile--rangeEnd 
-  react-calendar__tile--rangeBothEnds
-  react-calendar__month-view__days__day */
-
   .react-calendar__tile--range:not(.react-calendar__tile--rangeStart):not(.react-calendar__tile--rangeStart) {
+    transition: all 1s ease !important;
     &::after {
       content: "";
       position: absolute;
@@ -260,22 +251,22 @@ const CalendarWrapper = styled.div`
       transform: translate(-50%, -50%);
 
       height: 3.15em;
-      width: 250%;
+      width: 6em;
       border-top: solid #D9D9D9 0.15em;
       border-bottom: solid #D9D9D9 0.15em;
     }
   }
-/*         */
+
   .react-calendar__tile--rangeStart:not(.react-calendar__tile--rangeEnd) {
     &::after {
       content: "";
       position: absolute;
       top: 50%;
       left: -0.3em;
-      transform: translate(0, -50%);
+      transform: translate(0, -50%) !important;
 
       height: 3.15em;
-      width: 200%;
+      width: 4.5em;
       border-top: solid #D9D9D9 0.15em;
       border-bottom: solid #D9D9D9 0.15em;
       border-left: solid #D9D9D9 0.15em;
@@ -289,11 +280,11 @@ const CalendarWrapper = styled.div`
       content: "";
       position: absolute;
       top: 50%;
-      left: 0.3em;
-      transform: translate(-75%, -50%) !important;
+      left: -3.15em !important;
+      transform: translate(0, -50%) !important;
 
       height: 3.15em;
-      width: 200%;
+      width: 4.5em;
       border-top: solid #D9D9D9 0.15em;
       border-bottom: solid #D9D9D9 0.15em;
       border-right: solid #D9D9D9 0.15em;
