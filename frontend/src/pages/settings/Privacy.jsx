@@ -2,7 +2,7 @@ import { useRouteLoaderData, useSubmit } from "react-router-dom"
 
 import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Description, Value, Sync } from "@components/settings/Section"
-import Switch from "@components/settings/Switch"
+import Switch from "@components/settings/SettingSwitch"
 import Select from "@components/settings/Select"
 
 const Privacy = () => {

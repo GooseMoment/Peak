@@ -1,7 +1,7 @@
 import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
-import Switch from "@components/settings/Switch"
+import Switch from "@components/settings/SettingSwitch"
 import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
 import { states } from "@assets/themes"
 
