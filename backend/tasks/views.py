@@ -1,4 +1,5 @@
 from rest_framework import mixins, generics
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Task
 from .serializers import TaskSerializer
@@ -19,10 +20,26 @@ class TaskDetail(mixins.RetrieveModelMixin,
         return self.retrieve(request, *args, **kwargs)
     
     def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
+        try:
+            task: Task = self.get_object()
+            if (task.completed_at is None) or (request.data.get("completed_at") is None):
+                if task.completed_at is None:
+                    task.drawer.uncompleted_task_count += 1
+                    task.drawer.completed_task_count -= 1
+                else:
+                    task.drawer.uncompleted_task_count -= 1
+                    task.drawer.completed_task_count += 1   
+            task.drawer.save()
+
+            return self.partial_update(request, *args, **kwargs)
+        except Exception as e:
+            return e
     
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+    
+class TaskListPagination(PageNumberPagination):
+    page_size = 1000
     
 class TaskList(CreateMixin,
                   mixins.ListModelMixin,
@@ -30,6 +47,7 @@ class TaskList(CreateMixin,
                   generics.GenericAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsUserMatch]
+    pagination_class = TaskListPagination
 
     def get_queryset(self):
         queryset = Task.objects.filter(user=self.request.user).order_by("created_at").all()
