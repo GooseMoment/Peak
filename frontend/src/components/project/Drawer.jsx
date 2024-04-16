@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useLoaderData } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 import styled from "styled-components"
 import FeatherIcon from 'feather-icons-react'
@@ -7,9 +7,16 @@ import FeatherIcon from 'feather-icons-react'
 import Task from "@components/project/Task"
 import TaskCreateSimple from "@components/project/Creates/TaskCreateSimple"
 
-function Drawer({projectId, drawer, color}){
-    const {tasksByDrawer} = useLoaderData()
-    const tasks = tasksByDrawer.get(drawer.id)
+import { useQuery } from "@tanstack/react-query"
+import { getTasksByDrawer } from "@api/tasks.api"
+
+function Drawer({project, drawer, color}){
+    const navigate = useNavigate()
+
+    const { isPending, isError, data: tasks, error } = useQuery({
+        queryKey: ['tasks', {drawerID: drawer.id}],
+        queryFn: () => getTasksByDrawer(drawer.id),
+    })
 
     //Drawer collapsed handle
     const [collapsed, setCollapsed] = useState(false);
@@ -25,8 +32,13 @@ function Drawer({projectId, drawer, color}){
         setIsSimpleOpen(prev => !prev)
     }
 
+    const clickPlus = () => {
+        navigate(`/app/projects/${project.id}/tasks/create/`,
+        {state: {project_name : project.name, drawer_id : drawer.id, drawer_name : drawer.name}})
+    }
+
     const drawerIcons = [
-        {icon: "plus", click: () => {setsIsCreateOpen(true)}},
+        {icon: "plus", click: clickPlus},
         {icon: "chevron-down", click: handleCollapsed},
         {icon: "more-horizontal", click: () => {}},
     ]
@@ -44,12 +56,12 @@ function Drawer({projectId, drawer, color}){
             {collapsed ? null :
                 <TaskList>
                     {tasks && tasks.map((task) => (
-                        <Task key={task.id} projectId={projectId} task={task} color={color}/>
+                        <Task key={task.id} projectId={project.id} task={task} color={color}/>
                     ))}
                 </TaskList>
             }
             { isSimpleOpen &&
-                <TaskCreateSimple/>
+                <TaskCreateSimple color={color}/>
             }
             <TaskCreateButton onClick={handleisSimpleOpen}>
                 <FeatherIcon icon="plus-circle"/>

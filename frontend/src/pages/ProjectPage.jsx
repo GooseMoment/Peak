@@ -26,7 +26,7 @@ const ProjectPage = () => {
         </TitleBox>
         {drawers && (drawers.length === 0) ? <NoDrawerText>서랍을 생성하고 어서 투두를 작성해보세요😊</NoDrawerText> 
         : drawers.map((drawer) => (
-            <Drawer key={drawer.id} projectId={id} drawer={drawer} color={project.color}/>
+            <Drawer key={drawer.id} project={project} drawer={drawer} color={project.color}/>
         ))}
         { isDrawerCreateOpen &&
             <ModalPortal closeModal={() => {setIsDrawerCreateOpen(false)}}>

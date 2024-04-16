@@ -1,5 +1,3 @@
-import { useOutletContext, useSubmit } from "react-router-dom"
-
 import styled from "styled-components"
 
 import Detail from "@components/project/common/Detail"
@@ -9,9 +7,7 @@ import tomorrow from "@assets/project/calendar/tomorrow.svg"
 import next_week from "@assets/project/calendar/next_week.svg"
 import slach from "@assets/project/slach.svg"
 
-const Assigned = () => {
-    const [closeComponent] = useOutletContext()
-    const submit = useSubmit()
+const Assigned = ({setFunc, closeComponent}) => {
     let date = new Date()
 
     const items = [
@@ -25,14 +21,12 @@ const Assigned = () => {
     const changeAssignedDate = (set) => {
         return async () => {
             date.setDate(date.getDate() + set)
-            let assigned_at = "null"
+            let assigned_at = null
             if (!(set === null)) {
                 assigned_at = date.toISOString().slice(0, 10)
             }
-            submit({assigned_at}, {
-                method: "PATCH",
-                action: "..",
-            })
+            setFunc({assigned_at})
+            closeComponent()
         }
     }
 

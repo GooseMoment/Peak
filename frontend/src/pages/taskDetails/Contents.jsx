@@ -1,8 +1,11 @@
 import { useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
+
+import hourglass from "@assets/project/hourglass.svg"
+import alarmclock from "@assets/project/alarmclock.svg"
 
 import Calendar from "./Calendar"
 import Assigned from "./Assigned"
@@ -11,20 +14,26 @@ import Priority from "./Priority"
 import Drawer from "./Drawer"
 import Memo from "./Memo"
 
-import hourglass from "@assets/project/hourglass.svg"
-import alarmclock from "@assets/project/alarmclock.svg"
+import ModalPortal from "@components/common/ModalPortal"
 
-function Contents({task, setIsComponentOpen}) {
-    const { id: projectId } = useParams()
-    const pathRoot = `/app/projects/${projectId}/tasks/${task.id}/detail/`
+const Contents = ({task, setFunc}) => {
+    const { id: projectID } = useParams()
+    const navigate = useNavigate()
+
+    const [isComponentOpen, setIsComponentOpen] = useState(false)
 
     // text클릭 시 알맞는 component 띄우기
     const [content, setContent] = useState()
     
     const handleClickContent = (e) => {
-        const name = e.target.id
+        const name = Number(e.target.id)
         setContent(name)
         setIsComponentOpen(true)
+    }
+
+    const closeComponent = () => {
+        setIsComponentOpen(false)
+        navigate(`.`)
     }
 
     //display due, reminder
@@ -40,59 +49,58 @@ function Contents({task, setIsComponentOpen}) {
         {
             id: 1,
             icon: <FeatherIcon icon="calendar" />,
-            to: "assigned_at",
             display: task.assigned_at ? new_assigned_at_date : "없음",
-            component: <Assigned />
+            component: <Assigned setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 2,
             icon: <img src={hourglass} />,
-            to: "due",
             display: task.due_date && new_due_time ? new_due_date + ' ' + new_due_time : "없음",
-            component: <Calendar />
+            component: <Calendar setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 3,
             icon: <img src={alarmclock} />,
-            to: "reminder",
             display: task.reminder_datetime ? new_reminder_datetime : "없음",
-            component: <Reminder task={task} />
+            component: <Reminder setFunc={setFunc} closeComponent={closeComponent}/>
+            // 아직 안만듬
         },
         {
             id: 4,
             icon: <FeatherIcon icon="alert-circle" />,
-            to: "priority",
             display: priorities[task.priority],
-            component: <Priority />
+            component: <Priority setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 5,
             icon: <FeatherIcon icon="archive" />,
-            to: "drawer",
             display: task.drawer_name ? `${task.project_name} / ${task.drawer_name}` : "없음",
-            component: <Drawer projectId={projectId} task={task} />
+            component: <Drawer projectID={projectID} task={task} setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 6,
             icon: <FeatherIcon icon="edit" />,
-            to: "memo",
             display: task.memo ? task.memo : "없음",
-            component: <Memo />
+            component: <Memo setFunc={setFunc} closeComponent={closeComponent}/>
         },
     ]
 
     return (
         <ContentsBlock>
             {items.map(item => (
-            <ContentsBox key={item.id}>
-                {item.icon}
-                <VLine $end={item.id === 1 || item.id === 6} />
-                <Link to={pathRoot+item.to} style={{ textDecoration: 'none' }}>
-                    <ContentText id={item.icon} onClick={handleClickContent}>
+            <>
+                <ContentsBox key={item.id}>
+                    {item.icon}
+                    <VLine $end={item.id === 1 || item.id === 6} />
+                    <ContentText id={item.id} onClick={handleClickContent}>
                         {item.display}
                     </ContentText>
-                </Link>
-            </ContentsBox>
+                    {(content === item.id && isComponentOpen) ? 
+                    <ModalPortal closeModal={closeComponent} additional>
+                        {item.component}
+                    </ModalPortal> : null}
+                </ContentsBox>
+            </>
             ))}
         </ContentsBlock>
     )

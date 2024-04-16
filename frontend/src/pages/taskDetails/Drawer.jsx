@@ -1,22 +1,18 @@
-import { useRouteLoaderData, useNavigate, useOutletContext, useSubmit } from "react-router-dom"
+import { useRouteLoaderData, useNavigate } from "react-router-dom"
 import { Fragment } from "react"
 
 import Detail from "@components/project/common/Detail"
 import DrawerFolder from "@components/project/Creates/DrawerFolder"
 
-const Drawer = ({ projectId, task }) => {
+const Drawer = ({ projectID: projectID, task, setFunc, closeComponent }) => {
     const { projects } = useRouteLoaderData("app")
     const navigate = useNavigate()
-    const submit = useSubmit()
-    const [closeComponent] = useOutletContext()
 
     const changeDrawer = (drawerId) => {
         return async () => {
-            submit({drawer: drawerId}, {
-                method: "PATCH",
-                action: "..",
-            })
-            navigate(`/app/projects/${projectId}/tasks/${task.id}/detail/drawer`)
+            setFunc({drawer: drawerId})
+            navigate(`/app/projects/${projectID}/tasks/${task.id}/detail`)
+            closeComponent()
         }
     }
 
