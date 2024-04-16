@@ -68,6 +68,15 @@ body, textarea, input, button {
     padding: 0;
 }
 
+input {
+    border: none;
+
+    
+    &:focus {
+        outline: none;
+    }
+}
+
 body {
     overflow-x: hidden;
 }
