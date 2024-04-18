@@ -21,9 +21,8 @@ class PeckSerializer(serializers.ModelSerializer):
 class DailyReportSerializer(serializers.ModelSerializer):
     recent_task = serializers.SerializerMethodField()
     
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'display_name', 'profile_img_uri', 'recent_task']
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + ['recent_task']
     
     def get_recent_task(self, obj):
         day_min = self.context.get('day_min', None)
