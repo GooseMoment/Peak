@@ -1,54 +1,64 @@
-import { Link } from "react-router-dom"
-import { useState } from "react"
+import { Link, useSubmit } from "react-router-dom"
+import { useState, useEffect } from "react"
 
-import styled from "styled-components"
+import styled, {keyframes, css} from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-import { completeTask, uncompleteTask } from "@/api/tasks.api"
+import notify from "@utils/notify"
 
-function TaskName({projectId, task, setTasks, color, due_date, isModalOpen, openModal}){
+function TaskName({projectId, task, color, editable}){
     const date = new Date()
+    const submit = useSubmit()
     const pathRoot = `/app/projects/${projectId}/tasks/${task.id}/detail`
 
-    const [text, setText] = useState(task.name)
+    const [taskName, setTaskName] = useState(task.name)
+    const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        setIsLoading(false)
+    }, [task]);
     
     const onchange = (e) => {
-        setText(e.target.value)
-        console.log(text)
+        setTaskName(e.target.value)
+    }
+    
+    const changeTaskName = async (name) => {
+        submit({name}, {method: "PATCH"})
     }
 
-    const toComplete = (id) => {
-        return async () => {
-            let completed_at = null
-            if (task.completed_at) {
-                await uncompleteTask(id)
-            }
-            else {
-                await completeTask(id)
-                completed_at = date.toISOString()
-            }
-            setTasks(prev => prev.map(task => {
-                if (task.id === id) {
-                    task.completed_at = completed_at
-                }
-                return task
-            }))
+    const onEnter = async (e) => {
+        if(e.key === 'Enter') {
+            changeTaskName(taskName)
+            notify.success("이름이 변경되었습니다.")
         }
+    }
+
+    const toComplete = () => {
+        setIsLoading(true)
+        let completed_at = "null"
+        if (!(task.completed_at)) {
+            completed_at = date.toISOString()
+        }
+        submit({id: task.id, completed_at}, {
+            method: "PATCH",
+            action: `/app/projects/${projectId}`,
+            navigate: false,
+        })
     }
 
     const EditView = (
         <InputText 
-            $completed={task.completed_at ? true : false} 
-            onClick={openModal}
+            $completed={task.completed_at ? true : false}
             type='text'
             onChange={onchange}
-            value={text}
+            value={taskName}
+            onKeyDown={onEnter}
             placeholder="할 일의 이름을 입력해주세요."
         />
     )
 
     const TextView = (
-        <Text $completed={task.completed_at ? true : false} onClick={openModal}>
+        <Text $completed={task.completed_at ? true : false}>
             {task.name}
         </Text>
     )
@@ -56,19 +66,20 @@ function TaskName({projectId, task, setTasks, color, due_date, isModalOpen, open
     return (
         <>
             <TaskNameBox>
-                <TaskCircle
+                <TaskCircle 
                     $completed={task.completed_at ? true : false}
                     $color={color}
-                    $due_date={due_date}
-                    onClick={toComplete(task.id)}
+                    $due_date={task.due_date}
+                    $editable={editable}
+                    $isLoading={isLoading}
+                    onClick={toComplete}
                 >
                     {task.completed_at && <FeatherIcon icon="check"/>}
                 </TaskCircle>
-                { isModalOpen ? EditView :
+                { editable ? EditView :
                 <Link to={pathRoot} style={{ textDecoration: 'none' }}> 
                     {TextView}
                 </Link>}
-
             </TaskNameBox>
         </>
     );
@@ -85,10 +96,22 @@ const TaskNameBox = styled.div`
     }
 `
 
+const rotateAnimation = keyframes`
+    100% {
+        transform: rotate(360deg);
+    }
+`;
+
+const reverseRotateAnimation = keyframes`
+    100% {
+        transform: rotate(-360deg);
+    }
+`;
+
 const TaskCircle = styled.div`
     display: flex;
     justify-content: center;
-    top: ${(props) => (props.$due_date ? 0.3 : 0)}em;
+    top: ${(props) => (props.$editable ? 0.1 : props.$due_date ? 0.3 : 0)}em;
     width: 1.2em;
     height: 1.2em;
     border-radius: 50%;
@@ -98,21 +121,36 @@ const TaskCircle = styled.div`
     font-size: 1em;
 
     & svg {
-    width: 1em;
-    height: 1em;
-    stroke: #A4A4A4;
-    stroke-width: 0.2em;
-    margin-right: 0;
-}
+        width: 1em;
+        height: 1em;
+        stroke: #A4A4A4;
+        stroke-width: 0.2em;
+        margin-right: 0;
+        animation: none;
+    }
+
+    ${({$isLoading}) => $isLoading ? css`
+        border: 3px dashed ${(props) => (props.$completed ? '#A4A4A4': `#${props.$color}`)};
+        animation: ${rotateAnimation} 6s linear infinite;
+
+        & svg {
+            animation: ${reverseRotateAnimation} 6s linear infinite;
+        }
+    `: null}
 `
 
 const Text = styled.div`
+    width: 60em;
     font-style: normal;
     font-size: 1.1em;
     color: ${(props) => (props.$completed ? '#A4A4A4' : '#000000')};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 
 const InputText = styled.input`
+    width: 36em;
     font-weight: normal;
     font-size: 1.1em;
     color: ${(props) => (props.$completed ? '#A4A4A4' : '#000000')};

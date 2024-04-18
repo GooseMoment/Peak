@@ -1,9 +1,9 @@
 import PageTitle from "@components/common/PageTitle"
-import Section, { Name, Value } from "@components/settings/Section"
+import Section, { Name, Value, Sync } from "@components/settings/Section"
 
 const Reactions = () => {
     return <>
-        <PageTitle>Reactions</PageTitle>
+        <PageTitle>Reactions <Sync /></PageTitle>
         <Section>
             <Name>Favorite emojis</Name>
             <Value>

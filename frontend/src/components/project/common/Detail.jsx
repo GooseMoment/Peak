@@ -1,7 +1,7 @@
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-const DetailFrame = ({title, children, onClose}) => {
+const Detail = ({title, children, onClose}) => {
     return (
         <DetailBox $calendar={title === '기한 지정'}>
             <TitleBox>
@@ -18,10 +18,27 @@ const DetailBox = styled.div`
     z-index: 999;
     width: 15em;
     height: auto;
+    max-height: 30em;
+    overflow-y: auto;
+    overflow-x: hidden;
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
     padding-bottom: ${props => props.$calendar ? "0px" : "20px"};
+
+    &::-webkit-scrollbar {
+        width: 13px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: gray;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: #D9D9D9;
+        border-radius: 10px;
+    }
 `
 
 const TitleBox = styled.div`
@@ -52,4 +69,4 @@ const CLine = styled.div`
     margin-left: 1em;
 `
 
-export default DetailFrame
+export default Detail

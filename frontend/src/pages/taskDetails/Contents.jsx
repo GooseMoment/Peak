@@ -1,40 +1,26 @@
 import { useState } from "react"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-import ModalPortal from "@components/common/ModalPortal"
 import Calendar from "./Calendar"
 import Reminder from "./Reminder"
 import Priority from "./Priority"
 import Drawer from "./Drawer"
 import Memo from "./Memo"
 
-function Contents({task, setTasks}) {
+function Contents({task, setIsComponentOpen}) {
     const { id: projectId } = useParams()
     const pathRoot = `/app/projects/${projectId}/tasks/${task.id}/detail/`
-
-    const navigate = useNavigate()
-
-    const goPreviousOrIndex = () => {
-        navigate(`/app/projects/${projectId}`)
-    }
 
     // text클릭 시 알맞는 component 띄우기
     const [content, setContent] = useState()
     
     const handleClickContent = (e) => {
-        setIsComponentOpen(true)
         const name = e.target.id
         setContent(name)
-    }
-
-    // component modal
-    const [isComponentOpen, setIsComponentOpen] = useState(false)
-
-    const closeComponent = () => {
-        setIsComponentOpen(false)
+        setIsComponentOpen(true)
     }
 
     //display due, reminder
@@ -50,35 +36,35 @@ function Contents({task, setTasks}) {
             icon: "calendar",
             to: "due",
             display: task.due_date && new_due_time ? new_due_date + ' ' + new_due_time : "없음",
-            component: <Calendar taskId={task.id} setTasks={setTasks} onClose={closeComponent} />
+            component: <Calendar />
         },
         {
             id: 2,
             icon: "clock",
             to: "reminder",
             display: task.reminder_datetime ? new_reminder_datetime : "없음",
-            component: <Reminder task={task} setTasks={setTasks} onClose={closeComponent} />
+            component: <Reminder task={task} />
         },
         {
             id: 3,
             icon: "alert-circle",
             to: "priority",
             display: priorities[task.priority],
-            component: <Priority taskId={task.id} setTasks={setTasks} onClose={closeComponent} />
+            component: <Priority />
         },
         {
             id: 4,
             icon: "archive",
             to: "drawer",
             display: task.drawer_name ? `${task.project_name} / ${task.drawer_name}` : "없음",
-            component: <Drawer taskId={task.id} setTasks={setTasks} onClose={closeComponent} />
+            component: <Drawer projectId={projectId} task={task} />
         },
         {
             id: 5,
             icon: "edit",
             to: "memo",
             display: task.memo ? task.memo : "없음",
-            component: <Memo taskId={task.id} setTasks={setTasks} onClose={closeComponent} />
+            component: <Memo />
         },
     ]
 
@@ -89,14 +75,10 @@ function Contents({task, setTasks}) {
                 <FeatherIcon icon={item.icon} />
                 <VLine $end={item.id === 1 || item.id === 5} />
                 <Link to={pathRoot+item.to} style={{ textDecoration: 'none' }}>
-                    <ContentText id ={item.icon} onClick={handleClickContent}>
+                    <ContentText id={item.icon} onClick={handleClickContent}>
                         {item.display}
                     </ContentText>
                 </Link>
-                {(content === item.icon && isComponentOpen) ? 
-                <ModalPortal closeModal={goPreviousOrIndex} additional>
-                    {item.component}
-                </ModalPortal> : null}
             </ContentsBox>
             ))}
         </ContentsBlock>
@@ -140,12 +122,16 @@ const VLine = styled.div`
 `
 
 const ContentText = styled.div`
+    width: 31em;
     font-style: normal;
     font-size: 1.2em;
     color: #000000;
     margin-top: 1.1em;
     margin-left: 1.3em;
     text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &:hover {
     cursor: pointer;

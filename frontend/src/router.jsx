@@ -1,4 +1,5 @@
 import {
+    Outlet,
     createBrowserRouter,
     redirect,
 } from "react-router-dom"
@@ -17,11 +18,18 @@ import LandingPage from "@pages/LandingPage"
 import SignPage from "@pages/SignPage"
 import taskCreates from "@pages/taskDetails/taskCreates"
 
-import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
+import notify from "@utils/notify"
+
+import { getMe, getUserByUsername, isSignedIn, patchUser } from "@api/users.api"
 import { getSettings, patchSettings } from "@api/user_setting.api"
 import { getProject, getProjectsList } from "@api/projects.api"
 import { getDailyReport } from "@api/social.api"
 import settings from "@pages/settings/settings"
+import ModalPortal from "@components/common/ModalPortal"
+import { getTasksByDrawer, getTask, patchTask } from "@api/tasks.api"
+
+import { QueryClientProvider } from "@tanstack/react-query"
+import queryClient from "@queries/queryClient"
 
 const redirectIfSignedIn = () => {
     if (isSignedIn()) {
@@ -58,7 +66,7 @@ const routes = [
             }
         },
         shouldRevalidate: ({currentUrl}) => {
-            return currentUrl.pathname.startsWith("/app/users/")
+            return currentUrl.pathname.startsWith("/app/settings/account") || currentUrl.pathname === "/app/projects"
         },
         errorElement: <ErrorPage />,
         children: [
@@ -72,7 +80,9 @@ const routes = [
             },
             {
                 path: "notifications",
-                element: <NotificationsPage />,
+                element: <QueryClientProvider client={queryClient}>
+                    <NotificationsPage />
+                </QueryClientProvider>,
             },
             {
                 path: "tasks/:id",
@@ -112,16 +122,44 @@ const routes = [
             {
                 path: "projects/:id",
                 element: <ProjectPage/>,
+                action: async ({request}) => {
+                    const formData = await request.formData()
+                    let data = {}
+                    for (const [k, v] of Object.entries(Object.fromEntries(formData))) {
+                        if (v === "null") {
+                            data[k] = null
+                            continue
+                        }
+                        
+                        data[k] = v
+                    }
+                    return patchTask(data.id, data)
+                },
                 loader: async ({params}) => {
-                    return getProject(params.id)
+                    const tasksByDrawer = new Map()
+                    const project = await getProject(params.id)
+                    for (const drawer of project.drawers) {
+                        let tasks = await getTasksByDrawer(drawer.id)
+                        tasksByDrawer.set(drawer.id, tasks)
+                    }
+                    return {project, tasksByDrawer}
                 },
                 children: [
                     {
                         path: "tasks/:task_id/detail/",
+                        id: "task",
+                        action: async ({request, params}) => {
+                            const formData = await request.formData()
+                            return patchTask(params.task_id, Object.fromEntries(formData))
+                        },
+                        loader: async ({params}) => {
+                            const task = await getTask(params.task_id)
+                            return task
+                        },
+                        element: <taskCreates.TaskDetailElement />,
                         children: [
                             {
-                                path: "true",
-                                Component: taskCreates.TaskCreateDetail,
+                                index: true,
                             },
                             {
                                 path: "due",
@@ -129,7 +167,7 @@ const routes = [
                             },
                             {
                                 path: "reminder",
-                                Component: taskCreates.Calendar,
+                                Component: taskCreates.Reminder,
                             },
                             {
                                 path: "priority",
@@ -160,7 +198,11 @@ const routes = [
                 id: "settings",
                 action: async ({request}) => {
                     const formData = await request.formData()
-                    return patchSettings(Object.fromEntries(formData))
+                    const data = Object.fromEntries(formData)
+
+                    await patchSettings(data)
+                    notify.success("Settings were saved.")
+                    return null
                 },
                 loader: async () => {
                     return getSettings()
@@ -173,6 +215,14 @@ const routes = [
                     {
                         path: "account",
                         Component: settings.Account,
+                        action: async ({request}) => {
+                            const formData = await request.formData()
+                            const data = Object.fromEntries(formData)
+                            
+                            await patchUser(data)
+                            notify.success("Profile was edited.")
+                            return null
+                        },
                     },
                     {
                         path: "privacy",

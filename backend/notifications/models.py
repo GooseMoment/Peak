@@ -19,7 +19,7 @@ class TaskReminder(Base):
 class Notification(Base):
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
 
-    FOR_TASK = "task"
+    FOR_TASK_REMINDER = "task_reminder"
     FOR_REACTION = "reaction"
     FOR_FOLLOW = "follow"
     FOR_FOLLOW_REQUEST = "follow_request"
@@ -29,7 +29,7 @@ class Notification(Base):
     FOR_TRENDING_DOWN = "trending_down"
 
     NOTIFICATION_TYPES = [
-        (FOR_TASK, "for task"),
+        (FOR_TASK_REMINDER, "for task reminder"),
         (FOR_REACTION, "for reaction"),
         (FOR_FOLLOW, "for follow"),
         (FOR_FOLLOW_REQUEST, "for follow request"),
@@ -46,8 +46,8 @@ class Notification(Base):
         null=True,
         blank=True,
     )
-    task = models.ForeignKey(
-        Task,
+    task_reminder = models.ForeignKey(
+        TaskReminder,
         on_delete = models.CASCADE,
         null=True,
         blank=True,

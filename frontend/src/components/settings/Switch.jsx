@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 import { getClientSettings, setClientSettingsByName } from "@utils/clientSettings"
 
@@ -7,17 +7,29 @@ import styled from "styled-components"
 // from: https://velog.io/@fejigu/React-Toggle-Component-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0
 const Switch = ({settings=getClientSettings(), submit, name, online=false}) => {
     const [value, setValue] = useState(settings[name])
-    const onChange = () => {
-        setValue(prev => !prev)
+    const timer = useRef(null)
 
-        if (online) {
-            let data = {}
-            data[name] = !value
-            submit(data, {action: "..", method: "PATCH", navigate: false})
+    const sendChangeOnline = () => {
+        let data = {}
+        data[name] = value
+        submit(data, {action: "..", method: "PATCH", navigate: false})
+        timer.current = null
+    }
+
+    const onChange = e => {
+        const checked = e.target.checked
+        setValue(checked)
+
+        if (!online) {
+            setClientSettingsByName(name, checked)
             return
         }
 
-        setClientSettingsByName(name, !value)
+        if (timer.current !== null) {
+            clearTimeout(timer.current)
+        }
+
+        timer.current = setTimeout(sendChangeOnline, 1000)
     }
 
     return <ToggleSwitch>

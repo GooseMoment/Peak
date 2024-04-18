@@ -28,6 +28,9 @@ class UserSetting(Base):
         blank=True,
     )
 
+    def __str__(self) -> str:
+        return f"UserSetting of {self.user}"
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_setting(sender, instance=None, created=False, **kwargs):
     if created:

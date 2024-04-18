@@ -1,36 +1,31 @@
-import { useRouteLoaderData } from "react-router-dom"
+import { useRouteLoaderData, useNavigate, useOutletContext, useSubmit } from "react-router-dom"
 import { useState, Fragment } from "react"
 
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-import DetailFrame from "@components/project/common/Detail"
+import Detail from "@components/project/common/Detail"
 
-import { patchTask } from "@api/tasks.api"
+const Drawer = ({ projectId, task }) => {
+    const { projects } = useRouteLoaderData("app")
+    const navigate = useNavigate()
+    const submit = useSubmit()
+    const [closeComponent] = useOutletContext()
 
-const Drawer = ({ taskId, setTasks, onClose }) => {
-    const {projects} = useRouteLoaderData("app")
     const [collapsed, setCollapsed] = useState(false)
 
-    const changeDrawer = (id, drawerId) => {
+    const changeDrawer = (drawerId) => {
         return async () => {
-            const edit = {
-                'drawer': drawerId,
-            }
-            await patchTask(id, edit)
-            setTasks(prev => prev.map((task) => {
-                if (task.id === taskId) {
-                    task.drawer = drawerId
-                    return task
-                }
-                return task
-            }))
-            location.reload()
+            submit({drawer: drawerId}, {
+                method: "PATCH",
+                action: "..",
+            })
+            navigate(`/app/projects/${projectId}/tasks/${task.id}/detail/drawer`)
         }
     }
 
     return (
-        <DetailFrame title="서랍 선택" onClose={onClose}>
+        <Detail title="서랍 선택" onClose={closeComponent}>
             {projects.map((project) => (
                 <Fragment key={project.id}>
                     <ItemBox onClick={() => setCollapsed(prev => !prev)}>
@@ -39,14 +34,14 @@ const Drawer = ({ taskId, setTasks, onClose }) => {
                     </ItemBox>
                     {collapsed ? null : 
                         project.drawers && project.drawers.map(drawer => (
-                        <ItemBox key={drawer.id} onClick={changeDrawer(taskId, drawer.id)}>
+                        <ItemBox key={drawer.id} onClick={changeDrawer(drawer.id)}>
                             <FeatherIcon icon="arrow-right"/>
                             <ItemText $is_project={false}>{drawer.name}</ItemText>
                         </ItemBox>
                     ))}
                 </Fragment>
             ))}
-        </DetailFrame>
+        </Detail>
     )
 }
 
@@ -73,9 +68,13 @@ const ItemBox = styled.div`
 `
 
 const ItemText = styled.div`
+    width: 10em;
     font-weight: ${props => props.$is_project ? '500' : 'normal'};
     font-size: 1em;
     color: #000000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &:hover {
         font-weight: bolder;

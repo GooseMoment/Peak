@@ -12,12 +12,12 @@ const defaultSettings = {
 
     // Appearance
     theme: "system",
-    main_width: "0",
+    main_width: "5rem",
     close_sidebar_on_startup: false,
 }
 
 export const getClientSettings = () => {
-    return JSON.parse(localStorage.getItem(KEY_CLIENT_SETTINGS))
+    return JSON.parse(localStorage.getItem(KEY_CLIENT_SETTINGS)) || defaultSettings
 }
 
 export const setClientSettingsByName = (name, value) => {

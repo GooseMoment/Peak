@@ -1,38 +1,35 @@
+import { useOutletContext, useSubmit } from "react-router-dom"
+
 import styled from "styled-components"
 
-import DetailFrame from "@components/project/common/Detail"
-import { patchTask } from "@api/tasks.api"
+import Detail from "@components/project/common/Detail"
 
 import normal from "@assets/project/priority/normal.svg"
 import important from "@assets/project/priority/important.svg"
 import critical from "@assets/project/priority/critical.svg"
 
-const Priority = ({ taskId, setTasks, onClose }) => {
-    const changePriority = (id, priority) => {
+const Priority = () => {
+    const [closeComponent] = useOutletContext()
+    const submit = useSubmit()
+
+    const changePriority = (priority) => {
         return async () => {
-            const edit = {
-                'priority': priority,
-            }
-            await patchTask(id, edit)
-            setTasks(prev => prev.map((task) => {
-                if (task.id === taskId) {
-                    task.priority = priority
-                    return task
-                }
-                return task
-            }))
+            submit({priority}, {
+                method: "PATCH",
+                action: "..",
+            })
         }
     }
 
     return (
-        <DetailFrame title="중요도 설정" onClose={onClose}>
+        <Detail title="중요도 설정" onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
-                    <ItemText onClick={changePriority(taskId, item.id)}>{item.content}</ItemText>
+                    <ItemText onClick={changePriority(item.id)}>{item.content}</ItemText>
                 </ItemBlock>
             ))}
-        </DetailFrame>
+        </Detail>
     )
 }
 

@@ -2,15 +2,20 @@ import { useState } from "react"
 
 import Sidebar from "@components/sidebar/Sidebar"
 
+import { getClientSettings } from "@utils/clientSettings"
+
 import styled, { css } from "styled-components"
 
+const closeSidebarOnStartUp = getClientSettings()["close_sidebar_on_startup"]
+const contentPadding = getClientSettings()["main_width"]
+
 const Layout = ({noSidebar, children}) => {
-    let [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(closeSidebarOnStartUp)
     
     return (
     <App>
         { noSidebar ? null : <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />}
-        <Content $sidebarCollapsed={sidebarCollapsed}>
+        <Content $sidebarCollapsed={sidebarCollapsed} $sidePadding={contentPadding}>
             {children}
         </Content>
     </App>
@@ -18,16 +23,17 @@ const Layout = ({noSidebar, children}) => {
 }
 
 const App = styled.div`
-height: 100vh;
 `
 
 const Content = styled.main`
-padding: 3rem 3rem 3rem 22rem;
+padding: 3rem ${props => props.$sidePadding};
+padding-left: calc(${props => props.$sidePadding} + 18rem);
+
 transition: padding 0.25s;
 transition-timing-function: cubic-bezier(.86,0,.07,1);
 
 ${({$sidebarCollapsed}) => $sidebarCollapsed ? css`
-    padding: 3rem 10rem;
+    padding: 3rem calc(${props => props.$sidePadding} + 7rem);
 ` : null}
 `
 

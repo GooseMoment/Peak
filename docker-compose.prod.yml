@@ -36,6 +36,8 @@ services:
     env_file:
       - path: ./.env.prod
         required: true
+      - path: ./.env.s3
+        required: true
   db: 
     image: postgres:16.2-alpine3.19
     volumes:
