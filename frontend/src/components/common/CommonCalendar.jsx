@@ -45,7 +45,7 @@ const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStart
   };
 
   return <CalendarWrapper>
-    <StyledCalendar
+    <Calendar
       selectRange={isRangeSelectMode}
       onChange={changeDate}
       value={isRangeSelectMode ? [selectedStartDate, selectedEndDate] : selectedStartDate}
@@ -303,8 +303,6 @@ const CalendarWrapper = styled.div`
     color: black;
   }
 `
-
-const StyledCalendar = styled(Calendar)``
 
 const TodayButton = styled.button`
   position: absolute;
