@@ -18,7 +18,7 @@ class PeckSerializer(serializers.ModelSerializer):
         model = Peck
         fields = ["id", "user", "task", "count"]
 
-class DailyReportSerializer(serializers.ModelSerializer):
+class DailyReportSerializer(UserSerializer):
     recent_task = serializers.SerializerMethodField()
     
     class Meta(UserSerializer.Meta):
