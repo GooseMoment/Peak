@@ -47,7 +47,7 @@ const SocialFollowingPage = () => {
 
                 <DailyLogContainer>
                     {dailyReport.map((dailyFollowersLog) => (
-                        <DailyLogPreview key={dailyFollowersLog.id} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+                        <DailyLogPreview key={dailyFollowersLog.username} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                     ))}
                 </DailyLogContainer>
             </Container>

@@ -9,18 +9,18 @@ const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
     
     const handleSelect = () => {
     // ~Log.index can be replaced with ~Log.task.id
-        setSelectedIndex(userLogSimple.id === selectedIndex ? null : userLogSimple.id)
+        setSelectedIndex(userLogSimple.username === selectedIndex ? null : userLogSimple.username)
     }
 
     return <Frame onClick={handleSelect}
-            $bgcolor={userLogSimple.id === selectedIndex? "#ffd7c7" : "#FEFDFC"}
+            $bgcolor={userLogSimple.username === selectedIndex? "#ffd7c7" : "#FEFDFC"}
         >
         {/* separate the "Profile" into a separate file? */}
         {/* TODO: 화면 너비 줄이면 프로필 이름 길이에 따라 배열 망가지는 문제 해결 */}
         <Profile>
             {/* {userLogSimple.isRead ? "#A4A4A4" : userLogSimple.task.projectColor} */}
             <ProfileImgWrapper $color="#A4A4A4" >
-                <img src={userLogSimple.profile_img_uri}/>
+                <img src={userLogSimple.profile_img}/>
             </ProfileImgWrapper>
             <Username>
                 @{userLogSimple.username}
