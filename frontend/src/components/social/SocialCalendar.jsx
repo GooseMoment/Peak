@@ -1,32 +1,22 @@
 import styled from "styled-components"
 import CommonCalendar from "@components/common/CommonCalendar";
-import moment from 'moment';
 
-// TODO: divide each calendar style
-const StyledSocialCalendar = styled(CommonCalendar)`
-.highlight {
-  background: #00ff00;
-}
-// .react-calendar__tile:enabled:hover,
-// .react-calendar__tile:enabled:focus,
-// .react-calendar__tile--active {
-//       background: #a4a4a4;
-//       border-radius: 14px;
-//   } 
-`
+import { useState } from "react";
 
 const SocialCalendar = ({newLogDates, selectedDate, setSelectedDate}) => {
+  const [tempDate, setTempDate] = useState(new Date())
   return <>
     <StyledSocialCalendar
-      selectedDate={selectedDate}
-      setSelectedDate={setSelectedDate}
-      tileClassName={({ date, view }) => {
-        if (newLogDates.find((x) => x === moment(date).format("DD-MM-YYYY"))) {
-          return "highlight";
-        }
-      }}
+      isRangeSelectMode={false}
+      selectedStartDate={selectedDate}
+      setSelectedStartDate={setSelectedDate}
+      selectedEndDate={tempDate}
+      setSelectedEndDate={setTempDate}
+      contentedDates={newLogDates}
     />
   </>
 };
+
+const StyledSocialCalendar = styled(CommonCalendar)``
 
 export default SocialCalendar;

@@ -22,7 +22,6 @@ import notify from "@utils/notify"
 
 import { getMe, getUserByUsername, isSignedIn, patchUser } from "@api/users.api"
 import { getProject, getProjectsList } from "@api/projects.api"
-import ModalPortal from "@components/common/ModalPortal"
 import { getTasksByDrawer, getTask, patchTask } from "@api/tasks.api"
 
 import { QueryClientProvider } from "@tanstack/react-query"
@@ -99,6 +98,12 @@ const routes = [
                     {
                         path: "following",
                         element: <SocialFollowingPage />,
+                        // id: 'social',
+                        // loader: async () => {
+                        //     return {
+                        //         dailyLogPreview: await getDailyReport(),
+                        //     }
+                        // },
                     },
                     {
                         path: "explore",
