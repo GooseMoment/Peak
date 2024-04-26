@@ -24,7 +24,6 @@ import { getMe, getUserByUsername, isSignedIn, patchUser } from "@api/users.api"
 import { getSettings, patchSettings } from "@api/user_setting.api"
 import { getProject, getProjectsList } from "@api/projects.api"
 import settings from "@pages/settings/settings"
-import ModalPortal from "@components/common/ModalPortal"
 import { getTasksByDrawer, getTask, patchTask } from "@api/tasks.api"
 
 import { QueryClientProvider } from "@tanstack/react-query"
@@ -101,6 +100,12 @@ const routes = [
                     {
                         path: "following",
                         element: <SocialFollowingPage />,
+                        // id: 'social',
+                        // loader: async () => {
+                        //     return {
+                        //         dailyLogPreview: await getDailyReport(),
+                        //     }
+                        // },
                     },
                     {
                         path: "explore",

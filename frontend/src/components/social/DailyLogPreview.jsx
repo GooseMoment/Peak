@@ -9,26 +9,32 @@ const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
     
     const handleSelect = () => {
     // ~Log.index can be replaced with ~Log.task.id
-        setSelectedIndex(userLogSimple.index === selectedIndex ? null : userLogSimple.index)
+        setSelectedIndex(userLogSimple.username === selectedIndex ? null : userLogSimple.username)
     }
 
     return <Frame onClick={handleSelect}
-            $bgcolor={userLogSimple.index === selectedIndex? "#ffd7c7" : "#FEFDFC"}
+            $bgcolor={userLogSimple.username === selectedIndex? "#ffd7c7" : "#FEFDFC"}
         >
         {/* separate the "Profile" into a separate file? */}
-        {/* TODO: 화면 너비 줄이면 프로필 배열 망가지는 문제 해결 */}
+        {/* TODO: 화면 너비 줄이면 프로필 이름 길이에 따라 배열 망가지는 문제 해결 */}
         <Profile>
-            <ProfileImgWrapper $color={userLogSimple.isRead ? "#A4A4A4" : userLogSimple.task.projectColor} >
-                <img src={userLogSimple.user.profileImgURI}/>
+            {/* {userLogSimple.isRead ? "#A4A4A4" : userLogSimple.task.projectColor} */}
+            <ProfileImgWrapper $color="#A4A4A4" >
+                <img src={userLogSimple.profile_img}/>
             </ProfileImgWrapper>
             <Username>
-                @{userLogSimple.user.username}
+                @{userLogSimple.username}
             </Username>
         </Profile>
         <RecentTask>
-            <TaskName>  {"\"" + putEllipsis(userLogSimple.task.name, 32) + "\" 완료!"} </TaskName>
-            <Ago> {DateTime.fromJSDate(userLogSimple.task.completedAt).setLocale("en").toRelative()} </Ago>
-            {/* Ago: Left align? */}
+            {userLogSimple.recent_task && (
+                <>
+                    <TaskName>  {"\"" + putEllipsis(userLogSimple.recent_task.name, 32) + "\" 완료!"} </TaskName>
+                    <Ago> {DateTime.fromJSDate(userLogSimple.recent_task.completed_at).setLocale("en").toRelative()} </Ago>
+                    {/* Ago: Left align? */}
+                </>
+            )}
+            
         </RecentTask>
     </ Frame>
 }
