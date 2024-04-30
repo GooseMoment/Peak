@@ -29,18 +29,7 @@ const SidebarLink = styled(NavLink)`
     &.active {
         background-color: #D9D9D9;
     }
-`
 
-export const SidebarA = styled.a`
-    ${sidebarStyle}
-`
-
-const SidebarLink = styled(NavLink)`
-    ${sidebarStyle}
-
-    &.active {
-        background-color: #D9D9D9;
-    }
 `
 
 export default SidebarLink
