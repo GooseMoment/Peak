@@ -118,3 +118,12 @@ export const uploadProfileImg = async (formData) => {
         throw e
     }
 }
+
+export const getBlocks = async (username) => {
+    try {
+        const res = await client.get(`users/@${username}/blocks/`)
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
