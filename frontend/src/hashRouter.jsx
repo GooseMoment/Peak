@@ -3,7 +3,7 @@ import { createHashRouter } from "react-router-dom"
 import settings from "@pages/settings/settings"
 
 import { getSettings, patchSettings } from "@api/user_setting.api"
-import { getBlocks, getMe } from "@api/users.api"
+import { getBlocks, getMe, patchUser } from "@api/users.api"
 
 import { toast } from "react-toastify"
 
@@ -43,7 +43,7 @@ const routes = [
                     const data = Object.fromEntries(formData)
                     
                     await patchUser(data)
-                    notify.success("Profile was edited.")
+                    toast.success("Profile was edited.")
                     return null
                 },
             },
