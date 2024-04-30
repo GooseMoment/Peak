@@ -37,7 +37,7 @@ ${({$sidebarCollapsed}) => $sidebarCollapsed ? css`
     padding: 3rem calc(${props => props.$sidePadding} + 7rem);
 ` : null}
 
-height: 100vh;
+min-height: 100vh;
 box-sizing: border-box;
 color: ${p => p.theme.textColor};
 `
