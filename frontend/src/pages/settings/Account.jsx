@@ -12,7 +12,7 @@ import { states } from "@assets/themes"
 import styled from "styled-components"
 
 const Account = () => {
-    const {user} = useRouteLoaderData("app")
+    const {user} = useRouteLoaderData("settings")
     const revalidator = useRevalidator()
 
     return <>

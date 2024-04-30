@@ -2,6 +2,7 @@ from django.http import HttpRequest, Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from datetime import datetime, time
 
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
@@ -44,7 +45,7 @@ class FollowView(APIView):
     
     def delete(self, request, follower, followee):
         following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
-        #soft delete
+        #TODO: soft delete
         following.delete()
         
         return Response(status=status.HTTP_200_OK)
@@ -105,9 +106,21 @@ def get_blocks(request: HttpRequest, username):
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-def get_daily_report(request: HttpRequest, user_id, date):
-    pass
-
+# TODO: isRead는 redis로
+# GET social/daily/report/@username/YYYY-MM-DD/
+@api_view(["GET"])
+def get_daily_report(request: HttpRequest, username, day):
+    followings = Following.objects.filter(follower__username=username).all()
+    followingUsers = User.objects.filter(followers__in=followings.all()).all()
+    day = datetime.strptime(day, "%Y-%m-%d").date()
+    
+    day_min = datetime.combine(day, time.min)
+    day_max = datetime.combine(day, time.max)
+    
+    serializer = DailyReportSerializer(followingUsers, context={'day_min': day_min, 'day_max':day_max}, many=True)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK) 
+    
 def get_following_feed(request: HttpRequest, date):
     pass
 

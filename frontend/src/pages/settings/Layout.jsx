@@ -1,23 +1,21 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 
 import { SidebarBox } from "@components/sidebar/Sidebar"
 import { ItemBox, MiddleBox } from "@components/sidebar/Middle"
-import SidebarLink from "@components/sidebar/SidebarLink"
+import SidebarLink, { SidebarA } from "@components/sidebar/SidebarLink"
 import ModalPortal from "@components/common/ModalPortal"
 
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
-import { useRef } from "react"
 
-const pathRoot = "/app/settings/"
+const pathRoot = "/settings/"
 
 const Layout = () => {
     const navigate = useNavigate()
-    const location = useLocation()
-    const previousPathname = useRef(location.state?.previous?.pathname)
 
-    const goPreviousOrIndex = () => {
-        navigate(previousPathname.current || "/app/")
+    const goOutside = () => {
+        navigate("/")
+        history.pushState("", document.title, window.location.pathname + window.location.search)
     }
 
     const content = <ModalFrame>
@@ -30,9 +28,9 @@ const Layout = () => {
                 ))}
             </MiddleBox>
             <FooterBox>
-                <SidebarLink to="/app/sign_out">
+                <SidebarA href="/app/sign_out">
                     <ItemBox><FeatherIcon icon="log-out" />Sign out</ItemBox>
-                </SidebarLink>
+                </SidebarA>
             </FooterBox>
         </Sidebar>
         <Main>
@@ -40,13 +38,9 @@ const Layout = () => {
         </Main>
     </ModalFrame>
 
-    return <>
-        <ModalPortal closeModal={goPreviousOrIndex}>
-            {content}
-        </ModalPortal>
-        <p>배경</p>
-        {/* TODO: background skelton */}
-    </>
+    return <ModalPortal closeModal={goOutside}>
+        {content}
+    </ModalPortal>
 }
 
 const menuItems = [
@@ -84,6 +78,11 @@ const menuItems = [
         icon: "shield",
         display: "Blocks",
         to: "blocks",
+    },
+    {
+        icon: "info",
+        display: "Info",
+        to: "info",
     },
 ]
 

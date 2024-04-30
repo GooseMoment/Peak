@@ -6,7 +6,7 @@ import Switch from "@components/settings/SettingSwitch"
 import Select from "@components/settings/Select"
 
 const Privacy = () => {
-    const settings = useRouteLoaderData("settings")
+    const {settings} = useRouteLoaderData("settings")
     const submit = useSubmit()
 
     return <>
