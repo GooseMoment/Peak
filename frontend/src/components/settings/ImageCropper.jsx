@@ -1,9 +1,12 @@
 import { useState } from "react"
+
+import Button, { buttonForms, ButtonGroup } from "@components/common/Button"
+
 import Cropper from "react-easy-crop"
 import styled from "styled-components"
-import Button from "@components/sign/Button"
+import { states } from "@assets/themes"
 
-const ImageCropper = ({file, setCroppedAreaPixels, onClickOk}) => {
+const ImageCropper = ({file, setCroppedAreaPixels, onClickOk, onClickCancel}) => {
     const [crop, setCrop] = useState({ x: 0, y: 0 })
     const [zoom, setZoom] = useState(1)
 
@@ -21,34 +24,25 @@ const ImageCropper = ({file, setCroppedAreaPixels, onClickOk}) => {
         onCropComplete={onCropComplete}
         onZoomChange={setZoom}
     />
-    <ButtonGroup>
-        <CancelButton>Cancel</CancelButton>
-        <OkButton onClick={onClickOk}>Apply</OkButton>
-    </ButtonGroup>
+    <StyledButtonGroup>
+        <Button $form={buttonForms.outlined} $state={states.danger} onClick={onClickCancel}>Cancel</Button>
+        <Button $form={buttonForms.filled} $state={states.success} onClick={onClickOk}>Apply</Button>
+    </StyledButtonGroup>
     </>
 }
 
-const ButtonGroup = styled.div`
+const StyledButtonGroup = styled(ButtonGroup)`
     position: fixed;
     z-index: 1000;
-    left: auto;
-    right: auto;
-    bottom: 6rem;
+    left: 50%;
+    top: 70%;
+    transform: translateX(-50%) translateY(200%);
 
-    display: flex;
-    gap: 2rem;
-`
+    padding: 1em;
+    border-radius: 10px;
+    background-color: ${p => p.theme.backgroundColor};
 
-const CancelButton = styled(Button)`
-    background-color: red;
-    color: white;
-    border-color: red;
-`
-
-const OkButton = styled(Button)`
-    background-color: green;
-    color: white;
-    border-color: green;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 `
 
 export default ImageCropper

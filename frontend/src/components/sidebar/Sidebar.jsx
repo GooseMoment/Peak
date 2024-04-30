@@ -27,7 +27,8 @@ display: flex;
 flex-direction: column;
 justify-content: space-between;
 
-background-color: #F9F7F6;
+color: ${p => p.theme.textColor};
+background-color: ${p => p.theme.sidebar.backgroundColor};
 
 ${({$collapsed}) => $collapsed ? css`
     width: unset;

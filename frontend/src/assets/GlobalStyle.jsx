@@ -11,7 +11,8 @@ html {
     height: 100vh;
     width: 100vw;
 
-    scrollbar-color: var(--goose) transparent;
+    accent-color: ${p => p.theme.accentColor};
+    scrollbar-color: ${p => p.theme.scrollbarColor} transparent;
     scrollbar-width: thin;
 
     -webkit-font-smoothing: antialiased;
@@ -20,9 +21,6 @@ html {
 
 #root > div > main {
     transform: scale(1);
-
-    background-color: #FEFDFC;
-    height: 100%;
 
     animation: ${scaleForward} .5s ${cubicBeizer} forwards;
 }
@@ -63,9 +61,19 @@ html {
     animation: ${modalFadeIn} 0.5s ${cubicBeizer} forwards !important;
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 body, textarea, input, button {
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif !important;
     padding: 0;
+}
+
+textarea, input {
+    color: inherit;
+    background-color: inherit;
 }
 
 body {

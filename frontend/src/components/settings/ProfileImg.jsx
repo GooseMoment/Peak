@@ -52,6 +52,10 @@ const ProfileImg = ({revalidator, profile_img}) => {
         })
     }
 
+    const onClickCancel = () => {
+        setOpenCropper(false)
+    }
+
     const cropAndUpload = async () => {
         const cropped = await getCroppedImg(file, croppedAreaPixels, fileType)
 
@@ -72,7 +76,7 @@ const ProfileImg = ({revalidator, profile_img}) => {
                 <ImageIcon />
             </ProfileImgOverlay>
             <HiddenInput ref={input} accept=".jpg,.jpeg,.png" id="img_file" type="file" onChange={handleFileChange} />
-            {file && openCropper && <ImageCropper file={file} setCroppedAreaPixels={setCroppedAreaPixels} onClickOk={onClickOk} />}
+            {file && openCropper && <ImageCropper file={file} setCroppedAreaPixels={setCroppedAreaPixels} onClickCancel={onClickCancel} onClickOk={onClickOk} />}
         </ProfileImgContainer> 
     )
 }

@@ -1,4 +1,4 @@
-import Switch from "@components/settings/Switch"
+import Switch from "@components/settings/SettingSwitch"
 import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"

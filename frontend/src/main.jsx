@@ -5,6 +5,8 @@ import { RouterProvider } from 'react-router-dom'
 import router from '@/router'
 import hashRouter from '@/hashRouter'
 import GlobalStyle from '@assets/GlobalStyle'
+import { defaultTheme } from "@assets/themes"
+import { ThemeProvider } from "styled-components"
 
 import { initClientSettings } from '@utils/clientSettings'
 
@@ -16,9 +18,11 @@ initClientSettings()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <GlobalStyle />
-        <ToastContainer position="bottom-right" stacked hideProgressBar />
-        <RouterProvider router={router} />
-        <RouterProvider router={hashRouter} />
+        <ThemeProvider theme={defaultTheme}>
+            <GlobalStyle />
+            <ToastContainer position="bottom-right" stacked hideProgressBar />
+            <RouterProvider router={router} />
+            <RouterProvider router={hashRouter} />
+        </ThemeProvider>
     </React.StrictMode>,
 )

@@ -90,7 +90,8 @@ const ModalFrame = styled.div`
     display: flex;
     overflow: hidden; // to make sidebar obey parent's radius
 
-    background-color: white;
+    color: ${p => p.theme.textColor};
+    background-color: ${p => p.theme.backgroundColor};
     height: 70vh;
 
     @media screen and (max-width: 800px) {

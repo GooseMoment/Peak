@@ -8,6 +8,7 @@ const MildButton = styled.button`
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
+	box-sizing: border-box;
 `
 
 export default MildButton
