@@ -9,7 +9,7 @@
     "build": "npm run git-info && vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "generate-assets": "pwa-assets-generator --preset minimal-2023 public/logo.svg"
+    "generate-assets": "pwa-assets-generator"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.29.0",
