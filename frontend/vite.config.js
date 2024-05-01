@@ -26,8 +26,15 @@ export default defineConfig({
                 name: 'Peak',
                 short_name: 'Peak',
                 description: 'Pick, Peek, Peck, and Peak.',
-                theme_color: '#ffffff',
+                theme_color: '#ff4a03',
+                background_color: '#ffffff',
                 icons: [
+                    {
+                        "src": "logo.svg",
+                        "sizes": "any",
+                        "type": "image/svg+xml",
+                        "purpose": "maskable",
+                    },
                     {
                         "src": "pwa-64x64.png",
                         "sizes": "64x64",
@@ -41,7 +48,8 @@ export default defineConfig({
                     {
                         "src": "pwa-512x512.png",
                         "sizes": "512x512",
-                        "type": "image/png"
+                        "type": "image/png",
+                        "purpose": "maskable",
                     },
                     {
                         "src": "maskable-icon-512x512.png",
@@ -49,7 +57,29 @@ export default defineConfig({
                         "type": "image/png",
                         "purpose": "maskable"
                     }
-                ]
+                ],
+                shortcuts: [
+                    {
+                        "name": "Notifications",
+                        "url": "http://localhost:8080/app/notifications",
+                        "short_name": "Noti",
+                    },
+                    {
+                        "name": "Today",
+                        "url": "http://localhost:8080/app/today",
+                        "short_name": "Today",
+                    },
+                    {
+                        "name": "Social",
+                        "url": "http://localhost:8080/app/social/following",
+                        "short_name": "Social",
+                    },
+                    {
+                        "name": "Projects",
+                        "url": "http://localhost:8080/app/projects/",
+                        "short_name": "Projects",
+                    },
+                ],
             },
         }),
     ],
