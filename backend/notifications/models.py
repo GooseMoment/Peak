@@ -39,6 +39,9 @@ class Notification(Base):
         (FOR_TRENDING_DOWN, "for trending down"),
     ]
 
+    FOLLOWING_TYPES = (FOR_FOLLOW, FOR_FOLLOW_REQUEST, FOR_FOLLOW_REQUEST_ACCEPTED, )
+    SOCIAL_TYPES = (FOR_REACTION, FOR_PECK, ) + FOLLOWING_TYPES
+
     type = models.CharField(choices=NOTIFICATION_TYPES, max_length=128)
     user = models.ForeignKey(
         User,
