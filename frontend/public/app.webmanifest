@@ -4,6 +4,8 @@
     "description": "Pick, Peek, Peck, and Peak.",
     "theme_color": "#ff4a03",
     "background_color": "#ffffff",
+    "start_url": "/",
+    "display": "standalone",
     "icons": [
         {
             "src": "logo.svg",
