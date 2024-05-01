@@ -7,6 +7,7 @@ from . import views
 urlpatterns = [
     path("", views.NotificationList.as_view()),
     path("<str:id>", views.NotificationDetail.as_view()),
+    path("subscribe", views.WebPushSubscribe.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
