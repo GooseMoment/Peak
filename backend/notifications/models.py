@@ -73,3 +73,13 @@ class Notification(Base):
 
     def __str__(self) -> str:
         return f"{self.type} for {self.user}"
+
+class WebPushSubscription(Base):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    subscription_info = models.JSONField()
+    browser = models.CharField(max_length=128)
+    user_agent = models.CharField(max_length=500, blank=True)

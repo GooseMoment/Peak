@@ -1,4 +1,4 @@
-from .models import TaskReminder, Notification
+from .models import TaskReminder, Notification, WebPushSubscription
 from rest_framework import serializers
 
 from tasks.serializers import TaskSerializer
@@ -24,4 +24,13 @@ class NotificatonSerializer(serializers.ModelSerializer):
         depth = 1
         fields = [
             "id", "type", "username", "task_reminder", "reaction", "following", "peck", "created_at",
+        ]
+
+class WebPushSubscriptionSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = WebPushSubscription
+        fields = [
+            "user", "subscription_info", "browser", "user_agent",
         ]
