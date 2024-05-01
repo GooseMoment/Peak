@@ -203,3 +203,8 @@ STORAGES = {
     },
 }
 
+WEBPUSH = {
+    "icon": os.environ.get("WEBPUSH_ICON_URL"),
+    "vapid_private_key": os.environ.get("VAPID_PRIVATE_KEY"), 
+    "vapid_claims_email": os.environ.get("VAPID_CLAIMS_EMAIL"),
+}
