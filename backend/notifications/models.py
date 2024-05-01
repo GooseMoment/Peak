@@ -86,3 +86,6 @@ class WebPushSubscription(Base):
     subscription_info = models.JSONField()
     browser = models.CharField(max_length=128)
     user_agent = models.CharField(max_length=500, blank=True)
+
+    def __str__(self) -> str:
+        return f"Subscription for {self.user}"
