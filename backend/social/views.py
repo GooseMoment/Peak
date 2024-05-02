@@ -20,7 +20,7 @@ class FollowView(APIView):
         followeeUser = get_object_or_404(User, username=followee)
 # requested -> 상황에 따라!
         try:
-            created = Following.objects.create(follower=followerUser, followee=followeeUser, status="requested")
+            created = Following.objects.create(follower=followerUser, followee=followeeUser, status=Following.REQUESTED)
         except:
             return Response(status=status.HTTP_208_ALREADY_REPORTED)
         
@@ -38,7 +38,7 @@ class FollowView(APIView):
     def patch(self, request, follower, followee):
         following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
         
-        following.status = "canceled"
+        following.status = Following.CANCELED
         following.save()
         
         return Response(status=status.HTTP_202_ACCEPTED)

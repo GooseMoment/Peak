@@ -388,7 +388,7 @@ def create_followings(users: list[User]) -> list[Following]:
             following.save()
             followings[(follower, followee)] = following
 
-            if following.status == "accepted":
+            if following.status == Following.ACCEPTED:
                 follower.followings_count += 1
                 followee.followers_count += 1
     
