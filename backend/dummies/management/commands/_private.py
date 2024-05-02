@@ -373,8 +373,8 @@ def factory_following(follower: User, followee: User) -> Following:
         updated_at=updated_at,
     )
 
-def create_followings(users: list[User]) -> list[Following]:
-    followings = dict()
+def create_followings(users: list[User]) -> dict[tuple[str, str], Following]:
+    followings: dict[tuple[str, str], Following] = dict()
 
     for follower in users:
         for followee in users:
@@ -411,7 +411,7 @@ def factory_block(blocker: User, blockee: User) -> Block:
         updated_at=created_at,
     )
 
-def create_blocks(users: list[User], followings) -> list[Block]:
+def create_blocks(users: list[User], followings: dict[tuple[str, str], Following]) -> list[Block]:
     blocks: list[Block] = []
 
     for blocker in users:
