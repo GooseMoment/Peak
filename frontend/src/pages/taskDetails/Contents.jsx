@@ -14,6 +14,7 @@ import Priority from "./Priority"
 import Drawer from "./Drawer"
 import Memo from "./Memo"
 
+import ToolTip from "@components/project/common/ToolTip"
 import ModalPortal from "@components/common/ModalPortal"
 
 const Contents = ({task, setFunc}) => {
@@ -48,18 +49,21 @@ const Contents = ({task, setFunc}) => {
     const items = [
         {
             id: 1,
+            name: "assigned_due",
             icon: <FeatherIcon icon="calendar" />,
             display: task.assigned_at ? new_assigned_at_date : "없음",
             component: <Assigned setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 2,
+            name: "due",
             icon: <img src={hourglass} />,
             display: task.due_date && new_due_time ? new_due_date + ' ' + new_due_time : "없음",
             component: <Calendar setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 3,
+            name: "reminder",
             icon: <img src={alarmclock} />,
             display: task.reminder_datetime ? new_reminder_datetime : "없음",
             component: <Reminder setFunc={setFunc} closeComponent={closeComponent}/>
@@ -67,21 +71,24 @@ const Contents = ({task, setFunc}) => {
         },
         {
             id: 4,
+            name: "priority",
             icon: <FeatherIcon icon="alert-circle" />,
             display: priorities[task.priority],
             component: <Priority setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 5,
+            name: "drawer",
             icon: <FeatherIcon icon="archive" />,
             display: task.drawer_name ? `${task.project_name} / ${task.drawer_name}` : "없음",
             component: <Drawer projectID={projectID} task={task} setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 6,
+            name: "memo",
             icon: <FeatherIcon icon="edit" />,
             display: task.memo ? task.memo : "없음",
-            component: <Memo setFunc={setFunc} closeComponent={closeComponent}/>
+            component: <Memo previousMemo={task.memo} setFunc={setFunc} closeComponent={closeComponent}/>
         },
     ]
 
@@ -90,10 +97,12 @@ const Contents = ({task, setFunc}) => {
             {items.map(item => (
             <>
                 <ContentsBox key={item.id}>
-                    {item.icon}
+                    <ToolTip message={item.name}>
+                        {item.icon}
+                    </ToolTip>
                     <VLine $end={item.id === 1 || item.id === 6} />
                     <ContentText id={item.id} onClick={handleClickContent}>
-                        {item.display}
+                            {item.display}
                     </ContentText>
                     {(content === item.id && isComponentOpen) ? 
                     <ModalPortal closeModal={closeComponent} additional>
