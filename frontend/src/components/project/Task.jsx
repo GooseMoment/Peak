@@ -15,6 +15,7 @@ const Task = ({projectId, task, color}) => {
     const today = new Date()
     const task_due_time = new Date(`${task.due_date}${task.due_time ? "T"+task.due_time : ""}`)
     const assigned_at_date = new Date(task.assigned_at)
+    
     const new_today = `${today.getMonth()+1}월 ${today.getDate()}일`
     const new_due_date = `${task_due_time.getMonth()+1}월 ${task_due_time.getDate()}일`
     const new_assigned_at_date = `${assigned_at_date.getMonth()+1}월 ${assigned_at_date.getDate()}일`
@@ -27,13 +28,16 @@ const Task = ({projectId, task, color}) => {
     const ddays_assigned = dassigned.diff(dtoday, ["years", "months", "days"]).toObject()
 
     let dday_due = ''
-    if (ddays_due.years < 0 || ddays_due.months < 0 || ddays_due.days < 0) {
+    if (ddays_due.years < 0 || ddays_due.months < 0 ? null : ddays_due.days < -1) {
         dday_due = '기한 지남'
     }
-    else if (new_today === new_due_date) {
-        dday_due = `오늘 기한`
+    else if (ddays_due.years < 0 || ddays_due.months < 0 ? null : -1 <= ddays_due.days && ddays_due.days < 0) {
+        dday_due = '오늘 기한'
     }
-    else if (ddays_due.days > 0) {
+    else if (ddays_due.years < 0 || ddays_due.months < 0 ? null : 0 <= ddays_due.days && ddays_due.days <= 1) {
+        dday_due = '내일 기한'
+    }
+    else if (ddays_due.years < 0 || ddays_due.months < 0 ? null : ddays_due.days > 1) {
         dday_due = `${Math.floor(ddays_due.days)}일 남음`
     }
     else {
@@ -41,8 +45,17 @@ const Task = ({projectId, task, color}) => {
     }
 
     let assigned = ''
-    if (ddays_assigned.years < 0 || ddays_assigned.months < 0 || ddays_assigned.days < 0) {
+    if (ddays_assigned.years < 0 || ddays_assigned.months < 0 ? null : ddays_assigned.days < -1) {
         assigned = '놓침'
+    }
+    else if (ddays_assigned.years < 0 || ddays_assigned.months < 0 ? null : -1 <= ddays_assigned.days && ddays_assigned.days < 0) {
+        assigned = `오늘 기한`
+    }
+    else if (ddays_assigned.years < 0 || ddays_assigned.months < 0 ? null : 0 <= ddays_assigned.days && ddays_assigned.days <= 1) {
+        assigned = `내일 기한`
+    }
+    else if (ddays_assigned.years < 0 || ddays_assigned.months < 0 ? null : ddays_assigned.days > 1) {
+        assigned = `${Math.floor(ddays_assigned.days)}일 남음`
     }
     else {
         assigned = new_assigned_at_date
