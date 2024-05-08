@@ -26,7 +26,6 @@ def _notificationToPushData(notification: Notification) -> dict[str, any]:
     }
 
     data["timestamp"] = int(notification.created_at.strftime("%s"))
-    data["icon"] = settings.WEBPUSH.get("icon")
 
     # TODO: i18n
     if notification.type == Notification.FOR_TASK_REMINDER:
