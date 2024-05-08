@@ -39,13 +39,18 @@ class NotificationDetail(mixins.RetrieveModelMixin,
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
-class WebPushSubscribe(mixins.CreateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+class WebPushSubscriptionCreate(mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = WebPushSubscription.objects.all()
     serializer_class = WebPushSubscriptionSerializer
-    lookup_field = "id"
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
-    def delete(self, request, id, *args, **kwargs):
+class WebPushSubscriptionDelete(mixins.DestroyModelMixin, generics.GenericAPIView):
+    queryset = WebPushSubscription.objects.all()
+    serializer_class = WebPushSubscriptionSerializer
+    lookup_field = "id"
+    permission_classes = [IsUserMatch]
+
+    def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
