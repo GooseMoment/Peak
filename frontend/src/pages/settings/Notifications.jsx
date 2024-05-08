@@ -44,7 +44,7 @@ const Notifications = () => {
     }
 
     const subscribePush = async () => {
-        const registration = await navigator.serviceWorker.register("/service-worker.js")
+        const registration = await navigator.serviceWorker.ready
         const publicKey = urlB64ToUint8Array(VAPID_PUBLIC_KEY)
         const options = {applicationServerKey: publicKey, userVisibleOnly: true}
         const subscription = await registration.pushManager.subscribe(options)
