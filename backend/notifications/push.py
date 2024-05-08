@@ -8,6 +8,7 @@ from json import dumps
 from urllib3.util import parse_url
 
 DEFAULT_PROFILE_IMG = "https://assets-dev.peak.ooo/user_profile_imgs%2Fdefault.jpg"
+SUBSCRIPTION_MAX_FAILURE = 10
 
 def _notificationToPushData(notification: Notification) -> dict[str, any]:
     # FYI: https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
@@ -78,5 +79,21 @@ def pushNotificationToUser(user: User, notification: Notification) -> None:
                 },
             )
         except WebPushException as wpe:
-            # TODO: handle error
-            pass
+            if wpe.response and wpe.response.status_code == 401: # 401 GONE
+                # unsubscribed subscription
+                subscription.delete()
+                continue
+
+            subscription.fail_cnt += 1
+            if subscription.fail_cnt > SUBSCRIPTION_MAX_FAILURE: # 최대 횟수를 넘어갈 시 구독 삭제
+                subscription.delete()
+                continue
+
+            subscription.save()
+            continue
+
+        # 성공했으면 fail_cnt 초기화
+        if subscription.fail_cnt > 0:
+            subscription.fail_cnt = 0
+            subscription.save()
+
