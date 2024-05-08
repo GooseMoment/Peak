@@ -1,13 +1,15 @@
 import { useState } from "react"
 
-import SettingSwitch from "@components/settings/SettingSwitch"
-import Switch from "@components/common/Switch"
+import Switch from "@components/settings/SettingSwitch"
+import Button from "@components/common/Button"
 import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Description, Value } from "@components/settings/Section"
 
-import { postSubscription } from "@api/notifications.api"
+import { deleteSubscription, postSubscription } from "@api/notifications.api"
 import { getClientSettings, setClientSettingsByName } from "@/utils/clientSettings"
 import { toast } from "react-toastify"
+
+const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
 
 const urlB64ToUint8Array = base64String => {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
@@ -21,9 +23,18 @@ const urlB64ToUint8Array = base64String => {
 }
 
 const Notifications = () => {
-    const [subscription, setSubScription] = useState(() => getClientSettings()["push_notification_subscription"])
+    const [webSubscriptionID, setWebSubscriptionID] = useState(() => getClientSettings()["push_notification_subscription"])
 
     const requestPush = async () => {
+        if (webSubscriptionID) {
+            deleteSubscription(webSubscriptionID)
+            setClientSettingsByName("push_notification_subscription", null)
+            setWebSubscriptionID(null)
+
+            toast.info("Disabled push notifications.")
+            return
+        }
+
         const permission = await window.Notification.requestPermission()
         if (permission !== "granted") {
             toast.error("You declined notifications.", {toastId: "notification_permission_declined"})
@@ -34,13 +45,13 @@ const Notifications = () => {
 
     const subscribePush = async () => {
         const registration = await navigator.serviceWorker.register("/service-worker.js")
-        const publicKey = urlB64ToUint8Array("your-public-key-here")
+        const publicKey = urlB64ToUint8Array(VAPID_PUBLIC_KEY)
         const options = {applicationServerKey: publicKey, userVisibleOnly: true}
         const subscription = await registration.pushManager.subscribe(options)
-        await postSubscription(subscription)
+        const webSubscription = await postSubscription(subscription)
 
-        setClientSettingsByName("push_notification_subscription", subscription)
-        setSubScription(subscription)
+        setClientSettingsByName("push_notification_subscription", webSubscription?.id)
+        setWebSubscriptionID(webSubscription?.id)
         toast.success("Notification enabled.", {toastId: "notification_enabled"})
     }
 
@@ -50,13 +61,13 @@ const Notifications = () => {
             <Name>Receive push notifications</Name>
             <Description>If you disallow push notification permission of Peak, this option has no effect.</Description>
             <Value>
-                <Switch checked={subscription !== null} onClick={requestPush} />
+                <Button onClick={requestPush}>{webSubscriptionID ? "Disable" : "Enable"}</Button>
             </Value>
         </Section>
         <Section>
             <Name>Play notification sound</Name>
             <Value>
-                <SettingSwitch name="play_notification_sound" />
+                <Switch name="play_notification_sound" />
             </Value>
         </Section>
     </>

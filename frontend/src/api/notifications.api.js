@@ -35,6 +35,15 @@ export const postSubscription = async (subscription) => {
 
     try {
         const res = await client.post(`notifications/subscribe`, data)
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
+
+export const deleteSubscription = async (id) => {
+    try {
+        const res = await client.delete(`notifications/subscribe/${id}`)
         return res.status
     } catch (e) {
         throw e
