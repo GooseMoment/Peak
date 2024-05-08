@@ -44,7 +44,7 @@ def _notificationToPushData(notification: Notification) -> dict[str, any]:
             related_user = notification.following.followee
             data["body"] = "accepted your follow request"
         case Notification.FOR_COMMENT:
-            related_user = notification.user
+            related_user = notification.comment.user
             data["body"] = f"\"{notification.comment.comment}\""
         case Notification.FOR_PECK:
             related_user = notification.peck.user
