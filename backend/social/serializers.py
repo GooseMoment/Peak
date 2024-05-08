@@ -67,7 +67,7 @@ class FollowingSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Following
-        fields = ["follower", "followee", "is_request", "created_at", "updated_at", "deleted_at"]
+        fields = ["follower", "followee", "status", "created_at", "updated_at", "deleted_at"]
 
 class BlockSerializer(serializers.ModelSerializer):
     blocker = UserSerializer(many=False, read_only=True)

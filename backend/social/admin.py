@@ -97,7 +97,7 @@ class FollowingAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ["follower", "followee", "is_request"],
+                "fields": ["follower", "followee", "status"],
             },
         ),
         (

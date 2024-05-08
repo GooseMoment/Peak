@@ -359,22 +359,18 @@ def factory_following(follower: User, followee: User) -> Following:
         datetime_start=start_date, datetime_end=end_date, tzinfo=timezone.utc,
     )
     updated_at = created_at
-    is_request = bool(random.randint(0, 1))
-
-    if not is_request and random.randint(0, 1) == 0:
-        # 1/2 확률로 잠긴 계정이고 사후 요청을 받았대
-        updated_at += timedelta(days=random.randint(1, 3))
+    status = random.choice(Following.STATUS_TYPE)[0]
 
     return Following(
         follower=follower,
         followee=followee,
-        is_request=bool(random.randint(0, 1)),
+        status=status,
         created_at=created_at,
         updated_at=updated_at,
     )
 
-def create_followings(users: list[User]) -> list[Following]:
-    followings: list[Following] = []
+def create_followings(users: list[User]) -> dict[tuple[str, str], Following]:
+    followings: dict[tuple[str, str], Following] = dict()
 
     for follower in users:
         for followee in users:
@@ -386,9 +382,9 @@ def create_followings(users: list[User]) -> list[Following]:
 
             following = factory_following(followee=followee, follower=follower)
             following.save()
-            followings.append(following)
+            followings[(follower, followee)] = following
 
-            if not following.is_request:
+            if following.status == Following.ACCEPTED:
                 follower.followings_count += 1
                 followee.followers_count += 1
     
@@ -411,7 +407,7 @@ def factory_block(blocker: User, blockee: User) -> Block:
         updated_at=created_at,
     )
 
-def create_blocks(users: list[User]) -> list[Block]:
+def create_blocks(users: list[User], followings: dict[tuple[str, str], Following]) -> list[Block]:
     blocks: list[Block] = []
 
     for blocker in users:
@@ -425,6 +421,16 @@ def create_blocks(users: list[User]) -> list[Block]:
             block = factory_block(blockee=blockee, blocker=blocker)
             block.save()
             blocks.append(block)
+            
+            try:
+                del followings[(blockee, blocker)]
+            except KeyError:
+                pass
+            
+            try:
+                del followings[(blocker, blockee)]
+            except KeyError:
+                pass
     
     return blocks
 
@@ -464,21 +470,19 @@ def create_notifications(
         notifications.append(noti)
 
     # for following 
-    for following in followings:
+    for key, following in followings.items():
         # 예시: @AAA가 @BBB의 팔로우 버튼을 눌렀다 
-        if following.is_request or following.created_at != following.updated_at: # @BBB 계정이 잠겨있다면
+        if following.status == Following.REQUESTED or following.status == Following.REJECTED: # @BBB 계정이 잠겨있다면
             # @BBB에게 알림 보내기: @AAA가 팔로우 요청을 보냈습니다
             noti = factory_notification(
                 following.followee, Notification.FOR_FOLLOW_REQUEST, following, following.created_at,
             )
             noti.save()
             notifications.append(noti)
-        
-        if following.is_request: # @BBB가 승인하지 않은 상태라면
-            # 더 이상의 알림 없음
+            
             continue
         
-        if following.created_at != following.updated_at: # @BBB의 계정이 잠겨있었고 팔로우 요청을 승인했다면
+        if following.status == Following.ACCEPTED and following.created_at != following.updated_at: # @BBB의 계정이 잠겨있었고 팔로우 요청을 승인했다면
             # @AAA에게 알림 보내기: @BBB가 내 팔로우 요청을 승인했습니다
             noti = factory_notification(
                 following.follower, Notification.FOR_FOLLOW_REQUEST_ACCEPTED, following, following.updated_at,
