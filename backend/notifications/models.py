@@ -3,7 +3,7 @@ from django.db import models
 from api.models import Base
 from tasks.models import Task
 from users.models import User
-from social.models import Reaction, Following, Peck
+from social.models import Reaction, Following, Peck, Comment
 
 class TaskReminder(Base):
     task = models.ForeignKey(
@@ -25,6 +25,7 @@ class Notification(Base):
     FOR_FOLLOW_REQUEST = "follow_request"
     FOR_FOLLOW_REQUEST_ACCEPTED = "follow_request_accepted"
     FOR_PECK = "peck"
+    FOR_COMMENT = "comment"
     FOR_TRENDING_UP = "trending_up"
     FOR_TRENDING_DOWN = "trending_down"
 
@@ -35,12 +36,14 @@ class Notification(Base):
         (FOR_FOLLOW_REQUEST, "for follow request"),
         (FOR_FOLLOW_REQUEST_ACCEPTED, "for follow request accpeted"),
         (FOR_PECK, "for peck"),
+        (FOR_COMMENT, "for comment"),
         (FOR_TRENDING_UP, "for trending up"),
         (FOR_TRENDING_DOWN, "for trending down"),
     ]
 
     FOLLOWING_TYPES = (FOR_FOLLOW, FOR_FOLLOW_REQUEST, FOR_FOLLOW_REQUEST_ACCEPTED, )
-    SOCIAL_TYPES = (FOR_REACTION, FOR_PECK, ) + FOLLOWING_TYPES
+    INTERACTION_TYPES = (FOR_REACTION, FOR_PECK, FOR_COMMENT, ) 
+    SOCIAL_TYPES = INTERACTION_TYPES + FOLLOWING_TYPES
 
     type = models.CharField(choices=NOTIFICATION_TYPES, max_length=128)
     user = models.ForeignKey(
@@ -73,6 +76,12 @@ class Notification(Base):
         null=True,
         blank=True,
     )
+    comment = models.ForeignKey(
+        Comment,
+        on_delete = models.CASCADE,
+        null=True,
+        blank=True,
+    )
 
     def __str__(self) -> str:
         return f"{self.type} for {self.user}"
@@ -86,6 +95,7 @@ class WebPushSubscription(Base):
     subscription_info = models.JSONField()
     browser = models.CharField(max_length=128)
     user_agent = models.CharField(max_length=500, blank=True)
+    fail_cnt = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         return f"Subscription for {self.user}"
