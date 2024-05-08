@@ -359,16 +359,12 @@ def factory_following(follower: User, followee: User) -> Following:
         datetime_start=start_date, datetime_end=end_date, tzinfo=timezone.utc,
     )
     updated_at = created_at
-    is_request = bool(random.randint(0, 1))
-
-    if not is_request and random.randint(0, 1) == 0:
-        # 1/2 확률로 잠긴 계정이고 사후 요청을 받았대
-        updated_at += timedelta(days=random.randint(1, 3))
+    status = random.choice(Following.STATUS_TYPE)[0]
 
     return Following(
         follower=follower,
         followee=followee,
-        status=random.choice(Following.STATUS_TYPE)[0],
+        status=status,
         created_at=created_at,
         updated_at=updated_at,
     )
