@@ -130,7 +130,7 @@ class Command(BaseCommand):
             "Block을 생성합니다...", ending=" ",
         )
         stdout.flush()
-        blocks = create_blocks(users)
+        blocks = create_blocks(users, followings)
         self.stdout.write(
             self.style.SUCCESS(f"{len(blocks)}개 [OK]")
         )
