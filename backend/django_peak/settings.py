@@ -150,7 +150,7 @@ AUTHENTICATION_BACKENDS = [
 
 # CORS
 # https://github.com/adamchainz/django-cors-headers?tab=readme-ov-file#configuration
-CORS_ALLOWED_ORIGINS = os.environ.get("DJANGO_CORS_ALLOWED_ORIGINS").split() + [os.environ.get("SCHEME") + os.environ.get("WEB_ORIGIN")]
+CORS_ALLOWED_ORIGINS = os.environ.get("DJANGO_CORS_ALLOWED_ORIGINS").split() + [os.environ.get("SCHEME") + os.environ.get("WEB_HOSTNAME")]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^http:\/\/127\.0\.0\.1:((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$",
