@@ -87,7 +87,6 @@ class Notification(Base):
         return f"{self.type} for {self.user}"
 
 class WebPushSubscription(Base):
-    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
