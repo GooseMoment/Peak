@@ -81,10 +81,13 @@ const NoMore = styled.div`
 
 const filters = {
     "all": {
-        display: "All", types: ["task_reminder", "reaction", "follow", "follow_request", "follow_request_accepted", "peck", "trending_up", "trending_down"]
+        display: "All", types: ["task_reminder", "reaction", "follow", "follow_request", "follow_request_accepted", "comment", "peck", "trending_up", "trending_down"]
     },
     "tasks": {
         display: "Tasks", types: ["task_reminder"]
+    },
+    "comments": {
+        display: "Comments", types: ["comment"]
     },
     "reactions": {
         display: "Reactions", types: ["reaction"]
