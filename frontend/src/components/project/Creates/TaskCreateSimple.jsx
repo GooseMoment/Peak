@@ -1,53 +1,67 @@
+import { useSubmit } from "react-router-dom"
 import { useState } from "react"
 
 import FeatherIcon from "feather-icons-react"
 import styled, { css } from "styled-components"
 
-const TaskCreateSimple = () => {
+import notify from "@utils/notify"
+import hourglass from "@assets/project/hourglass.svg"
+import alarmclock from "@assets/project/alarmclock.svg"
+import TaskNameInput from "@/components/project/TaskNameInput"
+import SimplePriority from "./simple/SimplePriority"
+
+const TaskCreateSimple = ({color}) => {
+    const submit = useSubmit()
+
     const [tab, setTab] = useState(0)
+    const [newTaskName, setNewTaskName] = useState('')
 
-    const tabClick = (index) => {
-        setTab(index)
-    }
+    const items = [
+        {id: 0, icon: <FeatherIcon icon="tag" />, display: 
+            <TaskNameInput 
+                newTaskName={newTaskName}
+                setNewTaskName={setNewTaskName}
+                color={color}
+            />
+        },
+        {id: 1, icon: <FeatherIcon icon="calendar" />, display: "2024년 02월 20일 18:00"},
+        {id: 2, icon: <img src={hourglass} />, display: "2024년 02월 20일 16:00"},
+        {id: 3, icon: <img src={alarmclock} />, display: "여러개 들어가야함.."},
+        {id: 4, icon: <FeatherIcon icon="alert-circle" />, display: <SimplePriority/>}, 
+        {id: 4, icon: <FeatherIcon icon="archive" />, display: "홍대라이프 / 수강신청"},
+        {id: 5, icon: <FeatherIcon icon="edit" />, display: "없음"},
+    ]
 
-    const [isClick, setClick] = useState(false)
-    const [inputText, setInputText] = useState("")
-
-    const activeEnter = (e) => {
-        if (e.key === "Enter") {
-            setInputText(e.target.value)
-            alert(inputText)
-            setClick(false)
-            // inputText로 값 바뀌게 수정해야함
-        }
-    }
 
     return (
         <>
-            <FlexBox>
-                {items.map((val, index) => {
-                    return (
-                        <IndexBox
-                        $active={tab === index}
-                        key={val.id}
-                        onClick={() => tabClick(index)}
-                        >
-                            <FeatherIcon icon={val.icon}/>
-                        </IndexBox>
-                )})}
-            </FlexBox>
-            <MainBox onClick={() => setClick(true)}>
-                {isClick ? 
-                    <FieldBox
-                        type="text"
-                        placeholder={items[tab].display}
-                        onChange={(e) => setInputText(e.target.value)}
-                        onKeyDown={(e) => activeEnter(e)}
-                    /> : items[tab].display}
+            <Box>
+                <FlexBox>
+                    {items.map((val, index) => {
+                        return (
+                            <IndexBox
+                            $active={tab === index}
+                            key={val.id}
+                            onClick={setTab(index)}
+                            >
+                                {val.icon}
+                            </IndexBox>
+                    )})}
+                </FlexBox>
+            </Box>
+            <MainBox>
+                <MainDetailBox>
+                    {items[tab].display}
+                </MainDetailBox>
             </MainBox>
         </>
     )
 }
+
+const Box = styled.div`
+    display: flex;
+    align-items: center;
+`
 
 const FlexBox = styled.div`
     display: flex;
@@ -66,20 +80,23 @@ const IndexBox = styled.div`
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
     cursor: pointer;
-    justify-content: center;
     text-align: center;
     margin-left: 5px;
     border-bottom: none;
     
     ${(props) =>
         props.$active && css`
-        background-color: #FF4A03;
-        border: solid 2px #FFD7D7;
-        border-bottom: none;
+            background-color: #FF4A03;
+            border: solid 2px #FFD7D7;
+            border-bottom: none;
 
-        & svg {
-            stroke: #FFFFFF;
-        }`
+            & svg {
+                stroke: #FFFFFF;
+            }
+            & img {
+                filter: invert(99%) sepia(5%) saturate(385%) hue-rotate(252deg) brightness(118%) contrast(100%);
+            }
+        `
     }
 
     & svg {
@@ -88,38 +105,29 @@ const IndexBox = styled.div`
         margin-top: 6px;
         margin-left: 8px;
     }
+
+    & img {
+        width: 1.1em;
+        height: 1.1em;
+        margin-top: 8px;
+    }
 `
 
 const MainBox = styled.div`
     z-index: 2;
-    position: relative;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     height: 3.8em;
     background-color: #FFFFFF;
     border: solid 2px #D9D9D9;
-    border-radius: 15px;
+    border-radius: 20px;
     margin-bottom: none;
 `
 
-const FieldBox = styled.input`
-    margin-left: 1em;
-    border-width: 0;
-    background-color: none;
-
-    &:focus {
-        outline: none;
-    }
+const MainDetailBox = styled.div`
+    display: flex;
+    margin-left: 1.5em;
 `
-
-const items = [
-    {id: 0, icon: "tag", name: "Tag", display: "추가할 이름"},
-    {id: 1, icon: "calendar", name: "Calendar", display: "2024년 02월 20일 18:00"},
-    {id: 2, icon: "clock", name: "Clock", display: "2024년 02월 20일 16:00"},
-    {id: 3, icon: "alert-circle", name: "Alert-circle", display: "매우 중요"},
-    {id: 4, icon: "archive", name: "Archive", display: "홍대라이프 / 수강신청"},
-    {id: 5, icon: "edit", name: "Edit", display: "없음"},
-]
 
 export default TaskCreateSimple

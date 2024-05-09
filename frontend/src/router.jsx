@@ -16,14 +16,11 @@ import SocialExplorePage from "@pages/SocialExplorePage"
 import UserPage from "@pages/UserPage"
 import LandingPage from "@pages/LandingPage"
 import SignPage from "@pages/SignPage"
-import taskCreates from "@pages/taskDetails/taskCreates"
+import TaskCreateElement from "@pages/taskDetails/TaskCreateElement"
+import TaskDetailElement from "@pages/taskDetails/TaskDetailElement"
 
 import { getMe, getUserByUsername, isSignedIn, signOut } from "@api/users.api"
 import { getProject, getProjectsList } from "@api/projects.api"
-import { getTasksByDrawer, getTask, patchTask } from "@api/tasks.api"
-
-import { QueryClientProvider } from "@tanstack/react-query"
-import queryClient from "@queries/queryClient"
 
 const redirectIfSignedIn = () => {
     if (isSignedIn()) {
@@ -74,9 +71,7 @@ const routes = [
             },
             {
                 path: "notifications",
-                element: <QueryClientProvider client={queryClient}>
-                    <NotificationsPage />
-                </QueryClientProvider>,
+                element: <NotificationsPage />,
             },
             {
                 path: "tasks/:id",
@@ -116,66 +111,19 @@ const routes = [
             {
                 path: "projects/:id",
                 element: <ProjectPage/>,
-                action: async ({request}) => {
-                    const formData = await request.formData()
-                    let data = {}
-                    for (const [k, v] of Object.entries(Object.fromEntries(formData))) {
-                        if (v === "null") {
-                            data[k] = null
-                            continue
-                        }
-                        
-                        data[k] = v
-                    }
-                    return patchTask(data.id, data)
-                },
                 loader: async ({params}) => {
-                    const tasksByDrawer = new Map()
                     const project = await getProject(params.id)
-                    for (const drawer of project.drawers) {
-                        let tasks = await getTasksByDrawer(drawer.id)
-                        tasksByDrawer.set(drawer.id, tasks)
-                    }
-                    return {project, tasksByDrawer}
+                    return {project}
                 },
                 children: [
                     {
+                        path: "tasks/create/",
+                        element: <TaskCreateElement />,
+                    },
+                    {
                         path: "tasks/:task_id/detail/",
                         id: "task",
-                        action: async ({request, params}) => {
-                            const formData = await request.formData()
-                            return patchTask(params.task_id, Object.fromEntries(formData))
-                        },
-                        loader: async ({params}) => {
-                            const task = await getTask(params.task_id)
-                            return task
-                        },
-                        element: <taskCreates.TaskDetailElement />,
-                        children: [
-                            {
-                                index: true,
-                            },
-                            {
-                                path: "due",
-                                Component: taskCreates.Calendar,
-                            },
-                            {
-                                path: "reminder",
-                                Component: taskCreates.Reminder,
-                            },
-                            {
-                                path: "priority",
-                                Component: taskCreates.Priority,
-                            },
-                            {
-                                path: "Drawer",
-                                Component: taskCreates.Drawer,
-                            },
-                            {
-                                path: "memo",
-                                Component: taskCreates.Memo,
-                            },
-                        ]
+                        element: <TaskDetailElement/>,
                     },
                 ]
             },

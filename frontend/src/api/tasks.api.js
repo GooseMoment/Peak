@@ -1,9 +1,9 @@
 import client from "@api/client"
 
-export const getTasksByDrawer = async (drawerID) => {
+export const getTasksByDrawer = async (drawerID, page) => {
     try {
-        const res = await client.get(`tasks?drawer=${drawerID}`)
-        return res.data.results
+        const res = await client.get(`tasks?drawer=${drawerID}&page=${page}`)
+        return res.data
     } catch (e) {
         throw e
     }
