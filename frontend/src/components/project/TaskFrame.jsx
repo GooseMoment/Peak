@@ -4,8 +4,7 @@ import styled from "styled-components"
 
 import TaskCircleFrame from "./TaskCircleFrame"
 
-const TaskFrame = ({taskName, pathRoot=null, completed, color, isDate, editable, isLoading, toComplete}) => {
-
+const TaskFrame = ({taskName, taskDetailPath=null, completed, color, isDate, editable, isLoading, toComplete}) => {
     const TextView = (
         <Text $completed={completed}>
             {taskName}
@@ -22,9 +21,9 @@ const TaskFrame = ({taskName, pathRoot=null, completed, color, isDate, editable,
                 isLoading={isLoading}
                 toComplete={toComplete}
             />
-            {pathRoot ? <Link to={pathRoot} style={{ textDecoration: 'none' }}> 
+            {taskDetailPath ? <Link to={taskDetailPath} style={{ textDecoration: 'none' }}> 
                 {TextView}
-            </Link> : {TextView}}
+            </Link> : TextView}
         </>
     )
 }
