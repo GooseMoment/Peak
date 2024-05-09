@@ -7,7 +7,6 @@ from pywebpush import webpush, WebPushException
 from json import dumps
 from urllib3.util import parse_url
 
-DEFAULT_PROFILE_IMG = "https://assets-dev.peak.ooo/user_profile_imgs%2Fdefault.jpg"
 SUBSCRIPTION_MAX_FAILURE = 10
 
 def _notificationToPushData(notification: Notification) -> dict[str, any]:
@@ -19,21 +18,26 @@ def _notificationToPushData(notification: Notification) -> dict[str, any]:
 
         # URLS
         "icon": "", 
-        "badge": "", # only for Android Chrome
 
         # Unix timestamp (only int)
         "timestamp": 0,
+
+        # any structure
+        "data": {
+            "click_url": "",
+        },
     }
 
     data["timestamp"] = int(notification.created_at.strftime("%s"))
-
-    # TODO: i18n
-    if notification.type == Notification.FOR_TASK_REMINDER:
-        data["title"] = "Reminder"
+    data["data"]["click_url"] = "/app/notifications?id=" + str(notification.id)
 
     related_user: User = None
 
+    # TODO: i18n
     match notification.type:
+        case Notification.FOR_TASK_REMINDER:
+            data["title"] = notification.task_reminder.task.name
+            data["body"] = "Time to work!" # TODO: show left time
         case Notification.FOR_FOLLOW:
             related_user = notification.following.follower
             data["body"] = "follows you"
@@ -48,7 +52,7 @@ def _notificationToPushData(notification: Notification) -> dict[str, any]:
             data["body"] = f"\"{notification.comment.comment}\""
         case Notification.FOR_PECK:
             related_user = notification.peck.user
-            data["body"] = "pecked you"
+            data["body"] = "pecked " + f"\"{notification.peck.task.name}\""
         case Notification.FOR_REACTION:
             related_user = notification.reaction.user
             data["body"] = ":" + notification.reaction.emoji.name + ":"
@@ -58,7 +62,7 @@ def _notificationToPushData(notification: Notification) -> dict[str, any]:
         if related_user.profile_img:
             data["icon"] = related_user.profile_img.url
         else:
-            data["icon"] = DEFAULT_PROFILE_IMG
+            data["icon"] = settings.USER_DEFAULT_PROFILE_IMG
 
     return data
 

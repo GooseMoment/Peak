@@ -6,3 +6,8 @@ self.addEventListener("push", function(event) {
         self.registration.showNotification(data.title, data)
     }
 })
+
+self.addEventListener("notificationclick", function(event) {
+    const url = event?.notification?.data?.click_url
+    self.clients.openWindow(url);
+})
