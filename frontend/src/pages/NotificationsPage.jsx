@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react"
+import { Fragment, useEffect, useRef, useState } from "react"
 
 import FilterButtonGroup from "@components/notifications/FilterButtonGroup"
 import Box from "@components/notifications/Box"
@@ -10,6 +10,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { ImpressionArea } from "@toss/impression-area"
 import styled from "styled-components"
 import { toast } from "react-toastify"
+import { DateTime } from "luxon"
 
 const getCursorFromURL = (url) => {
     if (!url) return null
@@ -32,6 +33,11 @@ const NotificationsPage = () => {
     // useInfiniteQuery에서 제공하는 hasNextPage가 제대로 작동 안함. 어째서?
     const hasNextPage = data?.pages[data?.pages?.length-1].next !== null
 
+    const lastDate = useRef(null)
+    useEffect(() => {
+        lastDate.current = null
+    }, [activeFilter])
+
     const header = <>
         <PageTitle>Notifications</PageTitle>
         <FilterButtonGroup filters={filters} active={activeFilter} setActive={setActiveFilter} />
@@ -53,7 +59,20 @@ const NotificationsPage = () => {
     }
     {data?.pages.map((group, i) => (
         <Fragment key={i}>
-            {group.results.map(notification => <Box key={notification.id} notification={notification} />)}
+            {group.results.map((notification, j) => {
+                let dateDelimiter = null;
+                const thisDate = DateTime.fromISO(notification.created_at).toRelativeCalendar({unit: "days"})
+
+                if (i === 0 && j === 0 || thisDate !== lastDate.current) {
+                    dateDelimiter = <Date>{thisDate}</Date>
+                    lastDate.current = thisDate
+                }
+
+                return <Fragment key={notification.id}>
+                    {dateDelimiter}
+                    <Box notification={notification} />
+                </Fragment>
+            })}
         </Fragment>
     ))}
     <ImpressionArea onImpressionStart={() => fetchNextPage()} timeThreshold={200}>
@@ -77,6 +96,10 @@ const NoMore = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+`
+
+const Date = styled.h2`
+    font-weight: bold;
 `
 
 const filters = {
