@@ -23,7 +23,7 @@ const getPageFromURL = (url) => {
 const Drawer = ({project, drawer, color}) => {
     const navigate = useNavigate()
 
-    const { data, isError, error, fetchNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery({
+    const { data, isError, fetchNextPage, isFetching } = useInfiniteQuery({
         queryKey: ["tasks", {drawerID: drawer.id}],
         queryFn: (pages) => getTasksByDrawer(drawer.id, pages.pageParam || 1),
         initialPageParam: 1,
@@ -59,6 +59,19 @@ const Drawer = ({project, drawer, color}) => {
         </CollapseButton>},
         {icon: <FeatherIcon icon={"more-horizontal"}/>},
     ]
+
+    if (isError) {
+        return (
+            <>
+                <div>task를 불러오지 못했어요😂</div>
+                <div onClick={() => navigate(-1)}>이전으로 돌아가기</div>
+            </>
+        )
+    }
+
+    if (isFetching) {
+        return <div>로딩중..</div>
+    }
 
     return (
         <>
