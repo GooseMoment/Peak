@@ -26,8 +26,6 @@ class Notification(Base):
     FOR_FOLLOW_REQUEST_ACCEPTED = "follow_request_accepted"
     FOR_PECK = "peck"
     FOR_COMMENT = "comment"
-    FOR_TRENDING_UP = "trending_up"
-    FOR_TRENDING_DOWN = "trending_down"
 
     NOTIFICATION_TYPES = [
         (FOR_TASK_REMINDER, "for task reminder"),
@@ -37,8 +35,6 @@ class Notification(Base):
         (FOR_FOLLOW_REQUEST_ACCEPTED, "for follow request accpeted"),
         (FOR_PECK, "for peck"),
         (FOR_COMMENT, "for comment"),
-        (FOR_TRENDING_UP, "for trending up"),
-        (FOR_TRENDING_DOWN, "for trending down"),
     ]
 
     FOLLOWING_TYPES = (FOR_FOLLOW, FOR_FOLLOW_REQUEST, FOR_FOLLOW_REQUEST_ACCEPTED, )
