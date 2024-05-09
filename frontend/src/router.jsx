@@ -18,9 +18,7 @@ import LandingPage from "@pages/LandingPage"
 import SignPage from "@pages/SignPage"
 import taskCreates from "@pages/taskDetails/taskCreates"
 
-import notify from "@utils/notify"
-
-import { getMe, getUserByUsername, isSignedIn, patchUser } from "@api/users.api"
+import { getMe, getUserByUsername, isSignedIn, signOut } from "@api/users.api"
 import { getProject, getProjectsList } from "@api/projects.api"
 import { getTasksByDrawer, getTask, patchTask } from "@api/tasks.api"
 
@@ -189,13 +187,12 @@ const routes = [
                 element: <UserPage/>,
             },
             {
-                // TODO: remove this and add signOut api callback
                 path: "sign_out",
                 loader: () => {
-                    localStorage.removeItem("is_signed_in")
+                    signOut()
                     return redirect("/")
                 },
-                element: <div>Goodbye</div>,
+                element: null,
             },
         ]
     }
