@@ -60,8 +60,6 @@ const Drawer = ({project, drawer, color}) => {
         {icon: <FeatherIcon icon={"more-horizontal"}/>},
     ]
 
-    console.log({data})
-
     return (
         <>
             <DrawerBox $color = {color}>
@@ -74,7 +72,7 @@ const Drawer = ({project, drawer, color}) => {
             </DrawerBox>
             {collapsed ? null :
                 <TaskList>
-                    {data?.pages?.map((group, i) => (
+                    {data?.pages?.map((group) => (
                         group?.results?.map((task) =>
                             <Task key={task.id} projectId={project.id} task={task} color={color}/>
                     )))}
@@ -88,7 +86,7 @@ const Drawer = ({project, drawer, color}) => {
                 <TaskCreateText>할 일 추가</TaskCreateText>
             </TaskCreateButton>
             <FlexBox>
-                {hasNextPage ? <Button onClick={() => fetchNextPage()}>더보기</Button> : null}
+                {hasNextPage ? <MoreButton onClick={() => fetchNextPage()}>더보기</MoreButton> : null}
             </FlexBox>
         </>
     );
@@ -199,6 +197,10 @@ const FlexBox = styled.div`
     margin-top: 1em;
     align-items: center;
     justify-content: center;
+`
+
+const MoreButton = styled(Button)`
+    width: 25em;
 `
 
 export default Drawer

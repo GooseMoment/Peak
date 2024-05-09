@@ -1,11 +1,9 @@
 from rest_framework import mixins, generics
-from rest_framework.pagination import PageNumberPagination
 
 from .models import Task
 from .serializers import TaskSerializer
 from api.permissions import IsUserMatch
 from api.views import CreateMixin
-
 
 class TaskDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -38,16 +36,12 @@ class TaskDetail(mixins.RetrieveModelMixin,
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     
-class TaskListPagination(PageNumberPagination):
-    page_size = 1000
-    
 class TaskList(CreateMixin,
                   mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   generics.GenericAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsUserMatch]
-    pagination_class = TaskListPagination
 
     def get_queryset(self):
         queryset = Task.objects.filter(user=self.request.user).order_by("created_at").all()
