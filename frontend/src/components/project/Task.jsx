@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query"
 import queryClient from "@queries/queryClient"
 
 import { patchTask } from "@api/tasks.api"
-import taskDate from "./taskDate"
+import taskCalculation from "./taskCalculation"
 import TaskName from "./TaskName"
 import Priority from "./Priority"
 
@@ -15,7 +15,7 @@ import hourglass from "@assets/project/hourglass.svg"
 
 const Task = ({projectId, task, color}) => {
     const [newTaskName, setNewTaskName] = useState(task.name)
-    const {assigned, due} = taskDate(task)
+    const {assigned, due} = taskCalculation(task)
 
     const mutation = useMutation({
         mutationFn: (data) => {
