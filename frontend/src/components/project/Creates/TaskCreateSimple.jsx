@@ -1,23 +1,54 @@
-import { useSubmit } from "react-router-dom"
 import { useState } from "react"
 
 import FeatherIcon from "feather-icons-react"
 import styled, { css } from "styled-components"
+import { toast } from "react-toastify"
 
-import notify from "@utils/notify"
+import queryClient from "@queries/queryClient"
+import { postTask } from "@api/tasks.api"
+
 import hourglass from "@assets/project/hourglass.svg"
 import alarmclock from "@assets/project/alarmclock.svg"
-import TaskNameInput from "@/components/project/TaskNameInput"
+
+import TaskNameInput from "@components/project/TaskNameInput"
 import SimplePriority from "./simple/SimplePriority"
 
-const TaskCreateSimple = ({color}) => {
-    const submit = useSubmit()
-
+const TaskCreateSimple = ({color, drawer_id, drawer_name, project_name}) => {
     const [tab, setTab] = useState(0)
     const [newTaskName, setNewTaskName] = useState('')
 
+    const [newTask, setNewTask] = useState({
+        'name': "",
+        'assigned_at': null,
+        'due_date': null,
+        'due_time': null,
+        'reminders': [],
+        'priority': 0,
+        'drawer': drawer_id,
+        'drawer_name': drawer_name,
+        'project_name': project_name,
+        'memo': "",
+        'privacy': 'public'
+    })
+
+    const editNewTask = (edit) => {
+        setNewTask(Object.assign(newTask, edit))
+    }
+
+    const makeTask = async () => {
+        try {
+            editNewTask({'name': newTaskName})
+            await postTask(newTask)
+            toast.success("할 일 생성에 성공하였습니다!")
+            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: drawer_id}]})
+        } catch (e) {
+            toast.error("할 일 생성에 실패하였습니다.")
+        }
+    }
+
     const items = [
-        {id: 0, icon: <FeatherIcon icon="tag" />, display: 
+        {id: 0, icon: <FeatherIcon icon="tag" />,
+        display: 
             <TaskNameInput 
                 newTaskName={newTaskName}
                 setNewTaskName={setNewTaskName}
@@ -28,10 +59,9 @@ const TaskCreateSimple = ({color}) => {
         {id: 2, icon: <img src={hourglass} />, display: "2024년 02월 20일 16:00"},
         {id: 3, icon: <img src={alarmclock} />, display: "여러개 들어가야함.."},
         {id: 4, icon: <FeatherIcon icon="alert-circle" />, display: <SimplePriority/>}, 
-        {id: 4, icon: <FeatherIcon icon="archive" />, display: "홍대라이프 / 수강신청"},
-        {id: 5, icon: <FeatherIcon icon="edit" />, display: "없음"},
+        {id: 5, icon: <FeatherIcon icon="archive" />, display: "홍대라이프 / 수강신청"},
+        {id: 6, icon: <FeatherIcon icon="edit" />, display: "없음"},
     ]
-
 
     return (
         <>
@@ -42,7 +72,7 @@ const TaskCreateSimple = ({color}) => {
                             <IndexBox
                             $active={tab === index}
                             key={val.id}
-                            onClick={setTab(index)}
+                            onClick={() => setTab(index)}
                             >
                                 {val.icon}
                             </IndexBox>
