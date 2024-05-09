@@ -1,5 +1,3 @@
-import { useOutletContext, useSubmit } from "react-router-dom"
-
 import styled from "styled-components"
 
 import Detail from "@components/project/common/Detail"
@@ -8,16 +6,12 @@ import normal from "@assets/project/priority/normal.svg"
 import important from "@assets/project/priority/important.svg"
 import critical from "@assets/project/priority/critical.svg"
 
-const Priority = () => {
-    const [closeComponent] = useOutletContext()
-    const submit = useSubmit()
+const Priority = ({setFunc, closeComponent}) => {
 
     const changePriority = (priority) => {
         return async () => {
-            submit({priority}, {
-                method: "PATCH",
-                action: "..",
-            })
+            setFunc({priority})
+            closeComponent()
         }
     }
 

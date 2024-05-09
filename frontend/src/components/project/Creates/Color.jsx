@@ -4,19 +4,17 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 import Detail from "@components/project/common/Detail"
-import ModalPortal from "@components/common/ModalPortal"
-import CustomColor from "./CustomColor"
+import palettes from "./palettes"
 
 const Color = ({setColor, setDisplayColor, closeComponent}) => {
-    const [isCustomOpen, setIsCustomOpen] = useState(false)
+    const [activeTab, setActiveTab] = useState('기본')
+    const [usePalettes, setUsePalettes] = useState(palettes[0])
 
-    const openCustom = () => {
-        setIsCustomOpen(true)
-    }
-
-    const closeCustom = () => {
-        setIsCustomOpen(false)
-    }
+    const clickTab = (id, themeName) => {
+        return async () => {
+            setUsePalettes(palettes[id])
+            setActiveTab(themeName)
+        }}
 
     const changeColor = (color, displayColor) => {
         return async () => {
@@ -28,57 +26,63 @@ const Color = ({setColor, setDisplayColor, closeComponent}) => {
 
     return (
         <Detail title="색깔 설정" onClose={closeComponent}>
-            {items.map(item => (
-                <ItemBlock key={item.id}>
-                    <FeatherIcon icon="circle" fill={'#'+item.color}/>
-                    <ItemText onClick={(item.display === "사용자 지정") ? openCustom : changeColor(item.color, item.display)}>
-                        {item.display}
-                    </ItemText>
-                    { item.display ===  "사용자 지정" && isCustomOpen ?
-                    <ModalPortal closeModal={closeCustom} additional>
-                        <CustomColor closeCustom={closeCustom} changeColor={changeColor}/>
-                    </ModalPortal> : null }
+            <TabBox>
+            {themes.map(theme => (
+                <TabButton
+                    key={theme.themeName}
+                    $isActive={activeTab === theme.themeName}
+                    onClick={clickTab(theme.id, theme.themeName)}
+                >
+                    {theme.themeName}
+                </TabButton>
+            ))}
+            </TabBox>
+            {usePalettes.map(palette => (
+                <ItemBlock>
+                    <FeatherIcon icon="circle" fill={'#'+palette.color} onClick={changeColor(palette.color, palette.display)}/>
                 </ItemBlock>
             ))}
         </Detail>
     )
 }
 
-const ItemBlock = styled.div`
+const TabBox = styled.div`
     display: flex;
-    gap: 0.5em;
-    align-items: center;
-    margin-left: 1.2em;
+    margin-left: 0.4em;
+    margin-top: 1em;
+`
+
+const TabButton = styled.button`
+    font-weight: 400;
+    font-size: 0.9em;
+    padding: 0.3em;
+    margin-left: 1em;
+    width: 3em;
+    border: 1px solid;
+    border-radius: 15px;
+    border-color: #${props => props.$isActive ? 'FFD7C7' : 'A4A4A4'};
+    background-color: #${props => props.$isActive ? 'FF4A03' : 'FFFFFF'};
+    color: #${props => props.$isActive ? 'FFFFFF' : '000000'};
+    cursor: pointer;
+`
+
+const ItemBlock = styled.div`
+    display: inline-block;
+    margin-left: 1.4em;
     margin-top: 1.2em;
 
     & svg {
-        width: 1.2em;
-        height: 1.2em;
+        width: 1.5em;
+        height: 1.5em;
         stroke: none;
         top: 0;
-    }
-`
-
-const ItemText = styled.p`
-    font-weight: normal;
-    font-size: 1em;
-    color: #000000;
-
-    &:hover {
-        font-weight: bolder;
-        color: #FF4A03;
         cursor: pointer;
     }
 `
 
-const items = [
-    {color: "DC2E2E", display: "빨강"},
-    {color: "FF4A03", display: "주황"},
-    {color: "FFD703", display: "노랑"},
-    {color: "26AA1B", display: "초록"},
-    {color: "2E61DC", display: "파랑"},
-    {color: "8F2EDC", display: "보라"},
-    {color: "000000", display: "사용자 지정"},
+const themes = [
+    {id: 0, themeName: '기본'},
+    {id: 1, themeName: '여름'},
 ]
 
 export default Color

@@ -1,4 +1,3 @@
-import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
 import Detail from "@components/project/common/Detail"
@@ -8,7 +7,7 @@ import tomorrow from "@assets/project/calendar/tomorrow.svg"
 import next_week from "@assets/project/calendar/next_week.svg"
 import slach from "@assets/project/slach.svg"
 
-const Calendar = ({setFunc, closeComponent}) => {
+const Assigned = ({setFunc, closeComponent}) => {
     let date = new Date()
 
     const items = [
@@ -19,42 +18,28 @@ const Calendar = ({setFunc, closeComponent}) => {
         {id: 4, icon: <img src={slach}/>, content: "날짜없음", set: null},
     ]
 
-    const changeDueDate = (set) => {
+    const changeAssignedDate = (set) => {
         return async () => {
             date.setDate(date.getDate() + set)
-            let due_date = null
+            let assigned_at = null
             if (!(set === null)) {
-                due_date = date.toISOString().slice(0, 10)
+                assigned_at = date.toISOString().slice(0, 10)
             }
-            setFunc({due_date})
+            setFunc({assigned_at})
             closeComponent()
         }
     }
 
     return (
-        <Detail title="기한 지정" onClose={closeComponent}>
+        <Detail title="할당 날짜 설정" onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
-                    <ItemText onClick={changeDueDate(item.set)}>{item.content}</ItemText>
+                    <ItemText onClick={changeAssignedDate(item.set)}>{item.content}</ItemText>
                 </ItemBlock>
             ))}
             <CLine />
             <div>달력이 들어갈 자리입니다</div>
-            <CLine />
-            <AddButton>
-                <AddButtonText>
-                    <FeatherIcon icon="clock" />
-                    시간 추가
-                </AddButtonText>
-            </AddButton>
-            <CLine />
-            <AddButton>
-                <AddButtonText>
-                    <FeatherIcon icon="refresh-cw" />
-                    반복 설정
-                </AddButtonText>
-            </AddButton>
         </Detail>
     )
 }
@@ -62,8 +47,8 @@ const Calendar = ({setFunc, closeComponent}) => {
 const CLine = styled.div`
     border-top: thin solid #D9D9D9;
     width: 12.5em;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    margin-top: 1em;
+    margin-bottom: 0.3em;
     margin-left: 1em;
 `
 
@@ -87,37 +72,4 @@ const ItemText = styled.p`
     }
 `
 
-const AddButton = styled.div`
-    display: flex;
-    justify-content: center;
-    width: 14em;
-    height: 1.8em;
-    background-color: #FFFFFF;
-    border: solid 1px #D9D9D9;
-    border-radius: 15px;
-    margin: 0.5em 0.5em;
-`
-
-const AddButtonText = styled.p`
-    color: #000000;
-    font-size: 1em;
-
-    &:hover {
-        font-weight: bolder;
-        color: #FF4A03;
-        cursor: pointer;
-
-        & svg {
-            color: #000000;
-        }
-    }
-    
-    & svg {
-        width: 1.2em;
-        height: 1.2em;
-        top: 0.3em;
-    }
-    
-`
-
-export default Calendar
+export default Assigned
