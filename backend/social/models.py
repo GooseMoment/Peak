@@ -103,8 +103,20 @@ class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model
         on_delete = models.CASCADE,
         related_name = "followers"
     )
-    # 요청인가
-    is_request = models.BooleanField(default=False)
+    
+    REQUESTED = "requested"
+    ACCEPTED = "accepted"
+    REJECTED = "rejected"
+    CANCELED = "canceled"
+    
+    STATUS_TYPE = [
+        (REQUESTED, "request by follower"),
+        (ACCEPTED, "accepted by followee"),
+        (REJECTED, "rejected by followee"),
+        (CANCELED, "canceled by follower"),
+    ]
+    
+    status = models.CharField(choices=STATUS_TYPE)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -116,7 +128,7 @@ class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model
         ]
 
     def __str__(self) -> str:
-        return f"Following {self.follower} → {self.followee} (is_request: {self.is_request})"
+        return f"Following {self.follower} → {self.followee} (status: {self.status})"
 
 class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
     blocker = models.ForeignKey(
@@ -129,13 +141,6 @@ class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유
         on_delete = models.CASCADE,
         related_name = "blockers"
     )
-    
-    def save(self, force_insert: bool = False, force_update: bool = False, using: str | None = None, update_fields: Iterable[str] | None = None) -> None:
-        #soft delete
-        Following.objects.filter(followee=self.blocker, follower=self.blockee).delete()
-        Following.objects.filter(followee=self.blockee, follower=self.blocker).delete()
-        print(force_insert, force_update)
-        return super().save(force_insert, force_update, using, update_fields)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -61,7 +61,7 @@ const ProjectItemsContainer = styled.div`
     overflow-y: auto;
 
     scrollbar-width: thin;
-    scrollbar-color: #FFC6C6 #F9F7F6;
+    scrollbar-color: #FFC6C6 transparent;
     height: calc(100vh - 22em);
 
     ${props => props.$collapsed && css`

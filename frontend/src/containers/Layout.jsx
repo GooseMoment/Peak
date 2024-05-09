@@ -7,7 +7,7 @@ import { getClientSettings } from "@utils/clientSettings"
 import styled, { css } from "styled-components"
 
 const closeSidebarOnStartUp = getClientSettings()["close_sidebar_on_startup"]
-const contentPadding = getClientSettings()["main_width"]
+const contentPadding = getClientSettings()["main_width"] || "5rem"
 
 const Layout = ({noSidebar, children}) => {
     const [sidebarCollapsed, setSidebarCollapsed] = useState(closeSidebarOnStartUp)
@@ -23,6 +23,7 @@ const Layout = ({noSidebar, children}) => {
 }
 
 const App = styled.div`
+    background-color: ${p => p.theme.white};
 `
 
 const Content = styled.main`
@@ -35,6 +36,10 @@ transition-timing-function: cubic-bezier(.86,0,.07,1);
 ${({$sidebarCollapsed}) => $sidebarCollapsed ? css`
     padding: 3rem calc(${props => props.$sidePadding} + 7rem);
 ` : null}
+
+min-height: 100vh;
+box-sizing: border-box;
+color: ${p => p.theme.textColor};
 `
 
 // Reference: https://every-layout.dev/layouts/sidebar

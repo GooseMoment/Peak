@@ -19,14 +19,8 @@ import SignPage from "@pages/SignPage"
 import TaskCreateElement from "@pages/taskDetails/TaskCreateElement"
 import TaskDetailElement from "@pages/taskDetails/TaskDetailElement"
 
-import notify from "@utils/notify"
-
-import { getMe, getUserByUsername, isSignedIn, patchUser } from "@api/users.api"
-import { getSettings, patchSettings } from "@api/user_setting.api"
-import settings from "@pages/settings/settings"
-
+import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
 import { getProject, getProjectsList } from "@api/projects.api"
-import { getTasksByDrawer, getTask, patchTask, postTask } from "@api/tasks.api"
 
 const redirectIfSignedIn = () => {
     if (isSignedIn()) {
@@ -97,6 +91,12 @@ const routes = [
                     {
                         path: "following",
                         element: <SocialFollowingPage />,
+                        // id: 'social',
+                        // loader: async () => {
+                        //     return {
+                        //         dailyLogPreview: await getDailyReport(),
+                        //     }
+                        // },
                     },
                     {
                         path: "explore",
@@ -133,64 +133,6 @@ const routes = [
                     return getUserByUsername(params.username.slice(1))
                 },
                 element: <UserPage/>,
-            },
-            { /* TODO: split settings */
-                path: "settings",
-                Component: settings.Layout,
-                id: "settings",
-                action: async ({request}) => {
-                    const formData = await request.formData()
-                    const data = Object.fromEntries(formData)
-
-                    await patchSettings(data)
-                    notify.success("Settings were saved.")
-                    return null
-                },
-                loader: async () => {
-                    return getSettings()
-                },
-                children: [
-                    {
-                        index: true,
-                        Component: settings.Redirect,
-                    },
-                    {
-                        path: "account",
-                        Component: settings.Account,
-                        action: async ({request}) => {
-                            const formData = await request.formData()
-                            const data = Object.fromEntries(formData)
-                            
-                            await patchUser(data)
-                            notify.success("Profile was edited.")
-                            return null
-                        },
-                    },
-                    {
-                        path: "privacy",
-                        Component: settings.Privacy,
-                    },
-                    {
-                        path: "languages-and-region",
-                        Component: settings.LanguagesAndRegion,
-                    },
-                    {
-                        path: "appearance",
-                        Component: settings.Appearance,
-                    },
-                    {
-                        path: "reactions",
-                        Component: settings.Reactions,
-                    },
-                    {
-                        path: "notifications",
-                        Component: settings.Notifications,
-                    },
-                    {
-                        path: "blocks",
-                        Component: settings.Blocks,
-                    },
-                ]
             },
             {
                 // TODO: remove this and add signOut api callback

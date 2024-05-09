@@ -1,119 +1,100 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouteLoaderData } from "react-router-dom"
 
-import styled from "styled-components"
+import { styled, css } from "styled-components"
+import moment from "moment";
 
 import SocialCalendar from "@components/social/SocialCalendar";
 import DailyLogPreview from "@components/social/DailyLogPreview";
 import LogDetail from "@components/social/LogDetail/LogDetail";
 import SocialPageTitle from "@components/social/SocialPageTitle";
 
+import { getDailyReport } from "@api/social.api";
+
 const SocialFollowingPage = () => {
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(moment(new Date()).format('YYYY-MM-DD'))
     const [selectedIndex, setSelectedIndex] = useState(null)
+    const [dailyReport, setDailyReport] = useState([])
+    
+    const {user} = useRouteLoaderData("app")
+
+    const getPreview = async(date) => {
+        const day = date
+        if(date) try {
+            const res = await getDailyReport(user.username, day)
+            setDailyReport(res)
+        } catch (e) {
+            throw alert(e)
+        }
+    }
+
+    useEffect(() => {
+        getPreview(selectedDate)
+    }, [selectedDate])
 
     return <>
         <SocialPageTitle active="following" />
 
         <Wrapper>
-
             <Container>
-                <SocialCalendar
-                    newLogDates={mockNewLogDates}
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                >
-                </SocialCalendar>
+                <CalendarContainer>
+                    <SocialCalendar
+                        newLogDates={mockNewLogDates}
+                        selectedDate={selectedDate}
+                        setSelectedDate={setSelectedDate}
+                    />
+                </CalendarContainer>
+
                 <DailyLogContainer>
-                    {mockDailyFollowersLog.map((dailyFollowersLog) => (
-                        <DailyLogPreview key={dailyFollowersLog.index} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+                    {dailyReport.map((dailyFollowersLog) => (
+                        <DailyLogPreview key={dailyFollowersLog.username} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                     ))}
                 </DailyLogContainer>
-
-                {/* {selectedDate.toLocaleDateString()} */}
             </Container>
-            <Container>
+
+            <Container $isSticky={true}>
                 <LogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true} />
             </Container>
-
         </Wrapper>
     </>
 }
 
 const Wrapper = styled.div`
-    white-space: nowrap;
+    display: flex;
 `
 
 const Container = styled.div`
-display: inline-block;
-margin-right: 2em;
-height: 85vh;
-width: 50%;
-overflow: hidden;
+    width: 50%;
+    min-width: 32.5rem;
+    max-width: 40rem;
+    ${props => props.$isSticky ? css`
+        /* align-self: flex-start; */
+        position: sticky;
+        top: 2.5rem;
+    ` : null}
+    margin-bottom: auto;
+
+    padding: 0 1rem 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    overflow: hidden;
+`
+
+const CalendarContainer = styled.div`
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 `
 
 const DailyLogContainer = styled.div`
-max-height: 50%;
-overflow-y: auto;
-
-// IE and Edge
--ms-overflow-style: none;
-// Firefox
-scrollbar-width: none;
-// Chrome, Safari, Opera
-&::-webkit-scrollbar {
-    display: none;
-}
-    
-
 `
 
 const mockNewLogDates = [
-    "27-02-2024", "01-03-2024", "22-03-2024",
+    "2024-04-09", "2024-04-10", "2024-04-11",
 ];
-
-const mockDailyFollowersLog = [
-    {
-        index: 0,
-        isRead: false,
-        user: {
-            username: "minyoy", profileImgURI: "https://avatars.githubusercontent.com/u/65756020?v=4"
-        },
-        task: {
-            id: "TEMP1", name: "빨래 하기", completedAt: new Date(2024, 2, 2, 17, 4, 1), projectID: "홍대라이프", projectColor: "#2E61DC", reactionNum: 3
-        }
-    },
-    {
-        index: 1,
-        isRead: false,
-        user: {
-            username: "aksae", profileImgURI: "https://avatars.githubusercontent.com/u/39623851?v=4"
-        },
-        task: {
-            id: "TEMP2", name: "ㅆㅣ...", completedAt: new Date(2024, 2, 2, 7, 4, 1), projectID: "개발", projectColor: "#ff0022", reactionNum: 3
-        }
-    },
-    {
-        index: 2,
-        isRead: true,
-        user: {
-            username: "supercalifragilisticexpialidocious", profileImgURI: "https://avatars.githubusercontent.com/u/39623851?v=4"
-        },
-        task: {
-            id: "TEMP3", name: "우산 타고 날아가기", completedAt: new Date(2024, 2, 1, 19, 4, 1), projectID: "개발", projectColor: "#ff7f00", reactionNum: 3
-        }
-    },
-    {
-        index: 3,
-        isRead: true,
-
-        user: {
-            username: "supercalifragilisticexpialidocious", profileImgURI: "https://avatars.githubusercontent.com/u/39623851?v=4"
-        },
-        task: {
-            id: "TEMP4", name: "아주아주아주아주멀리그리고높이이카루스처럼태양을향해한번더날아가기", completedAt: new Date(2024, 2, 1, 19, 4, 1), projectID: "개발", projectColor: "#ff7f00", reactionNum: 3
-        }
-    },
-]
 
 const mockDailyFollowerLogsDetail = [
     {

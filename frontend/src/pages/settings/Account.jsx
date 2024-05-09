@@ -2,16 +2,17 @@ import { Form, useRouteLoaderData, useRevalidator } from "react-router-dom"
 
 import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value, Sync } from "@components/settings/Section"
-import Button from "@components/sign/Button"
+import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
 import Input from "@components/sign/Input"
 
 import ProfileImg from "@components/settings/ProfileImg"
 import PasswordSection from "@components/settings/PasswordSection"
 
+import { states } from "@assets/themes"
 import styled from "styled-components"
 
 const Account = () => {
-    const {user} = useRouteLoaderData("app")
+    const {user} = useRouteLoaderData("settings")
     const revalidator = useRevalidator()
 
     return <>
@@ -39,7 +40,9 @@ const Account = () => {
                 </Value>
             </Section>
             <Section>
-                <SubmitButton type="submit">Submit</SubmitButton>
+                <ButtonGroup $justifyContent="right">
+                    <Button $form={buttonForms.filled} $state={states.primary} type="submit">Submit</Button>
+                </ButtonGroup>
             </Section>
         </Form>
 

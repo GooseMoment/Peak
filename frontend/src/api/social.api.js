@@ -1,3 +1,5 @@
+import client from "@api/client"
+
 // send (user: sender)
 // userID: receiver
 export const postFollowRequest = (userID) => {
@@ -36,8 +38,13 @@ export const deleteBlock = (userID) => {
 
 }
 
-export const getDailyReport = (userID, date) => {
-
+export const getDailyReport = async(username, day) => {
+    try {
+        const res = await client.get(`social/daily/report/@${username}/${day}/`)
+        return res.data
+    } catch(e) {
+        throw e
+    }
 }
 
 export const getFollowingFeed = (date) => {
