@@ -5,7 +5,9 @@ import FeatherIcon from "feather-icons-react"
 
 import { DateTime } from "luxon"
 import { useMutation } from "@tanstack/react-query"
+import queryClient from "@queries/queryClient"
 
+import { patchTask } from "@api/tasks.api"
 import TaskName from "./TaskName"
 import Priority from "./Priority"
 
@@ -68,7 +70,7 @@ const Task = ({projectId, task, color}) => {
             return patchTask(task.id, data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['task', {taskID: task_id}]})
+            queryClient.invalidateQueries({queryKey: ['task', {taskID: task.id}]})
             queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
         },
     })

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { useMutation } from "@tanstack/react-query"
 
 import styled from "styled-components"
 
@@ -20,23 +19,13 @@ const TaskName = ({projectId, task, setFunc, newTaskName, setNewTaskName, color,
         setFunc({name})
     }
 
-    const mutation = useMutation({
-        mutationFn: (data) => {
-            return patchTask(task.id, data)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['task', {taskID: task_id}]})
-            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
-        },
-    })
-
     const toComplete = () => {
         setIsLoading(true)
         let completed_at = null
         if (!(task.completed_at)) {
             completed_at = date.toISOString()
         }
-        mutation.mutate({completed_at})
+        setFunc({completed_at})
     }
 
     return (
