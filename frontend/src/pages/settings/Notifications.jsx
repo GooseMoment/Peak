@@ -59,7 +59,7 @@ const Notifications = () => {
         <PageTitle>Notifications</PageTitle>
         <Section>
             <Name>Receive push notifications</Name>
-            <Description>If you disallow push notification permission of Peak, this option has no effect.</Description>
+            <Description>Get notifications on this device.</Description>
             <Value>
                 <Button onClick={requestPush}>{webSubscriptionID ? "Disable" : "Enable"}</Button>
             </Value>
