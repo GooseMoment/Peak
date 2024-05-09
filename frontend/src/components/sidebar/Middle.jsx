@@ -2,6 +2,7 @@ import SidebarLink from "@components/sidebar/SidebarLink"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
+import { cubicBeizer } from "@assets/keyframes"
 
 const Middle = ({projects, collapsed}) => {
     return <MiddleBox>
@@ -43,13 +44,18 @@ padding: 0.75em 0 0.75em 0.5em;
 margin: 0 0.75em;
 
 border-radius: 10px;
+box-sizing: border-box;
 
 background-color: inherit;
 
+transition: padding 0.25s ${cubicBeizer}, margin 0.25s ${cubicBeizer};
+
 ${({$collapsed}) => $collapsed ? css`
     text-align: center;
-    padding: 0.5em 0.25em;
-    margin: 0 1em;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+    margin-left: 1em;
+    margin-right: 1em;
 
     & svg {
         margin-right: 0;
@@ -62,7 +68,7 @@ const ProjectItemsContainer = styled.div`
 
     scrollbar-width: thin;
     scrollbar-color: #FFC6C6 transparent;
-    height: calc(100vh - 22em);
+    height: calc(100vh - 24em);
 
     ${props => props.$collapsed && css`
         scrollbar-width: none;
@@ -78,6 +84,7 @@ border-radius: 10px;
 text-overflow: ellipsis;
 overflow: hidden;
 white-space: nowrap;
+box-sizing: border-box;
 
 & svg {
     stroke: none;
@@ -85,8 +92,11 @@ white-space: nowrap;
 
 ${({$collapsed}) => $collapsed ? css`
     text-align: center;
-    padding: 0.5em 0.25em;
-    margin: 0 1em;
+
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+    margin-left: 1em;
+    margin-right: 1em;
 
     & svg {
         margin-right: 0;

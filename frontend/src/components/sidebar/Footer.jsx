@@ -31,10 +31,6 @@ flex-direction: ${props => props.$collapsed ? "column" : "row"};
 justify-content: space-between;
 
 margin: 1em;
-
-${({$collapsed}) => $collapsed ? css`
-    margin: 0.75em;
-` : null}
 `
 
 const MeProfile = styled.div`
