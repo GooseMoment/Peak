@@ -2,7 +2,7 @@ import styled from "styled-components"
 import { useState } from "react"
 
 import Detail from "@components/project/common/Detail"
-import Button from "@components/sign/Button"
+import Button from "@components/common/Button"
 import notify from "@utils/notify"
 
 const Memo = ({previousMemo, setFunc, closeComponent}) => {

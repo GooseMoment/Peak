@@ -1,7 +1,7 @@
 import FeatherIcon from "feather-icons-react"
 import { useState } from "react"
 import styled from "styled-components"
-import Button from "../sign/Button"
+import Button from "@components/common/Button"
 
 const TimeDetail = ({onClose}) => {
     const [hour, setHour] = useState()

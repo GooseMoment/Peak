@@ -10,7 +10,7 @@ import TaskCreateSimple from "@components/project/Creates/TaskCreateSimple"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { getTasksByDrawer } from "@api/tasks.api"
-import Button from "../sign/Button"
+import Button from "@components/common/Button"
 
 const getPageFromURL = (url) => {
     if (!url) return null
@@ -60,6 +60,8 @@ const Drawer = ({project, drawer, color}) => {
         {icon: <FeatherIcon icon={"more-horizontal"}/>},
     ]
 
+    console.log({data})
+
     return (
         <>
             <DrawerBox $color = {color}>
@@ -72,8 +74,8 @@ const Drawer = ({project, drawer, color}) => {
             </DrawerBox>
             {collapsed ? null :
                 <TaskList>
-                    {data?.pages.map((group, i) => (
-                        group.results.map((task) =>
+                    {data?.pages?.map((group, i) => (
+                        group?.results?.map((task) =>
                             <Task key={task.id} projectId={project.id} task={task} color={color}/>
                     )))}
                 </TaskList>

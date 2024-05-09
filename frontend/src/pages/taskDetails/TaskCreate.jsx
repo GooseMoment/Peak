@@ -5,7 +5,7 @@ import styled from "styled-components"
 import FeatherIcon from 'feather-icons-react'
 
 import TaskName from "@components/project/TaskName"
-import Button from "@components/sign/Button"
+import Button from "@components/common/Button"
 import Contents from "./Contents"
 
 import { postTask } from "@api/tasks.api"
