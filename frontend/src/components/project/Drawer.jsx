@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import styled, { keyframes, css } from "styled-components"
@@ -65,8 +65,8 @@ const Drawer = ({project, drawer, color}) => {
             <DrawerBox $color = {color}>
                 <DrawerName $color = {color}>{drawer.name}</DrawerName>
                 <DrawerIcon $color = {color}>
-                    {drawerIcons.map(item => (
-                        item.icon
+                    {drawerIcons.map((item, i) => (
+                        <Fragment key={i}>{item.icon}</Fragment>
                     ))}
                 </DrawerIcon>
             </DrawerBox>
