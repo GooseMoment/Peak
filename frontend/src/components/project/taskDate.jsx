@@ -1,45 +1,24 @@
-import { DateTime } from "luxon"
+const formatDate = (date) => {
+    const formattedDate = `${date?.getFullYear()}년 ${date?.getMonth()+1}월 ${date?.getDate()}일`
+    return formattedDate
+}
 
-const calculate = (name, newDate, diff) => {
-    let calculatedDue = ''
-    if (diff.years < 0 || diff.months < 0 || diff.days < -1) {
-        calculatedDue = (name === "assigned") ? "놓침" : "기한 지남"
-    }
-    else if (-1 <= diff.days && diff.days < 0) {
-        calculatedDue = "오늘 기한"
-    }
-    else if (0 <= diff.days && diff.days <= 1) {
-        calculatedDue = "내일 기한"
-    }
-    else if (1 < diff.days && diff.days <= 30) {
-        calculatedDue = `${Math.floor(diff.days)}일 남음`
-    }
-    else {
-        calculatedDue = newDate
-    }
-
-    return calculatedDue
+const formatTime = (time) => {
+    const formattedTime = `${time?.getHours()}시 ${time?.getMinutes()}분`
+    return formattedTime
 }
 
 const taskDate = (task) => {
-    const today = new Date()
-    const task_due_time = new Date(`${task.due_date}${task.due_time ? "T"+task.due_time : ""}`)
+    const task_due = new Date(`${task.due_date}${task.due_time ? "T"+task.due_time : ""}`)
     const assigned_at_date = new Date(task.assigned_at)
-    
-    const new_due_date = `${task_due_time.getMonth()+1}월 ${task_due_time.getDate()}일`
-    const new_assigned_at_date = `${assigned_at_date.getMonth()+1}월 ${assigned_at_date.getDate()}일`
-    
-    const dtoday = DateTime.fromJSDate(today)
-    const ddue = DateTime.fromJSDate(task_due_time)
-    const dassigned = DateTime.fromJSDate(assigned_at_date)
+    const reminder_date_time = new Date(task.reminder_datetime)
 
-    const diff_due = ddue.diff(dtoday, ["years", "months", "days"]).toObject()
-    const diff_assigned = dassigned.diff(dtoday, ["years", "months", "days"]).toObject()
+    const formatted_due_date = formatDate(task_due)
+    const formatted_due_time = formatTime(task_due)
+    const formatted_assigned_date = formatDate(assigned_at_date)
+    const formatted_reminder_datetime = formatDate(reminder_date_time) + formatTime(reminder_date_time)
 
-    let due = calculate("due", new_due_date, diff_due)
-    let assigned = calculate("assigned", new_assigned_at_date, diff_assigned)
-
-    return {assigned, due}
+    return {formatted_due_date, formatted_due_time, formatted_assigned_date, formatted_reminder_datetime}
 }
 
 export default taskDate
