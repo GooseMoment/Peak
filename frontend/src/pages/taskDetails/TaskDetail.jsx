@@ -1,5 +1,5 @@
 import { useNavigate, useOutletContext, useParams } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import styled from "styled-components"
 import FeatherIcon from 'feather-icons-react'
@@ -32,6 +32,12 @@ const TaskDetail = () => {
         },
     })
 
+    const [taskName, setTaskName] = useState("")
+
+    useEffect(() => {
+        setTaskName(task?.name)
+    }, [task])
+
     const onClose = () => {
         navigate(`/app/projects/${projectID}`)
     }
@@ -40,8 +46,6 @@ const TaskDetail = () => {
         return <TaskDetailBox />
         // 민영아.. 스켈레톤 뭐시기 만들어..
     }
-
-    const [taskName, setTaskName] = useState(task.name)
 
     return (
         <TaskDetailBox>
@@ -67,7 +71,7 @@ const TaskDetail = () => {
 
 const TaskDetailBox = styled.div`
     width: 50em;
-    height: 22em;
+    height: 23em;
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
