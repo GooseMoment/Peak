@@ -3,67 +3,19 @@ import { useState } from "react"
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-import { DateTime } from "luxon"
 import { useMutation } from "@tanstack/react-query"
 import queryClient from "@queries/queryClient"
 
 import { patchTask } from "@api/tasks.api"
+import taskDate from "./taskDate"
 import TaskName from "./TaskName"
 import Priority from "./Priority"
 
 import hourglass from "@assets/project/hourglass.svg"
 
 const Task = ({projectId, task, color}) => {
-    const today = new Date()
-    const task_due_time = new Date(`${task.due_date}${task.due_time ? "T"+task.due_time : ""}`)
-    const assigned_at_date = new Date(task.assigned_at)
-    
-    const new_today = `${today.getMonth()+1}월 ${today.getDate()}일`
-    const new_due_date = `${task_due_time.getMonth()+1}월 ${task_due_time.getDate()}일`
-    const new_assigned_at_date = `${assigned_at_date.getMonth()+1}월 ${assigned_at_date.getDate()}일`
-    
-    const dtoday = DateTime.fromJSDate(today)
-    const ddue = DateTime.fromJSDate(task_due_time)
-    const dassigned = DateTime.fromJSDate(assigned_at_date)
-
-    const ddays_due = ddue.diff(dtoday, ["years", "months", "days"]).toObject()
-    const ddays_assigned = dassigned.diff(dtoday, ["years", "months", "days"]).toObject()
-
-    let dday_due = ''
-    if (ddays_due.years < 0 || ddays_due.months < 0 ? null : ddays_due.days < -1) {
-        dday_due = '기한 지남'
-    }
-    else if (ddays_due.years < 0 || ddays_due.months < 0 ? null : -1 <= ddays_due.days && ddays_due.days < 0) {
-        dday_due = '오늘 기한'
-    }
-    else if (ddays_due.years < 0 || ddays_due.months < 0 ? null : 0 <= ddays_due.days && ddays_due.days <= 1) {
-        dday_due = '내일 기한'
-    }
-    else if (ddays_due.years < 0 || ddays_due.months < 0 ? null : ddays_due.days > 1) {
-        dday_due = `${Math.floor(ddays_due.days)}일 남음`
-    }
-    else {
-        dday_due = new_due_date
-    }
-
-    let assigned = ''
-    if (ddays_assigned.years < 0 || ddays_assigned.months < 0 ? null : ddays_assigned.days < -1) {
-        assigned = '놓침'
-    }
-    else if (ddays_assigned.years < 0 || ddays_assigned.months < 0 ? null : -1 <= ddays_assigned.days && ddays_assigned.days < 0) {
-        assigned = `오늘 기한`
-    }
-    else if (ddays_assigned.years < 0 || ddays_assigned.months < 0 ? null : 0 <= ddays_assigned.days && ddays_assigned.days <= 1) {
-        assigned = `내일 기한`
-    }
-    else if (ddays_assigned.years < 0 || ddays_assigned.months < 0 ? null : ddays_assigned.days > 1) {
-        assigned = `${Math.floor(ddays_assigned.days)}일 남음`
-    }
-    else {
-        assigned = new_assigned_at_date
-    }
-
     const [newTaskName, setNewTaskName] = useState(task.name)
+    const {assigned, due} = taskDate(task)
 
     const mutation = useMutation({
         mutationFn: (data) => {
@@ -90,15 +42,15 @@ const Task = ({projectId, task, color}) => {
                 />
                 <FlexBox>
                     {task.assigned_at &&
-                    <AssignedDate $completed={task.completed_at ? true : false} $isOutOfDue={assigned === '놓침'}>
+                    <AssignedDate $completed={task.completed_at ? true : false} $isOutOfDue={assigned === "놓침"}>
                         <FeatherIcon icon="calendar" />
                         {assigned}
                     </AssignedDate>
                     }
                     {task.due_date && 
-                    <DueDate $completed={task.completed_at ? true : false} $isOutOfDue={dday_due === '기한 지남'}>
+                    <DueDate $completed={task.completed_at ? true : false} $isOutOfDue={due === "기한 지남"}>
                         <img src={hourglass} />
-                        {dday_due}
+                        {due}
                     </DueDate>}
                 </FlexBox>
             </div>
