@@ -4,6 +4,7 @@ import { useState } from "react"
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
+import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/project/Drawer"
 import DrawerCreate from "@components/project/Creates/DrawerCreate"
 import ModalPortal from "@components/common/ModalPortal"
@@ -18,7 +19,7 @@ const ProjectPage = () => {
     return (
     <>
         <TitleBox>
-            <TitleName $color = {project.color}>{project.name}</TitleName>
+            <PageTitle $color={"#" + project.color}>{project.name}</PageTitle>
             <Icons>
                 <FeatherIcon icon="plus" onClick={() => {setIsDrawerCreateOpen(true)}}/>
                 <FeatherIcon icon="more-horizontal"/>
@@ -42,13 +43,6 @@ const TitleBox = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-`
-
-const TitleName = styled.h1`
-    font-size: 2em;
-    font-weight: bolder;
-    text-align: left;
-    color: #${props => props.$color};
 `
 
 const Icons = styled.div`
