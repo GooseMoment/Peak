@@ -11,8 +11,6 @@ from social.models import (
 )
 from notifications.models import Notification
 
-from hashlib import md5
-from urllib.parse import urlencode
 import random
 from datetime import date, datetime, timedelta, timezone
 import requests
