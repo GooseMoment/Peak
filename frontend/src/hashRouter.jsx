@@ -11,6 +11,7 @@ const routes = [
         path: "settings",
         Component: settings.Layout,
         id: "settings",
+        errorElement: <settings.ErrorPage />,
         children: [
             {
                 index: true,

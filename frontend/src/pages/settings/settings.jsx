@@ -7,9 +7,10 @@ import Appearance from "./Appearnce"
 import Notifications from "./Notifications"
 import Blocks from "./Blocks"
 import Info from "./Info"
+import ErrorPage from "./ErrorPage"
 
 const settings = {
-    Layout,
+    Layout, ErrorPage,
     Account, Privacy, LanguagesAndRegion, Appearance, Reactions, Notifications, Blocks, Info
 }
 

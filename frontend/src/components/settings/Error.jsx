@@ -23,7 +23,7 @@ const Container = styled.div`
 const StyledMeh = styled(Meh)`
     stroke: 2em;
     font-size: 3em;
-    margin-right: 0;
+    margin-right: 0 !important;
 `
 
 const Message = styled.p`
