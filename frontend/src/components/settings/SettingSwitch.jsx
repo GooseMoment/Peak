@@ -2,10 +2,12 @@ import { useRef, useState } from "react"
 
 import Switch from "@components/common/Switch"
 
-import { getClientSettings, setClientSettingsByName } from "@utils/clientSettings"
+import { useClientSetting } from "@utils/clientSettings"
 
-const SettingSwitch = ({settings=getClientSettings(), submit, name, online=false}) => {
-    const [value, setValue] = useState(settings[name])
+const SettingSwitch = ({submit, name, online=false}) => {
+    const [clientSetting, setClientSetting] = useClientSetting()
+    const [value, setValue] = useState(clientSetting[name])
+
     const timer = useRef(null)
 
     const sendChangeOnline = () => {
@@ -20,7 +22,7 @@ const SettingSwitch = ({settings=getClientSettings(), submit, name, online=false
         setValue(checked)
 
         if (!online) {
-            setClientSettingsByName(name, checked)
+            setClientSetting(name, checked)
             return
         }
 

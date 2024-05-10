@@ -1,11 +1,12 @@
 import { useState } from "react"
 
-import { getClientSettings, setClientSettingsByName } from "@utils/clientSettings"
+import { useClientSetting } from "@utils/clientSettings"
 
 import styled from "styled-components"
 
-const Select = ({settings=getClientSettings(), name, submit, choices, online=false}) => {
-    const [value, setValue] = useState(settings[name])
+const Select = ({name, submit, choices, online=false}) => {
+    const [clientSetting, setClientSetting] = useClientSetting()
+    const [value, setValue] = useState(clientSetting[name])
 
     const onChange = e => {
         setValue(e.target.value)
@@ -17,7 +18,7 @@ const Select = ({settings=getClientSettings(), name, submit, choices, online=fal
             return
         }
 
-        setClientSettingsByName(name, e.target.value)
+        setClientSetting(name, e.target.value)
     }
 
     return <StyledSelect onChange={onChange} defaultValue={value}>

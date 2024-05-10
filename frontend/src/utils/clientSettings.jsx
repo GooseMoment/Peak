@@ -1,3 +1,5 @@
+import { createContext, useContext, useMemo, useState } from "react"
+
 const KEY_CLIENT_SETTINGS = "client_settings"
 
 const defaultSettings = {
@@ -33,4 +35,27 @@ export const initClientSettings = () => {
     }
     settings = Object.assign(defaultSettings, settings)
     localStorage.setItem(KEY_CLIENT_SETTINGS, JSON.stringify(settings))
+}
+
+const ClientSettingContext = createContext()
+
+export const ClientSettingProvider = ({children}) => {
+    const [setting, setSetting] = useState(getClientSettings())
+
+    const updateSetting = useMemo(
+        () => ((key, val) => {
+            setClientSettingsByName(key, val)
+            setSetting(getClientSettings())
+        }), []
+    )
+
+    const providerValue = useMemo(() => [setting, updateSetting], [setting, updateSetting])
+
+    return <ClientSettingContext.Provider value={providerValue} >
+        {children}
+    </ClientSettingContext.Provider>
+}
+
+export const useClientSetting = () => {
+    return useContext(ClientSettingContext)
 }
