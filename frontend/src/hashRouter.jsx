@@ -70,10 +70,6 @@ const routes = [
             {
                 path: "blocks",
                 Component: settings.Blocks,
-                loader: async () => {
-                    const user = await getMe()
-                    return getBlocks(user.username)
-                },
             },
             {
                 path: "info",

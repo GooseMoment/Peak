@@ -1,17 +1,42 @@
-import { useLoaderData } from "react-router-dom"
-
 import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value, Sync } from "@components/settings/Section"
 import Button from "@components/common/Button"
+import Loading from "@components/settings/Loading"
+import Error from "@components/settings/Error"
+
+import { getBlocks } from "@api/users.api"
 
 import styled from "styled-components"
 import { toast } from "react-toastify"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import queryClient from "@queries/queryClient"
 
 const Blocks = () => {
-    const blocks = useLoaderData()
+    const {data: blocks, isPending, isError} = useQuery({
+        queryKey: ["blocks"],
+        queryFn: () => getBlocks(),
+    })
+
+    const mutation = useMutation({
+        mutationFn: (data) => {
+            return null // TODO: edit here after blocking api callback was made
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["blocks"]})
+        },
+    })
 
     const onClick = () => {
         toast.warn("Not implemented yet!")
+        mutation.mutate(null)
+    }
+
+    if (isPending) {
+        return <Loading />
+    }
+
+    if (isError) {
+        return <Error />
     }
 
     return <>
