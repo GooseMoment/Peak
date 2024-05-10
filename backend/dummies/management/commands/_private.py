@@ -227,7 +227,7 @@ def create_comments(users: list[User], tasks: list[Task]) -> list[Comment]:
         n = random.randint(0, len(tasks)//15)
         task_indexes = random.sample(range(len(tasks)), n)
         for task_index in task_indexes:
-            comment = factory_peck(user, tasks[task_index])
+            comment = factory_comment(user, tasks[task_index])
             comment.save()
             comments.append(comment)
 
