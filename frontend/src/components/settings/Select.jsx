@@ -42,6 +42,7 @@ const StyledSelect = styled.select`
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
 
