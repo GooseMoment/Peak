@@ -4,16 +4,16 @@ import Switch from "@components/common/Switch"
 
 import { useClientSetting } from "@utils/clientSettings"
 
-const SettingSwitch = ({submit, name, online=false}) => {
+const SettingSwitch = ({submit, name, onlineSetting}) => {
     const [clientSetting, setClientSetting] = useClientSetting()
-    const [value, setValue] = useState(clientSetting[name])
+    const [value, setValue] = useState(onlineSetting ? onlineSetting[name] : clientSetting[name])
 
     const timer = useRef(null)
 
     const sendChangeOnline = () => {
         let data = {}
         data[name] = value
-        submit(data, {action: "..", method: "PATCH", navigate: false})
+        submit(data)
         timer.current = null
     }
 
@@ -21,7 +21,7 @@ const SettingSwitch = ({submit, name, online=false}) => {
         const checked = e.target.checked
         setValue(checked)
 
-        if (!online) {
+        if (!onlineSetting) {
             setClientSetting(name, checked)
             return
         }

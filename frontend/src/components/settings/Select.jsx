@@ -4,17 +4,17 @@ import { useClientSetting } from "@utils/clientSettings"
 
 import styled from "styled-components"
 
-const Select = ({name, submit, choices, online=false}) => {
+const Select = ({name, submit, choices, onlineSetting}) => {
     const [clientSetting, setClientSetting] = useClientSetting()
-    const [value, setValue] = useState(clientSetting[name])
+    const [value, setValue] = useState(onlineSetting ? onlineSetting[name] : clientSetting[name])
 
     const onChange = e => {
         setValue(e.target.value)
 
-        if (online) {
+        if (onlineSetting) {
             let data = {}
             data[name] = e.target.value
-            submit(data, {action: "..", method: "PATCH", navigate: false})
+            submit(data)
             return
         }
 

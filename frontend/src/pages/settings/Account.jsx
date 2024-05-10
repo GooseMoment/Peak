@@ -15,6 +15,7 @@ import styled from "styled-components"
 
 import queryClient from "@queries/queryClient"
 import { useMutation, useQuery } from "@tanstack/react-query"
+import { toast } from "react-toastify"
 
 const Account = () => {
     const {data: user, isPending, isError} = useQuery({
@@ -27,7 +28,8 @@ const Account = () => {
             return patchUser(data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['users', "me"]})
+            queryClient.invalidateQueries({queryKey: ["users", "me"]})
+            toast.success("Account was edited.")
         },
     })
 

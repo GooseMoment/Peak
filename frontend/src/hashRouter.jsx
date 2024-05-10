@@ -2,11 +2,6 @@ import { createHashRouter } from "react-router-dom"
 
 import settings from "@pages/settings/settings"
 
-import { getSettings, patchSettings } from "@api/user_setting.api"
-import { getBlocks, getMe, patchUser } from "@api/users.api"
-
-import { toast } from "react-toastify"
-
 const routes = [
     {
         path: "/",
@@ -16,20 +11,6 @@ const routes = [
         path: "settings",
         Component: settings.Layout,
         id: "settings",
-        action: async ({request}) => {
-            const formData = await request.formData()
-            const data = Object.fromEntries(formData)
-
-            await patchSettings(data)
-            toast.success("Settings were saved.")
-            return null
-        },
-        loader: async () => {
-            return {
-                settings: await getSettings(),
-                user: await getMe(),
-            }
-        },
         children: [
             {
                 index: true,
@@ -38,14 +19,6 @@ const routes = [
             {
                 path: "account",
                 Component: settings.Account,
-                action: async ({request}) => {
-                    const formData = await request.formData()
-                    const data = Object.fromEntries(formData)
-                    
-                    await patchUser(data)
-                    toast.success("Profile was edited.")
-                    return null
-                },
             },
             {
                 path: "privacy",
