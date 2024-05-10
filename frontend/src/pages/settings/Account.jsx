@@ -34,7 +34,9 @@ const Account = () => {
     })
 
     const onSubmit = e => {
-        mutation.mutate(e.formData)
+        e.preventDefault()
+        const formData = new FormData(e.target)
+        mutation.mutate(formData)
     }
 
     if (isPending) {
