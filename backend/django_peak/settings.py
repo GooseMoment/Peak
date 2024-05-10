@@ -74,6 +74,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'api.middleware.AuthWallMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -203,3 +204,8 @@ STORAGES = {
     },
 }
 
+LOGIN_EXEMPT_URLS=(
+    r'sign_in/',
+    r'sign_up/',
+    r'health/ok',
+)
