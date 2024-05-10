@@ -12,6 +12,8 @@ import { ClientSettingProvider, initClientSettings } from '@utils/clientSettings
 
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { QueryClientProvider } from '@tanstack/react-query'
+import queryClient from '@queries/queryClient'
 
 // initilize client-side settings
 initClientSettings()
@@ -21,10 +23,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <ThemeProvider theme={defaultTheme}>
             <GlobalStyle />
             <ToastContainer position="bottom-right" stacked hideProgressBar />
-            <ClientSettingProvider>
-                <RouterProvider router={router} />
-                <RouterProvider router={hashRouter} />
-            </ClientSettingProvider>
+            <QueryClientProvider client={queryClient} >
+                <ClientSettingProvider>
+                    <RouterProvider router={router} />
+                    <RouterProvider router={hashRouter} />
+                </ClientSettingProvider>
+            </QueryClientProvider>
         </ThemeProvider>
     </React.StrictMode>,
 )
