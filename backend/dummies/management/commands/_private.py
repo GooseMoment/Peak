@@ -17,7 +17,6 @@ import requests
 from bs4 import BeautifulSoup, NavigableString
 from faker import Faker
 fake = Faker("ko_KR")
-Faker.seed(775479)
 
 PASSWORD_DEFAULT = "PASSWORD_DEFAULT"
 
