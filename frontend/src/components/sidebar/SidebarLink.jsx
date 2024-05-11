@@ -1,4 +1,6 @@
 import { NavLink } from "react-router-dom"
+
+import { cubicBeizer } from "@assets/keyframes"
 import styled, { css } from "styled-components"
 
 const sidebarStyle = css`
@@ -7,7 +9,7 @@ const sidebarStyle = css`
     border-radius: 10px;
 
     transition: background-color 0.1s;
-    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition-timing-function: ${cubicBeizer};
 
     &.active {
     color: ${p => p.theme.sidebar.activeColor};
