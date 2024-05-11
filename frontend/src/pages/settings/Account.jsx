@@ -79,6 +79,7 @@ const Bio = styled.textarea`
     box-sizing: border-box;
     padding: 1em;
     border: none;
+    font-size: 1em;
 
     border: 1px black solid;
     border-radius: 10px;
