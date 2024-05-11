@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
+from django.core.cache import cache
 
 from datetime import datetime, time
 
@@ -12,7 +13,7 @@ from .models import *
 from .serializers import *
 from users.serializers import UserSerializer
 
-# following 만드는 거
+# social/follow/@follower/@followee/
 class FollowView(APIView):
     #request 확인 기능 넣기
     #block 검사
@@ -70,7 +71,7 @@ def get_followings(request: HttpRequest, username):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 class BlockView(APIView):
-    #상대 볼 수 없게/
+    # TODO 상대 볼 수 없게/
     def put(self, request, blocker, blockee):
         blockerUser = get_object_or_404(User, username=blocker)
         blockeeUser = get_object_or_404(User, username=blockee)
@@ -107,11 +108,14 @@ def get_blocks(request: HttpRequest, username):
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-# TODO: isRead는 redis로
+# TODO daily report에 관해 class based로 묶어서?
 # GET social/daily/report/@username/YYYY-MM-DD/
 @api_view(["GET"])
 def get_daily_report(request: HttpRequest, username, day):
-    followings = Following.objects.filter(follower__username=username).all()
+    followings = Following.objects.filter(
+        follower__username=username,
+        status=Following.ACCEPTED
+    ).all()
     followingUsers = User.objects.filter(followers__in=followings.all()).all()
     day = datetime.strptime(day, "%Y-%m-%d").date()
     
