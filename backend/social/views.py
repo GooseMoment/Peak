@@ -125,7 +125,26 @@ def get_daily_report(request: HttpRequest, username, day):
     serializer = DailyReportSerializer(followingUsers, context={'day_min': day_min, 'day_max':day_max}, many=True)
     
     return Response(serializer.data, status=status.HTTP_200_OK) 
+
+# PUT social/daily/report/@follower/@followee/YYYY-MM-DD/
+@api_view(["PUT"])
+def view_daily_report(requset: HttpRequest, follower, followee, day):
+    followerUser = get_object_or_404(User, username=follower)
+    followeeUser = get_object_or_404(User, username=followee)
+    day = datetime.strptime(day, "%Y-%m-%d").date()
     
+    day_min = datetime.combine(day, time.min)
+    day_max = datetime.combine(day, time.max)
+    
+    recent_task = Task.objects.filter(
+        user=followeeUser,
+        completed_at__range=(day_min, day_max)
+    ).all().order_by("-completed_at").first()
+    
+    serializers = TaskSerializer(recent_task)
+    
+    return Response(serializers.data, status=status.HTTP_200_OK)
+
 def get_following_feed(request: HttpRequest, date):
     pass
 
