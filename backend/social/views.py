@@ -140,10 +140,18 @@ def view_daily_report(requset: HttpRequest, follower, followee, day):
         user=followeeUser,
         completed_at__range=(day_min, day_max)
     ).all().order_by("-completed_at").first()
+
+    cache_key = f"@{follower}/@{followee}/{day}/"
+    already_cache = cache.get(cache_key)
     
-    serializers = TaskSerializer(recent_task)
+    if already_cache:
+        cache.delete(cache_key)
     
-    return Response(serializers.data, status=status.HTTP_200_OK)
+    cache_data = recent_task.completed_at.strftime('%Y-%m-%d %H:%M:%S')
+    
+    cache.set(cache_key, cache_data)
+    
+    return Response(status=status.HTTP_200_OK)
 
 def get_following_feed(request: HttpRequest, date):
     pass
