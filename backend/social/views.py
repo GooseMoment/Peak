@@ -7,7 +7,7 @@ from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.core.cache import cache
 
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 
 from .models import *
 from .serializers import *
@@ -112,7 +112,7 @@ def get_blocks(request: HttpRequest, username):
 
 ## Daily Report
 # TODO daily report에 관해 class based로 묶어서?
-# GET social/daily/report/@username/YYYY-MM-DD/
+# GET social/daily/report/@username/YYYY-MM-DD'T'HH:mm:ss.SSS'Z'/
 @api_view(["GET"])
 def get_daily_report(request: HttpRequest, username, day):
     followings = Following.objects.filter(
@@ -120,10 +120,10 @@ def get_daily_report(request: HttpRequest, username, day):
         status=Following.ACCEPTED
     ).all()
     followingUsers = User.objects.filter(followers__in=followings.all()).all()
-    day = datetime.strptime(day, "%Y-%m-%d").date()
+    day = datetime.strptime(day, "%Y-%m-%dT%H:%M:%S.%fZ")
     
-    day_min = datetime.combine(day, time.min)
-    day_max = datetime.combine(day, time.max)
+    day_min = day
+    day_max = day + timedelta(hours=24) - timedelta(seconds=1)
     
     serializer = DailyReportSerializer(followingUsers, context={'day_min': day_min, 'day_max':day_max}, many=True)
     

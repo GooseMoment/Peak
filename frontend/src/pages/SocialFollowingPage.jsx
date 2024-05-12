@@ -12,7 +12,7 @@ import SocialPageTitle from "@components/social/SocialPageTitle";
 import { getDailyReport } from "@api/social.api";
 
 const SocialFollowingPage = () => {
-    const [selectedDate, setSelectedDate] = useState(moment(new Date()).format('YYYY-MM-DD'))
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
     const [selectedIndex, setSelectedIndex] = useState(null)
     const [dailyReport, setDailyReport] = useState([])
     
@@ -20,6 +20,7 @@ const SocialFollowingPage = () => {
 
     const getPreview = async(date) => {
         const day = date
+        // console.log(day)
         if(date) try {
             const res = await getDailyReport(user.username, day)
             setDailyReport(res)
