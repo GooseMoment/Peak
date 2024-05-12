@@ -13,6 +13,7 @@ from .models import *
 from .serializers import *
 from users.serializers import UserSerializer
 
+## Follow
 # social/follow/@follower/@followee/
 class FollowView(APIView):
     #request 확인 기능 넣기
@@ -70,6 +71,7 @@ def get_followings(request: HttpRequest, username):
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+## Block
 class BlockView(APIView):
     # TODO 상대 볼 수 없게/
     def put(self, request, blocker, blockee):
@@ -108,6 +110,7 @@ def get_blocks(request: HttpRequest, username):
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+## Daily Report
 # TODO daily report에 관해 class based로 묶어서?
 # GET social/daily/report/@username/YYYY-MM-DD/
 @api_view(["GET"])
@@ -142,16 +145,14 @@ def view_daily_report(requset: HttpRequest, follower, followee, day):
     ).all().order_by("-completed_at").first()
 
     cache_key = f"@{follower}/@{followee}/{day}/"
-    already_cache = cache.get(cache_key)
+    cache.delete(cache_key)
+    cache_data = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    if already_cache:
-        cache.delete(cache_key)
+    cache.set(cache_key, cache_data, 1*24*60*60)
     
-    cache_data = recent_task.completed_at.strftime('%Y-%m-%d %H:%M:%S')
+    temp = cache_key+cache_data
     
-    cache.set(cache_key, cache_data)
-    
-    return Response(status=status.HTTP_200_OK)
+    return Response(temp, status=status.HTTP_200_OK)
 
 def get_following_feed(request: HttpRequest, date):
     pass
