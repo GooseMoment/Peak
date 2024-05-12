@@ -7,7 +7,7 @@ import TaskNameInput from "./TaskNameInput"
 
 const TaskName = ({projectId, task, setFunc, newTaskName, setNewTaskName, color, editable}) => {
     const date = new Date()
-    const pathRoot = `/app/projects/${projectId}/tasks/${task.id}/detail`
+    const taskDetailPath = `/app/projects/${projectId}/tasks/${task.id}/detail`
 
     const [isLoading, setIsLoading] = useState(false)
 
@@ -45,7 +45,7 @@ const TaskName = ({projectId, task, setFunc, newTaskName, setNewTaskName, color,
                     /> :
                     <TaskFrame
                         taskName={task.name}
-                        pathRoot={pathRoot}
+                        taskDetailPath={taskDetailPath}
                         completed={task.completed_at ? true : false}
                         color={color}
                         isDate={task.due_date || task.assigned_at ? true : false}

@@ -1,4 +1,5 @@
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
+from rest_framework.response import Response
 
 from .models import Task
 from .serializers import TaskSerializer
@@ -19,19 +20,22 @@ class TaskDetail(mixins.RetrieveModelMixin,
     
     def patch(self, request, *args, **kwargs):
         try:
+            new_completed = request.data.get("completed_at")
+        except Exception as e:
+            pass
+        else:
             task: Task = self.get_object()
-            if (task.completed_at is None) or (request.data.get("completed_at") is None):
+            if (task.completed_at is None) or (new_completed is None):
                 if task.completed_at is None:
                     task.drawer.uncompleted_task_count += 1
                     task.drawer.completed_task_count -= 1
                 else:
                     task.drawer.uncompleted_task_count -= 1
-                    task.drawer.completed_task_count += 1   
+                    task.drawer.completed_task_count += 1
+
             task.drawer.save()
 
-            return self.partial_update(request, *args, **kwargs)
-        except Exception as e:
-            return e
+        return self.partial_update(request, *args, **kwargs)
     
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)

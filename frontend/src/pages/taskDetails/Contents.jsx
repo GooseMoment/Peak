@@ -16,6 +16,7 @@ import Memo from "./Memo"
 
 import ToolTip from "@components/project/common/ToolTip"
 import ModalPortal from "@components/common/ModalPortal"
+import taskDate from "@components/project/taskDate"
 
 const Contents = ({task, setFunc}) => {
     const { id: projectID } = useParams()
@@ -37,35 +38,28 @@ const Contents = ({task, setFunc}) => {
         navigate(`.`)
     }
 
-    //display due, reminder
-    const task_due = new Date(`${task.due_date}${task.due_time ? "T"+task.due_time : ""}`)
-    const assigned_at_date = new Date(task.assigned_at)
-    const reminder_date_time = new Date(task.reminder_datetime)
-    const new_due_date = `${task_due.getFullYear()}년 ${task_due.getMonth()+1}월 ${task_due.getDate()}일`
-    const new_due_time = `${task_due.getHours()}시 ${task_due.getMinutes()}분`
-    const new_assigned_at_date = `${assigned_at_date.getFullYear()}년 ${assigned_at_date.getMonth()+1}월 ${assigned_at_date.getDate()}일`
-    const new_reminder_datetime = `${reminder_date_time.getFullYear()}년 ${reminder_date_time.getMonth()+1}월 ${reminder_date_time.getDate()}일 ${reminder_date_time.getHours()}시 ${reminder_date_time.getMinutes()}분`
-
+    const {formatted_due_date, formatted_due_time, formatted_assigned_date, formatted_reminder_datetime} = taskDate(task)
+    
     const items = [
         {
             id: 1,
             name: "assigned_due",
             icon: <FeatherIcon icon="calendar" />,
-            display: task.assigned_at ? new_assigned_at_date : "없음",
+            display: task.assigned_at ? formatted_assigned_date : "없음",
             component: <Assigned setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 2,
             name: "due",
             icon: <img src={hourglass} />,
-            display: task.due_date && new_due_time ? new_due_date + ' ' + new_due_time : "없음",
+            display: task.due_date && formatted_due_time ? formatted_due_date + ' ' + formatted_due_time : "없음",
             component: <Calendar setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 3,
             name: "reminder",
             icon: <img src={alarmclock} />,
-            display: task.reminder_datetime ? new_reminder_datetime : "없음",
+            display: task.reminder_datetime ? formatted_reminder_datetime : "없음",
             component: <Reminder setFunc={setFunc} closeComponent={closeComponent}/>
             // 아직 안만듬
         },

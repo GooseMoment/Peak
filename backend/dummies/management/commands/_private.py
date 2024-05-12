@@ -11,15 +11,12 @@ from social.models import (
 )
 from notifications.models import Notification
 
-from hashlib import md5
-from urllib.parse import urlencode
 import random
 from datetime import date, datetime, timedelta, timezone
 import requests
 from bs4 import BeautifulSoup, NavigableString
 from faker import Faker
 fake = Faker("ko_KR")
-Faker.seed(775479)
 
 PASSWORD_DEFAULT = "PASSWORD_DEFAULT"
 
@@ -77,7 +74,7 @@ def create_users(n: int = 30) -> list[User]:
         except IntegrityError:
             # django.db.utils.IntegrityError: duplicate key value violates unique constraint "users_user_username_key"
             # DETAIL:  Key (username)=(andless._.) already exists.
-            raise CommandError("createdummies 명령어는 시드가 고정되어 있어 faker를 사용하는 곳들에는 항상 똑같은 결과를 출력합니다. clearall을 실행 후 다시 실행하세요.")
+            raise CommandError("clearall을 실행 후 다시 실행하세요.")
 
     for _ in range(n-len(default_users_data)):
         user = factory_user()
@@ -227,7 +224,7 @@ def create_comments(users: list[User], tasks: list[Task]) -> list[Comment]:
         n = random.randint(0, len(tasks)//15)
         task_indexes = random.sample(range(len(tasks)), n)
         for task_index in task_indexes:
-            comment = factory_peck(user, tasks[task_index])
+            comment = factory_comment(user, tasks[task_index])
             comment.save()
             comments.append(comment)
 
