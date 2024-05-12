@@ -56,8 +56,8 @@ const menuItems = [
     },
     {
         icon: "globe",
-        display: "Languages & Region",
-        to: "languages-and-region",
+        display: "Languages & Time",
+        to: "languages-and-time",
     },
     {
         icon: "bell",

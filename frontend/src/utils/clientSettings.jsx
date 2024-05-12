@@ -5,6 +5,7 @@ const KEY_CLIENT_SETTINGS = "client_settings"
 const defaultSettings = {
     // Languages & Region
     language: navigator.language,
+    timezone: "system",
     start_of_the_week_monday: false,
     time_as_24_hour: false,
 

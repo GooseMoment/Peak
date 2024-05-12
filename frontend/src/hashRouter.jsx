@@ -26,8 +26,8 @@ const routes = [
                 Component: settings.Privacy,
             },
             {
-                path: "languages-and-region",
-                Component: settings.LanguagesAndRegion,
+                path: "languages-and-time",
+                Component: settings.LanguagesAndTime,
             },
             {
                 path: "appearance",

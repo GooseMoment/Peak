@@ -3,13 +3,21 @@ import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 
+import timezones from "@assets/settings/timezones.json"
+
 const LanguagesAndRegion = () => {
     return <>
-        <PageTitle>Languages & Region</PageTitle>
+        <PageTitle>Languages & Time</PageTitle>
         <Section>
             <Name>Language</Name>
             <Value>
                 <Select name="language" choices={languageChoices} />
+            </Value>
+        </Section>
+        <Section>
+            <Name>Timezone</Name>
+            <Value>
+                <Select name="timezone" choices={timezones} />
             </Value>
         </Section>
         <Section>
