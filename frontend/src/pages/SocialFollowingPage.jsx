@@ -97,7 +97,7 @@ const DailyLogContainer = styled.div`
 `
 
 const mockNewLogDates = [
-    "2024-04-09", "2024-04-10", "2024-04-11",
+    "2024-05-12T15:00:00.000Z", "2024-05-11T15:00:00.000Z", "2024-05-09T00:00:00.000Z"
 ];
 
 const mockDailyFollowerLogsDetail = [
