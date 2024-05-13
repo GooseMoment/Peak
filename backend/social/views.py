@@ -129,28 +129,27 @@ def get_daily_report(request: HttpRequest, username, day):
     
     return Response(serializer.data, status=status.HTTP_200_OK) 
 
-# PUT social/daily/report/@follower/@followee/YYYY-MM-DD/
+# PUT social/daily/report/@follower/@followee/YYYY-MM-DD'T'HH:mm:ss.SSS'Z'/
 @api_view(["PUT"])
 def view_daily_report(requset: HttpRequest, follower, followee, day):
-    followerUser = get_object_or_404(User, username=follower)
-    followeeUser = get_object_or_404(User, username=followee)
-    day = datetime.strptime(day, "%Y-%m-%d").date()
-    
-    day_min = datetime.combine(day, time.min)
-    day_max = datetime.combine(day, time.max)
-    
-    recent_task = Task.objects.filter(
-        user=followeeUser,
-        completed_at__range=(day_min, day_max)
-    ).all().order_by("-completed_at").first()
+    followerUserID = get_object_or_404(User, username=follower).id
+    followeeUserID = get_object_or_404(User, username=followee).id
+    # day = datetime.strptime(day, "%Y-%m-%dT%H:%M:%S.%fZ")
 
-    cache_key = f"@{follower}/@{followee}/{day}/"
+    # cache key
+    cache_key = f"followeeID_{followeeUserID}_date_{day}"
     cache.delete(cache_key)
-    cache_data = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    cache.set(cache_key, cache_data, 1*24*60*60)
+    # cache date
+    # cache_data = datetime.now().isoformat()
+    # current_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    current_time = datetime.now()
     
-    temp = cache_key+cache_data
+    cache_data = (followerUserID, current_time)
+    
+    # cache.set(cache_key, cache_data, 1*24*60*60)
+    
+    temp = cache_data
     
     return Response(temp, status=status.HTTP_200_OK)
 
