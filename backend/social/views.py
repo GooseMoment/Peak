@@ -144,7 +144,7 @@ def view_daily_report(requset: HttpRequest, follower, followee, day):
     
     cache.delete(cache_key)
     # cache.set(cache_key, cache_data, 1*24*60*60)
-    cache.set(cache_key, cache_data, 60)
+    cache.set(cache_key, cache_data, 5*60)
     
     return Response(cache_data, status=status.HTTP_200_OK)
 

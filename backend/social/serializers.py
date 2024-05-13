@@ -41,13 +41,13 @@ class DailyReportSerializer(UserSerializer):
         if not recent_task:
             return None
         
-        print(recent_task.completed_at)
+        followee_user_id = obj.id
+        day = day_min.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]+'Z'
+        cache_key = f"followeeID_{followee_user_id}_date_{day}"
         
-        # followee_user_id = obj.id
-        # cache_key = f"followeeID_{followee_user_id}_date_{day_min}"
-        # cache_data = cache.get(cache_key)
+        cache_data = cache.get(cache_key)
         
-        # print(cache_data)
+        print(cache_data)
         
         return TaskSerializer(recent_task).data
 
