@@ -122,10 +122,11 @@ def get_daily_report(request: HttpRequest, username, day):
     followingUsers = User.objects.filter(followers__in=followings.all()).all()
     day = datetime.strptime(day, "%Y-%m-%dT%H:%M:%S.%fZ")
     
+    user_id = str(get_object_or_404(User, username=username).id)
     day_min = day
     day_max = day + timedelta(hours=24) - timedelta(seconds=1)
     
-    serializer = DailyReportSerializer(followingUsers, context={'day_min': day_min, 'day_max':day_max}, many=True)
+    serializer = DailyReportSerializer(followingUsers, context={'day_min': day_min, 'day_max':day_max, 'user_id':user_id}, many=True)
     
     return Response(serializer.data, status=status.HTTP_200_OK) 
 
@@ -135,16 +136,18 @@ def view_daily_report(requset: HttpRequest, follower, followee, day):
     followerUserID = str(get_object_or_404(User, username=follower).id)
     followeeUserID = str(get_object_or_404(User, username=followee).id)
 
-    cache_key = f"followeeID_{followeeUserID}_date_{day}"
+    cache_key = f"user_id_{followeeUserID}_date_{day}"
     cache_data = cache.get(cache_key)
     if cache_data:
         cache_data[followerUserID] = datetime.now()
     else:
         cache_data = {followerUserID: datetime.now()}
     
+    print(cache_data)
+    
     cache.delete(cache_key)
     # cache.set(cache_key, cache_data, 1*24*60*60)
-    cache.set(cache_key, cache_data, 5*60)
+    cache.set(cache_key, cache_data, 60*60)
     
     return Response(cache_data, status=status.HTTP_200_OK)
 

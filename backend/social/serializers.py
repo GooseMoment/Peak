@@ -39,17 +39,22 @@ class DailyReportSerializer(UserSerializer):
         ).all().order_by("-completed_at").first()
         
         if not recent_task:
-            return None
+            return None, True
         
         followee_user_id = obj.id
         day = day_min.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]+'Z'
-        cache_key = f"followeeID_{followee_user_id}_date_{day}"
-        
+        cache_key = f"user_id_{followee_user_id}_date_{day}"
         cache_data = cache.get(cache_key)
         
-        print(cache_data)
+        is_read = True
+        if cache_data:
+            last_visted = timezone.make_aware(cache_data[self.context.get('user_id', None)])        
+            is_read = last_visted > recent_task.completed_at
         
-        return TaskSerializer(recent_task).data
+        recent_task = TaskSerializer(recent_task).data
+        recent_task['is_read'] = is_read
+        
+        return recent_task
 
 class DailyCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
