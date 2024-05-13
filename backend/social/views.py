@@ -132,26 +132,22 @@ def get_daily_report(request: HttpRequest, username, day):
 # PUT social/daily/report/@follower/@followee/YYYY-MM-DD'T'HH:mm:ss.SSS'Z'/
 @api_view(["PUT"])
 def view_daily_report(requset: HttpRequest, follower, followee, day):
-    followerUserID = get_object_or_404(User, username=follower).id
-    followeeUserID = get_object_or_404(User, username=followee).id
+    followerUserID = str(get_object_or_404(User, username=follower).id)
+    followeeUserID = str(get_object_or_404(User, username=followee).id)
     # day = datetime.strptime(day, "%Y-%m-%dT%H:%M:%S.%fZ")
 
-    # cache key
     cache_key = f"followeeID_{followeeUserID}_date_{day}"
+    cache_data = cache.get(cache_key)
+    if cache_data:
+        cache_data[followerUserID] = datetime.now()
+    else:
+        cache_data = {followerUserID: datetime.now()}
+    
     cache.delete(cache_key)
-    
-    # cache date
-    # cache_data = datetime.now().isoformat()
-    # current_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    current_time = datetime.now()
-    
-    cache_data = (followerUserID, current_time)
-    
     # cache.set(cache_key, cache_data, 1*24*60*60)
+    cache.set(cache_key, cache_data, 60)
     
-    temp = cache_data
-    
-    return Response(temp, status=status.HTTP_200_OK)
+    return Response(cache_data, status=status.HTTP_200_OK)
 
 def get_following_feed(request: HttpRequest, date):
     pass
