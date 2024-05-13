@@ -1,5 +1,10 @@
 from rest_framework import serializers
 
+from django.utils import timezone
+from django.core.cache import cache
+
+from datetime import datetime
+
 from .models import *
 
 from users.serializers import UserSerializer
@@ -24,16 +29,27 @@ class DailyReportSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.fields + ['recent_task']
     
+    # TODO: completed_at을 기준으로 해야할 지, updated_at을 기준으로 해야할 지
     def get_recent_task(self, obj):
-        day_min = self.context.get('day_min', None)
-        day_max = self.context.get('day_max', None)
-        
+        day_min = timezone.make_aware(self.context.get('day_min', None))
+        day_max = timezone.make_aware(self.context.get('day_max', None))
+                
         recent_task = obj.tasks.filter(
             completed_at__range=(day_min, day_max)
         ).all().order_by("-completed_at").first()
         
-        return TaskSerializer(recent_task).data if recent_task else None
+        if not recent_task:
+            return None
         
+        print(recent_task.completed_at)
+        
+        # followee_user_id = obj.id
+        # cache_key = f"followeeID_{followee_user_id}_date_{day_min}"
+        # cache_data = cache.get(cache_key)
+        
+        # print(cache_data)
+        
+        return TaskSerializer(recent_task).data
 
 class DailyCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)

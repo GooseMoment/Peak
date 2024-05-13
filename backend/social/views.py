@@ -7,7 +7,7 @@ from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.core.cache import cache
 
-from datetime import datetime, time, timedelta
+from datetime import datetime, timedelta
 
 from .models import *
 from .serializers import *
@@ -134,7 +134,6 @@ def get_daily_report(request: HttpRequest, username, day):
 def view_daily_report(requset: HttpRequest, follower, followee, day):
     followerUserID = str(get_object_or_404(User, username=follower).id)
     followeeUserID = str(get_object_or_404(User, username=followee).id)
-    # day = datetime.strptime(day, "%Y-%m-%dT%H:%M:%S.%fZ")
 
     cache_key = f"followeeID_{followeeUserID}_date_{day}"
     cache_data = cache.get(cache_key)
