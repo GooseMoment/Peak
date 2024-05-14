@@ -4,8 +4,10 @@ const KEY_CLIENT_SETTINGS = "client_settings"
 
 const defaultSettings = {
     // Languages & Region
-    language: navigator.language,
+    //      locale = language + "-" + region
+    locale: "system",
     timezone: "system",
+
     start_of_the_week_monday: false,
     time_as_24_hour: false,
 
@@ -59,4 +61,33 @@ export const ClientSettingProvider = ({children}) => {
 
 export const useClientSetting = () => {
     return useContext(ClientSettingContext)
+}
+
+const getTimezone = (settingTz) => {
+    if (settingTz === defaultSettings["timezone"]) {
+        return new window.Intl.DateTimeFormat().resolvedOptions().timeZone
+    }
+
+    return settingTz
+}
+
+export const useClientLocale = () => {
+    const [setting, ] = useContext(ClientSettingContext)
+
+    const settingLocale = setting?.locale
+    let locale = settingLocale
+    if (locale === defaultSettings["locale"]) {
+        locale = navigator.language.startsWith("ko") ? "ko" : "en"
+    }
+
+    return locale
+}
+
+export const useClientTimezone = () => {
+    const [setting, ] = useContext(ClientSettingContext)
+
+    const settingTz = setting?.timezone
+    const tz = getTimezone(settingTz)
+
+    return tz
 }

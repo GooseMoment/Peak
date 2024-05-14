@@ -11,7 +11,7 @@ const LanguagesAndRegion = () => {
         <Section>
             <Name>Language</Name>
             <Value>
-                <Select name="language" choices={languageChoices} />
+                <Select name="locale" choices={languageChoices} />
             </Value>
         </Section>
         <Section>
@@ -35,13 +35,23 @@ const LanguagesAndRegion = () => {
     </>
 }
 
+const languageNames = code => {
+    return new Intl.DisplayNames([], {
+        type: 'language'
+    }).of(code)
+}
+
 const languageChoices = [
     {
-        display: "English",
+        display: "Default",
+        value: "system",
+    },
+    {
+        display: languageNames("en"),
         value: "en",
     },
     {
-        display: "한국어",
+        display: languageNames("ko"),
         value: "ko",
     },
 ]
