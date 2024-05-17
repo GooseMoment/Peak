@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import styled, { css } from "styled-components"
 
 const socialTypes = [
-    "reaction", "follow", "follow_request", "follow_request_accepted", "peck",
+    "comment", "reaction", "follow", "follow_request", "follow_request_accepted", "peck",
 ]
 
 const Content = ({type, payload, actionUser, skeleton=false}) => {
@@ -18,6 +18,11 @@ const Content = ({type, payload, actionUser, skeleton=false}) => {
     }
 
     switch (type) {
+        case "comment":
+            detail = <ContentDetailLink to={`/app/projects/${payload.task?.project_id}`}>
+                    "{payload.comment}"
+                </ContentDetailLink>
+            break
         case "reaction":
             if (payload.parent_type === "task") {
                 detail = <ContentDetailLink to={`/app/projects/${payload.task?.project_id}`}>
@@ -34,6 +39,15 @@ const Content = ({type, payload, actionUser, skeleton=false}) => {
             detail = <ContentDetailLink to={`/app/projects/${payload.task?.project_id}`}>
                     {payload.task?.name}
                 </ContentDetailLink>
+            break
+        case "follow":
+            detail = "follows you"
+            break
+        case "follow_request":
+            detail = "wants to follow you"
+            break
+        case "follow_request_accepted":
+            detail = "accepted follow request"
             break
         default:
             detail = ""

@@ -1,4 +1,5 @@
 .DS_Store
+.env
 .env.s3
 .env.prod
 .parcel-cache

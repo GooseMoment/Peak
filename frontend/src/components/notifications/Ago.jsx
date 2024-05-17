@@ -18,7 +18,7 @@ const Ago = ({created_at, skeleton=false}) => {
             onMouseEnter={e => setIsHover(true)}
             onMouseLeave={e => setIsHover(false)}
         >
-            {isHover ? datetime.toLocaleString(DateTime.DATETIME_MED) : datetime.toRelative()}
+            {!skeleton && isHover ? datetime.toLocaleString(DateTime.DATETIME_MED) : datetime.toRelative()}
         </Time>
     </Container>
 }

@@ -19,7 +19,7 @@ import SignPage from "@pages/SignPage"
 import TaskCreateElement from "@pages/taskDetails/TaskCreateElement"
 import TaskDetailElement from "@pages/taskDetails/TaskDetailElement"
 
-import { getMe, getUserByUsername, isSignedIn } from "@api/users.api"
+import { getMe, getUserByUsername, isSignedIn, signOut } from "@api/users.api"
 import { getProject, getProjectsList } from "@api/projects.api"
 
 const redirectIfSignedIn = () => {
@@ -135,13 +135,12 @@ const routes = [
                 element: <UserPage/>,
             },
             {
-                // TODO: remove this and add signOut api callback
                 path: "sign_out",
                 loader: () => {
-                    localStorage.removeItem("is_signed_in")
+                    signOut()
                     return redirect("/")
                 },
-                element: <div>Goodbye</div>,
+                element: null,
             },
         ]
     }

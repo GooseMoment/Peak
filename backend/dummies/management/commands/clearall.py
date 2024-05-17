@@ -38,7 +38,8 @@ class Command(BaseCommand):
             self.style.NOTICE("삭제를 시작합니다.")
         )
 
-        from notifications.models import Notification
+        from notifications.models import WebPushSubscription, Notification
+        WebPushSubscription.objects.all().delete()
         Notification.objects.all().delete()
 
         from social.models import (

@@ -12,9 +12,11 @@ import { initClientSettings } from '@utils/clientSettings'
 
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import registerSW from '@/registerSW'
 
 // initilize client-side settings
 initClientSettings()
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
@@ -26,3 +28,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </ThemeProvider>
     </React.StrictMode>,
 )
+
+registerSW()
