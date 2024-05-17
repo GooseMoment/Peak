@@ -207,9 +207,10 @@ STORAGES = {
 }
 
 LOGIN_EXEMPT_URLS=(
-    r'sign_in/',
-    r'sign_up/',
-    r'health/ok',
+    r"^sign_in\/",
+    r"^sign_up\/",
+    r"^health\/ok",
+    r"^admin\/",
 )
 
 WEBPUSH = {
