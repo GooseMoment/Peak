@@ -2,15 +2,15 @@ import { useState } from "react"
 
 import Sidebar from "@components/sidebar/Sidebar"
 
-import { getClientSettings } from "@utils/clientSettings"
+import { useClientSetting } from "@utils/clientSettings"
 
 import styled, { css } from "styled-components"
 
-const closeSidebarOnStartUp = getClientSettings()["close_sidebar_on_startup"]
-const contentPadding = getClientSettings()["main_width"] || "5rem"
-
 const Layout = ({noSidebar, children}) => {
-    const [sidebarCollapsed, setSidebarCollapsed] = useState(closeSidebarOnStartUp)
+    const [clientSetting, ] = useClientSetting()
+    
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(clientSetting["close_sidebar_on_startup"])
+    const contentPadding = clientSetting["main_width"] || "5rem"
     
     return (
     <App>

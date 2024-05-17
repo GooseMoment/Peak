@@ -1,5 +1,6 @@
 import { useState } from "react"
 
+import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 import { skeletonCSS } from "@assets/skeleton"
 
 import { DateTime } from "luxon"
@@ -8,7 +9,9 @@ import styled, { css } from "styled-components"
 const Ago = ({created_at, skeleton=false}) => {
     const [isHover, setIsHover] = useState(false)
 
-    const datetime = DateTime.fromISO(created_at).setLocale("en")
+    const locale = useClientLocale()
+    const tz = useClientTimezone()
+    const datetime = DateTime.fromISO(created_at).setLocale(locale).setZone(tz)
 
 
     return <Container>

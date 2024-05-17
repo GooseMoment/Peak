@@ -8,10 +8,12 @@ import GlobalStyle from '@assets/GlobalStyle'
 import { defaultTheme } from "@assets/themes"
 import { ThemeProvider } from "styled-components"
 
-import { initClientSettings } from '@utils/clientSettings'
+import { ClientSettingProvider, initClientSettings } from '@utils/clientSettings'
 
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { QueryClientProvider } from '@tanstack/react-query'
+import queryClient from '@queries/queryClient'
 import registerSW from '@/registerSW'
 
 // initilize client-side settings
@@ -23,8 +25,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <ThemeProvider theme={defaultTheme}>
             <GlobalStyle />
             <ToastContainer position="bottom-right" stacked hideProgressBar />
-            <RouterProvider router={router} />
-            <RouterProvider router={hashRouter} />
+            <QueryClientProvider client={queryClient} >
+                <ClientSettingProvider>
+                    <RouterProvider router={router} />
+                    <RouterProvider router={hashRouter} />
+                </ClientSettingProvider>
+            </QueryClientProvider>
         </ThemeProvider>
     </React.StrictMode>,
 )

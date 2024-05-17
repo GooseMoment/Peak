@@ -118,16 +118,16 @@ export const patchPassword = async (current_password, new_password) => {
 
 export const uploadProfileImg = async (formData) => {
     try {
-        const res = await client.post("users/me/profile_img", formData)
+        const res = await client.post("users/me/profile_img/", formData)
         return res.status
     } catch (e) {
         throw e
     }
 }
 
-export const getBlocks = async (username) => {
+export const getBlocks = async () => {
     try {
-        const res = await client.get(`users/@${username}/blocks/`)
+        const res = await client.get(`users/me/blocks/`)
         return res.data
     } catch (e) {
         throw e

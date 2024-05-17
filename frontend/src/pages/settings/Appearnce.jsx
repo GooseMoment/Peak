@@ -2,11 +2,8 @@ import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
-import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
-import { states } from "@assets/themes"
 
 const Appearance = () => {
-
     return <>
         <PageTitle>Appearance</PageTitle>
         <Section>
@@ -29,10 +26,6 @@ const Appearance = () => {
                 <Switch name="close_sidebar_on_startup" />
             </Value>
         </Section>
-
-        <ButtonGroup $justifyContent="right">
-            <Button $form={buttonForms.filled} $state={states.primary} onClick={() => window.location.reload()}>Apply</Button>
-        </ButtonGroup>
     </>
 }
 

@@ -1,32 +1,64 @@
-import { Form, useRouteLoaderData, useRevalidator } from "react-router-dom"
-
 import PageTitle from "@components/common/PageTitle"
-import Section, { Name, Value, Sync } from "@components/settings/Section"
 import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
 import Input from "@components/sign/Input"
 
+import Loading from "@components/settings/Loading"
+import Error from "@components/settings/Error"
+import Section, { Name, Value, Sync } from "@components/settings/Section"
 import ProfileImg from "@components/settings/ProfileImg"
 import PasswordSection from "@components/settings/PasswordSection"
 
+import { getMe, patchUser } from "@api/users.api"
 import { states } from "@assets/themes"
+
 import styled from "styled-components"
 
+import queryClient from "@queries/queryClient"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { toast } from "react-toastify"
+
 const Account = () => {
-    const {user} = useRouteLoaderData("settings")
-    const revalidator = useRevalidator()
+    const {data: user, isPending, isError} = useQuery({
+        queryKey: ["users", "me"],
+        queryFn: () => getMe(),
+    })
+
+    const mutation = useMutation({
+        mutationFn: (data) => {
+            return patchUser(data)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["users", "me"]})
+            toast.success("Account was edited.")
+        },
+    })
+
+    const onSubmit = e => {
+        e.preventDefault()
+        const formData = new FormData(e.target)
+        mutation.mutate(formData)
+    }
+
+    if (isPending) {
+        return <Loading />
+    }
+
+    if (isError) {
+        return <Error />
+    }
 
     return <>
         <PageTitle>Account <Sync /></PageTitle>
         <Section>
             <ImgNameEmailContainer>
-                <ProfileImg revalidator={revalidator} profile_img={user.profile_img} />
+                <ProfileImg profile_img={user.profile_img} />
                 <NameEmail>
                     <Username>@{user.username}</Username>
                     <Email>{user.email}</Email>
                 </NameEmail>
             </ImgNameEmailContainer>
         </Section>
-        <Form method="patch" navigate={false}>
+        <form onSubmit={onSubmit}>
             <Section>
                 <Name>Display name</Name>
                 <Value>
@@ -44,7 +76,7 @@ const Account = () => {
                     <Button $form={buttonForms.filled} $state={states.primary} type="submit">Submit</Button>
                 </ButtonGroup>
             </Section>
-        </Form>
+        </form>
 
         <PasswordSection />
     </>

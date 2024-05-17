@@ -9,8 +9,9 @@ import getCroppedImg from "@utils/cropImage"
 import { toast } from "react-toastify"
 import { Image as ImageIcon } from "feather-icons-react"
 import styled from "styled-components"
+import queryClient from "@queries/queryClient"
 
-const ProfileImg = ({revalidator, profile_img}) => {
+const ProfileImg = ({profile_img}) => {
     const [file, setFile] = useState(null)
     const [fileName, setFileName] = useState("")
     const [fileType, setFileType] = useState(null)
@@ -66,7 +67,7 @@ const ProfileImg = ({revalidator, profile_img}) => {
         formData.append("profile_img", croppedFile)
 
         await uploadProfileImg(formData)
-        revalidator.revalidate() 
+        queryClient.invalidateQueries({queryKey: ["users", "me"]})
     }
 
     return ( 

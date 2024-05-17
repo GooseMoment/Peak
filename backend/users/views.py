@@ -11,6 +11,7 @@ import re
 
 from .models import User
 from .serializers import UserSerializer
+from social.views import get_blocks
 
 class UserDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -148,3 +149,7 @@ def upload_profile_img(request: Request):
     request.user.save()
 
     return Response(status=status.HTTP_200_OK)
+
+@api_view(["GET"])
+def get_my_blocks(request: Request):
+    return get_blocks(request._request, request.user.username)
