@@ -1,10 +1,6 @@
 import axios from 'axios'
 
-let baseURL = "https://api.peak.ooo"
-
-if (process.env.NODE_ENV === "development") {
-    baseURL = "http://localhost:8888"
-}
+const baseURL = import.meta.env.VITE_API_BASEURL
 
 export const KEY_IS_SIGNED_IN = "is_signed_in"
 export const VALUE_IS_SIGNED_IN = "yeah"

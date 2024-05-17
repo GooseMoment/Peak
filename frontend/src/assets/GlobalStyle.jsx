@@ -74,6 +74,11 @@ body, textarea, input, button {
 textarea, input {
     color: inherit;
     background-color: inherit;
+    border: none;
+    
+    &:focus {
+        outline: none;
+    }
 }
 
 body {

@@ -1,10 +1,10 @@
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
+from rest_framework.response import Response
 
 from .models import Task
 from .serializers import TaskSerializer
 from api.permissions import IsUserMatch
 from api.views import CreateMixin
-
 
 class TaskDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -19,6 +19,22 @@ class TaskDetail(mixins.RetrieveModelMixin,
         return self.retrieve(request, *args, **kwargs)
     
     def patch(self, request, *args, **kwargs):
+        try:
+            new_completed = request.data.get("completed_at")
+        except Exception as e:
+            pass
+        else:
+            task: Task = self.get_object()
+            if (task.completed_at is None) or (new_completed is None):
+                if task.completed_at is None:
+                    task.drawer.uncompleted_task_count += 1
+                    task.drawer.completed_task_count -= 1
+                else:
+                    task.drawer.uncompleted_task_count -= 1
+                    task.drawer.completed_task_count += 1
+
+            task.drawer.save()
+
         return self.partial_update(request, *args, **kwargs)
     
     def delete(self, request, id, *args, **kwargs):

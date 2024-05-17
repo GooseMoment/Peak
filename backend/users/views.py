@@ -1,5 +1,3 @@
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
@@ -13,8 +11,8 @@ import re
 
 from .models import User
 from .serializers import UserSerializer
+from social.views import get_blocks
 
-@method_decorator(login_required, name="dispatch")
 class UserDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
@@ -108,25 +106,16 @@ def sign_up(request: Request):
 
 @api_view(["GET"])
 def sign_out(request: Request):
-    if request.user.is_anonymous:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
-    
     logout(request)
     return Response(status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 def get_me(request: Request):
-    if request.user.is_anonymous:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
-    
     serializer = UserSerializer(request.user._wrapped, context={"is_me": True})
     return Response(serializer.data)
 
 @api_view(["PATCH"])
 def patch_password(request: Request):
-    if request.user.is_anonymous:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
-    
     payload = request.data
     current_password = payload.get("current_password", "")
     new_password = payload.get("new_password", "")
@@ -160,3 +149,7 @@ def upload_profile_img(request: Request):
     request.user.save()
 
     return Response(status=status.HTTP_200_OK)
+
+@api_view(["GET"])
+def get_my_blocks(request: Request):
+    return get_blocks(request._request, request.user.username)

@@ -1,7 +1,5 @@
 import styled from "styled-components"
 
-import logo from "@assets/logo.svg"
-
 const Box = styled.h1`
     display: flex;
     align-items: center;
@@ -36,11 +34,12 @@ const By = styled.span`
 
 const LogoBox = styled.img`
     height: 1em;
+    border-radius: 6px;
 `
 
 const Brand = () => {
     return <Box>
-        <LogoBox src={logo} draggable="false"/>Peak <By>by GooseMoment</By>
+        <LogoBox src="/logo.svg" draggable="false"/>Peak <By>by GooseMoment</By>
     </Box>
 }
 

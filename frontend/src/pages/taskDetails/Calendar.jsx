@@ -1,5 +1,3 @@
-import { useOutletContext, useSubmit } from "react-router-dom"
-
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
@@ -10,9 +8,7 @@ import tomorrow from "@assets/project/calendar/tomorrow.svg"
 import next_week from "@assets/project/calendar/next_week.svg"
 import slach from "@assets/project/slach.svg"
 
-const Calendar = () => {
-    const [closeComponent] = useOutletContext()
-    const submit = useSubmit()
+const Calendar = ({setFunc, closeComponent}) => {
     let date = new Date()
 
     const items = [
@@ -26,14 +22,12 @@ const Calendar = () => {
     const changeDueDate = (set) => {
         return async () => {
             date.setDate(date.getDate() + set)
-            let due_date = "null"
+            let due_date = null
             if (!(set === null)) {
                 due_date = date.toISOString().slice(0, 10)
             }
-            submit({due_date}, {
-                method: "PATCH",
-                action: "..",
-            })
+            setFunc({due_date})
+            closeComponent()
         }
     }
 
@@ -48,12 +42,19 @@ const Calendar = () => {
             <CLine />
             <div>달력이 들어갈 자리입니다</div>
             <CLine />
-            <AddTime>
-                <AddTimeText>
+            <AddButton>
+                <AddButtonText>
                     <FeatherIcon icon="clock" />
                     시간 추가
-                </AddTimeText>
-            </AddTime>
+                </AddButtonText>
+            </AddButton>
+            <CLine />
+            <AddButton>
+                <AddButtonText>
+                    <FeatherIcon icon="refresh-cw" />
+                    반복 설정
+                </AddButtonText>
+            </AddButton>
         </Detail>
     )
 }
@@ -61,8 +62,8 @@ const Calendar = () => {
 const CLine = styled.div`
     border-top: thin solid #D9D9D9;
     width: 12.5em;
-    margin-top: 1em;
-    margin-bottom: 0.3em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
     margin-left: 1em;
 `
 
@@ -86,7 +87,7 @@ const ItemText = styled.p`
     }
 `
 
-const AddTime = styled.div`
+const AddButton = styled.div`
     display: flex;
     justify-content: center;
     width: 14em;
@@ -97,15 +98,26 @@ const AddTime = styled.div`
     margin: 0.5em 0.5em;
 `
 
-const AddTimeText = styled.p`
+const AddButtonText = styled.p`
     color: #000000;
     font-size: 1em;
+
+    &:hover {
+        font-weight: bolder;
+        color: #FF4A03;
+        cursor: pointer;
+
+        & svg {
+            color: #000000;
+        }
+    }
     
     & svg {
         width: 1.2em;
         height: 1.2em;
         top: 0.3em;
     }
+    
 `
 
 export default Calendar
