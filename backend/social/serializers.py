@@ -23,13 +23,12 @@ class PeckSerializer(serializers.ModelSerializer):
         model = Peck
         fields = ["id", "user", "task", "count"]
 
-class DailyReportSerializer(UserSerializer):
+class DailyLogsSerializer(UserSerializer):
     recent_task = serializers.SerializerMethodField()
     
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.fields + ['recent_task']
     
-    # TODO: completed_at을 기준으로 해야할 지, updated_at을 기준으로 해야할 지
     def get_recent_task(self, obj):
         day_min = timezone.make_aware(self.context.get('day_min', None))
         day_max = timezone.make_aware(self.context.get('day_max', None))
@@ -48,7 +47,7 @@ class DailyReportSerializer(UserSerializer):
         
         is_read = True
         if cache_data:
-            last_visted = timezone.make_aware(cache_data[self.context.get('user_id', None)])        
+            last_visted = timezone.make_aware(cache_data[self.context.get('user_id', None)])
             is_read = last_visted > recent_task.completed_at
         
         recent_task = TaskSerializer(recent_task).data

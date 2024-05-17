@@ -11,6 +11,14 @@ import SocialPageTitle from "@components/social/SocialPageTitle";
 
 import { getDailyReport } from "@api/social.api";
 
+const sortDailyLogs = (report) => {
+    return report.slice().sort((a, b) => {
+        if (a.is_read !== b.is_read)
+            return a.is_read - b.is_read
+        return new Date(a.completed_at) - new Date(b.completed_at)
+    })
+}
+
 const SocialFollowingPage = () => {
     const initial_date = new Date()
     initial_date.setHours(0, 0, 0, 0)
@@ -50,7 +58,7 @@ const SocialFollowingPage = () => {
                 </CalendarContainer>
 
                 <DailyLogContainer>
-                    {dailyReport.map((dailyFollowersLog) => (
+                    {sortDailyLogs(dailyReport).map((dailyFollowersLog) => (
                         <DailyLogPreview key={dailyFollowersLog.username} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                     ))}
                 </DailyLogContainer>

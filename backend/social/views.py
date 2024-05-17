@@ -110,11 +110,10 @@ def get_blocks(request: HttpRequest, username):
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-## Daily Report
-# TODO daily report에 관해 class based로 묶어서?
-# GET social/daily/report/@username/YYYY-MM-DD'T'HH:mm:ss.SSS'Z'/
+## Daily Logs
+# GET social/daily/logs/@username/YYYY-MM-DD'T'HH:mm:ss.SSS'Z'/
 @api_view(["GET"])
-def get_daily_report(request: HttpRequest, username, day):
+def get_daily_logs(request: HttpRequest, username, day):
     followings = Following.objects.filter(
         follower__username=username,
         status=Following.ACCEPTED
@@ -126,13 +125,13 @@ def get_daily_report(request: HttpRequest, username, day):
     day_min = day
     day_max = day + timedelta(hours=24) - timedelta(seconds=1)
     
-    serializer = DailyReportSerializer(followingUsers, context={'day_min': day_min, 'day_max':day_max, 'user_id':user_id}, many=True)
+    serializer = DailyLogsSerializer(followingUsers, context={'day_min': day_min, 'day_max':day_max, 'user_id':user_id}, many=True)
     
     return Response(serializer.data, status=status.HTTP_200_OK) 
 
-# PUT social/daily/report/@follower/@followee/YYYY-MM-DD'T'HH:mm:ss.SSS'Z'/
+# PUT social/daily/log/@follower/@followee/YYYY-MM-DD'T'HH:mm:ss.SSS'Z'/
 @api_view(["PUT"])
-def view_daily_report(requset: HttpRequest, follower, followee, day):
+def view_daily_log(requset: HttpRequest, follower, followee, day):
     followerUserID = str(get_object_or_404(User, username=follower).id)
     followeeUserID = str(get_object_or_404(User, username=followee).id)
 
