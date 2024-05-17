@@ -12,7 +12,7 @@ const defaultSettings = {
     time_as_24_hour: false,
 
     // Notifications
-    send_push_notifications: true,
+    push_notification_subscription: null,
     play_notification_sound: true,
 
     // Appearance

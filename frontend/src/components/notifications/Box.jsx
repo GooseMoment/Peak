@@ -5,8 +5,12 @@ import Ago from "./Ago"
 import styled from "styled-components"
 
 const Box = ({notification, skeleton=false}) => {
-    const actionUser = notification?.reaction?.user || notification?.peck?.user || notification?.following?.user
-    const payload = notification?.reaction || notification?.peck || notification?.following
+    const actionUser = notification?.reaction?.user || notification?.peck?.user || notification?.comment?.user 
+        || (notification?.type === "follow" && notification?.following?.follower)
+        || (notification?.type === "follow_request" && notification?.following?.follower)
+        || (notification?.type === "follow_request_accepted" && notification?.following?.followee)
+
+    const payload = notification?.reaction || notification?.peck || notification?.following || notification?.comment
 
     return <Frame>
         <Images skeleton={skeleton} profile_img={actionUser?.profile_img} reaction={notification?.reaction} />

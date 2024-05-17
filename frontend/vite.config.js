@@ -1,15 +1,19 @@
 import { defineConfig } from 'vite'
 import path from "path"
+
 import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     base: "./", // https://github.com/vitejs/vite/discussions/5081#discussioncomment-1525248
+    envDir: "..",
     server: {
         port: 3000,
         host: "0.0.0.0",
     },
-    plugins: [react()],
+    plugins: [
+        react(),
+    ],
     resolve: {
         alias: [
             { find: '@', replacement: path.resolve(__dirname, 'src') },

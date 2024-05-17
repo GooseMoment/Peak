@@ -1,9 +1,9 @@
 from rest_framework import mixins, generics, permissions
 from rest_framework.pagination import CursorPagination
 
-from .models import Notification
-from .serializers import NotificatonSerializer
-from .permissions import IsUserMatch
+from .models import Notification, WebPushSubscription
+from .serializers import NotificatonSerializer, WebPushSubscriptionSerializer
+from api.permissions import IsUserMatch
 
 class NotificationListPagination(CursorPagination):
     page_size = 20
@@ -37,4 +37,20 @@ class NotificationDetail(mixins.RetrieveModelMixin,
         return self.retrieve(request, *args, **kwargs)
 
     def delete(self, request, id, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+class WebPushSubscriptionCreate(mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = WebPushSubscription.objects.all()
+    serializer_class = WebPushSubscriptionSerializer
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+class WebPushSubscriptionDelete(mixins.DestroyModelMixin, generics.GenericAPIView):
+    queryset = WebPushSubscription.objects.all()
+    serializer_class = WebPushSubscriptionSerializer
+    lookup_field = "id"
+    permission_classes = [IsUserMatch]
+
+    def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)

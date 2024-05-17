@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand, CommandError
 from ._private import (
     create_users, create_projects, create_drawers, create_tasks,
     create_pecks, create_comments, create_daily_comments, create_emojis,
-    create_reactions, create_followings, create_blocks, create_notifications,
+    create_reactions, create_followings, create_blocks,
 )
 
 from socket import gethostname
@@ -133,15 +133,6 @@ class Command(BaseCommand):
         blocks = create_blocks(users, followings)
         self.stdout.write(
             self.style.SUCCESS(f"{len(blocks)}개 [OK]")
-        )
-
-        self.stdout.write(
-            "Notification을 생성합니다...", ending=" ",
-        )
-        stdout.flush()
-        notifications = create_notifications(tasks, reactions, followings, pecks)
-        self.stdout.write(
-            self.style.SUCCESS(f"{len(notifications)}개 [OK]")
         )
 
         self.stdout.write(

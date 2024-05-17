@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import serializers
 
 from .models import User
@@ -5,7 +6,7 @@ from .models import User
 class DefaultImageField(serializers.ImageField):
     def to_representation(self, value):
         if not value:
-            return "https://assets-dev.peak.ooo/user_profile_imgs%2Fdefault.jpg"
+            return settings.USER_DEFAULT_PROFILE_IMG
         
         return super().to_representation(value)
 
