@@ -39,7 +39,7 @@ class DailyReportSerializer(UserSerializer):
         ).all().order_by("-completed_at").first()
         
         if not recent_task:
-            return None, True
+            return None
         
         followee_user_id = obj.id
         day = day_min.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]+'Z'
