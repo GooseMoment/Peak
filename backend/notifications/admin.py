@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TaskReminder, Notification
+from .models import TaskReminder, Notification, WebPushSubscription
 from api.admin import fieldset_base, readonly_fields_base
 
 @admin.register(TaskReminder)
@@ -36,6 +36,28 @@ class NotificationAdmin(admin.ModelAdmin):
             "Payloads",
             {
                 "fields": ["task_reminder", "reaction", "following", "peck"],
+            },
+        ),
+        fieldset_base,
+    ]
+
+@admin.register(WebPushSubscription)
+class WebPushSubscriptionAdmin(admin.ModelAdmin):
+    ordering = ["-updated_at"]
+    search_fields = ["user__username"]
+    autocomplete_fields = ["user"]
+    readonly_fields = readonly_fields_base
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ["user"],
+            },
+        ),
+        (
+            None,
+            {
+                "fields": ["subscription_info", "browser", "user_agent"],
             },
         ),
         fieldset_base,
