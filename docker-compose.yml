@@ -29,8 +29,7 @@ services:
       db:
         condition: service_healthy
     env_file:
-      - ./.env.dev
-      - ./.env.s3
+      - ./.env
   db: 
     image: postgres:16.2-alpine3.19
     volumes:
@@ -41,10 +40,8 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
-    environment:
-      POSTGRES_USER: peakuser
-      POSTGRES_PASSWORD: PEAK_DEFAULT_PASSWORD
-      POSTGRES_DB: peakdb
+    env_file:
+      - ./.env
 volumes:
   django_admin_static:
   db_data:

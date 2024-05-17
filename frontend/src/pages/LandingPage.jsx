@@ -2,7 +2,6 @@ import { NavLink } from "react-router-dom"
 
 import LandingRoot from "@components/landing/LandingRoot"
 
-import logo from "@assets/logo.svg"
 import projectComplete from "@assets/landing/undraw_project_complete_lwss.svg"
 import buddies from "@assets/landing/undraw_buddies_2ae5.svg"
 import speedTest from "@assets/landing/undraw_speed_test_re_pe1f.svg"
@@ -13,7 +12,7 @@ const LandingPage = () => {
     return <LandingRoot>
     <nav>
     <div className="left">
-        <img className="icon" src={logo} />
+        <img className="icon" src="/logo.svg" />
         <h1>Peak <span className="by">by GooseMoment</span></h1>
     </div>
     <div className="right">

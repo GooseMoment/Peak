@@ -1,4 +1,6 @@
 import client, { KEY_IS_SIGNED_IN, VALUE_IS_SIGNED_IN } from "@api/client"
+import { deleteSubscription } from "./notifications.api"
+import { getClientSettings } from "@/utils/clientSettings"
 
 export const getMe = async () => {
     try {
@@ -83,7 +85,11 @@ export const signUp = async (email, password, username) => {
 export const signOut = async () => {
     localStorage.removeItem(KEY_IS_SIGNED_IN)
 
+    const subscriptionID = getClientSettings()["push_notification_subscription"]
+
     try {
+        await deleteSubscription(subscriptionID)
+
         const res = await client.get("sign_out/")
         if (res.status === 200) {
             return true
