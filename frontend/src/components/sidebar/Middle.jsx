@@ -1,16 +1,15 @@
+import { useMemo } from "react"
+
 import SidebarLink from "@components/sidebar/SidebarLink"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { cubicBeizer } from "@assets/keyframes"
 
-import { useClientLocale } from "@utils/clientSettings"
 import { useTranslation } from "react-i18next"
-import { useMemo } from "react"
 
 const Middle = ({projects, collapsed}) => {
-    const locale = useClientLocale()
-    const { t } = useTranslation("", {lng: locale, keyPrefix: "sidebar"})
+    const { t } = useTranslation("", {keyPrefix: "sidebar"})
 
     const items = useMemo(() => getItems(t), [t])
 

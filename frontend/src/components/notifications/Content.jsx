@@ -3,7 +3,6 @@ import { Link } from "react-router-dom"
 import { skeletonCSS } from "@assets/skeleton"
 import styled, { css } from "styled-components"
 
-import { useClientLocale } from "@utils/clientSettings"
 import { Trans, useTranslation } from "react-i18next"
 
 const socialTypes = [
@@ -11,8 +10,7 @@ const socialTypes = [
 ]
 
 const Content = ({type, payload, actionUser, skeleton=false}) => {
-    const locale = useClientLocale()
-    const { t } = useTranslation(null, {lng: locale, keyPrefix: "notifications"})
+    const { t } = useTranslation(null, {keyPrefix: "notifications"})
 
     let title = null
     let detail = null

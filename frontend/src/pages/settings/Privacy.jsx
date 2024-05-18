@@ -13,7 +13,6 @@ import queryClient from "@queries/queryClient"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 
-import { useClientLocale } from "@utils/clientSettings"
 import { useTranslation } from "react-i18next"
 
 const Privacy = () => {
@@ -32,8 +31,7 @@ const Privacy = () => {
         },
     })
 
-    const locale = useClientLocale()
-    const { t } = useTranslation(null, {lng: locale, keyPrefix: "settings.privacy"})
+    const { t } = useTranslation(null, {keyPrefix: "settings.privacy"})
     
     const privacyChoices = useMemo(() => makePrivacyChoices(t), [t])
 

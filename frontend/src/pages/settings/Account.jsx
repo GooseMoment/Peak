@@ -17,12 +17,10 @@ import queryClient from "@queries/queryClient"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 
-import { useClientLocale } from "@utils/clientSettings"
 import { useTranslation } from "react-i18next"
 
 const Account = () => {
-    const locale = useClientLocale()
-    const { t } = useTranslation("", {lng: locale, keyPrefix: "settings.account"})
+    const { t } = useTranslation("", {keyPrefix: "settings.account"})
 
     const {data: user, isPending, isError} = useQuery({
         queryKey: ["users", "me"],

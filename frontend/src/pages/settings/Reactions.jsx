@@ -1,12 +1,10 @@
 import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value, Sync, Description } from "@components/settings/Section"
 
-import { useClientLocale } from "@utils/clientSettings"
 import { useTranslation } from "react-i18next"
 
 const Reactions = () => {
-    const locale = useClientLocale()
-    const { t } = useTranslation(null, {lng: locale, keyPrefix: "settings.reactions"})
+    const { t } = useTranslation(null, {keyPrefix: "settings.reactions"})
 
     // TODO: use react-query to receive data
 

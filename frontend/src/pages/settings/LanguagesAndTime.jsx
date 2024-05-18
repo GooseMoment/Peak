@@ -5,14 +5,12 @@ import Select from "@components/settings/Select"
 
 import timezones from "@assets/settings/timezones.json"
 
-import { useClientLocale } from "@utils/clientSettings"
 import { useTranslation } from "react-i18next"
 
 const browserTz = Intl.DateTimeFormat().resolvedOptions().timeZone
 
 const LanguagesAndTime = () => {
-    const locale = useClientLocale()
-    const { t } = useTranslation(null, {lng: locale, keyPrefix: "settings.languages_and_time"})
+    const { t } = useTranslation(null, {keyPrefix: "settings.languages_and_time"})
 
     const timezoneSystemChoice = {
         display: t("timezone.system") + ` (${browserTz})`,

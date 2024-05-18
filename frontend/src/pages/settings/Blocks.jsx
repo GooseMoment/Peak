@@ -11,7 +11,6 @@ import { toast } from "react-toastify"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import queryClient from "@queries/queryClient"
 
-import { useClientLocale } from "@utils/clientSettings"
 import { useTranslation } from "react-i18next"
 
 const Blocks = () => {
@@ -29,8 +28,7 @@ const Blocks = () => {
         },
     })
 
-    const locale = useClientLocale()
-    const { t } = useTranslation(null, {lng: locale, keyPrefix: "settings.blocks"})
+    const { t } = useTranslation(null, {keyPrefix: "settings.blocks"})
 
     const onClick = () => {
         toast.warn("Not implemented yet!")

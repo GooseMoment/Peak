@@ -5,12 +5,10 @@ import Section, { Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
 
-import { useClientLocale } from "@utils/clientSettings"
 import { useTranslation } from "react-i18next"
 
 const Appearance = () => {
-    const locale = useClientLocale()
-    const { t } = useTranslation(null, {lng: locale, keyPrefix: "settings.appearance"})
+    const { t } = useTranslation(null, {keyPrefix: "settings.appearance"})
 
     const themeChoices = useMemo(() => makeThemeChoices(t), [t])
     const widthChoices = useMemo(() => makeWidthChoices(t), [t])

@@ -4,12 +4,11 @@ import PageTitle from "@components/common/PageTitle"
 import generatedGitInfo from '@/generatedGitInfo.json'
 
 import styled from "styled-components"
-import { useClientLocale } from "@utils/clientSettings"
+
 import { useTranslation } from "react-i18next"
 
 const Info = () => {
-    const locale = useClientLocale()
-    const { t } = useTranslation(null, {lng: locale, keyPrefix: "settings.info"})
+    const { t } = useTranslation(null, {keyPrefix: "settings.info"})
 
     return <>
         <PageTitle>{t("title")}</PageTitle>

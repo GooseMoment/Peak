@@ -9,15 +9,13 @@ import ModalPortal from "@components/common/ModalPortal"
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-import { useClientLocale } from "@utils/clientSettings"
 import { useTranslation } from "react-i18next"
 
 const pathRoot = "/settings/"
 
 const Layout = () => {
     const navigate = useNavigate()
-    const locale = useClientLocale()
-    const { t } = useTranslation("", {lng: locale, keyPrefix: "settings.sidebar"})
+    const { t } = useTranslation("", {keyPrefix: "settings.sidebar"})
 
     const goOutside = () => {
         navigate("/")

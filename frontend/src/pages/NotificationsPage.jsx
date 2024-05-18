@@ -5,6 +5,7 @@ import Box from "@components/notifications/Box"
 import PageTitle from "@components/common/PageTitle"
 
 import { getNotifications } from "@api/notifications.api"
+import { useClientLocale } from "@utils/clientSettings"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { ImpressionArea } from "@toss/impression-area"
@@ -12,7 +13,6 @@ import styled from "styled-components"
 import { toast } from "react-toastify"
 import { DateTime } from "luxon"
 
-import { useClientLocale } from "@utils/clientSettings"
 import { useTranslation } from "react-i18next"
 
 const getCursorFromURL = (url) => {
@@ -25,7 +25,7 @@ const getCursorFromURL = (url) => {
 
 const NotificationsPage = () => {
     const locale = useClientLocale()
-    const { t } = useTranslation("", {lng: locale, keyPrefix: "notifications"})
+    const { t } = useTranslation("", {keyPrefix: "notifications"})
     
     const [activeFilter, setActiveFilter] = useState("all")
     const filters = useMemo(() => makeFilters(t), [t])

@@ -10,13 +10,11 @@ import { Key, RotateCw } from "feather-icons-react"
 import styled from "styled-components"
 import { states } from "@assets/themes"
 
-import { useClientLocale } from "@utils/clientSettings"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const PasswordSection = () => {
-    const locale = useClientLocale()
-    const { t } = useTranslation("", {lng: locale, keyPrefix: "settings.account"})
+    const { t } = useTranslation("", {keyPrefix: "settings.account"})
 
     const [passwordFormOpened, setPasswordFormOpened] = useState(false)
     const [currentPassword, setCurrentPassword] = useState("")

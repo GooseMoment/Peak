@@ -4,7 +4,7 @@ import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Description, Value } from "@components/settings/Section"
 
 import { deleteSubscription, postSubscription } from "@api/notifications.api"
-import { useClientLocale, useClientSetting } from "@utils/clientSettings"
+import { useClientSetting } from "@utils/clientSettings"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 
@@ -31,8 +31,7 @@ const subscribePush = async () => {
 
 const Notifications = () => {
     const [setting, updateSetting] = useClientSetting()
-    const locale = useClientLocale()
-    const { t } = useTranslation(null, {lng: locale, keyPrefix: "settings.notifications"})
+    const { t } = useTranslation(null, {keyPrefix: "settings.notifications"})
 
     const onClick = async () => {
         if (setting.push_notification_subscription) {
