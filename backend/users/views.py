@@ -6,6 +6,9 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
+
+from knox.views import LoginView as KnoxLoginView
 
 import re
 
@@ -33,19 +36,21 @@ class UserDetail(mixins.RetrieveModelMixin,
 
         return self.partial_update(request, *args, **kwargs)
 
-@api_view(["POST"])
-def sign_in(request: Request):
-    email: str = request.data["email"]
-    password: str = request.data["password"]
+class SignInView(KnoxLoginView):
+    permission_classes = (AllowAny, )
 
-    user = authenticate(request, email=email, password=password)
+    def post(self, request):
+        email: str = request.data["email"]
+        password: str = request.data["password"]
 
-    if user is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    
-    login(request, user)
+        user = authenticate(request, email=email, password=password)
 
-    return Response(status=status.HTTP_200_OK)
+        if user is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        login(request, user)
+        
+        return super(SignInView, self).post(request, format=None)
 
 username_validation = re.compile(r"^[a-z0-9_-]{4,15}$")
 
@@ -102,11 +107,6 @@ def sign_up(request: Request):
     new_user.set_password(payload["password"])
     new_user.save()
 
-    return Response(status=status.HTTP_200_OK)
-
-@api_view(["GET"])
-def sign_out(request: Request):
-    logout(request)
     return Response(status=status.HTTP_200_OK)
 
 @api_view(["GET"])

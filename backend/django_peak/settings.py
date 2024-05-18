@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -72,7 +73,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'api.middleware.TokenAuthentication',
-        # 'knox.auth.TokenAuthentication',
     ),
 }
 
@@ -220,4 +220,10 @@ LOGIN_EXEMPT_URLS=(
 WEBPUSH = {
     "vapid_private_key": os.environ.get("VAPID_PRIVATE_KEY"), 
     "vapid_claims_email": os.environ.get("VAPID_CLAIMS_EMAIL"),
+}
+
+REST_KNOX = {
+    "TOKEN_TTL": timedelta(days=7),
+    "USER_SERIALIZER": "users.serializers.UserSerializer",
+    "AUTO_REFRESH": True,
 }
