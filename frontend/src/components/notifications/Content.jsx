@@ -100,6 +100,10 @@ const ContentTitle = styled.h3`
 `
 
 const ContentDetail = styled.p`
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
     ${props => props.$skeleton && css`
         width: 140px;
         height: 1em;
