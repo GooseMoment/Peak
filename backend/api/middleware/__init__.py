@@ -1,2 +1,2 @@
 from .DisableCSRFMiddleware import DisableCSRFMiddleware
-from .AuthWallMiddleware import AuthWallMiddleware
+from .TokenAuthentication import PeakTokenAuthentication as TokenAuthentication
