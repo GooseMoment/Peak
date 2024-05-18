@@ -1,10 +1,10 @@
+import { useEffect } from "react"
 import { Link, isRouteErrorResponse, useNavigate, useRouteError } from "react-router-dom"
 
 import Layout from "@containers/Layout"
 import PageTitle from "@components/common/PageTitle"
 
-import { setToken } from "@api/client";
-import { useEffect } from "react";
+import { setToken } from "@api/client"
 
 const ErrorPage = () => {
     const error = useRouteError()
