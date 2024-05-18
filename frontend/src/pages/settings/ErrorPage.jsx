@@ -4,9 +4,9 @@ import { toast } from "react-toastify"
 
 const ErrorPage = () => {
     const navigate = useNavigate()
-    toast.error("Error on Settings. Please try again.", {toastId: "errorSettings"})
 
     useEffect(() => {
+        toast.error("Error on Settings. Please try again.", {toastId: "errorSettings"})
         navigate("/")
     }, [])
 
