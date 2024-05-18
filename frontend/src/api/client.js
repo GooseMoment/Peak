@@ -4,7 +4,7 @@ const baseURL = import.meta.env.VITE_API_BASEURL
 
 export const getToken = () => {
     const token = localStorage.getItem("token")
-    if (token === "null") {
+    if (token === "null" || token === "undefined") {
         return null
     }
 
