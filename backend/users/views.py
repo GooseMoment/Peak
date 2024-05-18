@@ -111,7 +111,7 @@ def sign_up(request: Request):
 
 @api_view(["GET"])
 def get_me(request: Request):
-    serializer = UserSerializer(request.user._wrapped, context={"is_me": True})
+    serializer = UserSerializer(request.user, context={"is_me": True})
     return Response(serializer.data)
 
 @api_view(["PATCH"])
