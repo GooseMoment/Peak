@@ -3,7 +3,12 @@ import axios from 'axios'
 const baseURL = import.meta.env.VITE_API_BASEURL
 
 export const getToken = () => {
-    return localStorage.getItem("token")
+    const token = localStorage.getItem("token")
+    if (token === "null") {
+        return null
+    }
+
+    return token
 }
 
 export const setToken = token => {
