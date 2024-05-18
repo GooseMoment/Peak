@@ -4,8 +4,9 @@ import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Description, Value } from "@components/settings/Section"
 
 import { deleteSubscription, postSubscription } from "@api/notifications.api"
-import { useClientSetting } from "@utils/clientSettings"
+import { useClientLocale, useClientSetting } from "@utils/clientSettings"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
 
@@ -30,39 +31,44 @@ const subscribePush = async () => {
 
 const Notifications = () => {
     const [setting, updateSetting] = useClientSetting()
+    const locale = useClientLocale()
+    const { t } = useTranslation(null, {lng: locale, keyPrefix: "settings.notifications"})
 
     const onClick = async () => {
         if (setting.push_notification_subscription) {
             deleteSubscription(setting.push_notification_subscription)
             updateSetting("push_notification_subscription", null)
 
-            toast.info("Disabled push notifications.")
+            toast.info(t("push_notification_subscription.disabled_push_notification"))
             return
         }
 
         const permission = await window.Notification.requestPermission()
         if (permission !== "granted") {
-            toast.error("You declined notifications.", {toastId: "notification_permission_declined"})
+            toast.error(t("push_notification_subscription.declined_push_notification"), {toastId: "notification_permission_declined"})
             return
         }
 
         const webSubscription = await subscribePush()
 
         updateSetting("push_notification_subscription", webSubscription?.id)
-        toast.success("Notification enabled.", {toastId: "notification_enabled"})
+        toast.success(t("push_notification_subscription.enabled_push_notification"), {toastId: "notification_enabled"})
     }
 
     return <>
-        <PageTitle>Notifications</PageTitle>
+        <PageTitle>{t("title")}</PageTitle>
         <Section>
-            <Name>Receive push notifications</Name>
-            <Description>Get notifications on this device.</Description>
+            <Name>{t("push_notification_subscription.name")}</Name>
+            <Description>{t("push_notification_subscription.description")}</Description>
             <Value>
-                <Button onClick={onClick}>{setting.push_notification_subscription ? "Disable" : "Enable"}</Button>
+                <Button onClick={onClick}>
+                    {setting.push_notification_subscription 
+                        ? t("push_notification_subscription.values.button_disable") : t("push_notification_subscription.values.button_enable")}
+                </Button>
             </Value>
         </Section>
         <Section>
-            <Name>Play notification sound</Name>
+            <Name>{t("play_notification_sound.name")}</Name>
             <Value>
                 <Switch name="play_notification_sound" />
             </Value>

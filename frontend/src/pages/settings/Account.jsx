@@ -17,7 +17,13 @@ import queryClient from "@queries/queryClient"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 
+import { useClientLocale } from "@utils/clientSettings"
+import { useTranslation } from "react-i18next"
+
 const Account = () => {
+    const locale = useClientLocale()
+    const { t } = useTranslation("", {lng: locale, keyPrefix: "settings.account"})
+
     const {data: user, isPending, isError} = useQuery({
         queryKey: ["users", "me"],
         queryFn: () => getMe(),
@@ -29,7 +35,10 @@ const Account = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ["users", "me"]})
-            toast.success("Account was edited.")
+            toast.success(t("account_edited"))
+        },
+        onError: () => {
+            toast.error(t("account_fail"))
         },
     })
 
@@ -48,7 +57,7 @@ const Account = () => {
     }
 
     return <>
-        <PageTitle>Account <Sync /></PageTitle>
+        <PageTitle>{t("title")} <Sync /></PageTitle>
         <Section>
             <ImgNameEmailContainer>
                 <ProfileImg profile_img={user.profile_img} />
@@ -60,20 +69,20 @@ const Account = () => {
         </Section>
         <form onSubmit={onSubmit}>
             <Section>
-                <Name>Display name</Name>
+                <Name>{t("display_name")}</Name>
                 <Value>
-                    <Input name="display_name" type="text" defaultValue={user.display_name} placeholder="Your awesome name" />
+                    <Input name="display_name" type="text" defaultValue={user.display_name} placeholder={t("display_name_placeholder")} />
                 </Value>
             </Section>
             <Section>
-                <Name>Bio</Name>
+                <Name>{t("bio")}</Name>
                 <Value>
-                    <Bio autoComplete="off" name="bio" defaultValue={user.bio} placeholder="Your awesome bio" />
+                    <Bio autoComplete="off" name="bio" defaultValue={user.bio} placeholder={t("bio_placeholder")} />
                 </Value>
             </Section>
             <Section>
                 <ButtonGroup $justifyContent="right">
-                    <Button $form={buttonForms.filled} $state={states.primary} type="submit">Submit</Button>
+                    <Button $form={buttonForms.filled} $state={states.primary} type="submit">{t("button_submit")}</Button>
                 </ButtonGroup>
             </Section>
         </form>

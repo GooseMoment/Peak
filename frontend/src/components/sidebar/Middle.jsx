@@ -4,7 +4,16 @@ import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { cubicBeizer } from "@assets/keyframes"
 
+import { useClientLocale } from "@utils/clientSettings"
+import { useTranslation } from "react-i18next"
+import { useMemo } from "react"
+
 const Middle = ({projects, collapsed}) => {
+    const locale = useClientLocale()
+    const { t } = useTranslation("", {lng: locale, keyPrefix: "sidebar"})
+
+    const items = useMemo(() => getItems(t), [t])
+
     return <MiddleBox>
         {items.map(item => <SidebarLink to={item.to} draggable="false" key={item.to} end={item.end}>
             <ItemBox $collapsed={collapsed} key={item.name}>   
@@ -24,15 +33,15 @@ const Middle = ({projects, collapsed}) => {
     </MiddleBox>
 }
 
-const items = [
+const getItems = t => [
     // end가 true:  경로가 to와 완전히 일치해야 active
     //       false: to의 하위 경로에 있어도 active
-    {icon: "search", name: "Search", to: "search", end: false},
-    {icon: "home", name: "Home", to: "", end: true},
-    {icon: "bell", name: "Notifications", to: "notifications", end: false},
-    {icon: "calendar", name: "Today", to: "today", end: false},
-    {icon: "users", name: "Social", to: "social", end: false},
-    {icon: "archive", name: "Projects", to: "projects", end: true},
+    {icon: "search", name: t("search"), to: "search", end: false},
+    {icon: "home", name: t("home"), to: "", end: true},
+    {icon: "bell", name: t("notifications"), to: "notifications", end: false},
+    {icon: "calendar", name: t("today"), to: "today", end: false},
+    {icon: "users", name: t("social"), to: "social", end: false},
+    {icon: "archive", name: t("projects"), to: "projects", end: true},
 ]
 
 export const MiddleBox = styled.div`
