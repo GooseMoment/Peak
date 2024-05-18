@@ -24,6 +24,14 @@
         "content_follow_request": "wants to follow you",
         "content_follow_request_accepted": "accepted follow request"
     },
+    "project_list": {
+        "title": "Projects",
+        "type_regular": "Regular",
+        "type_goal": "Goal",
+        "button_add_project": "Add new project",
+        "completed_tasks": "Completed",
+        "uncompleted_tasks": "Uncompleted"
+    },
     "settings": {
         "sidebar": {
             "account": "Account",
