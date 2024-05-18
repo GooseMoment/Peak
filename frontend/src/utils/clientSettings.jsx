@@ -36,7 +36,7 @@ export const initClientSettings = () => {
     if (!(settings?.language)) {
         settings = defaultSettings
     }
-    settings = Object.assign(defaultSettings, settings)
+    settings = Object.assign(structuredClone(defaultSettings), settings)
     localStorage.setItem(KEY_CLIENT_SETTINGS, JSON.stringify(settings))
 }
 
