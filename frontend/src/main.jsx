@@ -14,8 +14,10 @@ import { ClientSettingProvider, initClientSettings } from '@utils/clientSettings
 
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+
 import { QueryClientProvider } from '@tanstack/react-query'
 import queryClient from '@queries/queryClient'
+
 import registerSW from '@/registerSW'
 import "@utils/i18n.js"
 
@@ -34,8 +36,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                         <RouterProvider router={router} />
                     </Suspense>
 
-                    <RouterProvider router={hashRouter} />
-
+                    <Suspense fallback={<Loading />}>
+                        <RouterProvider router={hashRouter} />
+                    </Suspense>
                 </ClientSettingProvider>
             </QueryClientProvider>
         </ThemeProvider>

@@ -1,11 +1,10 @@
-import { Suspense, useMemo } from "react"
+import { useMemo } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 
 import { SidebarBox } from "@components/sidebar/Sidebar"
 import { ItemBox, MiddleBox } from "@components/sidebar/Middle"
 import SidebarLink, { SidebarA } from "@components/sidebar/SidebarLink"
 import ModalPortal from "@components/common/ModalPortal"
-import Loading from "@components/settings/Loading"
 
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
@@ -48,9 +47,7 @@ const Layout = () => {
     </ModalFrame>
 
     return <ModalPortal closeModal={goOutside}>
-        <Suspense fallback={<Loading />}>
-            {content}
-        </Suspense>
+        {content}
     </ModalPortal>
 }
 
