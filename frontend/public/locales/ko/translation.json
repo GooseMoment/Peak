@@ -33,6 +33,14 @@
         "completed_tasks": "완수",
         "uncompleted_tasks": "미완"
     },
+    "project": {
+        "no_drawer": "+ 버튼을 눌러서 서랍을 추가하세요.",
+        "button_load_more": "더보기",
+        "button_add_task": "새 작업 추가",
+        "loading": "로딩 중",
+        "error_load_task": "작업을 불러오지 못했어요 😂",
+        "button_go_back": "이전으로 돌아가기"
+    },
     "settings": {
         "sidebar": {
             "account": "계정",

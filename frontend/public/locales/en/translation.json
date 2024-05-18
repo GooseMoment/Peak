@@ -32,6 +32,14 @@
         "completed_tasks": "Completed",
         "uncompleted_tasks": "Uncompleted"
     },
+    "project": {
+        "no_drawer": "Press + to add drawers",
+        "button_load_more": "Load more",
+        "button_add_task": "Add new task",
+        "loading": "Loading...",
+        "error_load_task": "Couldn't load tasks 😂",
+        "button_go_back": "Go back"
+    },
     "settings": {
         "sidebar": {
             "account": "Account",

@@ -11,6 +11,7 @@ import TaskCreateSimple from "@components/project/Creates/TaskCreateSimple"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { getTasksByDrawer } from "@api/tasks.api"
 import Button from "@components/common/Button"
+import { useTranslation } from "react-i18next"
 
 const getPageFromURL = (url) => {
     if (!url) return null
@@ -22,6 +23,8 @@ const getPageFromURL = (url) => {
 
 const Drawer = ({project, drawer, color}) => {
     const navigate = useNavigate()
+
+    const { t } = useTranslation(null, {keyPrefix: "project"})
 
     const { data, isError, fetchNextPage, isFetching } = useInfiniteQuery({
         queryKey: ["tasks", {drawerID: drawer.id}],
@@ -63,8 +66,8 @@ const Drawer = ({project, drawer, color}) => {
     if (isError) {
         return (
             <>
-                <div>task를 불러오지 못했어요😂</div>
-                <div onClick={() => navigate(-1)}>이전으로 돌아가기</div>
+                <div>{t("error_load_task")}</div>
+                <div onClick={() => navigate(-1)}>{t("button_go_back")}</div>
             </>
         )
     }
@@ -96,10 +99,10 @@ const Drawer = ({project, drawer, color}) => {
             }
             <TaskCreateButton onClick={handleisSimpleOpen}>
                 <FeatherIcon icon="plus-circle"/>
-                <TaskCreateText>할 일 추가</TaskCreateText>
+                <TaskCreateText>{t("button_add_task")}</TaskCreateText>
             </TaskCreateButton>
             <FlexBox>
-                {hasNextPage ? <MoreButton onClick={() => fetchNextPage()}>더보기</MoreButton> : null}
+                {hasNextPage ? <MoreButton onClick={() => fetchNextPage()}>{t("button_load_more")}</MoreButton> : null}
             </FlexBox>
         </>
     );
