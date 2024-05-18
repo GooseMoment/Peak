@@ -16,7 +16,14 @@
         "type_comments": "댓글",
         "type_reactions": "리액션",
         "type_pecking": "쿡",
-        "type_follow": "팔로우"
+        "type_follow": "팔로우",
+        "content_comment_task": "\"<ellipsis>{{task_name}}</ellipsis>\"에 댓글을 남겼습니다: \"<ellipsis>{{comment}}</ellipsis>\"",
+        "content_peck": "\"<ellipsis>{{task_name}}</ellipsis>\"을(를) {{count}}번 쿡 했습니다.",
+        "content_reaction_task": "\"<ellipsis>{{task_name}}</ellipsis>\"에 리액션 했습니다.",
+        "content_reaction_daily_comment": "{{date}}의 하루 코멘트에 리액션 했습니다.",
+        "content_follow": "나를 팔로우 합니다.",
+        "content_follow_request": "내게 팔로우 요청을 보냈습니다.",
+        "content_follow_request_accepted": "내 팔로우 요청을 승인했습니다."
     },
     "settings": {
         "sidebar": {
