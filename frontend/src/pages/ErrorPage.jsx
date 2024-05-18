@@ -3,7 +3,7 @@ import { Link, isRouteErrorResponse, useNavigate, useRouteError } from "react-ro
 import Layout from "@containers/Layout"
 import PageTitle from "@components/common/PageTitle"
 
-import { KEY_IS_SIGNED_IN } from "@api/client";
+import { setToken } from "@api/client";
 import { useEffect } from "react";
 
 const ErrorPage = () => {
@@ -12,7 +12,7 @@ const ErrorPage = () => {
 
     useEffect(() => {
         if (isRouteErrorResponse(error) && error.status === 401) {
-            localStorage.removeItem(KEY_IS_SIGNED_IN)
+            setToken(null)
             navigate("/sign?flag=401")
         }
     }, [])
