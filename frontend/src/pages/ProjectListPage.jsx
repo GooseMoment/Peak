@@ -4,6 +4,7 @@ import { useState } from "react"
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
+import PageTitle from "@components/common/PageTitle"
 import ModalPortal from "@components/common/ModalPortal"
 import ProjectCreate from "@components/project/Creates/ProjectCreate"
 
@@ -13,7 +14,7 @@ const ProjectListPage = () => {
 
     return(
         <>
-            <TitleText>프로젝트</TitleText>
+            <PageTitle>프로젝트</PageTitle>
             {projects && projects.map((project) => (
                 <Box key={project.id}>
                     <FlexBox>
@@ -39,13 +40,6 @@ const ProjectListPage = () => {
         </>
     )
 }
-
-const TitleText = styled.div`
-    font-size: 2em;
-    font-weight: bolder;
-    margin-bottom: 1em;
-    color: #000000;
-`
 
 const Box = styled.div`
     display: flex;
