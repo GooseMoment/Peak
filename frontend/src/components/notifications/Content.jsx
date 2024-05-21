@@ -1,12 +1,17 @@
-import { skeletonCSS } from "@/assets/skeleton"
 import { Link } from "react-router-dom"
+
+import { skeletonCSS } from "@assets/skeleton"
 import styled, { css } from "styled-components"
+
+import { Trans, useTranslation } from "react-i18next"
 
 const socialTypes = [
     "comment", "reaction", "follow", "follow_request", "follow_request_accepted", "peck",
 ]
 
 const Content = ({type, payload, actionUser, skeleton=false}) => {
+    const { t } = useTranslation(null, {keyPrefix: "notifications"})
+
     let title = null
     let detail = null
 
@@ -20,34 +25,50 @@ const Content = ({type, payload, actionUser, skeleton=false}) => {
     switch (type) {
         case "comment":
             detail = <ContentDetailLink to={`/app/projects/${payload.task?.project_id}`}>
-                    "{payload.comment}"
+                    <Trans 
+                        t={t} i18nKey="content_comment_task"
+                        values={{task_name: payload.task?.name, comment: payload.comment}}
+                        components={{ellipsis: <Ellipsis />}}
+                    />
                 </ContentDetailLink>
             break
         case "reaction":
             if (payload.parent_type === "task") {
                 detail = <ContentDetailLink to={`/app/projects/${payload.task?.project_id}`}>
-                    {payload.task?.name}
+                    <Trans 
+                        t={t} i18nKey="content_reaction_task"
+                        values={{task_name: payload.task?.name}}
+                        components={{ellipsis: <Ellipsis />}}
+                    />
                 </ContentDetailLink>
                 break
             }
 
             detail = <ContentDetailLink to={"/app/social/following/"}>
-                    Daily Comment of {payload.daily_comment?.date}
+                    <Trans 
+                        t={t} i18nKey="content_reaction_daily_comment"
+                        values={{date: payload.daily_comment?.date}}
+                        components={{ellipsis: <Ellipsis />}}
+                    />
                 </ContentDetailLink>
             break
         case "peck":
             detail = <ContentDetailLink to={`/app/projects/${payload.task?.project_id}`}>
-                    {payload.task?.name}
+                    <Trans 
+                        t={t} i18nKey="content_peck"
+                        values={{task_name: payload.task?.name, count: payload.count}}
+                        components={{ellipsis: <Ellipsis />}}
+                    />
                 </ContentDetailLink>
             break
         case "follow":
-            detail = "follows you"
+            detail = t("content_follow")
             break
         case "follow_request":
-            detail = "wants to follow you"
+            detail = t("content_follow_request")
             break
         case "follow_request_accepted":
-            detail = "accepted follow request"
+            detail = t("content_follow_request_accepted")
             break
         default:
             detail = ""
@@ -79,6 +100,10 @@ const ContentTitle = styled.h3`
 `
 
 const ContentDetail = styled.p`
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
     ${props => props.$skeleton && css`
         width: 140px;
         height: 1em;
@@ -93,6 +118,18 @@ const ContentTitleLink = styled(Link)`
 
 const ContentDetailLink = styled(Link)`
     color: inherit; 
+    display: flex;
+    gap: 0;
+`
+
+const Ellipsis = styled.span`
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
+    display: inline-block;
+    box-sizing: border-box;
+    max-width: 10em;
 `
 
 export default Content

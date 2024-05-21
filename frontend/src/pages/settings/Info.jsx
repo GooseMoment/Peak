@@ -5,15 +5,19 @@ import generatedGitInfo from '@/generatedGitInfo.json'
 
 import styled from "styled-components"
 
+import { useTranslation } from "react-i18next"
+
 const Info = () => {
+    const { t } = useTranslation(null, {keyPrefix: "settings.info"})
+
     return <>
-        <PageTitle>Info</PageTitle>
+        <PageTitle>{t("title")}</PageTitle>
         <Section>
-            <Name>Build information</Name>
+            <Name>{t("build.name")}</Name>
             <Value>
                 <ul>
-                    <li>Commit: <Code>{generatedGitInfo.gitCommitHash}</Code></li>
-                    <li>Branch: <Code>{generatedGitInfo.gitBranch}</Code></li>
+                    <li>{t("build.commit")}: <Code>{generatedGitInfo.gitCommitHash}</Code></li>
+                    <li>{t("build.branch")}: <Code>{generatedGitInfo.gitBranch}</Code></li>
                 </ul>
             </Value>
         </Section>

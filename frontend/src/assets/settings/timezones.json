@@ -1,9 +1,5 @@
 [
     {
-        "display": "Same as system",
-        "value": "system"
-    },
-    {
         "display": "(GMT-11:00) Midway Island",
         "value": "Pacific/Midway"
     },

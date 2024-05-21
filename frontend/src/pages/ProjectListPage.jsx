@@ -8,13 +8,17 @@ import PageTitle from "@components/common/PageTitle"
 import ModalPortal from "@components/common/ModalPortal"
 import ProjectCreate from "@components/project/Creates/ProjectCreate"
 
+import { useTranslation } from "react-i18next"
+
 const ProjectListPage = () => {
+    const { t } = useTranslation(null, {keyPrefix: "project_list"})
+
     const {projects} = useRouteLoaderData("app")
     const [isCreateOpen, setIsCreateOpen] = useState(false)
 
     return(
         <>
-            <PageTitle>프로젝트</PageTitle>
+            <PageTitle>{t("title")}</PageTitle>
             {projects && projects.map((project) => (
                 <Box key={project.id}>
                     <FlexBox>
@@ -22,16 +26,16 @@ const ProjectListPage = () => {
                         <Link to={`/app/projects/${project.id}`} style={{ textDecoration: 'none' }}>
                             <NameText>{project.name}</NameText>
                         </Link>
-                        <TypeText>{project.type === 'regular' ? "상시" : "목표"}</TypeText>
+                        <TypeText>{project.type === 'regular' ? t("type_regular") : t("type_goal")}</TypeText>
                     </FlexBox>
                     <FlexBox>
-                        <Text>완수한 일 : 30 / 완수하지 못한 일 : 40</Text>
+                        <Text>{t("completed_tasks")}: 30 / {t("uncompleted_tasks")}: 40</Text>
                     </FlexBox>
                 </Box>
             ))}
             <TaskCreateButton onClick={() => {setIsCreateOpen(true)}}>
                 <FeatherIcon icon="plus-circle"/>
-                <TaskCreateText>프로젝트 추가</TaskCreateText>
+                <TaskCreateText>{t("button_add_project")}</TaskCreateText>
             </TaskCreateButton>
             { isCreateOpen &&
             <ModalPortal closeModal={() => {setIsCreateOpen(false)}}>

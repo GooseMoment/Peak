@@ -8,11 +8,14 @@ import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/project/Drawer"
 import DrawerCreate from "@components/project/Creates/DrawerCreate"
 import ModalPortal from "@components/common/ModalPortal"
+import { useTranslation } from "react-i18next"
 
 const ProjectPage = () => {
     const { id } = useParams()
     const { project } = useLoaderData()
     const drawers = project.drawers
+
+    const { t } = useTranslation(null, {keyPrefix: "project"})
 
     const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
 
@@ -25,7 +28,7 @@ const ProjectPage = () => {
                 <FeatherIcon icon="more-horizontal"/>
             </Icons>
         </TitleBox>
-        {drawers && (drawers.length === 0) ? <NoDrawerText>서랍을 생성하고 어서 투두를 작성해보세요😊</NoDrawerText> 
+        {drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
         : drawers.map((drawer) => (
             <Drawer key={drawer.id} project={project} drawer={drawer} color={project.color}/>
         ))}
