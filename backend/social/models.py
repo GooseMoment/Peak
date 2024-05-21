@@ -1,4 +1,3 @@
-from typing import Iterable
 from django.db import models
 
 from api.models import Base

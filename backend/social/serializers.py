@@ -6,7 +6,6 @@ from django.core.cache import cache
 from datetime import datetime
 
 from .models import *
-
 from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
 

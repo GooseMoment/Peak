@@ -142,8 +142,6 @@ def view_daily_log(requset: HttpRequest, follower, followee, day):
     else:
         cache_data = {followerUserID: datetime.now()}
     
-    print(cache_data)
-    
     cache.delete(cache_key)
     # cache.set(cache_key, cache_data, 1*24*60*60)
     cache.set(cache_key, cache_data, 60*60)
