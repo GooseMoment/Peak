@@ -1,0 +1,6 @@
+packages:
+  # include packages in subfolders (change as required)
+  - 'src/**'
+  - 'public/**'
+  # if required, exclude directories
+  - '!**/dist/**'
