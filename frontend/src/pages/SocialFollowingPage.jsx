@@ -11,8 +11,19 @@ import SocialPageTitle from "@components/social/SocialPageTitle";
 
 import { getDailyReport } from "@api/social.api";
 
+const sortDailyLogs = (report) => {
+    return report.slice().sort((a, b) => {
+        if (a.is_read !== b.is_read)
+            return a.is_read - b.is_read
+        return new Date(a.completed_at) - new Date(b.completed_at)
+    })
+}
+
 const SocialFollowingPage = () => {
-    const [selectedDate, setSelectedDate] = useState(moment(new Date()).format('YYYY-MM-DD'))
+    const initial_date = new Date()
+    initial_date.setHours(0, 0, 0, 0)
+
+    const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
     const [selectedIndex, setSelectedIndex] = useState(null)
     const [dailyReport, setDailyReport] = useState([])
     
@@ -20,6 +31,7 @@ const SocialFollowingPage = () => {
 
     const getPreview = async(date) => {
         const day = date
+        console.log(day)
         if(date) try {
             const res = await getDailyReport(user.username, day)
             setDailyReport(res)
@@ -46,7 +58,7 @@ const SocialFollowingPage = () => {
                 </CalendarContainer>
 
                 <DailyLogContainer>
-                    {dailyReport.map((dailyFollowersLog) => (
+                    {sortDailyLogs(dailyReport).map((dailyFollowersLog) => (
                         <DailyLogPreview key={dailyFollowersLog.username} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                     ))}
                 </DailyLogContainer>
@@ -93,7 +105,7 @@ const DailyLogContainer = styled.div`
 `
 
 const mockNewLogDates = [
-    "2024-04-09", "2024-04-10", "2024-04-11",
+    "2024-05-12T15:00:00.000Z", "2024-05-11T15:00:00.000Z", "2024-05-09T00:00:00.000Z"
 ];
 
 const mockDailyFollowerLogsDetail = [

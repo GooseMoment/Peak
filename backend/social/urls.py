@@ -7,7 +7,8 @@ from . import views
 urlpatterns = [
     path('follow/@<str:follower>/@<str:followee>/', views.FollowView.as_view()),
     path('block/@<str:blocker>/@<str:blockee>/', views.BlockView.as_view()),
-    path('daily/report/@<str:username>/<str:day>/', views.get_daily_report),
+    path('daily/logs/@<str:username>/<str:day>/', views.get_daily_logs),
+    path('daily/log/@<str:follower>/@<str:followee>/<str:day>/', views.view_daily_log),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

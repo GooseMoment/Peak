@@ -7,10 +7,10 @@ import 'react-calendar/dist/Calendar.css';
 const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStartDate, selectedEndDate, setSelectedEndDate, contentedDates=[] }) => {
   const [activeStartDate, setActiveStartDate] = useState(new Date())
 
-  const changeDate = (e) => {
+  const changeDate = (e) => {   // client time 00:00
     if (isRangeSelectMode) {
-      const startDate = moment(e[0]).format("YYYY-MM-DD")
-      const endDate = moment(e[1]).format("YYYY-MM-DD")
+      const startDate = e[0].toISOString()
+      const endDate = e[1].toISOString()
       if (startDate === endDate) {
         setSelectedStartDate(null)
         setSelectedEndDate(null)
@@ -21,7 +21,7 @@ const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStart
       }
     }
     else {
-      const startDate = moment(e).format("YYYY-MM-DD")
+      const startDate = e.toISOString()
       if (selectedStartDate === startDate) {
         setSelectedStartDate(null)
       }
@@ -32,7 +32,7 @@ const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStart
 
   const handleTileContent = ({ date, view }) => {
     const contents = []
-    const day = moment(date).format("YYYY-MM-DD")
+    const day = date.toISOString()
 
     if (contentedDates.find((x) => x === day))
       contents.push(<StyledContentDot key={day} />)
@@ -40,7 +40,7 @@ const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStart
   }
 
   const handleTodayClick = () => {
-    const today = new Date();
+    const today = new Date();   // client time
     setActiveStartDate(today);
   };
 
@@ -51,7 +51,7 @@ const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStart
       value={isRangeSelectMode ? [selectedStartDate, selectedEndDate] : selectedStartDate}
       formatDay={(locale, date) => moment(date).format("D")}
       tileContent={handleTileContent}
-      locale='en'
+      locale='en'               // TODO: variable locale
       next2Label={null}
       prev2Label={null}
       minDetail='year'

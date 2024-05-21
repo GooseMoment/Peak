@@ -4,7 +4,7 @@ import CommonCalendar from "@components/common/CommonCalendar";
 import { useState } from "react";
 
 const SocialCalendar = ({newLogDates, selectedDate, setSelectedDate}) => {
-  const [tempDate, setTempDate] = useState(new Date())
+  const [tempDate, setTempDate] = useState(new Date())    // TODO unused
   return <>
     <StyledSocialCalendar
       isRangeSelectMode={false}
