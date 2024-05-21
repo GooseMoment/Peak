@@ -9,5 +9,21 @@ self.addEventListener("push", function(event) {
 
 self.addEventListener("notificationclick", function(event) {
     const url = event?.notification?.data?.click_url
-    self.clients.openWindow(url);
+
+    event.waitUntil(
+        self.clients.matchAll({type: "window"}).then(clients => {
+            if (clients.length > 0) {
+                for (let i=0; i<clients.length; i++) {
+                    if (clients[i].url.includes("/notifications")) {
+                        clients[i].navigate(url)
+                        clients[i].focus()
+                        return
+                    }
+                }
+
+            }
+
+            self.clients.openWindow(url);
+        })
+    )
 })
