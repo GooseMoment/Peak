@@ -72,7 +72,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'api.middleware.TokenAuthentication',
+        'knox.auth.TokenAuthentication',
     ),
 }
 
@@ -210,12 +210,6 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
-
-LOGIN_EXEMPT_URLS=(
-    r'sign_in/',
-    r'sign_up/',
-    r'health/ok',
-)
 
 WEBPUSH = {
     "vapid_private_key": os.environ.get("VAPID_PRIVATE_KEY"), 
