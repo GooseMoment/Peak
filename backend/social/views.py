@@ -111,7 +111,7 @@ def get_blocks(request: HttpRequest, username):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 ## Daily Logs
-# GET social/daily/logs/@username/YYYY-MM-DD'T'HH:mm:ss.SSS'Z'/
+# GET social/daily/logs/@username/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["GET"])
 def get_daily_logs(request: HttpRequest, username, day):
     followings = Following.objects.filter(
@@ -119,7 +119,7 @@ def get_daily_logs(request: HttpRequest, username, day):
         status=Following.ACCEPTED
     ).all()
     followingUsers = User.objects.filter(followers__in=followings.all()).all()
-    day = datetime.strptime(day, "%Y-%m-%dT%H:%M:%S.%fZ")
+    day = datetime.fromisoformat(day)
     
     user_id = str(get_object_or_404(User, username=username).id)
     day_min = day
@@ -129,7 +129,7 @@ def get_daily_logs(request: HttpRequest, username, day):
     
     return Response(serializer.data, status=status.HTTP_200_OK) 
 
-# PUT social/daily/log/@follower/@followee/YYYY-MM-DD'T'HH:mm:ss.SSS'Z'/
+# PUT social/daily/log/@follower/@followee/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["PUT"])
 def view_daily_log(requset: HttpRequest, follower, followee, day):
     followerUserID = str(get_object_or_404(User, username=follower).id)

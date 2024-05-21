@@ -29,8 +29,8 @@ class DailyLogsSerializer(UserSerializer):
         fields = UserSerializer.Meta.fields + ['recent_task']
     
     def get_recent_task(self, obj):
-        day_min = timezone.make_aware(self.context.get('day_min', None))
-        day_max = timezone.make_aware(self.context.get('day_max', None))
+        day_min = self.context.get('day_min', None)
+        day_max = self.context.get('day_max', None)
                 
         recent_task = obj.tasks.filter(
             completed_at__range=(day_min, day_max)
@@ -40,13 +40,15 @@ class DailyLogsSerializer(UserSerializer):
             return None
         
         followee_user_id = obj.id
-        day = day_min.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]+'Z'
+        day = day_min.isoformat()
+        
         cache_key = f"user_id_{followee_user_id}_date_{day}"
         cache_data = cache.get(cache_key)
         
         is_read = True
         if cache_data:
-            last_visted = timezone.make_aware(cache_data[self.context.get('user_id', None)])
+            # last_visted = timezone.make_aware()
+            last_visted =cache_data[self.context.get('user_id', None)]
             is_read = last_visted > recent_task.completed_at
         
         recent_task = TaskSerializer(recent_task).data
