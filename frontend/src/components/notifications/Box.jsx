@@ -1,10 +1,13 @@
+import { forwardRef } from "react"
+
 import Images from "./Images"
 import Content from "./Content"
 import Ago from "./Ago"
 
-import styled from "styled-components"
+import styled, { css, keyframes } from "styled-components"
+import { cubicBeizer } from "@/assets/keyframes"
 
-const Box = ({notification, skeleton=false}) => {
+const Box = forwardRef(({notification, highlight=false, skeleton=false}, ref) => {
     const actionUser = notification?.reaction?.user || notification?.peck?.user || notification?.comment?.user 
         || (notification?.type === "follow" && notification?.following?.follower)
         || (notification?.type === "follow_request" && notification?.following?.follower)
@@ -12,12 +15,24 @@ const Box = ({notification, skeleton=false}) => {
 
     const payload = notification?.reaction || notification?.peck || notification?.following || notification?.comment
 
-    return <Frame>
+    return <Frame ref={ref} $highlight={highlight}>
         <Images skeleton={skeleton} profile_img={actionUser?.profile_img} reaction={notification?.reaction} />
         <Content skeleton={skeleton} payload={payload} type={notification?.type} actionUser={actionUser} />
         <Ago skeleton={skeleton} created_at={notification?.created_at} />
     </Frame>
-}
+})
+
+const blink = p => keyframes`
+    0% {
+        border-color: transparent;
+    }
+    20%, 80% {
+        border-color: ${p.theme.accentColor};
+    }
+    100% {
+        border-color: transparent;
+    }
+`
 
 const Frame = styled.article`
     box-sizing: border-box;
@@ -33,8 +48,15 @@ const Frame = styled.article`
 
     border-radius: 10px;
 
+    background-color: ${p => p.theme.backgroundColor};
+    border: transparent 0.25em solid;
+
+    ${p => p.$highlight && css`
+        animation: ${blink(p)} 1.5s ${cubicBeizer};
+        animation-delay: 0.5s;
+    `}
+
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 `
-
 
 export default Box
