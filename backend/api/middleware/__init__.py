@@ -1,2 +1,1 @@
 from .DisableCSRFMiddleware import DisableCSRFMiddleware
-from .AuthWallMiddleware import AuthWallMiddleware

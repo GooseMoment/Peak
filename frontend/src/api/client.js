@@ -2,12 +2,32 @@ import axios from 'axios'
 
 const baseURL = import.meta.env.VITE_API_BASEURL
 
-export const KEY_IS_SIGNED_IN = "is_signed_in"
-export const VALUE_IS_SIGNED_IN = "yeah"
+export const getToken = () => {
+    const token = localStorage.getItem("token")
+    if (token === "null" || token === "undefined") {
+        return null
+    }
+
+    return token
+}
+
+export const setToken = token => {
+    return localStorage.setItem("token", token)
+}
 
 const client = axios.create({
     baseURL: baseURL,
     withCredentials: true,
+})
+
+client.interceptors.request.use(config => {
+    const token = getToken()
+
+    if (token) {
+        config.headers.Authorization = "Token " + token
+    }
+
+    return config
 })
 
 client.interceptors.response.use(res => {

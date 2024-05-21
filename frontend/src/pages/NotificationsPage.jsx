@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from "react"
+import { Fragment, useCallback, useMemo, useEffect, useRef, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 
 import FilterButtonGroup from "@components/notifications/FilterButtonGroup"
@@ -6,12 +6,15 @@ import Box from "@components/notifications/Box"
 import PageTitle from "@components/common/PageTitle"
 
 import { getNotifications } from "@api/notifications.api"
+import { useClientLocale } from "@utils/clientSettings"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { ImpressionArea } from "@toss/impression-area"
 import styled from "styled-components"
 import { toast } from "react-toastify"
 import { DateTime } from "luxon"
+
+import { useTranslation } from "react-i18next"
 
 const getCursorFromURL = (url) => {
     if (!url) return null
@@ -22,6 +25,9 @@ const getCursorFromURL = (url) => {
 }
 
 const NotificationsPage = () => {
+    const locale = useClientLocale()
+    const { t } = useTranslation("", {keyPrefix: "notifications"})
+    
     const [activeFilter, setActiveFilter] = useState("all")
     const [searchParams, ] = useSearchParams()
 
@@ -30,6 +36,7 @@ const NotificationsPage = () => {
     const scrollToBox = useCallback(node => {
         node?.scrollIntoView({block: "center", scrollBehavior: "smooth"})
     })
+    const filters = useMemo(() => makeFilters(t), [t])
 
     const { data, isError, error, fetchNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery({
         queryKey: ["notifications", {types: filters[activeFilter]}],
@@ -47,13 +54,13 @@ const NotificationsPage = () => {
     }, [activeFilter])
 
     const header = <>
-        <PageTitle>Notifications</PageTitle>
+        <PageTitle>{t("title")}</PageTitle>
         <FilterButtonGroup filters={filters} active={activeFilter} setActive={setActiveFilter} />
         <Blank />
     </>
 
     if (isError) {
-        toast.error("Failed to load notifications.")
+        toast.error(t("fail_to_load"))
         return <>
         {header}
         {[...Array(10)].map((e, i) => <Box key={i} skeleton />)}
@@ -69,7 +76,7 @@ const NotificationsPage = () => {
         <Fragment key={i}>
             {group.results.map((notification, j) => {
                 let dateDelimiter = null;
-                const thisDate = DateTime.fromISO(notification.created_at).toRelativeCalendar({unit: "days"})
+                const thisDate = DateTime.fromISO(notification.created_at).setLocale(locale).toRelativeCalendar({unit: "days"})
 
                 if (i === 0 && j === 0 || thisDate !== lastDate.current) {
                     dateDelimiter = <Date>{thisDate}</Date>
@@ -114,25 +121,25 @@ const Date = styled.h2`
     font-weight: bold;
 `
 
-const filters = {
+const makeFilters = (t) => ({
     "all": {
-        display: "All", types: ["task_reminder", "reaction", "follow", "follow_request", "follow_request_accepted", "comment", "peck"]
+        display: t("type_all"), types: ["task_reminder", "reaction", "follow", "follow_request", "follow_request_accepted", "comment", "peck"]
     },
     "tasks": {
-        display: "Tasks", types: ["task_reminder"]
+        display: t("type_tasks"), types: ["task_reminder"]
     },
     "comments": {
-        display: "Comments", types: ["comment"]
+        display: t("type_comments"), types: ["comment"]
     },
     "reactions": {
-        display: "Reactions", types: ["reaction"]
+        display: t("type_reactions"), types: ["reaction"]
     },
     "pecking": {
-        display: "Pecking", types: ["peck"]
+        display: t("type_pecking"), types: ["peck"]
     },
     "follow": {
-        display: "Follow", types: ["follow", "follow_request", "follow_request_accepted"]
+        display: t("type_follow"), types: ["follow", "follow_request", "follow_request_accepted"]
     },
-}
+})
 
 export default NotificationsPage

@@ -1,27 +1,36 @@
+import { useMemo } from "react"
+
 import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
 
+import { useTranslation } from "react-i18next"
+
 const Appearance = () => {
+    const { t } = useTranslation(null, {keyPrefix: "settings.appearance"})
+
+    const themeChoices = useMemo(() => makeThemeChoices(t), [t])
+    const widthChoices = useMemo(() => makeWidthChoices(t), [t])
+
     return <>
-        <PageTitle>Appearance</PageTitle>
+        <PageTitle>{t("title")}</PageTitle>
         <Section>
-            <Name>Theme perference</Name>
+            <Name>{t("theme.name")}</Name>
             <Value>
                 <Select choices={themeChoices} name="theme" />
             </Value>
         </Section>
 
         <Section>
-            <Name>Content width</Name>
+            <Name>{t("main_width.name")}</Name>
             <Value>
                 <Select choices={widthChoices} name="main_width" />
             </Value>
         </Section>
 
         <Section>
-            <Name>Close sidebar on start up</Name>
+            <Name>{t("close_sidebar_on_startup.name")}</Name>
             <Value>
                 <Switch name="close_sidebar_on_startup" />
             </Value>
@@ -29,32 +38,32 @@ const Appearance = () => {
     </>
 }
 
-const themeChoices = [
+const makeThemeChoices = t => [
     {
-        display: "Same as system",
+        display: t("theme.values.system"),
         value: "system",
     },
     {
-        display: "Light",
+        display: t("theme.values.light"),
         value: "light",
     },
     {
-        display: "Dark",
+        display: t("theme.values.dark"),
         value: "dark",
     },
 ]
 
-const widthChoices = [
+const makeWidthChoices = t => [
     {
-        display: "narrow",
+        display: t("main_width.values.narrow"),
         value: "7rem",
     }, 
     {
-        display: "normal",
+        display: t("main_width.values.normal"),
         value: "5rem",
     }, 
     {
-        display: "wide",
+        display: t("main_width.values.wide"),
         value: "2rem",
     }, 
 ]

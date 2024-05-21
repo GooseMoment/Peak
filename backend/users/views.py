@@ -1,11 +1,14 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status, mixins, generics
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+
+from knox.views import LoginView as KnoxLoginView
 
 import re
 
@@ -33,23 +36,26 @@ class UserDetail(mixins.RetrieveModelMixin,
 
         return self.partial_update(request, *args, **kwargs)
 
-@api_view(["POST"])
-def sign_in(request: Request):
-    email: str = request.data["email"]
-    password: str = request.data["password"]
+class SignInView(KnoxLoginView):
+    permission_classes = (AllowAny, )
 
-    user = authenticate(request, email=email, password=password)
+    def post(self, request):
+        email: str = request.data["email"]
+        password: str = request.data["password"]
 
-    if user is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    
-    login(request, user)
+        user = authenticate(request, email=email, password=password)
 
-    return Response(status=status.HTTP_200_OK)
+        if user is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        login(request, user)
+        
+        return super(SignInView, self).post(request, format=None)
 
 username_validation = re.compile(r"^[a-z0-9_-]{4,15}$")
 
 @api_view(["POST"])
+@permission_classes((AllowAny, ))
 def sign_up(request: Request):
     if request.user.is_authenticated:
         return Response({
@@ -105,13 +111,8 @@ def sign_up(request: Request):
     return Response(status=status.HTTP_200_OK)
 
 @api_view(["GET"])
-def sign_out(request: Request):
-    logout(request)
-    return Response(status=status.HTTP_200_OK)
-
-@api_view(["GET"])
 def get_me(request: Request):
-    serializer = UserSerializer(request.user._wrapped, context={"is_me": True})
+    serializer = UserSerializer(request.user, context={"is_me": True})
     return Response(serializer.data)
 
 @api_view(["PATCH"])

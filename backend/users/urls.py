@@ -3,6 +3,7 @@ from django.urls import path
 from . import views
 from user_setting.views import UserSettingDetail
 from social.views import get_followers, get_followings, get_blocks
+from knox import views as knox_views
 
 urlpatterns = [
     path("users/me/", views.get_me),
@@ -10,8 +11,9 @@ urlpatterns = [
     path("users/me/password/", views.patch_password),
     path("users/me/profile_img/", views.upload_profile_img),
     path("users/me/blocks/", views.get_my_blocks),
-    path("sign_in/", views.sign_in),
-    path("sign_out/", views.sign_out),
+    path("sign_in/", views.SignInView.as_view(), name="knox_login"),
+    path("sign_out/", knox_views.LogoutView.as_view(), name="knox_logout"),
+    path("sign_out_all/", knox_views.LogoutAllView.as_view(), name="knox_logoutall"),
     path("sign_up/", views.sign_up),
     path("users/@<str:username>/", views.UserDetail.as_view()),
     path("users/@<str:username>/followers/", get_followers),

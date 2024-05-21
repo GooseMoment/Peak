@@ -37,6 +37,7 @@ const Time = styled.time`
     font-size: 0.75em;
     display: block;
     word-break: keep-all;
+    white-space: nowrap;
 
     ${props => props.$skeleton && css`
         width: 70px;
