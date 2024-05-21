@@ -5,7 +5,7 @@ from django.core.validators import validate_email
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status, mixins, generics
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 
 from knox.views import LoginView as KnoxLoginView
@@ -55,6 +55,7 @@ class SignInView(KnoxLoginView):
 username_validation = re.compile(r"^[a-z0-9_-]{4,15}$")
 
 @api_view(["POST"])
+@permission_classes((AllowAny, ))
 def sign_up(request: Request):
     if request.user.is_authenticated:
         return Response({
