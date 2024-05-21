@@ -220,7 +220,7 @@ WEBPUSH = {
 }
 
 REST_KNOX = {
-    "TOKEN_TTL": timedelta(days=7),
+    "TOKEN_TTL": timedelta(days=14),
     "USER_SERIALIZER": "users.serializers.UserSerializer",
     "AUTO_REFRESH": True,
 }
