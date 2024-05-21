@@ -1,4 +1,5 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from "react"
+import { Fragment, useCallback, useMemo, useEffect, useRef, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 
 import FilterButtonGroup from "@components/notifications/FilterButtonGroup"
 import Box from "@components/notifications/Box"
@@ -28,6 +29,13 @@ const NotificationsPage = () => {
     const { t } = useTranslation("", {keyPrefix: "notifications"})
     
     const [activeFilter, setActiveFilter] = useState("all")
+    const [searchParams, ] = useSearchParams()
+
+    const id = searchParams.get("id")
+
+    const scrollToBox = useCallback(node => {
+        node?.scrollIntoView({block: "center", scrollBehavior: "smooth"})
+    })
     const filters = useMemo(() => makeFilters(t), [t])
 
     const { data, isError, error, fetchNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery({
@@ -77,7 +85,11 @@ const NotificationsPage = () => {
 
                 return <Fragment key={notification.id}>
                     {dateDelimiter}
-                    <Box notification={notification} />
+                    <Box 
+                        notification={notification} 
+                        highlight={notification.id === id} 
+                        ref={notification.id === id ? scrollToBox : null} 
+                    />
                 </Fragment>
             })}
         </Fragment>
