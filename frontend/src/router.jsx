@@ -1,5 +1,4 @@
 import {
-    Outlet,
     createBrowserRouter,
     redirect,
 } from "react-router-dom"
@@ -19,11 +18,12 @@ import SignPage from "@pages/SignPage"
 import TaskCreateElement from "@pages/taskDetails/TaskCreateElement"
 import TaskDetailElement from "@pages/taskDetails/TaskDetailElement"
 
-import { getMe, getUserByUsername, isSignedIn, signOut } from "@api/users.api"
+import { getMe, getUserByUsername, signOut } from "@api/users.api"
 import { getProject, getProjectsList } from "@api/projects.api"
+import { getToken } from "@api/client"
 
 const redirectIfSignedIn = () => {
-    if (isSignedIn()) {
+    if (getToken()) {
         return redirect("/app/")
     }
 
@@ -51,6 +51,10 @@ const routes = [
         element: <AppLayout />,
         id: "app",
         loader: async () => {
+            if (!getToken()) {
+                redirect("/")
+            }
+
             return {
                 projects: await getProjectsList(),
                 user: await getMe(),
