@@ -1,3 +1,4 @@
+import { useMemo } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 
 import { SidebarBox } from "@components/sidebar/Sidebar"
@@ -8,15 +9,20 @@ import ModalPortal from "@components/common/ModalPortal"
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
+import { useTranslation } from "react-i18next"
+
 const pathRoot = "/settings/"
 
 const Layout = () => {
     const navigate = useNavigate()
+    const { t } = useTranslation("", {keyPrefix: "settings.sidebar"})
 
     const goOutside = () => {
         navigate("/")
         history.pushState("", document.title, window.location.pathname + window.location.search)
     }
+
+    const menuItems = useMemo(() => getMenuItems(t), [t])
 
     const content = <ModalFrame>
         <Sidebar>
@@ -29,7 +35,7 @@ const Layout = () => {
             </MiddleBox>
             <FooterBox>
                 <SidebarA href="/app/sign_out">
-                    <ItemBox><FeatherIcon icon="log-out" />Sign out</ItemBox>
+                    <ItemBox><FeatherIcon icon="log-out" />{t("sign_out")}</ItemBox>
                 </SidebarA>
             </FooterBox>
         </Sidebar>
@@ -43,45 +49,45 @@ const Layout = () => {
     </ModalPortal>
 }
 
-const menuItems = [
+const getMenuItems = t => [
     {
         icon: "user",
-        display: "Account",
+        display: t("account"),
         to: "account",
     },
     {
         icon: "lock",
-        display: "Privacy",
+        display: t("privacy"),
         to: "privacy",
     },
     {
         icon: "globe",
-        display: "Languages & Time",
+        display: t("languages_and_time"),
         to: "languages-and-time",
     },
     {
         icon: "bell",
-        display: "Notifications",
+        display: t("notifications"),
         to: "notifications",
     },
     {
         icon: "sun",
-        display: "Appearance",
+        display: t("appearance"),
         to: "appearance",
     },
     {
         icon: "heart",
-        display: "Reactions",
+        display: t("reactions"),
         to: "reactions",
     },
     {
         icon: "shield",
-        display: "Blocks",
+        display: t("blocks"),
         to: "blocks",
     },
     {
         icon: "info",
-        display: "Info",
+        display: t("info"),
         to: "info",
     },
 ]

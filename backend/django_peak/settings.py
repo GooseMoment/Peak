@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'knox',
+
     'api',
 
     'users',
@@ -67,7 +70,13 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'knox.auth.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 MIDDLEWARE = [
@@ -78,7 +87,6 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'api.middleware.AuthWallMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -216,13 +224,13 @@ CACHES = {
     }
 }
 
-LOGIN_EXEMPT_URLS=(
-    r'sign_in/',
-    r'sign_up/',
-    r'health/ok',
-)
-
 WEBPUSH = {
     "vapid_private_key": os.environ.get("VAPID_PRIVATE_KEY"), 
     "vapid_claims_email": os.environ.get("VAPID_CLAIMS_EMAIL"),
+}
+
+REST_KNOX = {
+    "TOKEN_TTL": timedelta(days=14),
+    "USER_SERIALIZER": "users.serializers.UserSerializer",
+    "AUTO_REFRESH": True,
 }

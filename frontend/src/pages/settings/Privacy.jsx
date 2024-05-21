@@ -1,3 +1,5 @@
+import { useMemo } from "react"
+
 import Loading from "@components/settings/Loading"
 import Error from "@components/settings/Error"
 import PageTitle from "@components/common/PageTitle"
@@ -10,6 +12,8 @@ import { getSettings, patchSettings } from "@api/user_setting.api"
 import queryClient from "@queries/queryClient"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
+
+import { useTranslation } from "react-i18next"
 
 const Privacy = () => {
     const {data: settings, isPending, isError} = useQuery({
@@ -27,6 +31,10 @@ const Privacy = () => {
         },
     })
 
+    const { t } = useTranslation(null, {keyPrefix: "settings.privacy"})
+    
+    const privacyChoices = useMemo(() => makePrivacyChoices(t), [t])
+
     if (isPending) {
         return <Loading />
     }
@@ -36,10 +44,10 @@ const Privacy = () => {
     }
 
     return <>
-        <PageTitle>Privacy <Sync /></PageTitle>
+        <PageTitle>{t("title")} <Sync /></PageTitle>
         <Section>
-            <Name>Accept follow manually</Name>
-            <Description>Follow requests will be pending until you accept them.</Description>
+            <Name>{t("follow_request_approval_manually.name")}</Name>
+            <Description>{t("follow_request_approval_manually.description")}</Description>
             <Value>
                 <Switch 
                     onlineSetting={settings} submit={mutation.mutate}
@@ -49,8 +57,8 @@ const Privacy = () => {
         </Section>
 
         <Section>
-            <Name>Accept follows of your followings automatically</Name>
-            <Description>If one of your followings sends you follow request, you accept it without your action.</Description>
+            <Name>{t("follow_request_approval_for_followings.name")}</Name>
+            <Description>{t("follow_request_approval_for_followings.description")}</Description>
             <Value>
                 <Switch 
                     onlineSetting={settings} submit={mutation.mutate}
@@ -60,8 +68,8 @@ const Privacy = () => {
         </Section>
 
         <Section>
-            <Name>Visibility of my followings & followers list</Name>
-            <Description>You can set who can see your personal connections.</Description>
+            <Name>{t("follow_list_privacy.name")}</Name>
+            <Description>{t("follow_list_privacy.description")}</Description>
             <Value>
                 <Select
                     onlineSetting={settings} submit={mutation.mutate}
@@ -72,17 +80,17 @@ const Privacy = () => {
     </>
 }
 
-const privacyChoices = [
+const makePrivacyChoices = t => [
     {
-        display: "Everyone",
+        display: t("follow_list_privacy.values.public"),
         value: "public",
     },
     {
-        display: "Limit to my followers",
+        display: t("follow_list_privacy.values.protected"),
         value: "protected",
     },
     {
-        display: "Only me",
+        display: t("follow_list_privacy.values.private"),
         value: "private",
     },
 ]

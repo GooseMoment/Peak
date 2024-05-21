@@ -19,3 +19,4 @@ s3transfer==0.10.1
 pillow==10.3.0
 django-redis==5.4.0
 pywebpush==2.0.0
+django-rest-knox==4.2.0

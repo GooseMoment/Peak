@@ -1,17 +1,21 @@
 import { useState } from "react"
 
-import Button, { ButtonGroup, buttonForms } from "@/components/common/Button"
+import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
 import Section, { Name, Value } from "@components/settings/Section"
 import Input from "@components/sign/Input"
 
-import notify from "@utils/notify"
 import { patchPassword } from "@api/users.api"
 
 import { Key, RotateCw } from "feather-icons-react"
 import styled from "styled-components"
-import { states } from "@/assets/themes"
+import { states } from "@assets/themes"
+
+import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const PasswordSection = () => {
+    const { t } = useTranslation("", {keyPrefix: "settings.account"})
+
     const [passwordFormOpened, setPasswordFormOpened] = useState(false)
     const [currentPassword, setCurrentPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
@@ -21,60 +25,60 @@ const PasswordSection = () => {
         e.preventDefault()
 
         if (newPassword.length < 8) {
-            notify.error("New password is too short.")
+            toast.error(t("password_too_short"))
             return
         }
 
         if (currentPassword === newPassword) {
-            notify.error("New password is same with current password.")
+            toast.error(t("password_is_same"))
             return
         }
 
         if (newPassword !== newPasswordAgain) {
-            notify.error("New password does not match.")
+            toast.error(t("password_not_match"))
             return
         }
 
         try {
             const result = await patchPassword(currentPassword, newPassword)
             if (result === true) {
-                notify.success("Password was changed.")
+                toast.success(t("password_change_success"))
                 return
             }
         } catch (e) {
             if (e.response?.data?.code === "PATCHPASSWORD_WRONG_CURRENT_PASSWORD") {
-                notify.error("Current password does not match!")
+                toast.error(t("password_wrong"))
                 return
             }
-            notify.error("Password was not changed.")
+            toast.error(t("password_change_error"))
         }
 
     }
 
     return <Section>
         <Name>
-            Change password
+            {t("change_password")}
             <ToggleButton onClick={() => setPasswordFormOpened(prev => !prev)}>
-                {passwordFormOpened ? "Close" : "Open"}
+                {passwordFormOpened ? t("section_close") : t("section_open")}
             </ToggleButton>
         </Name>
         <Value>
             {passwordFormOpened ? <PasswordChangeForm onSubmit={changePassword}>
                 <Input 
-                    icon={<Key />} name="password" type="password" placeholder="Current password" required
+                    icon={<Key />} name="password" type="password" placeholder={t("current_password")} required
                     value={currentPassword} onChange={e => setCurrentPassword(e.target.value)}
                 />
                 <Input
-                    icon={<Key />} name="new_password" type="password" placeholder="New password" required
+                    icon={<Key />} name="new_password" type="password" placeholder={t("new_password")} required
                     value={newPassword} onChange={e => setNewPassword(e.target.value)}
                 />
                 <Input
-                    icon={<RotateCw />} name="new_password_again" type="password" placeholder="New password (Type again)" required 
+                    icon={<RotateCw />} name="new_password_again" type="password" placeholder={t("new_password_again")} required 
                     value={newPasswordAgain} onChange={e => setNewPasswordAgain(e.target.value)}
                 />
                 <div>
                     <ButtonGroup $justifyContent="right">
-                        <Button $form={buttonForms.filled} $state={states.primary} type="submit">Change</Button>
+                        <Button $form={buttonForms.filled} $state={states.primary} type="submit">{t("button_change")}</Button>
                     </ButtonGroup>
                 </div>
             </PasswordChangeForm> : <PasswordChangeInputsEmpty />}

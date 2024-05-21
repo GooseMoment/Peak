@@ -5,29 +5,40 @@ import Select from "@components/settings/Select"
 
 import timezones from "@assets/settings/timezones.json"
 
-const LanguagesAndRegion = () => {
+import { useTranslation } from "react-i18next"
+
+const browserTz = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+const LanguagesAndTime = () => {
+    const { t } = useTranslation(null, {keyPrefix: "settings.languages_and_time"})
+
+    const timezoneSystemChoice = {
+        display: t("timezone.system") + ` (${browserTz})`,
+        value: "system",
+    }
+
     return <>
-        <PageTitle>Languages & Time</PageTitle>
+        <PageTitle>{t("title")}</PageTitle>
         <Section>
-            <Name>Language</Name>
+            <Name>{t("locale.name")}</Name>
             <Value>
                 <Select name="locale" choices={languageChoices} />
             </Value>
         </Section>
         <Section>
-            <Name>Timezone</Name>
+            <Name>{t("timezone.name")}</Name>
             <Value>
-                <Select name="timezone" choices={timezones} />
+                <Select name="timezone" choices={[timezoneSystemChoice].concat(timezones)} />
             </Value>
         </Section>
         <Section>
-            <Name>Display the start of the week as Monday</Name>
+            <Name>{t("start_of_the_week_monday.name")}</Name>
             <Value>
                 <Switch name="start_of_the_week_monday" />
             </Value>
         </Section>
         <Section>
-            <Name>Display time as a 24-hour</Name>
+            <Name>{t("time_as_24_hour.name")}</Name>
             <Value>
                 <Switch name="time_as_24_hour" />
             </Value>
@@ -56,4 +67,4 @@ const languageChoices = [
     },
 ]
 
-export default LanguagesAndRegion
+export default LanguagesAndTime

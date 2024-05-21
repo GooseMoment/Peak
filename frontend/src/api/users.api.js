@@ -1,4 +1,4 @@
-import client, { KEY_IS_SIGNED_IN, VALUE_IS_SIGNED_IN } from "@api/client"
+import client, { setToken } from "@api/client"
 import { deleteSubscription } from "./notifications.api"
 import { getClientSettings } from "@/utils/clientSettings"
 
@@ -30,22 +30,19 @@ export const patchUser = async (data) => {
     }
 }
 
-export const isSignedIn = () => {
-    return localStorage.getItem(KEY_IS_SIGNED_IN) === VALUE_IS_SIGNED_IN ? true : false
-}
-
 export const signIn = async (email, password) => {
     try {
-        await client.post("sign_in/", {
+        const res = await client.post("sign_in/", {
             email: email,
             password: password,
         })
+
+        setToken(res.data.token)
+        return true
+
     } catch (e) {
         return false
     }
-
-    localStorage.setItem(KEY_IS_SIGNED_IN, VALUE_IS_SIGNED_IN)
-    return true
 }
 
 export const signUp = async (email, password, username) => {
@@ -83,7 +80,7 @@ export const signUp = async (email, password, username) => {
 }
 
 export const signOut = async () => {
-    localStorage.removeItem(KEY_IS_SIGNED_IN)
+    setToken(null)
 
     const subscriptionID = getClientSettings()["push_notification_subscription"]
 
