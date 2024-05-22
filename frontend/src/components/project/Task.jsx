@@ -11,19 +11,48 @@ import taskCalculation from "./taskCalculation"
 import TaskName from "./TaskName"
 import Priority from "./Priority"
 
-function Task({projectId, task, color}){
-    const today = new Date()
-    
+import hourglass from "@assets/project/hourglass.svg"
+
+const Task = ({projectId, task, color}) => {
+    const [newTaskName, setNewTaskName] = useState(task.name)
+    const {assigned, due} = taskCalculation(task)
+
+    const mutation = useMutation({
+        mutationFn: (data) => {
+            return patchTask(task.id, data)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['task', {taskID: task.id}]})
+            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
+        },
+    })
+
     return (
         <Box>
             <Priority priority={task.priority} completed={task.completed_at ? true : false}/>
             <div>
-                <TaskName projectId={projectId} task={task} color={color} editable={false}/>
-                {task.due_date && <CalendarText $completed={task.completed_at ? true : false}>
-                        {task.due_date === today.toISOString().slice(0, 10) && <CalendarTextPlus>오늘</CalendarTextPlus>}
-                        {task.due_date === today.toISOString().slice(0, 10) && "| "}
-                        {task.due_date}
-                </CalendarText>}
+                <TaskName
+                    projectId={projectId}
+                    task={task}
+                    setFunc={mutation.mutate}
+                    newTaskName={newTaskName}
+                    setNewTaskName={setNewTaskName}
+                    color={color} 
+                    editable={false}
+                />
+                <FlexBox>
+                    {task.assigned_at &&
+                    <AssignedDate $completed={task.completed_at ? true : false} $isOutOfDue={assigned === "놓침"}>
+                        <FeatherIcon icon="calendar" />
+                        {assigned}
+                    </AssignedDate>
+                    }
+                    {task.due_date && 
+                    <DueDate $completed={task.completed_at ? true : false} $isOutOfDue={due === "기한 지남"}>
+                        <img src={hourglass} />
+                        {due}
+                    </DueDate>}
+                </FlexBox>
             </div>
         </Box>
     )
