@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +31,11 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-87%a)!2$$9_yiz
 
 DEBUG = os.environ.get("DEBUG", "1") == "1"
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost:8000 localhost localhost:8080 127.0.0.1:8000 127.0.0.1").split(" ")
+SCHEME = os.environ.get("SCHEME")
+WEB_HOSTNAME = os.environ.get("WEB_HOSTNAME")
+API_HOSTNAME = os.environ.get("API_HOSTNAME")
+
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ") + [API_HOSTNAME]
 
 # Application definition
 
@@ -41,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'knox',
 
     'api',
 
@@ -63,7 +70,13 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'knox.auth.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 MIDDLEWARE = [
@@ -79,6 +92,7 @@ MIDDLEWARE = [
 ]
 
 AUTH_USER_MODEL = "users.User"
+USER_DEFAULT_PROFILE_IMG = "https://assets-dev.peak.ooo/user_profile_imgs%2Fdefault.jpg"
 
 ROOT_URLCONF = 'django_peak.urls'
 
@@ -150,10 +164,7 @@ AUTHENTICATION_BACKENDS = [
 
 # CORS
 # https://github.com/adamchainz/django-cors-headers?tab=readme-ov-file#configuration
-CORS_ALLOWED_ORIGINS = [
-    "https://peak.ooo",
-    "http://localhost:8000",
-]
+CORS_ALLOWED_ORIGINS = os.environ.get("DJANGO_CORS_ALLOWED_ORIGINS").split() + [SCHEME + WEB_HOSTNAME]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^http:\/\/127\.0\.0\.1:((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$",
@@ -203,3 +214,23 @@ STORAGES = {
     },
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis-cache:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+WEBPUSH = {
+    "vapid_private_key": os.environ.get("VAPID_PRIVATE_KEY"), 
+    "vapid_claims_email": os.environ.get("VAPID_CLAIMS_EMAIL"),
+}
+
+REST_KNOX = {
+    "TOKEN_TTL": timedelta(days=14),
+    "USER_SERIALIZER": "users.serializers.UserSerializer",
+    "AUTO_REFRESH": True,
+}

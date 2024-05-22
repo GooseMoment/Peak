@@ -1,4 +1,6 @@
-import client, { KEY_IS_SIGNED_IN, VALUE_IS_SIGNED_IN } from "@api/client"
+import client, { setToken } from "@api/client"
+import { deleteSubscription } from "./notifications.api"
+import { getClientSettings } from "@/utils/clientSettings"
 
 export const getMe = async () => {
     try {
@@ -28,22 +30,19 @@ export const patchUser = async (data) => {
     }
 }
 
-export const isSignedIn = () => {
-    return localStorage.getItem(KEY_IS_SIGNED_IN) === VALUE_IS_SIGNED_IN ? true : false
-}
-
 export const signIn = async (email, password) => {
     try {
-        await client.post("sign_in/", {
+        const res = await client.post("sign_in/", {
             email: email,
             password: password,
         })
+
+        setToken(res.data.token)
+        return true
+
     } catch (e) {
         return false
     }
-
-    localStorage.setItem(KEY_IS_SIGNED_IN, VALUE_IS_SIGNED_IN)
-    return true
 }
 
 export const signUp = async (email, password, username) => {
@@ -81,9 +80,13 @@ export const signUp = async (email, password, username) => {
 }
 
 export const signOut = async () => {
-    localStorage.removeItem(KEY_IS_SIGNED_IN)
+    setToken(null)
+
+    const subscriptionID = getClientSettings()["push_notification_subscription"]
 
     try {
+        await deleteSubscription(subscriptionID)
+
         const res = await client.get("sign_out/")
         if (res.status === 200) {
             return true
@@ -112,16 +115,16 @@ export const patchPassword = async (current_password, new_password) => {
 
 export const uploadProfileImg = async (formData) => {
     try {
-        const res = await client.post("users/me/profile_img", formData)
+        const res = await client.post("users/me/profile_img/", formData)
         return res.status
     } catch (e) {
         throw e
     }
 }
 
-export const getBlocks = async (username) => {
+export const getBlocks = async () => {
     try {
-        const res = await client.get(`users/@${username}/blocks/`)
+        const res = await client.get(`users/me/blocks/`)
         return res.data
     } catch (e) {
         throw e

@@ -1,17 +1,20 @@
-from django.http import HttpRequest, Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from datetime import datetime, time
-
 from rest_framework.decorators import api_view
+
+from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
+from django.core.cache import cache
+
+from datetime import datetime, timedelta
 
 from .models import *
 from .serializers import *
 from users.serializers import UserSerializer
 
-# following 만드는 거
+## Follow
+# social/follow/@follower/@followee/
 class FollowView(APIView):
     #request 확인 기능 넣기
     #block 검사
@@ -68,8 +71,9 @@ def get_followings(request: HttpRequest, username):
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+## Block
 class BlockView(APIView):
-    #상대 볼 수 없게/
+    # TODO 상대 볼 수 없게/
     def put(self, request, blocker, blockee):
         blockerUser = get_object_or_404(User, username=blocker)
         blockeeUser = get_object_or_404(User, username=blockee)
@@ -106,21 +110,44 @@ def get_blocks(request: HttpRequest, username):
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-# TODO: isRead는 redis로
-# GET social/daily/report/@username/YYYY-MM-DD/
+## Daily Logs
+# GET social/daily/logs/@username/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["GET"])
-def get_daily_report(request: HttpRequest, username, day):
-    followings = Following.objects.filter(follower__username=username).all()
+def get_daily_logs(request: HttpRequest, username, day):
+    followings = Following.objects.filter(
+        follower__username=username,
+        status=Following.ACCEPTED
+    ).all()
     followingUsers = User.objects.filter(followers__in=followings.all()).all()
-    day = datetime.strptime(day, "%Y-%m-%d").date()
+    day = datetime.fromisoformat(day)
     
-    day_min = datetime.combine(day, time.min)
-    day_max = datetime.combine(day, time.max)
+    user_id = str(get_object_or_404(User, username=username).id)
+    day_min = day
+    day_max = day + timedelta(hours=24) - timedelta(seconds=1)
     
-    serializer = DailyReportSerializer(followingUsers, context={'day_min': day_min, 'day_max':day_max}, many=True)
+    serializer = DailyLogsSerializer(followingUsers, context={'day_min': day_min, 'day_max':day_max, 'user_id':user_id}, many=True)
     
     return Response(serializer.data, status=status.HTTP_200_OK) 
+
+# PUT social/daily/log/@follower/@followee/YYYY-MM-DDTHH:mm:ss+hh:mm/
+@api_view(["PUT"])
+def view_daily_log(requset: HttpRequest, follower, followee, day):
+    followerUserID = str(get_object_or_404(User, username=follower).id)
+    followeeUserID = str(get_object_or_404(User, username=followee).id)
+
+    cache_key = f"user_id_{followeeUserID}_date_{day}"
+    cache_data = cache.get(cache_key)
+    if cache_data:
+        cache_data[followerUserID] = datetime.now()
+    else:
+        cache_data = {followerUserID: datetime.now()}
     
+    cache.delete(cache_key)
+    # cache.set(cache_key, cache_data, 1*24*60*60)
+    cache.set(cache_key, cache_data, 60*60)
+    
+    return Response(cache_data, status=status.HTTP_200_OK)
+
 def get_following_feed(request: HttpRequest, date):
     pass
 

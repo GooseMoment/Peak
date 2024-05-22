@@ -1,5 +1,6 @@
 import { useState } from "react"
 
+import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 import { skeletonCSS } from "@assets/skeleton"
 
 import { DateTime } from "luxon"
@@ -8,7 +9,9 @@ import styled, { css } from "styled-components"
 const Ago = ({created_at, skeleton=false}) => {
     const [isHover, setIsHover] = useState(false)
 
-    const datetime = DateTime.fromISO(created_at).setLocale("en")
+    const locale = useClientLocale()
+    const tz = useClientTimezone()
+    const datetime = DateTime.fromISO(created_at).setLocale(locale).setZone(tz)
 
 
     return <Container>
@@ -18,7 +21,7 @@ const Ago = ({created_at, skeleton=false}) => {
             onMouseEnter={e => setIsHover(true)}
             onMouseLeave={e => setIsHover(false)}
         >
-            {isHover ? datetime.toLocaleString(DateTime.DATETIME_MED) : datetime.toRelative()}
+            {!skeleton && isHover ? datetime.toLocaleString(DateTime.DATETIME_MED) : datetime.toRelative()}
         </Time>
     </Container>
 }
@@ -34,6 +37,7 @@ const Time = styled.time`
     font-size: 0.75em;
     display: block;
     word-break: keep-all;
+    white-space: nowrap;
 
     ${props => props.$skeleton && css`
         width: 70px;

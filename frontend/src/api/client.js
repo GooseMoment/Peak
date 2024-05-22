@@ -1,17 +1,33 @@
 import axios from 'axios'
 
-let baseURL = "https://api.peak.ooo"
+const baseURL = import.meta.env.VITE_API_BASEURL
 
-if (process.env.NODE_ENV === "development") {
-    baseURL = "http://localhost:8888"
+export const getToken = () => {
+    const token = localStorage.getItem("token")
+    if (token === "null" || token === "undefined") {
+        return null
+    }
+
+    return token
 }
 
-export const KEY_IS_SIGNED_IN = "is_signed_in"
-export const VALUE_IS_SIGNED_IN = "yeah"
+export const setToken = token => {
+    return localStorage.setItem("token", token)
+}
 
 const client = axios.create({
     baseURL: baseURL,
     withCredentials: true,
+})
+
+client.interceptors.request.use(config => {
+    const token = getToken()
+
+    if (token) {
+        config.headers.Authorization = "Token " + token
+    }
+
+    return config
 })
 
 client.interceptors.response.use(res => {

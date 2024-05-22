@@ -9,7 +9,6 @@ from tasks.models import Task
 from social.models import (
     Peck, Comment, DailyComment, Emoji, Reaction, Following, Block
 )
-from notifications.models import Notification
 
 import random
 from datetime import date, datetime, timedelta, timezone
@@ -430,76 +429,3 @@ def create_blocks(users: list[User], followings: dict[tuple[str, str], Following
                 pass
     
     return blocks
-
-def factory_notification(
-        user: User, type: str, payload: User | Task | Reaction | Following | Peck,
-        created_at: datetime,
-    ) -> Notification:
-        
-    noti = Notification(
-        user=user,
-        type=type,
-        created_at=created_at,
-    )
-
-    if type in (Notification.FOR_FOLLOW, Notification.FOR_FOLLOW_REQUEST, Notification.FOR_FOLLOW_REQUEST_ACCEPTED):
-        type = "following"
-
-    setattr(noti, type, payload)
-
-    return noti
-
-
-def create_notifications(
-        tasks: list[Task], reactions: list[Reaction], followings: list[Following], pecks: list[Peck]
-    ) -> list[Notification]:
-    
-    notifications: list[Notification] = []
-
-    # for reactions
-    for reaction in reactions:
-        reaction_payload = reaction.task or reaction.daily_comment
-
-        noti = factory_notification(
-            reaction_payload.user, Notification.FOR_REACTION, reaction, reaction.created_at,
-        )
-        noti.save()
-        notifications.append(noti)
-
-    # for following 
-    for key, following in followings.items():
-        # 예시: @AAA가 @BBB의 팔로우 버튼을 눌렀다 
-        if following.status == Following.REQUESTED or following.status == Following.REJECTED: # @BBB 계정이 잠겨있다면
-            # @BBB에게 알림 보내기: @AAA가 팔로우 요청을 보냈습니다
-            noti = factory_notification(
-                following.followee, Notification.FOR_FOLLOW_REQUEST, following, following.created_at,
-            )
-            noti.save()
-            notifications.append(noti)
-            
-            continue
-        
-        if following.status == Following.ACCEPTED and following.created_at != following.updated_at: # @BBB의 계정이 잠겨있었고 팔로우 요청을 승인했다면
-            # @AAA에게 알림 보내기: @BBB가 내 팔로우 요청을 승인했습니다
-            noti = factory_notification(
-                following.follower, Notification.FOR_FOLLOW_REQUEST_ACCEPTED, following, following.updated_at,
-            )
-            noti.save()
-            notifications.append(noti)
-
-        # @BBB에게 알림 보내기: @AAA가 나를 팔로우 합니다
-        noti = factory_notification(
-            following.followee, Notification.FOR_FOLLOW, following, following.updated_at,
-        )
-        noti.save()
-        notifications.append(noti)
-
-    # for peck
-    for peck in pecks:
-        noti = factory_notification(
-            peck.task.user, Notification.FOR_PECK, peck, peck.updated_at,
-        )
-        noti.save()
-        notifications.append(noti)
-
-    return notifications

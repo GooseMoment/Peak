@@ -28,9 +28,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     env_file:
-      - ./.env.dev
-      - ./.env.s3
+      - ./.env
   db: 
     image: postgres:16.2-alpine3.19
     volumes:
@@ -41,10 +42,18 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
-    environment:
-      POSTGRES_USER: peakuser
-      POSTGRES_PASSWORD: PEAK_DEFAULT_PASSWORD
-      POSTGRES_DB: peakdb
+    env_file:
+      - ./.env
+  redis:
+    container_name: redis-cache
+    image: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
 volumes:
   django_admin_static:
   db_data:
