@@ -35,6 +35,9 @@ importers:
       moment:
         specifier: ^2.30.1
         version: 2.30.1
+      pnpm:
+        specifier: ^9.1.2
+        version: 9.1.2
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -1544,6 +1547,11 @@ packages:
   picomatch@4.0.2:
     resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
     engines: {node: '>=12'}
+
+  pnpm@9.1.2:
+    resolution: {integrity: sha512-En3IO56hDDK+ZdIqjvtKZfuVLo/vvf3tOb3DyX78MtMbSLAEIN8sEYes4oySHJAvDLWhNKTQMri1KVy/osaB4g==}
+    engines: {node: '>=18.12'}
+    hasBin: true
 
   possible-typed-array-names@1.0.0:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
@@ -3542,6 +3550,8 @@ snapshots:
   picocolors@1.0.1: {}
 
   picomatch@4.0.2: {}
+
+  pnpm@9.1.2: {}
 
   possible-typed-array-names@1.0.0: {}
 
