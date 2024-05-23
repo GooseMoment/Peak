@@ -1,9 +1,10 @@
 import FeatherIcon from "feather-icons-react"
 import { useState } from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import Button from "@components/common/Button"
 
 const TimeDetail = ({onClose}) => {
+    const [timezone, setTimezone] = useState("오전")
     const [hour, setHour] = useState()
     const [min, setMin] = useState()
 
@@ -12,6 +13,9 @@ const TimeDetail = ({onClose}) => {
         if (validInputValue.length > 2){
             validInputValue = e.target.value.slice("", 2)
         }
+        if (validInputValue > 12){
+            validInputValue = e.target.value.slice("", 1)
+        }
         setHour(validInputValue)
     }
 
@@ -19,6 +23,9 @@ const TimeDetail = ({onClose}) => {
         let validInputValue = e.target.value
         if (validInputValue.length > 2){
             validInputValue = e.target.value.slice("", 2)
+        }
+        if (validInputValue > 59){
+            validInputValue = e.target.value.slice("", 1)
         }
         setMin(validInputValue)
     }
@@ -32,10 +39,10 @@ const TimeDetail = ({onClose}) => {
             <CLine />
             <FlexBox>
                 <ToggleBox>
-                    <TimezoneToggle>
+                    <TimezoneToggle $active={timezone == "오전"} onClick={()=>{setTimezone("오전")}}>
                         <ToggleText>오전</ToggleText>
                     </TimezoneToggle>
-                    <TimezoneToggle>
+                    <TimezoneToggle $active={timezone == "오후"} onClick={()=>{setTimezone("오후")}}>
                         <ToggleText>오후</ToggleText>
                     </TimezoneToggle>
                 </ToggleBox>
@@ -44,7 +51,6 @@ const TimeDetail = ({onClose}) => {
                         type="number"
                         maxLength={2}
                         value={hour}
-                        max="12"
                         onChange={handleHour}
                     />
                     <ColonContainer>:</ColonContainer>
@@ -52,13 +58,12 @@ const TimeDetail = ({onClose}) => {
                         type="number"
                         maxLength={2}
                         value={min}
-                        max="60"
                         onChange={handleMin}
                     />
                 </InputBox>
             </FlexBox>
             <FlexCenterBox>
-                <Button>추가하기</Button>
+                <AddButton onClick={()=>console.log(hour, min)}>추가하기</AddButton>
             </FlexCenterBox>
         </DetailBox>
     )
@@ -151,10 +156,15 @@ const TimezoneToggle = styled.div`
     border-radius: 15px;
 
     &:hover {
-        background-color: #FF4A03;
-        color: white;
-        border: solid 1px white;
         cursor: pointer;
+    }
+
+    ${(props) =>
+        props.$active && css`
+            background-color: #FF4A03;
+            border: solid 1px white;
+            color: white;
+        `
     }
 `
 
@@ -177,8 +187,8 @@ const ColonContainer = styled.div`
 `
 
 const TimeInput = styled.input`
-    width: 1.3em;
-    height: 1.4em;
+    width: 1.4em;
+    height: 1.5em;
     font-size: 2em;
     text-align: center;
     background-color: #D9D9D9;
@@ -192,6 +202,10 @@ const TimeInput = styled.input`
     &::-webkit-inner-spin-button {
         -webkit-appearance: none;
     }
+`
+
+const AddButton = styled(Button)`
+    font-size: 0.9em;
 `
 
 export default TimeDetail

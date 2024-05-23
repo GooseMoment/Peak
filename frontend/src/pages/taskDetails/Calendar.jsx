@@ -1,7 +1,11 @@
+import { useState } from "react"
+
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
 import Detail from "@components/project/common/Detail"
+import ModalPortal from "@components/common/ModalPortal"
+import TimeDetail from "@components/project/TimeDetail"
 
 import today from "@assets/project/calendar/today.svg"
 import tomorrow from "@assets/project/calendar/tomorrow.svg"
@@ -9,6 +13,9 @@ import next_week from "@assets/project/calendar/next_week.svg"
 import slach from "@assets/project/slach.svg"
 
 const Calendar = ({setFunc, closeComponent}) => {
+    const [isTimeOpen, setIsTimeOpen] = useState(false)
+    const [isRepeatOpen, setIsRepeatOpen] = useState(false)
+
     let date = new Date()
 
     const items = [
@@ -43,18 +50,22 @@ const Calendar = ({setFunc, closeComponent}) => {
             <div>달력이 들어갈 자리입니다</div>
             <CLine />
             <AddButton>
-                <AddButtonText>
+                <AddButtonText onClick={() => setIsTimeOpen(true)}>
                     <FeatherIcon icon="clock" />
                     시간 추가
                 </AddButtonText>
             </AddButton>
             <CLine />
             <AddButton>
-                <AddButtonText>
+                <AddButtonText onClick={() => setIsRepeatOpen(true)}>
                     <FeatherIcon icon="refresh-cw" />
                     반복 설정
                 </AddButtonText>
             </AddButton>
+            {isTimeOpen &&
+            <ModalPortal closeModal={() => setIsTimeOpen(false)} additional>
+                <TimeDetail onClose={() => setIsTimeOpen(false)}/>
+            </ModalPortal>}
         </Detail>
     )
 }
