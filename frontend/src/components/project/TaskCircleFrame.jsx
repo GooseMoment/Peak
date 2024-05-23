@@ -20,8 +20,8 @@ const TaskCircle = styled.div`
     display: flex;
     justify-content: center;
     top: ${(props) => (props.$editable ? 0.1 : props.$isDate ? 0.3 : 0)}em;
-    width: 1.2em;
     height: 1.2em;
+    aspect-ratio: 1;
     border-radius: 50%;
     border: 3px solid ${(props) => (props.$completed ? '#A4A4A4': `#${props.$color}`)};
     position: relative;
