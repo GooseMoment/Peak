@@ -1,10 +1,10 @@
-import FeatherIcon from "feather-icons-react"
 import { useState } from "react"
+import FeatherIcon from "feather-icons-react"
 import styled, { css } from "styled-components"
 import Button from "@components/common/Button"
 
 const TimeDetail = ({onClose}) => {
-    const [timezone, setTimezone] = useState("오전")
+    const [timezone, setTimezone] = useState(timezones[0].name)
     const [hour, setHour] = useState()
     const [min, setMin] = useState()
 
@@ -39,12 +39,11 @@ const TimeDetail = ({onClose}) => {
             <CLine />
             <FlexBox>
                 <ToggleBox>
-                    <TimezoneToggle $active={timezone == "오전"} onClick={()=>{setTimezone("오전")}}>
-                        <ToggleText>오전</ToggleText>
-                    </TimezoneToggle>
-                    <TimezoneToggle $active={timezone == "오후"} onClick={()=>{setTimezone("오후")}}>
-                        <ToggleText>오후</ToggleText>
-                    </TimezoneToggle>
+                    {timezones.map(t=>(
+                        <TimezoneToggle $active={timezone == t.name} onClick={()=>{setTimezone(t.name)}}>
+                            <ToggleText>{t.display}</ToggleText>
+                        </TimezoneToggle>
+                    ))}
                 </ToggleBox>
                 <InputBox>
                     <TimeInput
@@ -147,7 +146,7 @@ const ToggleBox = styled.div`
 
 const TimezoneToggle = styled.div`
     display: flex;
-    text-align: center;
+    align-items: center;
     justify-content: center;
     width: 3.4em;
     height: 1.6em;
@@ -169,7 +168,6 @@ const TimezoneToggle = styled.div`
 `
 
 const ToggleText = styled.div`
-    transform: translate(0, 14%);
     font-weight: 500;
 `
 
@@ -187,7 +185,7 @@ const ColonContainer = styled.div`
 `
 
 const TimeInput = styled.input`
-    width: 1.4em;
+    width: 1.5em;
     height: 1.5em;
     font-size: 2em;
     text-align: center;
@@ -207,5 +205,10 @@ const TimeInput = styled.input`
 const AddButton = styled(Button)`
     font-size: 0.9em;
 `
+
+const timezones = [
+    {name: "am", display: "오전"},
+    {name: "pm", display: "오후"},
+]
 
 export default TimeDetail
