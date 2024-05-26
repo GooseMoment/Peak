@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { Fragment, useState } from "react"
 
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
@@ -6,6 +6,7 @@ import styled from "styled-components"
 import Detail from "@components/project/common/Detail"
 import ModalPortal from "@components/common/ModalPortal"
 import TimeDetail from "@components/project/TimeDetail"
+import RepeatDetail from "@components/project/RepeatDetail"
 
 import today from "@assets/project/calendar/today.svg"
 import tomorrow from "@assets/project/calendar/tomorrow.svg"
@@ -13,8 +14,11 @@ import next_week from "@assets/project/calendar/next_week.svg"
 import slach from "@assets/project/slach.svg"
 
 const Calendar = ({setFunc, closeComponent}) => {
-    const [isTimeOpen, setIsTimeOpen] = useState(false)
-    const [isRepeatOpen, setIsRepeatOpen] = useState(false)
+    const [isAdditionalComp, setIsAdditionalComp] = useState()
+
+    const closeAdditionalComp = () => {
+        setIsAdditionalComp(false)
+    }
 
     let date = new Date()
 
@@ -24,6 +28,11 @@ const Calendar = ({setFunc, closeComponent}) => {
         {id: 2, icon: <img src={next_week}/>, content: "다음 주", set: 7},
         {id: 3, icon: <img src={next_week}/>, content: "2주 뒤", set: 14},
         {id: 4, icon: <img src={slach}/>, content: "날짜없음", set: null},
+    ]
+
+    const addComponent = [
+        {name: "time", display: "시간 추가", icon: "clock", component: <TimeDetail onClose={closeAdditionalComp}/>},
+        {name: "repeat", display: "반복 설정", icon: "refresh-cw", component: <RepeatDetail onClose={closeAdditionalComp}/>},
     ]
 
     const changeDueDate = (set) => {
@@ -48,24 +57,21 @@ const Calendar = ({setFunc, closeComponent}) => {
             ))}
             <CLine />
             <div>달력이 들어갈 자리입니다</div>
-            <CLine />
-            <AddButton>
-                <AddButtonText onClick={() => setIsTimeOpen(true)}>
-                    <FeatherIcon icon="clock" />
-                    시간 추가
-                </AddButtonText>
-            </AddButton>
-            <CLine />
-            <AddButton>
-                <AddButtonText onClick={() => setIsRepeatOpen(true)}>
-                    <FeatherIcon icon="refresh-cw" />
-                    반복 설정
-                </AddButtonText>
-            </AddButton>
-            {isTimeOpen &&
-            <ModalPortal closeModal={() => setIsTimeOpen(false)} additional>
-                <TimeDetail onClose={() => setIsTimeOpen(false)}/>
-            </ModalPortal>}
+            {addComponent.map((comp)=>(
+                <Fragment key={comp.name}>
+                    <CLine />
+                    <AddButton>
+                        <AddButtonText onClick={() => setIsAdditionalComp(comp.name)}>
+                            <FeatherIcon icon={comp.icon}/>
+                            {comp.display}
+                        </AddButtonText>
+                    </AddButton>
+                    {isAdditionalComp === comp.name &&
+                    <ModalPortal closeModal={closeAdditionalComp} additional>
+                        {comp.component}
+                    </ModalPortal>}
+                </Fragment>
+            ))}
         </Detail>
     )
 }
