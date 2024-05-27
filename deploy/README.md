@@ -31,6 +31,7 @@ WSGI 프로그램으로는 [gunicorn](https://gunicorn.org)을 사용합니다.
 - api: gunicorn (backend 디렉터리 포함)
 - web: caddy
 - db: postgresql
+- redis: redis
 
 ## 실행
 
@@ -41,19 +42,19 @@ docker volume create caddy_data
 docker volume create db_data
 ```
 
-오브젝트 스토리지에 접근하기 위해 `.env.s3` 파일이 필요합니다. `.env.s3.example`을 `.env.s3`로 복사합시다.
+오브젝트 스토리지에 접근하기 위해 `.env` 파일이 필요합니다. `.env.example`을 `.env`로 복사합시다.
 
 ```bash
-cp .env.s3.example .env.s3
+cp .env.example .env
 ```
 
-@JedBeom 에게 전달받은 값들로 `.env.s3`를 수정합니다.
+그 후 S3 등 필요한 부분을 변경해 주세요.
 
 > Windows 환경에서 실행하는 경우, 앞으로의 명령어 중 `.sh` 파일 대신 `.ps1` 파일을 사용하십시오.
 
 ### 개발 환경일시
 
-다른 터미널(또는 VSCode +버튼 눌러서 터미널 탭 추가)에서 `frontend`에서 `npm run dev` 실행 
+다른 터미널(또는 VSCode +버튼 눌러서 터미널 탭 추가)에서 `frontend`에서 `pnpm run dev` 실행 
 
 ```bash
 # Peak 디렉터리에서 실행
@@ -71,15 +72,7 @@ docker-compose down # 종료 및 컨테이너 내리기
 
 ### 프로덕션일시
 
-실행 전, `.env.prod` 파일이 필요합니다. `.env.prod.example`을 `.env.prod`로 복사합시다.
-
-```bash
-cp .env.prod.example .env.prod
-```
-
-`.env.prod`의 설정값을 적절히 교체합니다.
-
-그 다음, `frontend`의 `npm run build`를 시행합니다.
+`frontend` 코드를 아래 명령어로 빌드합니다.
 
 ```bash
 ./deploy/run-builder.sh frontend
@@ -101,7 +94,7 @@ cp .env.prod.example .env.prod
 
 ### permission denied: ./deploy/compose-prod.sh
 
-스크립트에 실행 권한이 부족해서 일어나는 일이다.
+스크립트에 실행 권한이 부족해서 발생하는 일입니다. 실행 권한을 부여해줍시다.
 
 ```bash
 chmod +x ./deploy/compose-prod.sh
@@ -114,8 +107,12 @@ django.db.utils.OperationalError: connection failed: FATAL:  password authentica
 FATAL:  role "peakuser" does not exist
 ```
 
-볼륨 설정이 제대로 되지 않은 것으로, 쿨하게 볼륨까지 내려주자(...) (다른 안전한 방법은 모르겠다)
+데이터베이스 볼륨 설정이 완료되지 않아 생긴 오류입니다. 볼륨과 컨테이너를 모두 내리고 다시 실행해주세요.
 
 ```bash
 docker-compose down -v
+docker volume remove db_data
+
+docker-volume create db_data
+docker-compose up
 ```
