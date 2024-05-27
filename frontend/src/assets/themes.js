@@ -1,5 +1,3 @@
-import { css } from "styled-components"
-
 const black = "#222222"
 const white = "#FEFDFC"
 const goose = "#ff4a03"
@@ -7,7 +5,7 @@ const goose = "#ff4a03"
 export const defaultTheme = {
     primaryColors: {
         text: black,
-        primary: goose,
+        primary: "AccentColor",
         secondary: "#f78457",
         link: "rgb(66, 88, 255)",
         info: "rgb(102, 209, 255)",
@@ -20,13 +18,13 @@ export const defaultTheme = {
     goose,
     textColor: black,
     backgroundColor: white,
-    accentColor: goose,
+    accentColor: "AccentColor",
     scrollbarColor: "#FFC6C6",
     sidebar: {
-        activeColor: black,
-        activeBackgroundColor: "#D9D9D9",
+        activeColor: "HighlightText",
+        activeBackgroundColor: "Highlight",
         hoverColor: black,
-        hoverBackgroundColor: `rgb(255 74 3 / 0.35)`,
+        hoverBackgroundColor: "#D9D9D9",
         backgroundColor: "#F9F7F6",
     }
 }
