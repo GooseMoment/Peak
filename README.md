@@ -1,7 +1,10 @@
+# Peak
+
 <div align="center">
 <a href="https://peak.ooo">
 	<img src="./frontend/public/og.png" alt="Peak Logo" style="border-radius:50%" width="600"/>
 </a>
+</div>
 
 **Peak is an open source task-managing platform.**
 
