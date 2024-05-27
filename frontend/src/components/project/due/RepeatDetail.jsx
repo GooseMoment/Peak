@@ -1,5 +1,4 @@
 import { useState } from "react"
-import FeatherIcon from "feather-icons-react"
 import styled, { css } from "styled-components"
 import Button from "@components/common/Button"
 
@@ -10,7 +9,7 @@ import everyyear from "@assets/project/repeat/everyyear.svg"
 import weekday from "@assets/project/repeat/weekday.svg"
 import weekend from "@assets/project/repeat/weekend.svg"
 
-const RepeatDetail = ({onClose}) => {
+const RepeatDetail = () => {
     const [quick, setQuick] = useState("")
     const [week, setWeek] = useState(0)
     const [days, setDays] = useState([])
@@ -42,11 +41,6 @@ const RepeatDetail = ({onClose}) => {
 
     return (
         <DetailBox>
-            <TitleBox>
-                <Title>반복 설정</Title>
-                <FeatherIcon icon="x" onClick={onClose} />
-            </TitleBox>
-            <CLine/>
             <ButtonFlexBox>
             {quickButtons.map(quickButton=>(
                 <ButtonBox key={quickButton.display} $active={quick == quickButton.display} onClick={()=>handleQuick(quickButton.display)}>
@@ -56,15 +50,13 @@ const RepeatDetail = ({onClose}) => {
             </ButtonFlexBox>
             <CLine/>
             <FlexCenterBox>
-                <InputBox>
-                    <WeekInput
-                        type="number"
-                        maxLength={2}
-                        value={week}
-                        onChange={handleWeek}
-                    />
-                    <TextContainer>주 마다</TextContainer>
-                </InputBox>
+                <WeekInput
+                    type="number"
+                    maxLength={2}
+                    value={week}
+                    onChange={handleWeek}
+                />
+                <TextContainer>주 마다</TextContainer>
             </FlexCenterBox>
             <FlexCenterBox>
             {daysOfWeek.map((day)=>(
@@ -79,7 +71,7 @@ const RepeatDetail = ({onClose}) => {
             ))}
             </FlexCenterBox>
             <FlexCenterBox>
-                <AddButton onClick={()=>console.log(week, days)}>추가하기</AddButton>
+                <Button onClick={()=>console.log(week, days)}>추가하기</Button>
             </FlexCenterBox>
         </DetailBox>
     )
@@ -105,58 +97,17 @@ const daysOfWeek = [
 ]
 
 const DetailBox = styled.div`
-    z-index: 999;
-    width: 17em;
-    height: auto;
-    max-height: 30em;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background-color: #FFFFFF;
-    border: solid 1px #D9D9D9;
-    border-radius: 15px;
-    padding-bottom: 20px;
-
-    &::-webkit-scrollbar {
-        width: 13px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: gray;
-        border-radius: 10px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background-color: #D9D9D9;
-        border-radius: 10px;
-    }
-`
-
-const TitleBox = styled.div`
     display: flex;
-    justify-content: space-between;
-    margin: 0 1.3em;
-
-    & svg {
-        width: 1em;
-        height: 1em;
-        stroke: #FF0000;
-        top: 1.2em;
-        cursor: pointer;
-    }
-`
-
-const Title = styled.div`
-    font-weight: 550;
-    font-size: 1em;
-    color: #000000;
-    margin-top: 1.3em;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 1em;
 `
 
 const CLine = styled.div`
     border-top: thin solid #D9D9D9;
-    width: 15em;
-    margin-top: 1em;
-    margin-left: 1em;
+    width: 90%;
+    margin: 1em 0em;
 `
 
 const FlexCenterBox = styled.div`
@@ -173,7 +124,6 @@ const ButtonFlexBox = styled.div`
     justify-content: center;
     align-items: center;
     margin: 0.3em;
-    margin-top: 1em;
     gap: 0.5em;
 `
 
@@ -199,10 +149,6 @@ const ButtonBox = styled.div`
             color: white;
         `
     }
-`
-
-const InputBox = styled(FlexCenterBox)`
-    margin-top: 0.3em;
 `
 
 const TextContainer = styled.div`
@@ -251,10 +197,6 @@ const Circle = styled.div`
             color: white;
         `
     }
-`
-
-const AddButton = styled(Button)`
-    font-size: 0.9em;
 `
 
 export default RepeatDetail
