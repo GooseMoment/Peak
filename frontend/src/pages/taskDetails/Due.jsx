@@ -139,12 +139,12 @@ const rotateToUnder = keyframes`
 
 const CollapseButton = styled.div`
     & svg {
-        animation: ${rotateToUp} 0.5s ${cubicBeizer} forwards;
+        animation: ${rotateToUp} 0.3s ${cubicBeizer} forwards;
     }
 
     ${props => props.$collapsed && css`
         & svg {
-            animation: ${rotateToUnder} 0.5s ${cubicBeizer} forwards;
+            animation: ${rotateToUnder} 0.3s ${cubicBeizer} forwards;
         }
     `}
 `
