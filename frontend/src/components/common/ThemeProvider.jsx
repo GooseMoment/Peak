@@ -5,10 +5,11 @@ import { ThemeProvider } from "styled-components"
 
 const ClientThemeProvider = ({children}) => {
     const windowMatchMediaDark = window.matchMedia('(prefers-color-scheme: dark)')
-
     const [systemTheme, setSystemTheme] = useState(
         window.matchMedia && windowMatchMediaDark.matches ? "dark" : "light"
     )
+
+    const theme = useClientTheme(systemTheme) 
 
     const onChangeScheme = (e) => {
         setSystemTheme(e.matches ? "dark" : "light")
@@ -22,7 +23,9 @@ const ClientThemeProvider = ({children}) => {
         }
     }, [])
 
-    const theme = useClientTheme(systemTheme) 
+    useEffect(() => {
+        document.body.style = `background-color: ${theme.backgroundColor}`
+    }, [theme])
 
     return <ThemeProvider theme={theme}>
         {children}
