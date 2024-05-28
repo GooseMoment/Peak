@@ -93,21 +93,9 @@ export const useClientTimezone = () => {
     return tz
 }
 
-export const useClientTheme = () => {
+export const useClientTheme = (systemTheme) => {
     const [setting, ] = useContext(ClientSettingContext)
-
-    const settingTheme = setting?.theme
-
-    let theme = "light" // fallback: light
-    if (settingTheme === "system") {
-        const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-
-        if (isDark) {
-            theme = "dark"
-        }
-    } else {
-        theme = settingTheme
-    }
+    const theme = setting?.theme === "system" ? systemTheme : setting?.theme
 
     return themes[theme]
 }
