@@ -1,9 +1,9 @@
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-const Detail = ({title, children, onClose}) => {
+const Detail = ({title, children, onClose, width=15}) => {
     return (
-        <DetailBox $calendar={title === '기한 지정'}>
+        <DetailBox $width={width} $calendar={title === '기한 지정'}>
             <TitleBox>
                 <Title>{title}</Title>
                 <FeatherIcon icon="x" onClick={onClose} />
@@ -16,9 +16,9 @@ const Detail = ({title, children, onClose}) => {
 
 const DetailBox = styled.div`
     z-index: 999;
-    width: 15em;
+    width: ${props=>props.$width}em;
     height: auto;
-    max-height: 30em;
+    max-height: 35em;
     overflow-y: auto;
     overflow-x: hidden;
     background-color: #FFFFFF;
@@ -64,9 +64,8 @@ const Title = styled.div`
 
 const CLine = styled.div`
     border-top: thin solid #D9D9D9;
-    width: 12.5em;
-    margin-top: 1em;
-    margin-left: 1em;
+    width: 90%;
+    margin: 1em 1em 0em;
 `
 
 export default Detail

@@ -3,7 +3,7 @@ import styled from "styled-components"
 import TaskCircleFrame from "./TaskCircleFrame"
 import notify from "@utils/notify"
 
-const TaskNameInput = ({newTaskName, setNewTaskName, changeTaskName, completed, color, isDate, editable, isLoading, toComplete}) => {
+const TaskNameInput = ({newTaskName, setNewTaskName, changeTaskName, completed, color, isDate, editable, isLoading, toComplete}) => {    
     const onChange = (e) => {
         const newName = e.target.value
         setNewTaskName(newName)

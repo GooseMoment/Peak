@@ -6,7 +6,6 @@ import { cubicBeizer } from "@assets/keyframes"
 import FeatherIcon from 'feather-icons-react'
 
 import Task from "@components/project/Task"
-import TaskCreateSimple from "@components/project/Creates/TaskCreateSimple"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { getTasksByDrawer } from "@api/tasks.api"
@@ -26,7 +25,7 @@ const Drawer = ({project, drawer, color}) => {
 
     const { t } = useTranslation(null, {keyPrefix: "project"})
 
-    const { data, isError, fetchNextPage, isFetching } = useInfiniteQuery({
+    const { data, isError, fetchNextPage, isLoading } = useInfiniteQuery({
         queryKey: ["tasks", {drawerID: drawer.id}],
         queryFn: (pages) => getTasksByDrawer(drawer.id, pages.pageParam || 1),
         initialPageParam: 1,
@@ -72,10 +71,10 @@ const Drawer = ({project, drawer, color}) => {
         )
     }
 
-    if (isFetching) {
+    if (isLoading) {
         return <div>로딩중..</div>
     }
-
+    
     return (
         <>
             <DrawerBox $color = {color}>
@@ -94,9 +93,14 @@ const Drawer = ({project, drawer, color}) => {
                     )))}
                 </TaskList>
             }
-            {isSimpleOpen &&
-                <TaskCreateSimple color={color}/>
-            }
+            {/*isSimpleOpen &&
+                <TaskCreateSimple 
+                    color={color}
+                    drawer_id={drawer.id}
+                    drawer_name={drawer.name}
+                    project_name={project.name}
+                />
+            */}
             <TaskCreateButton onClick={handleisSimpleOpen}>
                 <FeatherIcon icon="plus-circle"/>
                 <TaskCreateText>{t("button_add_task")}</TaskCreateText>
