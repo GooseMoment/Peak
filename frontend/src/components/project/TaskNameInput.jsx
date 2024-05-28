@@ -47,7 +47,7 @@ const InputText = styled.input`
     height: auto;
     font-weight: normal;
     font-size: 1.1em;
-    color: ${(props) => (props.$completed ? '#A4A4A4' : '#000000')};
+    color: ${p => p.$completed ? p.theme.grey : p.theme.textColor};
     margin-top: 0.1em;
 `
 

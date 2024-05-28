@@ -71,8 +71,8 @@ const TaskCreate = () => {
 
 const TaskCreateBox = styled.div`
     width: 50em;
-    background-color: #FFFFFF;
-    border: solid 1px #D9D9D9;
+    background-color: ${p => p.theme.backgroundColor};
+    border: solid 1px ${p => p.theme.secondBackgroundColor};
     border-radius: 15px;
 
     &::after {
