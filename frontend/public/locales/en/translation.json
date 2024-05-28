@@ -98,7 +98,8 @@
         "languages_and_time": {
             "title": "Languages & Time",
             "locale": {
-                "name": "Language"
+                "name": "Language",
+                "system":"Auto"
             },
             "timezone": {
                 "name": "Timezone",
