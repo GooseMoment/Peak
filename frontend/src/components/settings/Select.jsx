@@ -30,8 +30,10 @@ const Select = ({name, submit, choices, onlineSetting}) => {
 
 // from: https://codepen.io/vkjgr/pen/VYMeXp
 const StyledSelect = styled.select`
-    background-color: white;
-    border: thin solid black;
+    color: ${p => p.theme.textColor};
+    background-color: ${p => p.theme.backgroundColor};
+
+    border: thin solid ${p => p.theme.textColor};
     border-radius: 4px;
     display: inline-block;
     font: inherit;
