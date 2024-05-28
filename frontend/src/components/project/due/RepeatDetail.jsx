@@ -164,6 +164,8 @@ const WeekInput = styled.input`
     text-align: center;
     background-color: #D9D9D9;
     color: black;
+    appearance: textfield;
+    -moz-appearance: textfield;
 
     &:focus {
         background-color: #FF4A03;
