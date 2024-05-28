@@ -36,6 +36,7 @@ const Text = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.3em;
 `
 
 export default TaskFrame
