@@ -48,8 +48,8 @@ const makeThemeChoices = t => [
         value: "light",
     },
     {
-        display: t("theme.values.dark"),
-        value: "dark",
+        display: t("theme.values.light-systemcolor"),
+        value: "light-systemcolor",
     },
 ]
 
