@@ -10,10 +10,8 @@ def add_task_count_for_Task(sender, instance: Task=None, created=False, **kwargs
 
     if instance.completed_at is None:
         instance.drawer.uncompleted_task_count += 1
-        print(instance.drawer.uncompleted_task_count)
     else:
         instance.drawer.completed_task_count += 1
-        print(instance.drawer.completed_task_count)
 
     instance.drawer.save()
 
@@ -21,10 +19,8 @@ def add_task_count_for_Task(sender, instance: Task=None, created=False, **kwargs
 def delete_task_count_for_Task(sender, instance: Task=None, **kwargs):
     if instance.completed_at is None:
         instance.drawer.uncompleted_task_count -= 1
-        print(instance.drawer.uncompleted_task_count)
     else:
         instance.drawer.completed_task_count -= 1
-        print(instance.drawer.completed_task_count)
 
     instance.drawer.save()
 
