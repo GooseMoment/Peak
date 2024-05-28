@@ -27,8 +27,10 @@ export const light = {
     black,
     white,
     goose,
+    grey: "#cccccc",
     textColor: black,
     backgroundColor: white,
+    secondBackgroundColor: "#F7F7F3",
     accentColor: goose,
     scrollbarColor: "#FFC6C6",
     sidebar: {
@@ -54,8 +56,10 @@ export const lightSystemcolor = {
     black,
     white,
     goose,
+    grey: "#cccccc",
     textColor: black,
     backgroundColor: white,
+    secondBackgroundColor: "#F7F7F3",
     accentColor: "AccentColor",
     scrollbarColor: "#FFC6C6",
     sidebar: {
@@ -81,8 +85,10 @@ export const dark = {
     black,
     white,
     goose,
+    grey: "rgb(133, 133, 133)",
     textColor: white,
     backgroundColor: black,
+    secondBackgroundColor: "#2A2A2A",
     accentColor: "AccentColor",
     scrollbarColor: "#2A2A2A",
     sidebar: {
