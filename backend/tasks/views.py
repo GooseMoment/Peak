@@ -26,7 +26,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
         else:
             task: Task = self.get_object()
             if (task.completed_at is None) or (new_completed is None):
-                if task.completed_at is None:
+                if new_completed is None:
                     task.drawer.uncompleted_task_count += 1
                     task.drawer.completed_task_count -= 1
                 else:

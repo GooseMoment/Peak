@@ -29,7 +29,7 @@ const ProjectListPage = () => {
                         <TypeText>{project.type === 'regular' ? t("type_regular") : t("type_goal")}</TypeText>
                     </FlexBox>
                     <FlexBox>
-                        <Text>{t("completed_tasks")}: 30 / {t("uncompleted_tasks")}: 40</Text>
+                        <Text>{t("completed_tasks")}: {project.completed_task_count} / {t("uncompleted_tasks")}: {project.uncompleted_task_count}</Text>
                     </FlexBox>
                 </Box>
             ))}
