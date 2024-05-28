@@ -136,7 +136,8 @@
                     "system": "Same as system",
                     "light": "light",
                     "light-systemcolor": "light (with system color)",
-                    "dark": "dark"
+                    "dark": "dark",
+                    "dark-systemcolor": "dark (with system color)"
                 }
             },
             "main_width": {

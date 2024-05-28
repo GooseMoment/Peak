@@ -89,6 +89,36 @@ export const dark = {
     textColor: white,
     backgroundColor: black,
     secondBackgroundColor: "#2A2A2A",
+    accentColor: goose,
+    scrollbarColor: "#2A2A2A",
+    sidebar: {
+        activeColor: white,
+        activeBackgroundColor: black,
+        hoverColor: white,
+        hoverBackgroundColor: `rgb(255 74 3 / 0.35)`,
+        backgroundColor: "#2F2F2F",
+
+    }
+}
+
+export const darkSystemcolor = {
+    primaryColors: {
+        text: white,
+        primary: "AccentColor",
+        secondary: "#f78457",
+        link: "rgb(66, 88, 255)",
+        info: "rgb(102, 209, 255)",
+        success: "rgb(72, 199, 142)",
+        warning: "rgb(255, 183, 15)",
+        danger: "rgb(255, 102, 133)",
+    },
+    black,
+    white,
+    goose,
+    grey: "rgb(133, 133, 133)",
+    textColor: white,
+    backgroundColor: black,
+    secondBackgroundColor: "#2A2A2A",
     accentColor: "AccentColor",
     scrollbarColor: "#2A2A2A",
     sidebar: {
@@ -105,6 +135,7 @@ const themes = {
     "light": light,
     "light-systemcolor": lightSystemcolor,
     "dark": dark,
+    "dark-systemcolor": darkSystemcolor,
 }
 
 export default themes
