@@ -1,8 +1,9 @@
 import { Fragment, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import styled, { keyframes, css } from "styled-components"
+import styled, { css } from "styled-components"
 import { cubicBeizer } from "@assets/keyframes"
+import { rotateToUp, rotateToUnder } from "@assets/keyframes"
 import FeatherIcon from 'feather-icons-react'
 
 import Task from "@components/project/Task"
@@ -146,26 +147,6 @@ const DrawerIcon = styled.div`
         margin-right: 1em;
         color: #${props => props.$color};
         cursor: pointer;
-    }
-`
-
-const rotateToUp = keyframes`
-    0% {
-        transform: rotate(-180deg);
-    }
-
-    100% {
-        transform: rotate(0deg);
-    }
-`
-
-const rotateToUnder = keyframes`
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(-180deg);
     }
 `
 

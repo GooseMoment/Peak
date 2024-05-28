@@ -49,6 +49,7 @@ const InputText = styled.input`
     font-size: 1.1em;
     color: ${(props) => (props.$completed ? '#A4A4A4' : '#000000')};
     margin-top: 0.1em;
+    line-height: 1.3em;
 `
 
 export default TaskNameInput

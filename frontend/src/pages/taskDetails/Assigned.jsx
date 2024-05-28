@@ -1,22 +1,23 @@
-import styled from "styled-components"
+import { useState, Fragment } from "react"
+
+import FeatherIcon from "feather-icons-react"
+import styled, { css } from "styled-components"
+import { cubicBeizer } from "@assets/keyframes"
+import { rotateToUp, rotateToUnder } from "@assets/keyframes"
 
 import Detail from "@components/project/common/Detail"
-
-import today from "@assets/project/calendar/today.svg"
-import tomorrow from "@assets/project/calendar/tomorrow.svg"
-import next_week from "@assets/project/calendar/next_week.svg"
-import slach from "@assets/project/slach.svg"
+import QuickDue from "@components/project/due/QuickDue"
+import RepeatDetail from "@components/project/due/RepeatDetail"
 
 const Assigned = ({setFunc, closeComponent}) => {
-    let date = new Date()
+    const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
-    const items = [
-        {id: 0, icon: <img src={today}/>, content: "오늘", set: 0},
-        {id: 1, icon: <img src={tomorrow}/>, content: "내일", set: 1},
-        {id: 2, icon: <img src={next_week}/>, content: "다음 주", set: 7},
-        {id: 3, icon: <img src={next_week}/>, content: "2주 뒤", set: 14},
-        {id: 4, icon: <img src={slach}/>, content: "날짜없음", set: null},
-    ]
+    const handleAdditionalComp = (name) => {
+        if (isAdditionalComp === name) setIsAdditionalComp("")
+        else setIsAdditionalComp(name)
+    }
+
+    let date = new Date()
 
     const changeAssignedDate = (set) => {
         return async () => {
@@ -30,46 +31,100 @@ const Assigned = ({setFunc, closeComponent}) => {
         }
     }
 
+    const addComponent = [
+        {name: "quick", display: "빠른 지정", icon: "menu", component: <QuickDue changeDueDate={changeAssignedDate}/>},
+        {name: "calendar", display: "달력", icon: "calendar", component: <div>달력입니다</div>},
+        {name: "repeat", display: "반복 설정", icon: "refresh-cw", component: <RepeatDetail/>},
+    ]
+
     return (
-        <Detail title="할당 날짜 설정" onClose={closeComponent}>
-            {items.map(item => (
-                <ItemBlock key={item.id}>
-                    {item.icon}
-                    <ItemText onClick={changeAssignedDate(item.set)}>{item.content}</ItemText>
-                </ItemBlock>
+        <Detail title="할당 날짜 설정" onClose={closeComponent} special={true}>
+            {addComponent.map((comp, i)=>(
+                <Fragment key={comp.name}>
+                    <FlexCenterBox>
+                        <IndexBox $start={i===0} $end={i===2} onClick={() => handleAdditionalComp(comp.name)}>
+                            <EmptyBlock/>
+                            <Box>
+                                <FeatherIcon icon={comp.icon}/>
+                                {comp.display}
+                            </Box>
+                            <CollapseButton $collapsed={isAdditionalComp === comp.name}>
+                                <FeatherIcon icon="chevron-down"/>
+                            </CollapseButton>
+                        </IndexBox>
+                    </FlexCenterBox>
+                    {isAdditionalComp === comp.name && comp.component}
+                    {i !== 2 && <CLine />}
+                </Fragment>
             ))}
-            <CLine />
-            <div>달력이 들어갈 자리입니다</div>
         </Detail>
     )
 }
 
+const FlexCenterBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`
+
 const CLine = styled.div`
     border-top: thin solid #D9D9D9;
-    width: 12.5em;
-    margin-top: 1em;
-    margin-bottom: 0.3em;
-    margin-left: 1em;
+    width: 90%;
+    margin: 0.8em;
 `
 
-const ItemBlock = styled.div`
+const IndexBox = styled.div`
     display: flex;
-    gap: 0.5em;
+    justify-content: space-between;
     align-items: center;
-    margin-left: 1.2em;
-    margin-top: 1.2em;
-`
-
-const ItemText = styled.p`
-    font-weight: normal;
-    font-size: 1em;
+    width: 80%;
+    height: 1.8em;
+    background-color: #FFFFFF;
+    border: solid 1px #D9D9D9;
+    border-radius: 15px;
     color: #000000;
+    font-size: 1em;
+    padding: 0em 0.5em;
+    margin-top: ${props=>props.$start ? 0.8 : 0}em;
+    margin-bottom: ${props=>props.$end ? 0.8 : 0}em;
+
+    & svg {
+        margin-right: unset;
+    }
 
     &:hover {
         font-weight: bolder;
         color: #FF4A03;
         cursor: pointer;
+
+        & svg {
+            color: #000000;
+        }
     }
+`
+
+const Box = styled.div`
+    & svg {
+        margin-right: 0.5em;
+    }
+`
+
+const EmptyBlock = styled.div`
+    width: 16px;
+    height: 16px;
+`
+
+const CollapseButton = styled.div`
+    & svg {
+        animation: ${rotateToUp} 0.3s ${cubicBeizer} forwards;
+    }
+
+    ${props => props.$collapsed && css`
+        & svg {
+            animation: ${rotateToUnder} 0.3s ${cubicBeizer} forwards;
+        }
+    `}
 `
 
 export default Assigned

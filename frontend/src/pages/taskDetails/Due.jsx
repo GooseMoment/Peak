@@ -1,8 +1,9 @@
 import { Fragment, useState } from "react"
 
 import FeatherIcon from "feather-icons-react"
-import styled, { css, keyframes } from "styled-components"
+import styled, { css } from "styled-components"
 import { cubicBeizer } from "@assets/keyframes"
+import { rotateToUp, rotateToUnder } from "@assets/keyframes"
 
 import Detail from "@components/project/common/Detail"
 import QuickDue from "@components/project/due/QuickDue"
@@ -39,7 +40,7 @@ const Due = ({setFunc, closeComponent}) => {
     ]
 
     return (
-        <Detail title="기한 지정" onClose={closeComponent} width={18}>
+        <Detail title="기한 지정" onClose={closeComponent} special={true}>
             {addComponent.map((comp, i)=>(
                 <Fragment key={comp.name}>
                     <FlexCenterBox>
@@ -79,7 +80,7 @@ const IndexBox = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 90%;
+    width: 80%;
     height: 1.8em;
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
@@ -114,27 +115,6 @@ const Box = styled.div`
 const EmptyBlock = styled.div`
     width: 16px;
     height: 16px;
-`
-
-
-const rotateToUp = keyframes`
-    0% {
-        transform: rotate(-180deg);
-    }
-
-    100% {
-        transform: rotate(0deg);
-    }
-`
-
-const rotateToUnder = keyframes`
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(-180deg);
-    }
 `
 
 const CollapseButton = styled.div`

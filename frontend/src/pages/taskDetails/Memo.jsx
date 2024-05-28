@@ -46,14 +46,16 @@ const FlexBox = styled.div`
 `
 
 const Editor = styled.textarea`
-    width: 13em;
+    width: 70%;
     height: 17em;
     font-weight: normal;
     resize: none;
     font-size: 0.95em;
     color: black;
     border: 1px solid #D9D9D9;
+    border-radius: 15px;
     margin-top: 0.7em;
+    padding: 0.8em;
     white-space: pre-wrap;
     
     &:focus {
