@@ -20,7 +20,7 @@ const QuickDue = ({changeDueDate}) => {
         {items.map(item=>(
             <ButtonBox key={item.id} onClick={changeDueDate(item.set)}>
                 {item.icon}
-                {item.display}
+                <DisplayText>{item.display}</DisplayText>
             </ButtonBox>))}
         </ButtonFlexBox>
     )
@@ -52,6 +52,11 @@ const ButtonBox = styled.div`
         color: #FF4A03;
         cursor: pointer;
     }
+`
+
+const DisplayText = styled.div`
+    width: 3.5em;
+    text-align: center;
 `
 
 export default QuickDue
