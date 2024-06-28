@@ -1,29 +1,35 @@
-import Section, { SectionTitle, SectionDescription } from "@components/frontpage/Section"
-import SubSection, { SubGroup, SubTitle } from "@components/frontpage/SubSection"
+import { Link } from "react-router-dom"
 
 import Button from "@components/common/Button"
 import Brand from "@components/sign/Brand"
 
+import Section, { SectionTitle, SectionDescription } from "@components/frontpage/Section"
+import SubSection, { SubGroup, SubTitle } from "@components/frontpage/SubSection"
+import DemoProject from "@components/frontpage/DemoProject"
+import DemoDrawer from "@components/frontpage/DemoDrawer"
+
 import styled from "styled-components"
-import DemoProject from "@/components/frontpage/DemoProject"
-import DemoDrawer from "@/components/frontpage/DemoDrawer"
 
 const FrontPage = () => {
     return <>
     <Nav>
         <Brand /> 
-        <Button>
-            Sign in
-        </Button>
+        <Link to="sign">
+            <Button >
+                Sign in
+            </Button>
+        </Link>
     </Nav>
     <TopHero>
         <TopTitle>
             Plan, Organize, and Cheer. <br/>
             Do all them in Peak.
         </TopTitle>
-        <TopHeroButton>
-            Start
-        </TopHeroButton>
+        <Link to="sign">
+            <TopHeroButton>
+                Start
+            </TopHeroButton>
+        </Link>
     </TopHero>
 
     <Section>
@@ -129,6 +135,7 @@ const TopHeroButton = styled(Button)`
     margin-top: 3em;
     font-size: 1.25em;
     color: inherit;
+    background-color: ${p => p.theme.frontSignPageBackgroundColor};
     border-color: ${p => p.theme.frontSignPageTextColor};
 `
 
