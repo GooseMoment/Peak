@@ -1,4 +1,4 @@
-import Activity from '@components/sign/Activity'
+import Activity, {Emoji} from '@components/sign/Activity'
 
 import GraphemeSplitter from 'grapheme-splitter'
 
@@ -18,7 +18,7 @@ const splitter = new GraphemeSplitter()
 const emojis_str = "😀😃😄😁😆😅😂🤣🥲🥹☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😮‍💨😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🫣🤗🫡🤔🫢🤭🤫🤥😶😶‍🌫️😐😑😬🫨🫠🙄😯😦😧😮😲🥱😴🤤😪😵😵‍💫🫥🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾"
     + "👋🤚🖐✋🖖👌🤌🤏✌️🤞🫰🤟🤘🤙🫵🫱🫲🫸🫷🫳🫴👈👉👆🖕👇☝️👍👎✊👊🤛🤜👏🫶🙌👐🤲🤝🙏✍️💅🤳💪🦾🦵🦿🦶👣👂🦻👃🫀🫁🧠"
 
-const emojis = splitter.splitGraphemes(emojis_str)
+const systemEmojis = splitter.splitGraphemes(emojis_str)
 
 const tasks = [
     "교환학생 Application",
@@ -86,8 +86,6 @@ const projects = [
     "집안일",
     "루틴",
     "문화",
-    "아이돌마스터스탈릿시즌",
-    "아이돌마스터밀리언라이브시어터데이즈",
     "개발",
     "수학 1 & 2",
     "영어",
@@ -121,14 +119,6 @@ const comments = [
     // TODO: add comments
 ]
 
-const verbDetailMap = {
-    "reacted": emojis,
-    "completed a task": tasks,
-    "made a task": tasks,
-    "made a project": projects,
-    "put today's comment": comments,
-}
-
 const timeUnitsMap = {
     "seconds": 59-2,
     "minutes": 59-2,
@@ -137,20 +127,43 @@ const timeUnitsMap = {
     "months": 11-2,
 }
 
-let activities = []
+const generateActivities = (serverEmojis) => {
+    let emojis = serverEmojis
 
-for (let i=0; i<20; i++) {
-    const username = pick(usernames)
-
-    let verb = pick(Object.keys(verbDetailMap))
-    if (Math.random() > 0.8) {
-        verb = "reacted"
+    if (!serverEmojis) {
+        emojis = systemEmojis
     }
 
-    const detail = pick(verbDetailMap[verb])
-    const timeUnit = pick(Object.keys(timeUnitsMap))
-    const timeValue = Math.floor(Math.random() * timeUnitsMap[timeUnit]) + 2
-    activities.push(<Activity key={`activity-${i}`} action={"@" + username + " " + verb} detail={detail} ago={timeValue + " " + timeUnit + " ago"} />)
+    const verbDetailMap = {
+        "reacted": emojis,
+        "completed a task": tasks,
+        "made a task": tasks,
+        "made a project": projects,
+        "put today's comment": comments,
+    }
+
+    let activities = []
+    
+    for (let i=0; i<20; i++) {
+        const username = pick(usernames)
+
+        let verb = pick(Object.keys(verbDetailMap))
+        if (Math.random() < 0.25) {
+            verb = "reacted"
+        }
+
+        let detail = pick(verbDetailMap[verb])
+        if (detail?.name) {
+            detail = <Emoji src={detail.img_uri} />
+        }
+
+        const timeUnit = pick(Object.keys(timeUnitsMap))
+        const timeValue = Math.floor(Math.random() * timeUnitsMap[timeUnit]) + 2
+        activities.push(<Activity key={`activity-${i}`} action={"@" + username + " " + verb} detail={detail} ago={timeValue + " " + timeUnit + " ago"} />)
+    }
+
+    return activities
 }
 
-export default activities
+
+export default generateActivities

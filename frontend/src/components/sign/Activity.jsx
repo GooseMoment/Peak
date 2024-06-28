@@ -29,6 +29,12 @@ const Content = styled.p`
     line-height: 1.25em;
 `
 
+const Emoji = styled.img`
+    aspect-ratio: 1/1;
+    height: 1.25em;
+    vertical-align: middle;
+`
+
 const Action = styled.span`
     font-weight: 700;
     line-height: 1.25em;
@@ -52,3 +58,4 @@ const Ago = styled.p`
 `
 
 export default Activity
+export {Emoji}
