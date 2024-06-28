@@ -5,14 +5,17 @@ import Brand from "@components/sign/Brand"
 import Showcase from "@components/sign/Showcase"
 import SignForm from "@components/sign/SignForm"
 
-import activities from "@components/sign/activities"
+import generateActivities from "@components/sign/activities"
 
 import notify from "@utils/notify"
+import { getEmojis } from "@api/social.api"
 
 import styled from "styled-components"
+import { useQuery } from "@tanstack/react-query"
 
 const SignPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
+    const [activities, setActivities] = useState([])
 
     useEffect(() => {
         const flag = searchParams.get("flag")
@@ -23,6 +26,25 @@ const SignPage = () => {
         }
         setSearchParams({})
     }, [])
+
+    const { data: serverEmojis, isError, isFetching } = useQuery({
+        queryKey: ["emojis"],
+        queryFn: () => getEmojis(),
+        staleTime: 1000 * 60 * 60 * 5,
+    })
+
+    useEffect(() => {
+        if (isFetching) {
+            return
+        }
+
+        if (isError) {
+            setActivities(generateActivities(null))
+            return
+        }
+
+        setActivities(generateActivities(serverEmojis))
+    }, [serverEmojis])
 
     return <Root>
         <Brand />
