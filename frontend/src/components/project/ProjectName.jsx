@@ -4,15 +4,15 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const ProjectName = ({project, activateLink=false}) => {
+const ProjectName = ({project, demo=false}) => {
     const { t } = useTranslation(null, {keyPrefix: "project_list"})
 
-    let nameParts = <NameText>{project.name}</NameText>
+    let nameParts = <Link to={`/app/projects/${project.id}`} style={{ textDecoration: 'none' }}>
+        <NameText>{project.name}</NameText>
+    </Link>
 
-    if (activateLink) {
-        nameParts = <Link to={`/app/projects/${project.id}`} style={{ textDecoration: 'none' }}>
-            <NameText>{project.name}</NameText>
-        </Link>
+    if (demo) {
+        nameParts = <NameText>{project.name}</NameText>
     }
 
     return <Box>
@@ -21,9 +21,9 @@ const ProjectName = ({project, activateLink=false}) => {
             {nameParts}
             <TypeText>{project.type === 'regular' ? t("type_regular") : t("type_goal")}</TypeText>
         </FlexBox>
-        <FlexBox>
+        {!demo && <FlexBox>
             <Text>{t("completed_tasks")}: {project.completed_task_count} / {t("uncompleted_tasks")}: {project.uncompleted_task_count}</Text>
-        </FlexBox>
+        </FlexBox> }
     </Box>
 }
 

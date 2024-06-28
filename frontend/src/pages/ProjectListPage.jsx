@@ -20,7 +20,7 @@ const ProjectListPage = () => {
     return(
         <>
             <PageTitle>{t("title")}</PageTitle>
-            {projects?.map((project) => <ProjectName key={project.id} project={project} activateLink />)}
+            {projects?.map((project) => <ProjectName key={project.id} project={project} />)}
             <TaskCreateButton onClick={() => {setIsCreateOpen(true)}}>
                 <FeatherIcon icon="plus-circle"/>
                 <TaskCreateText>{t("button_add_project")}</TaskCreateText>
