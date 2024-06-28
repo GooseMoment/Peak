@@ -26,16 +26,19 @@ const Content = styled.p`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    line-height: 1.25em;
 `
 
 const Action = styled.span`
     font-weight: 700;
+    line-height: 1.25em;
 `
 
 // Detail: 구 landing/sign.html의 log.activity.content
 const Detail = styled.span`
     margin-left: 0.25rem;
     font-weight: 400;
+    line-height: 1.25em;
 `
 
 const Ago = styled.p`
@@ -45,6 +48,7 @@ const Ago = styled.p`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    line-height: 2rem;
 `
 
 export default Activity
