@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { useSearchParams } from "react-router-dom"
 
 import Brand, {Box as BrandTitle} from "@components/sign/Brand"
@@ -25,7 +26,9 @@ const SignPage = () => {
     }, [])
 
     return <Root>
-        <Brand />
+        <Link to="/">
+            <Brand />
+        </Link>
         <Showcase activities={activities} />
         <SignForm />
     </Root>
