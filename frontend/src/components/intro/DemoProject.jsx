@@ -28,32 +28,32 @@ const DemoProject = () => {
 const makeProjects = (t) => [
     {
         id: "1",
-        name: t("projects.project1"),
-        color: "#",
+        name: "한양라이프",
+        color: "0E4A84",
         type: "regular",
     },
     {
         id: "2",
-        name: t("projects.project2"),
-        color: "#",
+        name: "집안일",
+        color: "ffbe0b",
         type: "regular",
     },
     {
         id: "3",
-        name: t("projects.project3"),
-        color: "#",
+        name: "교환학생",
+        color: "fb5607",
         type: "goal",
     },
     {
         id: "4",
-        name: t("projects.project4"),
-        color: "#",
+        name: "8월 오키나와 여행!!",
+        color: "ff006e",
         type: "goal",
     },
     {
         id: "5",
-        name: t("projects.project5"),
-        color: "#",
+        name: "건강해지기",
+        color: "3a86ff",
         type: "regular",
     },
 ]
