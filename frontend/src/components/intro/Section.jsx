@@ -6,6 +6,10 @@ const Section = styled.section`
     color: ${p => p.theme.textColor};
     background-color: ${p => p.theme.backgroundColor};
     padding: 3em 10em;
+
+    @media screen and (max-width: 1000px) {
+        padding: 3em 2em;
+    }
 `
 export default Section
 
