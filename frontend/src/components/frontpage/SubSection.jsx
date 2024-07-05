@@ -9,7 +9,7 @@ export const SubGroup = styled.div`
     margin-top: 3em;
 
     display: flex;
-    gap: 2em;
+    gap: 3em 1em;
 
     flex-wrap: wrap;
     align-items: stretch;
@@ -18,5 +18,5 @@ export const SubGroup = styled.div`
 
 export const SubTitle = styled.h3`
     font-weight: 600;
-    margin-bottom: 2em;
+    margin-bottom: 3em;
 `
