@@ -109,9 +109,10 @@ const FrontPage = () => {
 
 const Nav = styled.nav`
     position: fixed;
-    padding: 1em 3em;
+    padding: 2rem;
     display: flex;
     justify-content: space-between;
+    align-items: start;
     width: 100%;
     box-sizing: border-box;
 
@@ -137,6 +138,7 @@ const TopHeroButton = styled(Button)`
     color: inherit;
     background-color: ${p => p.theme.frontSignPageBackgroundColor};
     border-color: ${p => p.theme.frontSignPageTextColor};
+    border-width: 0.15em;
 `
 
 
