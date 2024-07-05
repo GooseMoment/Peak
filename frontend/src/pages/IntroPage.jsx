@@ -5,8 +5,11 @@ import Brand from "@components/sign/Brand"
 
 import Section, { SectionTitle, SectionDescription } from "@components/intro/Section"
 import SubSection, { SubGroup, SubTitle } from "@components/intro/SubSection"
+
 import DemoProject from "@components/intro/DemoProject"
 import DemoDrawer from "@components/intro/DemoDrawer"
+import DemoPlan from "@components/intro/DemoPlan"
+import DemoTheme from "@components/intro/DemoTheme"
 
 import styled from "styled-components"
 
@@ -45,15 +48,7 @@ const IntroPage = () => {
         <SectionTitle>Plan</SectionTitle>
         <SectionDescription>Track priority and deadline of tasks.</SectionDescription>
         <SubGroup>
-            <SubSection>
-                <SubTitle>A project contains drawers.</SubTitle>
-            </SubSection>
-            <SubSection>
-                <SubTitle>A drawer is home for tasks.</SubTitle>
-            </SubSection>
-            <SubSection>
-                <SubTitle>Put tasks under drawers.</SubTitle>
-            </SubSection>
+            <DemoPlan />
         </SubGroup>
     </Section>
 
@@ -62,13 +57,7 @@ const IntroPage = () => {
         <SectionDescription>Share your daily log with your friends.</SectionDescription>
         <SubGroup>
             <SubSection>
-                <SubTitle>A project contains drawers.</SubTitle>
-            </SubSection>
-            <SubSection>
-                <SubTitle>A drawer is home for tasks.</SubTitle>
-            </SubSection>
-            <SubSection>
-                <SubTitle>Put tasks under drawers.</SubTitle>
+                <SubTitle>*** UserLogDetail should be here ***</SubTitle>
             </SubSection>
         </SubGroup>
     </Section>
@@ -78,13 +67,7 @@ const IntroPage = () => {
         <SectionDescription>Put reactions to your friends’ tasks with fancy emojis. Make motivate and get motivated.</SectionDescription>
         <SubGroup>
             <SubSection>
-                <SubTitle>A project contains drawers.</SubTitle>
-            </SubSection>
-            <SubSection>
-                <SubTitle>A drawer is home for tasks.</SubTitle>
-            </SubSection>
-            <SubSection>
-                <SubTitle>Put tasks under drawers.</SubTitle>
+                <SubTitle>*** Emoji Selector Box should be here ***</SubTitle>
             </SubSection>
         </SubGroup>
     </Section>
@@ -93,15 +76,7 @@ const IntroPage = () => {
         <SectionTitle>Customize</SectionTitle>
         <SectionDescription>Customize an apperance of Peak.</SectionDescription>
         <SubGroup>
-            <SubSection>
-                <SubTitle>A project contains drawers.</SubTitle>
-            </SubSection>
-            <SubSection>
-                <SubTitle>A drawer is home for tasks.</SubTitle>
-            </SubSection>
-            <SubSection>
-                <SubTitle>Put tasks under drawers.</SubTitle>
-            </SubSection>
+            <DemoTheme />
         </SubGroup>
     </Section>
     </>
