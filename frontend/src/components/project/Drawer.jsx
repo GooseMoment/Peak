@@ -126,7 +126,7 @@ const CollapseButton = styled.div`
     `}
 `
 
-const TaskList = styled.div`
+export const TaskList = styled.div`
     flex: 1;
     margin-left: 0.5em;
 `
