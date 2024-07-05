@@ -5,6 +5,7 @@ const SubSection = styled.article`
 export default SubSection
 
 export const SubGroup = styled.div`
+    position: relative;
     width: 100%;
     margin-top: 3em;
 

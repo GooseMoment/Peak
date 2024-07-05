@@ -3,14 +3,14 @@ import { Link } from "react-router-dom"
 import Button from "@components/common/Button"
 import Brand from "@components/sign/Brand"
 
-import Section, { SectionTitle, SectionDescription } from "@components/frontpage/Section"
-import SubSection, { SubGroup, SubTitle } from "@components/frontpage/SubSection"
-import DemoProject from "@components/frontpage/DemoProject"
-import DemoDrawer from "@components/frontpage/DemoDrawer"
+import Section, { SectionTitle, SectionDescription } from "@components/intro/Section"
+import SubSection, { SubGroup, SubTitle } from "@components/intro/SubSection"
+import DemoProject from "@components/intro/DemoProject"
+import DemoDrawer from "@components/intro/DemoDrawer"
 
 import styled from "styled-components"
 
-const FrontPage = () => {
+const IntroPage = () => {
     return <>
     <Nav>
         <Brand /> 
@@ -110,6 +110,7 @@ const FrontPage = () => {
 const Nav = styled.nav`
     position: fixed;
     padding: 2rem;
+    padding-bottom: 0;
     display: flex;
     justify-content: space-between;
     align-items: start;
@@ -142,4 +143,4 @@ const TopHeroButton = styled(Button)`
 `
 
 
-export default FrontPage
+export default IntroPage

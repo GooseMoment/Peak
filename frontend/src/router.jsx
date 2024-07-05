@@ -5,7 +5,7 @@ import {
 
 import AppLayout from "@containers/AppLayout"
 
-import FrontPage from "@pages/FrontPage"
+import IntroPage from "@pages/IntroPage"
 import SignPage from "@pages/SignPage"
 
 import ErrorPage from "@pages/ErrorPage"
@@ -43,7 +43,7 @@ const routes = [
         children: [
             {
                 index: true,
-                element: <FrontPage />,
+                element: <IntroPage />,
             },
             {
                 path: "sign",

@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 
-import SubSection, { SubTitle } from "@components/frontpage/SubSection"
+import SubSection, { SubTitle } from "@components/intro/SubSection"
 import ProjectName from "@components/project/ProjectName"
 import Button, { ButtonGroup } from "@components/common/Button"
 
@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next"
 import { useState } from "react"
 
 const DemoProject = () => {
-    const {t} = useTranslation(null, {keyPrefix: "frontpage.section_organize.Sub_project"}) 
+    const {t} = useTranslation(null, {keyPrefix: "intro.section_organize.Sub_project"}) 
     const [count, setCount] = useState(1)
     const projects = useMemo(() => makeProjects(t), [t])
 
