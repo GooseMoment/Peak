@@ -1,91 +1,121 @@
-import { useMemo } from "react"
+import { Fragment, useState, useMemo } from "react"
 
+import Button, { ButtonGroup } from "@components/common/Button"
 import PageTitle from "@components/common/PageTitle"
 import SubSection, { SubTitle } from "@components/intro/SubSection"
 import DrawerBox, { DrawerName } from "@components/project/DrawerBox"
+import Task from "@components/project/Task"
+import { TaskList } from "@components/project/Drawer"
+
+import {today, tomorrow, yesterday, dayAfterTomorrow, dayLongAfter} from "./todays"
 
 import { useTranslation } from "react-i18next"
-import { Fragment } from "react"
-import Task from "../project/Task"
+
+const projectColor = "0E4A84"
 
 const DemoDrawer = () => {
-    const {t} = useTranslation(null, {keyPrefix: "intro.section_organize.Sub_drawer"}) 
+    const {t} = useTranslation(null, {keyPrefix: "intro.section_organize.demo_drawer"}) 
     const drawers = useMemo(() => makeDrawers(t), [t])
+    const [count, setCount] = useState(1)
 
     return <SubSection>
         <SubTitle>A drawer is home for tasks.</SubTitle>
 
-        <PageTitle $color="#FD99E1">한양라이프</PageTitle>
-        {drawers?.map((drawer, i) => <Fragment key={i}>
-            <DrawerBox $color="FD99E1" $demo>
-                <DrawerName $color="FD99E1" $demo>{drawer.name}</DrawerName>
+        <PageTitle $color={"#" + projectColor}>한양라이프</PageTitle>
+        {drawers?.slice(0, count)?.map((drawer, i) => <Fragment key={i}>
+            <DrawerBox $color={projectColor} $demo>
+                <DrawerName $color={projectColor} $demo>{drawer.name}</DrawerName>
             </DrawerBox>
-            {drawer.tasks.map((task, i) => <Task task={task} key={i} /> )}
+            <TaskList>
+                {drawer.tasks?.map((task, i) => <Task color={projectColor} task={task} key={i} demo /> )}
+            </TaskList>
         </Fragment> )}
+
+        {count < drawers?.length && 
+            <ButtonGroup $justifyContent="right" $margin="1em 0">
+                <Button onClick={() => setCount(count + 1)}>Add drawer</Button>
+            </ButtonGroup>
+        }
     </SubSection>
 }
 
+// tasks는 각 drawer별로 2-3개씩
 const makeDrawers = (t) => [
     {
-        name: "자료구조론",
+        name: "🖋️ 과제",
         tasks: [
             {
-                name: "잠을 자기",
-                completed_at: new Date(),
-                due_date: null,
-                due_time: null,
-                assigned_at: null,
-                priority: null,
+                name: "Assignment 11",
+                completed_at: null,
+                due_date: tomorrow,
+                assigned_at: today,
+                priority: 1,
             },
             {
-                name: t("drawers.drawer1.tasks.task2"),
-                completed_at: new Date(),
-                due_date: null,
-                due_time: null,
-                assigned_at: null,
-                priority: null,
+                name: "온라인 강의 꼭꼭 보기",
+                completed_at: true,
+                due_date: today,
+                assigned_at: yesterday,
+                priority: 0,
             },
             {
-                name: t("drawers.drawer1.tasks.task3"),
-                completed_at: new Date(),
-                due_date: null,
-                due_time: null,
+                name: "안전교육 이수하기",
+                completed_at: false,
+                due_date: dayLongAfter,
                 assigned_at: null,
-                priority: null,
-            },
-            {
-                name: t("drawers.drawer1.tasks.task4"),
-                completed_at: new Date(),
-                due_date: null,
-                due_time: null,
-                assigned_at: null,
-                priority: null,
-            },
-            {
-                name: t("drawers.drawer1.tasks.task5"),
-                completed_at: new Date(),
-                due_date: null,
-                due_time: null,
-                assigned_at: null,
-                priority: null,
+                priority: 0,
             },
         ]
     },
     {
-        name: t("drawers.drawer2"),
-        tasks: [],
+        name: "📖 책 읽기",
+        tasks: [
+            {
+                name: "우리 마음은 늘 우리 저 너머로 쓸려 간다",
+                completed_at: null,
+                due_date: dayAfterTomorrow,
+                due_time: null,
+                assigned_at: tomorrow,
+                priority: 2,
+            },
+            {
+                name: "밤은 짧아, 걸어 아가씨야",
+                completed_at: true,
+                due_date: yesterday,
+                due_time: null,
+                assigned_at: yesterday,
+                priority: 2,
+            },
+        ],
     },
     {
-        name: t("drawers.drawer3"),
-        tasks: [],
-    },
-    {
-        name: t("drawers.drawer4"),
-        tasks: [],
-    },
-    {
-        name: t("drawers.drawer5"),
-        tasks: [],
+        name: "🎈 공모전",
+        tasks: [
+            {
+                name: "구스톤 2024 참가 신청서",
+                completed_at: false,
+                due_date: dayAfterTomorrow,
+                due_time: null,
+                assigned_at: null,
+                priority: 0,
+            },
+            {
+                name: "같이 나갈 부원들 연락하기",
+                completed_at: false,
+                due_date: today,
+                due_time: null,
+                assigned_at: null,
+                priority: 1,
+            },
+            {
+                name: "참가 작품 아이디어 회의",
+                completed_at: true,
+                due_date: yesterday,
+                due_time: null,
+                assigned_at: yesterday,
+                priority: 2,
+            },
+        ],
     },
 ]
 
