@@ -4,7 +4,7 @@ import Button, { ButtonGroup } from "@components/common/Button"
 import PageTitle from "@components/common/PageTitle"
 import SubSection, { SubTitle } from "@components/intro/SubSection"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
-import Task from "@components/tasks/Task"
+import DemoTask from "@components/intro/DemoTask"
 import { TaskList } from "@components/drawers/Drawer"
 
 import {today, tomorrow, yesterday, dayAfterTomorrow, dayLongAfter} from "./todays"
@@ -27,7 +27,7 @@ const DemoDrawer = () => {
                 <DrawerName $color={projectColor} $demo>{drawer.name}</DrawerName>
             </DrawerBox>
             <TaskList>
-                {drawer.tasks?.map((task, i) => <Task color={projectColor} task={task} key={i} demo /> )}
+                {drawer.tasks?.map((task, i) => <DemoTask color={projectColor} task={task} key={i} /> )}
             </TaskList>
         </Fragment> )}
 
