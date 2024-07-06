@@ -42,7 +42,7 @@ const DisplayArea = styled.div`
     user-select: none;
     gap: 2rem;
 
-    height: 40%;
+    height: 70%;
     width: 100%;
 `
 
@@ -50,7 +50,7 @@ const ScreenTop = styled.div`
     z-index: 10;
     position: absolute;
     width: 100%;
-    height: 7.5%;
+    height: 35%;
 
     top: 0;
     background: linear-gradient(180deg, #FFD7C7 29.5%, rgba(255, 215, 199, 0) 100%);
@@ -58,7 +58,7 @@ const ScreenTop = styled.div`
 
 const ScreenBottom = styled(ScreenTop)`
     top: unset;
-    bottom: 0;
+    bottom: -0.1em;
     transform: rotate(180deg);
 `
 

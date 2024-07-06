@@ -23,7 +23,7 @@ const Layout = ({noSidebar, children}) => {
 }
 
 const App = styled.div`
-    background-color: ${p => p.theme.white};
+    background-color: ${p => p.theme.backgroundColor};
 `
 
 const Content = styled.main`

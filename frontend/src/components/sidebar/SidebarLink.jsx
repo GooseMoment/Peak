@@ -12,13 +12,14 @@ const sidebarStyle = css`
     transition-timing-function: ${cubicBeizer};
 
     &.active {
-    color: ${p => p.theme.sidebar.activeColor};
+        color: ${p => p.theme.sidebar.activeColor};
         background-color: ${p => p.theme.sidebar.activeBackgroundColor};
     }
 
-&:hover {
-    background-color: #FFC6C6;
-}
+    &:hover:not(.active) {
+        color: ${p => p.theme.sidebar.hoverColor};
+        background-color: ${p => p.theme.sidebar.hoverBackgroundColor};
+    }
 `
 
 export const SidebarA = styled.a`
@@ -27,11 +28,6 @@ export const SidebarA = styled.a`
 
 const SidebarLink = styled(NavLink)`
     ${sidebarStyle}
-
-    &.active {
-        background-color: #D9D9D9;
-    }
-
 `
 
 export default SidebarLink

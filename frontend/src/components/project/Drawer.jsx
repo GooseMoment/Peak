@@ -153,7 +153,7 @@ const TaskCreateButton = styled.div`
 const TaskCreateText = styled.div`
     font-size: 1.1em;
     font-weight: medium;
-    color: black;
+    color: ${p => p.theme.textColor};
     margin-top: 0em;
 `
 

@@ -55,7 +55,7 @@ const TaskCreateButton = styled.div`
 const TaskCreateText = styled.div`
     font-size: 1em;
     font-weight: medium;
-    color: #000000;
+    color: ${p => p.theme.textColor};
     margin-top: 0em;
 `
 

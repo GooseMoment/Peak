@@ -24,7 +24,7 @@ const Label = styled.label`
     --button-toggle-offset: calc((var(--button-height) - var(--toggle-diameter)) / 2);
     --toggle-shadow-offset: 10px;
     --toggle-wider: 3em;
-    --color-grey: #cccccc;
+    --color-grey: ${p => p.theme.grey};
     --color-green: ${p => p.theme.accentColor};
 `
 
@@ -46,7 +46,7 @@ const Slider = styled.span`
         display: inline-block;
         width: var(--toggle-diameter);
         height: var(--toggle-diameter);
-        background-color: #fff;
+        background-color: ${p => p.theme.secondBackgroundColor};
         border-radius: calc(var(--toggle-diameter) / 2);
         position: absolute;
         top: var(--button-toggle-offset);

@@ -69,7 +69,7 @@ const StyledContentDot = styled.div`
   top: -0.1em;
   left: -0.1em;
   
-  background-color: #FF4A03;
+  background-color: ${p => p.theme.accentColor};
   border-radius: 0.4em;
   outline: solid 0.125em #FEFDFC;
   width: 0.4em;
@@ -187,7 +187,7 @@ const CalendarWrapper = styled.div`
 
   /* 오늘 날짜 */
   .react-calendar__tile--now {
-    background: #FF4A03 !important;
+    background: ${p => p.theme.accentColor} !important;
     abbr {
       color: #ffffff !important;
     }
@@ -204,7 +204,7 @@ const CalendarWrapper = styled.div`
     box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #D9D9D9;  
     
     &.react-calendar__tile--now {
-      box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em #FF4A03;
+      box-shadow: 0 0 0 0.15em #FEFDFC, 0 0 0 0.3em ${p => p.theme.accentColor};
     }
 
     &.react-calendar__month-view__days__day--neighboringMonth {
@@ -282,7 +282,7 @@ const CalendarWrapper = styled.div`
 
   /* 네비게이션 현재 월 스타일 적용 */
   .react-calendar__tile--hasActive {
-    background-color: #FF4A03;
+    background-color: ${p => p.theme.accentColor};
     abbr {
       color: white;
     }
@@ -313,7 +313,7 @@ const TodayButton = styled.button`
   height: 2em;
   border: 0;
   border-radius: 0.5em;
-  background-color: #FF4A03;
+  background-color: ${p => p.theme.accentColor};
   color: #ffffff;
   font-weight: bolder;
 

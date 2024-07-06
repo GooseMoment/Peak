@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo, useState } from "react"
+import themes from "@assets/themes"
 
 const KEY_CLIENT_SETTINGS = "client_settings"
 
@@ -90,4 +91,11 @@ export const useClientTimezone = () => {
     const tz = getTimezone(settingTz)
 
     return tz
+}
+
+export const useClientTheme = (systemTheme) => {
+    const [setting, ] = useContext(ClientSettingContext)
+    const theme = setting?.theme === "system" ? systemTheme : setting?.theme
+
+    return themes[theme]
 }
