@@ -62,7 +62,7 @@ const Contents = ({task, setFunc}) => {
             display: task.reminders?.length !== 0 ? <RemindersBox name="reminder">
                 {task.reminders.map(reminder => <ReminderBlock name="reminder">{reminder.delta}분 전</ReminderBlock>)}
             </RemindersBox> : "없음",
-            component: <Reminder setFunc={setFunc} closeComponent={closeComponent}/>
+            component: <Reminder task={task} closeComponent={closeComponent}/>
         },
         {
             id: 4,
