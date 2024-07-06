@@ -51,6 +51,8 @@ const Circle = styled.div`
         stroke-width: 0.2em;
         margin-right: 0;
         top: 0;
+
+        margin-top: 0.1rem;
         animation: none;
     }
 
