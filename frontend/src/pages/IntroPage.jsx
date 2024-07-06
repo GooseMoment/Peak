@@ -11,9 +11,19 @@ import DemoDrawer from "@components/intro/DemoDrawer"
 import DemoPlan from "@components/intro/DemoPlan"
 import DemoTheme from "@components/intro/DemoTheme"
 
+import { getEmojis } from "@api/social.api"
+
+import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
+
 const IntroPage = () => {
+    useQuery({
+        queryKey: ["emojis"],
+        queryFn: () => getEmojis(),
+        staleTime: 1000 * 60 * 60 * 5,
+    })
+
     return <>
     <Nav>
         <Brand /> 
