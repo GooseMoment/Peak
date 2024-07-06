@@ -89,9 +89,8 @@ const items = [
     {id: 1, icon: <img src={before_15}/>, content: "15분 전", delta: 15},
     {id: 2, icon: <img src={before_30}/>, content: "30분 전", delta: 30},
     {id: 3, icon: <img src={before_1h}/>, content: "1시간 전", delta: 60},
-    {id: 4, icon: <img src={before_D}/>, content: "당일", delta: 0},
-    {id: 5, icon: <img src={before_1D}/>, content: "1일 전", delta: 1440},
-    {id: 6, icon: <img src={before_2D}/>, content: "2일 전", delta: 2880},
+    {id: 4, icon: <img src={before_1D}/>, content: "1일 전", delta: 1440},
+    {id: 5, icon: <img src={before_2D}/>, content: "2일 전", delta: 2880},
 ]
 
 export default Reminder

@@ -60,8 +60,8 @@ const Contents = ({task, setFunc}) => {
             name: "reminder",
             icon: <img src={alarmclock} />,
             display: task.reminders?.length !== 0 ? <RemindersBox name="reminder">
-                {task.reminders.map(reminder => <ReminderBlock name="reminder">{reminder.delta}분 전</ReminderBlock>)}
-            </RemindersBox> : "없음",
+                {task.reminders.map(reminder => <ReminderBlock name="reminder">{displayReminder[reminder.delta]}</ReminderBlock>)}
+            </RemindersBox> : <PlusReminder name="reminder">+</PlusReminder>,
             component: <Reminder task={task} closeComponent={closeComponent}/>
         },
         {
@@ -174,14 +174,26 @@ const RemindersBox = styled.div`
 
 const ReminderBlock = styled.div`
     width: auto;
-    height: 1em;
+    font-size: 0.9em;
     padding: 0.3em;
     border: solid 1.5px #C4C4C4;
-    font-size: 0.9em;
     font-weight: 450;
     display: flex;
     justify-content: center;
     align-items: center;
+`
+
+const PlusReminder = styled.div`
+    font-size: 0.9em;
+    width: 1em;
+    padding: 0.3em;
+    margin-right: 0em;
+    border: solid 1.5px #C4C4C4;
+    font-weight: 450;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 `
 
 const priorities = [
@@ -189,5 +201,14 @@ const priorities = [
     '중요',
     '매우 중요'
 ]
+
+const displayReminder = {
+    5: "5분 전",
+    15: "15분 전",
+    30: "30분 전",
+    60: "1시간 전",
+    1440: "1일 전",
+    2880: "2일 전",
+}
 
 export default Contents
