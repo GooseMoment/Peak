@@ -32,15 +32,17 @@ const TaskFrame = ({task, setFunc, color, taskDetailPath}) => {
         setIsLoading(false)
     }, [task])
 
+    const hasDate = task.due_date || task.assigned_at
+
     return (
         <Box>
-            <Priority priority={task.priority} completed={task.completed_at}/>
+            <Priority hasDate={hasDate} priority={task.priority} completed={task.completed_at} />
             <div>
                 <CircleName>
                     <TaskCircle
                         completed={task.completed_at}
                         color={color}
-                        hasDate={task.due_date || task.assigned_at}
+                        hasDate={hasDate}
                         isLoading={isLoading}
                         onClick={toComplete}
                     />
