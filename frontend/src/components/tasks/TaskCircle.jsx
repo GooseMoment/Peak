@@ -40,6 +40,7 @@ const Circle = styled.div`
     position: relative;
     margin-right: 0.6em;
     font-size: 1em;
+    cursor: pointer;
 
     & svg {
         width: 1em;
