@@ -121,7 +121,7 @@ const Box = styled.section`
     gap: 5rem;
 
     padding: 2.25rem;
-    background-color: white;
+    background-color: ${p => p.theme.backgroundColor};
 
     grid-area: 1 / 2 / 2 / 3;
 
@@ -155,7 +155,7 @@ const A = styled.div`
 const TosAgreement = styled.p`
     text-align: center;
     font-size: 0.75em !important;
-    color: grey;
+    color: ${p => p.theme.grey};
 
     & a {
         display: inline-block;

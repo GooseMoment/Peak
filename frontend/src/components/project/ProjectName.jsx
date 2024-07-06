@@ -52,7 +52,7 @@ const NameText = styled.div`
     font-weight: normal;
     font-size: 1.25em;
     margin-left: 0.3em;
-    color: #000000;
+    color: ${p => p.theme.textColor};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -67,12 +67,12 @@ const TypeText = styled.div`
     font-weight: normal;
     font-size: 1em;
     margin-left: 0.6em;
-    color: #6E6E6E;
+    color: ${p => p.theme.grey};
 `
 
 const Text = styled.div`
     font-size: 1em;
-    color: #000000;
+    color: ${p => p.theme.textColor};
 `
 
 export default ProjectName
