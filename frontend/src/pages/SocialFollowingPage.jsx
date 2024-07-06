@@ -57,11 +57,11 @@ const SocialFollowingPage = () => {
                     />
                 </CalendarContainer>
 
-                <DailyLogContainer>
+                <DailyLogsPreviewContainer>
                     {sortDailyLogs(dailyReport).map((dailyFollowersLog) => (
                         <DailyLogPreview key={dailyFollowersLog.username} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                     ))}
-                </DailyLogContainer>
+                </DailyLogsPreviewContainer>
             </Container>
 
             <Container $isSticky={true}>
@@ -101,8 +101,7 @@ const CalendarContainer = styled.div`
     margin-right: auto;
 `
 
-const DailyLogContainer = styled.div`
-`
+const DailyLogsPreviewContainer = styled.div``
 
 const mockNewLogDates = [
     "2024-05-12T15:00:00.000Z", "2024-05-11T15:00:00.000Z", "2024-05-09T00:00:00.000Z"
