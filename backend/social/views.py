@@ -16,6 +16,7 @@ from datetime import datetime, timedelta
 from .models import *
 from .serializers import *
 from users.serializers import UserSerializer
+from projects.models import *
 
 ## Follow
 # social/follow/@follower/@followee/
@@ -133,12 +134,13 @@ def get_daily_logs(request: HttpRequest, username, day):
     
     return Response(serializer.data, status=status.HTTP_200_OK) 
 
-# PUT social/daily/log/@follower/@followee/YYYY-MM-DDTHH:mm:ss+hh:mm/
-@api_view(["PUT"])
-def view_daily_log(requset: HttpRequest, follower, followee, day):
+# GET social/daily/comment/@follower/@followee/YYYY-MM-DDTHH:mm:ss+hh:mm/
+@api_view(["GET"])
+def get_daily_comment(requset: HttpRequest, follower, followee, day):    
     followerUserID = str(get_object_or_404(User, username=follower).id)
     followeeUserID = str(get_object_or_404(User, username=followee).id)
 
+    # set cache for 'is_read'
     cache_key = f"user_id_{followeeUserID}_date_{day}"
     cache_data = cache.get(cache_key)
     if cache_data:
@@ -150,7 +152,14 @@ def view_daily_log(requset: HttpRequest, follower, followee, day):
     # cache.set(cache_key, cache_data, 1*24*60*60)
     cache.set(cache_key, cache_data, 60*60)
     
-    return Response(cache_data, status=status.HTTP_200_OK)
+    day_min = datetime.fromisoformat(day)
+    day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+    daily_comment = DailyComment.objects.filter(user__id=followeeUserID, date__range=(day_min, day_max)).first()
+    
+    serializer = DailyCommentSerializer(daily_comment)
+    
+    # Response(cache_data, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 def get_following_feed(request: HttpRequest, date):
     pass

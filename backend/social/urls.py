@@ -8,7 +8,7 @@ urlpatterns = [
     path('follow/@<str:follower>/@<str:followee>/', views.FollowView.as_view()),
     path('block/@<str:blocker>/@<str:blockee>/', views.BlockView.as_view()),
     path('daily/logs/@<str:username>/<str:day>/', views.get_daily_logs),
-    path('daily/log/@<str:follower>/@<str:followee>/<str:day>/', views.view_daily_log),
+    path('daily/comment/@<str:follower>/@<str:followee>/<str:day>/', views.get_daily_comment),
     path('emojis/', views.EmojiList.as_view()),
 ]
 
