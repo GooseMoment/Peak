@@ -3,9 +3,9 @@ import { Fragment, useState, useMemo } from "react"
 import Button, { ButtonGroup } from "@components/common/Button"
 import PageTitle from "@components/common/PageTitle"
 import SubSection, { SubTitle } from "@components/intro/SubSection"
-import DrawerBox, { DrawerName } from "@components/project/DrawerBox"
+import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import Task from "@components/project/Task"
-import { TaskList } from "@components/project/Drawer"
+import { TaskList } from "@components/drawers/Drawer"
 
 import {today, tomorrow, yesterday, dayAfterTomorrow, dayLongAfter} from "./todays"
 

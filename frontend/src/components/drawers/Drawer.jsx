@@ -5,7 +5,7 @@ import { cubicBeizer, rotateToUp, rotateToUnder } from "@assets/keyframes"
 
 import Button from "@components/common/Button"
 import Task from "@components/project/Task"
-import DrawerBox, { DrawerName, DrawerIcon } from "@components/project/DrawerBox"
+import DrawerBox, { DrawerName, DrawerIcon } from "@components/drawers/DrawerBox"
 
 import { getTasksByDrawer } from "@api/tasks.api"
 import { useInfiniteQuery } from "@tanstack/react-query"
