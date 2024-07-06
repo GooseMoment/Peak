@@ -62,16 +62,16 @@ const DailyLogDetail = ({userLogsDetail, isSelf}) => {
         
         <DetailBody>
         {
-            userLogsDetail.dailyProjects.map((dailyProject) => (
+            userLogsDetail.dailyProjects?.map((dailyProject) => (
                 <>
-                <DrawerBox key={dailyProject.projectID} $color={dailyProject.projectColor}>
-                    <DrawerName $color={dailyProject.projectColor}>{dailyProject.projectID}</DrawerName>
-                </DrawerBox>
-                <TaskList>
-                    {dailyProject.dailytasks?.map((dailytask) => (
-                        <TaskFrame task={dailytask} color={dailyProject.projectColor} />
-                    ))}
-                </TaskList>
+                    <DrawerBox key={dailyProject.projectID} $color={dailyProject.projectColor}>
+                        <DrawerName $color={dailyProject.projectColor}>{dailyProject.projectID}</DrawerName>
+                    </DrawerBox>
+                    <TaskList>
+                        {dailyProject.dailytasks?.map((dailytask) => (
+                            <TaskFrame task={dailytask} color={dailyProject.projectColor} />
+                        ))}
+                    </TaskList>
                 </>
             ))
         }
