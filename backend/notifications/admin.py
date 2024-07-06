@@ -12,7 +12,7 @@ class TaskReminderAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ["task", "scheduled"],
+                "fields": ["task", "scheduled", "delta"],
             },
         ),
         fieldset_base,

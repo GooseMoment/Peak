@@ -1,15 +1,8 @@
-from .models import TaskReminder, Notification, WebPushSubscription
+from .models import Notification, WebPushSubscription
 from rest_framework import serializers
 
-from tasks.serializers import TaskSerializer
 from social.serializers import CommentSerializer, ReactionSerializer, FollowingSerializer, PeckSerializer
-
-class TaskReminderSerializer(serializers.ModelSerializer):
-    task = TaskSerializer(read_only=True)
-     
-    class Meta:
-        model = TaskReminder
-        fields = ["task", "scheduled"]
+from tasks.serializers import TaskReminderSerializer
 
 class NotificatonSerializer(serializers.ModelSerializer):
     username = serializers.PrimaryKeyRelatedField(read_only=True, source="user.username")

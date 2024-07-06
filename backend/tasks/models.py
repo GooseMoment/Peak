@@ -1,4 +1,6 @@
 from django.db import models
+from datetime import datetime, time
+from pytz import timezone
 
 from api.models import Base, PrivacyMixin
 from users.models import User
@@ -30,6 +32,7 @@ class Task(Base, PrivacyMixin):
     )
     due_date = models.DateField(null=True, blank=True)
     due_time = models.TimeField(null=True, blank=True)
+    due_tz = models.CharField(max_length=128)
     assigned_at = models.DateField(null=True, blank=True)
     priority = models.IntegerField(default=0)
     memo = models.TextField(null=True, blank=True)
@@ -44,6 +47,13 @@ class Task(Base, PrivacyMixin):
         null=True,
         blank=True,
     )
+
+    def due_datetime(self):
+        if (self.due_time == None):
+            self.due_time = time(0, 0, 0)
+        due = datetime.combine(self.due_date, self.due_time)
+        tz = timezone("UTC")
+        return tz.localize(due)
 
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"
