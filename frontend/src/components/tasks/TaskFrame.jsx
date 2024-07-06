@@ -45,7 +45,7 @@ const TaskFrame = ({task, setFunc, color, taskDetailPath}) => {
                         color={color}
                         hasDate={hasDate}
                         isLoading={isLoading}
-                        onClick={toComplete}
+                        onClick={setFunc ? toComplete : undefined}
                     />
                     {taskDetailPath ? <Link to={taskDetailPath} style={{ textDecoration: 'none' }}> 
                         {TaskName}

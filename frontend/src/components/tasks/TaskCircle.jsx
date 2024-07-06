@@ -1,7 +1,7 @@
 import FeatherIcon from "feather-icons-react"
 import styled, { keyframes, css } from "styled-components"
 
-const TaskCircle = ({completed=false, color='FF4A03', hasDate=null, isInput=false, isLoading=false, onClick=() => {}}) => {
+const TaskCircle = ({completed=false, color='FF4A03', hasDate=null, isInput=false, isLoading=false, onClick}) => {
     return (
         <Circle 
             $completed={completed}
@@ -9,6 +9,7 @@ const TaskCircle = ({completed=false, color='FF4A03', hasDate=null, isInput=fals
             $hasDate={hasDate}
             $isInput={isInput}
             $isLoading={isLoading}
+            $clickable={!isLoading && onClick}
             onClick={onClick}
         >
             {completed && <FeatherIcon icon="check"/>}
@@ -42,7 +43,6 @@ const Circle = styled.div`
     position: relative;
     margin-right: 0.6em;
     font-size: 1em;
-    cursor: pointer;
 
     & svg {
         width: 1em;
@@ -64,6 +64,8 @@ const Circle = styled.div`
             animation: ${reverseRotateAnimation} 6s linear infinite;
         }
     `: null}
+
+    ${p => p.$clickable && css`cursor: pointer;`}
 `
 
 const rotateAnimation = keyframes`
