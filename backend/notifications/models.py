@@ -11,6 +11,7 @@ class TaskReminder(Base):
         on_delete = models.CASCADE,
         related_name = 'reminders'
     )
+    delta = models.IntegerField()
     scheduled = models.DateTimeField()
 
     def __str__(self) -> str:

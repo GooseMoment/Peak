@@ -1,5 +1,42 @@
 import client from "@api/client"
 
+export const getReminder = async (id) => {
+    try {
+        const res = await client.get(`notifications/reminders/${id}`)
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
+
+export const postReminder = async (reminder) => {
+    try {
+        const res = await client.post(`notifications/reminders/`, reminder)
+        return res.status
+    } catch (e) {
+        throw e
+    }
+}
+
+export const patchReminder = async (id, edit) => {
+    try {
+        const res = await client.patch(`notifications/reminders/${id}`, edit)
+        return res.data
+    } catch (e) {
+        throw e
+    }
+
+}
+
+export const deleteReminder = async (id) => {
+    try {
+        const res = await client.delete(`notifications/reminders/${id}`)
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
+
 export const getNotifications = async (query) => {
     const params = query.queryKey[1]
     const cursor = query.pageParam

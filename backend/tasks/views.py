@@ -3,6 +3,7 @@ from rest_framework.response import Response
 
 from .models import Task
 from .serializers import TaskSerializer
+from notifications.serializers import TaskReminderSerializer
 from api.permissions import IsUserMatch
 from api.views import CreateMixin
 
@@ -16,7 +17,12 @@ class TaskDetail(mixins.RetrieveModelMixin,
     permission_classes = [IsUserMatch]
 
     def get(self, request, id, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+        instance = self.get_object()
+        sorted_reminders = instance.reminders.order_by('delta')
+        serializer = self.get_serializer(instance)
+        data = serializer.data
+        data['reminders'] = TaskReminderSerializer(sorted_reminders, many=True).data
+        return Response(data)
     
     def patch(self, request, *args, **kwargs):
         try:

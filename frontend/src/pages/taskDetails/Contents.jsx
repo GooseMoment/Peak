@@ -25,11 +25,11 @@ const Contents = ({task, setFunc}) => {
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
     // text클릭 시 알맞는 component 띄우기
-    const [content, setContent] = useState()
+    const [content, setContent] = useState(null)
     
     const handleClickContent = (e) => {
-        const name = Number(e.target.id)
-        setContent(name)
+        const { name } = e.target.attributes
+        setContent(name.value)
         setIsComponentOpen(true)
     }
 
@@ -38,7 +38,7 @@ const Contents = ({task, setFunc}) => {
         navigate(`.`)
     }
 
-    const {formatted_due_date, formatted_due_time, formatted_assigned_date, formatted_reminder_datetime} = taskDate(task)
+    const {formatted_due_date, formatted_due_time, formatted_assigned_date} = taskDate(task)
     
     const items = [
         {
@@ -59,9 +59,10 @@ const Contents = ({task, setFunc}) => {
             id: 3,
             name: "reminder",
             icon: <img src={alarmclock} />,
-            display: task.reminder_datetime ? formatted_reminder_datetime : "없음",
-            component: <Reminder setFunc={setFunc} closeComponent={closeComponent}/>
-            // 아직 안만듬
+            display: task.reminders?.length !== 0 ? <RemindersBox name="reminder">
+                {task.reminders.map(reminder => <ReminderBlock name="reminder">{displayReminder[reminder.delta]}</ReminderBlock>)}
+            </RemindersBox> : <PlusReminder name="reminder">+</PlusReminder>,
+            component: <Reminder task={task} closeComponent={closeComponent}/>
         },
         {
             id: 4,
@@ -95,10 +96,10 @@ const Contents = ({task, setFunc}) => {
                         {item.icon}
                     </ToolTip>
                     <VLine $end={item.id === 1 || item.id === 6} />
-                    <ContentText id={item.id} onClick={handleClickContent}>
+                    <ContentText name={item.name} onClick={handleClickContent}>
                             {item.display}
                     </ContentText>
-                    {(content === item.id && isComponentOpen) ? 
+                    {(content === item.name && isComponentOpen) ? 
                     <ModalPortal closeModal={closeComponent} additional>
                         {item.component}
                     </ModalPortal> : null}
@@ -166,10 +167,48 @@ const ContentText = styled.div`
     }
 `
 
+const RemindersBox = styled.div`
+    display: flex;
+    gap: 0.5em;
+`
+
+const ReminderBlock = styled.div`
+    width: auto;
+    font-size: 0.9em;
+    padding: 0.3em;
+    border: solid 1.5px #C4C4C4;
+    font-weight: 450;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+const PlusReminder = styled.div`
+    font-size: 0.9em;
+    width: 1em;
+    padding: 0.3em;
+    margin-right: 0em;
+    border: solid 1.5px #C4C4C4;
+    font-weight: 450;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+`
+
 const priorities = [
     '보통',
     '중요',
     '매우 중요'
 ]
+
+const displayReminder = {
+    5: "5분 전",
+    15: "15분 전",
+    30: "30분 전",
+    60: "1시간 전",
+    1440: "1일 전",
+    2880: "2일 전",
+}
 
 export default Contents

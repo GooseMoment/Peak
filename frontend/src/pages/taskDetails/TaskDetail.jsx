@@ -69,7 +69,7 @@ const TaskDetail = () => {
 
 const TaskDetailBox = styled.div`
     width: 50em;
-    height: 23em;
+    height: 23.5em;
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;

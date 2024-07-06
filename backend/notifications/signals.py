@@ -1,11 +1,9 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models import Notification
+from .models import Notification, TaskReminder
 from social.models import Reaction, Peck, Following, Comment
 from .push import pushNotificationToUser
-
-# TODO: add code for TaskReminder
 
 @receiver(post_save, sender=Reaction)
 def create_notification_for_reaction(sender, instance: Reaction=None, created=False, **kwargs):
