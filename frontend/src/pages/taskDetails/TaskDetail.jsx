@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import styled from "styled-components"
 import FeatherIcon from 'feather-icons-react'
 
-import TaskName from "@components/project/TaskName"
+import TaskNameInput from "@components/tasks/TaskNameInput"
 import Contents from "./Contents"
 
 import queryClient from "@queries/queryClient"
@@ -50,14 +50,12 @@ const TaskDetail = () => {
     return (
         <TaskDetailBox>
             <TaskNameBox>
-                <TaskName
-                    projectId={projectID}
+                <TaskNameInput
                     task={task}
                     setFunc={mutation.mutate}
                     newTaskName={taskName}
                     setNewTaskName={setTaskName}
                     color={color}
-                    editable={true}
                 />
                 <Icons>
                     <FeatherIcon icon="trash-2" />

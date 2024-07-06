@@ -5,7 +5,7 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 import PageTitle from "@components/common/PageTitle"
-import Drawer from "@components/project/Drawer"
+import Drawer from "@components/drawers/Drawer"
 import DrawerCreate from "@components/project/Creates/DrawerCreate"
 import ModalPortal from "@components/common/ModalPortal"
 import { useTranslation } from "react-i18next"
