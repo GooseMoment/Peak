@@ -17,7 +17,7 @@ const Priority = ({priority, completed, hasDate}) => {
 const PriorityImg = styled.img`
     width: 15px;
     height: 15px;
-    margin-top: ${p => p.$hasDate ? "-0.5em" : "0em"};
+    margin-top: ${p => p.$hasDate ? "-0.5em" : "-0.25em"};
     margin-right: 0.2em;
     filter: ${(props) => (props.$completed && css`
         invert(73%) sepia(3%) saturate(9%) hue-rotate(349deg) brightness(89%) contrast(92%);

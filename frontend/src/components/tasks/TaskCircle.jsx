@@ -19,6 +19,8 @@ const TaskCircle = ({completed=false, color='FF4A03', hasDate=null, isInput=fals
 const Circle = styled.div`
     display: flex;
     justify-content: center;
+    align-items: center;
+
     top: ${
         (props) => {
             if (props.$isInput) {
@@ -48,6 +50,7 @@ const Circle = styled.div`
         stroke: #A4A4A4;
         stroke-width: 0.2em;
         margin-right: 0;
+        top: 0;
         animation: none;
     }
 
