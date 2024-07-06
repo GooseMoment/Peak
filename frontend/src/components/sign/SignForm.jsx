@@ -121,6 +121,7 @@ const Box = styled.section`
     gap: 5rem;
 
     padding: 2.25rem;
+    color: ${p => p.theme.textColor};
     background-color: ${p => p.theme.backgroundColor};
 
     grid-area: 1 / 2 / 2 / 3;
