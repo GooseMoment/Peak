@@ -1,7 +1,7 @@
 import SubSection from "@components/intro/SubSection"
 import RadioGroup from "@components/intro/RadioGroup"
 import Radio from "@components/intro/Radio"
-import Task from "@components/project/Task"
+import Task from "@components/tasks/Task"
 
 import {today, tomorrow, nextWeek, twoWeeksLater} from "./todays"
 
