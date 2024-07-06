@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import TaskCircle from "../tasks/TaskCircle"
 import notify from "@utils/notify"
@@ -7,6 +7,10 @@ import styled from "styled-components"
 
 const TaskNameInput = ({task, setFunc, newTaskName, setNewTaskName, color}) => {    
     const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        setIsLoading(false)
+    }, [task])
 
     const onChange = (e) => {
         const newName = e.target.value
@@ -27,7 +31,7 @@ const TaskNameInput = ({task, setFunc, newTaskName, setNewTaskName, color}) => {
     const toComplete = () => {
         setIsLoading(true)
         let completed_at = null
-        if (!(task.completed_at)) {
+        if (!task.completed_at) {
             completed_at = new Date().toISOString()
         }
         setFunc({completed_at})
@@ -35,14 +39,14 @@ const TaskNameInput = ({task, setFunc, newTaskName, setNewTaskName, color}) => {
 
     return <Box>
         <TaskCircle
-            completed={task.completed}
+            completed={task.completed_at}
             color={color}
             isLoading={isLoading}
             onClick={toComplete}
             isInput
         />
         <InputText
-            $completed={task.completed}
+            $completed={task.completed_at}
             type='text'
             onChange={onChange}
             onKeyDown={onEnter}
