@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import ReactionEmoji from "@components/social/ReactionEmoji";
 import EmojiAddButton from "@components/social/EmojiAddButton";
-import LogDetailProject from "@components/social/LogDetail/LogDetailProject";
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox";
 import { TaskList } from "@components/drawers/Drawer";
