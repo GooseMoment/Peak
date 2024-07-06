@@ -5,6 +5,8 @@ import Section, { Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
 
+import themes from "@assets/themes"
+
 import { useTranslation } from "react-i18next"
 
 const Appearance = () => {
@@ -38,20 +40,15 @@ const Appearance = () => {
     </>
 }
 
-const makeThemeChoices = t => [
-    {
-        display: t("theme.values.system"),
-        value: "system",
-    },
-    {
-        display: t("theme.values.light"),
-        value: "light",
-    },
-    {
-        display: t("theme.values.dark"),
-        value: "dark",
-    },
-]
+const makeThemeChoices = t => {
+    const keys = Object.keys(themes)
+    const prefix = "theme.values."
+
+    return keys.map(value => ({
+        display: t(prefix + value),
+        value
+    }))
+}
 
 const makeWidthChoices = t => [
     {
