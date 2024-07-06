@@ -4,7 +4,7 @@ import { useState } from "react"
 import styled from "styled-components"
 import FeatherIcon from 'feather-icons-react'
 
-import TaskName from "@components/project/TaskName"
+import TaskNameInput from "@components/tasks/TaskNameInput"
 import Button from "@components/common/Button"
 import Contents from "./Contents"
 
@@ -56,7 +56,13 @@ const TaskCreate = () => {
     return (
         <TaskCreateBox>
             <TaskNameBox>
-                <TaskName projectId={projectId} task={newTask} setFunc={editNewTask} newTaskName={newTaskName} setNewTaskName={setNewTaskName} color={color} editable={true}/>
+                <TaskNameInput
+                    task={newTask} 
+                    setFunc={editNewTask} 
+                    newTaskName={newTaskName} 
+                    setNewTaskName={setNewTaskName} 
+                    color={color} 
+                />
                 <Icons>
                     <FeatherIcon icon="trash-2" />
                     <FeatherIcon icon="x" onClick={onClose} />

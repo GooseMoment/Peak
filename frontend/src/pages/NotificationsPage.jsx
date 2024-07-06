@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useMemo, useEffect, useRef, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 
-import FilterButtonGroup from "@components/notifications/FilterButtonGroup"
+import FilterButtonGroup from "@components/common/FilterButtonGroup"
 import Box from "@components/notifications/Box"
 import PageTitle from "@components/common/PageTitle"
 

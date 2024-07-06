@@ -16,7 +16,7 @@ import Memo from "./Memo"
 
 import ToolTip from "@components/project/common/ToolTip"
 import ModalPortal from "@components/common/ModalPortal"
-import taskDate from "@components/project/taskDate"
+import taskDate from "@components/tasks/utils/taskDate"
 
 const Contents = ({task, setFunc}) => {
     const { id: projectID } = useParams()

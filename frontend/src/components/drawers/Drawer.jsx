@@ -1,16 +1,17 @@
 import { Fragment, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import styled, { css } from "styled-components"
-import { cubicBeizer } from "@assets/keyframes"
-import { rotateToUp, rotateToUnder } from "@assets/keyframes"
-import FeatherIcon from 'feather-icons-react'
+import { cubicBeizer, rotateToUp, rotateToUnder } from "@assets/keyframes"
 
-import Task from "@components/project/Task"
-
-import { useInfiniteQuery } from "@tanstack/react-query"
-import { getTasksByDrawer } from "@api/tasks.api"
 import Button from "@components/common/Button"
+import Task from "@components/tasks/Task"
+import DrawerBox, { DrawerName, DrawerIcon } from "@components/drawers/DrawerBox"
+
+import { getTasksByDrawer } from "@api/tasks.api"
+import { useInfiniteQuery } from "@tanstack/react-query"
+
+import styled, { css } from "styled-components"
+import FeatherIcon from 'feather-icons-react'
 import { useTranslation } from "react-i18next"
 
 const getPageFromURL = (url) => {
@@ -90,7 +91,7 @@ const Drawer = ({project, drawer, color}) => {
                 <TaskList>
                     {data?.pages?.map((group) => (
                         group?.results?.map((task) =>
-                            <Task key={task.id} projectId={project.id} task={task} color={color}/>
+                            <Task key={task.id} task={task} color={color}/>
                     )))}
                 </TaskList>
             }
@@ -113,43 +114,6 @@ const Drawer = ({project, drawer, color}) => {
     );
 }
 
-const DrawerBox = styled.div`
-    height: 3em;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 1.5em;
-    text-decoration: double;
-    border: solid 0.25em #${props => props.$color};
-    border-radius: 15px;
-`
-
-const DrawerName = styled.h1`
-    width: 42em;
-    font-size: 1.4em;
-    font-weight: bold;
-    text-align: left;
-    margin-left: 1.45em;
-    color: #${props => props.$color};
-    stroke-opacity: 0.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`
-
-const DrawerIcon = styled.div`
-    display: flex;
-    align-items: center;
-    margin-right: 1.45em;
-
-    & svg {
-        top: 0;
-        margin-right: 1em;
-        color: #${props => props.$color};
-        cursor: pointer;
-    }
-`
-
 const CollapseButton = styled.div`
     & svg {
         animation: ${rotateToUp} 0.5s ${cubicBeizer} forwards;
@@ -162,7 +126,7 @@ const CollapseButton = styled.div`
     `}
 `
 
-const TaskList = styled.div`
+export const TaskList = styled.div`
     flex: 1;
     margin-left: 0.5em;
 `

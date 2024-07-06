@@ -33,6 +33,8 @@ export const light = {
     secondBackgroundColor: "#F7F7F3",
     accentColor: goose,
     scrollbarColor: "#FFC6C6",
+    frontSignPageTextColor: goose,
+    frontSignPageBackgroundColor: "#FFD7C7",
     sidebar: {
         activeColor: black,
         activeBackgroundColor: "#D9D9D9",
