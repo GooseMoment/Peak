@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import styled from "styled-components"
 import FeatherIcon from 'feather-icons-react'
 
-import TaskNameInput from "@components/project/TaskNameInput"
+import TaskNameInput from "@components/tasks/TaskNameInput"
 import Contents from "./Contents"
 
 import queryClient from "@queries/queryClient"

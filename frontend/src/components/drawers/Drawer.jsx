@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { cubicBeizer, rotateToUp, rotateToUnder } from "@assets/keyframes"
 
 import Button from "@components/common/Button"
-import Task from "@components/project/Task"
+import Task from "@components/tasks/Task"
 import DrawerBox, { DrawerName, DrawerIcon } from "@components/drawers/DrawerBox"
 
 import { getTasksByDrawer } from "@api/tasks.api"
@@ -91,7 +91,7 @@ const Drawer = ({project, drawer, color}) => {
                 <TaskList>
                     {data?.pages?.map((group) => (
                         group?.results?.map((task) =>
-                            <Task key={task.id} projectId={project.id} task={task} color={color}/>
+                            <Task key={task.id} task={task} color={color}/>
                     )))}
                 </TaskList>
             }

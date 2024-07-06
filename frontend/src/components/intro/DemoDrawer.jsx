@@ -4,7 +4,7 @@ import Button, { ButtonGroup } from "@components/common/Button"
 import PageTitle from "@components/common/PageTitle"
 import SubSection, { SubTitle } from "@components/intro/SubSection"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
-import Task from "@components/project/Task"
+import Task from "@components/tasks/Task"
 import { TaskList } from "@components/drawers/Drawer"
 
 import {today, tomorrow, yesterday, dayAfterTomorrow, dayLongAfter} from "./todays"
