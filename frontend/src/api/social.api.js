@@ -55,8 +55,13 @@ export const getExploreFeed = (userID) => {
 
 }
 
-export const getEmojis = () => {
-
+export const getEmojis = async () => {
+    try {
+        const res = await client.get(`social/emojis/`)
+        return res.data.results
+    } catch (e) {
+        throw e
+    }
 }
 
 export const postReaction = (taskID, emoji) => {

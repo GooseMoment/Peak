@@ -7,8 +7,17 @@ import buddies from "@assets/landing/undraw_buddies_2ae5.svg"
 import speedTest from "@assets/landing/undraw_speed_test_re_pe1f.svg"
 import graphs from "@assets/landing/graphs.svg"
 
+import { useQuery } from "@tanstack/react-query"
+import { getEmojis } from "@/api/social.api"
+
 
 const LandingPage = () => {
+    useQuery({
+        queryKey: ["emojis"],
+        queryFn: () => getEmojis(),
+        staleTime: 1000 * 60 * 60 * 5,
+    })
+
     return <LandingRoot>
     <nav>
     <div className="left">
