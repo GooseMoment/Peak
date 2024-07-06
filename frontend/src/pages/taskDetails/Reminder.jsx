@@ -10,7 +10,6 @@ import before_5 from "@assets/project/reminder/before_5.svg"
 import before_15 from "@assets/project/reminder/before_15.svg"
 import before_30 from "@assets/project/reminder/before_30.svg"
 import before_1h from "@assets/project/reminder/before_1h.svg"
-import before_D from "@assets/project/reminder/before_D.svg"
 import before_1D from "@assets/project/reminder/before_1D.svg"
 import before_2D from "@assets/project/reminder/before_2D.svg"
 
@@ -21,6 +20,7 @@ const Reminder = ({ task, closeComponent }) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['task', {taskID: task.id}]})
+            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
         },
     })
 
@@ -30,6 +30,7 @@ const Reminder = ({ task, closeComponent }) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['task', {taskID: task.id}]})
+            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
         },
     })
 
