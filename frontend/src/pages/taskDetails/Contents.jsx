@@ -38,7 +38,7 @@ const Contents = ({task, setFunc}) => {
         navigate(`.`)
     }
 
-    const {formatted_due_date, formatted_due_time, formatted_assigned_date, formatted_reminder_datetime} = taskDate(task)
+    const {formatted_due_date, formatted_due_time, formatted_assigned_date} = taskDate(task)
     
     const items = [
         {
@@ -59,9 +59,11 @@ const Contents = ({task, setFunc}) => {
             id: 3,
             name: "reminder",
             icon: <img src={alarmclock} />,
-            display: task.reminder_datetime ? formatted_reminder_datetime : "없음",
+            display: task.reminders?.length !== 0 ?
+            <RemindersBox>
+            {task.reminders.map(reminder => <ReminderBlock>{reminder.delta}분 전</ReminderBlock>)}
+            </RemindersBox> : "없음",
             component: <Reminder setFunc={setFunc} closeComponent={closeComponent}/>
-            // 아직 안만듬
         },
         {
             id: 4,
@@ -164,6 +166,23 @@ const ContentText = styled.div`
     &:hover {
     cursor: pointer;
     }
+`
+
+const RemindersBox = styled.div`
+    display: flex;
+    gap: 0.5em;
+`
+
+const ReminderBlock = styled.div`
+    width: auto;
+    height: 1em;
+    padding: 0.3em;
+    border: solid 1.5px #C4C4C4;
+    font-size: 0.9em;
+    font-weight: 450;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 const priorities = [
