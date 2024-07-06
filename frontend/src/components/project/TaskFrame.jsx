@@ -1,59 +1,64 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
+
+import TaskCircle from "./TaskCircle"
+import Priority from "./Priority"
+
+import taskCalculation from "./taskCalculation"
+
+import hourglass from "@assets/project/hourglass.svg"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-import { useMutation } from "@tanstack/react-query"
-import queryClient from "@queries/queryClient"
 
-import { patchTask } from "@api/tasks.api"
-import taskCalculation from "./taskCalculation"
-import TaskName from "./TaskNameFrame"
-import Priority from "./Priority"
-
-import hourglass from "@assets/project/hourglass.svg"
-
-const TaskFrame = ({projectId, task, color, demo=false}) => {
-    const [newTaskName, setNewTaskName] = useState(task.name)
+const TaskFrame = ({task, setFunc, color, taskDetailPath}) => {
+    const [isLoading, setIsLoading] = useState(false)
     const {assigned, due} = taskCalculation(task)
 
-    const mutation = useMutation({
-        mutationFn: (data) => {
-            return patchTask(task.id, data)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['task', {taskID: task.id}]})
-            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
-        },
-    })
+    const TaskName = <TaskNameBox $completed={task.completed}>
+        {task?.name}
+    </TaskNameBox>
+
+    const toComplete = () => {
+        setIsLoading(true)
+        let completed_at = null
+        if (!(task.completed_at)) {
+            completed_at = new Date().toISOString()
+        }
+        setFunc({completed_at})
+    }
 
     return (
         <Box>
-            <Priority priority={task.priority} completed={task.completed_at ? true : false}/>
+            <Priority priority={task.priority} completed={task.completed_at}/>
             <div>
-                <TaskName
-                    projectId={projectId}
-                    task={task}
-                    setFunc={!demo ? mutation.mutate : undefined}
-                    newTaskName={newTaskName}
-                    setNewTaskName={setNewTaskName}
-                    color={color} 
-                    editable={false}
-                    demo={demo}
-                />
-                <FlexBox>
+                <CircleName>
+                    <TaskCircle
+                        completed={task.completed}
+                        color={color}
+                        hasDate={task.due_date || task.assigned_at}
+                        isLoading={isLoading}
+                        onClick={toComplete}
+                    />
+                    {taskDetailPath ? <Link to={taskDetailPath} style={{ textDecoration: 'none' }}> 
+                        {TaskName}
+                    </Link> : TaskName}
+                </CircleName>
+
+                <Dates>
                     {task.assigned_at &&
-                    <AssignedDate $completed={task.completed_at ? true : false} $isOutOfDue={assigned === "놓침"}>
+                    <AssignedDate $completed={task.completed_at} $isOutOfDue={assigned === "놓침"}>
                         <FeatherIcon icon="calendar" />
                         {assigned}
                     </AssignedDate>
                     }
                     {task.due_date && 
-                    <DueDate $completed={task.completed_at ? true : false} $isOutOfDue={due === "기한 지남"}>
+                    <DueDate $completed={task.completed_at} $isOutOfDue={due === "기한 지남"}>
                         <img src={hourglass} />
                         {due}
                     </DueDate>}
-                </FlexBox>
+                </Dates>
             </div>
         </Box>
     )
@@ -62,10 +67,27 @@ const TaskFrame = ({projectId, task, color, demo=false}) => {
 const Box = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 1em;
+    margin-top: 1.5em;
 `
 
-const FlexBox = styled.div`
+const TaskNameBox = styled.div`
+    display: inline-block;
+
+    width: 60em;
+    font-style: normal;
+    font-size: 1.1em;
+    color: ${p => p.$completed ? p.theme.grey : p.theme.textColor};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3em;
+`
+
+const CircleName = styled.div`
+    display: flex;
+`
+
+const Dates = styled.div`
     display: flex;
     align-items: center;
     margin-top: 0.2em;
