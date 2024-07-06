@@ -11,7 +11,7 @@ class TaskReminderSerializer(serializers.ModelSerializer):
      
     class Meta:
         model = TaskReminder
-        fields = ["task", "delta", "scheduled"]
+        fields = ["id", "task", "delta", "scheduled"]
 
 class TaskSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(required=False, queryset=User.objects.all())
