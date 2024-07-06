@@ -5,7 +5,7 @@ import { styled, css } from "styled-components"
 import moment from "moment";
 
 import SocialCalendar from "@components/social/SocialCalendar";
-import DailyLogsPreview from "@components/social/DailyLogsPreview";
+import DailyLogPreview from "@components/social/DailyLogsPreview";
 import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail";
 import SocialPageTitle from "@components/social/SocialPageTitle";
 
@@ -59,7 +59,7 @@ const SocialFollowingPage = () => {
 
                 <DailyLogsPreviewContainer>
                     {sortDailyLogs(dailyReport).map((dailyFollowersLog) => (
-                        <DailyLogsPreview key={dailyFollowersLog.username} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+                        <DailyLogPreview key={dailyFollowersLog.username} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                     ))}
                 </DailyLogsPreviewContainer>
             </Container>

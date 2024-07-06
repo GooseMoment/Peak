@@ -5,7 +5,7 @@ const putEllipsis = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength-3) + '...' : text;
 }
 
-const DailyLogsPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
+const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
     
     const handleSelect = () => {
     // ~Log.index can be replaced with ~Log.task.id
@@ -107,4 +107,4 @@ color: #A4A4A4;
 white-space: nowrap;
 `
 
-export default DailyLogsPreview;
+export default DailyLogPreview;
