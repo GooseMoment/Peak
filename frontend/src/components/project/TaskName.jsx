@@ -1,72 +1,42 @@
-import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
 
 import styled from "styled-components"
 
-import TaskFrame from "./TaskFrame"
-import TaskNameInput from "./TaskNameInput"
+import TaskCircle from "./TaskCircle"
 
-const TaskName = ({projectId, task, setFunc, newTaskName, setNewTaskName, color, editable, demo=false}) => {
-    const date = new Date()
-    const taskDetailPath = `/app/projects/${projectId}/tasks/${task.id}/detail`
-
-    const [isLoading, setIsLoading] = useState(false)
-
-    useEffect(() => {
-        setIsLoading(false)
-    }, [task]);
-
-    const changeTaskName = async (name) => {
-        setFunc({name})
-    }
-
-    const toComplete = () => {
-        setIsLoading(true)
-        let completed_at = null
-        if (!(task.completed_at)) {
-            completed_at = date.toISOString()
-        }
-        setFunc({completed_at})
-    }
+const TaskName = ({taskName, taskDetailPath=null, completed, color, isDate, editable, isLoading, toComplete}) => {
+    const TextView = (
+        <Text $completed={completed}>
+            {taskName}
+        </Text>
+    )
 
     return (
         <>
-            <TaskNameBox>
-                { editable ?
-                    <TaskNameInput 
-                        newTaskName={newTaskName}
-                        setNewTaskName={setNewTaskName}
-                        changeTaskName={changeTaskName}
-                        completed={task.completed_at ? true : false}
-                        color={color}
-                        isDate={task.due_date || task.assigned_at ? true : false}
-                        editable={editable}
-                        isLoading={isLoading}
-                        toComplete={toComplete}
-                    /> :
-                    <TaskFrame
-                        taskName={task.name}
-                        taskDetailPath={!demo && taskDetailPath}
-                        completed={task.completed_at ? true : false}
-                        color={color}
-                        isDate={task.due_date || task.assigned_at ? true : false}
-                        editable={editable}
-                        isLoading={isLoading}
-                        toComplete={!demo ? toComplete : undefined}
-                    />
-                }
-            </TaskNameBox>
+            <TaskCircle
+                completed={completed}
+                color={color}
+                isDate={isDate}
+                editable={editable}
+                isLoading={isLoading}
+                toComplete={toComplete}
+            />
+            {taskDetailPath ? <Link to={taskDetailPath} style={{ textDecoration: 'none' }}> 
+                {TextView}
+            </Link> : TextView}
         </>
-    );
+    )
 }
 
-const TaskNameBox = styled.div`
-    display: flex;
-    align-items: center;
-    padding-top: 0.8em;
-
-    &:hover {
-        cursor: pointer;
-    }
+const Text = styled.div`
+    width: 60em;
+    font-style: normal;
+    font-size: 1.1em;
+    color: ${p => p.$completed ? p.theme.grey : p.theme.textColor};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3em;
 `
 
 export default TaskName

@@ -1,9 +1,9 @@
-import styled from "styled-components"
-
-import TaskCircleFrame from "./TaskCircleFrame"
+import TaskCircle from "./TaskCircle"
 import notify from "@utils/notify"
 
-const TaskNameInput = ({newTaskName, setNewTaskName, changeTaskName, completed, color, isDate, editable, isLoading, toComplete}) => {    
+import styled from "styled-components"
+
+const TaskNameInput = ({newTaskName, setNewTaskName, changeTaskName, completed, color, isLoading, toComplete}) => {    
     const onChange = (e) => {
         const newName = e.target.value
         setNewTaskName(newName)
@@ -16,7 +16,14 @@ const TaskNameInput = ({newTaskName, setNewTaskName, changeTaskName, completed, 
         }
     }
 
-    const EditView = (
+    return <>
+        <TaskCircle
+            completed={completed}
+            color={color}
+            isLoading={isLoading}
+            onClick={toComplete}
+            isInput
+        />
         <InputText
             $completed={completed}
             type='text'
@@ -25,21 +32,7 @@ const TaskNameInput = ({newTaskName, setNewTaskName, changeTaskName, completed, 
             value={newTaskName}
             placeholder="할 일의 이름을 입력해주세요."
         />
-    )
-
-    return (
-        <>
-            <TaskCircleFrame
-                completed={completed}
-                color={color}
-                isDate={isDate}
-                editable={editable}
-                isLoading={isLoading}
-                toComplete={toComplete}
-            />
-            {EditView}
-        </>  
-    )
+    </>  
 }
 
 const InputText = styled.input`

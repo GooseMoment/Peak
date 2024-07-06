@@ -1,25 +1,38 @@
 import FeatherIcon from "feather-icons-react"
 import styled, { keyframes, css } from "styled-components"
 
-const TaskCircleFrame = ({completed=false, color='FF4A03', isDate=null, editable=false, isLoading=false, toComplete=() => {}}) => {
+const TaskCircle = ({completed=false, color='FF4A03', hasDate=null, isInput=false, isLoading=false, onClick=() => {}}) => {
     return (
-        <TaskCircle 
+        <Circle 
             $completed={completed}
             $color={color}
-            $isDate={isDate}
-            $editable={editable}
+            $hasDate={hasDate}
+            $isInput={isInput}
             $isLoading={isLoading}
-            onClick={toComplete}
+            onClick={onClick}
         >
             {completed && <FeatherIcon icon="check"/>}
-        </TaskCircle>
+        </Circle>
     )
 }
 
-const TaskCircle = styled.div`
+const Circle = styled.div`
     display: flex;
     justify-content: center;
-    top: ${(props) => (props.$editable ? 0.1 : props.$isDate ? 0.3 : 0)}em;
+    top: ${
+        (props) => {
+            if (props.$isInput) {
+                return 0.1 // optical center
+            }
+
+            if (props.$hasDate) {
+                return 0.3
+            }
+
+            return null
+        }
+        }em;
+
     height: 1.2em;
     aspect-ratio: 1;
     border-radius: 50%;
@@ -59,4 +72,4 @@ const reverseRotateAnimation = keyframes`
     }
 `
 
-export default TaskCircleFrame
+export default TaskCircle

@@ -1,42 +1,114 @@
-import { Link } from "react-router-dom"
+import { useState } from "react"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
+import FeatherIcon from "feather-icons-react"
 
-import TaskCircleFrame from "./TaskCircleFrame"
+import { useMutation } from "@tanstack/react-query"
+import queryClient from "@queries/queryClient"
 
-const TaskFrame = ({taskName, taskDetailPath=null, completed, color, isDate, editable, isLoading, toComplete}) => {
-    const TextView = (
-        <Text $completed={completed}>
-            {taskName}
-        </Text>
-    )
+import { patchTask } from "@api/tasks.api"
+import taskCalculation from "./taskCalculation"
+import TaskName from "./TaskNameFrame"
+import Priority from "./Priority"
+
+import hourglass from "@assets/project/hourglass.svg"
+
+const TaskFrame = ({projectId, task, color, demo=false}) => {
+    const [newTaskName, setNewTaskName] = useState(task.name)
+    const {assigned, due} = taskCalculation(task)
+
+    const mutation = useMutation({
+        mutationFn: (data) => {
+            return patchTask(task.id, data)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['task', {taskID: task.id}]})
+            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
+        },
+    })
 
     return (
-        <>
-            <TaskCircleFrame
-                completed={completed}
-                color={color}
-                isDate={isDate}
-                editable={editable}
-                isLoading={isLoading}
-                toComplete={toComplete}
-            />
-            {taskDetailPath ? <Link to={taskDetailPath} style={{ textDecoration: 'none' }}> 
-                {TextView}
-            </Link> : TextView}
-        </>
+        <Box>
+            <Priority priority={task.priority} completed={task.completed_at ? true : false}/>
+            <div>
+                <TaskName
+                    projectId={projectId}
+                    task={task}
+                    setFunc={!demo ? mutation.mutate : undefined}
+                    newTaskName={newTaskName}
+                    setNewTaskName={setNewTaskName}
+                    color={color} 
+                    editable={false}
+                    demo={demo}
+                />
+                <FlexBox>
+                    {task.assigned_at &&
+                    <AssignedDate $completed={task.completed_at ? true : false} $isOutOfDue={assigned === "놓침"}>
+                        <FeatherIcon icon="calendar" />
+                        {assigned}
+                    </AssignedDate>
+                    }
+                    {task.due_date && 
+                    <DueDate $completed={task.completed_at ? true : false} $isOutOfDue={due === "기한 지남"}>
+                        <img src={hourglass} />
+                        {due}
+                    </DueDate>}
+                </FlexBox>
+            </div>
+        </Box>
     )
 }
 
-const Text = styled.div`
-    width: 60em;
+const Box = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 1em;
+`
+
+const FlexBox = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 0.2em;
+    margin-left: 1.8em;
+`
+
+const AssignedDate = styled.div`
+    display: flex;
+    align-items: center;
     font-style: normal;
-    font-size: 1.1em;
-    color: ${p => p.$completed ? p.theme.grey : p.theme.textColor};
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.3em;
+    font-size: 0.8em;
+    margin-left: 0.5em;
+    color: ${(props) => (props.$completed ? '#A4A4A4' : props.$isOutOfDue ? '#FF0000' : '#2E61DC')};
+
+    & .feather {
+        top: 0;
+        width: 1em;
+        height: 1em;
+        margin-right: 0.3em;
+        color: ${(props) => (props.$completed ? '#A4A4A4' : props.$isOutOfDue ? '#FF0000' : '#2E61DC')};
+    }
+`
+
+const DueDate = styled.div`
+    display: flex;
+    align-items: center;
+    font-style: normal;
+    font-size: 0.8em;
+    margin-left: 0.5em;
+    color: ${(props) => (props.$completed ? '#A4A4A4' : props.$isOutOfDue ? '#FF0000' : '#009773')};
+
+    & img {
+        width: 1em;
+        height: 1em;
+        margin-right: 0.2em;
+        filter: ${(props) => (props.$completed ? css`
+        invert(83%) sepia(0%) saturate(1370%) hue-rotate(314deg) brightness(81%) contrast(81%);
+        ` : props.$isOutOfDue ? css`
+        invert(10%) sepia(97%) saturate(6299%) hue-rotate(3deg) brightness(101%) contrast(113%);
+        ` : css`
+        invert(39%) sepia(48%) saturate(3439%) hue-rotate(143deg) brightness(89%) contrast(101%);
+        `)};
+    }
 `
 
 export default TaskFrame
