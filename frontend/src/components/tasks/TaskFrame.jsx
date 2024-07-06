@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import TaskCircle from "./TaskCircle"
 import Priority from "./Priority"
 
-import taskCalculation from "./taskCalculation"
+import taskCalculation from "./utils/taskCalculation"
 
 import hourglass from "@assets/project/hourglass.svg"
 

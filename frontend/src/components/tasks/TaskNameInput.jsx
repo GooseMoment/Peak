@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import TaskCircle from "./TaskCircle"
+import TaskCircle from "../tasks/TaskCircle"
 import notify from "@utils/notify"
 
 import styled from "styled-components"
