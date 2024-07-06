@@ -77,7 +77,7 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
     width: 50%;
-    min-width: 32.5rem;
+    min-width: 27.5rem;
     max-width: 40rem;
     ${props => props.$isSticky ? css`
         /* align-self: flex-start; */
@@ -122,16 +122,16 @@ const mockDailyFollowerLogsDetail = [
         },
         dailyProjects: [
             {
-                projectID: "개발", projectColor: "#2E61DC",
+                projectID: "개발", projectColor: "2E61DC",
                 dailytasks: [
-                    { id: "TEMP11", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }] },
-                    { id: "TEMP12", name: "총장하기", completedAt: null, reaction: [{ emoji: null, reactionNum: 4 }] }
+                    { id: "TEMP11", name: "빨래하기", completed_at: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }] },
+                    { id: "TEMP12", name: "총장하기", completed_at: null, reaction: [{ emoji: null, reactionNum: 4 }] }
                 ]
             },
             {
-                projectID: "수강신청", projectColor: "#ff0022",
+                projectID: "수강신청", projectColor: "ff0022",
                 dailytasks: [
-                    { id: "TEMP15", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }, { emoji: "😅", reactionNum: 3 }] },
+                    { id: "TEMP15", name: "빨래하기", completed_at: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }, { emoji: "😅", reactionNum: 3 }] },
                 ]
             },
         ]
