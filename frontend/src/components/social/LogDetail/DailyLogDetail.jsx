@@ -5,7 +5,11 @@ import ReactionEmoji from "@components/social/ReactionEmoji";
 import EmojiAddButton from "@components/social/EmojiAddButton";
 import LogDetailProject from "@components/social/LogDetail/LogDetailProject";
 
-const LogDetail = ({userLogsDetail, isSelf}) => {
+import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox";
+import { TaskList } from "@components/drawers/Drawer";
+import TaskFrame from "@components/tasks/TaskFrame";
+
+const DailyLogDetail = ({userLogsDetail, isSelf}) => {
     const [tempText, setTempText] = useState(null)
     const [inputState, setInputState] = useState(false)
     // const [emojiClick, setEmojiClick] = useState(false)
@@ -59,7 +63,16 @@ const LogDetail = ({userLogsDetail, isSelf}) => {
         <DetailBody>
         {
             userLogsDetail.dailyProjects.map((dailyProject) => (
-                <LogDetailProject key={dailyProject.projectID} project={dailyProject}/>
+                <>
+                <DrawerBox key={dailyProject.projectID} $color={dailyProject.projectColor}>
+                    <DrawerName $color={dailyProject.projectColor}>{dailyProject.projectID}</DrawerName>
+                </DrawerBox>
+                <TaskList>
+                    {dailyProject.dailytasks?.map((dailytask) => (
+                        <TaskFrame task={dailytask} color={dailyProject.projectColor} />
+                    ))}
+                </TaskList>
+                </>
             ))
         }
         </DetailBody>
@@ -78,7 +91,6 @@ const Profile = styled.div`
 height: 5em;
 width: 5em;
 text-align: center;
-
 `
 
 const ProfileImg = styled.div`
@@ -157,4 +169,4 @@ scrollbar-width: none;
 }
 `
 
-export default LogDetail
+export default DailyLogDetail

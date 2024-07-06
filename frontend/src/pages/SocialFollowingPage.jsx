@@ -6,7 +6,7 @@ import moment from "moment";
 
 import SocialCalendar from "@components/social/SocialCalendar";
 import DailyLogsPreview from "@components/social/DailyLogsPreview";
-import LogDetail from "@components/social/LogDetail/LogDetail";
+import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail";
 import SocialPageTitle from "@components/social/SocialPageTitle";
 
 import { getDailyReport } from "@api/social.api";
@@ -65,7 +65,7 @@ const SocialFollowingPage = () => {
             </Container>
 
             <Container $isSticky={true}>
-                <LogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true} />
+                <DailyLogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true} />
             </Container>
         </Wrapper>
     </>
