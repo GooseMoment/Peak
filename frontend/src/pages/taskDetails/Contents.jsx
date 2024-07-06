@@ -25,11 +25,11 @@ const Contents = ({task, setFunc}) => {
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
     // text클릭 시 알맞는 component 띄우기
-    const [content, setContent] = useState()
+    const [content, setContent] = useState(null)
     
     const handleClickContent = (e) => {
-        const name = Number(e.target.id)
-        setContent(name)
+        const { name } = e.target.attributes
+        setContent(name.value)
         setIsComponentOpen(true)
     }
 
@@ -59,9 +59,8 @@ const Contents = ({task, setFunc}) => {
             id: 3,
             name: "reminder",
             icon: <img src={alarmclock} />,
-            display: task.reminders?.length !== 0 ?
-            <RemindersBox>
-            {task.reminders.map(reminder => <ReminderBlock>{reminder.delta}분 전</ReminderBlock>)}
+            display: task.reminders?.length !== 0 ? <RemindersBox name="reminder">
+                {task.reminders.map(reminder => <ReminderBlock name="reminder">{reminder.delta}분 전</ReminderBlock>)}
             </RemindersBox> : "없음",
             component: <Reminder setFunc={setFunc} closeComponent={closeComponent}/>
         },
@@ -97,10 +96,10 @@ const Contents = ({task, setFunc}) => {
                         {item.icon}
                     </ToolTip>
                     <VLine $end={item.id === 1 || item.id === 6} />
-                    <ContentText id={item.id} onClick={handleClickContent}>
+                    <ContentText name={item.name} onClick={handleClickContent}>
                             {item.display}
                     </ContentText>
-                    {(content === item.id && isComponentOpen) ? 
+                    {(content === item.name && isComponentOpen) ? 
                     <ModalPortal closeModal={closeComponent} additional>
                         {item.component}
                     </ModalPortal> : null}
