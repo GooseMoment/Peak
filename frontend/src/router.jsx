@@ -5,18 +5,23 @@ import {
 
 import AppLayout from "@containers/AppLayout"
 
+import IntroPage from "@pages/IntroPage"
+import SignPage from "@pages/SignPage"
+
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
+
 import ProjectPage from "@pages/ProjectPage"
 import ProjectListPage from "@pages/ProjectListPage"
+
 import SocialPage from "@pages/SocialPage"
 import SocialFollowingPage from "@pages/SocialFollowingPage"
 import SocialExplorePage from "@pages/SocialExplorePage"
-import UserPage from "@pages/UserPage"
-import LandingPage from "@pages/LandingPage"
-import SignPage from "@pages/SignPage"
+
 import TaskCreateElement from "@pages/taskDetails/TaskCreateElement"
 import TaskDetailElement from "@pages/taskDetails/TaskDetailElement"
+
+import UserPage from "@pages/UserPage"
 
 import { getMe, getUserByUsername, signOut } from "@api/users.api"
 import { getProject, getProjectsList } from "@api/projects.api"
@@ -38,7 +43,7 @@ const routes = [
         children: [
             {
                 index: true,
-                element: <LandingPage />,
+                element: <IntroPage />,
             },
             {
                 path: "sign",

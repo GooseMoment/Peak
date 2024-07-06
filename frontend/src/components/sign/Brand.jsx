@@ -6,20 +6,10 @@ const Box = styled.h1`
     gap: 0.25em;
 
     z-index: 999;
-    position: absolute;
-    color: #FE4902;
+    color: ${p => p.theme.frontSignPageTextColor};
 
     font-size: 2em;
     font-weight: bold;
-
-    top: 2rem;
-    left: 2rem;
-
-    @media screen and (max-width: 800px) {
-        & {
-            color: black;
-        }
-    }
 `
 
 const By = styled.span`
@@ -44,3 +34,4 @@ const Brand = () => {
 }
 
 export default Brand
+export { Box }

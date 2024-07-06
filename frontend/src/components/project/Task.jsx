@@ -13,7 +13,7 @@ import Priority from "./Priority"
 
 import hourglass from "@assets/project/hourglass.svg"
 
-const Task = ({projectId, task, color}) => {
+const Task = ({projectId, task, color, demo=false}) => {
     const [newTaskName, setNewTaskName] = useState(task.name)
     const {assigned, due} = taskCalculation(task)
 
@@ -34,11 +34,12 @@ const Task = ({projectId, task, color}) => {
                 <TaskName
                     projectId={projectId}
                     task={task}
-                    setFunc={mutation.mutate}
+                    setFunc={!demo ? mutation.mutate : undefined}
                     newTaskName={newTaskName}
                     setNewTaskName={setNewTaskName}
                     color={color} 
                     editable={false}
+                    demo={demo}
                 />
                 <FlexBox>
                     {task.assigned_at &&
