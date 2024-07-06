@@ -58,7 +58,7 @@ const ScreenTop = styled.div`
 
 const ScreenBottom = styled(ScreenTop)`
     top: unset;
-    bottom: 0;
+    bottom: -0.1em;
     transform: rotate(180deg);
 `
 
