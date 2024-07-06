@@ -10,7 +10,7 @@ import Contents from "./Contents"
 
 import { postTask } from "@api/tasks.api"
 import queryClient from "@queries/queryClient"
-import notify from "@utils/notify"
+import { toast } from "react-toastify"
 
 const TaskCreate = () => {
     const [projectId, color] = useOutletContext()
@@ -45,12 +45,11 @@ const TaskCreate = () => {
         try {
             editNewTask({'name': newTaskName})
             await postTask(newTask)
-            notify.success("할 일 생성에 성공하였습니다!")
+            toast.success("할 일 생성에 성공하였습니다!")
             queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: state?.drawer_id}]})
             onClose()
         } catch (e) {
-            console.log(e)
-            notify.error("할 일 생성에 실패하였습니다.")
+            toast.error("할 일 생성에 실패하였습니다.")
         }
     }
 
@@ -71,8 +70,8 @@ const TaskCreate = () => {
 
 const TaskCreateBox = styled.div`
     width: 50em;
-    background-color: #FFFFFF;
-    border: solid 1px #D9D9D9;
+    background-color: ${p => p.theme.backgroundColor};
+    border: solid 1px ${p => p.theme.secondBackgroundColor};
     border-radius: 15px;
 
     &::after {

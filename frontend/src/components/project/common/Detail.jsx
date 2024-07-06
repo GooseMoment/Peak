@@ -1,44 +1,32 @@
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-const Detail = ({title, children, onClose}) => {
+const Detail = ({title, children, onClose, special=false}) => {
     return (
-        <DetailBox $calendar={title === '기한 지정'}>
+        <DetailBox $special={special}>
             <TitleBox>
                 <Title>{title}</Title>
                 <FeatherIcon icon="x" onClick={onClose} />
             </TitleBox>
-            <CLine />
-            {children}
+            <CLine $special={special}/>
+            <Content>
+                {children}
+            </Content>
         </DetailBox>
     )
 }
 
 const DetailBox = styled.div`
     z-index: 999;
-    width: 15em;
+    width: ${props=>props.$special ? 18 : 15}em;
     height: auto;
-    max-height: 30em;
-    overflow-y: auto;
+    max-height: 35em;
     overflow-x: hidden;
+    overflow-y: hidden;
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
-    padding-bottom: ${props => props.$calendar ? "0px" : "20px"};
-
-    &::-webkit-scrollbar {
-        width: 13px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: gray;
-        border-radius: 10px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background-color: #D9D9D9;
-        border-radius: 10px;
-    }
+    padding-bottom: ${props => props.$special ? "0" : "1"}em;
 `
 
 const TitleBox = styled.div`
@@ -64,9 +52,16 @@ const Title = styled.div`
 
 const CLine = styled.div`
     border-top: thin solid #D9D9D9;
-    width: 12.5em;
-    margin-top: 1em;
-    margin-left: 1em;
+    width: ${props => props.$special ? "90%" : "85%"};
+    margin: 1em 1em 0em;
+`
+
+const Content = styled.div`
+    box-sizing: border-box;
+    border-radius: 15px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 35em;
 `
 
 export default Detail

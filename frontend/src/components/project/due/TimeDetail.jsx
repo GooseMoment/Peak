@@ -1,9 +1,9 @@
-import FeatherIcon from "feather-icons-react"
 import { useState } from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import Button from "@components/common/Button"
 
-const TimeDetail = ({onClose}) => {
+const TimeDetail = () => {
+    const [timezone, setTimezone] = useState(timezones[0].name)
     const [hour, setHour] = useState()
     const [min, setMin] = useState()
 
@@ -11,6 +11,9 @@ const TimeDetail = ({onClose}) => {
         let validInputValue = e.target.value
         if (validInputValue.length > 2){
             validInputValue = e.target.value.slice("", 2)
+        }
+        if (validInputValue > 12){
+            validInputValue = e.target.value.slice("", 1)
         }
         setHour(validInputValue)
     }
@@ -20,31 +23,27 @@ const TimeDetail = ({onClose}) => {
         if (validInputValue.length > 2){
             validInputValue = e.target.value.slice("", 2)
         }
+        if (validInputValue > 59){
+            validInputValue = e.target.value.slice("", 1)
+        }
         setMin(validInputValue)
     }
 
     return (
         <DetailBox>
-            <TitleBox>
-                <Title>시간 추가</Title>
-                <FeatherIcon icon="x" onClick={onClose} />
-            </TitleBox>
-            <CLine />
             <FlexBox>
                 <ToggleBox>
-                    <TimezoneToggle>
-                        <ToggleText>오전</ToggleText>
-                    </TimezoneToggle>
-                    <TimezoneToggle>
-                        <ToggleText>오후</ToggleText>
-                    </TimezoneToggle>
+                    {timezones.map(t=>(
+                        <TimezoneToggle $active={timezone == t.name} onClick={()=>{setTimezone(t.name)}}>
+                            {t.display}
+                        </TimezoneToggle>
+                    ))}
                 </ToggleBox>
                 <InputBox>
                     <TimeInput
                         type="number"
                         maxLength={2}
                         value={hour}
-                        max="12"
                         onChange={handleHour}
                     />
                     <ColonContainer>:</ColonContainer>
@@ -52,71 +51,23 @@ const TimeDetail = ({onClose}) => {
                         type="number"
                         maxLength={2}
                         value={min}
-                        max="60"
                         onChange={handleMin}
                     />
                 </InputBox>
             </FlexBox>
             <FlexCenterBox>
-                <Button>추가하기</Button>
+                <Button onClick={()=>console.log(hour, min)}>추가하기</Button>
             </FlexCenterBox>
         </DetailBox>
     )
 }
 
 const DetailBox = styled.div`
-    z-index: 999;
-    width: 15em;
-    height: auto;
-    max-height: 30em;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background-color: #FFFFFF;
-    border: solid 1px #D9D9D9;
-    border-radius: 15px;
-    padding-bottom: 20px;
-
-    &::-webkit-scrollbar {
-        width: 13px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: gray;
-        border-radius: 10px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background-color: #D9D9D9;
-        border-radius: 10px;
-    }
-`
-
-const TitleBox = styled.div`
     display: flex;
-    justify-content: space-between;
-    margin: 0 1.3em;
-
-    & svg {
-        width: 1em;
-        height: 1em;
-        stroke: #FF0000;
-        top: 1.2em;
-        cursor: pointer;
-    }
-`
-
-const Title = styled.div`
-    font-weight: 550;
-    font-size: 1em;
-    color: #000000;
-    margin-top: 1.3em;
-`
-
-const CLine = styled.div`
-    border-top: thin solid #D9D9D9;
-    width: 12.5em;
-    margin-top: 1em;
-    margin-left: 1em;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0.7em 0em;
 `
 
 const FlexBox = styled.div`
@@ -136,31 +87,31 @@ const ToggleBox = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5em 0em;
-    margin-left: 1.1em;
     margin-top: 0.3em;
 `
 
 const TimezoneToggle = styled.div`
     display: flex;
-    text-align: center;
+    align-items: center;
     justify-content: center;
-    width: 3.4em;
-    height: 1.6em;
+    width: 3.5em;
+    height: 1.7em;
     background-color: #FFFFFF;
     border: solid 1px #D9D9D9;
     border-radius: 15px;
+    font-weight: 500;
 
     &:hover {
-        background-color: #FF4A03;
-        color: white;
-        border: solid 1px white;
         cursor: pointer;
     }
-`
 
-const ToggleText = styled.div`
-    transform: translate(0, 14%);
-    font-weight: 500;
+    ${(props) =>
+        props.$active && css`
+            background-color: #FF4A03;
+            border: solid 1px white;
+            color: white;
+        `
+    }
 `
 
 const InputBox = styled.div`
@@ -172,17 +123,19 @@ const InputBox = styled.div`
 `
 
 const ColonContainer = styled.div`
-    font-size: 1.8em;
+    font-size: 2em;
     margin: 0 0.3em;
 `
 
 const TimeInput = styled.input`
-    width: 1.3em;
-    height: 1.4em;
+    width: 1.7em;
+    height: 1.7em;
     font-size: 2em;
     text-align: center;
     background-color: #D9D9D9;
     color: black;
+    appearance: textfield;
+    -moz-appearance: textfield;
 
     &:focus {
         background-color: #FF4A03;
@@ -193,5 +146,10 @@ const TimeInput = styled.input`
         -webkit-appearance: none;
     }
 `
+
+const timezones = [
+    {name: "am", display: "오전"},
+    {name: "pm", display: "오후"},
+]
 
 export default TimeDetail

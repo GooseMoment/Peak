@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { useSearchParams } from "react-router-dom"
 
-import Brand from "@components/sign/Brand"
+import Brand, {Box as BrandTitle} from "@components/sign/Brand"
 import Showcase from "@components/sign/Showcase"
 import SignForm from "@components/sign/SignForm"
 
-import activities from "@components/sign/activities"
+import generateActivities from "@components/sign/activities"
 
 import notify from "@utils/notify"
+import { getEmojis } from "@api/social.api"
 
 import styled from "styled-components"
+import { useQuery } from "@tanstack/react-query"
 
 const SignPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
+    const [activities, setActivities] = useState([])
 
     useEffect(() => {
         const flag = searchParams.get("flag")
@@ -24,8 +28,29 @@ const SignPage = () => {
         setSearchParams({})
     }, [])
 
+    const { data: serverEmojis, isError, isFetching } = useQuery({
+        queryKey: ["emojis"],
+        queryFn: () => getEmojis(),
+        staleTime: 1000 * 60 * 60 * 5,
+    })
+
+    useEffect(() => {
+        if (isFetching) {
+            return
+        }
+
+        if (isError) {
+            setActivities(generateActivities(null))
+            return
+        }
+
+        setActivities(generateActivities(serverEmojis))
+    }, [serverEmojis])
+
     return <Root>
-        <Brand />
+        <Link to="/">
+            <Brand />
+        </Link>
         <Showcase activities={activities} />
         <SignForm />
     </Root>
@@ -36,7 +61,7 @@ const Root = styled.div`
     width: 100%;
     height: 100vh;
 
-    background-color: #FFD7C7;
+    background-color: ${p => p.theme.frontSignPageBackgroundColor};
 
     display: grid;
     grid-template-columns: 1.75fr 1fr;
@@ -44,11 +69,22 @@ const Root = styled.div`
     grid-column-gap: 0px;
     grid-row-gap: 0px; 
 
-    @media screen and (max-width: 800px) {
-    & {
-        display: flex;
+    ${BrandTitle} {
+        position: absolute;
+
+        top: 2rem;
+        left: 2rem;
     }
-}
+
+    @media screen and (max-width: 800px) {
+        & {
+            display: flex;
+        }
+
+        ${BrandTitle} {
+            color: black;
+        }
+    }
 `
 
 export default SignPage

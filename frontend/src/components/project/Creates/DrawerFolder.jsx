@@ -37,8 +37,8 @@ const ItemBox = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    margin: 1.2em 0em;
     margin-left: 1.2em;
-    margin-top: 1.2em;
 
     & svg {
         margin-left: 1.3em;

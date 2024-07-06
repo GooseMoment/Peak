@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, Fragment } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 
 import styled, { css } from "styled-components"
@@ -7,7 +7,7 @@ import FeatherIcon from "feather-icons-react"
 import hourglass from "@assets/project/hourglass.svg"
 import alarmclock from "@assets/project/alarmclock.svg"
 
-import Calendar from "./Calendar"
+import Due from "./Due"
 import Assigned from "./Assigned"
 import Reminder from "./Reminder"
 import Priority from "./Priority"
@@ -53,7 +53,7 @@ const Contents = ({task, setFunc}) => {
             name: "due",
             icon: <img src={hourglass} />,
             display: task.due_date && formatted_due_time ? formatted_due_date + ' ' + formatted_due_time : "없음",
-            component: <Calendar setFunc={setFunc} closeComponent={closeComponent}/>
+            component: <Due setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 3,
@@ -89,8 +89,8 @@ const Contents = ({task, setFunc}) => {
     return (
         <ContentsBlock>
             {items.map(item => (
-            <>
-                <ContentsBox key={item.id}>
+            <Fragment key={item.id}>
+                <ContentsBox>
                     <ToolTip message={item.name}>
                         {item.icon}
                     </ToolTip>
@@ -103,7 +103,7 @@ const Contents = ({task, setFunc}) => {
                         {item.component}
                     </ModalPortal> : null}
                 </ContentsBox>
-            </>
+            </Fragment>
             ))}
         </ContentsBlock>
     )

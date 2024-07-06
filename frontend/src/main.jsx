@@ -5,8 +5,6 @@ import { RouterProvider } from 'react-router-dom'
 import router from '@/router'
 import hashRouter from '@/hashRouter'
 import GlobalStyle from '@assets/GlobalStyle'
-import { defaultTheme } from "@assets/themes"
-import { ThemeProvider } from "styled-components"
 
 import Loading from '@components/settings/Loading'
 
@@ -20,6 +18,7 @@ import queryClient from '@queries/queryClient'
 
 import registerSW from '@/registerSW'
 import i18n, { I18nSetLocale } from '@utils/i18n.js'
+import ClientThemeProvider from './components/common/ThemeProvider'
 
 // initilize client-side settings
 initClientSettings()
@@ -27,11 +26,11 @@ initClientSettings()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <ThemeProvider theme={defaultTheme}>
-            <GlobalStyle />
-            <ToastContainer position="bottom-right" stacked hideProgressBar />
-            <QueryClientProvider client={queryClient} >
-                <ClientSettingProvider>
+        <ClientSettingProvider>
+            <ClientThemeProvider>
+                <GlobalStyle />
+                <ToastContainer position="bottom-right" stacked hideProgressBar />
+                <QueryClientProvider client={queryClient} >
                     <I18nSetLocale i18n={i18n} />
 
                     <Suspense fallback={<Loading />}>
@@ -41,9 +40,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                     <Suspense fallback={<Loading />}>
                         <RouterProvider router={hashRouter} />
                     </Suspense>
-                </ClientSettingProvider>
-            </QueryClientProvider>
-        </ThemeProvider>
+                </QueryClientProvider>
+            </ClientThemeProvider>
+        </ClientSettingProvider>
     </React.StrictMode>,
 )
 

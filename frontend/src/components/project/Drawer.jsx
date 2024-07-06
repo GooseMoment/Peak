@@ -1,16 +1,17 @@
 import { Fragment, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import styled, { keyframes, css } from "styled-components"
-import { cubicBeizer } from "@assets/keyframes"
-import FeatherIcon from 'feather-icons-react'
+import { cubicBeizer, rotateToUp, rotateToUnder } from "@assets/keyframes"
 
-import Task from "@components/project/Task"
-import TaskCreateSimple from "@components/project/Creates/TaskCreateSimple"
-
-import { useInfiniteQuery } from "@tanstack/react-query"
-import { getTasksByDrawer } from "@api/tasks.api"
 import Button from "@components/common/Button"
+import Task from "@components/project/Task"
+import DrawerBox, { DrawerName, DrawerIcon } from "@components/project/DrawerBox"
+
+import { getTasksByDrawer } from "@api/tasks.api"
+import { useInfiniteQuery } from "@tanstack/react-query"
+
+import styled, { css } from "styled-components"
+import FeatherIcon from 'feather-icons-react'
 import { useTranslation } from "react-i18next"
 
 const getPageFromURL = (url) => {
@@ -26,7 +27,7 @@ const Drawer = ({project, drawer, color}) => {
 
     const { t } = useTranslation(null, {keyPrefix: "project"})
 
-    const { data, isError, fetchNextPage, isFetching } = useInfiniteQuery({
+    const { data, isError, fetchNextPage, isLoading } = useInfiniteQuery({
         queryKey: ["tasks", {drawerID: drawer.id}],
         queryFn: (pages) => getTasksByDrawer(drawer.id, pages.pageParam || 1),
         initialPageParam: 1,
@@ -72,10 +73,10 @@ const Drawer = ({project, drawer, color}) => {
         )
     }
 
-    if (isFetching) {
+    if (isLoading) {
         return <div>로딩중..</div>
     }
-
+    
     return (
         <>
             <DrawerBox $color = {color}>
@@ -94,9 +95,14 @@ const Drawer = ({project, drawer, color}) => {
                     )))}
                 </TaskList>
             }
-            {isSimpleOpen &&
-                <TaskCreateSimple color={color}/>
-            }
+            {/*isSimpleOpen &&
+                <TaskCreateSimple 
+                    color={color}
+                    drawer_id={drawer.id}
+                    drawer_name={drawer.name}
+                    project_name={project.name}
+                />
+            */}
             <TaskCreateButton onClick={handleisSimpleOpen}>
                 <FeatherIcon icon="plus-circle"/>
                 <TaskCreateText>{t("button_add_task")}</TaskCreateText>
@@ -107,63 +113,6 @@ const Drawer = ({project, drawer, color}) => {
         </>
     );
 }
-
-const DrawerBox = styled.div`
-    height: 3em;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 1.5em;
-    text-decoration: double;
-    border: solid 0.25em #${props => props.$color};
-    border-radius: 15px;
-`
-
-const DrawerName = styled.h1`
-    width: 42em;
-    font-size: 1.4em;
-    font-weight: bold;
-    text-align: left;
-    margin-left: 1.45em;
-    color: #${props => props.$color};
-    stroke-opacity: 0.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`
-
-const DrawerIcon = styled.div`
-    display: flex;
-    align-items: center;
-    margin-right: 1.45em;
-
-    & svg {
-        top: 0;
-        margin-right: 1em;
-        color: #${props => props.$color};
-        cursor: pointer;
-    }
-`
-
-const rotateToUp = keyframes`
-    0% {
-        transform: rotate(-180deg);
-    }
-
-    100% {
-        transform: rotate(0deg);
-    }
-`
-
-const rotateToUnder = keyframes`
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(-180deg);
-    }
-`
 
 const CollapseButton = styled.div`
     & svg {
@@ -177,7 +126,7 @@ const CollapseButton = styled.div`
     `}
 `
 
-const TaskList = styled.div`
+export const TaskList = styled.div`
     flex: 1;
     margin-left: 0.5em;
 `
@@ -204,7 +153,7 @@ const TaskCreateButton = styled.div`
 const TaskCreateText = styled.div`
     font-size: 1.1em;
     font-weight: medium;
-    color: black;
+    color: ${p => p.theme.textColor};
     margin-top: 0em;
 `
 

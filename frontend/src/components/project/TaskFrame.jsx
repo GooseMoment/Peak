@@ -32,10 +32,11 @@ const Text = styled.div`
     width: 60em;
     font-style: normal;
     font-size: 1.1em;
-    color: ${(props) => (props.$completed ? '#A4A4A4' : '#000000')};
+    color: ${p => p.$completed ? p.theme.grey : p.theme.textColor};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.3em;
 `
 
 export default TaskFrame

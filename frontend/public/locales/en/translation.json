@@ -98,7 +98,8 @@
         "languages_and_time": {
             "title": "Languages & Time",
             "locale": {
-                "name": "Language"
+                "name": "Language",
+                "system":"Auto"
             },
             "timezone": {
                 "name": "Timezone",
@@ -135,7 +136,9 @@
                 "values": {
                     "system": "Same as system",
                     "light": "light",
-                    "dark": "dark"
+                    "light-systemcolor": "light (with system color)",
+                    "dark": "dark",
+                    "dark-systemcolor": "dark (with system color)"
                 }
             },
             "main_width": {

@@ -1,12 +1,25 @@
-# frontend for Peak
+# Frontend for Peak
 
-## Structures
+## Start
+
+```bash
+pnpm i
+pnpm run dev
+```
+
+## Structure
 
 - `src/`
-    - `main.jsx`: 소스코드 시작 부분
-    - `utils/`: 유틸성 공용 함수
-    - `components/`: 상황별 컴포넌트
+    - `api/`: API 콜백 함수
+    - `assets/`: 소스 코드에서 참조해야 하는 데이터 및 미디어
+    - `components/`: 페이지별 컴포넌트
+    - `containers`: Layout
     - `pages/`: 페이지
+    - `queries/`: react-query 관련
+    - `utils/`: 유틸성 함수
+    - `main.jsx`: 소스코드 시작 부분
+    - `router.jsx`: 메인 라우터
+    - `hashRouter.jsx`: 해시 라우터 (현재 settings 관련만 존재)
 
 
 ## PWA

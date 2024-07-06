@@ -99,7 +99,8 @@
         "languages_and_time": {
             "title": "언어 및 시간",
             "locale": {
-                "name": "언어"
+                "name": "언어",
+                "system":"자동"
             },
             "timezone": {
                 "name": "시간대",
@@ -136,7 +137,9 @@
                 "values": {
                     "system": "시스템 설정대로",
                     "light": "라이트",
-                    "dark": "다크"
+                    "light-systemcolor": "라이트 (시스템 컬러)",
+                    "dark": "다크",
+                    "dark-systemcolor": "다크 (시스템 컬러)"
                 }
             },
             "main_width": {

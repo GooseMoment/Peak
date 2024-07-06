@@ -5,7 +5,7 @@ import styled from "styled-components"
 import TaskFrame from "./TaskFrame"
 import TaskNameInput from "./TaskNameInput"
 
-const TaskName = ({projectId, task, setFunc, newTaskName, setNewTaskName, color, editable}) => {
+const TaskName = ({projectId, task, setFunc, newTaskName, setNewTaskName, color, editable, demo=false}) => {
     const date = new Date()
     const taskDetailPath = `/app/projects/${projectId}/tasks/${task.id}/detail`
 
@@ -45,13 +45,13 @@ const TaskName = ({projectId, task, setFunc, newTaskName, setNewTaskName, color,
                     /> :
                     <TaskFrame
                         taskName={task.name}
-                        taskDetailPath={taskDetailPath}
+                        taskDetailPath={!demo && taskDetailPath}
                         completed={task.completed_at ? true : false}
                         color={color}
                         isDate={task.due_date || task.assigned_at ? true : false}
                         editable={editable}
                         isLoading={isLoading}
-                        toComplete={toComplete}
+                        toComplete={!demo ? toComplete : undefined}
                     />
                 }
             </TaskNameBox>

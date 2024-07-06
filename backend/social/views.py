@@ -1,11 +1,15 @@
+from rest_framework import status, mixins, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import AllowAny
 
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.core.cache import cache
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 from datetime import datetime, timedelta
 
@@ -171,5 +175,17 @@ def post_comment_to_daily_comment(request: HttpRequest, date, comment):
 
 def post_peck(request: HttpRequest, task_id):
     pass
+    
+class EmojiListPagination(PageNumberPagination):
+    page_size = 1000
 
+class EmojiList(mixins.ListModelMixin, generics.GenericAPIView):
+    queryset = Emoji.objects.all()
+    serializer_class = EmojiSerializer
+    pagination_class = EmojiListPagination
 
+    permission_classes = (AllowAny, )
+
+    @method_decorator(cache_page(60 * 60 * 5)) # caching for 5 hours 
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
