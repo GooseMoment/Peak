@@ -5,11 +5,11 @@ import { styled, css } from "styled-components"
 import moment from "moment";
 
 import SocialCalendar from "@components/social/SocialCalendar";
-import DailyLogPreview from "@components/social/DailyLogsPreview";
+import DailyLogPreview from "@components/social/DailyLogPreview";
 import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail";
 import SocialPageTitle from "@components/social/SocialPageTitle";
 
-import { getDailyReport } from "@api/social.api";
+import { getDailyReport, getDailyComment } from "@api/social.api";
 
 const sortDailyLogs = (report) => {
     return report.slice().sort((a, b) => {
@@ -26,12 +26,12 @@ const SocialFollowingPage = () => {
     const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
     const [selectedIndex, setSelectedIndex] = useState(null)
     const [dailyReport, setDailyReport] = useState([])
+    const [dailyComment, setDailyComment] = useState([])
     
     const {user} = useRouteLoaderData("app")
 
     const getPreview = async(date) => {
         const day = date
-        console.log(day)
         if(date) try {
             const res = await getDailyReport(user.username, day)
             setDailyReport(res)
@@ -40,9 +40,23 @@ const SocialFollowingPage = () => {
         }
     }
 
+    const getLogDetail = async(date) => {
+        const day = date
+        if(date) try {
+            const res = await getDailyComment(user.username, selectedIndex, day)
+            setDailyComment(res)
+        } catch (e) {
+            throw alert(e)
+        }
+    }
+
     useEffect(() => {
         getPreview(selectedDate)
     }, [selectedDate])
+
+    useEffect(() => {
+        getPreview(selectedIndex)
+    }, [selectedIndex])
 
     return <>
         <SocialPageTitle active="following" />
