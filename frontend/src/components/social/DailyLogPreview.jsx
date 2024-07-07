@@ -5,15 +5,15 @@ const putEllipsis = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength-3) + '...' : text;
 }
 
-const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
+const DailyLogPreview = ({userLogSimple, selectedIndex: selectedUsername, setSelectedIndex: setSelectedUsername}) => {
     
     const handleSelect = () => {
     // ~Log.index can be replaced with ~Log.task.id
-        setSelectedIndex(userLogSimple.username === selectedIndex ? null : userLogSimple.username)
+        setSelectedUsername(userLogSimple.username === selectedUsername ? null : userLogSimple.username)
     }
 
     return <Frame onClick={handleSelect}
-            $bgcolor={userLogSimple.username === selectedIndex? "#ffd7c7" : "#FEFDFC"}
+            $bgcolor={userLogSimple.username === selectedUsername? "#ffd7c7" : "#FEFDFC"}
         >
         {/* separate the "Profile" into a separate file? */}
         {/* TODO: 화면 너비 줄이면 프로필 이름 길이에 따라 배열 망가지는 문제 해결 */}

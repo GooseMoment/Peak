@@ -24,7 +24,7 @@ const SocialFollowingPage = () => {
     initial_date.setHours(0, 0, 0, 0)
 
     const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
-    const [selectedIndex, setSelectedIndex] = useState(null)
+    const [selectedUsername, setSelectedUsername] = useState(null)
     const [dailyReport, setDailyReport] = useState([])
     const [dailyComment, setDailyComment] = useState([])
     
@@ -43,7 +43,7 @@ const SocialFollowingPage = () => {
     const getLogDetail = async(date) => {
         const day = date
         if(date) try {
-            const res = await getDailyComment(user.username, selectedIndex, day)
+            const res = await getDailyComment(user.username, selectedUsername, day)
             setDailyComment(res)
         } catch (e) {
             throw alert(e)
@@ -55,8 +55,8 @@ const SocialFollowingPage = () => {
     }, [selectedDate])
 
     useEffect(() => {
-        getPreview(selectedIndex)
-    }, [selectedIndex])
+        getPreview(selectedUsername)
+    }, [selectedUsername])
 
     return <>
         <SocialPageTitle active="following" />
@@ -73,7 +73,7 @@ const SocialFollowingPage = () => {
 
                 <DailyLogsPreviewContainer>
                     {sortDailyLogs(dailyReport).map((dailyFollowersLog) => (
-                        <DailyLogPreview key={dailyFollowersLog.username} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+                        <DailyLogPreview key={dailyFollowersLog.username} userLogSimple={dailyFollowersLog} selectedIndex={selectedUsername} setSelectedIndex={setSelectedUsername} />
                     ))}
                 </DailyLogsPreviewContainer>
             </Container>
