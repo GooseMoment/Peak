@@ -47,6 +47,15 @@ export const getDailyReport = async(username, day) => {
     }
 }
 
+export const getDailyComment = async(username, followee_name, day) => {
+    try {
+        const res = await client.get(`social/daily/comment/@${username}/@${followee_name}/${day}/`)
+        return res.data
+    } catch(e) {
+        throw e
+    }
+}
+
 export const getFollowingFeed = (date) => {
 
 }
