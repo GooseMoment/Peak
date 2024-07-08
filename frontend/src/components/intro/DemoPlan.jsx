@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 
 import SubSection from "@components/intro/SubSection"
 import RadioGroup from "@components/intro/RadioGroup"
@@ -8,6 +8,7 @@ import DemoTask from "@components/intro/DemoTask"
 import {yesterday, today, tomorrow, nextWeek, twoWeeksLater} from "./todays"
 
 import styled from "styled-components"
+import { useTranslation } from "react-i18next"
 
 import normal from "@assets/project/priority/normal.svg"
 import important from "@assets/project/priority/important.svg"
@@ -24,35 +25,39 @@ const deadlineTable = {
     twoWeeksLater,
 }
 
-const sampleTasks = [
-    {id: 0, name: "토플 공부하기", completed_at: true, priority: 0, due_date: today},
-    {id: 1, name: "건강검진 받기", completed_at: true, priority: 1, due_date: yesterday},
-    {id: 3, name: "썬크림 사기", completed_at: true, priority: 2, due_date: tomorrow},
-    {id: 4, name: "퇴사하기", completed_at: true, priority: 0, due_date: nextWeek},
+const makeSampleTasks = t => [
+    {id: 0, name: t("sample0"), completed_at: true, priority: 0, due_date: today},
+    {id: 2, name: t("sample2"), completed_at: true, priority: 1, due_date: yesterday},
+    {id: 3, name: t("sample3"), completed_at: true, priority: 2, due_date: tomorrow},
+    {id: 4, name: t("sample4"), completed_at: true, priority: 0, due_date: nextWeek},
 ]
 
 const DemoPlan = () => {
+    const { t } = useTranslation(null, {keyPrefix: "intro.section_plan.demo"})
+
     const [priority, setPriority] = useState("1")
     const [deadline, setDeadline] = useState("today")
 
     const task = {
-        name: "생수 주문하기",
+        name: t("sample1"),
         priority: Number(priority),
         due_date: deadlineTable[deadline],
     }
+
+    const sampleTasks = useMemo(() => makeSampleTasks(t), [t])
 
     return <SubSection>
         <HalfDivider>
             <Selections>
                 <Selection>
-                    <RadioGroup label="Choose a priority" value={priority} onChange={setPriority}>
+                    <RadioGroup label={t("priority_selection")} value={priority} onChange={setPriority}>
                         <Radio value="0"><Icon src={normal} /> Normal</Radio>
                         <Radio value="1"><Icon src={important} /> Important</Radio>
                         <Radio value="2"><Icon src={critical} /> Critical</Radio>
                     </RadioGroup>
                 </Selection>
                 <Selection>
-                    <RadioGroup label="Choose a deadline" value={deadline} onChange={setDeadline}>
+                    <RadioGroup label={t("deadline_selection")} value={deadline} onChange={setDeadline}>
                         <Radio value="today"><Icon src={todayIcon} /> Today</Radio>
                         <Radio value="tomorrow"><Icon src={tomorrowIcon} /> Tomorrow</Radio>
                         <Radio value="nextWeek"><Icon src={next_weekIcon} /> Next week</Radio>

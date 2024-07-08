@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next"
 import styled, { ThemeProvider } from "styled-components"
 
 const DemoTheme = () => {
-    const { t } = useTranslation(null, {keyPrefix: "intro.section_theme"})
+    const { t } = useTranslation(null, {keyPrefix: "intro.section_customize.demo"})
     const [activeTheme, setActiveTheme] = useState("light")
     const filters = useMemo(() => makeFilters(t), [t])
 
