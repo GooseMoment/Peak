@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 import SubSection from "@components/intro/SubSection"
 import RadioGroup from "@components/intro/RadioGroup"
 import Radio from "@components/intro/Radio"
@@ -6,7 +8,6 @@ import DemoTask from "@components/intro/DemoTask"
 import {yesterday, today, tomorrow, nextWeek, twoWeeksLater} from "./todays"
 
 import styled from "styled-components"
-import { useState } from "react"
 
 import normal from "@assets/project/priority/normal.svg"
 import important from "@assets/project/priority/important.svg"
@@ -99,6 +100,8 @@ const Tasks = styled.div`
 `
 
 const BlurArea = styled.div`
+    pointer-events: none;
+    user-select: none;
     filter: blur(1px);
 `
 
