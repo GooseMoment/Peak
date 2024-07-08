@@ -15,9 +15,22 @@ const Task = ({task, color}) => {
         },
     })
 
+    const toComplete = () => {
+        let completed_at = null
+        if (!task.completed_at) {
+            completed_at = new Date().toISOString()
+        }
+        mutation.mutate({completed_at})
+    }
+
     const taskDetailPath = `/app/projects/${task.project_id}/tasks/${task.id}/detail`
 
-    return <TaskFrame taskDetailPath={taskDetailPath} setFunc={mutation.mutate} task={task} color={color} />
+    return <TaskFrame 
+        task={task} color={color} 
+        isLoading={mutation.isPending}
+        toComplete={toComplete}
+        taskDetailPath={taskDetailPath} 
+    />
 }
 
 export default Task
