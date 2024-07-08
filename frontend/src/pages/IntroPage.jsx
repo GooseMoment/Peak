@@ -46,6 +46,14 @@ const IntroPage = () => {
     </TopHero>
 
     <Section>
+        <SectionTitle>Plan</SectionTitle>
+        <SectionDescription>Track priority and deadline of tasks.</SectionDescription>
+        <SubGroup>
+            <DemoPlan />
+        </SubGroup>
+    </Section>
+
+    <Section>
         <SectionTitle>Organize</SectionTitle>
         <SectionDescription>Place tasks in the right place with projects and drawers.</SectionDescription>
         <SubGroup>
@@ -55,10 +63,12 @@ const IntroPage = () => {
     </Section>
 
     <Section>
-        <SectionTitle>Plan</SectionTitle>
-        <SectionDescription>Track priority and deadline of tasks.</SectionDescription>
+        <SectionTitle>Cheer</SectionTitle>
+        <SectionDescription>Put reactions to your friends’ tasks with fancy emojis. Make motivate and get motivated.</SectionDescription>
         <SubGroup>
-            <DemoPlan />
+            <SubSection>
+                <SubTitle>*** Emoji Selector Box should be here ***</SubTitle>
+            </SubSection>
         </SubGroup>
     </Section>
 
@@ -68,16 +78,6 @@ const IntroPage = () => {
         <SubGroup>
             <SubSection>
                 <SubTitle>*** UserLogDetail should be here ***</SubTitle>
-            </SubSection>
-        </SubGroup>
-    </Section>
-
-    <Section>
-        <SectionTitle>Cheer</SectionTitle>
-        <SectionDescription>Put reactions to your friends’ tasks with fancy emojis. Make motivate and get motivated.</SectionDescription>
-        <SubGroup>
-            <SubSection>
-                <SubTitle>*** Emoji Selector Box should be here ***</SubTitle>
             </SubSection>
         </SubGroup>
     </Section>
