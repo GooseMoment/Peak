@@ -56,7 +56,7 @@ const Bar = styled.div`
     height: 1em;
     border-radius: 4px;
 
-    background-color: ${p => p.theme.grey};
+    background-color: ${p => p.theme.secondBackgroundColor};
 `
 
 export default SkeletonDrawer
