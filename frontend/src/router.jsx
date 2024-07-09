@@ -11,6 +11,7 @@ import SignPage from "@pages/SignPage"
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 
+import StartPage from "@pages/StartPage"
 import TodayPage from "@pages/TodayPage"
 import HomePage from "@pages/HomePage"
 
@@ -75,7 +76,7 @@ const routes = [
         children: [
             {
                 index: true,
-                element: <div>This is /</div>,
+                element: <StartPage />,
             },
             {
                 path: "search",
