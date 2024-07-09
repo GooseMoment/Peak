@@ -43,6 +43,7 @@
     "settings": {
         "sidebar": {
             "account": "Account",
+            "general": "General",
             "privacy": "Privacy",
             "languages_and_time": "Languages & Time",
             "notifications": "Notifications",
@@ -74,6 +75,17 @@
             "password_wrong": "Current password is wrong.",
             "password_change_success": "Password was changes.",
             "password_change_error": "Error occured while changing password."
+        },
+        "general": {
+            "title": "General",
+            "startpage": {
+                "name": "Start Page",
+                "description": "Determines which page will show up on startup.",
+                "values": {
+                    "home": "Home",
+                    "today": "Today"
+                }
+            }
         },
         "privacy": {
             "title": "Privacy",
