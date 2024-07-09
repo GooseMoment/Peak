@@ -11,6 +11,9 @@ import SignPage from "@pages/SignPage"
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 
+import TodayPage from "@pages/TodayPage"
+import HomePage from "@pages/HomePage"
+
 import ProjectPage from "@pages/ProjectPage"
 import ProjectListPage from "@pages/ProjectListPage"
 
@@ -83,12 +86,12 @@ const routes = [
                 element: <NotificationsPage />,
             },
             {
-                path: "tasks/:id",
-                element: <div>This is /tasks/:id</div>,
+                path: "today",
+                element: <TodayPage />,
             },
             {
-                path: "today",
-                element: <div>This is /today</div>,
+                path: "home",
+                element: <HomePage />,
             },
             {
                 path: "social",
