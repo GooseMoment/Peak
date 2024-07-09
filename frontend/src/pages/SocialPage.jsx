@@ -5,7 +5,7 @@ const SocialPage = () => {
     const navigate = useNavigate()
 
     useEffect(()=> {
-        navigate("/app/social/following")
+        navigate("/app/social/following", {replace: true})
     }, [])
 
     return null
