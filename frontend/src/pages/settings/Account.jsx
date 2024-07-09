@@ -33,6 +33,7 @@ const Account = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ["users", "me"]})
+            queryClient.invalidateQueries({queryKey: ["users", user.username]})
             toast.success(t("account_edited"))
         },
         onError: () => {

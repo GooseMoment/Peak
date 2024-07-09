@@ -23,7 +23,7 @@ import TaskDetailElement from "@pages/taskDetails/TaskDetailElement"
 
 import UserPage from "@pages/UserPage"
 
-import { getMe, getUserByUsername, signOut } from "@api/users.api"
+import { getMe, signOut } from "@api/users.api"
 import { getProject, getProjectsList } from "@api/projects.api"
 import { getToken } from "@api/client"
 
@@ -138,10 +138,7 @@ const routes = [
             },
             {
                 path: "users/:username",
-                loader: async ({params}) => {
-                    return getUserByUsername(params.username.slice(1))
-                },
-                element: <UserPage/>,
+                element: <UserPage />,
             },
             {
                 path: "sign_out",
