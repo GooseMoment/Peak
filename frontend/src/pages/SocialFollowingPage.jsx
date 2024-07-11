@@ -31,9 +31,8 @@ const SocialFollowingPage = () => {
     const {user} = useRouteLoaderData("app")
 
     const getPreview = async(date) => {
-        const day = date
         if(date) try {
-            const res = await getDailyReport(user.username, day)
+            const res = await getDailyReport(user.username, date)
             setDailyReport(res)
         } catch (e) {
             throw alert(e)
