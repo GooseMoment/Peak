@@ -26,8 +26,8 @@ const SocialFollowingPage = () => {
     const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
     const [selectedUsername, setSelectedUsername] = useState(null)
     const [dailyReport, setDailyReport] = useState([])
-    const [dailyComment, setDailyComment] = useState([])
-    
+    const [dailyComment, setDailyComment] = useState(null)
+
     const {user} = useRouteLoaderData("app")
 
     const getPreview = async(date) => {
@@ -53,7 +53,6 @@ const SocialFollowingPage = () => {
     }, [selectedDate])
 
     useEffect(() => {
-        console.log(selectedUsername)
         getLogDetail(selectedDate, selectedUsername)
     }, [selectedUsername])
 
@@ -78,7 +77,11 @@ const SocialFollowingPage = () => {
             </Container>
 
             <Container $isSticky={true}>
-                <DailyLogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true} />
+                {
+                    (dailyComment&&dailyComment.comment)?
+                        <DailyLogDetail dailyComment={dailyComment} userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true} />
+                    :null
+                }
             </Container>
         </Wrapper>
     </>
