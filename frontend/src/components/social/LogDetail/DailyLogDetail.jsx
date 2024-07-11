@@ -8,7 +8,7 @@ import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox";
 import { TaskList } from "@components/drawers/Drawer";
 import TaskFrame from "@components/tasks/TaskFrame";
 
-const DailyLogDetail = ({userLogsDetail, isSelf}) => {
+const DailyLogDetail = ({dailyComment, userLogsDetail, isSelf}) => {
     const [tempText, setTempText] = useState(null)
     const [inputState, setInputState] = useState(false)
     // const [emojiClick, setEmojiClick] = useState(false)
@@ -25,15 +25,15 @@ const DailyLogDetail = ({userLogsDetail, isSelf}) => {
         <DetailHeader>
         <Profile>
             <ProfileImg>
-                <img src={userLogsDetail.user.profileImgURI}/>
+                <img src={dailyComment.user.profile_img}/>
             </ProfileImg>
             <Username>
-                @{userLogsDetail.user.username}
+                @{dailyComment.user.username}
             </Username>
         </Profile>
         <CommentBox onClick={handleInputState}>
-            {userLogsDetail.dailyComment.name ? (
-                <Comment>{"\""+userLogsDetail.dailyComment.name+"\""}</Comment>
+            {dailyComment.comment ? (
+                <Comment>{"\""+dailyComment.comment+"\""}</Comment>
             ) : (
                 isSelf ? (
                     <CommentInput 
