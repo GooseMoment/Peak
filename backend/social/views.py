@@ -137,8 +137,10 @@ def get_daily_logs(request: HttpRequest, username, day):
 # GET social/daily/comment/@follower/@followee/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["GET"])
 def get_daily_comment(requset: HttpRequest, follower, followee, day):    
+    followeeUser = get_object_or_404(User, username=followee)
+    
     followerUserID = str(get_object_or_404(User, username=follower).id)
-    followeeUserID = str(get_object_or_404(User, username=followee).id)
+    followeeUserID = str(followeeUser.id)
 
     # set cache for 'is_read'
     cache_key = f"user_id_{followeeUserID}_date_{day}"
@@ -156,6 +158,8 @@ def get_daily_comment(requset: HttpRequest, follower, followee, day):
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
     daily_comment = DailyComment.objects.filter(user__id=followeeUserID, date__range=(day_min, day_max)).first()
     
+    if not daily_comment:
+        daily_comment = DailyComment(id=None, user=followeeUser, comment='', date=None)
     serializer = DailyCommentSerializer(daily_comment)
     
     # Response(cache_data, status=status.HTTP_200_OK)
