@@ -40,10 +40,9 @@ const SocialFollowingPage = () => {
         }
     }
 
-    const getLogDetail = async(date) => {
-        const day = date
-        if(date) try {
-            const res = await getDailyComment(user.username, selectedUsername, day)
+    const getLogDetail = async(date, followee) => {
+        if(date && followee) try {
+            const res = await getDailyComment(user.username, followee, date)
             setDailyComment(res)
         } catch (e) {
             throw alert(e)
@@ -55,7 +54,8 @@ const SocialFollowingPage = () => {
     }, [selectedDate])
 
     useEffect(() => {
-        getPreview(selectedUsername)
+        console.log(selectedUsername)
+        getLogDetail(selectedDate, selectedUsername)
     }, [selectedUsername])
 
     return <>
