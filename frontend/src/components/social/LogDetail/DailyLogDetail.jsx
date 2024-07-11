@@ -84,7 +84,7 @@ display: flex;
 flex-flow: row wrap;
 gap: 1em;
 
-padding: 1.2em 1em 1.2em;
+padding: 1.2em 1em 0.2em;
 `
 
 const Profile = styled.div`

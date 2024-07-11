@@ -99,7 +99,10 @@ const Container = styled.div`
         /* align-self: flex-start; */
         position: sticky;
         top: 2.5rem;
-    ` : null}
+        gap: 0rem;
+    ` : css`
+        gap: 1rem;
+    `}
     margin-bottom: auto;
 
     padding: 0 1rem 0;
@@ -107,7 +110,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 1rem;
     overflow: hidden;
 `
 
