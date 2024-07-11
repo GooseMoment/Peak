@@ -7,6 +7,7 @@ import EmojiAddButton from "@components/social/EmojiAddButton";
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox";
 import { TaskList } from "@components/drawers/Drawer";
 import TaskFrame from "@components/tasks/TaskFrame";
+import { Fragment } from "react";
 
 const DailyLogDetail = ({dailyComment, userLogsDetail, isSelf}) => {
     const [tempText, setTempText] = useState(null)
@@ -62,16 +63,16 @@ const DailyLogDetail = ({dailyComment, userLogsDetail, isSelf}) => {
         <DetailBody>
         {
             userLogsDetail.dailyProjects?.map((dailyProject) => (
-                <>
-                    <DrawerBox key={dailyProject.projectID} $color={dailyProject.projectColor}>
+                <Fragment key={dailyProject.projectID}>
+                    <DrawerBox $color={dailyProject.projectColor}>
                         <DrawerName $color={dailyProject.projectColor}>{dailyProject.projectID}</DrawerName>
                     </DrawerBox>
                     <TaskList>
                         {dailyProject.dailytasks?.map((dailytask) => (
-                            <TaskFrame task={dailytask} color={dailyProject.projectColor} />
+                            <TaskFrame key={dailytask.id} task={dailytask} color={dailyProject.projectColor} />
                         ))}
                     </TaskList>
-                </>
+                </Fragment>
             ))
         }
         </DetailBody>
