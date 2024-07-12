@@ -76,14 +76,13 @@ class DailyCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = DailyComment
         fields = ["id", "user", "comment", "date"]
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
         
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
+    #     if not instance.comment:
+    #         return {'user': data['user']}
         
-        if not instance.comment:
-            return {'user': data['user']}
-        
-        return data
+    #     return data
 
 class ReactionSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
