@@ -9,7 +9,7 @@ import { TaskList } from "@components/drawers/Drawer";
 import TaskFrame from "@components/tasks/TaskFrame";
 import { Fragment } from "react";
 
-const DailyLogDetail = ({dailyComment, userLogsDetail, isSelf}) => {
+const DailyLogDetail = ({dailyComment, userLogsDetail}) => {
     const [tempText, setTempText] = useState(null)
     const [inputState, setInputState] = useState(false)
     // const [emojiClick, setEmojiClick] = useState(false)
@@ -36,7 +36,7 @@ const DailyLogDetail = ({dailyComment, userLogsDetail, isSelf}) => {
             {dailyComment.comment ? (
                 <Comment>{"\""+dailyComment.comment+"\""}</Comment>
             ) : (
-                isSelf ? (
+                dailyComment.user.is_me ? (
                     <CommentInput 
                     type="text" 
                     value={tempText}

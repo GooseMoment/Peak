@@ -71,17 +71,20 @@ const SocialFollowingPage = () => {
 
                 <DailyLogsPreviewContainer>
                     {sortDailyLogs(dailyReport).map((dailyFollowersLog) => (
-                        <DailyLogPreview key={dailyFollowersLog.username} userLogSimple={dailyFollowersLog} selectedIndex={selectedUsername} setSelectedIndex={setSelectedUsername} />
+                        <DailyLogPreview
+                            key={dailyFollowersLog.username}
+                            userLogSimple={dailyFollowersLog}
+                            selectedIndex={selectedUsername}
+                            setSelectedIndex={setSelectedUsername} />
                     ))}
                 </DailyLogsPreviewContainer>
             </Container>
 
             <Container $isSticky={true}>
-                {
-                    (dailyComment&&dailyComment.comment)?
-                        <DailyLogDetail dailyComment={dailyComment} userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true} />
-                    :null
-                }
+                {dailyComment?<DailyLogDetail
+                    dailyComment={dailyComment}
+                    userLogsDetail={mockDailyFollowerLogsDetail[0]}
+                />:null}
             </Container>
         </Wrapper>
     </>
