@@ -39,7 +39,7 @@ const SocialFollowingPage = () => {
         }
     }
 
-    const getLogDetail = async(date, followee) => {
+    const getDetail = async(date, followee) => {
         if(date && followee) try {
             const res = await getDailyComment(user.username, followee, date)
             setDailyComment(res)
@@ -53,7 +53,7 @@ const SocialFollowingPage = () => {
     }, [selectedDate])
 
     useEffect(() => {
-        getLogDetail(selectedDate, selectedUsername)
+        getDetail(selectedDate, selectedUsername)
     }, [selectedUsername])
 
     return <>
