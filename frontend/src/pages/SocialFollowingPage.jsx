@@ -9,7 +9,7 @@ import DailyLogPreview from "@components/social/DailyLogPreview";
 import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail";
 import SocialPageTitle from "@components/social/SocialPageTitle";
 
-import { getDailyReport, getDailyComment } from "@api/social.api";
+import { getDailyReport, getDailyComment, getDailyLogsPreview } from "@api/social.api";
 
 const sortDailyLogs = (report) => {
     return report.slice().sort((a, b) => {
@@ -32,7 +32,7 @@ const SocialFollowingPage = () => {
 
     const getPreview = async(date) => {
         if(date) try {
-            const res = await getDailyReport(user.username, date)
+            const res = await getDailyLogsPreview(user.username, date)
             setDailyReport(res)
         } catch (e) {
             throw alert(e)

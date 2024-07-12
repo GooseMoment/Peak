@@ -38,7 +38,7 @@ export const deleteBlock = (userID) => {
 
 }
 
-export const getDailyReport = async(username, day) => {
+export const getDailyLogsPreview = async(username, day) => {
     try {
         const res = await client.get(`social/daily/logs/@${username}/${day}/`)
         return res.data
