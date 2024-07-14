@@ -40,8 +40,10 @@ const SocialFollowingPage = () => {
     }
 
     const getDetail = async(date, followee) => {
-        if(date && followee) try {
-            const res = await getDailyComment(user.username, followee, date)
+        const followeeUsername = followee?followee:user.username
+
+        if(date && followeeUsername) try {
+            const res = await getDailyComment(user.username, followeeUsername, date)
             setDailyComment(res)
         } catch (e) {
             throw alert(e)

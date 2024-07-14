@@ -16,7 +16,6 @@ const DailyLogPreview = ({userLogSimple, selectedIndex: selectedUsername, setSel
     return <Frame onClick={handleSelect}
             $bgcolor={userLogSimple.username === selectedUsername? "#ffd7c7" : "#FEFDFC"}
         >
-        {/* separate the "Profile" into a separate file? */}
         {/* TODO: 화면 너비 줄이면 프로필 이름 길이에 따라 배열 망가지는 문제 해결 */}
         <SimpleProfile user={userLogSimple} ringColor="#A4A4A4" /> 
         {/* ringColor={userLogSimple.$color} */}
