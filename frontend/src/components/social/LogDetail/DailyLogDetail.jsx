@@ -81,42 +81,6 @@ gap: 1em;
 padding: 1.2em 1em 0.2em;
 `
 
-const Profile = styled.div`
-height: 5em;
-width: 5em;
-text-align: center;
-`
-
-const ProfileImg = styled.div`
-position: relative;
-width: auto;
-height: 3em;
-padding-top: 0.5em;
-padding-bottom: 0.5em;
-
-& img {
-    border-radius: 50%;
-}
-
-& svg {
-    stroke: 2em;
-    margin-right: 0;
-}
-
-& img, & svg {
-    width: auto;
-    height: 3em;
-}
-`
-
-const Username = styled.div`
-font-size: 1em;
-text-align: center;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-`
-
 const CommentBox = styled.div`
 display: flex;
 background-color: #e6e6e6;

@@ -43,44 +43,6 @@ padding: 1.2em 1em 1.2em;
 background-color: ${props => props.$bgcolor};
 `
 
-const Profile = styled.div`
-height: 5em;
-width: 6em;
-text-align: center;
-
-`
-
-const ProfileImgWrapper = styled.div`
-position: relative;
-width: auto;
-height: 3em;
-padding-top: 0.5em;
-padding-bottom: 0.5em;
-
-& img {
-    border-radius: 50%;
-}
-
-& svg {
-    stroke: 2em;
-    margin-right: 0;
-}
-
-& img, & svg {
-    width: auto;
-    height: 3em;
-    box-shadow: 0 0 0 2.5px #FEFDFC, 0 0 0 5px ${props => props.$color};
-}
-`
-
-const Username = styled.div`
-font-size: 1em;
-text-align: center;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-`
-
 const RecentTask = styled.div`
 padding-top: 0.7em;
 width: 230pt;
