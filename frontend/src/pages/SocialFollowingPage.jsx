@@ -9,7 +9,7 @@ import DailyLogPreview from "@components/social/DailyLogPreview";
 import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail";
 import SocialPageTitle from "@components/social/SocialPageTitle";
 
-import { getDailyReport, getDailyComment, getDailyLogsPreview } from "@api/social.api";
+import { getDailyComment, getDailyLogsPreview } from "@api/social.api";
 
 const sortDailyLogs = (report) => {
     return report.slice().sort((a, b) => {

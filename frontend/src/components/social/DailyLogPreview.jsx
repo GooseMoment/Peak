@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import { DateTime } from "luxon"
+import SimpleProfile from "./SimpleProfile";
 
 const putEllipsis = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength-3) + '...' : text;
@@ -17,15 +18,8 @@ const DailyLogPreview = ({userLogSimple, selectedIndex: selectedUsername, setSel
         >
         {/* separate the "Profile" into a separate file? */}
         {/* TODO: 화면 너비 줄이면 프로필 이름 길이에 따라 배열 망가지는 문제 해결 */}
-        <Profile>
-            {/* {userLogSimple.isRead ? "#A4A4A4" : userLogSimple.task.projectColor} */}
-            <ProfileImgWrapper $color="#A4A4A4" >
-                <img src={userLogSimple.profile_img}/>
-            </ProfileImgWrapper>
-            <Username>
-                @{userLogSimple.username}
-            </Username>
-        </Profile>
+        <SimpleProfile user={userLogSimple} ringColor="#A4A4A4" /> 
+        {/* ringColor={userLogSimple.$color} */}
         <RecentTask>
             {userLogSimple.recent_task && (
                 <>

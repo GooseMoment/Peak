@@ -8,6 +8,7 @@ import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox";
 import { TaskList } from "@components/drawers/Drawer";
 import TaskFrame from "@components/tasks/TaskFrame";
 import { Fragment } from "react";
+import SimpleProfile from "../SimpleProfile";
 
 const DailyLogDetail = ({dailyComment, userLogsDetail}) => {
     const [tempText, setTempText] = useState(null)
@@ -24,14 +25,7 @@ const DailyLogDetail = ({dailyComment, userLogsDetail}) => {
 
     return <>
         <DetailHeader>
-        <Profile>
-            <ProfileImg>
-                <img src={dailyComment.user.profile_img}/>
-            </ProfileImg>
-            <Username>
-                @{dailyComment.user.username}
-            </Username>
-        </Profile>
+        <SimpleProfile user={dailyComment.user}/>
         <CommentBox onClick={handleInputState}>
             {dailyComment.comment ? (
                 <Comment>{"\""+dailyComment.comment+"\""}</Comment>
@@ -130,6 +124,7 @@ border-radius: 10pt;
 padding: 1em;
 margin-right: 0.5em;
 width: 210pt;
+/* flex-grow: 1; */
 
 justify-content: center;
 align-items: center;
