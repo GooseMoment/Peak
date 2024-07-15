@@ -43,7 +43,7 @@ const TitleBox = styled.div`
     & svg {
         width: 1.2em;
         height: 1.2em;
-        stroke: #000000;
+        stroke: ${p => p.theme.textColor};
         margin-right: 0.6em;
         top: 0;
     }
@@ -54,7 +54,7 @@ const InputText = styled.input`
     margin: 0.3em;
     font-weight: 480;
     font-size: 1.1em;
-    color: #000000;
+    color: ${p => p.theme.textColor};
     border: none;
 
     &:focus {
@@ -73,7 +73,7 @@ const Icons = styled.div`
     & svg {
         top: 0.2em;
         cursor: pointer;
-        stroke: #FF0000;
+        stroke: ${p => p.theme.primaryColors.danger};
         margin-left: 1em;
     }
 `

@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 import Detail from "@components/project/common/Detail"
@@ -60,10 +60,14 @@ const TabButton = styled.button`
     width: 3em;
     border: 1px solid;
     border-radius: 15px;
-    border-color: #${props => props.$isActive ? 'FFD7C7' : 'A4A4A4'};
-    background-color: #${props => props.$isActive ? 'FF4A03' : 'FFFFFF'};
-    color: #${props => props.$isActive ? 'FFFFFF' : '000000'};
+    border-color: ${p => p.theme.project.lineColor};
+    background-color: ${p => p.theme.backgroundColor};
+    color: ${p => p.theme.textColor};
     cursor: pointer;
+
+    ${props => props.$isActive && css`
+        background-color: ${p => p.theme.goose};
+    `}
 `
 
 const ItemBlock = styled.div`

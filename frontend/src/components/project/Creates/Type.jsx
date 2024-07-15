@@ -45,11 +45,11 @@ const ItemBlock = styled.div`
 const ItemText = styled.p`
     font-weight: normal;
     font-size: 1em;
-    color: #000000;
+    color: ${p => p.theme.textColor};
 
     &:hover {
         font-weight: bolder;
-        color: #FF4A03;
+        color: ${p => p.theme.goose};
         cursor: pointer;
     }
 `
