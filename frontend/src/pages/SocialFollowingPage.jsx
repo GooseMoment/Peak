@@ -56,7 +56,7 @@ const SocialFollowingPage = () => {
 
     useEffect(() => {
         getDetail(selectedDate, selectedUsername)
-    }, [selectedUsername])
+    }, [selectedDate, selectedUsername])
 
     return <>
         <SocialPageTitle active="following" />
