@@ -1,9 +1,42 @@
 import Button from "@components/common/Button"
 import FollowsCount from "@components/users/FollowsCount"
 
-import styled from "styled-components"
+import { deleteFollowRequest, putFollowRequest } from "@api/social.api"
+import { getCurrentUsername } from "@api/client"
+import queryClient from "@queries/queryClient"
 
-const UserProfileHeader = ({user, isMine}) => {
+import styled from "styled-components"
+import { toast } from "react-toastify"
+import { useMutation } from "@tanstack/react-query"
+
+const UserProfileHeader = ({user, isMine, following, fetchFollowPending}) => {
+
+    const putMutation = useMutation({
+        mutationFn: () => putFollowRequest(user.username),
+        onSuccess: () => queryClient.invalidateQueries({queryKey: ["follow", getCurrentUsername(), user.username]}),
+        onError: () => toast.error(`Cannot follow @${user.username}.`)
+    }) 
+
+    const deleteMutation = useMutation({
+        mutationFn: () => deleteFollowRequest(user.username),
+        onSuccess: () => queryClient.invalidateQueries({queryKey: ["follow", getCurrentUsername(), user.username]}),
+        onError: () => toast.error(`Cannot cancel request to or unfollow @${user.username}.`)
+    }) 
+
+    const followButtonLoading = fetchFollowPending || putMutation.isPending || deleteMutation.isPending
+
+    const handleFollow = async () => {
+        if (followButtonLoading) {
+            return
+        }
+
+        if (!following) {
+            putMutation.mutate()
+            return
+        }
+        
+        deleteMutation.mutate()
+    }
 
     return <>
         <Banner />
@@ -21,7 +54,15 @@ const UserProfileHeader = ({user, isMine}) => {
             <ProfileButtons>
                 {isMine ? 
                     <a href="#/settings/account"><Button>Edit Profile</Button></a> 
-                    : <Button>Follow</Button>
+                    : <Button 
+                        onClick={handleFollow}
+                        $loading={followButtonLoading}
+                        disabled={followButtonLoading}> 
+
+                        {following ? (
+                            following.status === "requested" ? "Requested" : "Unfollow"
+                        ) : "Follow"}
+                    </Button>
                 }
             </ProfileButtons>
         </Profile>
@@ -52,7 +93,7 @@ const ProfileImg = styled.img`
 `
 
 const ProfileTexts = styled.div`
-    padding: 1.25em 0;
+    padding: 1em 0;
 
     display: flex;
     flex-direction: column;
@@ -71,7 +112,7 @@ const Names = styled.div`
 
 const DisplayName = styled.h1`
     font-weight: 700;
-    font-size: 1.75em;
+    font-size: 2em;
 `
 
 const Username = styled.div``

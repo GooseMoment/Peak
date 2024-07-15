@@ -9,6 +9,7 @@ import ProjectList from "@components/users/ProjectList"
 import { getUserByUsername } from "@api/users.api"
 import { getProjectListByUser } from "@api/projects.api"
 import { getCurrentUsername } from "@api/client"
+import { getFollow } from "@api/social.api"
 
 import { useQuery } from "@tanstack/react-query"
 
@@ -23,8 +24,8 @@ const UserPage = () => {
     }, [usernameWithAt])
 
     const username = usernameWithAt.slice(1)
-
-    const isMine = getCurrentUsername() === username
+    const currentUsername = getCurrentUsername()
+    const isMine = currentUsername === username
 
     const { data: user, isPending: userPending } = useQuery({
         queryKey: ["users", username],
@@ -36,12 +37,18 @@ const UserPage = () => {
         queryFn: () => getProjectListByUser(username),
     })
 
+    const { data: following, isPending: fetchFollowPending } = useQuery({
+        queryKey: ["follow", currentUsername, username],
+        queryFn: () => getFollow(currentUsername, username),
+        enabled: !isMine,
+    })
+
     if (userPending) {
         return "loading"
     }
 
     return <>
-        <UserProfileHeader user={user} isMine={isMine} />
+        <UserProfileHeader user={user} isMine={isMine} following={following} fetchFollowPending={fetchFollowPending} />
         <Section />
         <Bio bio={user.bio} />
         <ProjectList projects={projects} />
