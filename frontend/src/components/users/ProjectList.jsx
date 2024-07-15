@@ -7,7 +7,7 @@ const ProjectList = ({projects}) => {
         <SectionTitle>Projects</SectionTitle>
 
         <Projects>
-            {projects.map(project => <Project key={project.id}>
+            {projects?.map(project => <Project key={project.id}>
                 <Circle $color={"#" + project.color} /> <Name>{project.name}</Name> 
             </Project>)}
         </Projects>
