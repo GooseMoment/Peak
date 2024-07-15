@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "username", "display_name", "followings_count", "followers_count",
-            "profile_img", "bio", "email", "is_me",
+            "profile_img", "bio", "email", "header_color", "is_me",
         ]
 
     def get_email(self, obj):
