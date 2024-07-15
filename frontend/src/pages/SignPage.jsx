@@ -82,7 +82,7 @@ const Root = styled.div`
         }
 
         ${BrandTitle} {
-            color: black;
+            color: ${p => p.theme.textColor};
         }
     }
 `
