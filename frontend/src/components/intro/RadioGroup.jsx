@@ -11,7 +11,7 @@ const RadioGroup = ({ label, children, ...rest }) => {
 }
 
 const Legend = styled.legend`
-    margin-bottom: 1em;
+    margin-bottom: 0.25em;
 `
 
 export default RadioGroup
