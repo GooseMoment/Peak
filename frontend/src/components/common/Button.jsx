@@ -1,7 +1,7 @@
 import MildButton from "./MildButton"
 import { states } from "@assets/themes"
 
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 
 export const buttonForms = {
     filled: "filled",
@@ -15,10 +15,12 @@ export const buttonForms = {
  * @param {?string} $state - assets/themes/states 목록 중 사용 (기본: states.TEXT)
  */
 const Button = (props) => {
-    const { $form=buttonForms.outlined, $state=states.text } = props
+    const { $form=buttonForms.outlined, $state=states.text, $loading } = props
     const SelectedButton = buttons[$form]
 
-    return <SelectedButton {...props} $state={$state}>{props.children}</SelectedButton>
+    return <SelectedButton {...props} $state={$state}>
+        {$loading && <Loader />} {props.children}
+    </SelectedButton>
 }
 
 export const ButtonGroup = styled.div`
@@ -80,5 +82,28 @@ const buttons = {
     filled: FilledButton,
     outlined: OutlinedButton,
 }
+
+const spin = keyframes`
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+`
+
+const Loader = styled.div`
+    border: 3px solid ${p => p.theme.textColor};
+    border-left-color: transparent;
+    border-radius: 50%;
+
+    aspect-ratio: 1/1;
+    height: 0.75em;
+
+    animation: ${spin} 1s linear infinite;
+    
+    margin-right: 0.5em;
+`
 
 export default Button
