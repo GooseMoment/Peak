@@ -1,8 +1,9 @@
 import Button from "@components/common/Button"
+import FollowsCount from "@components/users/FollowsCount"
 
 import styled from "styled-components"
 
-const UserProfileHeader = ({user}) => {
+const UserProfileHeader = ({user, isMine}) => {
 
     return <>
         <Banner />
@@ -13,13 +14,17 @@ const UserProfileHeader = ({user}) => {
                     <DisplayName>{user.display_name}</DisplayName>
                     <Username>@{user.username}</Username>
                 </Names>
-                <Datas>Following {user.followings_count} / Followers {user.followers_count} </Datas>
+                <Datas>
+                    <FollowsCount followers={user.followers_count} followings={user.followings_count} />
+                </Datas>
             </ProfileTexts>
             <ProfileButtons>
-                <Button>Follow</Button>
+                {isMine ? 
+                    <a href="#/settings/account"><Button>Edit Profile</Button></a> 
+                    : <Button>Follow</Button>
+                }
             </ProfileButtons>
         </Profile>
-
     </>
 
 }
@@ -51,7 +56,9 @@ const ProfileTexts = styled.div`
 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: start;
+
+    gap: 1.75em;
 
     flex-grow: 3;
 `

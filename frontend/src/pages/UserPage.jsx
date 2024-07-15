@@ -8,6 +8,7 @@ import ProjectList from "@components/users/ProjectList"
 
 import { getUserByUsername } from "@api/users.api"
 import { getProjectListByUser } from "@api/projects.api"
+import { getCurrentUsername } from "@api/client"
 
 import { useQuery } from "@tanstack/react-query"
 
@@ -22,6 +23,8 @@ const UserPage = () => {
     }, [usernameWithAt])
 
     const username = usernameWithAt.slice(1)
+
+    const isMine = getCurrentUsername() === username
 
     const { data: user, isPending: userPending } = useQuery({
         queryKey: ["users", username],
@@ -38,7 +41,7 @@ const UserPage = () => {
     }
 
     return <>
-        <UserProfileHeader user={user} />
+        <UserProfileHeader user={user} isMine={isMine} />
         <Section />
         <Bio bio={user.bio} />
         {!projectsPending && <ProjectList projects={projects} />}
