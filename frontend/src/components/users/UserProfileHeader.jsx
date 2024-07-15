@@ -1,42 +1,10 @@
 import Button from "@components/common/Button"
 import FollowsCount from "@components/users/FollowsCount"
-
-import { deleteFollowRequest, putFollowRequest } from "@api/social.api"
-import { getCurrentUsername } from "@api/client"
-import queryClient from "@queries/queryClient"
+import FollowButton from "@components/users/FollowButton"
 
 import styled from "styled-components"
-import { toast } from "react-toastify"
-import { useMutation } from "@tanstack/react-query"
 
-const UserProfileHeader = ({user, isMine, following, fetchFollowPending}) => {
-
-    const putMutation = useMutation({
-        mutationFn: () => putFollowRequest(user.username),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ["follow", getCurrentUsername(), user.username]}),
-        onError: () => toast.error(`Cannot follow @${user.username}.`)
-    }) 
-
-    const deleteMutation = useMutation({
-        mutationFn: () => deleteFollowRequest(user.username),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ["follow", getCurrentUsername(), user.username]}),
-        onError: () => toast.error(`Cannot cancel request to or unfollow @${user.username}.`)
-    }) 
-
-    const followButtonLoading = fetchFollowPending || putMutation.isPending || deleteMutation.isPending
-
-    const handleFollow = async () => {
-        if (followButtonLoading) {
-            return
-        }
-
-        if (!following) {
-            putMutation.mutate()
-            return
-        }
-        
-        deleteMutation.mutate()
-    }
+const UserProfileHeader = ({user, isMine}) => {
 
     return <>
         <Banner />
@@ -48,21 +16,12 @@ const UserProfileHeader = ({user, isMine, following, fetchFollowPending}) => {
                     <Username>@{user.username}</Username>
                 </Names>
                 <Datas>
-                    <FollowsCount followers={user.followers_count} followings={user.followings_count} />
+                    <FollowsCount user={user} />
                 </Datas>
             </ProfileTexts>
             <ProfileButtons>
                 {isMine ? 
-                    <a href="#/settings/account"><Button>Edit Profile</Button></a> 
-                    : <Button 
-                        onClick={handleFollow}
-                        $loading={followButtonLoading}
-                        disabled={followButtonLoading}> 
-
-                        {following ? (
-                            following.status === "requested" ? "Requested" : "Unfollow"
-                        ) : "Follow"}
-                    </Button>
+                    <a href="#/settings/account"><Button>Edit Profile</Button></a> : <FollowButton user={user} /> 
                 }
             </ProfileButtons>
         </Profile>
