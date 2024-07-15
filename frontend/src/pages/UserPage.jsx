@@ -1,9 +1,12 @@
 import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
-import PageTitle from "@components/common/PageTitle"
+import { Section } from "@components/users/Section"
+import UserProfileHeader from "@components/users/UserProfileHeader"
+import Bio from "@components/users/Bio"
 
 import { getUserByUsername } from "@api/users.api"
+
 import { useQuery } from "@tanstack/react-query"
 
 const UserPage = () => {
@@ -28,7 +31,9 @@ const UserPage = () => {
     }
 
     return <>
-        <PageTitle>Hi {user.display_name}</PageTitle>
+        <UserProfileHeader user={user} />
+        <Section />
+        <Bio bio={user.bio} />
     </>
 }
 
