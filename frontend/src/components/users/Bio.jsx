@@ -17,7 +17,7 @@ const BioBox = styled.div`
     box-sizing: border-box;
     padding: 1.25em;
 
-    white-space: pre;
+    white-space: pre-wrap;
 `
 
 export default Bio

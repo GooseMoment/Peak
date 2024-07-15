@@ -19,6 +19,9 @@ const Projects = styled.div`
     display: flex;
     gap: 1.5em;
     margin-top: 1.5em;
+    margin-left: 1.25em;
+
+    flex-wrap: wrap;
 `
 
 const Project = styled.div`
@@ -36,6 +39,8 @@ const Circle = styled.div`
     height: 1em;
 `
 
-const Name = styled.div``
+const Name = styled.div`
+    word-break: keep-all;
+`
 
 export default ProjectList
