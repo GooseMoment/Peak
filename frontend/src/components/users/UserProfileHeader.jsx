@@ -7,7 +7,7 @@ import styled from "styled-components"
 const UserProfileHeader = ({user, isMine}) => {
 
     return <>
-        <Banner />
+        <Banner $headerColor={"#" + user.header_color} />
         <Profile>
             <ProfileImg src={user.profile_img} />
             <ProfileTexts>
@@ -30,7 +30,7 @@ const UserProfileHeader = ({user, isMine}) => {
 }
 
 const Banner = styled.div`
-    background-color: ${p => p.theme.grey};
+    background-color: ${p => p.$headerColor};
     height: 15em;
     width: 100vw;
     margin: -3em -10em;
@@ -52,6 +52,7 @@ const ProfileImg = styled.img`
 `
 
 const ProfileTexts = styled.div`
+
     padding: 1em 0;
 
     display: flex;
@@ -64,12 +65,18 @@ const ProfileTexts = styled.div`
 `
 
 const Names = styled.div`
+    color: ${p => p.theme.white};
+    text-shadow: 1px 1px 20px #000;
+
     display: flex;
     flex-direction: column;
     gap: 0.5em;
 `
 
 const DisplayName = styled.h1`
+    color: ${p => p.theme.white};
+    text-shadow: 1px 1px 10px #000;
+
     font-weight: 700;
     font-size: 2em;
 `
