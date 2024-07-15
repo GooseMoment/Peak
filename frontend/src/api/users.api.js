@@ -1,6 +1,6 @@
-import client, { setToken } from "@api/client"
+import client, { setToken, setCurrentUsername } from "@api/client"
 import { deleteSubscription } from "./notifications.api"
-import { getClientSettings } from "@/utils/clientSettings"
+import { getClientSettings } from "@utils/clientSettings"
 
 export const getMe = async () => {
     try {
@@ -38,6 +38,7 @@ export const signIn = async (email, password) => {
         })
 
         setToken(res.data.token)
+        setCurrentUsername(res.data.user.username)
         return true
 
     } catch (e) {
