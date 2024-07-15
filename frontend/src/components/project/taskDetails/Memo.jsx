@@ -28,7 +28,7 @@ const Memo = ({previousMemo, setFunc, closeComponent}) => {
                     type='text'
                     onChange={onChange}
                     value={memo}
-                    placeholder="할 일의 이름을 입력해주세요."
+                    placeholder="메모를 입력해주세요."
                 />
             </FlexBox>
             <FlexBox>
@@ -51,8 +51,8 @@ const Editor = styled.textarea`
     font-weight: normal;
     resize: none;
     font-size: 0.95em;
-    color: black;
-    border: 1px solid #D9D9D9;
+    color: ${p => p.theme.textColor};
+    border: 1px solid ${p => p.theme.project.borderColor};
     border-radius: 15px;
     margin-top: 0.7em;
     padding: 0.8em;

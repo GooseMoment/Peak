@@ -41,6 +41,12 @@ export const light = {
         hoverColor: black,
         hoverBackgroundColor: `rgb(255 74 3 / 0.35)`,
         backgroundColor: "#F9F7F6",
+    },
+    project: {
+        borderColor: "#D9D9D9",
+        lineColor: "#D9D9D9",
+        inputColor: "#D9D9D9",
+        imgColor: "invert(6%) sepia(7%) saturate(65%) hue-rotate(314deg) brightness(100%) contrast(84%)",
     }
 }
 
@@ -67,7 +73,7 @@ export const dark = {
         info: "rgb(102, 209, 255)",
         success: "rgb(72, 199, 142)",
         warning: "rgb(255, 183, 15)",
-        danger: "rgb(255, 102, 133)",
+        danger: "#E32C20",
     },
     black,
     white,
@@ -86,6 +92,12 @@ export const dark = {
         hoverColor: white,
         hoverBackgroundColor: `rgb(255 74 3 / 0.35)`,
         backgroundColor: "#2F2F2F",
+    },
+    project: {
+        borderColor: "#474747",
+        lineColor: "#D9D9D9",
+        inputColor: "#474747",
+        imgColor: "invert(99%) sepia(72%) saturate(487%) hue-rotate(309deg) brightness(117%) contrast(99%)",
     }
 }
 

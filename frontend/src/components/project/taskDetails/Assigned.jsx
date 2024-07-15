@@ -69,7 +69,7 @@ const FlexCenterBox = styled.div`
 `
 
 const CLine = styled.div`
-    border-top: thin solid #D9D9D9;
+    border-top: thin solid ${p => p.theme.project.clineColor};
     width: 90%;
     margin: 0.8em;
 `
@@ -80,10 +80,10 @@ const IndexBox = styled.div`
     align-items: center;
     width: 80%;
     height: 1.8em;
-    background-color: #FFFFFF;
-    border: solid 1px #D9D9D9;
+    background-color: ${p => p.theme.backgroundColor};
+    border: solid 1px ${p => p.theme.project.borderColor};
     border-radius: 15px;
-    color: #000000;
+    color: ${p => p.theme.textColor};
     font-size: 1em;
     padding: 0em 0.5em;
     margin-top: ${props=>props.$start ? 0.8 : 0}em;
@@ -95,12 +95,8 @@ const IndexBox = styled.div`
 
     &:hover {
         font-weight: bolder;
-        color: #FF4A03;
+        color: ${p => p.theme.goose};
         cursor: pointer;
-
-        & svg {
-            color: #000000;
-        }
     }
 `
 

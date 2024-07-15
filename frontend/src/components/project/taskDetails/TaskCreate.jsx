@@ -103,7 +103,7 @@ const Icons = styled.div`
     & svg {
         top: 0.4em;
         cursor: pointer;
-        stroke: #FF0000;
+        stroke: ${p => p.theme.goose};
         margin-left: 1em;
     }
 `
