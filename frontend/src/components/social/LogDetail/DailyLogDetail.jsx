@@ -9,18 +9,34 @@ import { TaskList } from "@components/drawers/Drawer";
 import TaskFrame from "@components/tasks/TaskFrame";
 import { Fragment } from "react";
 import SimpleProfile from "../SimpleProfile";
+import { useEffect } from "react";
 
-const DailyLogDetail = ({dailyComment, userLogsDetail}) => {
-    const [tempText, setTempText] = useState(null)
+const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment}) => {
     const [inputState, setInputState] = useState(false)
+    const [comment, setComment] = useState(dailyComment.comment)
     // const [emojiClick, setEmojiClick] = useState(false)
 
-    const handleChange = (e) => {
-        setTempText(e.target.value)
-    }
+    useEffect(() => {
+        setComment(dailyComment.comment)
+    }, [dailyComment])
 
     const handleInputState = () => {
-        setInputState(prev => !prev)
+        if(dailyComment.user.username === user.username)
+            setInputState(true)
+    }
+
+    const handleChange = (e) => {
+        setComment(e.target.value)
+    }
+
+    const handleKeyDown= (e) => {
+        if(e.key == 'Enter') {
+            setInputState(false)
+        }
+    }
+
+    const handleBlur = () => {
+        setInputState(false)
     }
 
     return <>
@@ -28,18 +44,24 @@ const DailyLogDetail = ({dailyComment, userLogsDetail}) => {
         <CommentRow>
             <SimpleProfile user={dailyComment.user}/>
             <CommentBox onClick={handleInputState}>
-                {dailyComment.comment ? (
-                    <Comment>{"\""+dailyComment.comment+"\""}</Comment>
-                ) : (
-                    dailyComment.user.is_me ? (
-                        <CommentInput 
+                {dailyComment.user.username === user.username && inputState ? (
+                    <CommentInput 
                         type="text" 
-                        value={tempText}
+                        value={comment}
                         onChange={handleChange}
-                        placeholder="Write your daily comments"
+                        onKeyDown={handleKeyDown}
+                        onBlur={handleBlur}
+                        autoFocus
                     />
+                ):(
+                    dailyComment.comment ? (
+                        <Comment>{"\""+dailyComment.comment+"\""}</Comment>
                     ) : (
-                        <Comment $color="#A4A4A4" $fontstyle="italic">{"No daily comments yet"}</Comment>
+                        dailyComment.user.username === user.username ? (
+                            <Comment $color="#A4A4A4" $fontstyle="italic">{"Write your daily comments"}</Comment>
+                        ) : (
+                            <Comment $color="#A4A4A4" $fontstyle="italic">{"No daily comments yet"}</Comment>
+                        )
                     )
                 )}
             </CommentBox>
@@ -92,9 +114,9 @@ const CommentBox = styled.div`
 display: flex;
 background-color: #e6e6e6;
 border-radius: 10pt;
+width: 70%;
 padding: 1em;
-margin-right: 0.5em;
-flex-grow: 1;
+cursor: pointer;
 
 justify-content: center;
 align-items: center;
@@ -111,6 +133,7 @@ display: flex;
 height: 100%;
 width: 100%;
 text-align: center;
+font-size: 1em;
 background-color: inherit;
 border: 0;
 white-space: normal;

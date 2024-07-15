@@ -9,7 +9,7 @@ import DailyLogPreview from "@components/social/DailyLogPreview";
 import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail";
 import SocialPageTitle from "@components/social/SocialPageTitle";
 
-import { getDailyComment, getDailyLogsPreview } from "@api/social.api";
+import { getDailyComment, getDailyLogsPreview, postCommentToDailyComment } from "@api/social.api";
 
 const sortDailyLogs = (report) => {
     return report.slice().sort((a, b) => {
@@ -39,8 +39,13 @@ const SocialFollowingPage = () => {
         }
     }
 
-    const getDetail = async(date, followee) => {
+    const getDetail = async(date, followee) => {      
         const followeeUsername = followee?followee:user.username
+
+        if(!date) {
+            setDailyComment(null)
+            return
+        }
 
         if(date && followeeUsername) try {
             const res = await getDailyComment(followeeUsername, date)
@@ -49,6 +54,12 @@ const SocialFollowingPage = () => {
             throw alert(e)
         }
     }
+
+    // const postDailyComment = async(date) => {
+    //     if(date) try {
+    //         // await postCommentToDailyComment(date, )
+    //     }
+    // }
 
     useEffect(() => {
         getPreview(selectedDate)
@@ -86,6 +97,7 @@ const SocialFollowingPage = () => {
                 {dailyComment?<DailyLogDetail
                     dailyComment={dailyComment}
                     userLogsDetail={mockDailyFollowerLogsDetail[0]}
+                    user={user}
                 />:null}
             </Container>
         </Wrapper>
