@@ -24,7 +24,7 @@ import TaskDetailElement from "@pages/taskDetails/TaskDetailElement"
 import UserPage from "@pages/UserPage"
 
 import { getMe, signOut } from "@api/users.api"
-import { getProject, getProjectsList } from "@api/projects.api"
+import { getProject, getProjectList } from "@api/projects.api"
 import { getToken } from "@api/client"
 
 const redirectIfSignedIn = () => {
@@ -61,7 +61,7 @@ const routes = [
             }
 
             return {
-                projects: await getProjectsList(),
+                projects: await getProjectList(),
                 user: await getMe(),
             }
         },

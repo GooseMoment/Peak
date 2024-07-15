@@ -4,8 +4,10 @@ import { useNavigate, useParams } from "react-router-dom"
 import { Section } from "@components/users/Section"
 import UserProfileHeader from "@components/users/UserProfileHeader"
 import Bio from "@components/users/Bio"
+import ProjectList from "@components/users/ProjectList"
 
 import { getUserByUsername } from "@api/users.api"
+import { getProjectListByUser } from "@api/projects.api"
 
 import { useQuery } from "@tanstack/react-query"
 
@@ -21,12 +23,17 @@ const UserPage = () => {
 
     const username = usernameWithAt.slice(1)
 
-    const { data: user, isPending } = useQuery({
+    const { data: user, isPending: userPending } = useQuery({
         queryKey: ["users", username],
         queryFn: () => getUserByUsername(username),
     })
 
-    if (isPending) {
+    const { data: projects, isPending: projectsPending } = useQuery({
+        queryKey: ["userProjects", username],
+        queryFn: () => getProjectListByUser(username),
+    })
+
+    if (userPending) {
         return "loading"
     }
 
@@ -34,6 +41,7 @@ const UserPage = () => {
         <UserProfileHeader user={user} />
         <Section />
         <Bio bio={user.bio} />
+        {!projectsPending && <ProjectList projects={projects} />}
     </>
 }
 

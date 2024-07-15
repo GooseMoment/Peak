@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 export const Section = styled.div`
     position: relative;
-    margin: 2em 0;
+    margin: 3em 0;
 `
 
 export const SectionTitle = styled.h2`
