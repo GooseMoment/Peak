@@ -147,7 +147,7 @@ const CalendarWrapper = styled.div`
   .react-calendar__month-view__days__day {
     position: relative;
     flex-basis: 2.5em !important;
-    margin: 0.4em calc((100% - 7*2.5em)/14) 0.4em !important;
+    margin: 0.7em calc((100% - 7*2.5em)/14) 0.7em !important;
     height: 2.5em;
 
     border-radius: 3em;

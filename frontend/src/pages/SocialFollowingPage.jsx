@@ -94,12 +94,12 @@ const SocialFollowingPage = () => {
 
 const Wrapper = styled.div`
     display: flex;
+    gap: 5rem;
 `
 
 const Container = styled.div`
     width: 50%;
     min-width: 27.5rem;
-    max-width: 40rem;
     ${props => props.$isSticky ? css`
         /* align-self: flex-start; */
         position: sticky;
@@ -120,6 +120,7 @@ const Container = styled.div`
 
 const CalendarContainer = styled.div`
     width: 80%;
+    max-width: 40rem;
     margin-left: auto;
     margin-right: auto;
 `
