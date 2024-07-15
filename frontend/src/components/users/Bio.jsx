@@ -13,6 +13,8 @@ const BioBox = styled.div`
     background-color: ${p => p.theme.secondBackgroundColor};
     border-radius: 16px;
 
+    line-height: 1.5em;
+
     width: 100%;
     box-sizing: border-box;
     padding: 1.25em;
