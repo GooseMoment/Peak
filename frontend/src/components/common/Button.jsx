@@ -71,7 +71,7 @@ const FilledButton = styled(CommonButton)`
 `
 
 const OutlinedButton = styled(CommonButton)`
-    background-color: ${p => p.theme.white};
+    background-color: ${p => p.theme.backgroundColor};
     border-color: ${p => p.theme.primaryColors[p.$state]};
     color: ${p => p.theme.primaryColors[p.$state]};
 `

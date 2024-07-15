@@ -35,7 +35,7 @@ position: relative;
 justify-content: space-between;
 gap: 0.25em;
 
-background-color: #F3F3F3;
+background-color: ${p => p.theme.secondBackgroundColor};
 border-radius: 60px;
 padding: 0.3em;
 `
@@ -64,7 +64,7 @@ const BackgroundButton = styled(MildButton)`
 
     height: calc(1em + 1rem);
 
-    background-color: white;
+    background-color: ${p => p.theme.backgroundColor};
     border-radius: 50px;
     filter: drop-shadow(2px 2px 3px #00000041);
 

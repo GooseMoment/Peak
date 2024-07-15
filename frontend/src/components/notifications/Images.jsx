@@ -38,7 +38,7 @@ const EmojiContainer = styled.div`
     top: 2.5em;
     left: 2.5em;
 
-    background-color: white;
+    background-color: ${p => p.theme.backgroundColor};
     border-radius: 50%;
     
     width: 3em;
