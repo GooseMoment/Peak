@@ -1,9 +1,27 @@
-import styled from "styled-components"
+import { useState } from "react"
 
-const FollowsCount = ({followers, followings}) => {
+import ModalPortal from "@components/common/ModalPortal"
+import { FollowerList, FollowingList } from "./FollowList"
+
+import styled from "styled-components"
+import { useEffect } from "react"
+
+const FollowsCount = ({user}) => {
+    const [window, setWindow] = useState("")
+
+    useEffect(() => {
+        setWindow("")
+    }, [user])
+
     return <Items>
-        <Item>Followers <Count>{followers}</Count></Item>
-        <Item>Followings <Count>{followings}</Count></Item>
+        <Item onClick={() => setWindow("followers")}>Followers <Count>{user.followers_count}</Count></Item>
+        <Item onClick={() => setWindow("followings")}>Followings <Count>{user.followings_count}</Count></Item>
+        {window !== "" &&
+            <ModalPortal closeModal={() => setWindow("")}>
+                {window === "followers" && <FollowerList user={user} />} 
+                {window === "followings" && <FollowingList user={user} />} 
+            </ModalPortal>
+        }
     </Items>
 }
 
@@ -13,7 +31,7 @@ const Items = styled.div`
 `
 
 const Item = styled.div`
-    
+    cursor: pointer;
 `
 
 const Count = styled.span`

@@ -60,11 +60,21 @@ export const deleteFollowRequest = async (username) => {
 }
 
 export const getFollowersByUser = async (username) => {
-
+    try {
+        const res = await client.get(`users/@${username}/followers/`)
+        return res.data
+    } catch (e) {
+        throw e
+    }
 }
 
 export const getFollowingsByUser = async (username) => {
-
+    try {
+        const res = await client.get(`users/@${username}/followings/`)
+        return res.data
+    } catch (e) {
+        throw e
+    }
 }
 
 export const getBlocks = () => {
