@@ -23,7 +23,7 @@ const UserContainer = styled.div`
     justify-content: space-between;
 
     padding: 1em;
-    border-bottom: 1px #ddd solid;
+    border-bottom: 1px ${p => p.theme.grey} solid;
 
     &:last-child {
         border-bottom-width: 0px;
@@ -44,6 +44,7 @@ const ProfileImg = styled.img`
 
 const Username = styled.div`
     font-weight: 600;
+    color: ${p => p.theme.textColor};
 `
 
 export default ListUserProfile

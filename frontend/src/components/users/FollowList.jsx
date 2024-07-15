@@ -36,6 +36,7 @@ export const FollowingList = ({user}) => {
 
 const Window = styled.div`
     background-color: ${p => p.theme.backgroundColor};
+    color: ${p => p.theme.textColor};
     width: 25rem;
 
     box-sizing: border-box;
