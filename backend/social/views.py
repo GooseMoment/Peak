@@ -134,12 +134,12 @@ def get_daily_logs(request: HttpRequest, username, day):
     
     return Response(serializer.data, status=status.HTTP_200_OK) 
 
-# GET social/daily/comment/@follower/@followee/YYYY-MM-DDTHH:mm:ss+hh:mm/
+# GET social/daily/comment/@followee/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["GET"])
-def get_daily_comment(requset: HttpRequest, follower, followee, day):    
+def get_daily_comment(requset: HttpRequest, followee, day):    
     followeeUser = get_object_or_404(User, username=followee)
     
-    followerUserID = str(get_object_or_404(User, username=follower).id)
+    followerUserID = str(requset.user.id)
     followeeUserID = str(followeeUser.id)
 
     # set cache for 'is_read'
@@ -185,14 +185,14 @@ def post_comment_to_task(request: HttpRequest, task_id, comment):
 
 # POST social/daily/logs/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["POST"])
-def post_comment_to_daily_comment(request: HttpRequest, day, *args, **kwargs):
+def post_comment_to_daily_comment(request: HttpRequest, day):
     day_min = datetime.fromisoformat(day)
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
     
     daily_comment = DailyComment.objects.filter(user=request.user, date__range=(day_min, day_max)).first()
     comment = request.data.get('comment')
     
-    day_date = day_min.date()
+    day_date = day_min.date()   # delete
     
     if daily_comment:
         daily_comment.comment = comment
