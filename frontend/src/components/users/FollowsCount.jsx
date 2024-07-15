@@ -1,10 +1,9 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import ModalPortal from "@components/common/ModalPortal"
-import { FollowerList, FollowingList } from "./FollowList"
+import { FollowerList, FollowingList } from "@components/users/FollowList"
 
 import styled from "styled-components"
-import { useEffect } from "react"
 
 const FollowsCount = ({user}) => {
     const [window, setWindow] = useState("")
