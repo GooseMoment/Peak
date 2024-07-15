@@ -12,6 +12,7 @@ import sleep from "@utils/sleep"
 
 import styled from "styled-components"
 import {Mail, AtSign, Key} from "feather-icons-react"
+import { Trans, useTranslation } from "react-i18next"
 
 
 const SignForm = () => {
@@ -25,6 +26,8 @@ const SignForm = () => {
 }
 
 const SignInForm = ({setActive}) => {
+    const { t } = useTranslation(null, {keyPrefix: "sign"})
+    
     const goToSignUp = e => {
         e.preventDefault()
         setActive("signUp")
@@ -42,35 +45,37 @@ const SignInForm = ({setActive}) => {
         try {
             const res = await signIn(email, password)
             if (res) {
-                notify.success("Login succeed. Welcome back!")
+                notify.success(t("sign_in_success"))
                 await sleep(1000)
                 navigate("/app/")
             } else {
-                notify.error("Login failed. Please check your email and password.")
+                notify.error(t("sign_in_failed"))
                 setIsLoading(false)
             }
         } catch (err) {
-            notify.error("Please check your network.")
+            notify.error(t("network_error"))
             setIsLoading(false)
             return
         }
     }
 
     return <Box>
-        <Title>Sign in</Title>
+        <Title>{t("sign_in")}</Title>
         <Form onSubmit={onSubmit}>
             <Input icon={<Mail />} name="email" type="email" placeholder="id@example.com" required />
             <Input icon={<Key />} name="password" type="password" placeholder="********" required />
-            <Button type="submit" disabled={isLoading}>{isLoading ? "Loading" : "Go!"}</Button>
+            <Button type="submit" disabled={isLoading}>{isLoading ? t("loading") : t("button_sign_in")}</Button>
         </Form>
         <Links>
-            <A href="#">Forgot password?</A>
-            <A href="#" onClick={goToSignUp}>Create an account</A>
+            <A href="#">{t("button_forgot_password")}</A>
+            <A href="#" onClick={goToSignUp}>{t("button_create_account")}</A>
         </Links>
     </Box>
 }
 
 const SignUpForm = ({setActive}) => {
+    const { t } = useTranslation(null, {keyPrefix: "sign"})
+
     const goToSignIn = e => {
         e.preventDefault()
         setActive("signIn")
@@ -87,29 +92,29 @@ const SignUpForm = ({setActive}) => {
 
         try {
             await signUp(email, password, username)
-            notify.success("You become a new member! Please sign in.")
+            notify.success(t("sign_up_success"))
             setActive("signIn")
         } catch (err) {
-            notify.error("Sign up failed: " + err.message)
+            notify.error(t("sign_up_failed") + err.message)
             setIsLoading(false)
             return
         }
     }
 
     return <Box>
-        <Title>Sign in</Title>
+        <Title>{t("sign_up")}</Title>
         <Form onSubmit={onSubmit}>
             <Input icon={<Mail />} name="email" type="email" placeholder="id@example.com" required />
             <Input icon={<Key />} name="password" type="password" placeholder="********" required />
             <Input icon={<AtSign />} name="username" type="text" 
                 placeholder="cool_user_name_0908" pattern="[a-z0-9_-]{4,15}" minlength="4" required />
             <TosAgreement>
-                By creating an account, you agree to our <a href="/tos">Terms of Service</a>.
+                <Trans t={t} i18nKey="tos" components={{linkToTos: <a href="/tos" />}} />
             </TosAgreement>
-            <Button type="submit" disabled={isLoading}>{isLoading ? "Loading" : "Let's start!"}</Button>
+            <Button type="submit" disabled={isLoading}>{isLoading ? t("loading") : t("button_sign_up")}</Button>
         </Form>
         <Links>
-            <A href="#" onClick={goToSignIn}>Already have an account</A>
+            <A href="#" onClick={goToSignIn}>{t("button_already_have_account")}</A>
         </Links>
     </Box>
 }

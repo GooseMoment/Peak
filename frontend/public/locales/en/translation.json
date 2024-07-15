@@ -265,5 +265,21 @@
                 "theme_dark": "Dark"
             }
         }
+    },
+    "sign": {
+        "sign_in": "Sign in",
+        "sign_in_success": "Signed in successfully. Welcome back!",
+        "sign_in_failed": "Signing in failed. Please check again your password.",
+        "network_error": "Problem occured. Check your network.",
+        "loading": "Loading...",
+        "button_sign_in": "Sign in",
+        "button_forgot_password": "Forgot password?",
+        "button_create_account": "Create an account",
+        "sign_up": "Sign up",
+        "sign_up_success": "You became our member! Please sign in.",
+        "sign_up_failed": "Signing up failed: ",
+        "button_sign_up": "Register",
+        "tos": "By clicking 'Register', you agree to our <linkToTos>Terms of Service</linkToTos>.",
+        "button_already_have_account": "Already have an account"
     }
 }
