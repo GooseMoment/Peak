@@ -273,8 +273,8 @@
         "network_error": "Problem occured. Check your network.",
         "loading": "Loading...",
         "button_sign_in": "Sign In",
-        "button_forgot_password": "Forgot password?",
-        "button_create_account": "Create an account",
+        "button_forgot_password": "Forgot password",
+        "button_create_account": "Create account",
         "sign_up": "Sign Up",
         "sign_up_success": "You became our member! Please sign in.",
         "sign_up_failed": "Signing up failed: ",
@@ -283,6 +283,6 @@
         "username": "Username",
         "button_sign_up": "Register",
         "tos": "By clicking 'Register', you agree to our <linkToTos>Terms of Service</linkToTos>.",
-        "button_already_have_account": "Already have an account"
+        "button_already_have_account": "Have Account"
     }
 }

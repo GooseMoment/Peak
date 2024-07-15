@@ -10,9 +10,11 @@ import { signIn, signUp } from "@api/users.api"
 import sleep from "@utils/sleep"
 
 import styled from "styled-components"
-import {Mail, AtSign, Key} from "feather-icons-react"
+import { Mail, AtSign, Key, HelpCircle, UserPlus, LogIn } from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { Link } from "react-router-dom"
+import { cubicBeizer } from "@/assets/keyframes"
 
 const SignForm = () => {
     const [active, setActive] = useState("signIn")
@@ -70,8 +72,18 @@ const SignInForm = ({setActive}) => {
             </ButtonGroup>
         </Form>
         <Links>
-            <A href="#">{t("button_forgot_password")}</A>
-            <A href="#" onClick={goToSignUp}>{t("button_create_account")}</A>
+            <Link to="/reset-password">
+                <LinkBox>
+                    <HelpCircle />
+                    <LinkText>{t("button_forgot_password")}</LinkText>
+                </LinkBox>
+            </Link>
+            <Link onClick={goToSignUp}>
+                <LinkBox>
+                    <UserPlus />
+                    <LinkText>{t("button_create_account")}</LinkText>
+                </LinkBox>
+            </Link>
         </Links>
     </Box>
 }
@@ -121,7 +133,12 @@ const SignUpForm = ({setActive}) => {
             </ButtonGroup>
         </Form>
         <Links>
-            <A href="#" onClick={goToSignIn}>{t("button_already_have_account")}</A>
+            <Link onClick={goToSignIn}>
+                <LinkBox>
+                    <LogIn />
+                    <LinkText>{t("button_already_have_account")}</LinkText>
+                </LinkBox>
+            </Link>
         </Links>
     </Box>
 }
@@ -153,16 +170,46 @@ const Title = styled.h2`
 `
 
 const Links = styled.div`
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 2em;
 `
 
-const A = styled.div`
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    margin-bottom: 0.5em;
+const LinkBox = styled.div`
+    border: 1.5px solid ${p => p.theme.grey};
+    border-radius: 16px;
 
-    cursor: pointer;
+    color: ${p => p.theme.grey};
+
+    box-sizing: border-box;
+    height: 6em;
+    width: 5.5em;
+    padding: 0.75em;
+    padding-bottom: 0.5em;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+
+    svg {
+        font-size: 2em;
+        top: unset;
+        margin-right: unset;
+    }
+
+    transition: border-color 0.5s ${cubicBeizer}, color 0.5s ${cubicBeizer};
+
+    &:hover {
+        border-color: ${p => p.theme.textColor};
+        color: ${p => p.theme.textColor};
+    }
+`
+
+const LinkText = styled.p`
+    font-size: 0.75em;
+    text-align: center;
+    line-height: 1.25;
 `
 
 const TosAgreement = styled.p`
