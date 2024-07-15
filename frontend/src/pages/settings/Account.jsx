@@ -148,8 +148,12 @@ const Bio = styled.textarea`
     border: none;
     font-size: 1em;
 
-    border: 1px black solid;
+    border: 1px solid ${p => p.theme.textColor};
     border-radius: 10px;
+
+    &:focus {
+        border-color: ${p => p.theme.goose};
+    }
 `
 
 const ColorCircle = styled.div`
