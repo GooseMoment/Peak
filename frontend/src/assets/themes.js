@@ -46,7 +46,15 @@ export const light = {
         borderColor: "#D9D9D9",
         lineColor: "#D9D9D9",
         inputColor: "#D9D9D9",
+        assignColor: "#2E61DC",
+        dueColor: "#009773",
+        reminderColor: "#7B2CBF",
+        danger: "#FF0000",
         imgColor: "invert(6%) sepia(7%) saturate(65%) hue-rotate(314deg) brightness(100%) contrast(84%)",
+        imgGreyColor: "invert(92%) sepia(0%) saturate(58%) hue-rotate(169deg) brightness(102%) contrast(70%)",
+        imgDangerColor: "invert(20%) sepia(92%) saturate(7288%) hue-rotate(358deg) brightness(106%) contrast(115%)",
+        imgDueColor: "invert(42%) sepia(80%) saturate(4726%) hue-rotate(148deg) brightness(94%) contrast(101%)",
+        imgReminderColor: "invert(23%) sepia(38%) saturate(4190%) hue-rotate(259deg) brightness(91%) contrast(101%)",
     }
 }
 
@@ -73,7 +81,7 @@ export const dark = {
         info: "rgb(102, 209, 255)",
         success: "rgb(72, 199, 142)",
         warning: "rgb(255, 183, 15)",
-        danger: "#E32C20",
+        danger: "#E05153",
     },
     black,
     white,
@@ -97,7 +105,15 @@ export const dark = {
         borderColor: "#474747",
         lineColor: "#D9D9D9",
         inputColor: "#474747",
+        assignColor: "#3182F7",
+        dueColor: "#02AF6D",
+        reminderColor: "#9D4EEE",
+        danger: "#E05153",
         imgColor: "invert(99%) sepia(72%) saturate(487%) hue-rotate(309deg) brightness(117%) contrast(99%)",
+        imgGreyColor: "invert(56%) sepia(4%) saturate(11%) hue-rotate(26deg) brightness(92%) contrast(89%)",
+        imgDangerColor: "invert(40%) sepia(69%) saturate(3544%) hue-rotate(331deg) brightness(94%) contrast(86%)",
+        imgDueColor: "invert(42%) sepia(93%) saturate(2201%) hue-rotate(130deg) brightness(96%) contrast(98%)",
+        imgReminderColor: "invert(42%) sepia(58%) saturate(5361%) hue-rotate(253deg) brightness(93%) contrast(85%)",
     }
 }
 

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 import TaskCircle from "./TaskCircle"
@@ -11,12 +12,26 @@ import alarmclock from "@assets/project/alarmclock.svg"
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-const TaskFrame = ({task, color, taskDetailPath, isLoading, toComplete}) => {
+const TaskFrame = ({task, setFunc, color, taskDetailPath}) => {
+    const [isLoading, setIsLoading] = useState(false)
     const {assigned, due} = taskCalculation(task)
 
     const TaskName = <TaskNameBox $completed={task.completed_at}>
         {task?.name}
     </TaskNameBox>
+
+    const toComplete = () => {
+        setIsLoading(true)
+        let completed_at = null
+        if (!(task.completed_at)) {
+            completed_at = new Date().toISOString()
+        }
+        setFunc({completed_at})
+    }
+
+    useEffect(() => {
+        setIsLoading(false)
+    }, [task])
 
     const hasDate = task.due_date || task.assigned_at
 
@@ -97,14 +112,14 @@ const AssignedDate = styled.div`
     font-style: normal;
     font-size: 0.8em;
     margin-left: 0.5em;
-    color: ${(props) => (props.$completed ? '#A4A4A4' : props.$isOutOfDue ? '#FF0000' : '#2E61DC')};
+    color: ${(props) => (props.$completed ? props.theme.grey : props.$isOutOfDue ? props.theme.project.danger : props.theme.project.assignColor)};
 
     & .feather {
         top: 0;
         width: 1em;
         height: 1em;
         margin-right: 0.3em;
-        color: ${(props) => (props.$completed ? '#A4A4A4' : props.$isOutOfDue ? '#FF0000' : '#2E61DC')};
+        color: ${(props) => (props.$completed ? props.theme.grey : props.$isOutOfDue ? props.theme.project.danger : props.theme.project.assignColor)};
     }
 `
 
@@ -114,18 +129,19 @@ const DueDate = styled.div`
     font-style: normal;
     font-size: 0.8em;
     margin-left: 0.5em;
-    color: ${(props) => (props.$completed ? '#A4A4A4' : props.$isOutOfDue ? '#FF0000' : '#009773')};
+    color: ${(props) => (props.$completed ? props.theme.grey : props.$isOutOfDue ? props.theme.project.danger : props.theme.project.dueColor)};
 
     & img {
         width: 1em;
         height: 1em;
         margin-right: 0.2em;
-        filter: ${(props) => (props.$completed ? css`
-        invert(83%) sepia(0%) saturate(1370%) hue-rotate(314deg) brightness(81%) contrast(81%);
+        
+        ${(props) => (props.$completed ? css`
+            filter: ${p => p.theme.project.imgGreyColor};
         ` : props.$isOutOfDue ? css`
-        invert(10%) sepia(97%) saturate(6299%) hue-rotate(3deg) brightness(101%) contrast(113%);
+            filter: ${p => p.theme.project.imgDangerColor};
         ` : css`
-        invert(39%) sepia(48%) saturate(3439%) hue-rotate(143deg) brightness(89%) contrast(101%);
+            filter: ${p => p.theme.project.imgDueColor};
         `)};
     }
 `
@@ -136,16 +152,17 @@ const Reminder = styled.div`
     font-style: normal;
     font-size: 0.8em;
     margin-left: 0.5em;
-    color: ${(props) => (props.$completed ? '#A4A4A4' : '#7e47d1')};
+    color: ${(props) => (props.$completed ? props.theme.grey : props.theme.project.reminderColor)};
     
     & img {
         width: 1em;
         height: 1em;
         margin-right: 0.2em;
+        top: 0;
         filter: ${(props) => (props.$completed ? css`
-        invert(83%) sepia(0%) saturate(1370%) hue-rotate(314deg) brightness(81%) contrast(81%);
+            ${p=>p.theme.project.imgGrayColor};
         ` : css`
-        invert(31%) sepia(68%) saturate(1747%) hue-rotate(244deg) brightness(87%) contrast(89%);
+            ${p=>p.theme.project.imgReminderColor};
         `)};
     }
 `
