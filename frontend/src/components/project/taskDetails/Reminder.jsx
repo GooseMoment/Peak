@@ -2,9 +2,11 @@ import styled from "styled-components"
 
 import queryClient from "@queries/queryClient"
 import { useMutation } from "@tanstack/react-query"
+import { toast } from "react-toastify"
 import { postReminder, deleteReminder } from "@api/notifications.api"
 
 import Detail from "@components/project/common/Detail"
+import ReminderContents from "@components/project/Creates/ReminderContents"
 
 import before_5 from "@assets/project/reminder/before_5.svg"
 import before_15 from "@assets/project/reminder/before_15.svg"
@@ -34,56 +36,43 @@ const Reminder = ({ task, closeComponent }) => {
         },
     })
 
+    const getReminderID = (delta) => {
+        for (let i=0; i < task.reminders.length; i++) {
+            if (task.reminders[i].delta === delta) {
+                return task.reminders[i].id
+        }}
+        return null
+    }
+
     const handleReminder = (delta) => {
-        return async () => {
-            for (let i=0; i < task.reminders.length; i++) {
-                if (task.reminders[i].delta === delta) {
-                    deleteMutation.mutate(task.reminders[i].id)
-                    return
-            }}
-            postMutation.mutate({
-                "task": task.id,
-                "delta": delta,
-            })
+        if (!task.due_date) {
+            toast.error("알람 설정 전에 기한을 설정해주세요")
+            return true
         }
+        const id = getReminderID(delta)
+        if (id) {
+            deleteMutation.mutate(id)
+            return
+        }
+        postMutation.mutate({
+            "task": task.id,
+            "delta": delta,
+        })
     }
 
     return (
         <Detail title="알람 설정" onClose={closeComponent}>
             {items.map(item => (
-                <ItemBlock key={item.id}>
-                    {item.icon}
-                    <ItemText onClick={handleReminder(item.delta)}>{item.content}</ItemText>
-                </ItemBlock>
+                <ReminderContents 
+                    item={item}
+                    reminders={task.reminders}
+                    handleReminder={handleReminder}
+                    ReminderID={getReminderID(item.delta)}
+                />
             ))}
         </Detail>
     )
 }
-
-const ItemBlock = styled.div`
-    display: flex;
-    gap: 0.5em;
-    align-items: center;
-    margin-left: 1.2em;
-    margin-top: 1.2em;
-
-    & svg {
-        stroke: ${p => p.theme.goose};
-        top: 1.2em;
-    }
-`
-
-const ItemText = styled.p`
-    font-weight: normal;
-    font-size: 1em;
-    color: ${p => p.theme.textColor};
-
-    &:hover {
-        font-weight: bolder;
-        color: ${p => p.theme.goose};
-        cursor: pointer;
-    }
-`
 
 const items = [
     {id: 0, icon: <img src={before_5}/>, content: "5분 전", delta: 5},
