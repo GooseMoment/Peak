@@ -59,7 +59,7 @@ const Account = () => {
         <PageTitle>{t("title")} <Sync /></PageTitle>
         <Section>
             <ImgNameEmailContainer>
-                <ProfileImg profile_img={user.profile_img} />
+                <ProfileImg profile_img={user.profile_img} username={user.username} />
                 <NameEmail>
                     <Username>@{user.username}</Username>
                     <Email>{user.email}</Email>
