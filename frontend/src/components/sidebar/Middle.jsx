@@ -36,7 +36,7 @@ const getItems = t => [
     // end가 true:  경로가 to와 완전히 일치해야 active
     //       false: to의 하위 경로에 있어도 active
     {icon: "search", name: t("search"), to: "search", end: false},
-    {icon: "home", name: t("home"), to: "", end: true},
+    {icon: "home", name: t("home"), to: "home", end: true},
     {icon: "bell", name: t("notifications"), to: "notifications", end: false},
     {icon: "calendar", name: t("today"), to: "today", end: false},
     {icon: "users", name: t("social"), to: "social", end: false},

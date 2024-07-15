@@ -4,6 +4,9 @@ import themes from "@assets/themes"
 const KEY_CLIENT_SETTINGS = "client_settings"
 
 const defaultSettings = {
+    // general
+    startpage: "home",
+
     // Languages & Region
     //      locale = language + "-" + region
     locale: "system",
