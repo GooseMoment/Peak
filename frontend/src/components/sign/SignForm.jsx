@@ -3,17 +3,16 @@ import { useNavigate } from "react-router-dom"
 
 import Form from "@components/sign/Form"
 import Input from "@components/sign/Input"
-import Button from "@/components/common/Button"
+import Button, { ButtonGroup } from "@components/common/Button"
 
 import { signIn, signUp } from "@api/users.api"
 
-import notify from "@utils/notify"
 import sleep from "@utils/sleep"
 
 import styled from "styled-components"
 import {Mail, AtSign, Key} from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
-
+import { toast } from "react-toastify"
 
 const SignForm = () => {
     const [active, setActive] = useState("signIn")
@@ -45,15 +44,15 @@ const SignInForm = ({setActive}) => {
         try {
             const res = await signIn(email, password)
             if (res) {
-                notify.success(t("sign_in_success"))
+                toast.success(t("sign_in_success"))
                 await sleep(1000)
                 navigate("/app/")
             } else {
-                notify.error(t("sign_in_failed"))
+                toast.error(t("sign_in_failed"))
                 setIsLoading(false)
             }
         } catch (err) {
-            notify.error(t("network_error"))
+            toast.error(t("network_error"))
             setIsLoading(false)
             return
         }
@@ -62,9 +61,13 @@ const SignInForm = ({setActive}) => {
     return <Box>
         <Title>{t("sign_in")}</Title>
         <Form onSubmit={onSubmit}>
-            <Input icon={<Mail />} name="email" type="email" placeholder="id@example.com" required />
-            <Input icon={<Key />} name="password" type="password" placeholder="********" required />
-            <Button type="submit" disabled={isLoading}>{isLoading ? t("loading") : t("button_sign_in")}</Button>
+            <Input icon={<Mail />} name="email" type="email" placeholder={t("email")} required />
+            <Input icon={<Key />} name="password" type="password" placeholder={t("password")} required />
+            <ButtonGroup $justifyContent="right" $margin="1em 0 0 0">
+                <Button type="submit" disabled={isLoading} $loading={isLoading}>
+                    {isLoading ? t("loading") : t("button_sign_in")}
+                </Button>
+            </ButtonGroup>
         </Form>
         <Links>
             <A href="#">{t("button_forgot_password")}</A>
@@ -92,10 +95,10 @@ const SignUpForm = ({setActive}) => {
 
         try {
             await signUp(email, password, username)
-            notify.success(t("sign_up_success"))
+            toast.success(t("sign_up_success"))
             setActive("signIn")
         } catch (err) {
-            notify.error(t("sign_up_failed") + err.message)
+            toast.error(t("sign_up_failed") + err.message)
             setIsLoading(false)
             return
         }
@@ -104,14 +107,18 @@ const SignUpForm = ({setActive}) => {
     return <Box>
         <Title>{t("sign_up")}</Title>
         <Form onSubmit={onSubmit}>
-            <Input icon={<Mail />} name="email" type="email" placeholder="id@example.com" required />
-            <Input icon={<Key />} name="password" type="password" placeholder="********" required />
+            <Input icon={<Mail />} name="email" type="email" placeholder={t("email")} required />
+            <Input icon={<Key />} name="password" type="password" placeholder={t("password")} minLength="8" required />
             <Input icon={<AtSign />} name="username" type="text" 
-                placeholder="cool_user_name_0908" pattern="[a-z0-9_-]{4,15}" minlength="4" required />
+                placeholder={t("username")} pattern="[a-z0-9_-]{4,15}" minLength="4" required />
             <TosAgreement>
                 <Trans t={t} i18nKey="tos" components={{linkToTos: <a href="/tos" />}} />
             </TosAgreement>
-            <Button type="submit" disabled={isLoading}>{isLoading ? t("loading") : t("button_sign_up")}</Button>
+            <ButtonGroup $justifyContent="right" $margin="1em 0">
+                <Button type="submit" disabled={isLoading} $loading={isLoading}>
+                    {isLoading ? t("loading") : t("button_sign_up")}
+                </Button>
+            </ButtonGroup>
         </Form>
         <Links>
             <A href="#" onClick={goToSignIn}>{t("button_already_have_account")}</A>

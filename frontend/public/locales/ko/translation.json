@@ -279,6 +279,9 @@
         "sign_up": "회원가입",
         "sign_up_success": "회원가입 완료! 이제 로그인 해주세요.",
         "sign_up_failed": "회원가입 실패: ",
+        "email": "이메일 주소",
+        "password": "암호",
+        "username": "사용자 이름",
         "button_sign_up": "가입하기",
         "tos": "'가입하기' 버튼을 누름으로써 <linkToTos>이용약관</linkToTos>에 동의하게 됩니다.",
         "button_already_have_account": "로그인 하기"

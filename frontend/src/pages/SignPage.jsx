@@ -8,11 +8,11 @@ import SignForm from "@components/sign/SignForm"
 
 import generateActivities from "@components/sign/activities"
 
-import notify from "@utils/notify"
 import { getEmojis } from "@api/social.api"
 
 import styled from "styled-components"
 import { useQuery } from "@tanstack/react-query"
+import { toast } from "react-toastify"
 
 const SignPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -22,7 +22,7 @@ const SignPage = () => {
         const flag = searchParams.get("flag")
         switch (flag) {
             case "401":
-                notify.error("Please sign in again.", {toastId: "flag401"})
+                toast.error("Please sign in again.", {toastId: "flag401"})
                 break
         }
         setSearchParams({})
