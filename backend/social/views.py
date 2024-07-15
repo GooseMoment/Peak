@@ -183,8 +183,26 @@ def delete_reaction(request: HttpRequest, task_id):
 def post_comment_to_task(request: HttpRequest, task_id, comment):
     pass
 
-def post_comment_to_daily_comment(request: HttpRequest, date, comment):
-    pass
+# POST social/daily/logs/YYYY-MM-DDTHH:mm:ss+hh:mm/
+@api_view(["POST"])
+def post_comment_to_daily_comment(request: HttpRequest, day, *args, **kwargs):
+    day_min = datetime.fromisoformat(day)
+    day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+    
+    daily_comment = DailyComment.objects.filter(user=request.user, date__range=(day_min, day_max)).first()
+    comment = request.data.get('comment')
+    
+    day_date = day_min.date()
+    
+    if daily_comment:
+        daily_comment.comment = comment
+        daily_comment.save()
+    else:
+        daily_comment = DailyComment.objects.create(user=request.user, comment=comment, date=day_date)
+    
+    serializer = DailyCommentSerializer(daily_comment)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 def post_peck(request: HttpRequest, task_id):
     pass
