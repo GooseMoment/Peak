@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 import TaskCircle from "./TaskCircle"
@@ -12,26 +11,12 @@ import alarmclock from "@assets/project/alarmclock.svg"
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-const TaskFrame = ({task, setFunc, color, taskDetailPath}) => {
-    const [isLoading, setIsLoading] = useState(false)
+const TaskFrame = ({task, color, taskDetailPath, isLoading, toComplete}) => {
     const {assigned, due} = taskCalculation(task)
 
     const TaskName = <TaskNameBox $completed={task.completed_at}>
         {task?.name}
     </TaskNameBox>
-
-    const toComplete = () => {
-        setIsLoading(true)
-        let completed_at = null
-        if (!(task.completed_at)) {
-            completed_at = new Date().toISOString()
-        }
-        setFunc({completed_at})
-    }
-
-    useEffect(() => {
-        setIsLoading(false)
-    }, [task])
 
     const hasDate = task.due_date || task.assigned_at
 
