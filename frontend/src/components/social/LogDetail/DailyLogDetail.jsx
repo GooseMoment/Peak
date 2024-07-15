@@ -25,23 +25,25 @@ const DailyLogDetail = ({dailyComment, userLogsDetail}) => {
 
     return <>
         <DetailHeader>
-        <SimpleProfile user={dailyComment.user}/>
-        <CommentBox onClick={handleInputState}>
-            {dailyComment.comment ? (
-                <Comment>{"\""+dailyComment.comment+"\""}</Comment>
-            ) : (
-                dailyComment.user.is_me ? (
-                    <CommentInput 
-                    type="text" 
-                    value={tempText}
-                    onChange={handleChange}
-                    placeholder="Write your daily comments"
-                />
+        <CommentRow>
+            <SimpleProfile user={dailyComment.user}/>
+            <CommentBox onClick={handleInputState}>
+                {dailyComment.comment ? (
+                    <Comment>{"\""+dailyComment.comment+"\""}</Comment>
                 ) : (
-                    <Comment $color="#A4A4A4" $fontstyle="italic">{"No daily comments yet"}</Comment>
-                )
-            )}
-        </CommentBox>
+                    dailyComment.user.is_me ? (
+                        <CommentInput 
+                        type="text" 
+                        value={tempText}
+                        onChange={handleChange}
+                        placeholder="Write your daily comments"
+                    />
+                    ) : (
+                        <Comment $color="#A4A4A4" $fontstyle="italic">{"No daily comments yet"}</Comment>
+                    )
+                )}
+            </CommentBox>
+        </CommentRow>
 
         <ReactionBox>
             {userLogsDetail.dailyComment.reaction.map((dailyCommentEmoji) => (
@@ -75,10 +77,15 @@ const DailyLogDetail = ({dailyComment, userLogsDetail}) => {
 
 const DetailHeader = styled.div`
 display: flex;
-flex-flow: row wrap;
+flex-direction: column;
 gap: 1em;
 
 padding: 1.2em 1em 0.2em;
+`
+
+const CommentRow = styled.div`
+display: flex;
+gap: 1em;
 `
 
 const CommentBox = styled.div`
@@ -87,8 +94,7 @@ background-color: #e6e6e6;
 border-radius: 10pt;
 padding: 1em;
 margin-right: 0.5em;
-width: 210pt;
-/* flex-grow: 1; */
+flex-grow: 1;
 
 justify-content: center;
 align-items: center;
