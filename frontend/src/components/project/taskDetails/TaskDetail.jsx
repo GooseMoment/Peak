@@ -10,7 +10,7 @@ import Contents from "./Contents"
 import queryClient from "@queries/queryClient"
 import { useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
-import { getTask, patchTask } from "@api/tasks.api"
+import { getTask, patchTask, deleteTask } from "@api/tasks.api"
 
 const TaskDetail = () => {
     const [ projectID, color ] = useOutletContext()
@@ -22,9 +22,19 @@ const TaskDetail = () => {
         queryFn: () => getTask(task_id),
     })
 
-    const mutation = useMutation({
+    const patchMutation = useMutation({
         mutationFn: (data) => {
             return patchTask(task_id, data)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['task', {taskID: task_id}]})
+            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
+        },
+    })
+
+    const deleteMutation = useMutation({
+        mutationFn: () => {
+            return deleteTask(task_id)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['task', {taskID: task_id}]})
@@ -42,6 +52,13 @@ const TaskDetail = () => {
         navigate(`/app/projects/${projectID}`)
     }
 
+    const handleDelete = () => {
+        return async () => {
+            navigate(`/app/projects/${projectID}`)
+            deleteMutation.mutate()
+        }
+    }
+
     if (isPending) {
         return <TaskDetailBox />
         // 민영아.. 스켈레톤 뭐시기 만들어..
@@ -52,17 +69,17 @@ const TaskDetail = () => {
             <TaskNameBox>
                 <TaskNameInput
                     task={task}
-                    setFunc={mutation.mutate}
+                    setFunc={patchMutation.mutate}
                     newTaskName={taskName}
                     setNewTaskName={setTaskName}
                     color={color}
                 />
                 <Icons>
-                    <FeatherIcon icon="trash-2" />
+                    <FeatherIcon icon="trash-2" onClick={handleDelete()}/>
                     <FeatherIcon icon="x" onClick={onClose} />
                 </Icons>
             </TaskNameBox>
-            <Contents task={task} setFunc={mutation.mutate}/>
+            <Contents task={task} setFunc={patchMutation.mutate}/>
         </TaskDetailBox>
     )
 }
