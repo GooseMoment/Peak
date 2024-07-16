@@ -25,3 +25,6 @@ dist-ssr
 
 generatedGitInfo.json
 dev-dist/
+
+# npm lockfile
+package-lock.json
