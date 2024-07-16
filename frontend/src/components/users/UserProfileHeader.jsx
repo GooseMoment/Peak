@@ -32,7 +32,7 @@ const UserProfileHeader = ({user, isMine}) => {
 }
 
 const Banner = styled.div`
-    background-color: ${p => p.$headerColor ? "#" + p.$headerColor : p.theme.secondBackgroundColor};
+    background-color: ${p => p.$headerColor ? "#" + p.$headerColor : p.theme.thirdBackgroundColor};
     height: 15em;
     width: 100vw;
     margin: -3em -10em;
@@ -50,7 +50,7 @@ const Profile = styled.div`
 `
 
 const ProfileImg = styled.img`
-    background-color: ${p => p.theme.secondBackgroundColor};
+    background-color: ${p => p.theme.thirdBackgroundColor};
 
     border-radius: 50%;
     height: 10em;

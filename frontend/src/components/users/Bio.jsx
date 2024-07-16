@@ -10,7 +10,7 @@ const Bio = ({bio}) => {
 }
 
 const BioBox = styled.div`
-    background-color: ${p => p.theme.secondBackgroundColor};
+    background-color: ${p => p.theme.thirdBackgroundColor};
     border-radius: 16px;
 
     line-height: 1.5em;
