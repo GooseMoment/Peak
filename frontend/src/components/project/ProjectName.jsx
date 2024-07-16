@@ -56,6 +56,7 @@ const NameText = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.3em;
 
     &:hover {
         color: #FF4A03;
@@ -67,6 +68,7 @@ const TypeText = styled.div`
     font-weight: normal;
     font-size: 1em;
     margin-left: 0.6em;
+    margin-top: 0.1em;
     color: ${p => p.theme.grey};
 `
 
