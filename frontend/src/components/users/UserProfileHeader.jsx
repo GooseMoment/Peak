@@ -14,7 +14,7 @@ const UserProfileHeader = ({user, isMine}) => {
             <ProfileImg src={user?.profile_img} />
             <ProfileTexts>
                 <Names>
-                    <DisplayName>{user?.display_name}</DisplayName>
+                    <DisplayName>{user?.display_name || "-----"}</DisplayName>
                     <Username>@{user?.username}</Username>
                 </Names>
                 <Datas>
