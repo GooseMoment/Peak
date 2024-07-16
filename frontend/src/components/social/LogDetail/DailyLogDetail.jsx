@@ -11,17 +11,17 @@ import { Fragment } from "react";
 import SimpleProfile from "../SimpleProfile";
 import { useEffect } from "react";
 
-const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment}) => {
+const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment, day}) => {
     const [inputState, setInputState] = useState(false)
     const [comment, setComment] = useState(dailyComment.comment)
     // const [emojiClick, setEmojiClick] = useState(false)
 
     useEffect(() => {
         setComment(dailyComment.comment)
-    }, [dailyComment])
+    }, [dailyComment, day])
 
     const handleInputState = () => {
-        if(dailyComment.user.username === user.username)
+        if(dailyComment.user.username === user.username) 
             setInputState(true)
     }
 
@@ -29,14 +29,16 @@ const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment}) 
         setComment(e.target.value)
     }
 
-    const handleKeyDown= (e) => {
+    const handleKeyDown = (e) => {
         if(e.key == 'Enter') {
+            saveDailyComment(day, comment)
             setInputState(false)
         }
     }
 
     const handleBlur = () => {
         setInputState(false)
+        saveDailyComment(day, comment)
     }
 
     return <>
@@ -45,8 +47,8 @@ const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment}) 
             <SimpleProfile user={dailyComment.user}/>
             <CommentBox onClick={handleInputState}>
                 {dailyComment.user.username === user.username && inputState ? (
-                    <CommentInput 
-                        type="text" 
+                    <CommentInput
+                        type="text"
                         value={comment}
                         onChange={handleChange}
                         onKeyDown={handleKeyDown}

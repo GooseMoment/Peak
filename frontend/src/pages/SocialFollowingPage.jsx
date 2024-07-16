@@ -41,7 +41,6 @@ const SocialFollowingPage = () => {
 
     const getDetail = async(date, followee) => {      
         const followeeUsername = followee?followee:user.username
-
         if(!date) {
             setDailyComment(null)
             return
@@ -55,11 +54,14 @@ const SocialFollowingPage = () => {
         }
     }
 
-    // const postDailyComment = async(date) => {
-    //     if(date) try {
-    //         // await postCommentToDailyComment(date, )
-    //     }
-    // }
+    const postDailyComment = async(date, comment) => {
+        if(date) try {
+            const res = await postCommentToDailyComment(date, comment)
+            setDailyComment(res)
+        } catch (e) {
+            throw alert(e)
+        }
+    }
 
     useEffect(() => {
         getPreview(selectedDate)
@@ -98,6 +100,8 @@ const SocialFollowingPage = () => {
                     dailyComment={dailyComment}
                     userLogsDetail={mockDailyFollowerLogsDetail[0]}
                     user={user}
+                    saveDailyComment={postDailyComment}
+                    day={selectedDate}
                 />:null}
             </Container>
         </Wrapper>
