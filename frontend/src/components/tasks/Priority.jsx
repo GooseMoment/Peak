@@ -19,9 +19,11 @@ const PriorityImg = styled.img`
     height: 15px;
     margin-top: ${p => p.$hasDate ? "-0.5em" : "-0.25em"};
     margin-right: 0.2em;
-    filter: ${(props) => (props.$completed && css`
-        invert(73%) sepia(3%) saturate(9%) hue-rotate(349deg) brightness(89%) contrast(92%);
-    `)};
+    filter: ${p => p.theme.project.imgDangerColor};
+
+    ${(props) => (props.$completed && css`
+        filter: ${p => p.theme.project.imgGreyColor};
+    `)}
 `
 
 export default Priority

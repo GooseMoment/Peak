@@ -96,8 +96,9 @@ const TimezoneToggle = styled.div`
     justify-content: center;
     width: 3.5em;
     height: 1.7em;
-    background-color: #FFFFFF;
-    border: solid 1px #D9D9D9;
+    background-color: ${p => p.theme.backgroundColor};
+    border: solid 1px ${p => p.theme.project.lineColor};
+    color: ${p => p.theme.textColor};
     border-radius: 15px;
     font-weight: 500;
 
@@ -107,9 +108,9 @@ const TimezoneToggle = styled.div`
 
     ${(props) =>
         props.$active && css`
-            background-color: #FF4A03;
-            border: solid 1px white;
-            color: white;
+            background-color: ${p => p.theme.goose};
+            border: solid 1px ${p => p.theme.project.borderColor};
+            color: ${p => p.theme.white};
         `
     }
 `
@@ -125,6 +126,7 @@ const InputBox = styled.div`
 const ColonContainer = styled.div`
     font-size: 2em;
     margin: 0 0.3em;
+    color: ${p => p.theme.textColor};
 `
 
 const TimeInput = styled.input`
@@ -132,14 +134,14 @@ const TimeInput = styled.input`
     height: 1.7em;
     font-size: 2em;
     text-align: center;
-    background-color: #D9D9D9;
-    color: black;
+    background-color: ${p => p.theme.project.inputColor};
+    color: ${p => p.theme.textColor};
     appearance: textfield;
     -moz-appearance: textfield;
 
     &:focus {
-        background-color: #FF4A03;
-        color: white;
+        background-color: ${p => p.theme.goose};
+        color: ${p => p.theme.white};
     }
 
     &::-webkit-inner-spin-button {

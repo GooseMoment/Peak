@@ -39,7 +39,7 @@ const Circle = styled.div`
     height: 1.2em;
     aspect-ratio: 1;
     border-radius: 50%;
-    border: 3px solid ${(props) => (props.$completed ? '#A4A4A4': `#${props.$color}`)};
+    border: 3px solid ${(props) => (props.$completed ? props.theme.grey : `#${props.$color}`)};
     position: relative;
     margin-right: 0.6em;
     font-size: 1em;
@@ -47,7 +47,7 @@ const Circle = styled.div`
     & svg {
         width: 1em;
         height: 1em;
-        stroke: #A4A4A4;
+        stroke: ${p => p.theme.grey};
         stroke-width: 0.2em;
         margin-right: 0;
         top: 0;
@@ -57,7 +57,7 @@ const Circle = styled.div`
     }
 
     ${({$isLoading}) => $isLoading ? css`
-        border: 3px dashed ${(props) => (props.$completed ? '#A4A4A4': `#${props.$color}`)};
+        border: 3px dashed ${(props) => (props.$completed ? props.theme.grey : `#${props.$color}`)};
         animation: ${rotateAnimation} 6s linear infinite;
 
         & svg {

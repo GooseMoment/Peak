@@ -44,12 +44,13 @@ const ButtonBox = styled.div`
     width: 40%;
     height: 1.7em;
     border-radius: 13px;
-    border: solid 1px #D9D9D9;
+    border: solid 1px ${p => p.theme.project.borderColor};
+    color: ${p => p.theme.textColor};
     font-weight: 500;
 
     &:hover {
         font-weight: bolder;
-        color: #FF4A03;
+        color: ${p => p.theme.goose};
         cursor: pointer;
     }
 `

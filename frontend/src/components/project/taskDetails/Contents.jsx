@@ -128,18 +128,19 @@ const ContentsBox = styled.div`
     & svg, img {
         width: 1.3em;
         height: 1.3em;
-        stroke: #000000;
+        stroke: ${p => p.theme.textColor};
         margin-top: 1.3em;
         top: 0;
     }
 
     & img {
+        filter: ${p => p.theme.project.imgColor};
         margin-right: 8px;
     }
 `
 
 const VLine = styled.div`
-    border-left: thin solid #D9D9D9;
+    border-left: thin solid ${p => p.theme.project.lineColor};
     height: 1em;
     margin-top: 1.3em;
     margin-left: 1em;
@@ -154,7 +155,7 @@ const ContentText = styled.div`
     width: 31em;
     font-style: normal;
     font-size: 1.2em;
-    color: #000000;
+    color: ${p => p.theme.textColor};
     margin-top: 1.1em;
     margin-left: 1.3em;
     text-decoration: none;
@@ -163,7 +164,7 @@ const ContentText = styled.div`
     text-overflow: ellipsis;
 
     &:hover {
-    cursor: pointer;
+        cursor: pointer;
     }
 `
 
@@ -176,7 +177,7 @@ const ReminderBlock = styled.div`
     width: auto;
     font-size: 0.9em;
     padding: 0.3em;
-    border: solid 1.5px #C4C4C4;
+    border: solid 1.5px ${p => p.theme.grey};
     font-weight: 450;
     display: flex;
     justify-content: center;
@@ -188,7 +189,7 @@ const PlusReminder = styled.div`
     width: 1em;
     padding: 0.3em;
     margin-right: 0em;
-    border: solid 1.5px #C4C4C4;
+    border: solid 1.5px ${p => p.theme.grey};
     font-weight: 450;
     display: flex;
     justify-content: center;

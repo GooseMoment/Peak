@@ -51,11 +51,12 @@ const ContentsBox = styled.div`
         height: 1.3em;
         margin-top: 1.3em;
         top: 0;
+        color: ${p => p.theme.textColor};
     }
 `
 
 const VLine = styled.div`
-    border-left: thin solid #D9D9D9;
+    border-left: thin solid ${p => p.theme.project.lineColor};;
     height: 1em;
     margin-top: 1.3em;
     margin-left: 1em;
@@ -65,13 +66,13 @@ const VLine = styled.div`
 const ContentText = styled.div`
     font-style: normal;
     font-size: 1.2em;
-    color: #000000;
+    color: ${p => p.theme.textColor};
     margin-top: 1.1em;
     margin-left: 1.3em;
     text-decoration: none;
 
     &:hover {
-    cursor: pointer;
+        cursor: pointer;
     }
 `
 

@@ -43,6 +43,7 @@ const ItemBox = styled.div`
     & svg {
         margin-left: 1.3em;
         top: 0;
+        color: ${p => p.theme.textColor};
     }
 `
 
@@ -50,14 +51,14 @@ const ItemText = styled.div`
     width: 10em;
     font-weight: ${props => props.$is_project ? '500' : 'normal'};
     font-size: 1em;
-    color: #000000;
+    color: ${p => p.theme.textColor};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
     &:hover {
         font-weight: bolder;
-        color: #FF4A03;
+        color: ${p => p.theme.goose};
         cursor: pointer;
     }
 `
