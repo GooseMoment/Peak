@@ -1,5 +1,6 @@
 import Layout from "./Layout"
 import Account from "./Account"
+import General from "./General"
 import Privacy from "./Privacy"
 import LanguagesAndTime from "./LanguagesAndTime"
 import Reactions from "./Reactions"
@@ -11,7 +12,7 @@ import ErrorPage from "./ErrorPage"
 
 const settings = {
     Layout, ErrorPage,
-    Account, Privacy, LanguagesAndTime, Appearance, Reactions, Notifications, Blocks, Info
+    Account, General, Privacy, LanguagesAndTime, Appearance, Reactions, Notifications, Blocks, Info
 }
 
 export default settings

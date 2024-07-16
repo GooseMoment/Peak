@@ -23,8 +23,8 @@ const Box = styled.p`
 const StyledInput = styled.input`
     width: 100%;
     padding: 0.75em 1.25em;
-    border: 1px solid #FE4902;
-    border-radius: 5000px;
+    border: 1px solid ${p => p.theme.textColor};
+    border-radius: 16px;
     
     box-sizing: border-box;
 
@@ -33,6 +33,10 @@ const StyledInput = styled.input`
     ${props => props.$hasIcon ? css`
         padding-left: 2.5em;
     ` : null}
+
+    &:focus {
+        border-color: ${p => p.theme.accentColor};
+    }
 `
 
 const IconBox = styled.span`

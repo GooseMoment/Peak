@@ -1,12 +1,22 @@
+import { useState, useMemo } from "react"
+
 import SubSection from "@components/intro/SubSection"
 import RadioGroup from "@components/intro/RadioGroup"
 import Radio from "@components/intro/Radio"
-import Task from "@components/tasks/Task"
+import DemoTask from "@components/intro/DemoTask"
 
-import {today, tomorrow, nextWeek, twoWeeksLater} from "./todays"
+import {yesterday, today, tomorrow, nextWeek, twoWeeksLater} from "./todays"
 
 import styled from "styled-components"
-import { useState } from "react"
+import { useTranslation } from "react-i18next"
+
+import normal from "@assets/project/priority/normal.svg"
+import important from "@assets/project/priority/important.svg"
+import critical from "@assets/project/priority/critical.svg"
+
+import todayIcon from "@assets/project/calendar/today.svg"
+import tomorrowIcon from "@assets/project/calendar/tomorrow.svg"
+import next_weekIcon from "@assets/project/calendar/next_week.svg"
 
 const deadlineTable = {
     today,
@@ -15,37 +25,54 @@ const deadlineTable = {
     twoWeeksLater,
 }
 
+const makeSampleTasks = t => [
+    {id: 0, name: t("sample0"), completed_at: true, priority: 0, due_date: today},
+    {id: 2, name: t("sample2"), completed_at: true, priority: 1, due_date: yesterday},
+    {id: 3, name: t("sample3"), completed_at: true, priority: 2, due_date: tomorrow},
+    {id: 4, name: t("sample4"), completed_at: true, priority: 0, due_date: nextWeek},
+]
+
 const DemoPlan = () => {
+    const { t } = useTranslation(null, {keyPrefix: "intro.section_plan.demo"})
+
     const [priority, setPriority] = useState("1")
     const [deadline, setDeadline] = useState("today")
 
     const task = {
-        name: "생수 주문하기",
+        name: t("sample1"),
         priority: Number(priority),
         due_date: deadlineTable[deadline],
     }
+
+    const sampleTasks = useMemo(() => makeSampleTasks(t), [t])
 
     return <SubSection>
         <HalfDivider>
             <Selections>
                 <Selection>
-                    <RadioGroup label="Choose a priority" value={priority} onChange={value => setPriority(value)}>
-                        <Radio value="0">Normal</Radio>
-                        <Radio value="1">Important</Radio>
-                        <Radio value="2">Critical</Radio>
+                    <RadioGroup label={t("priority_selection")} value={priority} onChange={setPriority}>
+                        <Radio value="0"><Icon src={normal} /> Normal</Radio>
+                        <Radio value="1"><Icon src={important} /> Important</Radio>
+                        <Radio value="2"><Icon src={critical} /> Critical</Radio>
                     </RadioGroup>
                 </Selection>
                 <Selection>
-                    <RadioGroup label="Choose a deadline" value={deadline} onChange={value => setDeadline(value)}>
-                        <Radio value="today">Today</Radio>
-                        <Radio value="tomorrow">Tomorrow</Radio>
-                        <Radio value="nextWeek">Next week</Radio>
-                        <Radio value="twoWeeksLater">Two weeks later</Radio>
+                    <RadioGroup label={t("deadline_selection")} value={deadline} onChange={setDeadline}>
+                        <Radio value="today"><Icon src={todayIcon} /> Today</Radio>
+                        <Radio value="tomorrow"><Icon src={tomorrowIcon} /> Tomorrow</Radio>
+                        <Radio value="nextWeek"><Icon src={next_weekIcon} /> Next week</Radio>
+                        <Radio value="twoWeeksLater"><Icon src={next_weekIcon} /> Two weeks later</Radio>
                     </RadioGroup>
                 </Selection>
             </Selections>
             <Tasks>
-                <Task task={task} demo />
+                <BlurArea>
+                    {sampleTasks.slice(0, 1).map(task => <DemoTask task={task} key={task.id} />)}
+                </BlurArea>
+                <DemoTask id={2} task={task} />
+                <BlurArea>
+                    {sampleTasks.slice(1).map(task => <DemoTask task={task} key={task.id} />)}
+                </BlurArea>
             </Tasks>
         </HalfDivider>
     </SubSection>
@@ -67,8 +94,20 @@ const Selection = styled.div`
 
 `
 
+const Icon = styled.img`
+    aspect-ratio: 1/1;
+    height: 1em;
+    vertical-align: bottom;
+`
+
 const Tasks = styled.div`
     width: 50%;
+`
+
+const BlurArea = styled.div`
+    pointer-events: none;
+    user-select: none;
+    filter: blur(1px);
 `
 
 export default DemoPlan

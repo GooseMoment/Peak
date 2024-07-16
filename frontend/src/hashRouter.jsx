@@ -22,6 +22,10 @@ const routes = [
                 Component: settings.Account,
             },
             {
+                path: "general",
+                Component: settings.General,
+            },
+            {
                 path: "privacy",
                 Component: settings.Privacy,
             },

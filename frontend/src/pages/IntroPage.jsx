@@ -15,6 +15,7 @@ import { getEmojis } from "@api/social.api"
 
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
+import { useTranslation } from "react-i18next"
 
 
 const IntroPage = () => {
@@ -24,30 +25,41 @@ const IntroPage = () => {
         staleTime: 1000 * 60 * 60 * 5,
     })
 
+    const { t } = useTranslation(null, {keyPrefix: "intro"})
+
     return <>
     <Nav>
         <Brand /> 
         <Link to="sign">
             <Button >
-                Sign in
+                {t("section_top.button_sign_in")}
             </Button>
         </Link>
     </Nav>
     <TopHero>
         <TopTitle>
-            Plan, Organize, and Cheer. <br/>
-            Do all them in Peak.
+            {t("section_top.title1")}
+            <br/>
+            {t("section_top.title2")}
         </TopTitle>
         <Link to="sign">
             <TopHeroButton>
-                Start
+                {t("section_top.button_start")}
             </TopHeroButton>
         </Link>
     </TopHero>
 
     <Section>
-        <SectionTitle>Organize</SectionTitle>
-        <SectionDescription>Place tasks in the right place with projects and drawers.</SectionDescription>
+        <SectionTitle>{t("section_plan.title")}</SectionTitle>
+        <SectionDescription>{t("section_plan.description")}</SectionDescription>
+        <SubGroup>
+            <DemoPlan />
+        </SubGroup>
+    </Section>
+
+    <Section>
+        <SectionTitle>{t("section_organize.title")}</SectionTitle>
+        <SectionDescription>{t("section_organize.description")}</SectionDescription>
         <SubGroup>
             <DemoProject />
             <DemoDrawer />
@@ -55,26 +67,8 @@ const IntroPage = () => {
     </Section>
 
     <Section>
-        <SectionTitle>Plan</SectionTitle>
-        <SectionDescription>Track priority and deadline of tasks.</SectionDescription>
-        <SubGroup>
-            <DemoPlan />
-        </SubGroup>
-    </Section>
-
-    <Section>
-        <SectionTitle>Share</SectionTitle>
-        <SectionDescription>Share your daily log with your friends.</SectionDescription>
-        <SubGroup>
-            <SubSection>
-                <SubTitle>*** UserLogDetail should be here ***</SubTitle>
-            </SubSection>
-        </SubGroup>
-    </Section>
-
-    <Section>
-        <SectionTitle>Cheer</SectionTitle>
-        <SectionDescription>Put reactions to your friends’ tasks with fancy emojis. Make motivate and get motivated.</SectionDescription>
+        <SectionTitle>{t("section_cheer.title")}</SectionTitle>
+        <SectionDescription>{t("section_cheer.description")}</SectionDescription>
         <SubGroup>
             <SubSection>
                 <SubTitle>*** Emoji Selector Box should be here ***</SubTitle>
@@ -83,8 +77,18 @@ const IntroPage = () => {
     </Section>
 
     <Section>
-        <SectionTitle>Customize</SectionTitle>
-        <SectionDescription>Customize an apperance of Peak.</SectionDescription>
+        <SectionTitle>{t("section_share.title")}</SectionTitle>
+        <SectionDescription>{t("section_share.description")}</SectionDescription>
+        <SubGroup>
+            <SubSection>
+                <SubTitle>*** UserLogDetail should be here ***</SubTitle>
+            </SubSection>
+        </SubGroup>
+    </Section>
+
+    <Section>
+        <SectionTitle>{t("section_customize.title")}</SectionTitle>
+        <SectionDescription>{t("section_customize.description")}</SectionDescription>
         <SubGroup>
             <DemoTheme />
         </SubGroup>

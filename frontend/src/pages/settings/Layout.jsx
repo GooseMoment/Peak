@@ -56,6 +56,11 @@ const getMenuItems = t => [
         to: "account",
     },
     {
+        icon: "settings",
+        display: t("general"),
+        to: "general",
+    },
+    {
         icon: "lock",
         display: t("privacy"),
         to: "privacy",
