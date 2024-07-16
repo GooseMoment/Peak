@@ -176,8 +176,8 @@ const Links = styled.div`
 `
 
 const LinkBox = styled.div`
-    border: 1.5px solid ${p => p.theme.grey};
-    border-radius: 16px;
+    border: 2px solid ${p => p.theme.grey};
+    border-radius: 10px;
 
     color: ${p => p.theme.grey};
 
@@ -208,6 +208,8 @@ const LinkBox = styled.div`
 
 const LinkText = styled.p`
     font-size: 0.75em;
+    font-weight: bold;
+
     text-align: center;
     line-height: 1.25;
 `
