@@ -2,18 +2,20 @@ import Button from "@components/common/Button"
 import FollowsCount from "@components/users/FollowsCount"
 import FollowButton from "@components/users/FollowButton"
 
+import { cubicBeizer } from "@assets/keyframes"
+
 import styled from "styled-components"
 
 const UserProfileHeader = ({user, isMine}) => {
 
     return <>
-        <Banner $headerColor={"#" + user.header_color} />
+        <Banner $headerColor={user?.header_color} />
         <Profile>
-            <ProfileImg src={user.profile_img} />
+            <ProfileImg src={user?.profile_img} />
             <ProfileTexts>
                 <Names>
-                    <DisplayName>{user.display_name}</DisplayName>
-                    <Username>@{user.username}</Username>
+                    <DisplayName>{user?.display_name}</DisplayName>
+                    <Username>@{user?.username}</Username>
                 </Names>
                 <Datas>
                     <FollowsCount user={user} />
@@ -30,10 +32,12 @@ const UserProfileHeader = ({user, isMine}) => {
 }
 
 const Banner = styled.div`
-    background-color: ${p => p.$headerColor};
+    background-color: ${p => p.$headerColor ? "#" + p.$headerColor : p.theme.secondBackgroundColor};
     height: 15em;
     width: 100vw;
     margin: -3em -10em;
+
+    transition: background-color 0.25s ${cubicBeizer};
 `
 
 const Profile = styled.div`
@@ -46,6 +50,8 @@ const Profile = styled.div`
 `
 
 const ProfileImg = styled.img`
+    background-color: ${p => p.theme.secondBackgroundColor};
+
     border-radius: 50%;
     height: 10em;
     aspect-ratio: 1/1;

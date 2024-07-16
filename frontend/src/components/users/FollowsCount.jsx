@@ -12,6 +12,13 @@ const FollowsCount = ({user}) => {
         setWindow("")
     }, [user])
 
+    if (!user) {
+        return <Items>
+            <Item>Followers <Count>000</Count></Item>
+            <Item>Followings <Count>000</Count></Item>
+        </Items>
+    }
+
     return <Items>
         <Item onClick={() => setWindow("followers")}>Followers <Count>{user.followers_count}</Count></Item>
         <Item onClick={() => setWindow("followings")}>Followings <Count>{user.followings_count}</Count></Item>

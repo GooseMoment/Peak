@@ -26,7 +26,7 @@ const UserPage = () => {
     const currentUsername = getCurrentUsername()
     const isMine = currentUsername === username
 
-    const { data: user, isPending: userPending } = useQuery({
+    const { data: user, isPending: userPending, isError: userError } = useQuery({
         queryKey: ["users", username],
         queryFn: () => getUserByUsername(username),
     })
@@ -34,16 +34,18 @@ const UserPage = () => {
     const { data: projects } = useQuery({
         queryKey: ["userProjects", username],
         queryFn: () => getProjectListByUser(username),
+        enabled: !userPending && !userError,
     })
 
-    if (userPending) {
-        return "loading"
+    if (userError) {
+        // TODO: Edit here after building a new error page
+        return "UserNotFound!"
     }
 
     return <>
         <UserProfileHeader user={user} isMine={isMine} />
         <Section />
-        <Bio bio={user.bio} />
+        <Bio bio={user?.bio} />
         <ProjectList projects={projects} />
     </>
 }
