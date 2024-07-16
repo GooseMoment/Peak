@@ -12,26 +12,12 @@ import alarmclock from "@assets/project/alarmclock.svg"
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-const TaskFrame = ({task, setFunc, color, taskDetailPath}) => {
-    const [isLoading, setIsLoading] = useState(false)
+const TaskFrame = ({task, color, taskDetailPath, isLoading, toComplete}) => {
     const {assigned, due} = taskCalculation(task)
 
     const TaskName = <TaskNameBox $completed={task.completed_at}>
         {task?.name}
     </TaskNameBox>
-
-    const toComplete = () => {
-        setIsLoading(true)
-        let completed_at = null
-        if (!(task.completed_at)) {
-            completed_at = new Date().toISOString()
-        }
-        setFunc({completed_at})
-    }
-
-    useEffect(() => {
-        setIsLoading(false)
-    }, [task])
 
     const hasDate = task.due_date || task.assigned_at
 
@@ -160,7 +146,7 @@ const Reminder = styled.div`
         margin-right: 0.2em;
         top: 0;
         filter: ${(props) => (props.$completed ? css`
-            ${p=>p.theme.project.imgGrayColor};
+            ${p=>p.theme.project.imgGreyColor};
         ` : css`
             ${p=>p.theme.project.imgReminderColor};
         `)};
