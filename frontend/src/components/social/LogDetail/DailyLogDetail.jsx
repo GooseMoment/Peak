@@ -32,13 +32,13 @@ const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment, d
     const handleKeyDown = (e) => {
         if(e.key == 'Enter') {
             setInputState(false)
-            saveDailyComment(day, comment)
+            saveDailyComment({day, comment})
         }
     }
 
     const handleBlur = () => {
         setInputState(false)
-        saveDailyComment(day, comment)
+        saveDailyComment({day, comment})
     }
 
     return <>

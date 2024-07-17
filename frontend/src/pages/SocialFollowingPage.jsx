@@ -9,6 +9,10 @@ import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail"
 import SocialPageTitle from "@components/social/SocialPageTitle"
 
 import { getDailyComment, getDailyLogsPreview, postCommentToDailyComment } from "@api/social.api"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import queryClient from "@/queries/queryClient"
+import { toast } from "react-toastify"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 const sortDailyLogs = (report) => {
     return report.slice().sort((a, b) => {
@@ -25,7 +29,6 @@ const SocialFollowingPage = () => {
     const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
     const [selectedUsername, setSelectedUsername] = useState(null)
     const [dailyReport, setDailyReport] = useState([])
-    const [dailyComment, setDailyComment] = useState(null)
 
     const {user} = useRouteLoaderData("app")
 
@@ -38,37 +41,29 @@ const SocialFollowingPage = () => {
         }
     }
 
-    const getDetail = async(date, followee) => {      
-        const followeeUsername = followee?followee:user.username
-        if(!date) {
-            setDailyComment(null)
-            return
-        }
+    const dailyLogDetailUsername = selectedUsername?selectedUsername:user.username
 
-        if(date && followeeUsername) try {
-            const res = await getDailyComment(followeeUsername, date)
-            setDailyComment(res)
-        } catch (e) {
-            throw alert(e)
-        }
-    }
+    const { data: dailyComment, isError: dailyCommentError } = useQuery({
+        queryKey: ['daily', 'comment', dailyLogDetailUsername, selectedDate],
+        queryFn: () => getDailyComment(dailyLogDetailUsername, selectedDate),
+        enabled: !!selectedDate
+    })
 
-    const postDailyComment = async(date, comment) => {
-        if(date) try {
-            const res = await postCommentToDailyComment(date, comment)
-            setDailyComment(res)
-        } catch (e) {
-            throw alert(e)
+    const dailyCommentMutation = useMutation({
+        mutationFn: ({day, comment}) => {
+            return postCommentToDailyComment(day, comment)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['daily', 'comment', user.username, selectedDate]})
+        },
+        onError: () => {
+            toast.error(e)
         }
-    }
+    })
 
     useEffect(() => {
         getPreview(selectedDate)
     }, [selectedDate])
-
-    useEffect(() => {
-        getDetail(selectedDate, selectedUsername)
-    }, [selectedDate, selectedUsername])
 
     return <>
         <SocialPageTitle active="following" />
@@ -99,11 +94,12 @@ const SocialFollowingPage = () => {
                     dailyComment={dailyComment}
                     userLogsDetail={mockDailyFollowerLogsDetail[0]}
                     user={user}
-                    saveDailyComment={postDailyComment}
+                    saveDailyComment={dailyCommentMutation.mutate}
                     day={selectedDate}
                 />:null}
             </Container>
         </Wrapper>
+        {/* <ReactQueryDevtools initialIsOpen></ReactQueryDevtools> */}
     </>
 }
 

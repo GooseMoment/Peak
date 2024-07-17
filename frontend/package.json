@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.29.0",
+    "@tanstack/react-query-devtools": "^5.51.3",
     "@toss/impression-area": "^1.4.0",
     "axios": "^1.6.7",
     "feather-icons-react": "^0.7.0",
