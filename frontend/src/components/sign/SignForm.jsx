@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import Form from "@components/sign/Form"
 import Input from "@components/sign/Input"
@@ -8,13 +8,12 @@ import Button, { ButtonGroup } from "@components/common/Button"
 import { signIn, signUp } from "@api/users.api"
 
 import sleep from "@utils/sleep"
+import { cubicBeizer } from "@assets/keyframes"
 
 import styled from "styled-components"
 import { Mail, AtSign, Key, HelpCircle, UserPlus, LogIn } from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import { Link } from "react-router-dom"
-import { cubicBeizer } from "@/assets/keyframes"
 
 const SignForm = () => {
     const [active, setActive] = useState("signIn")

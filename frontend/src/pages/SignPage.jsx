@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import { useSearchParams } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 
 import Brand, {Box as BrandTitle} from "@components/sign/Brand"
 import Showcase from "@components/sign/Showcase"
