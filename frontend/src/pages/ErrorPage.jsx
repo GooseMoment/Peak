@@ -1,14 +1,15 @@
 import { useEffect } from "react"
-import { Link, isRouteErrorResponse, useNavigate, useRouteError } from "react-router-dom"
+import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router-dom"
 
-import Layout from "@containers/Layout"
-import PageTitle from "@components/common/PageTitle"
+import ErrorLayout from "@components/errors/ErrorLayout"
 
 import { setToken } from "@api/client"
+import { useTranslation } from "react-i18next"
 
 const ErrorPage = () => {
     const error = useRouteError()
     const navigate = useNavigate()
+    const { t } = useTranslation(null, {keyPrefix: "error-page"})
 
     useEffect(() => {
         if (isRouteErrorResponse(error) && error.status === 401) {
@@ -17,21 +18,17 @@ const ErrorPage = () => {
         }
     }, [])
 
+    useEffect(() => {
+        if (import.meta.env.DEBUG == 1) {
+            console.log(error)
+        }
+    }, [error])
+
     if (isRouteErrorResponse(error)) {
-        return <Layout>
-            <PageTitle>{error.status}: {error.statusText}</PageTitle>
-            <p>라우터 에러!</p>
-            <Link to="">Go to index</Link>
-        </Layout>
+        return <ErrorLayout code={"" + error.status} text={t("404_error_text")} bottomText={t("404_error_bottom")} bottomLinkTo="/app/" />
     }
 
-    console.log(error)
-
-    return <Layout noSidebar={true}>
-        <PageTitle>이런!</PageTitle>
-        <p>라우터 외의 에러입니다. 콘솔 확인하세요.</p>
-        <Link to="">Go to index</Link>
-    </Layout>
+    return <ErrorLayout code={t("unknown_error_code")} text={t("unknown_error_text")} bottomText={t("unknown_error_bottom")} bottomLinkTo="/app/" />
 }
 
 export default ErrorPage

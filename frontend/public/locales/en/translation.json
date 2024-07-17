@@ -265,5 +265,12 @@
                 "theme_dark": "Dark"
             }
         }
+    },
+    "error-page": {
+        "unknown_error_code": "X_X",
+        "unknown_error_text": "Oops.",
+        "unknown_error_bottom": "Go to the home page",
+        "404_error_text": "The page you requested is not found.",
+        "404_error_bottom": "Back to the previous page"
     }
 }
