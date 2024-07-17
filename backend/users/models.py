@@ -38,7 +38,8 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
         null=True,
         blank=True,
     )
-    bio = models.TextField(max_length=50, null=True, blank=True)
+    bio = models.TextField(max_length=150, null=True, blank=True)
+    header_color = models.CharField(max_length=6, default="c4c4c4")
 
     is_staff = models.BooleanField(default=False)
     

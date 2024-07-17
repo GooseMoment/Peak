@@ -58,6 +58,7 @@
             "display_name": "Display name",
             "display_name_placeholder": "Your awesome name",
             "bio": "Bio",
+            "header_color": "Header Color",
             "bio_placeholder": "Tell me who you are",
             "button_submit": "Submit",
             "change_password": "Change password",

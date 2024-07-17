@@ -4,12 +4,12 @@ import { useRouteLoaderData } from "react-router-dom"
 import { styled, css } from "styled-components"
 import moment from "moment";
 
-import SocialCalendar from "@components/social/SocialCalendar";
-import DailyLogPreview from "@components/social/DailyLogPreview";
-import LogDetail from "@components/social/LogDetail/LogDetail";
-import SocialPageTitle from "@components/social/SocialPageTitle";
+import SocialCalendar from "@components/social/SocialCalendar"
+import DailyLogPreview from "@components/social/DailyLogPreview"
+import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail"
+import SocialPageTitle from "@components/social/SocialPageTitle"
 
-import { getDailyReport } from "@api/social.api";
+import { getDailyComment, getDailyLogsPreview, postCommentToDailyComment } from "@api/social.api"
 
 const sortDailyLogs = (report) => {
     return report.slice().sort((a, b) => {
@@ -24,17 +24,40 @@ const SocialFollowingPage = () => {
     initial_date.setHours(0, 0, 0, 0)
 
     const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
-    const [selectedIndex, setSelectedIndex] = useState(null)
+    const [selectedUsername, setSelectedUsername] = useState(null)
     const [dailyReport, setDailyReport] = useState([])
-    
+    const [dailyComment, setDailyComment] = useState(null)
+
     const {user} = useRouteLoaderData("app")
 
     const getPreview = async(date) => {
-        const day = date
-        console.log(day)
         if(date) try {
-            const res = await getDailyReport(user.username, day)
+            const res = await getDailyLogsPreview(user.username, date)
             setDailyReport(res)
+        } catch (e) {
+            throw alert(e)
+        }
+    }
+
+    const getDetail = async(date, followee) => {      
+        const followeeUsername = followee?followee:user.username
+        if(!date) {
+            setDailyComment(null)
+            return
+        }
+
+        if(date && followeeUsername) try {
+            const res = await getDailyComment(followeeUsername, date)
+            setDailyComment(res)
+        } catch (e) {
+            throw alert(e)
+        }
+    }
+
+    const postDailyComment = async(date, comment) => {
+        if(date) try {
+            const res = await postCommentToDailyComment(date, comment)
+            setDailyComment(res)
         } catch (e) {
             throw alert(e)
         }
@@ -43,6 +66,10 @@ const SocialFollowingPage = () => {
     useEffect(() => {
         getPreview(selectedDate)
     }, [selectedDate])
+
+    useEffect(() => {
+        getDetail(selectedDate, selectedUsername)
+    }, [selectedDate, selectedUsername])
 
     return <>
         <SocialPageTitle active="following" />
@@ -57,15 +84,25 @@ const SocialFollowingPage = () => {
                     />
                 </CalendarContainer>
 
-                <DailyLogContainer>
+                <DailyLogsPreviewContainer>
                     {sortDailyLogs(dailyReport).map((dailyFollowersLog) => (
-                        <DailyLogPreview key={dailyFollowersLog.username} userLogSimple={dailyFollowersLog} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+                        <DailyLogPreview
+                            key={dailyFollowersLog.username}
+                            userLogSimple={dailyFollowersLog}
+                            selectedIndex={selectedUsername}
+                            setSelectedIndex={setSelectedUsername} />
                     ))}
-                </DailyLogContainer>
+                </DailyLogsPreviewContainer>
             </Container>
 
             <Container $isSticky={true}>
-                <LogDetail userLogsDetail={mockDailyFollowerLogsDetail[0]} isSelf={true} />
+                {dailyComment?<DailyLogDetail
+                    dailyComment={dailyComment}
+                    userLogsDetail={mockDailyFollowerLogsDetail[0]}
+                    user={user}
+                    saveDailyComment={postDailyComment}
+                    day={selectedDate}
+                />:null}
             </Container>
         </Wrapper>
     </>
@@ -73,17 +110,20 @@ const SocialFollowingPage = () => {
 
 const Wrapper = styled.div`
     display: flex;
+    gap: 5rem;
 `
 
 const Container = styled.div`
     width: 50%;
-    min-width: 32.5rem;
-    max-width: 40rem;
+    min-width: 27.5rem;
     ${props => props.$isSticky ? css`
         /* align-self: flex-start; */
         position: sticky;
         top: 2.5rem;
-    ` : null}
+        gap: 0rem;
+    ` : css`
+        gap: 1rem;
+    `}
     margin-bottom: auto;
 
     padding: 0 1rem 0;
@@ -91,18 +131,17 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 1rem;
     overflow: hidden;
 `
 
 const CalendarContainer = styled.div`
     width: 80%;
+    max-width: 40rem;
     margin-left: auto;
     margin-right: auto;
 `
 
-const DailyLogContainer = styled.div`
-`
+const DailyLogsPreviewContainer = styled.div``
 
 const mockNewLogDates = [
     "2024-05-12T15:00:00.000Z", "2024-05-11T15:00:00.000Z", "2024-05-09T00:00:00.000Z"
@@ -122,16 +161,16 @@ const mockDailyFollowerLogsDetail = [
         },
         dailyProjects: [
             {
-                projectID: "개발", projectColor: "#2E61DC",
+                projectID: "개발", projectColor: "2E61DC",
                 dailytasks: [
-                    { id: "TEMP11", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }] },
-                    { id: "TEMP12", name: "총장하기", completedAt: null, reaction: [{ emoji: null, reactionNum: 4 }] }
+                    { id: "TEMP11", name: "빨래하기", completed_at: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }] },
+                    { id: "TEMP12", name: "총장하기", completed_at: null, reaction: [{ emoji: null, reactionNum: 4 }] }
                 ]
             },
             {
-                projectID: "수강신청", projectColor: "#ff0022",
+                projectID: "수강신청", projectColor: "ff0022",
                 dailytasks: [
-                    { id: "TEMP15", name: "빨래하기", completedAt: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }, { emoji: "😅", reactionNum: 3 }] },
+                    { id: "TEMP15", name: "빨래하기", completed_at: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }, { emoji: "😅", reactionNum: 3 }] },
                 ]
             },
         ]

@@ -28,7 +28,7 @@ def _notificationToPushData(notification: Notification) -> dict[str, any]:
         },
     }
 
-    data["timestamp"] = int(notification.created_at.strftime("%s"))
+    data["timestamp"] = int(notification.created_at.timestamp() * 1e3)
     data["data"]["click_url"] = "/app/notifications?id=" + str(notification.id)
 
     related_user: User = None

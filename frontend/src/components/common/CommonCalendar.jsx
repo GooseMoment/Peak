@@ -1,67 +1,70 @@
-import { useState } from 'react';
-import moment from 'moment';
-import styled from "styled-components"
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import { useState } from 'react'
+import moment from 'moment'
+import styled from 'styled-components'
+import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css'
+import { useClientLocale } from '@/utils/clientSettings'
 
-const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStartDate, selectedEndDate, setSelectedEndDate, contentedDates=[] }) => {
-  const [activeStartDate, setActiveStartDate] = useState(new Date())
+const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStartDate, selectedEndDate, setSelectedEndDate, contentedDates = [] }) => {
+    const [activeStartDate, setActiveStartDate] = useState(new Date())
 
-  const changeDate = (e) => {   // client time 00:00
-    if (isRangeSelectMode) {
-      const startDate = e[0].toISOString()
-      const endDate = e[1].toISOString()
-      if (startDate === endDate) {
-        setSelectedStartDate(null)
-        setSelectedEndDate(null)
-      }
-      else {
-        setSelectedStartDate(startDate)
-        setSelectedEndDate(endDate)
-      }
+    const locale = useClientLocale()
+
+    const changeDate = (e) => {
+        if (isRangeSelectMode) {
+            const startDate = moment(e[0]).format("YYYY-MM-DD")
+            const endDate = moment(e[1]).format("YYYY-MM-DD")
+            if (startDate === endDate) {
+                setSelectedStartDate(null)
+                setSelectedEndDate(null)
+            }
+            else {
+                setSelectedStartDate(startDate)
+                setSelectedEndDate(endDate)
+            }
+        }
+        else {
+            const startDate = moment(e).format("YYYY-MM-DD")
+            if (selectedStartDate === startDate) {
+                setSelectedStartDate(null)
+            }
+            else
+                setSelectedStartDate(startDate)
+        }
     }
-    else {
-      const startDate = e.toISOString()
-      if (selectedStartDate === startDate) {
-        setSelectedStartDate(null)
-      }
-      else
-        setSelectedStartDate(startDate)
+
+    const handleTileContent = ({ date, view }) => {
+        const contents = []
+        const day = moment(date).format("YYYY-MM-DD")
+
+        if (contentedDates.find((x) => x === day))
+            contents.push(<StyledContentDot key={day} />)
+        return <>{contents}</>
     }
-  }
 
-  const handleTileContent = ({ date, view }) => {
-    const contents = []
-    const day = date.toISOString()
+    const handleTodayClick = () => {
+        const today = new Date()
+        setActiveStartDate(today)
+    }
 
-    if (contentedDates.find((x) => x === day))
-      contents.push(<StyledContentDot key={day} />)
-    return <>{contents}</>
-  }
-
-  const handleTodayClick = () => {
-    const today = new Date();   // client time
-    setActiveStartDate(today);
-  };
-
-  return <CalendarWrapper>
-    <Calendar
-      selectRange={isRangeSelectMode}
-      onChange={changeDate}
-      value={isRangeSelectMode ? [selectedStartDate, selectedEndDate] : selectedStartDate}
-      formatDay={(locale, date) => moment(date).format("D")}
-      tileContent={handleTileContent}
-      locale='en'               // TODO: variable locale
-      next2Label={null}
-      prev2Label={null}
-      minDetail='year'
-      activeStartDate={activeStartDate ? activeStartDate : undefined}
-      onActiveStartDateChange={({ activeStartDate }) =>
-        setActiveStartDate(activeStartDate)
-      }
-    />
-    <TodayButton onClick={handleTodayClick}>TODAY</TodayButton>
-  </CalendarWrapper>
+    return <CalendarWrapper>
+        <Calendar
+            selectRange={isRangeSelectMode}
+            onChange={changeDate}
+            value={isRangeSelectMode ? [selectedStartDate, selectedEndDate] : selectedStartDate}
+            formatDay={(locale, date) => moment(date).format("D")}
+            tileContent={handleTileContent}
+            locale={locale}
+            next2Label={null}
+            prev2Label={null}
+            minDetail='year'
+            activeStartDate={activeStartDate ? activeStartDate : undefined}
+            onActiveStartDateChange={({ activeStartDate }) =>
+                setActiveStartDate(activeStartDate)
+            }
+        />
+        <TodayButton onClick={handleTodayClick}>TODAY</TodayButton>
+    </CalendarWrapper>
 };
 
 const StyledContentDot = styled.div`
@@ -147,7 +150,7 @@ const CalendarWrapper = styled.div`
   .react-calendar__month-view__days__day {
     position: relative;
     flex-basis: 2.5em !important;
-    margin: 0.4em calc((100% - 7*2.5em)/14) 0.4em !important;
+    margin: 0.7em calc((100% - 7*2.5em)/14) 0.7em !important;
     height: 2.5em;
 
     border-radius: 3em;

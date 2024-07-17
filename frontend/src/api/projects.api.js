@@ -1,8 +1,17 @@
 import client from "@api/client"
 
-export const getProjectsList = async () => {
+export const getProjectList = async () => {
     try {
         const res = await client.get("projects/")
+        return res.data.results
+    } catch (e) {
+        throw e
+    }
+}
+
+export const getProjectListByUser = async (username) => {
+    try {
+        const res = await client.get(`users/@${username}/projects/`)
         return res.data.results
     } catch (e) {
         throw e
