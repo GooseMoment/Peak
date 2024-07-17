@@ -70,7 +70,6 @@ export const signUp = async (email, password, username) => {
             }
         } else if (err && err.response && err.response.status === 500) {
             msg = "Something's wrong with our server. Please try later."
-            return
         } else {
             throw err
         }
