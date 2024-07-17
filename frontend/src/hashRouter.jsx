@@ -1,7 +1,5 @@
 import { createHashRouter } from "react-router-dom"
 
-import settings from "@pages/settings/settings"
-
 const routes = [
     {
         path: "/",
@@ -9,9 +7,11 @@ const routes = [
     },
     { 
         path: "settings",
-        Component: settings.Layout,
         id: "settings",
-        errorElement: <settings.ErrorPage />,
+        async lazy() {
+            const { Layout, ErrorPage } = await import("@pages/settings/settings")
+            return { Component: Layout, ErrorBoundary: ErrorPage }
+        },
         children: [
             {
                 index: true,
@@ -19,39 +19,66 @@ const routes = [
             },
             {
                 path: "account",
-                Component: settings.Account,
+                async lazy() {
+                    const { Account } = await import("@pages/settings/settings")
+                    return { Component: Account }
+                },
             },
             {
                 path: "general",
-                Component: settings.General,
+                async lazy() {
+                    const { General } = await import("@pages/settings/settings")
+                    return { Component: General }
+                },
             },
             {
                 path: "privacy",
-                Component: settings.Privacy,
+                async lazy() {
+                    const { Privacy } = await import("@pages/settings/settings")
+                    return { Component: Privacy }
+                },
             },
             {
                 path: "languages-and-time",
-                Component: settings.LanguagesAndTime,
+                async lazy() {
+                    const { LanguagesAndTime } = await import("@pages/settings/settings")
+                    return { Component: LanguagesAndTime }
+                },
             },
             {
                 path: "appearance",
-                Component: settings.Appearance,
+                async lazy() {
+                    const { Appearance } = await import("@pages/settings/settings")
+                    return { Component: Appearance }
+                },
             },
             {
                 path: "reactions",
-                Component: settings.Reactions,
+                async lazy() {
+                    const { Reactions } = await import("@pages/settings/settings")
+                    return { Component: Reactions }
+                },
             },
             {
                 path: "notifications",
-                Component: settings.Notifications,
+                async lazy() {
+                    const { Notifications } = await import("@pages/settings/settings")
+                    return { Component: Notifications }
+                },
             },
             {
                 path: "blocks",
-                Component: settings.Blocks,
+                async lazy() {
+                    const { Blocks } = await import("@pages/settings/settings")
+                    return { Component: Blocks }
+                },
             },
             {
                 path: "info",
-                Component: settings.Info,
+                async lazy() {
+                    const { Info } = await import("@pages/settings/settings")
+                    return { Component: Info }
+                },
             },
         ]
     },
