@@ -36,6 +36,7 @@ export const light = {
     scrollbarColor: "#FFC6C6",
     frontSignPageTextColor: goose,
     frontSignPageBackgroundColor: "#FFD7C7",
+    imgIconFilter: "invert(0%)",
     sidebar: {
         activeColor: black,
         activeBackgroundColor: "#D9D9D9",
@@ -104,6 +105,7 @@ export const dark = {
     scrollbarColor: "#4A4A4A",
     frontSignPageTextColor: goose,
     frontSignPageBackgroundColor: "#FFD7C7",
+    imgIconFilter: "invert(100%)",
     sidebar: {
         activeColor: white,
         activeBackgroundColor: black,
