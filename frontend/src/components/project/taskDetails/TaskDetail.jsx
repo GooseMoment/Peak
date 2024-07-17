@@ -5,9 +5,12 @@ import styled from "styled-components"
 import FeatherIcon from 'feather-icons-react'
 
 import TaskNameInput from "@components/tasks/TaskNameInput"
+import DeleteAlert from "@components/common/DeleteAlert"
+import ModalPortal from "@components/common/ModalPortal"
 import Contents from "./Contents"
 
 import queryClient from "@queries/queryClient"
+import { useClientSetting } from "@utils/clientSettings"
 import { useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
 import { getTask, patchTask, deleteTask } from "@api/tasks.api"
@@ -16,6 +19,10 @@ const TaskDetail = () => {
     const [ projectID, color ] = useOutletContext()
     const { task_id } = useParams()
     const navigate = useNavigate()
+    const [setting, ] = useClientSetting()
+
+    const [taskName, setTaskName] = useState("")
+    const [isAlertOpen, setIsAlertOpen] = useState(false)
 
     const { isPending, isError, data: task, error } = useQuery({
         queryKey: ['task', {taskID: task_id}],
@@ -42,8 +49,6 @@ const TaskDetail = () => {
         },
     })
 
-    const [taskName, setTaskName] = useState("")
-
     useEffect(() => {
         setTaskName(task?.name)
     }, [task])
@@ -52,11 +57,18 @@ const TaskDetail = () => {
         navigate(`/app/projects/${projectID}`)
     }
 
-    const handleDelete = () => {
-        return async () => {
-            navigate(`/app/projects/${projectID}`)
-            deleteMutation.mutate()
+    const handleAlert = () => {
+        if (setting.delete_task_after_alert) {
+            setIsAlertOpen(true)
         }
+        else {
+            handleDelete()
+        }
+    }
+
+    const handleDelete = () => {
+        navigate(`/app/projects/${projectID}`)
+        deleteMutation.mutate()
     }
 
     if (isPending) {
@@ -75,11 +87,19 @@ const TaskDetail = () => {
                     color={color}
                 />
                 <Icons>
-                    <FeatherIcon icon="trash-2" onClick={handleDelete()}/>
+                    <FeatherIcon 
+                        icon="trash-2"
+                        onClick={handleAlert}
+                    />
                     <FeatherIcon icon="x" onClick={onClose} />
                 </Icons>
             </TaskNameBox>
             <Contents task={task} setFunc={patchMutation.mutate}/>
+            {isAlertOpen &&
+                <ModalPortal closeModal={() => {setIsAlertOpen(false)}} additional={true}>
+                    <DeleteAlert title="할 일을" onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
+                </ModalPortal>
+            }
         </TaskDetailBox>
     )
 }

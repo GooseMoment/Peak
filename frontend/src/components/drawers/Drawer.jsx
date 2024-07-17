@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react"
+import { Fragment, useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { cubicBeizer, rotateToUp, rotateToUnder } from "@assets/keyframes"
@@ -8,13 +8,16 @@ import FeatherIcon from 'feather-icons-react'
 import Button from "@components/common/Button"
 import Task from "@components/tasks/Task"
 import ContextMenu from "@components/common/ContextMenu"
+import DeleteAlert from "@components/common/DeleteAlert"
+import ModalPortal from "@components/common/ModalPortal"
 import DrawerBox, { DrawerName, DrawerIcon } from "@components/drawers/DrawerBox"
 
 import { useMutation } from "@tanstack/react-query"
 import { useInfiniteQuery } from "@tanstack/react-query"
-import queryClient from "@queries/queryClient"
 import { deleteDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
+import queryClient from "@queries/queryClient"
+import handleIsContextMenuOpen from "@utils/selectedPosition"
 
 import { useTranslation } from "react-i18next"
 
@@ -30,6 +33,12 @@ const Drawer = ({project, drawer, color}) => {
     const theme = useTheme()
     const navigate = useNavigate()
 
+    const [collapsed, setCollapsed] = useState(false)
+    const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+    const [isAlertOpen, setIsAlertOpen] = useState(false)
+    const [selectedButtonPosition, setSelectedButtonPosition] = useState({top: 0, left: 0})
+    const [isSimpleOpen, setIsSimpleOpen] = useState(false)
+
     const { t } = useTranslation(null, {keyPrefix: "project"})
 
     const { data, isError, fetchNextPage, isLoading } = useInfiniteQuery({
@@ -39,16 +48,16 @@ const Drawer = ({project, drawer, color}) => {
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
+    useEffect(() => {
+        setIsContextMenuOpen(false)
+    }, [project])
+
     const hasNextPage = data?.pages[data?.pages?.length-1].next !== null
 
-    //Drawer collapsed handle
-    const [collapsed, setCollapsed] = useState(false);
-    
     const handleCollapsed = () => {
         {drawer.task_count !== 0 && setCollapsed(prev => !prev)}
     }
 
-    //Drawer Delete
     const deleteMutation = useMutation({
         mutationFn: () => {
             return deleteDrawer(drawer.id)
@@ -58,27 +67,18 @@ const Drawer = ({project, drawer, color}) => {
         },
     })
 
-    const handleDelete = () => {
+    const handleAlert = () => {
         return async () => {
-            deleteMutation.mutate()
+            setIsContextMenuOpen(false)
+            setIsAlertOpen(true)
         }
     }
 
-    //Drawer ContextMenu handle
-    const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
-    const [selectedButtonPosition, setSelectedButtonPosition] = useState({top: 0, left: 0})
-    const contextMenuItems = makeContextMenuItems(theme, handleDelete)
+    const contextMenuItems = makeContextMenuItems(theme, handleAlert)
 
-    const handleIsContextMenuOpen = e => {
-        setSelectedButtonPosition({
-            top: e.target.getBoundingClientRect().top,
-            left: e.target.getBoundingClientRect().left,
-        })
-        setIsContextMenuOpen(prev => !prev)
+    const handleDelete = () => {
+        deleteMutation.mutate()
     }
-
-    //simpleCreateTask handle
-    const [isSimpleOpen, setIsSimpleOpen] = useState(false)
 
     const handleIsSimpleOpen = () => {
         setIsSimpleOpen(prev => !prev)
@@ -94,7 +94,7 @@ const Drawer = ({project, drawer, color}) => {
         {icon: <CollapseButton $collapsed={collapsed}>
             <FeatherIcon icon={"chevron-down"} onClick={handleCollapsed}/>
         </CollapseButton>},
-        {icon: <FeatherIcon icon={"more-horizontal"} onClick={handleIsContextMenuOpen}/>},
+        {icon: <FeatherIcon icon={"more-horizontal"} onClick={handleIsContextMenuOpen(setSelectedButtonPosition, setIsContextMenuOpen)}/>},
     ]
 
     if (isError) {
@@ -133,6 +133,11 @@ const Drawer = ({project, drawer, color}) => {
                     items={contextMenuItems}
                     selectedButtonPosition={selectedButtonPosition}
                 />
+            }
+            {isAlertOpen &&
+                <ModalPortal closeModal={() => {setIsAlertOpen(false)}}>
+                    <DeleteAlert title="서랍을" onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
+                </ModalPortal>
             }
             {/*isSimpleOpen &&
                 <TaskCreateSimple 
@@ -207,8 +212,8 @@ const MoreButton = styled(Button)`
     width: 25em;
 `
 
-const makeContextMenuItems = (theme, handleDelete) => [
-    {"icon": "trash-2", "display": "Delete", "color": theme.project.danger, "func": handleDelete()}, 
+const makeContextMenuItems = (theme, handleAlert) => [
+    {"icon": "trash-2", "display": "Delete", "color": theme.project.danger, "func": handleAlert()}, 
     {"icon": "chevrons-down", "display": "Sort", "color": theme.textColor, "func": () => {}}
 ]
 
