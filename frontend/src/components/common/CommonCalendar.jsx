@@ -12,8 +12,8 @@ const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStart
 
     const changeDate = (e) => {
         if (isRangeSelectMode) {
-            const startDate = moment(e[0]).format("YYYY-MM-DD")
-            const endDate = moment(e[1]).format("YYYY-MM-DD")
+            const startDate = moment(e[0]).toISOString()
+            const endDate = moment(e[1]).toISOString()
             if (startDate === endDate) {
                 setSelectedStartDate(null)
                 setSelectedEndDate(null)
@@ -24,7 +24,7 @@ const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStart
             }
         }
         else {
-            const startDate = moment(e).format("YYYY-MM-DD")
+            const startDate = moment(e).toISOString()
             if (selectedStartDate === startDate) {
                 setSelectedStartDate(null)
             }
@@ -35,7 +35,7 @@ const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStart
 
     const handleTileContent = ({ date, view }) => {
         const contents = []
-        const day = moment(date).format("YYYY-MM-DD")
+        const day = moment(date).toISOString()
 
         if (contentedDates.find((x) => x === day))
             contents.push(<StyledContentDot key={day} />)
