@@ -13,7 +13,7 @@ const UserProfileHeader = ({user, isMine}) => {
 
     useEffect(() => {
         setImgLoaded(false)
-    }, [user])
+    }, [user?.profile_img])
 
     return <>
         <Banner $headerColor={user?.header_color} />
