@@ -1,4 +1,3 @@
-import { useRouteLoaderData } from "react-router-dom"
 import { useState } from "react"
 
 import styled from "styled-components"
@@ -9,12 +8,18 @@ import ProjectName from "@components/project/ProjectName"
 import ModalPortal from "@components/common/ModalPortal"
 import ProjectCreate from "@components/project/Creates/ProjectCreate"
 
+import { getProjectsList } from "@api/projects.api"
+import { useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 
 const ProjectListPage = () => {
     const { t } = useTranslation(null, {keyPrefix: "project_list"})
 
-    const {projects} = useRouteLoaderData("app")
+    const { isPending, isError, data: projects, error } = useQuery({
+        queryKey: ['projects'],
+        queryFn: () => getProjectsList(),
+    })
+
     const [isCreateOpen, setIsCreateOpen] = useState(false)
 
     return(

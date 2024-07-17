@@ -1,4 +1,4 @@
-import { Outlet, useLoaderData, useParams } from "react-router-dom"
+import { Outlet, useParams } from "react-router-dom"
 import { useState } from "react"
 
 import styled from "styled-components"
@@ -8,16 +8,40 @@ import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
 import DrawerCreate from "@components/project/Creates/DrawerCreate"
 import ModalPortal from "@components/common/ModalPortal"
+import { useMutation } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
+
+import { getProject, patchProject } from "@api/projects.api"
 
 const ProjectPage = () => {
     const { id } = useParams()
-    const { project } = useLoaderData()
-    const drawers = project.drawers
+    
+    const { isPending, isError, data: project, error } = useQuery({
+        queryKey: ['projects', id],
+        queryFn: () => getProject(id),
+    })
+
+    const patchMutation = useMutation({
+        mutationFn: (data) => {
+            return patchProject(id, data)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['projects', id]})
+            queryClient.invalidateQueries({queryKey: ['projects']})
+        },
+    }) // 수정 만드셈
 
     const { t } = useTranslation(null, {keyPrefix: "project"})
 
     const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
+
+    if (isPending) {
+        return <div>로딩중...</div>
+        // 민영아.. 스켈레톤 뭐시기 만들어..
+    }
+
+    const drawers = project.drawers
 
     return (
     <>
@@ -32,7 +56,7 @@ const ProjectPage = () => {
         : drawers.map((drawer) => (
             <Drawer key={drawer.id} project={project} drawer={drawer} color={project.color}/>
         ))}
-        { isDrawerCreateOpen &&
+        {isDrawerCreateOpen &&
             <ModalPortal closeModal={() => {setIsDrawerCreateOpen(false)}}>
                 <DrawerCreate onClose={() => {setIsDrawerCreateOpen(false)}}/>
             </ModalPortal>}
