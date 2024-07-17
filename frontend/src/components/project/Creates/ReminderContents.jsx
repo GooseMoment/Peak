@@ -49,7 +49,7 @@ const ItemBlock = styled.div`
     margin-top: 1.2em;
 
     & svg {
-        stroke: #FF4A03;
+        stroke: ${p => p.theme.project.danger};
         stroke-width: 3;
         top: 0em;
     }
@@ -58,11 +58,11 @@ const ItemBlock = styled.div`
 const ItemText = styled.p`
     font-weight: normal;
     font-size: 1em;
-    color: #000000;
+    color: ${p => p.theme.textColor};
 
     &:hover {
         font-weight: bolder;
-        color: #FF4A03;
+        color: ${p => p.theme.goose};
         cursor: pointer;
     }
 `

@@ -22,8 +22,8 @@ import SocialPage from "@pages/SocialPage"
 import SocialFollowingPage from "@pages/SocialFollowingPage"
 import SocialExplorePage from "@pages/SocialExplorePage"
 
-import TaskCreateElement from "@pages/taskDetails/TaskCreateElement"
-import TaskDetailElement from "@pages/taskDetails/TaskDetailElement"
+import TaskCreateElement from "@components/project/taskDetails/TaskCreateElement"
+import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement"
 
 import UserPage from "@pages/UserPage"
 

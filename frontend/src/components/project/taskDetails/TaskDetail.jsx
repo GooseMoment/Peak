@@ -70,8 +70,8 @@ const TaskDetail = () => {
 const TaskDetailBox = styled.div`
     width: 50em;
     height: 23.5em;
-    background-color: #FFFFFF;
-    border: solid 1px #D9D9D9;
+    background-color: ${p => p.theme.backgroundColor};
+    border: solid 1px ${p => p.theme.project.borderColor};
     border-radius: 15px;
 `
 
@@ -90,7 +90,7 @@ const Icons = styled.div`
     & svg {
         top: 0.4em;
         cursor: pointer;
-        stroke: #FF0000;
+        stroke: ${p => p.theme.primaryColors.danger};
         margin-left: 1em;
     }
 `

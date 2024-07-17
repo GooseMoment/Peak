@@ -61,8 +61,8 @@ const DrawerCreate = ({onClose}) => {
 
 const DrawerBox = styled.div`
     width: 35em;
-    background-color: #FFFFFF;
-    border: solid 1px #D9D9D9;
+    background-color: ${p => p.theme.backgroundColor};
+    border: solid 1px ${p => p.theme.project.borderColor};
     border-radius: 15px;
 
     transition: left 0.5s ${cubicBeizer}, width 0.5s ${cubicBeizer};

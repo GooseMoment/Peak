@@ -105,7 +105,7 @@ const DetailBox = styled.div`
 `
 
 const CLine = styled.div`
-    border-top: thin solid #D9D9D9;
+    border-top: thin solid ${p => p.theme.project.lineColor};
     width: 90%;
     margin: 1em 0em;
 `
@@ -135,18 +135,20 @@ const ButtonBox = styled.div`
     width: 28%;
     height: 1.7em;
     border-radius: 13px;
-    border: solid 1px #D9D9D9;
+    border: solid 1px ${p => p.theme.project.borderColor};
+    color: ${p => p.theme.textColor};
     font-weight: 500;
 
     &:hover {
         cursor: pointer;
+        font-weight: bolder;
     }
 
     ${(props) =>
         props.$active && css`
-            background-color: #FF4A03;
-            border: solid 1px white;
-            color: white;
+            background-color: ${p => p.theme.goose};
+            border: solid 1px ${p => p.theme.project.borderColor};
+            color: ${p => p.theme.backgroundColor};
         `
     }
 `
@@ -155,6 +157,7 @@ const TextContainer = styled.div`
     font-weight: 450;
     font-size: 1.6em;
     margin: 0 0.3em;
+    color: ${p => p.theme.textColor};
 `
 
 const WeekInput = styled.input`
@@ -162,14 +165,14 @@ const WeekInput = styled.input`
     height: 1.6em;
     font-size: 1.6em;
     text-align: center;
-    background-color: #D9D9D9;
-    color: black;
+    background-color: ${p => p.theme.project.inputColor};
+    color: ${p => p.theme.textColor};
     appearance: textfield;
     -moz-appearance: textfield;
 
     &:focus {
-        background-color: #FF4A03;
-        color: white;
+        background-color: ${p => p.theme.goose};
+        color: ${p => p.theme.white};
     }
 
     &::-webkit-inner-spin-button {
@@ -184,7 +187,8 @@ const Circle = styled.div`
     height: 1.7em;
     aspect-ratio: 1;
     font-weight: 480;
-    border: solid 1px #D9D9D9;
+    color: ${p => p.theme.textColor};
+    border: solid 1px ${p => p.theme.project.lineColor};
     border-radius: 50%;
     margin-left: ${(props)=>props.$isFirst ? 0 : 0.3}em;
 
@@ -194,7 +198,7 @@ const Circle = styled.div`
 
     ${(props) =>
         props.$active && css`
-            background-color: #FF4A03;
+            background-color: ${p => p.theme.goose};
             border: solid 1px white;
             color: white;
         `

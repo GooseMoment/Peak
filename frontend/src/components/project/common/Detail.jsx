@@ -23,8 +23,8 @@ const DetailBox = styled.div`
     max-height: 35em;
     overflow-x: hidden;
     overflow-y: hidden;
-    background-color: #FFFFFF;
-    border: solid 1px #D9D9D9;
+    background-color: ${p => p.theme.backgroundColor};
+    border: solid 1px ${p => p.theme.project.borderColor};
     border-radius: 15px;
     padding-bottom: ${props => props.$special ? "0" : "1"}em;
 `
@@ -37,7 +37,7 @@ const TitleBox = styled.div`
     & svg {
         width: 1em;
         height: 1em;
-        stroke: #FF0000;
+        stroke: ${p => p.theme.primaryColors.danger};
         top: 1.2em;
         cursor: pointer;
     }
@@ -46,12 +46,12 @@ const TitleBox = styled.div`
 const Title = styled.div`
     font-weight: 550;
     font-size: 1em;
-    color: #000000;
+    color: ${p => p.theme.textColor};
     margin-top: 1.3em;
 `
 
 const CLine = styled.div`
-    border-top: thin solid #D9D9D9;
+    border-top: thin solid ${p => p.theme.project.lineColor};
     width: ${props => props.$special ? "90%" : "85%"};
     margin: 1em 1em 0em;
 `
