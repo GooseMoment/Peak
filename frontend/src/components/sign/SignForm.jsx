@@ -8,7 +8,6 @@ import Button, { ButtonGroup } from "@components/common/Button"
 import { signIn, signUp } from "@api/users.api"
 
 import sleep from "@utils/sleep"
-import { cubicBeizer } from "@assets/keyframes"
 
 import styled from "styled-components"
 import { Mail, AtSign, Key, HelpCircle, UserPlus, LogIn } from "feather-icons-react"
@@ -72,16 +71,10 @@ const SignInForm = ({setActive}) => {
         </Form>
         <Links>
             <Link to="/reset-password">
-                <LinkBox>
-                    <HelpCircle />
-                    <LinkText>{t("button_forgot_password")}</LinkText>
-                </LinkBox>
+                <LinkText><HelpCircle />{t("button_forgot_password")}</LinkText>
             </Link>
             <Link onClick={goToSignUp}>
-                <LinkBox>
-                    <UserPlus />
-                    <LinkText>{t("button_create_account")}</LinkText>
-                </LinkBox>
+                <LinkText><UserPlus />{t("button_create_account")}</LinkText>
             </Link>
         </Links>
     </Box>
@@ -133,10 +126,7 @@ const SignUpForm = ({setActive}) => {
         </Form>
         <Links>
             <Link onClick={goToSignIn}>
-                <LinkBox>
-                    <LogIn />
-                    <LinkText>{t("button_already_have_account")}</LinkText>
-                </LinkBox>
+                <LinkText><LogIn />{t("button_already_have_account")}</LinkText>
             </Link>
         </Links>
     </Box>
@@ -170,44 +160,14 @@ const Title = styled.h2`
 
 const Links = styled.div`
     display: flex;
-    justify-content: center;
-    gap: 2em;
-`
-
-const LinkBox = styled.div`
-    border: 2px solid ${p => p.theme.grey};
-    border-radius: 10px;
-
-    color: ${p => p.theme.grey};
-
-    box-sizing: border-box;
-    height: 6em;
-    width: 5.5em;
-    padding: 0.75em;
-    padding-bottom: 0.5em;
-
-    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1em;
-
-    svg {
-        font-size: 2em;
-        top: unset;
-        margin-right: unset;
-    }
-
-    transition: border-color 0.5s ${cubicBeizer}, color 0.5s ${cubicBeizer};
-
-    &:hover {
-        border-color: ${p => p.theme.textColor};
-        color: ${p => p.theme.textColor};
-    }
+    gap: 1.75em;
 `
 
 const LinkText = styled.p`
-    font-size: 0.75em;
-    font-weight: bold;
+    font-size: 1em;
+    font-weight: 500;
 
     text-align: center;
     line-height: 1.25;
