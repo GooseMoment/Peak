@@ -59,6 +59,7 @@
             "display_name": "이름",
             "display_name_placeholder": "남에게 보일 이름",
             "bio": "바이오",
+            "header_color": "헤더 색상",
             "bio_placeholder": "자신을 소개하세요.",
             "button_submit": "제출",
             "change_password": "암호 변경",

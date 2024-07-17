@@ -2,7 +2,7 @@ from rest_framework import mixins, generics
 from rest_framework.pagination import PageNumberPagination
 
 from .models import Project
-from .serializers import ProjectSerializer
+from .serializers import ProjectSerializer, ProjectSerializerForUserProjectList
 from api.permissions import IsUserMatch
 from api.views import CreateMixin
 
@@ -42,3 +42,15 @@ class ProjectList(CreateMixin,
     
     def post(self, request, *args, **kwargs):
         return self.create_with_user(request, order=0, *args, **kwargs)
+
+class UserProjectList(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = ProjectSerializerForUserProjectList
+    pagination_class = ProjectListPagination
+
+    def get_queryset(self):
+        username = self.kwargs["username"]
+        return Project.objects.filter(user__username=username).order_by("order").all()
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    

@@ -15,6 +15,19 @@ export const setToken = token => {
     return localStorage.setItem("token", token)
 }
 
+export const getCurrentUsername = () => {
+    const token = localStorage.getItem("username")
+    if (token === "null" || token === "undefined") {
+        return null
+    }
+
+    return token
+}
+
+export const setCurrentUsername = username => {
+    return localStorage.setItem("username", username)
+}
+
 const client = axios.create({
     baseURL: baseURL,
     withCredentials: true,
