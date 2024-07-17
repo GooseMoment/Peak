@@ -5,12 +5,13 @@ import { cubicBeizer, rotateToUp, rotateToUnder } from "@assets/keyframes"
 
 import Button from "@components/common/Button"
 import Task from "@components/tasks/Task"
+import ContextMenu from "@components/common/ContextMenu"
 import DrawerBox, { DrawerName, DrawerIcon } from "@components/drawers/DrawerBox"
 
 import { getTasksByDrawer } from "@api/tasks.api"
 import { useInfiniteQuery } from "@tanstack/react-query"
 
-import styled, { css } from "styled-components"
+import styled, { css, useTheme } from "styled-components"
 import FeatherIcon from 'feather-icons-react'
 import { useTranslation } from "react-i18next"
 
@@ -23,6 +24,7 @@ const getPageFromURL = (url) => {
 }
 
 const Drawer = ({project, drawer, color}) => {
+    const theme = useTheme()
     const navigate = useNavigate()
 
     const { t } = useTranslation(null, {keyPrefix: "project"})
@@ -34,7 +36,6 @@ const Drawer = ({project, drawer, color}) => {
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
-    // useInfiniteQuery에서 제공하는 hasNextPage가 제대로 작동 안함. 어째서?
     const hasNextPage = data?.pages[data?.pages?.length-1].next !== null
 
     //Drawer collapsed handle
@@ -44,10 +45,22 @@ const Drawer = ({project, drawer, color}) => {
         {drawer.task_count !== 0 && setCollapsed(prev => !prev)}
     }
 
+    //Drawer ContextMenu handle
+    const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+    const [selectedButtonPosition, setSelectedButtonPosition] = useState({top: 0, left: 0})
+
+    const handleIsContextMenuOpen = e => {
+        setSelectedButtonPosition({
+            top: e.target.getBoundingClientRect().top,
+            left: e.target.getBoundingClientRect().left,
+        })
+        setIsContextMenuOpen(prev => !prev)
+    }
+
     //simpleCreateTask handle
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
 
-    const handleisSimpleOpen = () => {
+    const handleIsSimpleOpen = () => {
         setIsSimpleOpen(prev => !prev)
     }
 
@@ -61,7 +74,7 @@ const Drawer = ({project, drawer, color}) => {
         {icon: <CollapseButton $collapsed={collapsed}>
             <FeatherIcon icon={"chevron-down"} onClick={handleCollapsed}/>
         </CollapseButton>},
-        {icon: <FeatherIcon icon={"more-horizontal"}/>},
+        {icon: <FeatherIcon icon={"more-horizontal"} onClick={handleIsContextMenuOpen}/>},
     ]
 
     if (isError) {
@@ -95,6 +108,15 @@ const Drawer = ({project, drawer, color}) => {
                     )))}
                 </TaskList>
             }
+            {isContextMenuOpen &&
+                <ContextMenu
+                    items={[
+                        {"icon": "trash-2", "display": "Delete", "color": theme.project.danger}, 
+                        {"icon": "chevrons-down", "display": "Sort", "color": theme.textColor}
+                    ]}
+                    selectedButtonPosition={selectedButtonPosition}
+                />
+            }
             {/*isSimpleOpen &&
                 <TaskCreateSimple 
                     color={color}
@@ -103,7 +125,7 @@ const Drawer = ({project, drawer, color}) => {
                     project_name={project.name}
                 />
             */}
-            <TaskCreateButton onClick={handleisSimpleOpen}>
+            <TaskCreateButton onClick={handleIsSimpleOpen}>
                 <FeatherIcon icon="plus-circle"/>
                 <TaskCreateText>{t("button_add_task")}</TaskCreateText>
             </TaskCreateButton>
