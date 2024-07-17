@@ -22,7 +22,7 @@ const UserProfileHeader = ({user, isMine}) => {
             <ProfileImgEmpty $display={!imgLoaded} />
             <ProfileTexts>
                 <Names>
-                    <DisplayName>{user?.display_name || "-----"}</DisplayName>
+                    <DisplayName>{user ? user.display_name || user.username : "----"}</DisplayName>
                     <Username>@{user?.username}</Username>
                 </Names>
                 <Datas>
