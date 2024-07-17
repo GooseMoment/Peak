@@ -3,9 +3,12 @@ import moment from 'moment'
 import styled from 'styled-components'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
+import { useClientLocale } from '@/utils/clientSettings'
 
 const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStartDate, selectedEndDate, setSelectedEndDate, contentedDates = [] }) => {
     const [activeStartDate, setActiveStartDate] = useState(new Date())
+
+    const locale = useClientLocale()
 
     const changeDate = (e) => {
         if (isRangeSelectMode) {
@@ -51,7 +54,7 @@ const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStart
             value={isRangeSelectMode ? [selectedStartDate, selectedEndDate] : selectedStartDate}
             formatDay={(locale, date) => moment(date).format("D")}
             tileContent={handleTileContent}
-            locale='en'
+            locale={locale}
             next2Label={null}
             prev2Label={null}
             minDetail='year'
