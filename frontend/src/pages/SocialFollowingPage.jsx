@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useRouteLoaderData } from "react-router-dom"
 
 import { styled, css } from "styled-components"
-import moment from "moment";
 
 import SocialCalendar from "@components/social/SocialCalendar"
 import DailyLogPreview from "@components/social/DailyLogPreview"
