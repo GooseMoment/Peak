@@ -35,7 +35,8 @@ SCHEME = os.environ.get("SCHEME")
 WEB_HOSTNAME = os.environ.get("WEB_HOSTNAME")
 API_HOSTNAME = os.environ.get("API_HOSTNAME")
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ") + [API_HOSTNAME]
+API_HOSTNAME_NO_PORT = API_HOSTNAME.split(":")[0]
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ") + [API_HOSTNAME_NO_PORT]
 
 # Application definition
 
