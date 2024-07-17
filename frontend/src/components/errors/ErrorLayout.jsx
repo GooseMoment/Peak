@@ -22,7 +22,7 @@ const Error = ({code, text, bottomText, bottomLinkTo, bottomA=false}) => {
 const Container = styled.div`
     width: 100%;
     height: 100vh;
-    padding: 5em 0;
+    padding: 10em 0 5em 0;
     box-sizing: border-box;
 
     display: flex;
