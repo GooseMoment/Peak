@@ -42,6 +42,7 @@ export const light = {
         hoverColor: black,
         hoverBackgroundColor: `rgb(255 74 3 / 0.35)`,
         backgroundColor: "#F9F7F6",
+        scrollbarColor: "#FFC6C6",
     },
     project: {
         borderColor: "#D9D9D9",
@@ -64,13 +65,13 @@ export const lightSystemcolor = Object.assign({}, light, {
         primary: "AccentColor",
     }),
     accentColor: "AccentColor",
-    sidebar: {
+    sidebar: Object.assign({}, light.sidebar, {
         activeColor: "HighlightText",
         activeBackgroundColor: "Highlight",
         hoverColor: black,
         hoverBackgroundColor: "#D9D9D9",
         backgroundColor: "#F9F7F6",
-    }
+    }),
 })
 
 export const dark = {
@@ -93,7 +94,7 @@ export const dark = {
     secondBackgroundColor: "#474747",
     thirdBackgroundColor: "#2A2A2A",
     accentColor: goose,
-    scrollbarColor: "#2A2A2A",
+    scrollbarColor: "#4A4A4A",
     frontSignPageTextColor: goose,
     frontSignPageBackgroundColor: "#FFD7C7",
     sidebar: {
@@ -102,6 +103,7 @@ export const dark = {
         hoverColor: white,
         hoverBackgroundColor: `rgb(255 74 3 / 0.35)`,
         backgroundColor: "#2F2F2F",
+        scrollbarColor: "#4A4A4A",
     },
     project: {
         borderColor: "#474747",
@@ -124,13 +126,13 @@ export const darkSystemcolor = Object.assign({}, dark, {
         primary: "AccentColor",
     }),
     accentColor: "AccentColor",
-    sidebar: {
+    sidebar: Object.assign({}, dark.sidebar, {
         activeColor: "HighlightText",
         activeBackgroundColor: "Highlight",
         hoverColor: white,
         hoverBackgroundColor: black,
         backgroundColor: "#2F2F2F",
-    }
+    }),
 })
 
 const themes = {
