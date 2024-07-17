@@ -121,7 +121,7 @@ const SignUpForm = ({setActive}) => {
             <Input icon={<Mail />} name="email" type="email" placeholder={t("email")} required />
             <Input icon={<Key />} name="password" type="password" placeholder={t("password")} minLength="8" required />
             <Input icon={<AtSign />} name="username" type="text" 
-                placeholder={t("username")} pattern="[a-z0-9_-]{4,15}" minLength="4" required />
+                placeholder={t("username")} pattern="^[a-z0-9_]{4,15}$" minLength="4" required />
             <TosAgreement>
                 <Trans t={t} i18nKey="tos" components={{linkToTos: <a href="/tos" />}} />
             </TosAgreement>
