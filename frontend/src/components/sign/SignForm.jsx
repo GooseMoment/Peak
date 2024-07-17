@@ -109,7 +109,7 @@ const SignUpForm = ({setActive}) => {
             toast.success(t("sign_up_success"))
             setActive("signIn")
         } catch (err) {
-            toast.error(t("sign_up_failed") + err.message)
+            toast.error(t("sign_up_errors." + err.message))
             setIsLoading(false)
             return
         }
