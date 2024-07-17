@@ -57,7 +57,14 @@ export const light = {
         imgDangerColor: "invert(20%) sepia(92%) saturate(7288%) hue-rotate(358deg) brightness(106%) contrast(115%)",
         imgDueColor: "invert(42%) sepia(80%) saturate(4726%) hue-rotate(148deg) brightness(94%) contrast(101%)",
         imgReminderColor: "invert(23%) sepia(38%) saturate(4190%) hue-rotate(259deg) brightness(91%) contrast(101%)",
-    }
+    },
+    skeleton: {
+        defaultColor: "#ddd",
+        shineColor: "#e8e8e8",
+    },
+    notifications: {
+        boxShadowColor: "rgba(149, 157, 165, 0.2)",
+    },
 }
 
 export const lightSystemcolor = Object.assign({}, light, {
@@ -88,10 +95,10 @@ export const dark = {
     black,
     white,
     goose,
-    grey: "rgb(133, 133, 133)",
+    grey: "#858585",
     textColor: white,
     backgroundColor: black,
-    secondBackgroundColor: "#474747",
+    secondBackgroundColor: "#323232",
     thirdBackgroundColor: "#2A2A2A",
     accentColor: goose,
     scrollbarColor: "#4A4A4A",
@@ -118,7 +125,14 @@ export const dark = {
         imgDangerColor: "invert(40%) sepia(69%) saturate(3544%) hue-rotate(331deg) brightness(94%) contrast(86%)",
         imgDueColor: "invert(42%) sepia(93%) saturate(2201%) hue-rotate(130deg) brightness(96%) contrast(98%)",
         imgReminderColor: "invert(42%) sepia(58%) saturate(5361%) hue-rotate(253deg) brightness(93%) contrast(85%)",
-    }
+    },
+    skeleton: {
+        defaultColor: "#2A2A2A",
+        shineColor: "#3A3A3A",
+    },
+    notifications: {
+        boxShadowColor: "rgba(0, 0, 0, 0.4)",
+    },
 }
 
 export const darkSystemcolor = Object.assign({}, dark, {
