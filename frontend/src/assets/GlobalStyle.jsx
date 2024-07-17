@@ -1,6 +1,6 @@
 import reset from 'styled-reset'
 
-import { scaleForward, scaleBack, modalFadeOut, scaleUp, modalFadeIn, cubicBeizer } from '@assets/keyframes'
+import { scaleForward, scaleBack, modalFadeOut, modalFadeIn, cubicBeizer } from '@assets/keyframes'
 
 import { createGlobalStyle } from 'styled-components'
 
@@ -83,6 +83,7 @@ textarea, input {
 
 body {
     overflow-x: hidden;
+    transition: background-color 0.25s ${cubicBeizer};
 }
 
 .feather {
