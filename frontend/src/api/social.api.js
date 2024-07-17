@@ -89,9 +89,18 @@ export const deleteBlock = (userID) => {
 
 }
 
-export const getDailyReport = async(username, day) => {
+export const getDailyLogsPreview = async(username, day) => {
     try {
         const res = await client.get(`social/daily/logs/@${username}/${day}/`)
+        return res.data
+    } catch(e) {
+        throw e
+    }
+}
+
+export const getDailyComment = async(username, day) => {
+    try {
+        const res = await client.get(`social/daily/comment/@${username}/${day}/`)
         return res.data
     } catch(e) {
         throw e
@@ -127,8 +136,15 @@ export const postCommentToTask = (taskID, comment) => {
 
 }
 
-export const postCommentToDailyComment = (date, comment) => {
-
+export const postCommentToDailyComment = async(date, dailycomment) => {
+    try {
+        const res = await client.post(`social/daily/comment/${date}/`, {
+            comment: dailycomment
+        })
+        return res.data
+    } catch (e) {
+        throw e
+    }
 }
 
 export const postPeck = (taskID) => {

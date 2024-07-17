@@ -1,31 +1,29 @@
 import styled from "styled-components"
 import { DateTime } from "luxon"
+import SimpleProfile from "./SimpleProfile"
 
 const putEllipsis = (text, maxLength) => {
-    return text.length > maxLength ? text.substring(0, maxLength-3) + '...' : text;
+    return text.length > maxLength ? text.substring(0, maxLength-3) + '...' : text
 }
 
-const DailyLogPreview = ({userLogSimple, selectedIndex, setSelectedIndex}) => {
+const DailyLogPreview = ({userLogSimple, selectedIndex: selectedUsername, setSelectedIndex: setSelectedUsername}) => {
     
     const handleSelect = () => {
     // ~Log.index can be replaced with ~Log.task.id
-        setSelectedIndex(userLogSimple.username === selectedIndex ? null : userLogSimple.username)
+        setSelectedUsername(userLogSimple.username === selectedUsername ? null : userLogSimple.username)
+    }
+
+    const setRingColor = () => {
+        if(userLogSimple.recent_task)
+            return userLogSimple.recent_task.is_read ? "A4A4A4" : userLogSimple.recent_task.project_color
+        return null
     }
 
     return <Frame onClick={handleSelect}
-            $bgcolor={userLogSimple.username === selectedIndex? "#ffd7c7" : "#FEFDFC"}
+            $bgcolor={userLogSimple.username === selectedUsername? "#ffd7c7" : "#FEFDFC"}
         >
-        {/* separate the "Profile" into a separate file? */}
-        {/* TODO: 화면 너비 줄이면 프로필 이름 길이에 따라 배열 망가지는 문제 해결 */}
-        <Profile>
-            {/* {userLogSimple.isRead ? "#A4A4A4" : userLogSimple.task.projectColor} */}
-            <ProfileImgWrapper $color="#A4A4A4" >
-                <img src={userLogSimple.profile_img}/>
-            </ProfileImgWrapper>
-            <Username>
-                @{userLogSimple.username}
-            </Username>
-        </Profile>
+
+        <SimpleProfile user={userLogSimple} ringColor={setRingColor} />
         <RecentTask>
             {userLogSimple.recent_task && (
                 <>
@@ -47,44 +45,6 @@ border-bottom: 1px solid black;
 padding: 1.2em 1em 1.2em;
 
 background-color: ${props => props.$bgcolor};
-`
-
-const Profile = styled.div`
-height: 5em;
-width: 6em;
-text-align: center;
-
-`
-
-const ProfileImgWrapper = styled.div`
-position: relative;
-width: auto;
-height: 3em;
-padding-top: 0.5em;
-padding-bottom: 0.5em;
-
-& img {
-    border-radius: 50%;
-}
-
-& svg {
-    stroke: 2em;
-    margin-right: 0;
-}
-
-& img, & svg {
-    width: auto;
-    height: 3em;
-    box-shadow: 0 0 0 2.5px #FEFDFC, 0 0 0 5px ${props => props.$color};
-}
-`
-
-const Username = styled.div`
-font-size: 1em;
-text-align: center;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
 `
 
 const RecentTask = styled.div`
