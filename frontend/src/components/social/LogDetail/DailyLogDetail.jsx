@@ -31,8 +31,8 @@ const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment, d
 
     const handleKeyDown = (e) => {
         if(e.key == 'Enter') {
-            saveDailyComment(day, comment)
             setInputState(false)
+            saveDailyComment(day, comment)
         }
     }
 

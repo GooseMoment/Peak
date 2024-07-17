@@ -192,13 +192,11 @@ def post_comment_to_daily_comment(request: HttpRequest, day):
     daily_comment = DailyComment.objects.filter(user=request.user, date__range=(day_min, day_max)).first()
     comment = request.data.get('comment')
     
-    day_date = day_min.date()   # delete
-    
     if daily_comment:
         daily_comment.comment = comment
         daily_comment.save()
     else:
-        daily_comment = DailyComment.objects.create(user=request.user, comment=comment, date=day_date)
+        daily_comment = DailyComment.objects.create(user=request.user, comment=comment, date=day)
     
     serializer = DailyCommentSerializer(daily_comment)
     
