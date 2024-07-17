@@ -45,7 +45,7 @@ const UserPage = () => {
     return <>
         <UserProfileHeader user={user} isMine={isMine} />
         <Section />
-        <Bio bio={user?.bio} />
+        <Bio bio={user?.bio} isMine={isMine} />
         <ProjectList projects={projects} />
     </>
 }
