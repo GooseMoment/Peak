@@ -13,12 +13,17 @@ const DailyLogPreview = ({userLogSimple, selectedIndex: selectedUsername, setSel
         setSelectedUsername(userLogSimple.username === selectedUsername ? null : userLogSimple.username)
     }
 
+    const setRingColor = () => {
+        if(userLogSimple.recent_task)
+            return userLogSimple.recent_task.is_read ? "A4A4A4" : userLogSimple.recent_task.project_color
+        return null
+    }
+
     return <Frame onClick={handleSelect}
             $bgcolor={userLogSimple.username === selectedUsername? "#ffd7c7" : "#FEFDFC"}
         >
-        {/* TODO: 화면 너비 줄이면 프로필 이름 길이에 따라 배열 망가지는 문제 해결 */}
-        <SimpleProfile user={userLogSimple} ringColor="#A4A4A4" /> 
-        {/* ringColor={userLogSimple.$color} */}
+
+        <SimpleProfile user={userLogSimple} ringColor={setRingColor} />
         <RecentTask>
             {userLogSimple.recent_task && (
                 <>

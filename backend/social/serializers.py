@@ -10,6 +10,8 @@ from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
 from projects.serializers import ProjectSerializer
 
+from projects.models import *
+
 class EmojiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Emoji
@@ -52,8 +54,12 @@ class DailyLogsSerializer(UserSerializer):
             last_visted = cache_data[self.context.get("user_id", None)]
             is_read = last_visted > recent_task.completed_at
         
+        #need to delete
+        is_read = False
+        
         recent_task = TaskSerializer(recent_task).data
         recent_task["is_read"] = is_read
+        recent_task["project_color"] = Project.objects.get(id=recent_task["project_id"]).color
         
         return recent_task
     

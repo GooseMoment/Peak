@@ -37,7 +37,7 @@ padding-bottom: 0.5em;
     width: auto;
     height: 3em;
     ${props => props.$color ? css`
-        box-shadow: 0 0 0 2.5px #FEFDFC, 0 0 0 5px ${props => props.$color};    
+        box-shadow: 0 0 0 2.5px #FEFDFC, 0 0 0 5px #${props => props.$color};    
     ` : null
     }
 }
