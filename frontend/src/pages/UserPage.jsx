@@ -1,7 +1,6 @@
 import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
-import { Section } from "@components/users/Section"
 import UserProfileHeader from "@components/users/UserProfileHeader"
 import Bio from "@components/users/Bio"
 import ProjectList from "@components/users/ProjectList"
@@ -44,9 +43,8 @@ const UserPage = () => {
 
     return <>
         <UserProfileHeader user={user} isMine={isMine} />
-        <Section />
         <Bio bio={user?.bio} isMine={isMine} />
-        <ProjectList projects={projects} />
+        <ProjectList projects={projects} isMine={isMine} />
     </>
 }
 
