@@ -49,7 +49,10 @@ const TaskCreate = () => {
             queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: state?.drawer_id}]})
             onClose()
         } catch (e) {
-            toast.error("할 일 생성에 실패하였습니다.")
+            if (newTask?.name)
+                toast.error("할 일 생성에 실패하였습니다.")
+            else
+                toast.error("할 일의 이름을 적어주세요.")
         }
     }
 
