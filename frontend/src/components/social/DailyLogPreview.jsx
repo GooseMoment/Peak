@@ -1,9 +1,9 @@
 import styled from "styled-components"
 import { DateTime } from "luxon"
-import SimpleProfile from "./SimpleProfile";
+import SimpleProfile from "./SimpleProfile"
 
 const putEllipsis = (text, maxLength) => {
-    return text.length > maxLength ? text.substring(0, maxLength-3) + '...' : text;
+    return text.length > maxLength ? text.substring(0, maxLength-3) + '...' : text
 }
 
 const DailyLogPreview = ({userLogSimple, selectedIndex: selectedUsername, setSelectedIndex: setSelectedUsername}) => {

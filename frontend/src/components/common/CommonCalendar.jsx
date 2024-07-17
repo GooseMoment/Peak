@@ -40,9 +40,9 @@ const CommonCalendar = ({ isRangeSelectMode, selectedStartDate, setSelectedStart
     }
 
     const handleTodayClick = () => {
-        const today = new Date();
-        setActiveStartDate(today);
-    };
+        const today = new Date()
+        setActiveStartDate(today)
+    }
 
     return <CalendarWrapper>
         <Calendar

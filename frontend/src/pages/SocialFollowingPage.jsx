@@ -4,12 +4,12 @@ import { useRouteLoaderData } from "react-router-dom"
 import { styled, css } from "styled-components"
 import moment from "moment";
 
-import SocialCalendar from "@components/social/SocialCalendar";
-import DailyLogPreview from "@components/social/DailyLogPreview";
-import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail";
-import SocialPageTitle from "@components/social/SocialPageTitle";
+import SocialCalendar from "@components/social/SocialCalendar"
+import DailyLogPreview from "@components/social/DailyLogPreview"
+import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail"
+import SocialPageTitle from "@components/social/SocialPageTitle"
 
-import { getDailyComment, getDailyLogsPreview, postCommentToDailyComment } from "@api/social.api";
+import { getDailyComment, getDailyLogsPreview, postCommentToDailyComment } from "@api/social.api"
 
 const sortDailyLogs = (report) => {
     return report.slice().sort((a, b) => {
