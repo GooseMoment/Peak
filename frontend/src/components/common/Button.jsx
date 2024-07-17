@@ -1,7 +1,8 @@
 import MildButton from "./MildButton"
 import { states } from "@assets/themes"
+import LoaderCircle from "@components/common/LoaderCircle"
 
-import styled, { keyframes } from "styled-components"
+import styled from "styled-components"
 
 export const buttonForms = {
     filled: "filled",
@@ -19,7 +20,7 @@ const Button = (props) => {
     const SelectedButton = buttons[$form]
 
     return <SelectedButton {...props} $state={$state}>
-        {$loading && <Loader />} {props.children}
+        {$loading && <ButtonLoader />} {props.children}
     </SelectedButton>
 }
 
@@ -83,27 +84,9 @@ const buttons = {
     outlined: OutlinedButton,
 }
 
-const spin = keyframes`
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-`
-
-const Loader = styled.div`
-    border: 3px solid ${p => p.theme.textColor};
-    border-left-color: transparent;
-    border-radius: 50%;
-
-    aspect-ratio: 1/1;
-    height: 0.75em;
-
-    animation: ${spin} 1s linear infinite;
-    
-    margin-right: 0.5em;
+const ButtonLoader = styled(LoaderCircle)`
+    margin-right: 0.25em;
+    opacity: 0.5;
 `
 
 export default Button
