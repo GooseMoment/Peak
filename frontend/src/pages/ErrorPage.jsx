@@ -25,7 +25,7 @@ const ErrorPage = () => {
     }, [error])
 
     if (isRouteErrorResponse(error)) {
-        return <ErrorLayout code={"" + error.status} text={t("404_error_text")} bottomText={t("404_error_bottom")} bottomLinkTo="/app/" />
+        return <ErrorLayout code={"" + error.status} text={t("404_error_text")} bottomText={t("404_error_bottom")} bottomLinkTo=".." />
     }
 
     return <ErrorLayout code={t("unknown_error_code")} text={t("unknown_error_text")} bottomText={t("unknown_error_bottom")} bottomLinkTo="/app/" />
