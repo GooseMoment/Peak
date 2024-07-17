@@ -2,17 +2,20 @@ import { Fragment, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { cubicBeizer, rotateToUp, rotateToUnder } from "@assets/keyframes"
+import styled, { css, useTheme } from "styled-components"
+import FeatherIcon from 'feather-icons-react'
 
 import Button from "@components/common/Button"
 import Task from "@components/tasks/Task"
 import ContextMenu from "@components/common/ContextMenu"
 import DrawerBox, { DrawerName, DrawerIcon } from "@components/drawers/DrawerBox"
 
-import { getTasksByDrawer } from "@api/tasks.api"
+import { useMutation } from "@tanstack/react-query"
 import { useInfiniteQuery } from "@tanstack/react-query"
+import queryClient from "@queries/queryClient"
+import { deleteDrawer } from "@api/drawers.api"
+import { getTasksByDrawer } from "@api/tasks.api"
 
-import styled, { css, useTheme } from "styled-components"
-import FeatherIcon from 'feather-icons-react'
 import { useTranslation } from "react-i18next"
 
 const getPageFromURL = (url) => {
@@ -45,9 +48,26 @@ const Drawer = ({project, drawer, color}) => {
         {drawer.task_count !== 0 && setCollapsed(prev => !prev)}
     }
 
+    //Drawer Delete
+    const deleteMutation = useMutation({
+        mutationFn: () => {
+            return deleteDrawer(drawer.id)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['projects', project.id]})
+        },
+    })
+
+    const handleDelete = () => {
+        return async () => {
+            deleteMutation.mutate()
+        }
+    }
+
     //Drawer ContextMenu handle
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
     const [selectedButtonPosition, setSelectedButtonPosition] = useState({top: 0, left: 0})
+    const contextMenuItems = makeContextMenuItems(theme, handleDelete)
 
     const handleIsContextMenuOpen = e => {
         setSelectedButtonPosition({
@@ -110,10 +130,7 @@ const Drawer = ({project, drawer, color}) => {
             }
             {isContextMenuOpen &&
                 <ContextMenu
-                    items={[
-                        {"icon": "trash-2", "display": "Delete", "color": theme.project.danger}, 
-                        {"icon": "chevrons-down", "display": "Sort", "color": theme.textColor}
-                    ]}
+                    items={contextMenuItems}
                     selectedButtonPosition={selectedButtonPosition}
                 />
             }
@@ -189,5 +206,10 @@ const FlexBox = styled.div`
 const MoreButton = styled(Button)`
     width: 25em;
 `
+
+const makeContextMenuItems = (theme, handleDelete) => [
+    {"icon": "trash-2", "display": "Delete", "color": theme.project.danger, "func": handleDelete()}, 
+    {"icon": "chevrons-down", "display": "Sort", "color": theme.textColor, "func": () => {}}
+]
 
 export default Drawer

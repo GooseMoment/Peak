@@ -3,27 +3,7 @@ import { Fragment } from "react"
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-import { deleteDrawer } from "@api/drawers.api"
-import { useMutation } from "@tanstack/react-query"
-
 const ContextMenu = ({ items, selectedButtonPosition }) => {
-    //delete
-    const deleteMutation = useMutation({
-        mutationFn: () => {
-            return deleteDrawer(id)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['projects', id]})
-        },
-    })
-
-    const handleDelete = () => {
-        return async () => {
-            navigate(`/app/projects/${id}`)
-            deleteMutation.mutate()
-        }
-    }
-    
     return (
         <ContextMenuBox
             $top={selectedButtonPosition.top}
@@ -31,7 +11,7 @@ const ContextMenu = ({ items, selectedButtonPosition }) => {
         >
             {items.map((item, i) => (
                 <Fragment key={item.icon}>
-                    <DisplayBox $color={item.color}>
+                    <DisplayBox $color={item.color} onClick={item.func}>
                         <FeatherIcon icon={item.icon}/>
                         {item.display}
                     </DisplayBox>
