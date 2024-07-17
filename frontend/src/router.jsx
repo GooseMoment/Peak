@@ -5,9 +5,6 @@ import {
 
 import AppLayout from "@containers/AppLayout"
 
-import IntroPage from "@pages/IntroPage"
-import SignPage from "@pages/SignPage"
-
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 
@@ -47,11 +44,17 @@ const routes = [
         children: [
             {
                 index: true,
-                element: <IntroPage />,
+                async lazy() {
+                    const { IntroPage } = await import("@pages/OutsidePages")
+                    return { Component: IntroPage }
+                },
             },
             {
                 path: "sign",
-                element: <SignPage />,
+                async lazy() {
+                    const { SignPage } = await import("@pages/OutsidePages")
+                    return { Component: SignPage }
+                },
             },
         ]
     },
