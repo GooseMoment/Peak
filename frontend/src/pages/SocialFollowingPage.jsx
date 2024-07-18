@@ -14,13 +14,25 @@ import queryClient from "@/queries/queryClient"
 import { toast } from "react-toastify"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
-const sortDailyLogs = (report) => {
-    return report.slice().sort((a, b) => {
-        if (a.is_read !== b.is_read)
-            return a.is_read - b.is_read
-        return new Date(a.completed_at) - new Date(b.completed_at)
-    })
-}
+const sortDailyLogs = (dailyLogs) => {
+    return Object.entries(dailyLogs).sort(([, a], [, b]) => {
+        if(!a.recent_task === !b.recent_task) {
+            // (when there is no completed task) Show the user with the earliest username in alphabetical order first
+            if(!a.recent_task) return a.username > b.username ? 1:-1
+            if(a.recent_task.is_read !== b.recent_task.is_read)
+                return a.recent_task.is_read - b.recent_task.is_read
+            return a.recent_task.is_read ? (
+                // Show the earliest completed tasks first
+                new Date(a.recent_task.completed_at) - new Date(b.recent_task.completed_at)
+            ) : (
+                // Show more recently completed tasks first when not read yet
+                new Date(b.recent_task.completed_at) - new Date(a.recent_task.completed_at)
+            )
+
+        }
+        // Show user with recent work first
+        return !a.recent_task - !b.recent_task
+})}
 
 const SocialFollowingPage = () => {
     const initial_date = new Date()
@@ -70,8 +82,9 @@ const SocialFollowingPage = () => {
                     />
                 </CalendarContainer>
 
+                {/* DailyLogsPreview를 별도의 컴포넌트 파일로 구분핧까 고민중 */}
                 <DailyLogsPreviewContainer>
-                    {dailyLogs && Object.entries(dailyLogs).map(([index, dailyFollowerLog]) => (
+                    {dailyLogs && sortDailyLogs(dailyLogs).map(([index, dailyFollowerLog]) => (
                         <DailyLogPreview
                             key={index}
                             dailyLog={dailyFollowerLog}
