@@ -12,17 +12,11 @@ import StartPage from "@pages/StartPage"
 import TodayPage from "@pages/TodayPage"
 import HomePage from "@pages/HomePage"
 
-import ProjectPage from "@pages/ProjectPage"
 import ProjectListPage from "@pages/ProjectListPage"
 
-import SocialPage from "@pages/SocialPage"
-import SocialFollowingPage from "@pages/SocialFollowingPage"
-import SocialExplorePage from "@pages/SocialExplorePage"
-
+import ProjectPage from "@pages/ProjectPage"
 import TaskCreateElement from "@components/project/taskDetails/TaskCreateElement"
 import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement"
-
-import UserPage from "@pages/UserPage"
 
 import { getMe, signOut } from "@api/users.api"
 import { getProject, getProjectList } from "@api/projects.api"
@@ -45,14 +39,14 @@ const routes = [
             {
                 index: true,
                 async lazy() {
-                    const { IntroPage } = await import("@pages/OutsidePages")
+                    const { IntroPage } = await import("@/pages/chunks/OutsidePages")
                     return { Component: IntroPage }
                 },
             },
             {
                 path: "sign",
                 async lazy() {
-                    const { SignPage } = await import("@pages/OutsidePages")
+                    const { SignPage } = await import("@/pages/chunks/OutsidePages")
                     return { Component: SignPage }
                 },
             },
@@ -102,21 +96,24 @@ const routes = [
                 children: [
                     {
                         index: true,
-                        element: <SocialPage />
+                        async lazy() {
+                            const { SocialRedirector } = await import("@pages/chunks/SocialPages")
+                            return { Component: SocialRedirector }
+                        },
                     },
                     {
                         path: "following",
-                        element: <SocialFollowingPage />,
-                        // id: 'social',
-                        // loader: async () => {
-                        //     return {
-                        //         dailyLogPreview: await getDailyReport(),
-                        //     }
-                        // },
+                        async lazy() {
+                            const { SocialFollowingPage } = await import("@pages/chunks/SocialPages")
+                            return { Component: SocialFollowingPage }
+                        },
                     },
                     {
                         path: "explore",
-                        element: <SocialExplorePage />,
+                        async lazy() {
+                            const { SocialExplorePage } = await import("@pages/chunks/SocialPages")
+                            return { Component: SocialExplorePage }
+                        },
                     },
                 ]
             },
@@ -145,7 +142,10 @@ const routes = [
             },
             {
                 path: "users/:username",
-                element: <UserPage />,
+                async lazy() {
+                    const { default: UserPage } = await import("@pages/UserPage")
+                    return { Component: UserPage }
+                },
             },
             {
                 path: "sign_out",
