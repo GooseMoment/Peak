@@ -8,7 +8,7 @@ import ProjectName from "@components/project/ProjectName"
 import ModalPortal from "@components/common/ModalPortal"
 import ProjectCreate from "@components/project/Creates/ProjectCreate"
 
-import { getProjectsList } from "@api/projects.api"
+import { getProjectList } from "@api/projects.api"
 import { useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 
@@ -17,7 +17,7 @@ const ProjectListPage = () => {
 
     const { isPending, isError, data: projects, error } = useQuery({
         queryKey: ['projects'],
-        queryFn: () => getProjectsList(),
+        queryFn: () => getProjectList(),
     })
 
     const [isCreateOpen, setIsCreateOpen] = useState(false)
