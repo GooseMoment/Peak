@@ -30,27 +30,26 @@ class TaskDetail(mixins.RetrieveModelMixin,
     
     def patch(self, request, *args, **kwargs):
         try:
-            new_due_date = request.data.get("due_date")
-            new_due_time = request.data.get("due_time")
+            new_due_date = request.data["due_date"]
+            new_due_time = request.data["due_time"]
         except Exception as e:
             pass
         else:
             task: Task = self.get_object()
+            prev_due_date = None
+            prev_due_time = None
+
+            if task.due_date is not None:
+                prev_due_date = task.due_date.strftime("%Y-%m-%d")
+
+            if task.due_time is not None:
+                prev_due_time = task.due_time.strftime("T%H:%M:%SZ")
 
             # new_due_date is None
-            if new_due_date is None:
+            if (new_due_date is None) and (prev_due_date is not None):
                 TaskReminder.objects.filter(task=task.id).delete()
             # new_due_date is true
-            else:
-                prev_due_date = None
-                prev_due_time = None
-
-                if task.due_date is not None:
-                    prev_due_date = task.due_date.strftime("%Y-%m-%d")
-
-                if task.due_time is not None:
-                    prev_due_time = task.due_time.strftime("T%H:%M:%SZ")
-                    
+            else:   
                 if (prev_due_date != new_due_date) or (prev_due_time != new_due_time):
                     # new_due_time is None -> 9시 설정
                     if new_due_time is None:
