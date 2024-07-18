@@ -1,4 +1,4 @@
-const handleIsContextMenuOpen = (setSelectedButtonPosition, setIsContextMenuOpen) => {
+const handleToggleContextMenu = (setSelectedButtonPosition, setIsContextMenuOpen) => {
     return async (e) => {
         setSelectedButtonPosition({
             top: e.target.getBoundingClientRect().top,
@@ -8,4 +8,4 @@ const handleIsContextMenuOpen = (setSelectedButtonPosition, setIsContextMenuOpen
     }
 }
 
-export default handleIsContextMenuOpen
+export default handleToggleContextMenu
