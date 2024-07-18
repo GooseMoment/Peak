@@ -12,12 +12,11 @@ import DeleteAlert from "@components/common/DeleteAlert"
 import ModalPortal from "@components/common/ModalPortal"
 import DrawerBox, { DrawerName, DrawerIcon } from "@components/drawers/DrawerBox"
 
-import { useMutation } from "@tanstack/react-query"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useMutation, useInfiniteQuery } from "@tanstack/react-query"
 import { deleteDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
 import queryClient from "@queries/queryClient"
-import handleIsContextMenuOpen from "@utils/selectedPosition"
+import handleToggleContextMenu from "@utils/handleToggleContextMenu"
 
 import { useTranslation } from "react-i18next"
 
@@ -80,7 +79,7 @@ const Drawer = ({project, drawer, color}) => {
         deleteMutation.mutate()
     }
 
-    const handleIsSimpleOpen = () => {
+    const handleToggleSimpleCreate = () => {
         setIsSimpleOpen(prev => !prev)
     }
 
@@ -94,7 +93,7 @@ const Drawer = ({project, drawer, color}) => {
         {icon: <CollapseButton $collapsed={collapsed}>
             <FeatherIcon icon={"chevron-down"} onClick={handleCollapsed}/>
         </CollapseButton>},
-        {icon: <FeatherIcon icon={"more-horizontal"} onClick={handleIsContextMenuOpen(setSelectedButtonPosition, setIsContextMenuOpen)}/>},
+        {icon: <FeatherIcon icon={"more-horizontal"} onClick={handleToggleContextMenu(setSelectedButtonPosition, setIsContextMenuOpen)}/>},
     ]
 
     if (isError) {
@@ -136,7 +135,7 @@ const Drawer = ({project, drawer, color}) => {
             }
             {isAlertOpen &&
                 <ModalPortal closeModal={() => {setIsAlertOpen(false)}}>
-                    <DeleteAlert title="서랍을" onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
+                    <DeleteAlert title={`"${drawer.name}" 서랍을`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
                 </ModalPortal>
             }
             {/*isSimpleOpen &&
@@ -147,7 +146,7 @@ const Drawer = ({project, drawer, color}) => {
                     project_name={project.name}
                 />
             */}
-            <TaskCreateButton onClick={handleIsSimpleOpen}>
+            <TaskCreateButton onClick={handleToggleSimpleCreate}>
                 <FeatherIcon icon="plus-circle"/>
                 <TaskCreateText>{t("button_add_task")}</TaskCreateText>
             </TaskCreateButton>

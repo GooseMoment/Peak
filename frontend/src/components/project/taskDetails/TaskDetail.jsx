@@ -97,7 +97,7 @@ const TaskDetail = () => {
             <Contents task={task} setFunc={patchMutation.mutate}/>
             {isAlertOpen &&
                 <ModalPortal closeModal={() => {setIsAlertOpen(false)}} additional={true}>
-                    <DeleteAlert title="할 일을" onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
+                    <DeleteAlert title={`"${task.name}"\n 할 일을`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
                 </ModalPortal>
             }
         </TaskDetailBox>

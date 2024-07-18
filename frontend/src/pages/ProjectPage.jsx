@@ -11,11 +11,11 @@ import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
 import ModalPortal from "@components/common/ModalPortal"
 import queryClient from "@queries/queryClient"
-import { useMutation } from "@tanstack/react-query"
-import { useQuery } from "@tanstack/react-query"
-import { useTranslation } from "react-i18next"
+import handleToggleContextMenu from "@utils/handleToggleContextMenu"
 
-import handleIsContextMenuOpen from "@utils/selectedPosition"
+import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { getProject, patchProject, deleteProject } from "@api/projects.api"
 
 const ProjectPage = () => {
@@ -44,7 +44,6 @@ const ProjectPage = () => {
             return patchProject(id, data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['projects', id]})
             queryClient.invalidateQueries({queryKey: ['projects']})
         },
     }) // 수정 만드셈
@@ -54,7 +53,6 @@ const ProjectPage = () => {
             return deleteProject(id)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['projects', project.id]})
             queryClient.invalidateQueries({queryKey: ['projects']})
         },
     })
@@ -69,6 +67,7 @@ const ProjectPage = () => {
     const handleDelete = () => {
         navigate(`/app/projects`)
         deleteMutation.mutate()
+        toast.success(`"${project.name}" 프로젝트가 삭제되었습니다`)
     }
 
     if (isPending) {
@@ -84,7 +83,7 @@ const ProjectPage = () => {
             <PageTitle $color={"#" + project.color}>{project.name}</PageTitle>
             <Icons>
                 <FeatherIcon icon="plus" onClick={() => {setIsDrawerCreateOpen(true)}}/>
-                <FeatherIcon icon="more-horizontal" onClick={handleIsContextMenuOpen(setSelectedButtonPosition, setIsContextMenuOpen)}/>
+                <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedButtonPosition, setIsContextMenuOpen)}/>
             </Icons>
         </TitleBox>
         {drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
@@ -99,7 +98,7 @@ const ProjectPage = () => {
         }
         {isAlertOpen &&
             <ModalPortal closeModal={() => {setIsAlertOpen(false)}}>
-                <DeleteAlert title="프로젝트를" onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
+                <DeleteAlert title={`"${project.name}" 프로젝트를`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
             </ModalPortal>
         }
         {isDrawerCreateOpen &&
