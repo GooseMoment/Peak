@@ -1,10 +1,10 @@
 from django.db import models
 from datetime import datetime, time
-from pytz import timezone
 
 from api.models import Base, PrivacyMixin
 from users.models import User
 from drawers.models import Drawer
+from tasks.utils import combine_due_datetime
 
 class Repeat(Base):
     # TODO: 자연어로 빠른 Repeat 지정
@@ -48,12 +48,8 @@ class Task(Base, PrivacyMixin):
         blank=True,
     )
 
-    def due_datetime(self):
-        if (self.due_time == None):
-            self.due_time = time(0, 0, 0)
-        due = datetime.combine(self.due_date, self.due_time)
-        tz = timezone("UTC")
-        return tz.localize(due)
+    def due_datetime(self): 
+        return combine_due_datetime(self.due_date, self.due_time)
 
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"
