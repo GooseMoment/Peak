@@ -1,8 +1,5 @@
-import styled from "styled-components"
-
 import queryClient from "@queries/queryClient"
 import { useMutation } from "@tanstack/react-query"
-import { toast } from "react-toastify"
 import { postReminder, deleteReminder } from "@api/notifications.api"
 
 import Detail from "@components/project/common/Detail"
@@ -45,10 +42,6 @@ const Reminder = ({ task, closeComponent }) => {
     }
 
     const handleReminder = (delta) => {
-        if (!task.due_date) {
-            toast.error("알람 설정 전에 기한을 설정해주세요")
-            return true
-        }
         const id = getReminderID(delta)
         if (id) {
             deleteMutation.mutate(id)
@@ -63,7 +56,7 @@ const Reminder = ({ task, closeComponent }) => {
     return (
         <Detail title="알람 설정" onClose={closeComponent}>
             {items.map(item => (
-                <ReminderContents 
+                <ReminderContents
                     item={item}
                     reminders={task.reminders}
                     handleReminder={handleReminder}

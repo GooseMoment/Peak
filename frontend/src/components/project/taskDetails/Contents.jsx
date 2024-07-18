@@ -14,6 +14,7 @@ import Priority from "./Priority"
 import Drawer from "./Drawer"
 import Memo from "./Memo"
 
+import { toast } from "react-toastify"
 import ToolTip from "@components/project/common/ToolTip"
 import ModalPortal from "@components/common/ModalPortal"
 import taskDate from "@components/tasks/utils/taskDate"
@@ -59,9 +60,12 @@ const Contents = ({task, setFunc}) => {
             id: 3,
             name: "reminder",
             icon: <img src={alarmclock} />,
-            display: task.reminders?.length !== 0 ? <RemindersBox name="reminder">
-                {task.reminders.map(reminder => <ReminderBlock name="reminder">{displayReminder[reminder.delta]}</ReminderBlock>)}
-            </RemindersBox> : <PlusReminder name="reminder">+</PlusReminder>,
+            display: task?.reminders && task.reminders?.length !== 0 ? 
+                <RemindersBox name="reminder">
+                    {task.reminders.map(reminder => <ReminderBlock name="reminder">{displayReminder[reminder.delta]}</ReminderBlock>)}
+                </RemindersBox> 
+                : (task.due_date ? <EmptyReminderBox name="reminder">+</EmptyReminderBox>
+                : <EmptyReminderBox onClick={()=>{toast.error("알람 설정 전에 기한을 설정해주세요")}}>-</EmptyReminderBox>),
             component: <Reminder task={task} closeComponent={closeComponent}/>
         },
         {
@@ -184,7 +188,7 @@ const ReminderBlock = styled.div`
     align-items: center;
 `
 
-const PlusReminder = styled.div`
+const EmptyReminderBox = styled.div`
     font-size: 0.9em;
     width: 1em;
     padding: 0.3em;
@@ -194,7 +198,6 @@ const PlusReminder = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-
 `
 
 const priorities = [
