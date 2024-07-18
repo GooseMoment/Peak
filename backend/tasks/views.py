@@ -1,11 +1,15 @@
-from rest_framework import mixins, generics, status
+from rest_framework import mixins, generics
 from rest_framework.response import Response
 
 from .models import Task
 from .serializers import TaskSerializer
 from notifications.serializers import TaskReminderSerializer
-from api.permissions import IsUserMatch
 from api.views import CreateMixin
+from api.permissions import IsUserMatch
+from notifications.models import TaskReminder
+from datetime import datetime
+from notifications.utils import caculateScheduled
+from .utils import combine_due_datetime
 
 class TaskDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -25,6 +29,43 @@ class TaskDetail(mixins.RetrieveModelMixin,
         return Response(data)
     
     def patch(self, request, *args, **kwargs):
+        try:
+            new_due_date = request.data.get("due_date")
+            new_due_time = request.data.get("due_time")
+        except Exception as e:
+            pass
+        else:
+            task: Task = self.get_object()
+
+            # new_due_date is None
+            if new_due_date is None:
+                TaskReminder.objects.filter(task=task.id).delete()
+            # new_due_date is true
+            else:
+                prev_due_date = None
+                prev_due_time = None
+
+                if task.due_date is not None:
+                    prev_due_date = task.due_date.strftime("%Y-%m-%d")
+
+                if task.due_time is not None:
+                    prev_due_time = task.due_time.strftime("T%H:%M:%SZ")
+                    
+                if (prev_due_date != new_due_date) or (prev_due_time != new_due_time):
+                    # new_due_time is None -> 9시 설정
+                    if new_due_time is None:
+                        converted_due_date = datetime.strptime(new_due_date, "%Y-%m-%d").date()
+                        converted_due_time = datetime.strptime("T09:00:00Z", "T%H:%M:%SZ").time()
+                    # new_due_time is true -> new_due_time 대로 설정
+                    else:
+                        converted_due_date = datetime.strptime(new_due_date, "%Y-%m-%d").date()
+                        converted_due_time = datetime.strptime(new_due_time, "T%H:%M:%SZ").time()
+                    
+                    reminders = TaskReminder.objects.filter(task=task.id)
+                    for reminder in reminders:
+                        reminder.scheduled = caculateScheduled(combine_due_datetime(converted_due_date, converted_due_time), reminder.delta)
+                        reminder.save()
+    
         try:
             new_completed = request.data.get("completed_at")
         except Exception as e:
