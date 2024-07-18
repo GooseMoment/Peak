@@ -185,7 +185,7 @@ def post_comment_to_task(request: HttpRequest, task_id, comment):
 
 # POST social/daily/logs/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["POST"])
-def post_comment_to_daily_comment(request: HttpRequest, day):
+def post_comment_to_daily_comment(request, day):
     day_min = datetime.fromisoformat(day)
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
     
