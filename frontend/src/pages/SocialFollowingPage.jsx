@@ -74,9 +74,9 @@ const SocialFollowingPage = () => {
                     {dailyLogs && Object.entries(dailyLogs).map(([index, dailyFollowerLog]) => (
                         <DailyLogPreview
                             key={index}
-                            userLogSimple={dailyFollowerLog}
-                            selectedIndex={selectedUsername}
-                            setSelectedIndex={setSelectedUsername} />
+                            dailyLog={dailyFollowerLog}
+                            selectedUsername={selectedUsername}
+                            setSelectedUsername={setSelectedUsername} />
                     ))}
                 </DailyLogsPreviewContainer>
             </Container>
