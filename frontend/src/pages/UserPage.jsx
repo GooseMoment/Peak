@@ -1,29 +1,50 @@
-import { useState } from "react"
-import { useLoaderData } from "react-router-dom"
+import { useEffect } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 
-import { patchUser } from "@api/users.api"
+import UserProfileHeader from "@components/users/UserProfileHeader"
+import Bio from "@components/users/Bio"
+import ProjectList from "@components/users/ProjectList"
+
+import { getUserByUsername } from "@api/users.api"
+import { getProjectListByUser } from "@api/projects.api"
+import { getCurrentUsername } from "@api/client"
+
+import { useQuery } from "@tanstack/react-query"
 
 const UserPage = () => {
-    const user = useLoaderData()
-    const [bio, setBio] = useState(user.bio)
+    const navigate = useNavigate()
+    const { username: usernameWithAt } = useParams()
 
-    const changeBio = async e => {
-        const res = await patchUser({bio})
-        if (res === 200) alert("OK")
+    useEffect(() => {
+        if (usernameWithAt.at(0) !== "@") {
+            navigate("/app/users/@" + usernameWithAt)
+        }
+    }, [usernameWithAt])
+
+    const username = usernameWithAt.slice(1)
+    const currentUsername = getCurrentUsername()
+    const isMine = currentUsername === username
+
+    const { data: user, isPending: userPending, isError: userError } = useQuery({
+        queryKey: ["users", username],
+        queryFn: () => getUserByUsername(username),
+    })
+
+    const { data: projects } = useQuery({
+        queryKey: ["userProjects", username],
+        queryFn: () => getProjectListByUser(username),
+        enabled: !userPending && !userError,
+    })
+
+    if (userError) {
+        // TODO: Edit here after building a new error page
+        return "UserNotFound!"
     }
 
-    // TODO: @andless2004 영서의 페이지
-
     return <>
-        <h1>@{user.username}'s profile</h1>
-        <ul>
-            <img src={user.profile_img} />
-            <li>display_name: {user.display_name}</li>
-        </ul>
-        <br/>
-        <h1>Let's edit bio!</h1>
-        <textarea value={bio} onChange={e => setBio(e.target.value)} />
-        <button onClick={changeBio}>Change Bio</button>
+        <UserProfileHeader user={user} isMine={isMine} />
+        <Bio bio={user?.bio} isMine={isMine} />
+        <ProjectList projects={projects} isMine={isMine} />
     </>
 }
 
