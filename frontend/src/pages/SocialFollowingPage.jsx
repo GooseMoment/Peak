@@ -28,18 +28,14 @@ const SocialFollowingPage = () => {
 
     const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
     const [selectedUsername, setSelectedUsername] = useState(null)
-    const [dailyReport, setDailyReport] = useState([])
 
     const {user} = useRouteLoaderData("app")
 
-    const getPreview = async(date) => {
-        if(date) try {
-            const res = await getDailyLogsPreview(user.username, date)
-            setDailyReport(res)
-        } catch (e) {
-            throw alert(e)
-        }
-    }
+    const { data: dailyLogs, isError: dailyLogsError } = useQuery({
+        queryKey: ['daily', 'logs', user.username, selectedDate],
+        queryFn: () => getDailyLogsPreview(user.username, selectedDate),
+        enabled: !!selectedDate
+    })
 
     const dailyLogDetailUsername = selectedUsername?selectedUsername:user.username
 
@@ -61,10 +57,6 @@ const SocialFollowingPage = () => {
         }
     })
 
-    useEffect(() => {
-        getPreview(selectedDate)
-    }, [selectedDate])
-
     return <>
         <SocialPageTitle active="following" />
 
@@ -79,10 +71,10 @@ const SocialFollowingPage = () => {
                 </CalendarContainer>
 
                 <DailyLogsPreviewContainer>
-                    {sortDailyLogs(dailyReport).map((dailyFollowersLog) => (
+                    {dailyLogs && Object.entries(dailyLogs).map(([index, dailyFollowerLog]) => (
                         <DailyLogPreview
-                            key={dailyFollowersLog.username}
-                            userLogSimple={dailyFollowersLog}
+                            key={index}
+                            userLogSimple={dailyFollowerLog}
                             selectedIndex={selectedUsername}
                             setSelectedIndex={setSelectedUsername} />
                     ))}
