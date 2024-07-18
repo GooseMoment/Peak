@@ -15,7 +15,7 @@ class TaskReminder(Base):
     scheduled = models.DateTimeField()
 
     def __str__(self) -> str:
-        return f"Reminder for {self.task.name} at {self.scheduled}"
+        return f"Reminder for {self.task.name} before {self.delta}min at {self.scheduled}"
 
 class Notification(Base):
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
