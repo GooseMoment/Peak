@@ -38,10 +38,7 @@ const ContextMenuBox = styled.div`
     background-color: ${p => p.theme.backgroundColor};
     border: solid 2px ${p => p.theme.textColor};
     border-radius: 15px;
-
-    &:hover {
-        cursor: pointer;
-    }
+    cursor: pointer;
 `
 
 const DisplayBox = styled.div`
