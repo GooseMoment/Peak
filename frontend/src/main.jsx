@@ -2,12 +2,12 @@ import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 
-import router from '@/router'
-import hashRouter from '@/hashRouter'
+import mainRouter from '@routers/mainRouter'
+import hashRouter from '@routers/hashRouter'
 import GlobalStyle from '@assets/GlobalStyle'
 
 import ClientThemeProvider from '@components/common/ThemeProvider'
-import InitialLoader from '@components/main/InitialLoader'
+import FullscreenLoader from '@components/common/FullscreenLoader'
 import Loading from '@components/settings/Loading'
 
 import { ClientSettingProvider, initClientSettings } from '@utils/clientSettings'
@@ -34,8 +34,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 <QueryClientProvider client={queryClient} >
                     <I18nSetLocale i18n={i18n} />
 
-                    <Suspense fallback={<InitialLoader />}>
-                        <RouterProvider router={router} />
+                    <Suspense fallback={<FullscreenLoader />}>
+                        <RouterProvider router={mainRouter} />
                     </Suspense>
 
                     <Suspense fallback={<Loading />}>
