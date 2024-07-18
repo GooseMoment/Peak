@@ -45,6 +45,7 @@ padding-bottom: 0.5em;
 
 const Username = styled.div`
 font-size: 1em;
+line-height: 1.3em;
 text-align: center;
 white-space: nowrap;
 overflow: hidden;
