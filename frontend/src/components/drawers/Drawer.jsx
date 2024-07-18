@@ -17,7 +17,7 @@ import { deleteDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
 import queryClient from "@queries/queryClient"
 import handleToggleContextMenu from "@utils/handleToggleContextMenu"
-
+import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 
 const getPageFromURL = (url) => {
@@ -77,6 +77,7 @@ const Drawer = ({project, drawer, color}) => {
 
     const handleDelete = () => {
         deleteMutation.mutate()
+        toast.success(`"${drawer.name}" 서랍이 삭제되었습니다`)
     }
 
     const handleToggleSimpleCreate = () => {

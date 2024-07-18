@@ -14,6 +14,7 @@ import { useClientSetting } from "@utils/clientSettings"
 import { useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
 import { getTask, patchTask, deleteTask } from "@api/tasks.api"
+import { toast } from "react-toastify"
 
 const TaskDetail = () => {
     const [ projectID, color ] = useOutletContext()
@@ -69,6 +70,7 @@ const TaskDetail = () => {
     const handleDelete = () => {
         navigate(`/app/projects/${projectID}`)
         deleteMutation.mutate()
+        toast.success(`"${task.name}" 할 일이 삭제되었습니다`)
     }
 
     if (isPending) {
