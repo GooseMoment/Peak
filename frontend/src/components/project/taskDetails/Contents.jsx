@@ -52,7 +52,7 @@ const Contents = ({task, setFunc}) => {
             id: 2,
             name: "due",
             icon: <img src={hourglass} />,
-            display: task.due_date && formatted_due_time ? formatted_due_date + ' ' + formatted_due_time : "없음",
+            display: task.due_date ? (task.due_time ? formatted_due_date + ' ' + formatted_due_time : formatted_due_date) : null,
             component: <Due setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
