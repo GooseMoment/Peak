@@ -1,17 +1,27 @@
+import { Link } from "react-router-dom"
 import { Section, SectionTitle } from "@components/users/Section"
 
 import styled from "styled-components"
 
-const ProjectList = ({projects}) => {
+const ProjectList = ({projects, isMine}) => {
     return <Section>
         <SectionTitle>Projects</SectionTitle>
 
         <Projects>
-            {projects?.map(project => <Project key={project.id}>
-                <Circle $color={"#" + project.color} /> <Name>{project.name}</Name> 
-            </Project>)}
-        </Projects>
+            {projects?.map(project => {
+                const projectCompo = <Project key={project.id}>
+                    <Circle $color={"#" + project.color} /> <Name>{project.name}</Name> 
+                </Project>
 
+                if (!isMine) {
+                    return projectCompo
+                }
+
+                return <Link to={isMine && `/app/projects/${project.id}`} key={project.id}>
+                    {projectCompo}
+                </Link>
+            })}
+        </Projects>
     </Section>
 }
 

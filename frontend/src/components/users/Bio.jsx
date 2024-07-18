@@ -1,11 +1,13 @@
 import { Section, SectionTitle } from "./Section"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
-const Bio = ({bio}) => {
+const Bio = ({bio, isMine}) => {
     return <Section>
         <SectionTitle>Bio</SectionTitle>
-        <BioBox>{bio}</BioBox>
+        <BioBox $empty={!bio}>
+            {bio || (isMine ? "Click 'Edit Profile' to write your bio!" : "Empty here")}
+        </BioBox>
     </Section>
 }
 
@@ -20,6 +22,11 @@ const BioBox = styled.div`
     padding: 1.25em;
 
     white-space: pre-wrap;
+
+    ${p => p.$empty && css`
+        font-style: italic;
+        color: ${p => p.theme.grey};
+    `}
 `
 
 export default Bio
