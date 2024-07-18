@@ -50,12 +50,12 @@ const TaskFrame = ({task, color, taskDetailPath, isLoading, toComplete}) => {
                         <img src={hourglass} />
                         {due}
                     </DueDate>}
-                    {task.reminders?.length !== 0 &&
+                    {task?.reminders ? task.reminders?.length !== 0 &&
                     <Reminder $completed={task.completed_at}>
                         <img src={alarmclock} />
                         {task.reminders?.length}
                     </Reminder>
-                    }
+                    : null}
                 </Dates>
             </div>
         </Box>
