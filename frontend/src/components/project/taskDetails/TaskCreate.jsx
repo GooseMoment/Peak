@@ -67,7 +67,6 @@ const TaskCreate = () => {
                     color={color} 
                 />
                 <Icons>
-                    <FeatherIcon icon="trash-2" />
                     <FeatherIcon icon="x" onClick={onClose} />
                 </Icons>
             </TaskNameBox>
