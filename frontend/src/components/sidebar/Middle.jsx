@@ -114,7 +114,7 @@ const ProjectItemBox = styled.div`
     ${p => p.$skeleton && css`
         height: 2em;
         margin: 0.25em 1.5em;
-        ${skeletonCSS(p, "-100px", "300px", "0s", "2s")}
+        ${skeletonCSS("-100px", "300px", "2s")}
     `}
 
     ${p => p.$collapsed && css`
