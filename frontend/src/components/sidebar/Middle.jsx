@@ -1,17 +1,22 @@
 import { useMemo } from "react"
 
 import SidebarLink from "@components/sidebar/SidebarLink"
+import { cubicBeizer } from "@assets/keyframes"
+import { skeletonCSS } from "@assets/skeleton"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
-import { cubicBeizer } from "@assets/keyframes"
-
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
-const Middle = ({projects, collapsed}) => {
+const Middle = ({projects, collapsed, isPending, isError}) => {
     const { t } = useTranslation("", {keyPrefix: "sidebar"})
 
     const items = useMemo(() => getItems(t), [t])
+
+    const onClickErrorBox = () => {
+        toast.error(t("projects_list_error_detail"))
+    }
 
     return <MiddleBox>
         {items.map(item => <SidebarLink to={item.to} draggable="false" key={item.to} end={item.end}>
@@ -22,10 +27,17 @@ const Middle = ({projects, collapsed}) => {
         </SidebarLink>)}
 
         <ProjectItemsContainer $collapsed={collapsed}>
-            {projects && projects.map(project => <SidebarLink to={`projects/` + project.id} draggable="false" key={project.id}>
+            {isPending && [...Array(5)].map((e, i) => <ProjectItemBox key={i} $skeleton />)}
+
+            {isError && <ProjectLoadErrorBox $collapsed={collapsed} onClick={onClickErrorBox}>
+                <FeatherIcon icon="alert-triangle" />
+                {!collapsed && t("projects_list_error_simple")}
+            </ProjectLoadErrorBox>}
+
+            {projects?.map(project => <SidebarLink to={`projects/` + project.id} draggable="false" key={project.id}>
                 <ProjectItemBox $collapsed={collapsed}>
                     <FeatherIcon icon="circle" fill={`#` + project.color} />
-                    {collapsed ? null : project.name}
+                    {!collapsed && project.name}
                 </ProjectItemBox>
             </SidebarLink>)}
         </ProjectItemsContainer>
@@ -44,32 +56,32 @@ const getItems = t => [
 ]
 
 export const MiddleBox = styled.div`
-flex-grow: 99;
+    flex-grow: 99;
 `
 
 export const ItemBox = styled.div`
-font-size: 1em;
-padding: 0.75em 0 0.75em 0.5em;
-margin: 0 0.75em;
+    font-size: 1em;
+    padding: 0.75em 0 0.75em 0.5em;
+    margin: 0 0.75em;
 
-border-radius: 10px;
-box-sizing: border-box;
+    border-radius: 10px;
+    box-sizing: border-box;
 
-background-color: inherit;
+    background-color: inherit;
 
-transition: padding 0.25s ${cubicBeizer}, margin 0.25s ${cubicBeizer};
+    transition: padding 0.25s ${cubicBeizer}, margin 0.25s ${cubicBeizer};
 
-${({$collapsed}) => $collapsed ? css`
-    text-align: center;
-    padding-left: 0.2em;
-    padding-right: 0.2em;
-    margin-left: 1em;
-    margin-right: 1em;
+    ${p => p.$collapsed && css`
+        text-align: center;
+        padding-left: 0.2em;
+        padding-right: 0.2em;
+        margin-left: 1em;
+        margin-right: 1em;
 
-    & svg {
-        margin-right: 0;
-    }
-` : null}
+        & svg {
+            margin-right: 0;
+        }
+    `}
 `
 
 const ProjectItemsContainer = styled.div`
@@ -85,32 +97,48 @@ const ProjectItemsContainer = styled.div`
 `
 
 const ProjectItemBox = styled.div`
-padding: 0.5em 0.5em;
-margin: 0 1.5em;
-background-color: inherit;
-border-radius: 10px;
+    padding: 0.5em 0.5em;
+    margin: 0 1.5em;
+    background-color: inherit;
+    border-radius: 10px;
 
-text-overflow: ellipsis;
-overflow: hidden;
-white-space: nowrap;
-box-sizing: border-box;
-
-& svg {
-    stroke: none;
-}
-
-${({$collapsed}) => $collapsed ? css`
-    text-align: center;
-
-    padding-left: 0.2em;
-    padding-right: 0.2em;
-    margin-left: 1em;
-    margin-right: 1em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
 
     & svg {
-        margin-right: 0;
+        stroke: none;
     }
-` : null}
+
+    ${p => p.$skeleton && css`
+        height: 2em;
+        margin: 0.25em 1.5em;
+        ${skeletonCSS(p, "-100px", "300px", "0s", "2s")}
+    `}
+
+    ${p => p.$collapsed && css`
+        text-align: center;
+
+        padding-left: 0.2em;
+        padding-right: 0.2em;
+        margin-left: 1em;
+        margin-right: 1em;
+
+        & svg {
+            margin-right: 0;
+        }
+    `}
 `
 
-export default Middle;
+const ProjectLoadErrorBox = styled(ProjectItemBox)`
+    cursor: pointer;
+    color: ${p => p.theme.white};
+    background-color: ${p => p.theme.primaryColors.danger};
+
+    & svg {
+        stroke: ${p => p.theme.textColor};
+    }
+`
+
+export default Middle
