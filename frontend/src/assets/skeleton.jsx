@@ -31,5 +31,6 @@ const breathing = p => keyframes`
 `
 
 export const skeletonBreathingCSS = css`
+    background-color: ${p => p.theme.skeleton.defaultColor};
     animation: ${p => breathing(p)} 2s infinite linear;
 `

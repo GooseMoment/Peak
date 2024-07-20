@@ -48,8 +48,6 @@ const Banner = styled.div`
     width: 100vw;
     margin: -3em -10em;
 
-    transition: background-color 0.25s ${cubicBeizer};
-
     ${p => p.$skeleton && css`
         ${skeletonBreathingCSS}
     `}
