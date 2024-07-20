@@ -1,13 +1,17 @@
 import { Link } from "react-router-dom"
 import { Section, SectionTitle } from "@components/users/Section"
 
-import styled from "styled-components"
+import { skeletonCSS } from "@assets/skeleton"
 
-const ProjectList = ({projects, isMine}) => {
+import styled, { css } from "styled-components"
+
+const ProjectList = ({projects, isMine, isPending}) => {
     return <Section>
         <SectionTitle>Projects</SectionTitle>
 
         <Projects>
+            {isPending && [...Array(10)].map((_, i) => <Project key={i} $skeleton />)}
+
             {projects?.map(project => {
                 const projectCompo = <Project key={project.id}>
                     <Circle $color={"#" + project.color} /> <Name>{project.name}</Name> 
@@ -39,6 +43,14 @@ const Project = styled.div`
     gap: 0.25em;
     font-size: 1.25em;
     align-items: center;
+
+    ${p => p.$skeleton && css`
+        height: 1.25em;
+        width: 5em;
+        border-radius: 8px;
+
+        ${skeletonCSS}    
+    `}
 `
 
 const Circle = styled.div`

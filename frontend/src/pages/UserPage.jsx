@@ -42,7 +42,7 @@ const UserPage = () => {
 
     return <>
         <UserProfileHeader user={user} isPending={userPending} isMine={isMine} />
-        <Bio bio={user?.bio} isMine={isMine} />
+        <Bio bio={user?.bio} isPending={userPending} isMine={isMine} />
         <ProjectList projects={projects} isPending={projectPending} isMine={isMine} />
     </>
 }

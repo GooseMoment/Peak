@@ -1,12 +1,17 @@
 import { Section, SectionTitle } from "./Section"
+import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import styled, { css } from "styled-components"
 
-const Bio = ({bio, isMine}) => {
+const Bio = ({bio, isMine, isPending}) => {
     return <Section>
         <SectionTitle>Bio</SectionTitle>
-        <BioBox $empty={!bio}>
-            {bio || (isMine ? "Click 'Edit Profile' to write your bio!" : "Empty here")}
+        <BioBox $empty={!bio} $skeleton={isPending}>
+            {
+                isPending && " " ||
+                bio ||
+                (isMine ? "Click 'Edit Profile' to write your bio!" : "Empty here")
+            }
         </BioBox>
     </Section>
 }
@@ -26,6 +31,11 @@ const BioBox = styled.div`
     ${p => p.$empty && css`
         font-style: italic;
         color: ${p => p.theme.grey};
+    `}
+
+    ${p => p.$skeleton && css`
+        height: 5em;
+        ${skeletonBreathingCSS}
     `}
 `
 
