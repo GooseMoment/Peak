@@ -5,8 +5,10 @@ import Section, { Name, Description, Value } from "@components/settings/Section"
 
 import { deleteSubscription, postSubscription } from "@api/notifications.api"
 import { useClientSetting } from "@utils/clientSettings"
+
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
+import { useMutation } from "@tanstack/react-query"
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
 
@@ -33,12 +35,30 @@ const Notifications = () => {
     const [setting, updateSetting] = useClientSetting()
     const { t } = useTranslation(null, {keyPrefix: "settings.notifications"})
 
+    const enableMutation = useMutation({
+        mutationFn: () => subscribePush(),
+        onSuccess: webSubscription => {
+            updateSetting("push_notification_subscription", webSubscription?.id)
+            toast.success(t("push_notification_subscription.enabled_push_notification"), {toastId: "notification_enabled"})
+        }
+    })
+
+    const disableMutation = useMutation({
+        mutationFn: () => deleteSubscription(setting.push_notification_subscription),
+        onSuccess: () => {
+            updateSetting("push_notification_subscription", null)
+            toast.info(t("push_notification_subscription.disabled_push_notification"))
+        },
+        onError: () => {
+            toast.info(t("push_notification_subscription.disabled_push_notification_error"))
+        },
+    })
+
+    const isPending = enableMutation.isPending || disableMutation.isPending
+
     const onClick = async () => {
         if (setting.push_notification_subscription) {
-            deleteSubscription(setting.push_notification_subscription)
-            updateSetting("push_notification_subscription", null)
-
-            toast.info(t("push_notification_subscription.disabled_push_notification"))
+            disableMutation.mutate()
             return
         }
 
@@ -47,11 +67,8 @@ const Notifications = () => {
             toast.error(t("push_notification_subscription.declined_push_notification"), {toastId: "notification_permission_declined"})
             return
         }
-
-        const webSubscription = await subscribePush()
-
-        updateSetting("push_notification_subscription", webSubscription?.id)
-        toast.success(t("push_notification_subscription.enabled_push_notification"), {toastId: "notification_enabled"})
+        
+        enableMutation.mutate()
     }
 
     return <>
@@ -60,7 +77,9 @@ const Notifications = () => {
             <Name>{t("push_notification_subscription.name")}</Name>
             <Description>{t("push_notification_subscription.description")}</Description>
             <Value>
-                <Button onClick={onClick}>
+                <Button 
+                    onClick={onClick} $loading={isPending} disabled={isPending}
+                >
                     {setting.push_notification_subscription 
                         ? t("push_notification_subscription.values.button_disable") : t("push_notification_subscription.values.button_enable")}
                 </Button>

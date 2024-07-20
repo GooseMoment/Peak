@@ -135,6 +135,7 @@
                     "button_disable": "Disable"
                 },
                 "disabled_push_notification": "Disabled push notification.",
+                "disabled_push_notification_error": "An error is occured while disabling a push notification.",
                 "declined_push_notification": "You declined notifications. Please allow permisssion.",
                 "enabled_push_notification": "Now you can receive notifications from Peak."
             },
