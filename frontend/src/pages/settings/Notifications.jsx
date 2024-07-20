@@ -5,6 +5,7 @@ import Section, { Name, Description, Value } from "@components/settings/Section"
 
 import { deleteSubscription, postSubscription } from "@api/notifications.api"
 import { useClientSetting } from "@utils/clientSettings"
+import { states } from "@assets/themes"
 
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
@@ -79,6 +80,7 @@ const Notifications = () => {
             <Value>
                 <Button 
                     onClick={onClick} $loading={isPending} disabled={isPending}
+                    $state={setting.push_notification_subscription ? states.danger : states.text}
                 >
                     {setting.push_notification_subscription 
                         ? t("push_notification_subscription.values.button_disable") : t("push_notification_subscription.values.button_enable")}
