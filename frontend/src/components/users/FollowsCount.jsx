@@ -3,19 +3,21 @@ import { useState, useEffect } from "react"
 import ModalPortal from "@components/common/ModalPortal"
 import { FollowerList, FollowingList } from "@components/users/FollowList"
 
-import styled from "styled-components"
+import { skeletonCSS } from "@assets/skeleton"
 
-const FollowsCount = ({user}) => {
+import styled, { css } from "styled-components"
+
+const FollowsCount = ({user, isPending}) => {
     const [window, setWindow] = useState("")
 
     useEffect(() => {
         setWindow("")
     }, [user])
 
-    if (!user) {
+    if (isPending) {
         return <Items>
-            <Item>Followers <Count>000</Count></Item>
-            <Item>Followings <Count>000</Count></Item>
+            <Item>Followers <Count $skeleton /></Item>
+            <Item>Followings <Count $skeleton /></Item>
         </Items>
     }
 
@@ -38,10 +40,19 @@ const Items = styled.div`
 
 const Item = styled.div`
     cursor: pointer;
+
+    display: flex;
+    gap: 0.5em;
 `
 
 const Count = styled.span`
     font-weight: 700;
+
+    ${p => p.$skeleton && css`
+        height: 1em;
+        width: 1.5em;
+        ${skeletonCSS}
+    `}
 `
 
 export default FollowsCount

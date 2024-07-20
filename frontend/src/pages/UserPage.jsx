@@ -30,10 +30,9 @@ const UserPage = () => {
         queryFn: () => getUserByUsername(username),
     })
 
-    const { data: projects } = useQuery({
+    const { data: projects, isPending: projectPending } = useQuery({
         queryKey: ["userProjects", username],
         queryFn: () => getProjectListByUser(username),
-        enabled: !userPending && !userError,
     })
 
     if (userError) {
@@ -42,9 +41,9 @@ const UserPage = () => {
     }
 
     return <>
-        <UserProfileHeader user={user} isMine={isMine} />
+        <UserProfileHeader user={user} isPending={userPending} isMine={isMine} />
         <Bio bio={user?.bio} isMine={isMine} />
-        <ProjectList projects={projects} isMine={isMine} />
+        <ProjectList projects={projects} isPending={projectPending} isMine={isMine} />
     </>
 }
 
