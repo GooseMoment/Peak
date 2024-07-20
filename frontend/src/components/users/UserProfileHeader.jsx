@@ -19,7 +19,7 @@ const UserProfileHeader = ({user, isMine, isPending}) => {
     }, [user?.profile_img])
 
     return <>
-        <Banner $headerColor={user?.header_color} $skeleton={isPending} />
+        <Banner $headerColor={user?.header_color} />
         <Profile>
             <ProfileImg $display={imgLoaded} src={user?.profile_img} onLoad={() => setImgLoaded(true)} />
             <ProfileImgEmpty $display={!imgLoaded} />
@@ -43,14 +43,12 @@ const UserProfileHeader = ({user, isMine, isPending}) => {
 }
 
 const Banner = styled.div`
-    background-color: ${p => p.$headerColor ? "#" + p.$headerColor : p.theme.thirdBackgroundColor};
+    background-color: ${p => p.$headerColor ? "#" + p.$headerColor : p.theme.skeleton.defaultColor};
     height: 15em;
     width: 100vw;
     margin: -3em -10em;
 
-    ${p => p.$skeleton && css`
-        ${skeletonBreathingCSS}
-    `}
+    transition: background-color 0.25s ${cubicBeizer};
 `
 
 const Profile = styled.div`
