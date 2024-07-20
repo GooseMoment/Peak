@@ -1,7 +1,10 @@
-import Button from "@components/common/Button"
+import { useState } from "react"
+
+import Button, { buttonForms } from "@components/common/Button"
 import { deleteFollowRequest, getFollow, putFollowRequest } from "@api/social.api"
 import { getCurrentUsername } from "@api/client"
 
+import { states } from "@assets/themes"
 import queryClient from "@queries/queryClient"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -13,7 +16,7 @@ const FollowButton = ({user}) => {
     const { data: following, isPending: fetchFollowPending } = useQuery({
         queryKey: ["follow", currentUsername, user?.username],
         queryFn: () => getFollow(currentUsername, user?.username),
-        enabled: user !== undefined,
+        enabled: !!user,
     })
 
     const putMutation = useMutation({
@@ -28,14 +31,17 @@ const FollowButton = ({user}) => {
         onError: () => toast.error(`Cannot cancel request to or unfollow @${user?.username}.`),
     }) 
 
+    const [isHover, setIsHover] = useState(false)
+
     const followButtonLoading = fetchFollowPending || putMutation.isPending || deleteMutation.isPending
+    const followAccpetedOrRequested = following?.status === "accepted" || following?.status === "requested" 
 
     const handleFollow = async () => {
         if (followButtonLoading) {
             return
         }
 
-        if (!following) {
+        if (!followAccpetedOrRequested) {
             putMutation.mutate()
             return
         }
@@ -46,11 +52,22 @@ const FollowButton = ({user}) => {
     return <Button 
         onClick={handleFollow}
         $loading={followButtonLoading}
-        disabled={followButtonLoading}> 
+        disabled={followButtonLoading}
+        $state={
+            following?.status === "accepted" && states.success ||
+            following?.status === "requested" && states.link ||
+            states.text
+        }
+        $form={isHover && followAccpetedOrRequested ? buttonForms.filled : buttonForms.outlined}
 
-        {following ? (
-            following.status === "requested" ? "Requested" : "Unfollow"
-        ) : "Follow"}
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+    > 
+        {
+            following?.status === "requested" && "Requested" ||
+            following?.status === "accepted" && "Following" ||
+            "Follow"
+        }
     </Button>
 }
 
