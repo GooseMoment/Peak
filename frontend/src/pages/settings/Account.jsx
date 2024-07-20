@@ -14,7 +14,6 @@ import Color from "@components/project/Creates/Color"
 import ModalPortal from "@components/common/ModalPortal"
 
 import { getMe, patchUser } from "@api/users.api"
-import { states } from "@assets/themes"
 
 import styled from "styled-components"
 
