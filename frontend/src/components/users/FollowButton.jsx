@@ -9,7 +9,7 @@ import queryClient from "@queries/queryClient"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
-import { Trans, useTranslation } from "react-i18next"
+import { useTranslation } from "react-i18next"
 
 const FollowButton = ({user}) => {
     const { t } = useTranslation(null, {keyPrefix: "follow_button"})
@@ -26,15 +26,15 @@ const FollowButton = ({user}) => {
         mutationFn: () => putFollowRequest(user?.username),
         onSuccess: data => {
             if (data.status === "requested") {
-                toast.info(<Trans t={t} i18nKey="success_requested" values={{username: user?.username}} />)
+                toast.info(t("success_requested", {username: user?.username}))
             } else {
-                toast.success(<Trans t={t} i18nKey="success_follow" values={{username: user?.username}} />)
+                toast.success(t("success_follow", {username: user?.username}))
             }
 
             queryClient.setQueryData(["followings", currentUsername, user?.username], data)
         },
         onError: () => {
-            toast.error(<Trans t={t} i18nKey="error_follow" values={{username: user?.username}} />)
+            toast.error(t("error_follow", {username: user?.username}))
         },
     }) 
 
@@ -42,18 +42,18 @@ const FollowButton = ({user}) => {
         mutationFn: () => deleteFollowRequest(user?.username),
         onSuccess: data => {
             if (following?.status === "requested") {
-                toast.success(<Trans t={t} i18nKey="success_cancel" values={{username: user?.username}} />)
+                toast.success(t("success_cancel", {username: user?.username}))
             } else {
-                toast.success(<Trans t={t} i18nKey="success_unfollow" values={{username: user?.username}} />)
+                toast.success(t("success_unfollow", {username: user?.username}))
             }
 
             queryClient.setQueryData(["followings", currentUsername, user?.username], data)
         },
         onError: () => {
             if (following?.status === "requested") {
-                toast.success(<Trans t={t} i18nKey="error_cancel" values={{username: user?.username}} />)
+                toast.success(t("error_cancel", {username: user?.username}))
             } else {
-                toast.success(<Trans t={t} i18nKey="error_unfollow" values={{username: user?.username}} />)
+                toast.success(t("error_unfollow", {username: user?.username}))
             }
         },
     }) 
