@@ -15,8 +15,8 @@ export const FollowerList = ({user}) => {
 
     return <Window>
         <Title><Trans t={t} i18nKey="follower_list_title" values={{username: user?.username}} /></Title>
-        {isPending && "Loading"}
         <List>
+            {isPending && [...Array(10)].map((_, i) => <ListUserProfile key={i} skeleton />)}
             {followers?.map(follower => <ListUserProfile user={follower} key={follower.username} />)}
         </List>
     </Window>
@@ -32,8 +32,8 @@ export const FollowingList = ({user}) => {
 
     return <Window>
         <Title><Trans t={t} i18nKey="following_list_title" values={{username: user?.username}} /></Title>
-        {isPending && "Loading"}
         <List>
+            {isPending && [...Array(10)].map((_, i) => <ListUserProfile key={i} skeleton />)}
             {followings?.map(following => <ListUserProfile user={following} key={following.username} />)}
         </List>
     </Window>
