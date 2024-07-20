@@ -2,27 +2,13 @@ import Header from "./Header"
 import Middle from "./Middle"
 import Footer from "./Footer"
 
-import { getProjectList } from "@api/projects.api"
-import { getMe } from "@api/users.api"
-
 import styled, { css } from "styled-components"
-import { useQuery } from "@tanstack/react-query"
 
 const Sidebar = ({collapsed, setCollapsed}) => {
-    const { data: user, isPending: userPending, isError: userError } = useQuery({
-        queryKey: ["users", "me"],
-        queryFn: () => getMe(),
-    })
-
-    const { data: projects, isPending: projectPending, isError: projectError } = useQuery({
-        queryKey: ["projects"],
-        queryFn: () => getProjectList(),
-    })
-
     return <SidebarBox $collapsed={collapsed}>
         <Header collapsed={collapsed} setCollapsed={setCollapsed} />
-        <Middle collapsed={collapsed} projects={projects} isPending={projectPending} isError={projectError} />
-        <Footer collapsed={collapsed} user={user} isPending={userPending} isError={userError} />
+        <Middle collapsed={collapsed} />
+        <Footer collapsed={collapsed} />
     </SidebarBox>
 }
 

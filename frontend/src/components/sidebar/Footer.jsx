@@ -2,13 +2,20 @@ import { useEffect } from "react"
 
 import SidebarLink, { SidebarA } from "./SidebarLink"
 import { skeletonCSS } from "@assets/skeleton"
+import { getMe } from "@api/users.api"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
+import { useQuery } from "@tanstack/react-query"
 
-const Footer = ({user, collapsed, isPending, isError}) => {
+const Footer = ({ collapsed }) => {
+    const { data: user, isPending, isError } = useQuery({
+        queryKey: ["users", "me"],
+        queryFn: () => getMe(),
+    })
+
     const { t } = useTranslation(null, {keyPrefix: "sidebar"})
 
     useEffect(() => {

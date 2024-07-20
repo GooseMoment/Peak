@@ -3,13 +3,20 @@ import { useMemo } from "react"
 import SidebarLink from "@components/sidebar/SidebarLink"
 import { cubicBeizer } from "@assets/keyframes"
 import { skeletonCSS } from "@assets/skeleton"
+import { getProjectList } from "@api/projects.api"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { useQuery } from "@tanstack/react-query"
 
-const Middle = ({projects, collapsed, isPending, isError}) => {
+const Middle = ({ collapsed }) => {
+    const { data: projects, isPending, isError } = useQuery({
+        queryKey: ["projects"],
+        queryFn: () => getProjectList(),
+    })
+
     const { t } = useTranslation("", {keyPrefix: "sidebar"})
 
     const items = useMemo(() => getItems(t), [t])
