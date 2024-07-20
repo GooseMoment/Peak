@@ -57,9 +57,6 @@ const Notifications = () => {
         },
         onSettled: async () => {
             updateSetting("push_notification_subscription", null)
-            const registration = await navigator.serviceWorker.ready
-            const subscription = await registration.pushManager.getSubscription()
-            await subscription.unsubscribe()
         },
     })
 

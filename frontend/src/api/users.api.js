@@ -1,5 +1,5 @@
 import client, { setToken, setCurrentUsername } from "@api/client"
-import { deleteSubscription } from "./notifications.api"
+import { deleteSubscription } from "@api/notifications.api"
 import { getClientSettings } from "@utils/clientSettings"
 
 export const getMe = async () => {
@@ -82,6 +82,7 @@ export const signUp = async (email, password, username) => {
 
 export const signOut = async () => {
     setToken(null)
+    setCurrentUsername(null)
 
     const subscriptionID = getClientSettings()["push_notification_subscription"]
 
