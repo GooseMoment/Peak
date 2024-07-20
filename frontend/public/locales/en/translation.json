@@ -135,9 +135,10 @@
                     "button_disable": "Disable"
                 },
                 "disabled_push_notification": "Disabled push notification.",
-                "disabled_push_notification_error": "An error is occured while disabling a push notification.",
+                "disabled_push_notification_error": "Disabled push notification on this device.",
                 "declined_push_notification": "You declined notifications. Please allow permisssion.",
-                "enabled_push_notification": "Now you can receive notifications from Peak."
+                "enabled_push_notification": "Now you can receive notifications from Peak.",
+                "enabled_push_notification_error": "An error is occured while enabling a push notification."
             },
             "play_notification_sound": {
                 "name": "Play notification sound"

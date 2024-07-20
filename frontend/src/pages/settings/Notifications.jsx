@@ -41,23 +41,31 @@ const Notifications = () => {
         onSuccess: webSubscription => {
             updateSetting("push_notification_subscription", webSubscription?.id)
             toast.success(t("push_notification_subscription.enabled_push_notification"), {toastId: "notification_enabled"})
-        }
+        },
+        onError: () => {
+            toast.error(t("push_notification_subscription.enabled_push_notification_error"), {toastId: "notification_enabled_error"})
+        },
     })
 
     const disableMutation = useMutation({
         mutationFn: () => deleteSubscription(setting.push_notification_subscription),
         onSuccess: () => {
-            updateSetting("push_notification_subscription", null)
             toast.info(t("push_notification_subscription.disabled_push_notification"))
         },
         onError: () => {
-            toast.info(t("push_notification_subscription.disabled_push_notification_error"))
+            toast.warning(t("push_notification_subscription.disabled_push_notification_error"))
+        },
+        onSettled: async () => {
+            updateSetting("push_notification_subscription", null)
+            const registration = await navigator.serviceWorker.ready
+            const subscription = await registration.pushManager.getSubscription()
+            await subscription.unsubscribe()
         },
     })
 
     const isPending = enableMutation.isPending || disableMutation.isPending
 
-    const onClick = async () => {
+    const toggleWebPush = async () => {
         if (setting.push_notification_subscription) {
             disableMutation.mutate()
             return
@@ -79,7 +87,7 @@ const Notifications = () => {
             <Description>{t("push_notification_subscription.description")}</Description>
             <Value>
                 <Button 
-                    onClick={onClick} $loading={isPending} disabled={isPending}
+                    onClick={toggleWebPush} $loading={isPending} disabled={isPending}
                     $state={setting.push_notification_subscription ? states.danger : states.text}
                 >
                     {setting.push_notification_subscription 
