@@ -14,20 +14,22 @@ const FollowButton = ({user}) => {
     const currentUsername = getCurrentUsername()
 
     const { data: following, isPending: fetchFollowPending } = useQuery({
-        queryKey: ["follow", currentUsername, user?.username],
+        queryKey: ["followings", currentUsername, user?.username],
         queryFn: () => getFollow(currentUsername, user?.username),
         enabled: !!user,
     })
 
     const putMutation = useMutation({
         mutationFn: () => putFollowRequest(user?.username),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ["follow", currentUsername, user?.username]}),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["followings", currentUsername, user?.username]})
+        },
         onError: () => toast.error(`Cannot follow @${user?.username}.`)
     }) 
 
     const deleteMutation = useMutation({
         mutationFn: () => deleteFollowRequest(user?.username),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ["follow", currentUsername, user?.username]}),
+        onSuccess: () => queryClient.invalidateQueries({queryKey: ["followings", currentUsername, user?.username]}),
         onError: () => toast.error(`Cannot cancel request to or unfollow @${user?.username}.`),
     }) 
 
