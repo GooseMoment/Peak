@@ -199,11 +199,13 @@
         "followers": "Followers",
         "bio": "Bio",
         "projects": "Projects",
-        "projects_nothing": "There are no projects.",
+        "projects_empty": "There are no projects.",
         "button_edit_profile": "Edit Profile",
         "error_user_not_found": "This user is not found.",
         "following_list_title": "@{{username}}'s followings",
-        "follower_list_title": "@{{username}}'s followers"
+        "following_list_empty": "Nothing is here.",
+        "follower_list_title": "@{{username}}'s followers",
+        "follower_list_empty": "Nothing is here."
     },
     "intro": {
         "section_top": {

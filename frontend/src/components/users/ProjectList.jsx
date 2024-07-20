@@ -29,7 +29,7 @@ const ProjectList = ({projects, isMine, isPending}) => {
                 </Link>
             })}
 
-            {projects?.length === 0 && t("projects_nothing")}
+            {projects?.length === 0 && t("projects_empty")}
         </Projects>
     </Section>
 }

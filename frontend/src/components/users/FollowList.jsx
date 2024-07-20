@@ -18,6 +18,7 @@ export const FollowerList = ({user}) => {
         <List>
             {isPending && [...Array(10)].map((_, i) => <ListUserProfile key={i} skeleton />)}
             {followers?.map(follower => <ListUserProfile user={follower} key={follower.username} />)}
+            {followers?.length === 0 && <NoneMessage>{t("following_list_empty")}</NoneMessage>}
         </List>
     </Window>
 }
@@ -35,6 +36,7 @@ export const FollowingList = ({user}) => {
         <List>
             {isPending && [...Array(10)].map((_, i) => <ListUserProfile key={i} skeleton />)}
             {followings?.map(following => <ListUserProfile user={following} key={following.username} />)}
+            {followings?.length === 0 && <NoneMessage>{t("following_list_empty")}</NoneMessage>}
         </List>
     </Window>
 }
@@ -55,6 +57,18 @@ const Title = styled.h2`
 `
 
 const List = styled.div`
+    position: relative;
+
     max-height: 70vh;
     overflow-y: auto;
+`
+
+const NoneMessage = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+    width: 100%;
+    height: 10em;
 `
