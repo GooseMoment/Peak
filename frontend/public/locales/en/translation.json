@@ -17,6 +17,7 @@
         "type_reactions": "Reactions",
         "type_pecking": "Pecking",
         "type_follow": "Follow",
+        "content_task_reminder": "This is a reminder before {{delta}} minute(s).",
         "content_comment_task": "commented on \"<ellipsis>{{task_name}}</ellipsis>\": \"<ellipsis>{{comment}}</ellipsis>\"",
         "content_peck": "pecked \"<ellipsis>{{task_name}}</ellipsis>\" {{count}} times",
         "content_daily_comment": "Daily Comment of {{date}}",
