@@ -267,5 +267,17 @@
                 "theme_dark": "다크"
             }
         }
+    },
+    "follow_button": {
+        "button_follow": "팔로우",
+        "button_accepted": "팔로우 중",
+        "button_requested": "요청 보냄",
+        "success_follow": "@{{username}} 님을 팔로우 합니다.",
+        "success_requested": "@{{username}} 님에게 팔로우 요청을 보냈습니다.",
+        "error_follow": "@{{username}} 님에게 팔로우 요청을 보내지 못했습니다.",
+        "success_unfollow": "이제 @{{username}} 님을 팔로우하지 않습니다.",
+        "success_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소했습니다.",
+        "error_unfollow": "@{{username}} 님의 내 팔로우를 취소하지 못했습니다.",
+        "error_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소하지 못했습니다."
     }
 }

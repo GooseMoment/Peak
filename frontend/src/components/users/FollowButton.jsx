@@ -9,8 +9,11 @@ import queryClient from "@queries/queryClient"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
+import { Trans, useTranslation } from "react-i18next"
 
 const FollowButton = ({user}) => {
+    const { t } = useTranslation(null, {keyPrefix: "follow_button"})
+
     const currentUsername = getCurrentUsername()
 
     const { data: following, isPending: fetchFollowPending } = useQuery({
@@ -21,16 +24,38 @@ const FollowButton = ({user}) => {
 
     const putMutation = useMutation({
         mutationFn: () => putFollowRequest(user?.username),
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["followings", currentUsername, user?.username]})
+        onSuccess: data => {
+            if (data.status === "requested") {
+                toast.info(<Trans t={t} i18nKey="success_requested" values={{username: user?.username}} />)
+            } else {
+                toast.success(<Trans t={t} i18nKey="success_follow" values={{username: user?.username}} />)
+            }
+
+            queryClient.setQueryData(["followings", currentUsername, user?.username], data)
         },
-        onError: () => toast.error(`Cannot follow @${user?.username}.`)
+        onError: () => {
+            toast.error(<Trans t={t} i18nKey="error_follow" values={{username: user?.username}} />)
+        },
     }) 
 
     const deleteMutation = useMutation({
         mutationFn: () => deleteFollowRequest(user?.username),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ["followings", currentUsername, user?.username]}),
-        onError: () => toast.error(`Cannot cancel request to or unfollow @${user?.username}.`),
+        onSuccess: data => {
+            if (following?.status === "requested") {
+                toast.success(<Trans t={t} i18nKey="success_cancel" values={{username: user?.username}} />)
+            } else {
+                toast.success(<Trans t={t} i18nKey="success_unfollow" values={{username: user?.username}} />)
+            }
+
+            queryClient.setQueryData(["followings", currentUsername, user?.username], data)
+        },
+        onError: () => {
+            if (following?.status === "requested") {
+                toast.success(<Trans t={t} i18nKey="error_cancel" values={{username: user?.username}} />)
+            } else {
+                toast.success(<Trans t={t} i18nKey="error_unfollow" values={{username: user?.username}} />)
+            }
+        },
     }) 
 
     const [isHover, setIsHover] = useState(false)
@@ -66,9 +91,9 @@ const FollowButton = ({user}) => {
         onMouseLeave={() => setIsHover(false)}
     > 
         {
-            following?.status === "requested" && "Requested" ||
-            following?.status === "accepted" && "Following" ||
-            "Follow"
+            following?.status === "requested" && t("button_requested") ||
+            following?.status === "accepted" && t("button_following") ||
+            t("button_follow") 
         }
     </Button>
 }

@@ -266,5 +266,17 @@
                 "theme_dark": "Dark"
             }
         }
+    },
+    "follow_button": {
+        "button_follow": "Follow",
+        "button_accepted": "Following",
+        "button_requested": "Requested",
+        "success_follow": "Following @{{username}}.",
+        "success_requested": "Sent a follow request to @{{username}}.",
+        "error_follow": "Failed to send a follow request to @{{username}}.",
+        "success_unfollow": "Unfollowed @{{username}}.",
+        "success_cancel": "Canceled your follow request to {{username}}.",
+        "error_unfollow": "Failed to unfollow @{{username}}.",
+        "error_cancel": "Failed to cancel a follow request to @{{username}}."
     }
 }
