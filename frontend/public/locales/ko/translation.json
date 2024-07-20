@@ -6,8 +6,7 @@
         "today": "오늘",
         "social": "소셜",
         "projects": "프로젝트",
-        "projects_list_error_simple": "목록 불러오기 실패",
-        "projects_list_error_detail": "프로젝트 목록을 불러올 수 없습니다. 다시 시도해 주세요.",
+        "projects_list_refetch": "눌러서 재시도",
         "user_error": "유저 정보를 불러올 수 없습니다. 앱을 다시 실행해 주세요."
     },
     "notifications": {

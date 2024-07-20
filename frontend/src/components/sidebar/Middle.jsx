@@ -8,11 +8,10 @@ import { getProjectList } from "@api/projects.api"
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
-import { toast } from "react-toastify"
 import { useQuery } from "@tanstack/react-query"
 
 const Middle = ({ collapsed }) => {
-    const { data: projects, isPending, isError } = useQuery({
+    const { data: projects, isPending, isError, refetch } = useQuery({
         queryKey: ["projects"],
         queryFn: () => getProjectList(),
     })
@@ -22,7 +21,7 @@ const Middle = ({ collapsed }) => {
     const items = useMemo(() => getItems(t), [t])
 
     const onClickErrorBox = () => {
-        toast.error(t("projects_list_error_detail"))
+        refetch()
     }
 
     return <MiddleBox>
@@ -38,7 +37,7 @@ const Middle = ({ collapsed }) => {
 
             {isError && <ProjectLoadErrorBox $collapsed={collapsed} onClick={onClickErrorBox}>
                 <FeatherIcon icon="alert-triangle" />
-                {!collapsed && t("projects_list_error_simple")}
+                {!collapsed && t("projects_list_refetch")}
             </ProjectLoadErrorBox>}
 
             {projects?.map(project => <SidebarLink to={`projects/` + project.id} draggable="false" key={project.id}>
