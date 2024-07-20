@@ -101,7 +101,7 @@ const Account = () => {
                     <ColorCircle onClick={onClickOpenPalette} $color={"#" + headerColor} />
                     <input name="header_color" type="hidden" value={headerColor} />
                 </Value>
-                {paletteOpen && <ModalPortal>
+                {paletteOpen && <ModalPortal additional>
                     <Color closeComponent={() => setPaletteOpen(false)} setColor={setHeaderColor} /> 
                 </ModalPortal>}
             </Section>
