@@ -99,7 +99,7 @@ const Account = () => {
                 <Name>{t("header_color")}</Name>
                 <Value>
                     <ColorCircle onClick={onClickOpenPalette} $color={"#" + headerColor} />
-                    <input name="header_color" type="hidden" value={headerColor} />
+                    <input name="header_color" type="hidden" value={headerColor || ""} />
                 </Value>
                 {paletteOpen && <ModalPortal additional>
                     <Color closeComponent={() => setPaletteOpen(false)} setColor={setHeaderColor} /> 
