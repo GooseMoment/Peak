@@ -13,7 +13,7 @@ const Bio = ({bio, isMine, isPending}) => {
             {
                 isPending && " " ||
                 bio ||
-                (isMine ? "Click 'Edit Profile' to write your bio!" : "Empty here")
+                (isMine ? t("bio_empty_mine") : t("bio_empty"))
             }
         </BioBox>
     </Section>

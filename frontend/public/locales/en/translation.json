@@ -198,6 +198,8 @@
         "followings": "Followings",
         "followers": "Followers",
         "bio": "Bio",
+        "bio_empty": "Empty here.",
+        "bio_empty_mine": "Click 'Edit Profile' to edit your bio.",
         "projects": "Projects",
         "projects_empty": "There are no projects.",
         "button_edit_profile": "Edit Profile",

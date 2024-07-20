@@ -199,6 +199,8 @@
         "followings": "팔로잉",
         "followers": "팔로워",
         "bio": "바이오",
+        "bio_empty": "비어 있습니다.",
+        "bio_empty_mine": "프로필 수정을 눌러 바이오를 작성해보세요.",
         "projects": "프로젝트",
         "projects_empty": "프로젝트가 없습니다.",
         "button_edit_profile": "프로필 수정",
