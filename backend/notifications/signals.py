@@ -1,9 +1,12 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models import Notification, TaskReminder
+from .models import Notification
 from social.models import Reaction, Peck, Following, Comment
 from .push import pushNotificationToUser
+
+# A receiver for post_save of TaskReminder is intentionally missed.
+# Creating Notifications for TaskReminder is being done by a Command notifyreminders.
 
 @receiver(post_save, sender=Reaction)
 def create_notification_for_reaction(sender, instance: Reaction=None, created=False, **kwargs):

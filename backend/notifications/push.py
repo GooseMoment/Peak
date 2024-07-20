@@ -37,7 +37,7 @@ def _notificationToPushData(notification: Notification) -> dict[str, any]:
     match notification.type:
         case Notification.FOR_TASK_REMINDER:
             data["title"] = notification.task_reminder.task.name
-            data["body"] = "Time to work!" # TODO: show left time
+            data["body"] = f"{notification.task_reminder.delta} minute(s) left."
         case Notification.FOR_FOLLOW:
             related_user = notification.following.follower
             data["body"] = "follows you"
