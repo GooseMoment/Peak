@@ -194,6 +194,17 @@
             }
         }
     },
+    "users": {
+        "followings": "Followings",
+        "followers": "Followers",
+        "bio": "Bio",
+        "projects": "Projects",
+        "projects_nothing": "There are no projects.",
+        "button_edit_profile": "Edit Profile",
+        "error_user_not_found": "This user is not found.",
+        "following_list_title": "@{{username}}'s followings",
+        "follower_list_title": "@{{username}}'s followers"
+    },
     "intro": {
         "section_top": {
             "title1": "Plan, Organize, and Cheer.",

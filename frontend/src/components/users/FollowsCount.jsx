@@ -6,8 +6,10 @@ import { FollowerList, FollowingList } from "@components/users/FollowList"
 import { skeletonCSS } from "@assets/skeleton"
 
 import styled, { css } from "styled-components"
+import { useTranslation } from "react-i18next"
 
 const FollowsCount = ({user, isPending}) => {
+    const { t } = useTranslation(null, {keyPrefix: "users"})
     const [window, setWindow] = useState("")
 
     useEffect(() => {
@@ -16,14 +18,14 @@ const FollowsCount = ({user, isPending}) => {
 
     if (isPending) {
         return <Items>
-            <Item>Followers <Count $skeleton /></Item>
-            <Item>Followings <Count $skeleton /></Item>
+            <Item>{t("followers")} <Count $skeleton /></Item>
+            <Item>{t("followings")} <Count $skeleton /></Item>
         </Items>
     }
 
     return <Items>
-        <Item onClick={() => setWindow("followers")}>Followers <Count>{user.followers_count}</Count></Item>
-        <Item onClick={() => setWindow("followings")}>Followings <Count>{user.followings_count}</Count></Item>
+        <Item onClick={() => setWindow("followers")}>{t("followers")} <Count>{user.followers_count}</Count></Item>
+        <Item onClick={() => setWindow("followings")}>{t("followings")} <Count>{user.followings_count}</Count></Item>
         {window !== "" &&
             <ModalPortal closeModal={() => setWindow("")}>
                 {window === "followers" && <FollowerList user={user} />} 

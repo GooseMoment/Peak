@@ -4,10 +4,13 @@ import { Section, SectionTitle } from "@components/users/Section"
 import { skeletonCSS } from "@assets/skeleton"
 
 import styled, { css } from "styled-components"
+import { useTranslation } from "react-i18next"
 
 const ProjectList = ({projects, isMine, isPending}) => {
+    const { t } = useTranslation(null, {keyPrefix: "users"})
+
     return <Section>
-        <SectionTitle>Projects</SectionTitle>
+        <SectionTitle>{t("projects")}</SectionTitle>
 
         <Projects>
             {isPending && [...Array(10)].map((_, i) => <Project key={i} $skeleton />)}
@@ -25,6 +28,8 @@ const ProjectList = ({projects, isMine, isPending}) => {
                     {projectCompo}
                 </Link>
             })}
+
+            {projects?.length === 0 && t("projects_nothing")}
         </Projects>
     </Section>
 }

@@ -8,8 +8,10 @@ import { cubicBeizer } from "@assets/keyframes"
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import styled, { css } from "styled-components"
+import { useTranslation } from "react-i18next"
 
 const UserProfileHeader = ({user, isMine, isPending}) => {
+    const { t } = useTranslation(null, {keyPrefix: "users"})
     const [imgLoaded, setImgLoaded] = useState(false)
 
     useEffect(() => {
@@ -32,7 +34,7 @@ const UserProfileHeader = ({user, isMine, isPending}) => {
             </ProfileTexts>
             <ProfileButtons>
                 {isMine ? 
-                    <a href="#/settings/account"><Button>Edit Profile</Button></a> : <FollowButton disabled={!user} user={user} /> 
+                    <a href="#/settings/account"><Button>{t("button_edit_profile")}</Button></a> : <FollowButton disabled={!user} user={user} /> 
                 }
             </ProfileButtons>
         </Profile>

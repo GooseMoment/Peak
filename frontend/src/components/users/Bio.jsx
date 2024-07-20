@@ -2,10 +2,13 @@ import { Section, SectionTitle } from "./Section"
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import styled, { css } from "styled-components"
+import { useTranslation } from "react-i18next"
 
 const Bio = ({bio, isMine, isPending}) => {
+    const { t } = useTranslation(null, {keyPrefix: "users"})
+
     return <Section>
-        <SectionTitle>Bio</SectionTitle>
+        <SectionTitle>{t("bio")}</SectionTitle>
         <BioBox $empty={!bio} $skeleton={isPending}>
             {
                 isPending && " " ||
