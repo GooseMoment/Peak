@@ -204,8 +204,10 @@
         "error_user_not_found": "This user is not found.",
         "following_list_title": "@{{username}}'s followings",
         "following_list_empty": "Nothing is here.",
+        "following_list_error": "Unable to load followings.",
         "follower_list_title": "@{{username}}'s followers",
-        "follower_list_empty": "Nothing is here."
+        "follower_list_empty": "Nothing is here.",
+        "follower_list_error": "Unable to load followers."
     },
     "intro": {
         "section_top": {

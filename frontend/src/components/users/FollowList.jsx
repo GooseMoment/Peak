@@ -8,7 +8,7 @@ import { Trans, useTranslation } from "react-i18next"
 export const FollowerList = ({user}) => {
     const { t } = useTranslation(null, {keyPrefix: "users"})
 
-    const { data: followers, isPending } = useQuery({
+    const { data: followers, isPending, isError } = useQuery({
         queryKey: ["users", user.username, "followers"],
         queryFn: () => getFollowersByUser(user.username),
     })
@@ -17,8 +17,9 @@ export const FollowerList = ({user}) => {
         <Title><Trans t={t} i18nKey="follower_list_title" values={{username: user?.username}} /></Title>
         <List>
             {isPending && [...Array(10)].map((_, i) => <ListUserProfile key={i} skeleton />)}
+            {isError && <Message>{t("follower_list_error")}</Message>}
             {followers?.map(follower => <ListUserProfile user={follower} key={follower.username} />)}
-            {followers?.length === 0 && <NoneMessage>{t("following_list_empty")}</NoneMessage>}
+            {followers?.length === 0 && <Message>{t("follower_list_empty")}</Message>}
         </List>
     </Window>
 }
@@ -26,7 +27,7 @@ export const FollowerList = ({user}) => {
 export const FollowingList = ({user}) => {
     const { t } = useTranslation(null, {keyPrefix: "users"})
 
-    const { data: followings, isPending } = useQuery({
+    const { data: followings, isPending, isError } = useQuery({
         queryKey: ["users", user.username, "followings"],
         queryFn: () => getFollowingsByUser(user.username),
     })
@@ -35,8 +36,9 @@ export const FollowingList = ({user}) => {
         <Title><Trans t={t} i18nKey="following_list_title" values={{username: user?.username}} /></Title>
         <List>
             {isPending && [...Array(10)].map((_, i) => <ListUserProfile key={i} skeleton />)}
+            {isError && <Message>{t("following_list_error")}</Message>}
             {followings?.map(following => <ListUserProfile user={following} key={following.username} />)}
-            {followings?.length === 0 && <NoneMessage>{t("following_list_empty")}</NoneMessage>}
+            {followings?.length === 0 && <Message>{t("following_list_empty")}</Message>}
         </List>
     </Window>
 }
@@ -63,7 +65,7 @@ const List = styled.div`
     overflow-y: auto;
 `
 
-const NoneMessage = styled.div`
+const Message = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
