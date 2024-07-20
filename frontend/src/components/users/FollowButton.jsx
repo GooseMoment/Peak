@@ -92,7 +92,7 @@ const FollowButton = ({user}) => {
     > 
         {
             following?.status === "requested" && t("button_requested") ||
-            following?.status === "accepted" && t("button_following") ||
+            following?.status === "accepted" && t("button_accepted") ||
             t("button_follow") 
         }
     </Button>
