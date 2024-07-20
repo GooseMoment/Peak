@@ -108,7 +108,12 @@ const Account = () => {
             </Section>
             <Section>
                 <ButtonGroup $justifyContent="right">
-                    <Button $form={buttonForms.filled} $state={states.primary} type="submit">{t("button_submit")}</Button>
+                    <Button 
+                        disabled={mutation.isPending} $loading={mutation.isPending}
+                        $form={buttonForms.filled} type="submit"
+                    >
+                        {t("button_submit")}
+                    </Button>
                 </ButtonGroup>
             </Section>
         </form>
