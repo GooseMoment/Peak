@@ -197,11 +197,15 @@ def get_daily_log_details(requset: HttpRequest, followee, day):
         followee=followeeUser,
         status=Following.ACCEPTED
     ).exists()
-    
-    if is_follower:
+
+    if requset.user.username == followee:   # is me
+        drawersFilter = Q()
+    elif is_follower:   # is follower
         drawersFilter = (Q(privacy=Drawer.FOR_PUBLIC) | Q(privacy=Drawer.FOR_PROTECTED))
     else:
         drawersFilter = Q(privacy=Drawer.FOR_PUBLIC)
+    
+    # TODO: need to check block
 
     drawersFilter &= Q(user=followeeUser)
     
