@@ -1,5 +1,6 @@
 from rest_framework import status, mixins, generics
 from rest_framework.views import APIView
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
@@ -10,6 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django.db.models import Q
 
 from datetime import datetime, timedelta
 
@@ -17,6 +19,8 @@ from .models import *
 from .serializers import *
 from users.serializers import UserSerializer
 from projects.models import *
+from drawers.models import *
+from drawers.serializers import DrawerSerializer
 
 ## Follow
 # social/follow/@follower/@followee/
@@ -165,6 +169,51 @@ def get_daily_comment(requset: HttpRequest, followee, day):
     # Response(cache_data, status=status.HTTP_200_OK)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+# POST social/daily/logs/YYYY-MM-DDTHH:mm:ss+hh:mm/
+@api_view(["POST"])
+def post_comment_to_daily_comment(request: Request, day):
+    day_min = datetime.fromisoformat(day)
+    day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+    
+    daily_comment = DailyComment.objects.filter(user=request.user, date__range=(day_min, day_max)).first()
+    comment = request.data.get('comment')
+    
+    if daily_comment:
+        daily_comment.comment = comment
+        daily_comment.save()
+    else:
+        daily_comment = DailyComment.objects.create(user=request.user, comment=comment, date=day)
+    
+    serializer = DailyCommentSerializer(daily_comment)
+    
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@api_view(["GET"])
+def get_daily_log_details(requset: HttpRequest, followee, day):
+    followeeUser = get_object_or_404(User, username=followee)
+    
+    is_follower = Following.objects.filter(
+        follower=requset.user,
+        followee=followeeUser,
+        status=Following.ACCEPTED
+    ).exists()
+    
+    if is_follower:
+        drawersFilter = (Q(privacy=Drawer.FOR_PUBLIC) | Q(privacy=Drawer.FOR_PROTECTED))
+    else:
+        drawersFilter = Q(privacy=Drawer.FOR_PUBLIC)
+
+    drawersFilter &= Q(user=followeeUser)
+    
+    drawers = Drawer.objects.filter(drawersFilter)
+    
+    day_min = datetime.fromisoformat(day)
+    day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+    
+    serializer = DrawerSerializer(drawers, many=True)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
+      
 def get_following_feed(request: HttpRequest, date):
     pass
 
@@ -182,25 +231,6 @@ def delete_reaction(request: HttpRequest, task_id):
 
 def post_comment_to_task(request: HttpRequest, task_id, comment):
     pass
-
-# POST social/daily/logs/YYYY-MM-DDTHH:mm:ss+hh:mm/
-@api_view(["POST"])
-def post_comment_to_daily_comment(request, day):
-    day_min = datetime.fromisoformat(day)
-    day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
-    
-    daily_comment = DailyComment.objects.filter(user=request.user, date__range=(day_min, day_max)).first()
-    comment = request.data.get('comment')
-    
-    if daily_comment:
-        daily_comment.comment = comment
-        daily_comment.save()
-    else:
-        daily_comment = DailyComment.objects.create(user=request.user, comment=comment, date=day)
-    
-    serializer = DailyCommentSerializer(daily_comment)
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
 def post_peck(request: HttpRequest, task_id):
     pass
