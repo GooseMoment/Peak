@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from django.utils import timezone
 from django.core.cache import cache
+from django.shortcuts import get_object_or_404
 
 from datetime import datetime
 
@@ -9,6 +10,7 @@ from .models import *
 from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
 from projects.serializers import ProjectSerializer
+from drawers.serializers import DrawerSerializer
 
 from projects.models import *
 
@@ -89,6 +91,18 @@ class DailyCommentSerializer(serializers.ModelSerializer):
     #         return {'user': data['user']}
         
     #     return data
+
+class DailyLogDetailsDrawerSerializer(serializers.ListSerializer):
+    pass
+
+class DailyLogDetailsParentSerializer(DrawerSerializer):
+    color = serializers.SerializerMethodField()
+    
+    class Meta(DrawerSerializer.Meta):
+        fields = DrawerSerializer.Meta.fields + ["color"]
+        
+    def get_color(self, obj):
+        return obj.project.color
 
 class ReactionSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)

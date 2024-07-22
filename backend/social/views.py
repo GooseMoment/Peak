@@ -210,7 +210,7 @@ def get_daily_log_details(requset: HttpRequest, followee, day):
     day_min = datetime.fromisoformat(day)
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
     
-    serializer = DrawerSerializer(drawers, many=True)
+    serializer = DailyLogDetailsParentSerializer(drawers, many=True)
     
     return Response(serializer.data, status=status.HTTP_200_OK)
       
