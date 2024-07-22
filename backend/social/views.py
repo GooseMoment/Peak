@@ -205,7 +205,7 @@ def get_daily_log_details(requset: HttpRequest, followee, day):
 
     drawersFilter &= Q(user=followeeUser)
     
-    drawers = Drawer.objects.filter(drawersFilter)
+    drawers = Drawer.objects.filter(drawersFilter).order_by('order')
     
     day_min = datetime.fromisoformat(day)
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
