@@ -11,7 +11,7 @@ import { Fragment } from "react";
 import SimpleProfile from "../SimpleProfile";
 import { useEffect } from "react";
 
-const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment, day}) => {
+const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, saveDailyComment, day}) => {
     const [inputState, setInputState] = useState(false)
     const [comment, setComment] = useState(dailyComment.comment)
     // const [emojiClick, setEmojiClick] = useState(false)
@@ -92,6 +92,15 @@ const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment, d
                             <TaskFrame key={dailytask.id} task={dailytask} color={dailyProject.projectColor} />
                         ))}
                     </TaskList>
+                </Fragment>
+            ))
+        }
+        {
+            userLogDetails && Object.values(userLogDetails).map((drawer) => (
+                <Fragment key={drawer.id}>
+                    <DrawerBox $color={drawer.color}>
+                        <DrawerName $color={drawer.color}>{drawer.name}</DrawerName>
+                    </DrawerBox>
                 </Fragment>
             ))
         }

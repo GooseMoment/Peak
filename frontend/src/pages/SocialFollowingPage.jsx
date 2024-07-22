@@ -8,7 +8,7 @@ import DailyLogPreview from "@components/social/DailyLogPreview"
 import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail"
 import SocialPageTitle from "@components/social/SocialPageTitle"
 
-import { getDailyComment, getDailyLogsPreview, postCommentToDailyComment } from "@api/social.api"
+import { getDailyComment, getDailyLogDetails, getDailyLogsPreview, postCommentToDailyComment } from "@api/social.api"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import queryClient from "@/queries/queryClient"
 import { toast } from "react-toastify"
@@ -69,6 +69,14 @@ const SocialFollowingPage = () => {
         }
     })
 
+    const { data: dailyLogDetails, isError: dailyLogDetailsError } = useQuery({
+        queryKey: ['daily', 'log', 'details', dailyLogDetailUsername, selectedDate],
+        queryFn: () => getDailyLogDetails(dailyLogDetailUsername, selectedDate),
+        enabled: !!selectedDate
+    })
+
+    // dailyLogDetails && console.log(Object.values(dailyLogDetails))
+
     return <>
         <SocialPageTitle active="following" />
 
@@ -97,6 +105,7 @@ const SocialFollowingPage = () => {
             <Container $isSticky={true}>
                 {dailyComment?<DailyLogDetail
                     dailyComment={dailyComment}
+                    userLogDetails={dailyLogDetails}
                     userLogsDetail={mockDailyFollowerLogsDetail[0]}
                     user={user}
                     saveDailyComment={dailyCommentMutation.mutate}

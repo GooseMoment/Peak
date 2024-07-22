@@ -107,6 +107,15 @@ export const getDailyComment = async(username, day) => {
     }
 }
 
+export const getDailyLogDetails = async(username, day) => {
+    try {
+        const res = await client.get(`social/daily/log/details/@${username}/${day}/`)
+        return res.data
+    } catch(e) {
+        throw e
+    }
+}
+
 export const getFollowingFeed = (date) => {
 
 }
