@@ -29,6 +29,7 @@ class Task(Base, PrivacyMixin):
     drawer = models.ForeignKey(
         Drawer,
         on_delete=models.CASCADE,
+        related_name='tasks'
     )
     due_date = models.DateField(null=True, blank=True)
     due_time = models.TimeField(null=True, blank=True)
