@@ -51,13 +51,12 @@ class TaskDetail(mixins.RetrieveModelMixin,
             # new_due_date is true
             else:   
                 if (prev_due_date != new_due_date) or (prev_due_time != new_due_time):
+                    converted_due_date = datetime.strptime(new_due_date, "%Y-%m-%d").date()
                     # new_due_time is None -> 9시 설정
                     if new_due_time is None:
-                        converted_due_date = datetime.strptime(new_due_date, "%Y-%m-%d").date()
                         converted_due_time = datetime.strptime("T09:00:00Z", "T%H:%M:%SZ").time()
                     # new_due_time is true -> new_due_time 대로 설정
                     else:
-                        converted_due_date = datetime.strptime(new_due_date, "%Y-%m-%d").date()
                         converted_due_time = datetime.strptime(new_due_time, "T%H:%M:%SZ").time()
                     
                     reminders = TaskReminder.objects.filter(task=task.id)
