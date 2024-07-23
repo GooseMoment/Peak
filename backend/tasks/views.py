@@ -32,7 +32,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
         try:
             new_due_date = request.data["due_date"]
             new_due_time = request.data["due_time"]
-        except Exception as e:
+        except KeyError as e:
             pass
         else:
             task: Task = self.get_object()
