@@ -2,17 +2,17 @@ from rest_framework import serializers
 
 from django.utils import timezone
 from django.core.cache import cache
-from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 from datetime import datetime
 
 from .models import *
+from projects.models import Project
+from tasks.models import Task
+
 from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
-from projects.serializers import ProjectSerializer
 from drawers.serializers import DrawerSerializer
-
-from projects.models import *
 
 class EmojiSerializer(serializers.ModelSerializer):
     class Meta:
@@ -73,11 +73,6 @@ class DailyLogsSerializer(UserSerializer):
     #         ret['recent_task'] = sorted(ret['recent_task'], key=lambda x: x['recent_task__completed_at'])
     #     return ret
 
-class DailyLogSerializer(serializers.Serializer):
-    class Meta:
-        pass
-    pass
-
 class DailyCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     
@@ -92,17 +87,15 @@ class DailyCommentSerializer(serializers.ModelSerializer):
         
     #     return data
 
-class DailyLogDetailsDrawerSerializer(serializers.ListSerializer):
-    pass
-
-class DailyLogDetailsParentSerializer(DrawerSerializer):
-    color = serializers.SerializerMethodField()
+class DailyLogDetailsSerializer(DrawerSerializer):
+    color = serializers.CharField(read_only=True)
+    tasks = TaskSerializer(many=True, read_only=True)
     
     class Meta(DrawerSerializer.Meta):
-        fields = DrawerSerializer.Meta.fields + ["color"]
+        fields = DrawerSerializer.Meta.fields + ['color', 'tasks']
         
     def get_color(self, obj):
-        return obj.project.color
+        return obj['color']
 
 class ReactionSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)

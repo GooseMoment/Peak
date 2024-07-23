@@ -11,16 +11,16 @@ from django.shortcuts import get_object_or_404
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.db.models import Q
+from django.db.models import Q, F, Prefetch
 
 from datetime import datetime, timedelta
 
 from .models import *
 from .serializers import *
+from api.models import PrivacyMixin
+from drawers.models import Drawer
+
 from users.serializers import UserSerializer
-from projects.models import *
-from drawers.models import *
-from drawers.serializers import DrawerSerializer
 
 ## Follow
 # social/follow/@follower/@followee/
@@ -199,22 +199,30 @@ def get_daily_log_details(requset: HttpRequest, followee, day):
     ).exists()
 
     if requset.user.username == followee:   # is me
-        drawersFilter = Q()
+        privacyFilter = Q()
     elif is_follower:   # is follower
-        drawersFilter = (Q(privacy=Drawer.FOR_PUBLIC) | Q(privacy=Drawer.FOR_PROTECTED))
+        privacyFilter = (Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(privacy=PrivacyMixin.FOR_PROTECTED))
     else:
-        drawersFilter = Q(privacy=Drawer.FOR_PUBLIC)
-    
+        privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
     # TODO: need to check block
 
-    drawersFilter &= Q(user=followeeUser)
-    
-    drawers = Drawer.objects.filter(drawersFilter).order_by('order')
+    privacyFilter &= Q(user=followeeUser)
     
     day_min = datetime.fromisoformat(day)
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
     
-    serializer = DailyLogDetailsParentSerializer(drawers, many=True)
+    tasksFilterForCompleted = Q(completed_at__range=(day_min, day_max))
+    tasksFilterForUncompleted = Q(completed_at=None)
+    tasksFilter = privacyFilter & (tasksFilterForCompleted | tasksFilterForUncompleted)
+    
+    # TODO: order of tasks
+    prefetch_tasks = Prefetch('tasks', queryset=Task.objects.filter(tasksFilter))
+    
+    # TODO: Do not process if there is no task in the drawer
+    
+    drawers = Drawer.objects.filter(privacyFilter).prefetch_related(prefetch_tasks).annotate(color=F('project__color')).order_by('order')
+    
+    serializer = DailyLogDetailsSerializer(drawers, many=True)
     
     return Response(serializer.data, status=status.HTTP_200_OK)
       
