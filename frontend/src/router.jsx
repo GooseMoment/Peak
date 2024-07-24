@@ -27,8 +27,8 @@ import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement
 
 import UserPage from "@pages/UserPage"
 
-import { getMe, getUserByUsername, signOut } from "@api/users.api"
-import { getProject, getProjectsList } from "@api/projects.api"
+import { getMe, signOut } from "@api/users.api"
+import { getProject, getProjectList } from "@api/projects.api"
 import { getToken } from "@api/client"
 
 const redirectIfSignedIn = () => {
@@ -65,7 +65,7 @@ const routes = [
             }
 
             return {
-                projects: await getProjectsList(),
+                projects: await getProjectList(),
                 user: await getMe(),
             }
         },
@@ -124,10 +124,6 @@ const routes = [
             {
                 path: "projects/:id",
                 element: <ProjectPage/>,
-                loader: async ({params}) => {
-                    const project = await getProject(params.id)
-                    return {project}
-                },
                 children: [
                     {
                         path: "tasks/create/",
@@ -142,10 +138,7 @@ const routes = [
             },
             {
                 path: "users/:username",
-                loader: async ({params}) => {
-                    return getUserByUsername(params.username.slice(1))
-                },
-                element: <UserPage/>,
+                element: <UserPage />,
             },
             {
                 path: "sign_out",

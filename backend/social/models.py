@@ -27,12 +27,12 @@ class Peck(Base):
 
 class DailyComment(Base):
     user = models.ForeignKey(
-        User,
+        User, 
         on_delete=models.CASCADE,
     )
     comment = models.TextField()
-    date = models.DateField()
-
+    date = models.DateTimeField(null=True, blank=True)
+    
     def __str__(self) -> str:
         return f"DailyComment of {self.date} by {self.user}"
 

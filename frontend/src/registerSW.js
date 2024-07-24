@@ -7,7 +7,7 @@ export default async function registerSW() {
     try {
         await navigator.serviceWorker.register("/service-worker.js")
         console.log("SW registered.")
-    } catch (e) {
+    } catch (err) {
         console.error("Unable to register service worker.", err)
     }
 }

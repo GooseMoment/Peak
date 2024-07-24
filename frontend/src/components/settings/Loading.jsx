@@ -32,7 +32,6 @@ const pulse = keyframes`
 
 const uibSize = "2.8rem"
 const uibSpeed = ".9s"
-const uidColor = "#183153"
 
 const DotSpinner = styled.div`
     position: relative;
@@ -58,7 +57,7 @@ const DotSpinnerDot = styled.div`
         height: 20%;
         width: 20%;
         border-radius: 50%;
-        background-color: ${uidColor};
+        background-color: ${p => p.theme.accentColor};
         transform: scale(0);
         opacity: 0.5;
         animation: ${pulse} calc(${uibSpeed} * 1.111) ease-in-out infinite;

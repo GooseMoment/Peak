@@ -1,7 +1,7 @@
 import { skeletonCSS } from "@/assets/skeleton"
 import { cubicBeizer } from "@assets/keyframes"
 
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 
 const Images = ({profile_img, reaction, skeleton=false}) => {
     const emojiURL = reaction?.emoji?.img_uri
@@ -30,7 +30,7 @@ const ProfileImgSkeleton = styled.div`
     height: 100%;
     aspect-ratio: 1 / 1;
 
-    ${skeletonCSS}
+    ${p => skeletonCSS(p)}
 `
 
 const EmojiContainer = styled.div`

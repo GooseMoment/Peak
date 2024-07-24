@@ -31,16 +31,19 @@ export const light = {
     textColor: black,
     backgroundColor: white,
     secondBackgroundColor: "#F3F3F3",
+    thirdBackgroundColor: "#F3F3F3",
     accentColor: goose,
     scrollbarColor: "#FFC6C6",
     frontSignPageTextColor: goose,
     frontSignPageBackgroundColor: "#FFD7C7",
+    imgIconFilter: "invert(0%)",
     sidebar: {
         activeColor: black,
         activeBackgroundColor: "#D9D9D9",
         hoverColor: black,
         hoverBackgroundColor: `rgb(255 74 3 / 0.35)`,
         backgroundColor: "#F9F7F6",
+        scrollbarColor: "#FFC6C6",
     },
     project: {
         borderColor: "#D9D9D9",
@@ -55,7 +58,15 @@ export const light = {
         imgDangerColor: "invert(20%) sepia(92%) saturate(7288%) hue-rotate(358deg) brightness(106%) contrast(115%)",
         imgDueColor: "invert(42%) sepia(80%) saturate(4726%) hue-rotate(148deg) brightness(94%) contrast(101%)",
         imgReminderColor: "invert(23%) sepia(38%) saturate(4190%) hue-rotate(259deg) brightness(91%) contrast(101%)",
-    }
+    },
+    skeleton: {
+        defaultColor: "#ddd",
+        shineColor: "#e8e8e8",
+    },
+    notifications: {
+        boxShadowColor: "rgba(149, 157, 165, 0.2)",
+    },
+    toastTheme: "light",
 }
 
 export const lightSystemcolor = Object.assign({}, light, {
@@ -63,13 +74,13 @@ export const lightSystemcolor = Object.assign({}, light, {
         primary: "AccentColor",
     }),
     accentColor: "AccentColor",
-    sidebar: {
+    sidebar: Object.assign({}, light.sidebar, {
         activeColor: "HighlightText",
         activeBackgroundColor: "Highlight",
         hoverColor: black,
         hoverBackgroundColor: "#D9D9D9",
         backgroundColor: "#F9F7F6",
-    }
+    }),
 })
 
 export const dark = {
@@ -86,20 +97,23 @@ export const dark = {
     black,
     white,
     goose,
-    grey: "rgb(133, 133, 133)",
+    grey: "#858585",
     textColor: white,
     backgroundColor: black,
-    secondBackgroundColor: "#474747",
+    secondBackgroundColor: "#323232",
+    thirdBackgroundColor: "#2A2A2A",
     accentColor: goose,
-    scrollbarColor: "#2A2A2A",
+    scrollbarColor: "#4A4A4A",
     frontSignPageTextColor: goose,
     frontSignPageBackgroundColor: "#FFD7C7",
+    imgIconFilter: "invert(100%)",
     sidebar: {
         activeColor: white,
         activeBackgroundColor: black,
         hoverColor: white,
         hoverBackgroundColor: `rgb(255 74 3 / 0.35)`,
         backgroundColor: "#2F2F2F",
+        scrollbarColor: "#4A4A4A",
     },
     project: {
         borderColor: "#474747",
@@ -114,7 +128,15 @@ export const dark = {
         imgDangerColor: "invert(40%) sepia(69%) saturate(3544%) hue-rotate(331deg) brightness(94%) contrast(86%)",
         imgDueColor: "invert(42%) sepia(93%) saturate(2201%) hue-rotate(130deg) brightness(96%) contrast(98%)",
         imgReminderColor: "invert(42%) sepia(58%) saturate(5361%) hue-rotate(253deg) brightness(93%) contrast(85%)",
-    }
+    },
+    skeleton: {
+        defaultColor: "#2A2A2A",
+        shineColor: "#3A3A3A",
+    },
+    notifications: {
+        boxShadowColor: "rgba(0, 0, 0, 0.4)",
+    },
+    toastTheme: "dark",
 }
 
 export const darkSystemcolor = Object.assign({}, dark, {
@@ -122,13 +144,13 @@ export const darkSystemcolor = Object.assign({}, dark, {
         primary: "AccentColor",
     }),
     accentColor: "AccentColor",
-    sidebar: {
+    sidebar: Object.assign({}, dark.sidebar, {
         activeColor: "HighlightText",
         activeBackgroundColor: "Highlight",
         hoverColor: white,
         hoverBackgroundColor: black,
         backgroundColor: "#2F2F2F",
-    }
+    }),
 })
 
 const themes = {

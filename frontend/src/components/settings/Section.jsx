@@ -31,7 +31,7 @@ export const Value = styled.div`
 
 const SyncStyleIcon = styled.img`
     position: relative;
-    color: orange;
+    filter: ${p => p.theme.imgIconFilter};
     top: .13em;
     width: 0.75em;
     height: 0.75em;

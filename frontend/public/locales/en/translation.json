@@ -58,6 +58,7 @@
             "display_name": "Display name",
             "display_name_placeholder": "Your awesome name",
             "bio": "Bio",
+            "header_color": "Header Color",
             "bio_placeholder": "Tell me who you are",
             "button_submit": "Submit",
             "change_password": "Change password",
@@ -272,5 +273,33 @@
         "unknown_error_bottom": "Go to the home page",
         "404_error_text": "The page you requested is not found.",
         "404_error_bottom": "Back to the previous page"
+     
+    },
+    "sign": {
+        "sign_in": "Sign In",
+        "sign_in_success": "Signed in successfully. Welcome back!",
+        "sign_in_failed": "Signing in failed. Please check again your password.",
+        "network_error": "Problem occured. Check your network.",
+        "loading": "Loading...",
+        "button_sign_in": "Sign In",
+        "button_forgot_password": "Forgot password",
+        "button_create_account": "Create account",
+        "sign_up": "Sign Up",
+        "sign_up_success": "You became our member! Please sign in.",
+        "email": "Email",
+        "password": "Password",
+        "username": "Username",
+        "button_sign_up": "Register",
+        "tos": "By clicking 'Register', you agree to our <linkToTos>Terms of Service</linkToTos>.",
+        "button_already_have_account": "Have Account",
+        "sign_up_errors": {
+            "SIGNUP_NETWORK_ERROR": "Please check your network.",
+            "SIGNUP_SIGNED_IN_USER": "You already signed in.",
+            "SIGNUP_USERNAME_TOO_SHORT": "Username should be more than 4 letters.",
+            "SIGNUP_PASSWORD_TOO_SHORT": "Password should be more than 8 letters.",
+            "SIGNUP_USERNAME_WRONG": "Username should only contain alphabets, underscore and digits.",
+            "SIGNUP_INTERNAL_ERROR": "Something's wrong with our service. Please try again.",
+            "SIGNUP_UNKNOWN_ERROR": "Please try later."
+        }
     }
 }

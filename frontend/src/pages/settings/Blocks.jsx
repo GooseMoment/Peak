@@ -3,10 +3,10 @@ import Section, { Name, Value, Sync, Description } from "@components/settings/Se
 import Button from "@components/common/Button"
 import Loading from "@components/settings/Loading"
 import Error from "@components/settings/Error"
+import ListUserProfile from "@components/users/ListUserProfile"
 
 import { getBlocks } from "@api/users.api"
 
-import styled from "styled-components"
 import { toast } from "react-toastify"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import queryClient from "@queries/queryClient"
@@ -49,41 +49,12 @@ const Blocks = () => {
             <Name>{t("blockees.name")}</Name>
             <Description>{t("blockees.description")}</Description>
             <Value>
-                {blocks.map(user => <UserContainer key={user.username}>
-                    <Profile>
-                        <ProfileImg src={user.profile_img} />
-                        <Username>@{user.username}</Username>
-                    </Profile>
+                {blocks.map(user => <ListUserProfile user={user} key={user.username}>
                     <Button onClick={onClick}>{t("blockees.button_unblock")}</Button>
-                </UserContainer>)}
+                </ListUserProfile>)}
             </Value>
         </Section>
     </>
 }
-
-const UserContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 1em;
-    border-bottom: 1px #ddd solid;
-`
-
-const Profile = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 1em;
-`
-
-const ProfileImg = styled.img`
-    border-radius: 50%;
-    aspect-ratio: 1 / 1;
-    width: 3em;
-`
-
-const Username = styled.div`
-    font-weight: 600;
-`
 
 export default Blocks
