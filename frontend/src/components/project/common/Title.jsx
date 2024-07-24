@@ -25,24 +25,21 @@ const Title = ({name, setName, icon, onClose}) => {
 }
 
 const TitleFrameBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0em 1.8em;
+    margin-left: 1.8em;
     margin-top: 1em;
-    margin-bottom: 0.5em;
 `
 
 const TitleBox = styled.div`
     display: flex;
-    flex: 1;
     align-items: center;
-    padding-top: 0.5em;
+    margin-top: 0.5em;
 
     & svg {
-        width: 1.2em;
-        height: 1.2em;
+        width: 1.3em;
+        height: 1.3em;
         stroke: ${p => p.theme.textColor};
         margin-right: 0.6em;
         top: 0;
@@ -50,10 +47,10 @@ const TitleBox = styled.div`
 `
 
 const InputText = styled.input`
-    width: 24em;
+    width: 20em;
     margin: 0.3em;
-    font-weight: 480;
-    font-size: 1.1em;
+    font-weight: 500;
+    font-size: 1.3em;
     color: ${p => p.theme.textColor};
     border: none;
 
@@ -69,12 +66,14 @@ const InputText = styled.input`
 const Icons = styled.div`
     display: flex;
     align-items: center;
+    margin-right: 1.3em;
 
     & svg {
+        width: 1.1em;
+        height: 1.1em;
         top: 0.2em;
         cursor: pointer;
         stroke: ${p => p.theme.primaryColors.danger};
-        margin-left: 1em;
     }
 `
 

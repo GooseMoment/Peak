@@ -28,7 +28,7 @@ const DrawerCreate = ({onClose}) => {
     }
 
     const items = [
-        {icon: "server", display: displayPrivacy, component: <Privacy setPrivacy={setPrivacy} setDisplayPrivacy={setDisplayPrivacy} closeComponent={closeComponent}/>},
+        {id: 1, icon: "server", display: displayPrivacy, component: <Privacy setPrivacy={setPrivacy} setDisplayPrivacy={setDisplayPrivacy} closeComponent={closeComponent}/>},
     ]
 
     const makeDrawer = async (name, privacy) => {
