@@ -1,27 +1,30 @@
-import { useRouteLoaderData, useNavigate } from "react-router-dom"
-import { Fragment } from "react"
+import { useQuery } from "@tanstack/react-query"
 
 import Detail from "@components/project/common/Detail"
 import DrawerFolder from "@components/project/Creates/DrawerFolder"
+import { getProjectList } from "@api/projects.api"
 
-const Drawer = ({ projectID: projectID, task, setFunc, closeComponent }) => {
-    const { projects } = useRouteLoaderData("app")
-    const navigate = useNavigate()
+const Drawer = ({ setFunc, closeComponent }) => {
+    const { isPending, isError, data: projects, error } = useQuery({
+        queryKey: ['projects'],
+        queryFn: () => getProjectList(),
+    })
 
     const changeDrawer = (drawerId) => {
         return async () => {
             setFunc({drawer: drawerId})
-            navigate(`/app/projects/${projectID}/tasks/${task.id}/detail`)
             closeComponent()
         }
     }
 
+    if (isPending) {
+        return <Detail title="서랍 선택" onClose={closeComponent}/>
+    }
+
     return (
         <Detail title="서랍 선택" onClose={closeComponent}>
-            {projects.map((project) => (
-                <Fragment key={project.id}>
-                    <DrawerFolder project={project} changeDrawer={changeDrawer}/>
-                </Fragment>
+            {projects?.map((project) => (
+                <DrawerFolder key={project.id} project={project} changeDrawer={changeDrawer}/>
             ))}
         </Detail>
     )
