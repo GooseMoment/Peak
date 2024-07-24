@@ -66,6 +66,7 @@ export const light = {
     notifications: {
         boxShadowColor: "rgba(149, 157, 165, 0.2)",
     },
+    toastTheme: "light",
 }
 
 export const lightSystemcolor = Object.assign({}, light, {
@@ -135,6 +136,7 @@ export const dark = {
     notifications: {
         boxShadowColor: "rgba(0, 0, 0, 0.4)",
     },
+    toastTheme: "dark",
 }
 
 export const darkSystemcolor = Object.assign({}, dark, {
