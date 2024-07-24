@@ -5,6 +5,7 @@ import FeatherIcon from "feather-icons-react"
 
 import ModalPortal from "@components/common/ModalPortal"
 import Button from "@components/common/Button"
+import { Fragment } from "react"
 
 const Middle = ({items, submit, isComponentOpen, setIsComponentOpen}) => {
     const [content, setContent] = useState()
@@ -18,21 +19,21 @@ const Middle = ({items, submit, isComponentOpen, setIsComponentOpen}) => {
     return (
         <>
             {items.map(item => (
-            <>
-            <ContentsBox key={item.icon}>
-                {(item.icon === "circle") ? 
-                <FeatherIcon icon={item.icon} fill={'#'+item.color} stroke="none"/> :
-                <FeatherIcon icon={item.icon} />}
-                <VLine $end={item.id === 1 || item.id === 3}/>
-                <ContentText id ={item.icon} onClick={handleClickContent}>
-                    {item.display ? item.display : "없음"}
-                </ContentText>
-            </ContentsBox>
-            {(content === item.icon && isComponentOpen) ? 
+            <Fragment key={item.icon}>
+                <ContentsBox>
+                    {(item.icon === "circle") ? 
+                    <FeatherIcon icon={item.icon} fill={'#'+item.color} stroke="none"/> :
+                    <FeatherIcon icon={item.icon} />}
+                    <VLine $end={item.id === 1 || item.id === 3}/>
+                    <ContentText id ={item.icon} onClick={handleClickContent}>
+                        {item.display ? item.display : "없음"}
+                    </ContentText>
+                </ContentsBox>
+                {(content === item.icon && isComponentOpen) ? 
                 <ModalPortal closeModal={() => setIsComponentOpen(false)} additional>
                     {item.component}
                 </ModalPortal> : null}
-            </>
+            </Fragment>
             ))}
             <AddButton onClick={submit}>추가하기</AddButton>
         </>

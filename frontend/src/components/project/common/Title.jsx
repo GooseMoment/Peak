@@ -30,6 +30,7 @@ const TitleFrameBox = styled.div`
     justify-content: space-between;
     margin-left: 1.8em;
     margin-top: 1em;
+    margin-bottom: 0.5em;
 `
 
 const TitleBox = styled.div`

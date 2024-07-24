@@ -22,7 +22,7 @@ const RepeatDetail = () => {
     const handleWeek = (e) => {
         let validInputValue = e.target.value
         if (validInputValue > 128){
-            if (validInputValue.length() > 2)
+            if (validInputValue.length > 2)
                 validInputValue = e.target.value.slice("", 3)
             else
                 validInputValue = e.target.value.slice("", 2)

@@ -34,7 +34,7 @@ const TimeDetail = () => {
             <FlexBox>
                 <ToggleBox>
                     {timezones.map(t=>(
-                        <TimezoneToggle $active={timezone == t.name} onClick={()=>{setTimezone(t.name)}}>
+                        <TimezoneToggle key={t.name} $active={timezone == t.name} onClick={()=>{setTimezone(t.name)}}>
                             {t.display}
                         </TimezoneToggle>
                     ))}
@@ -43,14 +43,14 @@ const TimeDetail = () => {
                     <TimeInput
                         type="number"
                         maxLength={2}
-                        value={hour}
+                        value={hour || ''}
                         onChange={handleHour}
                     />
                     <ColonContainer>:</ColonContainer>
                     <TimeInput
                         type="number"
                         maxLength={2}
-                        value={min}
+                        value={min || ''}
                         onChange={handleMin}
                     />
                 </InputBox>
