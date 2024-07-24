@@ -8,6 +8,7 @@ import Middle from "@components/project/common/Middle"
 import notify from "@utils/notify"
 import Color from "./Color"
 import Type from "./Type"
+import Privacy from "./Privacy"
 
 import { postProject } from "@api/projects.api"
 
@@ -19,6 +20,8 @@ const ProjectCreate = ({onClose}) => {
     const [displayColor, setDisplayColor] = useState('빨강')
     const [type, setType] = useState('regular')
     const [displayType, setDisplayType] = useState('상시 프로젝트')
+    const [privacy, setPrivacy] = useState('public')
+    const [displayPrivacy, setDisplayPrivacy] = useState('전체공개')
 
      //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
@@ -28,11 +31,12 @@ const ProjectCreate = ({onClose}) => {
     }
 
     const items = [
-        {icon: "circle", color: color, display: displayColor, component: <Color setColor={setColor} setDisplayColor={setDisplayColor} closeComponent={closeComponent}/>},
-        {icon: "award", display: displayType, component: <Type setType={setType} setDisplayType={setDisplayType} closeComponent={closeComponent}/>}
+        {id: 1, icon: "circle", color: color, display: displayColor, component: <Color setColor={setColor} setDisplayColor={setDisplayColor} closeComponent={closeComponent}/>},
+        {id: 2, icon: "server", display: displayPrivacy, component: <Privacy setPrivacy={setPrivacy} setDisplayPrivacy={setDisplayPrivacy} closeComponent={closeComponent}/>},
+        {id: 3, icon: "award", display: displayType, component: <Type setType={setType} setDisplayType={setDisplayType} closeComponent={closeComponent}/>},
     ]
 
-    const makeProject = async (name, color, type) => {
+    const makeProject = async (name, color, type) => { /*privacy 추가해야함*/
         try {
             const edit = {
                 'name': name,
