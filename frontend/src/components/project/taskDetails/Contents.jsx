@@ -207,6 +207,7 @@ const priorities = [
 ]
 
 const displayReminder = {
+    0: "당일",
     5: "5분 전",
     15: "15분 전",
     30: "30분 전",
