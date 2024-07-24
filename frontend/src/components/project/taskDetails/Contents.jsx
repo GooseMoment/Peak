@@ -98,7 +98,7 @@ const Contents = ({task, setFunc}) => {
                         </ToolTip>
                         <VLine $end={item.id === 1 || item.id === 6} />
                         <ContentText name={item.name} onClick={handleClickContent}>
-                                {item.display}
+                            {item.display}
                         </ContentText>
                         {(content === item.name && isComponentOpen) ? 
                         <ModalPortal closeModal={closeComponent} additional>
