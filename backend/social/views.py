@@ -219,7 +219,6 @@ def get_daily_log_details(requset: HttpRequest, followee, day):
     prefetch_tasks = Prefetch('tasks', queryset=Task.objects.filter(tasksFilter))
     
     # TODO: Do not process if there is no task in the drawer
-    
     drawers = Drawer.objects.filter(privacyFilter).prefetch_related(prefetch_tasks).annotate(color=F('project__color')).order_by('order')
     
     serializer = DailyLogDetailsSerializer(drawers, many=True)

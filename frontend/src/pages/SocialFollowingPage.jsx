@@ -90,7 +90,7 @@ const SocialFollowingPage = () => {
                     />
                 </CalendarContainer>
 
-                {/* DailyLogsPreview를 별도의 컴포넌트 파일로 구분핧까 고민중 */}
+                {/* DailyLogsPreview를 별도의 컴포넌트 파일로 구분할까 고민중 */}
                 <DailyLogsPreviewContainer>
                     {dailyLogs && sortDailyLogs(dailyLogs).map(([index, dailyFollowerLog]) => (
                         <DailyLogPreview

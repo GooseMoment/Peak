@@ -82,25 +82,16 @@ const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, sav
         
         <DetailBody>
         {
-            userLogsDetail.dailyProjects?.map((dailyProject) => (
-                <Fragment key={dailyProject.projectID}>
-                    <DrawerBox $color={dailyProject.projectColor}>
-                        <DrawerName $color={dailyProject.projectColor}>{dailyProject.projectID}</DrawerName>
-                    </DrawerBox>
-                    <TaskList>
-                        {dailyProject.dailytasks?.map((dailytask) => (
-                            <TaskFrame key={dailytask.id} task={dailytask} color={dailyProject.projectColor} />
-                        ))}
-                    </TaskList>
-                </Fragment>
-            ))
-        }
-        {
             userLogDetails && Object.values(userLogDetails).map((drawer) => (
-                <Fragment key={drawer.id}>
+                (drawer.tasks.length !== 0) && <Fragment key={drawer.id}>
                     <DrawerBox $color={drawer.color}>
                         <DrawerName $color={drawer.color}>{drawer.name}</DrawerName>
                     </DrawerBox>
+                    <TaskList>
+                        {drawer.tasks.map((task) => (
+                            <TaskFrame key={task.id} task={task} color={drawer.color} />
+                        ))}
+                    </TaskList>
                 </Fragment>
             ))
         }
