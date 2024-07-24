@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useRevalidator } from "react-router-dom"
 
 import styled from "styled-components"
 
@@ -9,11 +8,10 @@ import notify from "@utils/notify"
 import Color from "./Color"
 import Type from "./Type"
 
+import queryClient from "@queries/queryClient"
 import { postProject } from "@api/projects.api"
 
 const ProjectCreate = ({onClose}) => {
-    const revalidator = useRevalidator()
-
     const [name, setName] = useState('')
     const [color, setColor] = useState('DC2E2E')
     const [displayColor, setDisplayColor] = useState('빨강')
@@ -49,7 +47,7 @@ const ProjectCreate = ({onClose}) => {
     const submit = async (e) => {
         await makeProject(name, color, type)
         onClose()
-        revalidator.revalidate()
+        queryClient.invalidateQueries({queryKey: ['projects']})
     }
 
     return (
