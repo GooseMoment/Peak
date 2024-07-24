@@ -26,9 +26,9 @@ class TaskDetail(mixins.RetrieveModelMixin,
     
     def patch(self, request, *args, **kwargs):
         try:
-            new_completed = request.data.get("completed_at")
-        except Exception as e:
-            pass
+            new_completed = request.data["completed_at"]
+        except KeyError as e:
+            print(e)
         else:
             task: Task = self.get_object()
             if (task.completed_at is None) or (new_completed is None):
