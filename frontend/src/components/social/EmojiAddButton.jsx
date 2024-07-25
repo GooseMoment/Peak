@@ -1,38 +1,65 @@
-import { useState, useRef } from "react";
-import styled from "styled-components";
-import FeatherIcon from "feather-icons-react";
+import { useState, useRef } from "react"
+import styled from "styled-components"
+import FeatherIcon from "feather-icons-react"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
-import EmojiButton from "@components/social/EmojiButton";
+import { getEmojis } from "@api/social.api"
 
-const EmojiModal = ({isModalOpen, setIsModalOpen}) => {
-    if(!isModalOpen) 
-        return null
+import EmojiButton from "@components/social/EmojiButton"
+import EmojiModalContainer from "@components/social/EmojiModalContainer"
 
-    const [isHover, setIsHover] = useState(false)
-    const emojis = [
-        "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "🥰", "😗", "😙", "🥲", "😚", "🤗", "🙂", "🤩", "🤔"
-    ]
+// const EmojiModal = ({isModalOpen, setIsModalOpen}) => {
+//     if(!isModalOpen) 
+//         return null
 
-    return <EmojiLists>
-        {
-            emojis.map(emoji =>
-                    <EmojiButton key={emoji} emoji={emoji} isHover={isHover} setIsHover={setIsHover} setIsModalOpen={setIsModalOpen}/>
-            )
-        }
-    </EmojiLists>
-}
+//     const [isHover, setIsHover] = useState(false)
+//     const emojis = [
+//         "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "🥰", "😗", "😙", "🥲", "😚", "🤗", "🙂", "🤩", "🤔"
+//     ]
+
+//     return <EmojiLists>
+//         {
+//             emojis.map(emoji =>
+//                     <EmojiButton key={emoji} emoji={emoji} isHover={isHover} setIsHover={setIsHover} setIsModalOpen={setIsModalOpen}/>
+//             )
+//         }
+//     </EmojiLists>
+// }
 
 const EmojiAddButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const modalBackground = useRef()
+    const [selectedEmoji, setSelectedEmoji] = useState(false)
+
+    const { data: serverEmojis, isError: emojiError, isFetching } = useQuery({
+        queryKey: ["emojis"],
+        queryFn: () => getEmojis(),
+    })
+
+    const handleSelectEmoji = (emoji) => {
+        setSelectedEmoji(emoji)
+        setIsModalOpen(false)
+    }
 
     return <>
-        <AddEmojiButton onClick={() => setIsModalOpen(!isModalOpen)}>
-            <FeatherIcon icon={isModalOpen ? "x-square" : "plus-square"}/>    
+        <AddEmojiButton onClick={() => setIsModalOpen(prev => !prev)}>
+            <FeatherIcon icon={isModalOpen ? "x-square" : "plus-square"}/>
         </AddEmojiButton>
-        {
-            isModalOpen &&
-            <ModalContainer 
+        {selectedEmoji && (
+                <div>
+                    <img src={selectedEmoji.img_uri} alt={selectedEmoji.name} />
+                    <span>{selectedEmoji.name}</span>
+                </div>
+            )}
+
+        <EmojiModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(prev => !prev)}
+            emojis={serverEmojis}
+            onSelect={handleSelectEmoji}
+        /> 
+
+        {/* {
+            isModalOpen && <ModalContainer 
                 ref={modalBackground} 
                 onClick={ e => {
                     if (e.target === modalBackground.current) {
@@ -42,7 +69,7 @@ const EmojiAddButton = () => {
             >
                 <EmojiModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>   
             </ModalContainer>
-        }
+        } */}
     </>
 }
 
