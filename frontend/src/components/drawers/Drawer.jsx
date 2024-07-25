@@ -11,6 +11,8 @@ import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
 import ModalPortal from "@components/common/ModalPortal"
 import DrawerBox, { DrawerName, DrawerIcon } from "@components/drawers/DrawerBox"
+import SortIcon from "@components/drawers/SortIcon"
+import SortMenu from "@components/drawers/SortMenu"
 
 import { useMutation, useInfiniteQuery } from "@tanstack/react-query"
 import { deleteDrawer } from "@api/drawers.api"
@@ -33,9 +35,11 @@ const Drawer = ({project, drawer, color}) => {
     const navigate = useNavigate()
 
     const [collapsed, setCollapsed] = useState(false)
+    const [isSortMenuOpen, setIsSortMenuOpen] = useState(false)
+    const [selectedSortMenuPosition, setSelectedSortMenuPosition] = useState({top: 0, left: 0})
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
-    const [selectedButtonPosition, setSelectedButtonPosition] = useState({top: 0, left: 0})
+    const [selectedContextPosition, setSelectedContextPosition] = useState({top: 0, left: 0})
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
 
     const { t } = useTranslation(null, {keyPrefix: "project"})
@@ -49,6 +53,7 @@ const Drawer = ({project, drawer, color}) => {
 
     useEffect(() => {
         setIsContextMenuOpen(false)
+        setIsSortMenuOpen(false)
     }, [project])
 
     const hasNextPage = data?.pages[data?.pages?.length-1].next !== null
@@ -90,11 +95,14 @@ const Drawer = ({project, drawer, color}) => {
     }
 
     const drawerIcons = [
-        {icon: <FeatherIcon icon={"plus"} onClick={clickPlus}/>},
+        {icon: <FeatherIcon icon="plus" onClick={clickPlus}/>},
+        {icon: <div onClick={handleToggleContextMenu(setSelectedSortMenuPosition, setIsSortMenuOpen)}>
+            <SortIcon color={color}/>
+        </div>},
         {icon: <CollapseButton $collapsed={collapsed}>
-            <FeatherIcon icon={"chevron-down"} onClick={handleCollapsed}/>
+            <FeatherIcon icon="chevron-down" onClick={handleCollapsed}/>
         </CollapseButton>},
-        {icon: <FeatherIcon icon={"more-horizontal"} onClick={handleToggleContextMenu(setSelectedButtonPosition, setIsContextMenuOpen)}/>},
+        {icon: <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedContextPosition, setIsContextMenuOpen)}/>},
     ]
 
     if (isError) {
@@ -128,10 +136,16 @@ const Drawer = ({project, drawer, color}) => {
                     )))}
                 </TaskList>
             }
+            {isSortMenuOpen &&
+                <SortMenu
+                    items={sortMenuItems}
+                    selectedButtonPosition={selectedSortMenuPosition}
+                />
+            }
             {isContextMenuOpen &&
                 <ContextMenu
                     items={contextMenuItems}
-                    selectedButtonPosition={selectedButtonPosition}
+                    selectedButtonPosition={selectedContextPosition}
                 />
             }
             {isAlertOpen &&
@@ -212,9 +226,18 @@ const MoreButton = styled(Button)`
     width: 25em;
 `
 
+const sortMenuItems = [
+    {"icon": "check", "display": "중요도", "func": () => {}},
+    {"icon": "check", "display": "기한↑", "func": () => {}},
+    {"icon": "check", "display": "기한↓", "func": () => {}},
+    {"icon": "check", "display": "제목 가나다순", "func": () => {}},
+    {"icon": "check", "display": "만든 지 최신순", "func": () => {}},
+    {"icon": "check", "display": "만든 지 오래된 순", "func": () => {}},
+]
+
 const makeContextMenuItems = (theme, handleAlert) => [
-    {"icon": "trash-2", "display": "Delete", "color": theme.project.danger, "func": handleAlert()}, 
-    {"icon": "chevrons-down", "display": "Sort", "color": theme.textColor, "func": () => {}}
+    {"icon": "edit", "display": "수정", "color": theme.textColor, "func": () => {}},
+    {"icon": "trash-2", "display": "삭제", "color": theme.project.danger, "func": handleAlert()}
 ]
 
 export default Drawer
