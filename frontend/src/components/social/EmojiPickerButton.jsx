@@ -73,41 +73,4 @@ width: 1.5em;
 padding: 0.5em;
 `
 
-const ModalContainer = styled.div`
-z-index: 999;
-position: absolute;
-top: 0;
-left: 0;
-width: 100vw;
-height: 100vh;
-`
-
-const EmojiLists = styled.div`
-display: flex;
-flex-wrap: wrap;
-justify-content: center;
-
-max-width: 20rem;
-max-height: 20rem;
-overflow-y: auto;
-
-// IE and Edge
--ms-overflow-style: none;
-// Firefox
-scrollbar-width: none;
-// Chrome, Safari, Opera
-&::-webkit-scrollbar {
-    display: none;
-}
-    
-border-radius: 1rem;
-border: 1px solid #E6E6E6;
-background-color: #FEFDFC;
-box-shadow: 0.3rem 0.3rem 0.5rem #e6e6e6;
-
-margin-top: 15%;
-margin-left: 60%;
-padding: 1rem 0 1rem;
-`
-
 export default EmojiPickerButton
