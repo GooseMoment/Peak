@@ -5,24 +5,32 @@ import styled from "styled-components"
 import FeatherIcon from 'feather-icons-react'
 
 import TaskNameInput from "@components/tasks/TaskNameInput"
+import DeleteAlert from "@components/common/DeleteAlert"
+import ModalPortal from "@components/common/ModalPortal"
 import Contents from "./Contents"
 
 import queryClient from "@queries/queryClient"
+import { useClientSetting } from "@utils/clientSettings"
 import { useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
-import { getTask, patchTask } from "@api/tasks.api"
+import { getTask, patchTask, deleteTask } from "@api/tasks.api"
+import { toast } from "react-toastify"
 
 const TaskDetail = () => {
     const [ projectID, color ] = useOutletContext()
     const { task_id } = useParams()
     const navigate = useNavigate()
+    const [setting, ] = useClientSetting()
+
+    const [taskName, setTaskName] = useState("")
+    const [isAlertOpen, setIsAlertOpen] = useState(false)
 
     const { isPending, isError, data: task, error } = useQuery({
         queryKey: ['task', {taskID: task_id}],
         queryFn: () => getTask(task_id),
     })
 
-    const mutation = useMutation({
+    const patchMutation = useMutation({
         mutationFn: (data) => {
             return patchTask(task_id, data)
         },
@@ -32,7 +40,15 @@ const TaskDetail = () => {
         },
     })
 
-    const [taskName, setTaskName] = useState("")
+    const deleteMutation = useMutation({
+        mutationFn: () => {
+            return deleteTask(task_id)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['task', {taskID: task_id}]})
+            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
+        },
+    })
 
     useEffect(() => {
         setTaskName(task?.name)
@@ -40,6 +56,21 @@ const TaskDetail = () => {
 
     const onClose = () => {
         navigate(`/app/projects/${projectID}`)
+    }
+
+    const handleAlert = () => {
+        if (setting.delete_task_after_alert) {
+            setIsAlertOpen(true)
+        }
+        else {
+            handleDelete()
+        }
+    }
+
+    const handleDelete = () => {
+        navigate(`/app/projects/${projectID}`)
+        deleteMutation.mutate()
+        toast.success(`"${task.name}" 할 일이 삭제되었습니다`)
     }
 
     if (isPending) {
@@ -52,17 +83,25 @@ const TaskDetail = () => {
             <TaskNameBox>
                 <TaskNameInput
                     task={task}
-                    setFunc={mutation.mutate}
+                    setFunc={patchMutation.mutate}
                     newTaskName={taskName}
                     setNewTaskName={setTaskName}
                     color={color}
                 />
                 <Icons>
-                    <FeatherIcon icon="trash-2" />
+                    <FeatherIcon 
+                        icon="trash-2"
+                        onClick={handleAlert}
+                    />
                     <FeatherIcon icon="x" onClick={onClose} />
                 </Icons>
             </TaskNameBox>
-            <Contents task={task} setFunc={mutation.mutate}/>
+            <Contents task={task} setFunc={patchMutation.mutate}/>
+            {isAlertOpen &&
+                <ModalPortal closeModal={() => {setIsAlertOpen(false)}} additional={true}>
+                    <DeleteAlert title={`"${task.name}"\n 할 일을`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
+                </ModalPortal>
+            }
         </TaskDetailBox>
     )
 }

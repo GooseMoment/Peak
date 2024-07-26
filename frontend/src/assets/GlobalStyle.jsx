@@ -1,8 +1,7 @@
-import reset from 'styled-reset'
-
 import { scaleForward, scaleBack, modalFadeOut, modalFadeIn, cubicBeizer } from '@assets/keyframes'
 
 import { createGlobalStyle } from 'styled-components'
+import reset from 'styled-reset'
 
 const GlobalStyle = createGlobalStyle`
 ${reset}
@@ -103,6 +102,10 @@ body {
 .reactEasyCrop_Container {
     position: fixed !important;
     z-index: 999;
+}
+
+.Toastify__toast-body {
+    line-height: 1.3;
 }
 `
 

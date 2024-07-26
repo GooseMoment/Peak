@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react"
+
 import Button from "@components/common/Button"
 import FollowsCount from "@components/users/FollowsCount"
 import FollowButton from "@components/users/FollowButton"
@@ -7,14 +9,20 @@ import { cubicBeizer } from "@assets/keyframes"
 import styled from "styled-components"
 
 const UserProfileHeader = ({user, isMine}) => {
+    const [imgLoaded, setImgLoaded] = useState(false)
+
+    useEffect(() => {
+        setImgLoaded(false)
+    }, [user?.profile_img])
 
     return <>
         <Banner $headerColor={user?.header_color} />
         <Profile>
-            <ProfileImg src={user?.profile_img} />
+            <ProfileImg $display={imgLoaded} src={user?.profile_img} onLoad={() => setImgLoaded(true)} />
+            <ProfileImgEmpty $display={!imgLoaded} />
             <ProfileTexts>
                 <Names>
-                    <DisplayName>{user?.display_name || "-----"}</DisplayName>
+                    <DisplayName>{user ? user.display_name || user.username : "----"}</DisplayName>
                     <Username>@{user?.username}</Username>
                 </Names>
                 <Datas>
@@ -55,6 +63,21 @@ const ProfileImg = styled.img`
     border-radius: 50%;
     height: 10em;
     aspect-ratio: 1/1;
+
+    display: ${p => p.$display ? "unset" : "none"};
+    opacity: ${p => p.$display ? 1 : 0};
+
+    transition: opcity 0.5s ${cubicBeizer};
+`
+
+const ProfileImgEmpty = styled.div`
+    background-color: ${p => p.theme.thirdBackgroundColor};
+
+    border-radius: 50%;
+    height: 10em;
+    aspect-ratio: 1/1;
+
+    display: ${p => p.$display ? "unset" : "none"};
 `
 
 const ProfileTexts = styled.div`

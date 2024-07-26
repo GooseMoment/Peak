@@ -124,10 +124,6 @@ const routes = [
             {
                 path: "projects/:id",
                 element: <ProjectPage/>,
-                loader: async ({params}) => {
-                    const project = await getProject(params.id)
-                    return {project}
-                },
                 children: [
                     {
                         path: "tasks/create/",
