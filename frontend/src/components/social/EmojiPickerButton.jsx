@@ -26,7 +26,7 @@ import EmojiModal from "@components/social/EmojiModal"
 //     </EmojiLists>
 // }
 
-const EmojiAddButton = () => {
+const EmojiPickerButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedEmoji, setSelectedEmoji] = useState(false)
     const [modalPosition, setModalPosition] = useState({top: 0, left: 0})
@@ -126,4 +126,4 @@ margin-left: 60%;
 padding: 1rem 0 1rem;
 `
 
-export default EmojiAddButton
+export default EmojiPickerButton

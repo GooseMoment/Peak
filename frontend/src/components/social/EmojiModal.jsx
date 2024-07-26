@@ -49,12 +49,12 @@ const EmojiModalOverlay = styled.div`
 const Modal = styled.div`
     position: absolute;
     top: ${props => props.$posY}px;
-    left: calc(${props => props.$posX}px - 33em);
+    left: calc(${props => props.$posX}px - 34em); // 33 + 1(shadow)
     background: white;
     padding: 1.5em;
     border-radius: 1em;
     border: 0.2em solid rgba(123, 123, 123, 0.1);
-    box-shadow: 0.4em 0.4em 0.2em rgba(0, 0, 0, 0.1);
+    box-shadow: 0.2em 0.2em 0.4em rgba(0, 0, 0, 0.1);
     width: 30em;
     height: 24em;
     overflow-y: auto;
