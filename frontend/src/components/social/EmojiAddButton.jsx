@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { getEmojis } from "@api/social.api"
 
 import EmojiButton from "@components/social/EmojiButton"
-import EmojiModalContainer from "@components/social/EmojiModalContainer"
+import EmojiModal from "@components/social/EmojiModal"
 
 // const EmojiModal = ({isModalOpen, setIsModalOpen}) => {
 //     if(!isModalOpen) 
@@ -29,11 +29,26 @@ import EmojiModalContainer from "@components/social/EmojiModalContainer"
 const EmojiAddButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedEmoji, setSelectedEmoji] = useState(false)
+    const [modalPosition, setModalPosition] = useState({top: 0, left: 0})
+    const buttonRef = useRef(null)
 
     const { data: serverEmojis, isError: emojiError, isFetching } = useQuery({
         queryKey: ["emojis"],
         queryFn: () => getEmojis(),
     })
+
+    const handleOpenModal = () => {
+        if(!isModalOpen) {
+            if(buttonRef.current) {
+                const rect = buttonRef.current.getBoundingClientRect();
+                setModalPosition({
+                    top: rect.top + window.scrollY,
+                    left: rect.left + window.scrollX,
+                });
+            }
+        }
+        setIsModalOpen(prev => !prev)
+    }
 
     const handleSelectEmoji = (emoji) => {
         setSelectedEmoji(emoji)
@@ -41,7 +56,7 @@ const EmojiAddButton = () => {
     }
 
     return <>
-        <AddEmojiButton onClick={() => setIsModalOpen(prev => !prev)}>
+        <AddEmojiButton onClick={handleOpenModal} ref={buttonRef}>
             <FeatherIcon icon={isModalOpen ? "x-square" : "plus-square"}/>
         </AddEmojiButton>
         {selectedEmoji && (
@@ -49,27 +64,15 @@ const EmojiAddButton = () => {
                     <img src={selectedEmoji.img_uri} alt={selectedEmoji.name} />
                     <span>{selectedEmoji.name}</span>
                 </div>
-            )}
+        )}
 
         <EmojiModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(prev => !prev)}
             emojis={serverEmojis}
             onSelect={handleSelectEmoji}
+            position={modalPosition}
         /> 
-
-        {/* {
-            isModalOpen && <ModalContainer 
-                ref={modalBackground} 
-                onClick={ e => {
-                    if (e.target === modalBackground.current) {
-                        setIsModalOpen(false)
-                    }
-                }}
-            >
-                <EmojiModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>   
-            </ModalContainer>
-        } */}
     </>
 }
 
