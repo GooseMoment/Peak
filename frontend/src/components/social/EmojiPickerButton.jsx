@@ -8,23 +8,6 @@ import { getEmojis } from "@api/social.api"
 import EmojiButton from "@components/social/EmojiButton"
 import EmojiModal from "@components/social/EmojiModal"
 
-// const EmojiModal = ({isModalOpen, setIsModalOpen}) => {
-//     if(!isModalOpen) 
-//         return null
-
-//     const [isHover, setIsHover] = useState(false)
-//     const emojis = [
-//         "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "🥰", "😗", "😙", "🥲", "😚", "🤗", "🙂", "🤩", "🤔"
-//     ]
-
-//     return <EmojiLists>
-//         {
-//             emojis.map(emoji =>
-//                     <EmojiButton key={emoji} emoji={emoji} isHover={isHover} setIsHover={setIsHover} setIsModalOpen={setIsModalOpen}/>
-//             )
-//         }
-//     </EmojiLists>
-// }
 
 const EmojiPickerButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -51,7 +34,8 @@ const EmojiPickerButton = () => {
     }
 
     const handleSelectEmoji = (emoji) => {
-        setSelectedEmoji(emoji)
+        if (emoji === selectedEmoji) setSelectedEmoji(false)
+        else setSelectedEmoji(emoji)
         setIsModalOpen(false)
     }
 
