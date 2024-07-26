@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react"
+
 import PageTitle from "@components/common/PageTitle"
 import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
 import Input from "@components/sign/Input"
@@ -7,6 +9,9 @@ import Error from "@components/settings/Error"
 import Section, { Name, Value, Sync } from "@components/settings/Section"
 import ProfileImg from "@components/settings/ProfileImg"
 import PasswordSection from "@components/settings/PasswordSection"
+
+import Color from "@components/project/Creates/Color"
+import ModalPortal from "@components/common/ModalPortal"
 
 import { getMe, patchUser } from "@api/users.api"
 import { states } from "@assets/themes"
@@ -27,18 +32,31 @@ const Account = () => {
         queryFn: () => getMe(),
     })
 
+    const [headerColor, setHeaderColor] = useState(user?.header_color)
+    const [paletteOpen, setPaletteOpen] = useState(false)
+
     const mutation = useMutation({
         mutationFn: (data) => {
             return patchUser(data)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ["users", "me"]})
+            queryClient.invalidateQueries({queryKey: ["users", user.username]})
             toast.success(t("account_edited"))
         },
         onError: () => {
             toast.error(t("account_fail"))
         },
     })
+
+    useEffect(() => {
+        setHeaderColor(user?.header_color)
+    }, [user])
+
+    const onClickOpenPalette = e => {
+        e.preventDefault()
+        setPaletteOpen(true)
+    }
 
     const onSubmit = e => {
         e.preventDefault()
@@ -58,7 +76,7 @@ const Account = () => {
         <PageTitle>{t("title")} <Sync /></PageTitle>
         <Section>
             <ImgNameEmailContainer>
-                <ProfileImg profile_img={user.profile_img} />
+                <ProfileImg profile_img={user.profile_img} username={user.username} />
                 <NameEmail>
                     <Username>@{user.username}</Username>
                     <Email>{user.email}</Email>
@@ -77,6 +95,16 @@ const Account = () => {
                 <Value>
                     <Bio autoComplete="off" name="bio" defaultValue={user.bio} placeholder={t("bio_placeholder")} />
                 </Value>
+            </Section>
+            <Section>
+                <Name>{t("header_color")}</Name>
+                <Value>
+                    <ColorCircle onClick={onClickOpenPalette} $color={"#" + headerColor} />
+                    <input name="header_color" type="hidden" value={headerColor} />
+                </Value>
+                {paletteOpen && <ModalPortal>
+                    <Color closeComponent={() => setPaletteOpen(false)} setColor={setHeaderColor} /> 
+                </ModalPortal>}
             </Section>
             <Section>
                 <ButtonGroup $justifyContent="right">
@@ -120,12 +148,24 @@ const Bio = styled.textarea`
     border: none;
     font-size: 1em;
 
-    border: 1px black solid;
+    border: 1px solid ${p => p.theme.textColor};
     border-radius: 10px;
+
+    &:focus {
+        border-color: ${p => p.theme.goose};
+    }
 `
 
-const SubmitButton = styled(Button)`
-    float: right;
+const ColorCircle = styled.div`
+    border-radius: 50%;
+    border: 1.5px solid ${p => p.theme.secondBackgroundColor};
+    aspect-ratio: 1/1;
+
+    height: 2em;
+
+    cursor: pointer;
+
+    background-color: ${p => p.$color};
 `
 
 export default Account

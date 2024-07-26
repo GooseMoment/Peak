@@ -4,8 +4,9 @@ import Images from "./Images"
 import Content from "./Content"
 import Ago from "./Ago"
 
+import { cubicBeizer } from "@assets/keyframes"
+
 import styled, { css, keyframes } from "styled-components"
-import { cubicBeizer } from "@/assets/keyframes"
 
 const Box = forwardRef(({notification, highlight=false, skeleton=false}, ref) => {
     const actionUser = notification?.reaction?.user || notification?.peck?.user || notification?.comment?.user 
@@ -56,7 +57,7 @@ const Frame = styled.article`
         animation-delay: 0.5s;
     `}
 
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    box-shadow: ${p => p.theme.notifications.boxShadowColor} 0px 8px 24px;
 `
 
 export default Box

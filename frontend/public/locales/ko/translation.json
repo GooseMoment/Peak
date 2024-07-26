@@ -59,6 +59,7 @@
             "display_name": "이름",
             "display_name_placeholder": "남에게 보일 이름",
             "bio": "바이오",
+            "header_color": "헤더 색상",
             "bio_placeholder": "자신을 소개하세요.",
             "button_submit": "제출",
             "change_password": "암호 변경",
@@ -273,5 +274,32 @@
         "unknown_error_bottom": "시작 화면으로 돌아가기",
         "404_error_text": "요청하신 페이지를 찾을 수 없습니다.",
         "404_error_bottom": "이전 화면으로 돌아가기"
+    },
+    "sign": {
+        "sign_in": "로그인",
+        "sign_in_success": "로그인 성공! 다시 만나서 기뻐요.",
+        "sign_in_failed": "로그인 실패. 유저네임과 암호를 다시 확인하세요.",
+        "network_error": "문제가 발생했습니다. 네트워크 상황을 확인하세요.",
+        "loading": "로딩 중",
+        "button_sign_in": "로그인",
+        "button_forgot_password": "암호 찾기",
+        "button_create_account": "계정 생성",
+        "sign_up": "회원가입",
+        "sign_up_success": "회원가입 완료! 이제 로그인 해주세요.",
+        "email": "이메일 주소",
+        "password": "암호",
+        "username": "사용자 이름",
+        "button_sign_up": "가입하기",
+        "tos": "'가입하기' 버튼을 누름으로써 <linkToTos>이용약관</linkToTos>에 동의하게 됩니다.",
+        "button_already_have_account": "로그인 하기",
+        "sign_up_errors": {
+            "SIGNUP_NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
+            "SIGNUP_SIGNED_IN_USER": "이미 로그인되어 있습니다.",
+            "SIGNUP_USERNAME_TOO_SHORT": "사용자 이름은 4글자 이상이어야 합니다.",
+            "SIGNUP_PASSWORD_TOO_SHORT": "암호는 8글자 이상이어야 합니다.",
+            "SIGNUP_USERNAME_WRONG": "사용자 이름은 알파벳, 언더스코어(_), 숫자만 포함할 수 있습니다.",
+            "SIGNUP_INTERNAL_ERROR": "문제가 발생했습니다. 다시 시도해 주세요.",
+            "SIGNUP_UNKNOWN_ERROR": "나중에 시도해 주세요."
+        }
     }
 }

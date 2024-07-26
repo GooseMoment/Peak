@@ -16,6 +16,7 @@ from datetime import datetime, timedelta
 from .models import *
 from .serializers import *
 from users.serializers import UserSerializer
+from projects.models import *
 
 ## Follow
 # social/follow/@follower/@followee/
@@ -133,12 +134,15 @@ def get_daily_logs(request: HttpRequest, username, day):
     
     return Response(serializer.data, status=status.HTTP_200_OK) 
 
-# PUT social/daily/log/@follower/@followee/YYYY-MM-DDTHH:mm:ss+hh:mm/
-@api_view(["PUT"])
-def view_daily_log(requset: HttpRequest, follower, followee, day):
-    followerUserID = str(get_object_or_404(User, username=follower).id)
-    followeeUserID = str(get_object_or_404(User, username=followee).id)
+# GET social/daily/comment/@followee/YYYY-MM-DDTHH:mm:ss+hh:mm/
+@api_view(["GET"])
+def get_daily_comment(requset: HttpRequest, followee, day):    
+    followeeUser = get_object_or_404(User, username=followee)
+    
+    followerUserID = str(requset.user.id)
+    followeeUserID = str(followeeUser.id)
 
+    # set cache for 'is_read'
     cache_key = f"user_id_{followeeUserID}_date_{day}"
     cache_data = cache.get(cache_key)
     if cache_data:
@@ -150,7 +154,16 @@ def view_daily_log(requset: HttpRequest, follower, followee, day):
     # cache.set(cache_key, cache_data, 1*24*60*60)
     cache.set(cache_key, cache_data, 60*60)
     
-    return Response(cache_data, status=status.HTTP_200_OK)
+    day_min = datetime.fromisoformat(day)
+    day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+    daily_comment = DailyComment.objects.filter(user__id=followeeUserID, date__range=(day_min, day_max)).first()
+    
+    if not daily_comment:
+        daily_comment = DailyComment(id=None, user=followeeUser, comment='', date=None)
+    serializer = DailyCommentSerializer(daily_comment)
+    
+    # Response(cache_data, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 def get_following_feed(request: HttpRequest, date):
     pass
@@ -170,8 +183,24 @@ def delete_reaction(request: HttpRequest, task_id):
 def post_comment_to_task(request: HttpRequest, task_id, comment):
     pass
 
-def post_comment_to_daily_comment(request: HttpRequest, date, comment):
-    pass
+# POST social/daily/logs/YYYY-MM-DDTHH:mm:ss+hh:mm/
+@api_view(["POST"])
+def post_comment_to_daily_comment(request: HttpRequest, day):
+    day_min = datetime.fromisoformat(day)
+    day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+    
+    daily_comment = DailyComment.objects.filter(user=request.user, date__range=(day_min, day_max)).first()
+    comment = request.data.get('comment')
+    
+    if daily_comment:
+        daily_comment.comment = comment
+        daily_comment.save()
+    else:
+        daily_comment = DailyComment.objects.create(user=request.user, comment=comment, date=day)
+    
+    serializer = DailyCommentSerializer(daily_comment)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 def post_peck(request: HttpRequest, task_id):
     pass
