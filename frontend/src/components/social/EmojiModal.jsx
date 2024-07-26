@@ -1,6 +1,5 @@
 import React from 'react';
 import { Portal } from 'react-portal';
-import './EmojiModal.css';
 import styled from 'styled-components';
 import { useState } from 'react';
 
@@ -13,6 +12,12 @@ const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
         emoji.name.toLowerCase().includes(emojiSearchQuery.toLowerCase())
     );
 
+    const chunkNum = 8
+    const chunkedEmojis = []
+    for (let i = 0; i < filteredEmojis.length; i += chunkNum) {
+        chunkedEmojis.push(filteredEmojis.slice(i, i + chunkNum))
+    }
+
     return (
         <Portal>
             <Wrapper>
@@ -24,14 +29,15 @@ const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
                         value={emojiSearchQuery}
                         onChange={(e) => setEmojiSearchQuery(e.target.value)}
                     />
-                    <EmojiList>
-                        {filteredEmojis.map(emoji => (
-                            <li key={emoji.id} onClick={() => onSelect(emoji)}>
-                                <img src={emoji.img_uri} alt={emoji.name} />
-                                <span>{emoji.name}</span>
-                            </li>
-                        ))}
-                    </EmojiList>
+                    {chunkedEmojis.map((emojiListRow, rowIndex) => (
+                        <EmojiListRow key={rowIndex}>
+                            {emojiListRow.map(emoji => (
+                                <EmojiListCell key={emoji.id} $chunkNum={chunkNum} onClick={() => onSelect(emoji)}>
+                                    <EmojiCell src={emoji.img_uri} alt={emoji.name} />
+                                </EmojiListCell>
+                            ))}
+                        </EmojiListRow>
+                    ))}
                 </Modal>
             </Wrapper>
         </Portal>
@@ -85,8 +91,32 @@ const EmojiSearchBox = styled.input`
     background-color: #f2f2f2;
 `
 
-const EmojiList = styled.div`
-    
+const EmojiListRow = styled.ul`
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 1em 0;
+`
+
+const EmojiListCell = styled.li`
+    flex: 0 1 2.8em;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 calc((100% - ${props => (props.$chunkNum)*2.8}em) / ${props => props.$chunkNum*2});
+    cursor: pointer;
+    &:hover {
+        background-color: #f0f0f0;
+    }
+`
+
+const EmojiCell = styled.img`
+    padding: 0.2em;
+    width: 2.4em;
+    height: 2.4em;
 `
 
 export default EmojiModal;

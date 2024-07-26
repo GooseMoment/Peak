@@ -3,7 +3,7 @@ import FeatherIcon from "feather-icons-react";
 import { DateTime } from "luxon"
 
 import ReactionEmoji from "@components/social/ReactionEmoji";
-import EmojiAddButton from "@components/social/EmojiAddButton";
+import EmojiPickerButton from "@components/social/EmojiAddButton";
 import PeakButton from "@components/social/PeakButton";
 
 const putEllipsis = (text, maxLength) => {
@@ -41,7 +41,7 @@ const LogDetailTask = ({ task, color }) => {
                     {task.reaction.map((LogDetailTaskEmoji) => (
                         <ReactionEmoji key={LogDetailTaskEmoji.emoji} emoji={LogDetailTaskEmoji} />
                     ))}
-                    <EmojiAddButton />
+                    <EmojiPickerButton />
                 </>
             ) : (
                 <PeakButton id={task.id} num={task.reaction[0].reactionNum}/>
