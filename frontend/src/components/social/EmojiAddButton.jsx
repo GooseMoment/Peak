@@ -56,9 +56,9 @@ const EmojiAddButton = () => {
     }
 
     return <>
-        <AddEmojiButton onClick={handleOpenModal} ref={buttonRef}>
+        <PickerButton onClick={handleOpenModal} ref={buttonRef}>
             <FeatherIcon icon={isModalOpen ? "x-square" : "plus-square"}/>
-        </AddEmojiButton>
+        </PickerButton>
         {selectedEmoji && (
                 <div>
                     <img src={selectedEmoji.img_uri} alt={selectedEmoji.name} />
@@ -69,20 +69,23 @@ const EmojiAddButton = () => {
         <EmojiModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(prev => !prev)}
-            emojis={serverEmojis}
+            emojis={serverEmojis?Object.values(serverEmojis):null}
             onSelect={handleSelectEmoji}
             position={modalPosition}
         /> 
     </>
 }
 
-const AddEmojiButton = styled.div`
-display: inline-block;
+const PickerButton = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
 
 background-color: inherit;
 border: 0;
 
 height: 1em;
+width: 1.5em;
 padding: 0.5em;
 `
 

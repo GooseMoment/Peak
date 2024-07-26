@@ -4,18 +4,15 @@ import './EmojiModal.css';
 import styled from 'styled-components';
 
 const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
-    if (!isOpen) return null
+    if (!isOpen || !emojis) return null
 
     return (
         <Portal>
             <Wrapper>
                 <EmojiModalOverlay onClick={onClose} />
-                <Modal style={{
-                        top: position.top,
-                        left: position.left,
-                    }} >
+                <Modal $posY={position.top} $posX={position.left}>
                     <EmojiList>
-                        emojis && {Object.values(emojis).map(emoji => (
+                        {emojis.map(emoji => (
                             <li key={emoji.id} onClick={() => onSelect(emoji)}>
                                 <img src={emoji.img_uri} alt={emoji.name} />
                                 <span>{emoji.name}</span>
@@ -51,11 +48,15 @@ const EmojiModalOverlay = styled.div`
 
 const Modal = styled.div`
     position: absolute;
+    top: ${props => props.$posY}px;
+    left: calc(${props => props.$posX}px - 33em);
     background: white;
     padding: 1.5em;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    max-height: 80vh;
+    border-radius: 1em;
+    border: 0.2em solid rgba(123, 123, 123, 0.1);
+    box-shadow: 0.4em 0.4em 0.2em rgba(0, 0, 0, 0.1);
+    width: 30em;
+    height: 24em;
     overflow-y: auto;
     z-index: 10;
     pointer-events: auto;
