@@ -1,8 +1,10 @@
 import { Suspense } from "react"
 import { RouterProvider } from "react-router-dom"
 
-import router from "@/router"
-import hashRouter from "@/hashRouter"
+import mainRouter from "@routers/mainRouter"
+import hashRouter from "@routers/hashRouter"
+
+import FullscreenLoader from "@components/common/FullscreenLoader"
 import Loading from "@components/settings/Loading"
 
 import { useTheme } from "styled-components"
@@ -15,8 +17,8 @@ const Root = () => {
     return <>
         <ToastContainer position="bottom-right" theme={theme.toastTheme} stacked hideProgressBar />
 
-        <Suspense fallback={<Loading />}>
-            <RouterProvider router={router} />
+        <Suspense fallback={<FullscreenLoader />}>
+            <RouterProvider router={mainRouter} />
         </Suspense>
 
         <Suspense fallback={<Loading />}>
