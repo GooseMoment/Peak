@@ -89,7 +89,7 @@ class WebPushSubscription(Base):
         on_delete=models.CASCADE,
     )
     subscription_info = models.JSONField()
-    browser = models.CharField(max_length=128)
+    locale = models.CharField(max_length=128, null=True, blank=True)
     user_agent = models.CharField(max_length=500, blank=True)
     fail_cnt = models.IntegerField(default=0)
 

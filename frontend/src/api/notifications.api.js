@@ -1,3 +1,4 @@
+import { getClientSettings } from "@/utils/clientSettings"
 import client from "@api/client"
 
 export const getReminder = async (id) => {
@@ -64,9 +65,14 @@ export const deleteNotification = async (id) => {
 }
 
 export const postSubscription = async (subscription) => {
+    let locale = getClientSettings()["locale"]
+    if (locale === "system") {
+        locale = navigator.language.startsWith("ko") ? "ko" : "en"
+    }
+
     const data = {
         subscription_info: subscription,
-        browser: "Firefox",
+        locale,
         user_agent: navigator.userAgent,
     }
 
