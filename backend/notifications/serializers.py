@@ -26,5 +26,5 @@ class WebPushSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = WebPushSubscription
         fields = [
-            "id", "user", "subscription_info", "browser", "user_agent",
+            "id", "user", "subscription_info", "locale", "user_agent",
         ]
