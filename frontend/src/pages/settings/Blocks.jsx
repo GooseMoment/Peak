@@ -45,7 +45,7 @@ const Blocks = () => {
     }
 
     return <>
-        <PageTitle>{t("title")} <Sync /></PageTitle>
+        <PageTitle>{t("title")} <Sync name={t("title")} /></PageTitle>
         <Section>
             <Name>{t("blockees.name")}</Name>
             <Description>{t("blockees.description")}</Description>

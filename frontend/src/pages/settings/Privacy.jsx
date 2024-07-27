@@ -44,7 +44,7 @@ const Privacy = () => {
     }
 
     return <>
-        <PageTitle>{t("title")} <Sync /></PageTitle>
+        <PageTitle>{t("title")} <Sync name={t("title")} /></PageTitle>
         <Section>
             <Name>{t("follow_request_approval_manually.name")}</Name>
             <Description>{t("follow_request_approval_manually.description")}</Description>

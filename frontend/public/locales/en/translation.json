@@ -41,6 +41,9 @@
         "button_go_back": "Go back"
     },
     "settings": {
+        "online": {
+            "sync_help": "The values of {{name}} are synced across all your devices."
+        },
         "sidebar": {
             "account": "Account",
             "general": "General",
