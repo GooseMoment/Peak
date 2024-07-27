@@ -234,8 +234,39 @@ def get_explore_feed(request: HttpRequest, user_id):
 def get_emojis(request: HttpRequest):
     pass
 
-def post_reaction(request: HttpRequest, task_id, emoji):
-    pass
+class ReactionView(APIView):
+    def post(self, request, type, id):
+        # TODO: Need to check block
+        emoji_id = request.data.get('emoji')
+        emoji = get_object_or_404(Emoji, id=emoji_id)
+        user = request.user
+        
+        if type == "task":
+            task = get_object_or_404(Task, id=id)
+            try:
+                reaction = Reaction.objects.create(user=user,
+                                                   parent_type=Reaction.FOR_TASK,
+                                                   task=task,
+                                                   emoji=emoji)
+            except:
+                return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        elif type == "daily_comment":
+            daily_comment = get_object_or_404(DailyComment, id=id)
+            try:
+                reaction = Reaction.objects.create(user=user,
+                                                   parent_type=Reaction.FOR_DAILY_COMMENT,
+                                                   daily_comment=daily_comment,
+                                                   emoji=emoji)
+            except:
+                return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST) #맞나..?
+        
+        serializer = ReactionSerializer(reaction)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def delete(self, request, type, id):
+        pass
 
 def delete_reaction(request: HttpRequest, task_id):
     pass
