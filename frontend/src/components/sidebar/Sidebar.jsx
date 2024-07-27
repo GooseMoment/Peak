@@ -26,8 +26,11 @@ export const SidebarBox = styled.nav`
 z-index: 99;
 
 position: fixed;
-height: 100vh;
+height: 100dvh;
 width: 18rem;
+
+padding-bottom: calc(env(safe-area-inset-bottom) - 1em);
+box-sizing: border-box;
 
 display: flex;
 flex-direction: column;

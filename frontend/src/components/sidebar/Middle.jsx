@@ -77,7 +77,7 @@ const ProjectItemsContainer = styled.div`
 
     scrollbar-width: thin;
     scrollbar-color: ${p => p.theme.sidebar.scrollbarColor} transparent;
-    height: calc(100vh - 24em);
+    box-sizing: border-box;
 
     ${props => props.$collapsed && css`
         scrollbar-width: none;
