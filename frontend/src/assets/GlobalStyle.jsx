@@ -7,7 +7,7 @@ const GlobalStyle = createGlobalStyle`
 ${reset}
 
 html {
-    height: 100vh;
+    height: 100dvh;
     width: 100vw;
 
     accent-color: ${p => p.theme.accentColor};
@@ -52,7 +52,7 @@ html {
     left: 0;
 
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
     padding: 0.5em;
 
     z-index: 99;
