@@ -9,7 +9,7 @@ translations = {
 }
 
 def get_translations(locale: str):
-    if locale in translations.keys():
+    if locale in translations:
         return translations[locale]
     
     return translations[settings.LANGUAGE_CODE]

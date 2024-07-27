@@ -81,11 +81,17 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
 
 def pushNotificationToUser(user: User, notification: Notification) -> None:
     subscriptions = WebPushSubscription.objects.filter(user=user).all()
+    datas_per_locale = dict()
     
     for subscription in subscriptions:
         endpoint = parse_url(subscription.subscription_info.get("endpoint"))
         aud = endpoint.scheme + "://" + endpoint.host
-        data = _notificationToPushData(notification, subscription.locale)
+
+        if subscription.locale in datas_per_locale:
+            data = datas_per_locale[subscription.locale]
+        else:
+            data = _notificationToPushData(notification, subscription.locale)
+            datas_per_locale[subscription.locale] = data
 
         try:
             webpush(
