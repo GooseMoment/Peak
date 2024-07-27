@@ -114,7 +114,8 @@
                     "protected": "팔로워에게만",
                     "private": "나에게만"
                 }
-            }
+            },
+            "setting_submitted": "공개 범위 설정을 저장했습니다."
         },
         "languages_and_time": {
             "title": "언어 및 시간",

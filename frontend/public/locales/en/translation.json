@@ -113,7 +113,8 @@
                     "protected": "Limit to my followers",
                     "private": "Only me"
                 }
-            }
+            },
+            "setting_submitted": "Privacy settings were saved."
         },
         "languages_and_time": {
             "title": "Languages & Time",
