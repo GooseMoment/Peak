@@ -1,3 +1,4 @@
+import { ifWidthM } from '@/utils/screenType'
 import { scaleForward, scaleBack, modalFadeOut, modalFadeIn, cubicBeizer } from '@assets/keyframes'
 
 import { createGlobalStyle } from 'styled-components'
@@ -105,6 +106,20 @@ body {
 
 .Toastify__toast-body {
     line-height: 1.3;
+}
+
+${ifWidthM} {
+    body { // https://stackoverflow.com/a/3428477
+        -webkit-text-size-adjust: 100%;
+    }
+
+    .Toastify__toast-body {
+        font-size: 0.9em;
+    }
+
+    .Toastify__toast--stacked[data-pos="bot"] {
+        bottom: 5em;
+    }
 }
 `
 
