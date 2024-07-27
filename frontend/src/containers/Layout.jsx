@@ -5,6 +5,7 @@ import Navbar from "@components/navbar/Navbar"
 
 import { ifWidthM, ifWidthS, useScreenType } from "@utils/screenType"
 import { useClientSetting } from "@utils/clientSettings"
+import { cubicBeizer, modalFadeIn } from "@assets/keyframes"
 
 import styled, { css } from "styled-components"
 
@@ -31,6 +32,7 @@ const Layout = ({children}) => {
         {widthType === "S" && <Navbar openSidebar={openSidebarFromNavbar} />}
         {!sidebarHidden && 
             <Sidebar isMobile={widthType === "S"} setSidebarHidden={setSidebarHidden} collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />}
+        {widthType === "S" && !sidebarHidden && <BackgroundWall onClick={() => setSidebarHidden(true)} />}
         <Content $sidebarCollapsed={sidebarCollapsed} $sidePadding={contentPadding}>
             {children}
         </Content>
@@ -63,6 +65,18 @@ const Content = styled.main`
         padding: 2rem 1.5rem;
         padding-bottom: calc(2rem + 6rem);
     }
+`
+
+const BackgroundWall = styled.div`
+    z-index: 98;
+
+    position: fixed;
+    height: 100dvh;
+    width: 100dvw;
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+
+    animation: ${modalFadeIn} 0.25s ${cubicBeizer} forwards;
 `
 
 // Reference: https://every-layout.dev/layouts/sidebar

@@ -31,7 +31,7 @@ const Navbar = ({openSidebar}) => {
 }
 
 const Frame = styled.nav`
-    z-index: 98;
+    z-index: 97;
 
     position: fixed;    
     left: 0;
