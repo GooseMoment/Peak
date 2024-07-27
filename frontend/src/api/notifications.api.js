@@ -1,4 +1,6 @@
-import { getClientSettings } from "@/utils/clientSettings"
+import { getClientSettings } from "@utils/clientSettings"
+import getDeviceType from "@utils/getDeviceType"
+
 import client from "@api/client"
 
 export const getReminder = async (id) => {
@@ -73,6 +75,7 @@ export const postSubscription = async (subscription) => {
     const data = {
         subscription_info: subscription,
         locale,
+        device: getDeviceType(),
         user_agent: navigator.userAgent,
     }
 
