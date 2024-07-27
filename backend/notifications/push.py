@@ -2,6 +2,7 @@ from django.conf import settings
 
 from users.models import User
 from .models import Notification, WebPushSubscription
+from .locale import get_translations
 
 from pywebpush import webpush, WebPushException
 from json import dumps
@@ -9,7 +10,7 @@ from urllib3.util import parse_url
 
 SUBSCRIPTION_MAX_FAILURE = 10
 
-def _notificationToPushData(notification: Notification) -> dict[str, any]:
+def _notificationToPushData(notification: Notification, locale: str) -> dict[str, any]:
     # FYI: https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
     data = {
         # Texts
@@ -32,33 +33,45 @@ def _notificationToPushData(notification: Notification) -> dict[str, any]:
     data["data"]["click_url"] = "/app/notifications?id=" + str(notification.id)
 
     related_user: User = None
+    t = get_translations(locale)["push"]
 
-    # TODO: i18n
     match notification.type:
         case Notification.FOR_TASK_REMINDER:
-            data["title"] = notification.task_reminder.task.name
-            data["body"] = "Time to work!" # TODO: show left time
+            t = t[Notification.FOR_TASK_REMINDER]
+            data["title"] = t["title"].format(task=notification.task_reminder.task.name)
+            data["body"] = t["body"].format(delta=notification.task_reminder.delta)
+        case Notification.FOR_REACTION:
+            related_user = notification.reaction.task.user
+            t = t[Notification.FOR_REACTION]
+            data["title"] = t["title"].format(emoji=notification.reaction.emoji.name, username=related_user.username)
+            data["body"] = t["body"].format(delta=notification.task_reminder.delta)
         case Notification.FOR_FOLLOW:
             related_user = notification.following.follower
-            data["body"] = "follows you"
+            t = t[Notification.FOR_FOLLOW]
+            data["title"] = t["title"].format(username=related_user.username)
+            data["body"] = t["body"]
         case Notification.FOR_FOLLOW_REQUEST:
             related_user = notification.following.follower
-            data["body"] = "wants to follow you"
+            t = t[Notification.FOR_FOLLOW]
+            data["title"] = t["title"].format(username=related_user.username)
+            data["body"] = t["body"]
         case Notification.FOR_FOLLOW_REQUEST_ACCEPTED:
             related_user = notification.following.followee
-            data["body"] = "accepted your follow request"
-        case Notification.FOR_COMMENT:
-            related_user = notification.comment.user
-            data["body"] = f"\"{notification.comment.comment}\""
+            t = t[Notification.FOR_FOLLOW]
+            data["title"] = t["title"].format(username=related_user.username)
+            data["body"] = t["body"]
         case Notification.FOR_PECK:
             related_user = notification.peck.user
-            data["body"] = "pecked " + f"\"{notification.peck.task.name}\""
-        case Notification.FOR_REACTION:
-            related_user = notification.reaction.user
-            data["body"] = ":" + notification.reaction.emoji.name + ":"
+            t = t[Notification.FOR_PECK]
+            data["title"] = t["title"].format(username=related_user.username)
+            data["body"] = t["body"].format(task=notification.peck.task.name, count=notification.peck.count)
+        case Notification.FOR_COMMENT:
+            related_user = notification.comment.user
+            t = t[Notification.FOR_PECK]
+            data["title"] = t["title"].format(username=related_user.username)
+            data["body"] = t["body"].format(task=notification.comment.task.name, comment=notification.comment.comment)
         
     if related_user:
-        data["title"] = "@" + related_user.username
         if related_user.profile_img:
             data["icon"] = related_user.profile_img.url
         else:
@@ -68,11 +81,11 @@ def _notificationToPushData(notification: Notification) -> dict[str, any]:
 
 def pushNotificationToUser(user: User, notification: Notification) -> None:
     subscriptions = WebPushSubscription.objects.filter(user=user).all()
-    data = _notificationToPushData(notification)
     
     for subscription in subscriptions:
         endpoint = parse_url(subscription.subscription_info.get("endpoint"))
         aud = endpoint.scheme + "://" + endpoint.host
+        data = _notificationToPushData(notification, subscription.locale)
 
         try:
             webpush(
