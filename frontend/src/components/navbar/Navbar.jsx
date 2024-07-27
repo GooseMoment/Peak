@@ -1,24 +1,32 @@
-import styled from "styled-components"
-import { Menu, PlusCircle } from "feather-icons-react"
+import { useNavigate } from "react-router-dom"
+
+import { Menu, Calendar, PlusCircle, Bell, Users } from "feather-icons-react"
 import { toast } from "react-toastify"
+import styled from "styled-components"
 
 const Navbar = ({openSidebar}) => {
+    const navigate = useNavigate()
+
     const onClickTaskCreate = () => {
-        toast.info("TaskCreate", {autoClose: false})
+        toast.info("TaskCreate")
     }
 
     return <Frame>
-        <Item onClick={openSidebar}>
+        <Item key="sidebar" onClick={openSidebar}>
             <Menu />
         </Item>
-        <Item>
-
+        <Item key="today" onClick={() => navigate("/app/today")}>
+            <Calendar />
         </Item>
-        <Item onClick={onClickTaskCreate}>
+        <Item key="taskCreate" onClick={onClickTaskCreate}>
             <PlusCircle />
         </Item>
-        <Item />
-        <Item />
+        <Item key="notifications" onClick={() => navigate("/app/notifications")}>
+            <Bell />
+        </Item>
+        <Item key="social" onClick={() => navigate("/app/social/following")}>
+            <Users />
+        </Item>
     </Frame>
 }
 
