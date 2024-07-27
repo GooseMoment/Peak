@@ -22,9 +22,10 @@ class NotificatonSerializer(serializers.ModelSerializer):
 
 class WebPushSubscriptionSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    device = serializers.CharField(default="Unknown")
 
     class Meta:
         model = WebPushSubscription
         fields = [
-            "id", "user", "subscription_info", "locale", "user_agent",
+            "id", "user", "subscription_info", "locale", "device", "user_agent",
         ]
