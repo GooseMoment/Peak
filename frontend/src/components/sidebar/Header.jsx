@@ -10,12 +10,16 @@ import FeatherIcon from "feather-icons-react"
 
 const autoCollapseWidth = WIDTH_M
 
-const Header = ({collapsed, setCollapsed}) => {
+const Header = ({collapsed, setCollapsed, setSidebarHidden, isMobile}) => {
     const screenSize = useScreenSize()
     const previousScreenSize = useRef(screenSize)
     const autoControlled = useRef(true)
 
     useEffect(() => {
+        if (isMobile) {
+            return
+        }
+
         if (previousScreenSize.current.width > autoCollapseWidth && screenSize.width <= autoCollapseWidth ) {
             // if screen width became shorter than autoCollapseWidth
             setCollapsed(true)
@@ -43,9 +47,14 @@ const Header = ({collapsed, setCollapsed}) => {
 
     return <header>
         <ButtonContainer $collapsed={collapsed}>
-            <CollapseButton onClick={onClickCollapseButton} $collapsed={collapsed} >
-                <FeatherIcon icon="chevrons-left" />
-            </CollapseButton>
+            {isMobile ? 
+                <CollapseButton onClick={() => setSidebarHidden(true)}>
+                    <FeatherIcon icon="x" />
+                </CollapseButton>
+                : <CollapseButton onClick={onClickCollapseButton} $collapsed={collapsed} >
+                    <FeatherIcon icon="chevrons-left" />
+                </CollapseButton>
+            }
         </ButtonContainer>
     </header>
 }

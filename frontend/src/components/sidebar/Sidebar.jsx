@@ -4,9 +4,11 @@ import Header from "./Header"
 import Middle from "./Middle"
 import Footer from "./Footer"
 
+import { ifWidthS } from "@utils/screenType"
+
 import styled, { css } from "styled-components"
 
-const Sidebar = ({collapsed, setCollapsed}) => {
+const Sidebar = ({collapsed, setCollapsed, setSidebarHidden, isMobile}) => {
     const routeData = useRouteLoaderData("app")
 
     if (!routeData) {
@@ -16,7 +18,7 @@ const Sidebar = ({collapsed, setCollapsed}) => {
     const {projects, user} = routeData
 
     return <SidebarBox $collapsed={collapsed}>
-        <Header collapsed={collapsed} setCollapsed={setCollapsed} />
+        <Header collapsed={collapsed} setCollapsed={setCollapsed} setSidebarHidden={setSidebarHidden} isMobile={isMobile} />
         <Middle collapsed={collapsed} projects={projects} />
         <Footer collapsed={collapsed} user={user} />
     </SidebarBox>
@@ -49,6 +51,10 @@ ${({$collapsed}) => $collapsed ? css`
     -moz-user-select: none;
     -webkit-user-select: none;
 }
+
+    ${ifWidthS} {
+        width: 15rem;
+    }
 `
 
 export default Sidebar

@@ -29,7 +29,8 @@ const Layout = ({children}) => {
     return (
     <App>
         {widthType === "S" && <Navbar openSidebar={openSidebarFromNavbar} />}
-        {!sidebarHidden && <Sidebar mobile={widthType === "S"} collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />}
+        {!sidebarHidden && 
+            <Sidebar isMobile={widthType === "S"} setSidebarHidden={setSidebarHidden} collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />}
         <Content $sidebarCollapsed={sidebarCollapsed} $sidePadding={contentPadding}>
             {children}
         </Content>
