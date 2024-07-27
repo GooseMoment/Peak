@@ -187,7 +187,9 @@
             "blockees": {
                 "name": "내가 차단한 사용자",
                 "description": "이 사용자들과 마주치지 않습니다.",
-                "button_unblock": "차단 해제"
+                "button_unblock": "차단 해제",
+                "button_block": "다시 차단",
+                "empty": "아무도 없습니다."
             }
         },
         "info": {

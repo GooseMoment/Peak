@@ -12,6 +12,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
+import styled from "styled-components"
 
 const Blocks = () => {
     const {data: blocks, isPending, isError} = useQuery({
@@ -52,9 +53,22 @@ const Blocks = () => {
                 {blocks.map(user => <ListUserProfile user={user} key={user.username}>
                     <Button onClick={onClick}>{t("blockees.button_unblock")}</Button>
                 </ListUserProfile>)}
+                {blocks?.length === 0 && <Message>{t("blockees.empty")}</Message>}
             </Value>
         </Section>
     </>
 }
+
+// TODO: Integrate with @components/users/FollowList.jsx
+const Message = styled.div`
+    color: ${p => p.theme.grey};
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    aspect-ratio: 3/2;
+`
 
 export default Blocks
