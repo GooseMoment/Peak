@@ -242,15 +242,30 @@ class ReactionView(APIView):
             task = get_object_or_404(Task, id=id)
             # parent_type을 비교하는 게 속도 향상에 도움이 될진 모르겠음
             reactions = Reaction.objects.filter(parent_type=Reaction.FOR_TASK,
-                                                task=task)
+                                                task=task).order_by("created_at")
         elif type == 'daily_comment':
             daily_comment = get_object_or_404(DailyComment, id=id)
+            # parent_type을 비교하는 게 속도 향상에 도움이 될진 모르겠음
             reactions = Reaction.objects.filter(parent_type=Reaction.FOR_DAILY_COMMENT,
-                                                daily_comment=daily_comment)
+                                                daily_comment=daily_comment).order_by("created_at")
+        
+        reactionCountsDir = dict()
+        for reaction in reactions:
+            emoji_id = f"{reaction.emoji.id}"
+            reactionNum = reactionCountsDir.get(emoji_id)
+            if reactionNum:
+                reactionCountsDir[emoji_id][1] = reactionNum + 1
+            else:
+                reactionCountsDir[emoji_id] = [EmojiSerializer(reaction.emoji).data, 1]
         
         serializer = ReactionSerializer(reactions, many=True)
         
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        data = {
+            'reactions': serializer.data,
+            'reaction_counts': reactionCountsDir
+        }
+        
+        return Response(data, status=status.HTTP_200_OK)
     
     def post(self, request, type, id):
         # TODO: Need to check block
