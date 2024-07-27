@@ -235,6 +235,23 @@ def get_emojis(request: HttpRequest):
     pass
 
 class ReactionView(APIView):
+    def get(self, request, type, id):
+        user = request.user
+
+        if type == 'task':
+            task = get_object_or_404(Task, id=id)
+            # parent_type을 비교하는 게 속도 향상에 도움이 될진 모르겠음
+            reactions = Reaction.objects.filter(parent_type=Reaction.FOR_TASK,
+                                                task=task)
+        elif type == 'daily_comment':
+            daily_comment = get_object_or_404(DailyComment, id=id)
+            reactions = Reaction.objects.filter(parent_type=Reaction.FOR_DAILY_COMMENT,
+                                                daily_comment=daily_comment)
+        
+        serializer = ReactionSerializer(reactions, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
     def post(self, request, type, id):
         # TODO: Need to check block
         emoji_id = request.data.get('emoji')
@@ -310,9 +327,6 @@ class ReactionView(APIView):
         reaction.delete()
         
         return Response(status=status.HTTP_200_OK)
-
-def delete_reaction(request: HttpRequest, task_id):
-    pass
 
 def post_comment_to_task(request: HttpRequest, task_id, comment):
     pass
