@@ -86,6 +86,10 @@
                     "home": "Home",
                     "today": "Today"
                 }
+            },
+            "delete_task_after_alert": {
+                "name": "Alert before task deletion",
+                "description": "Show an alert before deleting tasks."
             }
         },
         "privacy": {

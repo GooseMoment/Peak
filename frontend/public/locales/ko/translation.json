@@ -87,6 +87,10 @@
                     "home": "홈",
                     "today": "오늘"
                 }
+            },
+            "delete_task_after_alert": {
+                "name": "작업 삭제 시 경고",
+                "description": "작업을 삭제할 때 되묻는 경고창을 띄웁니다."
             }
         },
         "privacy": {
