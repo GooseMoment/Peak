@@ -5,7 +5,7 @@ import { useClientSetting } from "@utils/clientSettings"
 
 import styled, { css } from "styled-components"
 
-const Layout = ({noSidebar, children}) => {
+const Layout = ({children}) => {
     const [clientSetting, ] = useClientSetting()
     
     const [sidebarCollapsed, setSidebarCollapsed] = useState(clientSetting["close_sidebar_on_startup"])
@@ -13,7 +13,7 @@ const Layout = ({noSidebar, children}) => {
     
     return (
     <App>
-        { noSidebar ? null : <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />}
+        <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
         <Content $sidebarCollapsed={sidebarCollapsed} $sidePadding={contentPadding}>
             {children}
         </Content>
