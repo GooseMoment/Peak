@@ -133,6 +133,15 @@ export const getEmojis = async () => {
     }
 }
 
+export const getReactions = async(type, id) => {
+    try {
+        const res = await client.get(`social/reaction/${type}/${id}/`)
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
+
 export const postReaction = (taskID, emoji) => {
 
 }
