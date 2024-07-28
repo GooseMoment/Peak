@@ -7,7 +7,7 @@ const EmojiButton = ({emoji, isHover, setIsHover, setIsModalOpen}) => {
         onClick={() => setIsModalOpen(false)}
         $bgcolor = {isHover===emoji ? "#FFD7C7" : "inherit" }
     >
-        {emoji}
+        <Emoji src={emoji} />
     </EmojiBox>
 }
 
@@ -22,6 +22,11 @@ text-align: center;
 border-radius: 0.5rem;
 
 background-color: ${props => props.$bgcolor};
+`
+
+const Emoji = styled.img`
+    height: 1.5em;
+    width: 1.5em;
 `
 
 export default EmojiButton
