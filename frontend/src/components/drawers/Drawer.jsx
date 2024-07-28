@@ -68,7 +68,7 @@ const Drawer = ({project, drawer, color}) => {
             return deleteDrawer(drawer.id)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['projects', project.id]})
+            queryClient.invalidateQueries({queryKey: ['drawers', {projectID: project.id}]})
         },
     })
 
@@ -98,7 +98,7 @@ const Drawer = ({project, drawer, color}) => {
     const drawerIcons = [
         {icon: <FeatherIcon icon="plus" onClick={clickPlus}/>},
         {icon: <div onClick={handleToggleContextMenu(setSelectedSortMenuPosition, setIsSortMenuOpen, setIsContextMenuOpen)}>
-            <SortIcon color={color}/>
+            <SortIcon color={`#${color}`}/>
         </div>},
         {icon: <CollapseButton $collapsed={collapsed}>
             <FeatherIcon icon="chevron-down" onClick={handleCollapsed}/>
@@ -230,13 +230,13 @@ const MoreButton = styled(Button)`
 `
 
 const sortMenuItems = [
-    {"icon": "check", "display": "중요도", "context": "-priority"},
-    {"icon": "check", "display": "기한↓", "context": "assigned_at,due_date,due_time"},
-    {"icon": "check", "display": "기한↑", "context": "-assigned_at,-due_date,-due_time"},
-    {"icon": "check", "display": "제목 가나다순", "context": "name"},
-    {"icon": "check", "display": "만든 지 최신순", "context": "created_at"},
-    {"icon": "check", "display": "만든 지 오래된 순", "context": "-created_at"},
-    {"icon": "check", "display": "알람 설정 우선", "context": "reminders"},
+    {"display": "중요도", "context": "-priority"},
+    {"display": "기한↓", "context": "assigned_at,due_date,due_time"},
+    {"display": "기한↑", "context": "-assigned_at,-due_date,-due_time"},
+    {"display": "제목 가나다순", "context": "name"},
+    {"display": "만든 지 최신순", "context": "created_at"},
+    {"display": "만든 지 오래된 순", "context": "-created_at"},
+    {"display": "알람 설정 우선", "context": "reminders"},
 ]
 
 const makeContextMenuItems = (theme, handleAlert) => [

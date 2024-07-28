@@ -12,11 +12,14 @@ import DeleteAlert from "@components/common/DeleteAlert"
 import ModalPortal from "@components/common/ModalPortal"
 import queryClient from "@queries/queryClient"
 import handleToggleContextMenu from "@utils/handleToggleContextMenu"
+import SortIcon from "@components/project/sorts/SortIcon"
+import SortMenu from "@components/project/sorts/SortMenu"
 
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { getProject, patchProject, deleteProject } from "@api/projects.api"
+import { getDrawersByProject } from "@api/drawers.api"
 
 const ProjectPage = () => {
     const { id } = useParams()
@@ -24,19 +27,28 @@ const ProjectPage = () => {
     const navigate = useNavigate()
 
     const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
+    const [ordering, setOrdering] = useState("created_at")
+    const [isSortMenuOpen, setIsSortMenuOpen] = useState(false)
+    const [selectedSortMenuPosition, setSelectedSortMenuPosition] = useState({top: 0, left: 0})
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
     const [selectedButtonPosition, setSelectedButtonPosition] = useState({top: 0, left: 0})
 
     const { t } = useTranslation(null, {keyPrefix: "project"})
     
-    const { isPending, isError, data: project, error } = useQuery({
+    const { isLoading: isProjectLoading, isError: isProjectError, data: project } = useQuery({
         queryKey: ['projects', id],
         queryFn: () => getProject(id),
     })
 
+    const { isLoading: isDrawersLoading, isError: isDrawersError, data: drawers } = useQuery({
+        queryKey: ['drawers', {projectID: id, ordering: ordering}],
+        queryFn: () => getDrawersByProject(id, ordering),
+    })
+
     useEffect(() => {
         setIsContextMenuOpen(false)
+        setIsSortMenuOpen(false)
     }, [project])
 
     const patchMutation = useMutation({
@@ -64,18 +76,22 @@ const ProjectPage = () => {
         }
     }
 
+    const contextMenuItems = makeContextMenuItems(theme, handleAlert)
+
     const handleDelete = () => {
         navigate(`/app/projects`)
         deleteMutation.mutate()
         toast.success(`"${project.name}" 프로젝트가 삭제되었습니다`)
     }
 
-    if (isPending) {
+    if (isProjectLoading) {
         return <div>로딩중...</div>
         // 민영아.. 스켈레톤 뭐시기 만들어..
     }
 
-    const drawers = project.drawers
+    if (isDrawersLoading) {
+        return <div>로딩중...</div>
+    }
 
     return (
     <>
@@ -83,16 +99,27 @@ const ProjectPage = () => {
             <PageTitle $color={"#" + project.color}>{project.name}</PageTitle>
             <Icons>
                 <FeatherIcon icon="plus" onClick={() => {setIsDrawerCreateOpen(true)}}/>
-                <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedButtonPosition, setIsContextMenuOpen)}/>
+                <SortIconBox onClick={handleToggleContextMenu(setSelectedSortMenuPosition, setIsSortMenuOpen, setIsContextMenuOpen)}>
+                    <SortIcon color={theme.textColor}/>
+                </SortIconBox>
+                <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedButtonPosition, setIsContextMenuOpen, setIsSortMenuOpen)}/>
             </Icons>
         </TitleBox>
         {drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
-        : drawers.map((drawer) => (
+        : drawers?.map((drawer) => (
             <Drawer key={drawer.id} project={project} drawer={drawer} color={project.color}/>
         ))}
+        {isSortMenuOpen &&
+            <SortMenu
+                items={sortMenuItems}
+                selectedButtonPosition={selectedSortMenuPosition}
+                ordering={ordering}
+                setOrdering={setOrdering}
+            />
+        }
         {isContextMenuOpen &&
             <ContextMenu
-                items={[{"icon": "trash-2", "display": "Delete", "color": theme.project.danger, "func": handleAlert()}]}
+                items={contextMenuItems}
                 selectedButtonPosition={selectedButtonPosition}
             />
         }
@@ -128,10 +155,32 @@ const Icons = styled.div`
     }
 `
 
+const SortIconBox = styled.div`
+    & svg {
+        position: relative;
+        top: 0.17em;
+        margin-right: 0.5em;
+    }
+`
+
 const NoDrawerText = styled.div`
     margin-top: 2em;
     font-weight: 600;
     font-size: 1.4em;
 `
+
+const sortMenuItems = [
+    {"display": "제목 가나다순", "context": "name"},
+    {"display": "만든 지 최신순", "context": "created_at"},
+    {"display": "만든 지 오래된 순", "context": "-created_at"},
+    {"display": "미완료한 일↑", "context": "-uncompleted_task_count"},
+    {"display": "완료한 일↑", "context": "-completed_task_count"},
+    {"display": "완료한 일↓", "context": "completed_task_count"},
+]
+
+const makeContextMenuItems = (theme, handleAlert) => [
+    {"icon": "edit", "display": "수정", "color": theme.textColor, "func": () => {}},
+    {"icon": "trash-2", "display": "삭제", "color": theme.project.danger, "func": handleAlert()}
+]
 
 export default ProjectPage

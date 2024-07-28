@@ -17,7 +17,7 @@ const SortMenu = ({ items, selectedButtonPosition, ordering, setOrdering }) => {
             <CLine/>
             {items.map((item) => (
                 <DisplayBox key={item.display} onClick={handleToggleSortMenu(item.context)} $isSelected={item.context === ordering}>
-                    {<FeatherIcon icon={item.icon}/>}
+                    <FeatherIcon icon="check"/>
                     {item.display}
                 </DisplayBox>
             ))}
