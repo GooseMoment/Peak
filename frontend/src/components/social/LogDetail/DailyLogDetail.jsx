@@ -47,7 +47,10 @@ const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, sav
         saveDailyComment({day, comment})
     }
 
-    const reactions = dailyCommentReactions ? Object.values(dailyCommentReactions)[1] : null
+    const processReactions = (reactionsObject) => {
+        const reactions = Object.values(reactionsObject)[1]
+        return Object.values(reactions)
+    }
 
     return <>
         <DetailHeader>
@@ -78,7 +81,7 @@ const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, sav
         </CommentRow>
 
         <ReactionBox>
-            {dailyCommentReactions && Object.values(reactions).map((reaction, index) => (
+            {dailyCommentReactions && processReactions(dailyCommentReactions).map((reaction, index) => (
                 <ReactionButton key={index} emoji={reaction}/> 
             ))}
             <EmojiPickerButton />
