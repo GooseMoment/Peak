@@ -1,15 +1,17 @@
-import { useState } from "react";
-import styled from "styled-components";
+import { useState } from "react"
+import styled from "styled-components"
 
-import ReactionEmoji from "@components/social/ReactionEmoji";
-import EmojiAddButton from "@components/social/EmojiAddButton";
+import ReactionEmoji from "@components/social/ReactionEmoji"
+import EmojiPickerButton from "@components/social/EmojiPickerButton"
 
-import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox";
-import { TaskList } from "@components/drawers/Drawer";
-import TaskFrame from "@components/tasks/TaskFrame";
-import { Fragment } from "react";
-import SimpleProfile from "../SimpleProfile";
-import { useEffect } from "react";
+import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
+import { TaskList } from "@components/drawers/Drawer"
+import TaskFrame from "@components/tasks/TaskFrame"
+import { Fragment } from "react"
+import SimpleProfile from "../SimpleProfile"
+import { useEffect } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { getReactions } from "@/api/social.api"
 
 const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, saveDailyComment, day}) => {
     const [inputState, setInputState] = useState(false)
@@ -19,6 +21,12 @@ const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, sav
     useEffect(() => {
         setComment(dailyComment.comment)
     }, [dailyComment, day])
+
+    const { data: dailyCommentReactions, isError: dailyCommentReactionsError } = useQuery({
+        queryKey: ['reaction', 'daily', 'comment', dailyComment.id],
+        queryFn: () => getReactions('daily_comment', dailyComment.id),
+        enabled: !!dailyComment.id
+    })
 
     const handleInputState = () => {
         if(dailyComment.user.username === user.username) 
@@ -40,6 +48,8 @@ const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, sav
         setInputState(false)
         saveDailyComment({day, comment})
     }
+
+    const reactions = dailyCommentReactions ? Object.values(dailyCommentReactions)[1] : null
 
     return <>
         <DetailHeader>
@@ -70,13 +80,19 @@ const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, sav
         </CommentRow>
 
         <ReactionBox>
-            {userLogsDetail.dailyComment.reaction.map((dailyCommentEmoji) => (
+            {dailyCommentReactions && Object.values(reactions).map((reaction, index) => (
+                <ReactionEmoji key={index} emoji={reaction}/> 
+            ))}
+
+
+            {/* {userLogsDetail.dailyComment.reaction.map((dailyCommentEmoji) => (
                 // <ReactionEmoji emojiClick={emojiClick} setEmojiClick={setEmojiClick} emoji={dailyCommentEmoji}/>
                 <ReactionEmoji key={dailyCommentEmoji.emoji} emoji={dailyCommentEmoji}/>
             ))
-            }
-            <EmojiAddButton />
+            } */}
+            <EmojiPickerButton />
         </ReactionBox>
+
         {/* TODO: who and what emoji */}
         </DetailHeader>
         
