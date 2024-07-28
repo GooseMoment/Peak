@@ -1,7 +1,7 @@
 import { useState } from "react"
 import styled from "styled-components"
 
-import ReactionEmoji from "@components/social/ReactionEmoji"
+import ReactionButton from "@components/social/ReactionButton"
 import EmojiPickerButton from "@components/social/EmojiPickerButton"
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
@@ -81,7 +81,7 @@ const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, sav
 
         <ReactionBox>
             {dailyCommentReactions && Object.values(reactions).map((reaction, index) => (
-                <ReactionEmoji key={index} emoji={reaction}/> 
+                <ReactionButton key={index} emoji={reaction}/> 
             ))}
 
 
