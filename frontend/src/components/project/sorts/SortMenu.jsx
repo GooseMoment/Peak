@@ -1,7 +1,13 @@
 import FeatherIcon from "feather-icons-react"
 import styled, { keyframes } from "styled-components"
 
-const SortMenu = ({ items, selectedButtonPosition }) => {
+const SortMenu = ({ items, selectedButtonPosition, ordering, setOrdering }) => {    
+    const handleToggleSortMenu = (context) => {
+        return async () => {
+            setOrdering(context)
+        }
+    }
+
     return (
         <ContextMenuBox
             $top={selectedButtonPosition.top}
@@ -10,8 +16,8 @@ const SortMenu = ({ items, selectedButtonPosition }) => {
             <TitleBox>정렬 기준</TitleBox>
             <CLine/>
             {items.map((item) => (
-                <DisplayBox key={item.display} onClick={item.func}>
-                    <FeatherIcon icon={item.icon}/>
+                <DisplayBox key={item.display} onClick={handleToggleSortMenu(item.context)} $isSelected={item.context === ordering}>
+                    {<FeatherIcon icon={item.icon}/>}
                     {item.display}
                 </DisplayBox>
             ))}
@@ -68,7 +74,7 @@ const DisplayBox = styled.div`
 
     & svg {
         top: 0;
-        color: ${p => p.theme.primaryColors.success};
+        color: ${props => props.$isSelected ? props.theme.primaryColors.success : 'transparent'};
     }
 `
 
