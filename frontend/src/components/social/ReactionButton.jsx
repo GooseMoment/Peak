@@ -10,8 +10,7 @@ const ReactionButton = ({emoji}) => {
     // onClick={handleEmoji} 
     return <EmojiBox $bgcolor={emojiClick? "#FFD7C7" : "#F2F2F2"}>
         <Emoji src={emoji[0].img_uri} />
-        {/* <EmojiCounts>{emoji[1]}</EmojiCounts> */}
-        <EmojiCounts>99</EmojiCounts>
+        <EmojiCounts>{emoji[1]}</EmojiCounts>
     </ EmojiBox>
 }
 

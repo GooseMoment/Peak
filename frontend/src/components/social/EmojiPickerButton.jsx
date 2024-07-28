@@ -1,13 +1,11 @@
 import { useState, useRef } from "react"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
-import { useMutation, useQuery } from "@tanstack/react-query"
 
-import { getEmojis } from "@api/social.api"
-
-import EmojiButton from "@components/social/EmojiButton"
 import EmojiModal from "@components/social/EmojiModal"
 
+import { getEmojis } from "@api/social.api"
 
 const EmojiPickerButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -61,16 +59,16 @@ const EmojiPickerButton = () => {
 }
 
 const PickerButton = styled.div`
-display: flex;
-align-items: center;
-justify-content: center;
-
-background-color: inherit;
-border: 0;
-
 height: 1em;
 width: 1.5em;
 padding: 0.5em;
+
+border: 0;
+background-color: inherit;
+
+display: flex;
+align-items: center;
+justify-content: center;
 `
 
 export default EmojiPickerButton

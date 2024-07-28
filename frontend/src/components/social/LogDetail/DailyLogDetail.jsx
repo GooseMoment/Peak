@@ -1,17 +1,15 @@
-import { useState } from "react"
+import { useState, Fragment, useEffect } from "react"
+import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import SimpleProfile from "@components/social/SimpleProfile"
 import ReactionButton from "@components/social/ReactionButton"
 import EmojiPickerButton from "@components/social/EmojiPickerButton"
-
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import { TaskList } from "@components/drawers/Drawer"
 import TaskFrame from "@components/tasks/TaskFrame"
-import { Fragment } from "react"
-import SimpleProfile from "../SimpleProfile"
-import { useEffect } from "react"
-import { useQuery } from "@tanstack/react-query"
-import { getReactions } from "@/api/social.api"
+
+import { getReactions } from "@api/social.api"
 
 const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, saveDailyComment, day}) => {
     const [inputState, setInputState] = useState(false)
@@ -83,13 +81,6 @@ const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, sav
             {dailyCommentReactions && Object.values(reactions).map((reaction, index) => (
                 <ReactionButton key={index} emoji={reaction}/> 
             ))}
-
-
-            {/* {userLogsDetail.dailyComment.reaction.map((dailyCommentEmoji) => (
-                // <ReactionEmoji emojiClick={emojiClick} setEmojiClick={setEmojiClick} emoji={dailyCommentEmoji}/>
-                <ReactionEmoji key={dailyCommentEmoji.emoji} emoji={dailyCommentEmoji}/>
-            ))
-            } */}
             <EmojiPickerButton />
         </ReactionBox>
 
@@ -159,6 +150,8 @@ white-space: normal;
 
 const ReactionBox = styled.div`
 margin-left: auto;
+
+display: flex;
 `
 
 const DetailBody = styled.div`

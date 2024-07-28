@@ -1,7 +1,7 @@
-import React from 'react';
-import { Portal } from 'react-portal';
-import styled from 'styled-components';
-import { useState } from 'react';
+import React from 'react'
+import { useState } from 'react'
+import styled from 'styled-components'
+import { Portal } from 'react-portal'
 
 const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
     if (!isOpen || !emojis) return null
@@ -68,7 +68,7 @@ const EmojiModalOverlay = styled.div`
 const Modal = styled.div`
     position: absolute;
     top: ${props => props.$posY}px;
-    left: calc(${props => props.$posX}px - 34em); // 33 + 1(shadow)
+    left: calc(${props => props.$posX}px - 33em); // 32 + 1(shadow)
     background: white;
     padding: 1em;
     border-radius: 1em;
