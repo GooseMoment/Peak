@@ -11,9 +11,9 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 
-const FollowButton = ({user}) => {
+const FollowButton = ({user, disabled=false}) => {
     const { t } = useTranslation(null, {keyPrefix: "follow_button"})
-
+  
     const currentUsername = getCurrentUsername()
 
     const { data: following, isPending: fetchFollowPending } = useQuery({
@@ -64,7 +64,7 @@ const FollowButton = ({user}) => {
     const followAccpetedOrRequested = following?.status === "accepted" || following?.status === "requested" 
 
     const handleFollow = async () => {
-        if (followButtonLoading) {
+        if (followButtonLoading || disabled) {
             return
         }
 
@@ -79,7 +79,7 @@ const FollowButton = ({user}) => {
     return <Button 
         onClick={handleFollow}
         $loading={followButtonLoading}
-        disabled={followButtonLoading}
+        disabled={followButtonLoading || disabled}
         $state={
             following?.status === "accepted" && states.success ||
             following?.status === "requested" && states.link ||
