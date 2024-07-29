@@ -1,30 +1,27 @@
 import { useState } from "react"
 import styled, { css } from "styled-components"
 import Button from "@components/common/Button"
+import { toast } from "react-toastify"
 
 const TimeDetail = () => {
-    const [timezone, setTimezone] = useState(timezones[0].name)
+    const [ampm, setAmpm] = useState(ampms[0].name)
     const [hour, setHour] = useState()
     const [min, setMin] = useState()
 
     const handleHour = (e) => {
-        let validInputValue = e.target.value
-        if (validInputValue.length > 2){
-            validInputValue = e.target.value.slice("", 2)
-        }
+        let validInputValue = parseInt(e.target.value)
         if (validInputValue > 12){
-            validInputValue = e.target.value.slice("", 1)
+            toast.error("입력 가능한 최대 숫자는 12입니다", {toastId: "handle_hour"})
+            validInputValue = 12
         }
         setHour(validInputValue)
     }
 
-    const handleMin = (e) => {
-        let validInputValue = e.target.value
-        if (validInputValue.length > 2){
-            validInputValue = e.target.value.slice("", 2)
-        }
+    const handleMinute = (e) => {
+        let validInputValue = parseInt(e.target.value)
         if (validInputValue > 59){
-            validInputValue = e.target.value.slice("", 1)
+            toast.error("입력 가능한 최대 숫자는 59입니다", {toastId: "handle_minute"})
+            validInputValue = 59
         }
         setMin(validInputValue)
     }
@@ -33,25 +30,23 @@ const TimeDetail = () => {
         <DetailBox>
             <FlexBox>
                 <ToggleBox>
-                    {timezones.map(t=>(
-                        <TimezoneToggle key={t.name} $active={timezone == t.name} onClick={()=>{setTimezone(t.name)}}>
+                    {ampms.map(t=>(
+                        <AmpmToggle key={t.name} $active={ampm == t.name} onClick={()=>{setAmpm(t.name)}}>
                             {t.display}
-                        </TimezoneToggle>
+                        </AmpmToggle>
                     ))}
                 </ToggleBox>
                 <InputBox>
                     <TimeInput
                         type="number"
-                        maxLength={2}
                         value={hour || ''}
                         onChange={handleHour}
                     />
                     <ColonContainer>:</ColonContainer>
                     <TimeInput
                         type="number"
-                        maxLength={2}
                         value={min || ''}
-                        onChange={handleMin}
+                        onChange={handleMinute}
                     />
                 </InputBox>
             </FlexBox>
@@ -90,7 +85,7 @@ const ToggleBox = styled.div`
     margin-top: 0.3em;
 `
 
-const TimezoneToggle = styled.div`
+const AmpmToggle = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -149,7 +144,7 @@ const TimeInput = styled.input`
     }
 `
 
-const timezones = [
+const ampms = [
     {name: "am", display: "오전"},
     {name: "pm", display: "오후"},
 ]

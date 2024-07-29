@@ -8,6 +8,7 @@ import everymonth from "@assets/project/repeat/everymonth.svg"
 import everyyear from "@assets/project/repeat/everyyear.svg"
 import weekday from "@assets/project/repeat/weekday.svg"
 import weekend from "@assets/project/repeat/weekend.svg"
+import { toast } from "react-toastify"
 
 const RepeatDetail = () => {
     const [quick, setQuick] = useState("")
@@ -20,12 +21,11 @@ const RepeatDetail = () => {
     }
 
     const handleWeek = (e) => {
-        let validInputValue = e.target.value
+        const inputValue = e.target.value
+        let validInputValue = parseInt(inputValue)
         if (validInputValue > 128){
-            if (validInputValue.length > 2)
-                validInputValue = e.target.value.slice("", 3)
-            else
-                validInputValue = e.target.value.slice("", 2)
+            toast.error("입력 가능한 최대 숫자는 128입니다", {toastId: "handle_week"})
+            validInputValue = 128
         }
         setWeek(validInputValue)
     }
@@ -52,7 +52,6 @@ const RepeatDetail = () => {
             <FlexCenterBox>
                 <WeekInput
                     type="number"
-                    maxLength={2}
                     value={week}
                     onChange={handleWeek}
                 />
