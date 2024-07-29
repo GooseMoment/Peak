@@ -50,8 +50,8 @@ const TitleBox = styled.div`
 const InputText = styled.input`
     width: 20em;
     margin: 0.3em;
-    font-weight: 500;
-    font-size: 1.3em;
+    font-weight: bold;
+    font-size: 1.1em;
     color: ${p => p.theme.textColor};
     border: none;
 
@@ -60,7 +60,7 @@ const InputText = styled.input`
     }
 
     &::placeholder {
-        font-size: 0.9em;
+        font-size: 1em;
     }
 `
 

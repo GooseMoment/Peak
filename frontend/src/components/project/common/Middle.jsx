@@ -69,8 +69,7 @@ const VLine = styled.div`
 `
 
 const ContentText = styled.div`
-    font-style: normal;
-    font-size: 1.2em;
+    font-size: 1em;
     color: ${p => p.theme.textColor};
     margin-top: 1.1em;
     margin-left: 1.3em;
