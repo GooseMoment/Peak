@@ -30,6 +30,9 @@ class UserSetting(Base):
 
     def __str__(self) -> str:
         return f"UserSetting of {self.user}"
+    
+    class Meta:
+        db_table = "user_settings"
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_setting(sender, instance=None, created=False, **kwargs):

@@ -9,7 +9,7 @@ const Reactions = () => {
     // TODO: use react-query to receive data
 
     return <>
-        <PageTitle>{t("title")} <Sync /></PageTitle>
+        <PageTitle>{t("title")} <Sync name={t("title")} /></PageTitle>
         <Section>
             <Name>{t("favorite_emojis.name")}</Name>
             <Description>{t("favorite_emojis.description")}</Description>

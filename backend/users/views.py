@@ -52,7 +52,7 @@ class SignInView(KnoxLoginView):
         
         return super(SignInView, self).post(request, format=None)
 
-username_validation = re.compile(r"^[a-z0-9_-]{4,15}$")
+username_validation = re.compile(r"^[a-z0-9_]{4,15}$")
 
 @api_view(["POST"])
 @permission_classes((AllowAny, ))
