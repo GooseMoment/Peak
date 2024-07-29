@@ -9,6 +9,7 @@
     },
     "notifications": {
         "title": "알림",
+        "empty": "알림이 없습니다.",
         "no_more": "알림이 더 이상 없습니다.",
         "fail_to_load": "알림을 불러오지 못했습니다.",
         "type_all": "모두",
