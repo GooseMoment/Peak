@@ -41,6 +41,9 @@
         "button_go_back": "Go back"
     },
     "settings": {
+        "online": {
+            "sync_help": "The values of {{name}} are synced across all your devices."
+        },
         "sidebar": {
             "account": "Account",
             "general": "General",
@@ -86,6 +89,10 @@
                     "home": "Home",
                     "today": "Today"
                 }
+            },
+            "delete_task_after_alert": {
+                "name": "Alert before task deletion",
+                "description": "Show an alert before deleting tasks."
             }
         },
         "privacy": {
@@ -106,7 +113,8 @@
                     "protected": "Limit to my followers",
                     "private": "Only me"
                 }
-            }
+            },
+            "setting_submitted": "Privacy settings were saved."
         },
         "languages_and_time": {
             "title": "Languages & Time",
@@ -181,8 +189,10 @@
             "title": "Blocks",
             "blockees": {
                 "name": "Users blocked by me",
-                "description": "These users cannot be found.",
-                "button_unblock": "Unblock"
+                "description": "These users don't appear to you.",
+                "button_unblock": "Unblock",
+                "button_block": "Re-block",
+                "empty": "Nobody is here."
             }
         },
         "info": {

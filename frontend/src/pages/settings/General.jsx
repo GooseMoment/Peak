@@ -3,6 +3,7 @@ import { useMemo } from "react"
 import PageTitle from "@components/common/PageTitle"
 import Section, { Description, Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
+import SettingSwitch from "@components/settings/SettingSwitch"
 
 import { useTranslation } from "react-i18next"
 
@@ -21,6 +22,13 @@ const General = () => {
             </Value>
         </Section>
 
+        <Section>
+            <Name>{t("delete_task_after_alert.name")}</Name>
+            <Description>{t("delete_task_after_alert.description")}</Description>
+            <Value>
+                <SettingSwitch name="delete_task_after_alert" />
+            </Value>
+        </Section>
     </>
 }
 

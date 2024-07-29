@@ -42,6 +42,9 @@
         "button_go_back": "이전으로 돌아가기"
     },
     "settings": {
+        "online": {
+            "sync_help": "{{name}} 설정 값은 모든 기기와 동기화 됩니다."
+        },
         "sidebar": {
             "account": "계정",
             "general": "일반",
@@ -87,6 +90,10 @@
                     "home": "홈",
                     "today": "오늘"
                 }
+            },
+            "delete_task_after_alert": {
+                "name": "작업 삭제 시 경고",
+                "description": "작업을 삭제할 때 되묻는 경고창을 띄웁니다."
             }
         },
         "privacy": {
@@ -107,7 +114,8 @@
                     "protected": "팔로워에게만",
                     "private": "나에게만"
                 }
-            }
+            },
+            "setting_submitted": "공개 범위 설정을 저장했습니다."
         },
         "languages_and_time": {
             "title": "언어 및 시간",
@@ -183,7 +191,9 @@
             "blockees": {
                 "name": "내가 차단한 사용자",
                 "description": "이 사용자들과 마주치지 않습니다.",
-                "button_unblock": "차단 해제"
+                "button_unblock": "차단 해제",
+                "button_block": "다시 차단",
+                "empty": "아무도 없습니다."
             }
         },
         "info": {
