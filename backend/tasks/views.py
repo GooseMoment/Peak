@@ -28,7 +28,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
         try:
             new_completed = request.data["completed_at"]
         except KeyError as e:
-            print(e)
+            pass
         else:
             task: Task = self.get_object()
             if (task.completed_at is None) or (new_completed is None):
