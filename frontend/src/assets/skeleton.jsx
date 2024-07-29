@@ -20,3 +20,17 @@ export const skeletonCSS = p => css`
 
     animation: ${shineLines} 1.6s infinite linear;
 `
+
+const breathing = p => keyframes`
+    0%, 100% {
+        background-color: ${p.theme.skeleton.defaultColor};
+    }
+    40% {
+        background-color: ${p.theme.skeleton.shineColor};
+    }
+`
+
+export const skeletonBreathingCSS = css`
+    background-color: ${p => p.theme.skeleton.defaultColor};
+    animation: ${p => breathing(p)} 2s infinite linear;
+`
