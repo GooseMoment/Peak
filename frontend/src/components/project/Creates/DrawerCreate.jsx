@@ -1,20 +1,19 @@
 import { useState } from "react"
-import { useRevalidator, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 
 import styled from "styled-components"
 
 import { cubicBeizer } from "@assets/keyframes"
+import notify from "@utils/notify"
 import Title from "@components/project/common/Title"
 import Middle from "@components/project/common/Middle"
 import Privacy from "./Privacy"
 
 import { postDrawer } from "@api/drawers.api"
-import notify from "@utils/notify"
+import queryClient from "@queries/queryClient"
 
 const DrawerCreate = ({onClose}) => {
     const { id } = useParams()
-
-    const revalidator = useRevalidator()
 
     const [name, setName] = useState('')
     const [privacy, setPrivacy] = useState('public')
@@ -48,7 +47,7 @@ const DrawerCreate = ({onClose}) => {
     const submit = async (e) => {
         await makeDrawer(name, privacy)
         onClose()
-        revalidator.revalidate()
+        queryClient.invalidateQueries({queryKey: ['projects', id]})
     }
 
     return (
