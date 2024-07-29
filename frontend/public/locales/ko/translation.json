@@ -9,6 +9,7 @@
     },
     "notifications": {
         "title": "알림",
+        "empty": "알림이 없습니다.",
         "no_more": "알림이 더 이상 없습니다.",
         "fail_to_load": "알림을 불러오지 못했습니다.",
         "type_all": "모두",
@@ -42,6 +43,9 @@
         "button_go_back": "이전으로 돌아가기"
     },
     "settings": {
+        "online": {
+            "sync_help": "{{name}} 설정 값은 모든 기기와 동기화 됩니다."
+        },
         "sidebar": {
             "account": "계정",
             "general": "일반",
@@ -87,6 +91,10 @@
                     "home": "홈",
                     "today": "오늘"
                 }
+            },
+            "delete_task_after_alert": {
+                "name": "작업 삭제 시 경고",
+                "description": "작업을 삭제할 때 되묻는 경고창을 띄웁니다."
             }
         },
         "privacy": {
@@ -107,7 +115,8 @@
                     "protected": "팔로워에게만",
                     "private": "나에게만"
                 }
-            }
+            },
+            "setting_submitted": "공개 범위 설정을 저장했습니다."
         },
         "languages_and_time": {
             "title": "언어 및 시간",
@@ -183,7 +192,9 @@
             "blockees": {
                 "name": "내가 차단한 사용자",
                 "description": "이 사용자들과 마주치지 않습니다.",
-                "button_unblock": "차단 해제"
+                "button_unblock": "차단 해제",
+                "button_block": "다시 차단",
+                "empty": "아무도 없습니다."
             }
         },
         "info": {
@@ -194,6 +205,23 @@
                 "branch": "브랜치"
             }
         }
+    },
+    "users": {
+        "followings": "팔로잉",
+        "followers": "팔로워",
+        "bio": "바이오",
+        "bio_empty": "비어 있습니다.",
+        "bio_empty_mine": "프로필 수정을 눌러 바이오를 작성해보세요.",
+        "projects": "프로젝트",
+        "projects_empty": "프로젝트가 없습니다.",
+        "button_edit_profile": "프로필 수정",
+        "error_user_not_found": "찾을 수 없는 유저입니다.",
+        "following_list_title": "@{{username}} 님의 팔로잉 목록",
+        "following_list_empty": "아무 것도 없습니다.",
+        "following_list_error": "팔로잉 목록을 불러올 수 없습니다.",
+        "follower_list_title": "@{{username}} 님의 팔로워 목록",
+        "follower_list_empty": "아무 것도 없습니다.",
+        "follower_list_error": "팔로워 목록을 불러올 수 없습니다."
     },
     "intro": {
         "section_top": {
@@ -267,6 +295,25 @@
                 "theme_dark": "다크"
             }
         }
+    },
+    "follow_button": {
+        "button_follow": "팔로우",
+        "button_accepted": "팔로우 중",
+        "button_requested": "요청 보냄",
+        "success_follow": "@{{username}} 님을 팔로우 합니다.",
+        "success_requested": "@{{username}} 님에게 팔로우 요청을 보냈습니다.",
+        "error_follow": "@{{username}} 님에게 팔로우 요청을 보내지 못했습니다.",
+        "success_unfollow": "이제 @{{username}} 님을 팔로우하지 않습니다.",
+        "success_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소했습니다.",
+        "error_unfollow": "@{{username}} 님의 내 팔로우를 취소하지 못했습니다.",
+        "error_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소하지 못했습니다."
+    },
+    "error-page": {
+        "unknown_error_code": "ㅠ_ㅠ",
+        "unknown_error_text": "알 수 없는 오류가 발생했습니다.",
+        "unknown_error_bottom": "시작 화면으로 돌아가기",
+        "404_error_text": "요청하신 페이지를 찾을 수 없습니다.",
+        "404_error_bottom": "이전 화면으로 돌아가기"
     },
     "sign": {
         "sign_in": "로그인",

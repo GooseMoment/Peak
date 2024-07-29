@@ -17,6 +17,9 @@ class TaskReminder(Base):
     def __str__(self) -> str:
         return f"Reminder for {self.task.name} at {self.scheduled}"
 
+    class Meta:
+        db_table = "task_reminders"
+
 class Notification(Base):
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
 
@@ -82,6 +85,9 @@ class Notification(Base):
 
     def __str__(self) -> str:
         return f"{self.type} for {self.user}"
+    
+    class Meta:
+        db_table = "notifications"
 
 class WebPushSubscription(Base):
     user = models.ForeignKey(
@@ -96,3 +102,6 @@ class WebPushSubscription(Base):
 
     def __str__(self) -> str:
         return f"Subscription of {self.user} for {self.device}"
+
+    class Meta:
+        db_table = "web_push_subscriptions"
