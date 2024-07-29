@@ -73,7 +73,7 @@ const Account = () => {
     }
 
     return <>
-        <PageTitle>{t("title")} <Sync /></PageTitle>
+        <PageTitle>{t("title")} <Sync name={t("title")} /></PageTitle>
         <Section>
             <ImgNameEmailContainer>
                 <ProfileImg profile_img={user.profile_img} username={user.username} />

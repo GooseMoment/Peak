@@ -47,6 +47,7 @@ const NotificationsPage = () => {
 
     // useInfiniteQuery에서 제공하는 hasNextPage가 제대로 작동 안함. 어째서?
     const hasNextPage = data?.pages[data?.pages?.length-1].next !== null
+    const isNotificationEmpty = data?.pages[0]?.results?.length === 0
 
     const lastDate = useRef(null)
     useEffect(() => {
@@ -95,8 +96,10 @@ const NotificationsPage = () => {
         </Fragment>
     ))}
     <ImpressionArea onImpressionStart={() => fetchNextPage()} timeThreshold={200}>
-        {hasNextPage ? <Box skeleton /> : <NoMore>No more notifications!</NoMore>}
+        {hasNextPage && <Box skeleton />}
+        {!hasNextPage && !isNotificationEmpty && <NoMore>{t("no_more")}</NoMore>}
     </ImpressionArea>
+    {isNotificationEmpty && <NoMore>{t("empty")}</NoMore>}
     </>
 }
 
