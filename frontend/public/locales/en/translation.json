@@ -294,12 +294,24 @@
             }
         }
     },
+    "follow_button": {
+        "button_follow": "Follow",
+        "button_accepted": "Following",
+        "button_requested": "Requested",
+        "success_follow": "Following @{{username}}.",
+        "success_requested": "Sent a follow request to @{{username}}.",
+        "error_follow": "Failed to send a follow request to @{{username}}.",
+        "success_unfollow": "Unfollowed @{{username}}.",
+        "success_cancel": "Canceled your follow request to {{username}}.",
+        "error_unfollow": "Failed to unfollow @{{username}}.",
+        "error_cancel": "Failed to cancel a follow request to @{{username}}."
+    },
     "error-page": {
         "unknown_error_code": "X_X",
         "unknown_error_text": "Oops.",
         "unknown_error_bottom": "Go to the home page",
         "404_error_text": "The page you requested is not found.",
-        "404_error_bottom": "Back to the previous page"
+        "404_error_bottom": "Back to the previous page",
     },
     "sign": {
         "sign_in": "Sign In",
