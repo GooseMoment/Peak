@@ -69,7 +69,7 @@ const Reminder = ({ task, closeComponent }) => {
 }
 
 const items = [
-    {id: 0, icon: <img src={before_D}/>, content: "당일", delta: 0},
+    {id: 0, icon: <img src={before_D}/>, content: "그때", delta: 0},
     {id: 1, icon: <img src={before_5}/>, content: "5분 전", delta: 5},
     {id: 2, icon: <img src={before_15}/>, content: "15분 전", delta: 15},
     {id: 3, icon: <img src={before_30}/>, content: "30분 전", delta: 30},
