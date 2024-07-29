@@ -22,6 +22,9 @@ class Repeat(Base):
 
     def __str__(self) -> str:
         return f"Repeat by {self.user}"
+    
+    class Meta:
+        db_table = "repeats"
 
 class Task(Base, PrivacyMixin):
     name = models.CharField(max_length=128)
@@ -57,3 +60,6 @@ class Task(Base, PrivacyMixin):
 
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"
+    
+    class Meta:
+        db_table = "tasks"
