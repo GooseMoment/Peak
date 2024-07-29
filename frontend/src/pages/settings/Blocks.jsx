@@ -1,7 +1,6 @@
 import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value, Sync, Description } from "@components/settings/Section"
 import Button from "@components/common/Button"
-import Loading from "@components/settings/Loading"
 import Error from "@components/settings/Error"
 import ListUserProfile from "@components/users/ListUserProfile"
 
@@ -35,10 +34,6 @@ const Blocks = () => {
         mutation.mutate(null)
     }
 
-    if (isPending) {
-        return <Loading />
-    }
-
     if (isError) {
         return <Error />
     }
@@ -49,7 +44,8 @@ const Blocks = () => {
             <Name>{t("blockees.name")}</Name>
             <Description>{t("blockees.description")}</Description>
             <Value>
-                {blocks.map(user => <ListUserProfile user={user} key={user.username}>
+                {isPending && [...Array(10)].map((_, i) => <ListUserProfile key={i} skeleton />)}
+                {blocks?.map(user => <ListUserProfile user={user} key={user.username}>
                     <Button onClick={onClick}>{t("blockees.button_unblock")}</Button>
                 </ListUserProfile>)}
             </Value>

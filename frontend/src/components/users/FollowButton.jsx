@@ -7,7 +7,7 @@ import queryClient from "@queries/queryClient"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 
-const FollowButton = ({user}) => {
+const FollowButton = ({user, disabled=false}) => {
     const currentUsername = getCurrentUsername()
 
     const { data: following, isPending: fetchFollowPending } = useQuery({
@@ -31,7 +31,7 @@ const FollowButton = ({user}) => {
     const followButtonLoading = fetchFollowPending || putMutation.isPending || deleteMutation.isPending
 
     const handleFollow = async () => {
-        if (followButtonLoading) {
+        if (followButtonLoading || disabled) {
             return
         }
 
@@ -46,7 +46,7 @@ const FollowButton = ({user}) => {
     return <Button 
         onClick={handleFollow}
         $loading={followButtonLoading}
-        disabled={followButtonLoading}> 
+        disabled={followButtonLoading || disabled}> 
 
         {following ? (
             following.status === "requested" ? "Requested" : "Unfollow"

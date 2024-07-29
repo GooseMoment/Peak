@@ -194,6 +194,23 @@
             }
         }
     },
+    "users": {
+        "followings": "Followings",
+        "followers": "Followers",
+        "bio": "Bio",
+        "bio_empty": "Empty here.",
+        "bio_empty_mine": "Click 'Edit Profile' to edit your bio.",
+        "projects": "Projects",
+        "projects_empty": "There are no projects.",
+        "button_edit_profile": "Edit Profile",
+        "error_user_not_found": "This user is not found.",
+        "following_list_title": "@{{username}}'s followings",
+        "following_list_empty": "Nothing is here.",
+        "following_list_error": "Unable to load followings.",
+        "follower_list_title": "@{{username}}'s followers",
+        "follower_list_empty": "Nothing is here.",
+        "follower_list_error": "Unable to load followers."
+    },
     "intro": {
         "section_top": {
             "title1": "Plan, Organize, and Cheer.",
