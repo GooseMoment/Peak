@@ -1,12 +1,20 @@
 import { Section, SectionTitle } from "./Section"
+import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import styled, { css } from "styled-components"
+import { useTranslation } from "react-i18next"
 
-const Bio = ({bio, isMine}) => {
+const Bio = ({bio, isMine, isPending}) => {
+    const { t } = useTranslation(null, {keyPrefix: "users"})
+
     return <Section>
-        <SectionTitle>Bio</SectionTitle>
-        <BioBox $empty={!bio}>
-            {bio || (isMine ? "Click 'Edit Profile' to write your bio!" : "Empty here")}
+        <SectionTitle>{t("bio")}</SectionTitle>
+        <BioBox $empty={!bio} $skeleton={isPending}>
+            {
+                isPending && " " ||
+                bio ||
+                (isMine ? t("bio_empty_mine") : t("bio_empty"))
+            }
         </BioBox>
     </Section>
 }
@@ -26,6 +34,11 @@ const BioBox = styled.div`
     ${p => p.$empty && css`
         font-style: italic;
         color: ${p => p.theme.grey};
+    `}
+
+    ${p => p.$skeleton && css`
+        height: 5em;
+        ${skeletonBreathingCSS}
     `}
 `
 

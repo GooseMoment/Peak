@@ -38,10 +38,10 @@ export const setClientSettingsByName = (name, value) => {
 
 export const initClientSettings = () => {
     let settings = getClientSettings()
-    if (!(settings?.language)) {
+    if (!(settings?.theme)) {
         settings = defaultSettings
     }
-    settings = Object.assign(structuredClone(defaultSettings), settings)
+    settings = Object.assign({}, defaultSettings, settings)
     localStorage.setItem(KEY_CLIENT_SETTINGS, JSON.stringify(settings))
 }
 
