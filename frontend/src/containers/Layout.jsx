@@ -62,8 +62,10 @@ const Content = styled.main`
     }
 
     ${ifMobile} {
-        padding: 2rem 1.5rem;
+        padding-top: max(env(safe-area-inset-top), 2rem);
+        padding-right: max(env(safe-area-inset-right), 1.5rem);
         padding-bottom: calc(2rem + 6rem);
+        padding-left: max(env(safe-area-inset-left), 1.5rem);
     }
 `
 
