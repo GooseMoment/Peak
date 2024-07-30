@@ -141,6 +141,7 @@ const SignUpForm = ({setActive}) => {
 
 const Box = styled.section`
     display: flex;
+    overflow-y: scroll;
     justify-content: center;
     flex-direction: column;
     gap: 5rem;
