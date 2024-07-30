@@ -70,6 +70,11 @@ const ProjectPage = () => {
         toast.success(`"${project.name}" 프로젝트가 삭제되었습니다`)
     }
 
+    const openInboxTaskCreate = () => {
+        navigate(`/app/projects/${project.id}/tasks/create/`,
+        {state: {project_name : project.name, drawer_id : project.drawers[0].id, drawer_name : project.drawers[0].name}})
+    }
+
     if (isPending) {
         return <div>로딩중...</div>
         // 민영아.. 스켈레톤 뭐시기 만들어..
@@ -82,10 +87,11 @@ const ProjectPage = () => {
         <TitleBox>
             <PageTitle $color={"#" + project.color}>{project.name}</PageTitle>
             <Icons>
-                <FeatherIcon icon="plus" onClick={() => {setIsDrawerCreateOpen(true)}}/>
+                <FeatherIcon icon="plus" onClick={project.type === 'inbox' ? openInboxTaskCreate : () => {setIsDrawerCreateOpen(true)}}/>
                 <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedButtonPosition, setIsContextMenuOpen)}/>
             </Icons>
         </TitleBox>
+        {project.type === 'inbox'}
         {drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
         : drawers.map((drawer) => (
             <Drawer key={drawer.id} project={project} drawer={drawer} color={project.color}/>

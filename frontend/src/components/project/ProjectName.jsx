@@ -19,7 +19,7 @@ const ProjectName = ({project, demo=false}) => {
         <FlexBox>
             <FeatherIcon icon="circle" fill={`#`+ project.color}/>
             {nameParts}
-            <TypeText>{project.type === 'regular' ? t("type_regular") : t("type_goal")}</TypeText>
+            <TypeText>{project.type === 'inbox' ? '' : project.type === 'regular' ? t("type_regular") : t("type_goal")}</TypeText>
         </FlexBox>
         {!demo && <FlexBox>
             <Text>{t("completed_tasks")}: {project.completed_task_count} / {t("uncompleted_tasks")}: {project.uncompleted_task_count}</Text>
