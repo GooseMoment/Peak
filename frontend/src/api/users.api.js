@@ -5,6 +5,7 @@ import { getClientSettings } from "@utils/clientSettings"
 export const getMe = async () => {
     try {
         const res = await client.get("users/me")
+        setCurrentUsername(res.data.username)
         return res.data
     } catch (e) {
         throw e
