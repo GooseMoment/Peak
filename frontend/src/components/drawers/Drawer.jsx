@@ -73,10 +73,8 @@ const Drawer = ({project, drawer, color}) => {
     })
 
     const handleAlert = () => {
-        return async () => {
-            setIsContextMenuOpen(false)
-            setIsAlertOpen(true)
-        }
+        setIsContextMenuOpen(false)
+        setIsAlertOpen(true)
     }
 
     const contextMenuItems = makeContextMenuItems(theme, handleAlert)
@@ -139,6 +137,7 @@ const Drawer = ({project, drawer, color}) => {
             }
             {isSortMenuOpen &&
                 <SortMenu
+                    title="작업"
                     items={sortMenuItems}
                     selectedButtonPosition={selectedSortMenuPosition}
                     ordering={ordering}
@@ -230,18 +229,19 @@ const MoreButton = styled(Button)`
 `
 
 const sortMenuItems = [
-    {"display": "중요도", "context": "-priority"},
-    {"display": "기한↓", "context": "assigned_at,due_date,due_time"},
-    {"display": "기한↑", "context": "-assigned_at,-due_date,-due_time"},
-    {"display": "제목 가나다순", "context": "name"},
-    {"display": "만든 지 최신순", "context": "created_at"},
-    {"display": "만든 지 오래된 순", "context": "-created_at"},
-    {"display": "알람 설정 우선", "context": "reminders"},
+    {"display": "중요도순", "context": "-priority"},
+    {"display": "기한 이른 순서", "context": "assigned_at,due_date,due_time"},
+    {"display": "기한 늦은 순서", "context": "-assigned_at,-due_date,-due_time"},
+    {"display": "이름 사전순", "context": "name"},
+    {"display": "이름 사전 역순", "context": "-name"},
+    {"display": "생성일자 최신순", "context": "created_at"},
+    {"display": "생성일자 오래된 순", "context": "-created_at"},
+    {"display": "알림 설정 우선", "context": "reminders"},
 ]
 
 const makeContextMenuItems = (theme, handleAlert) => [
     {"icon": "edit", "display": "수정", "color": theme.textColor, "func": () => {}},
-    {"icon": "trash-2", "display": "삭제", "color": theme.project.danger, "func": handleAlert()}
+    {"icon": "trash-2", "display": "삭제", "color": theme.project.danger, "func": handleAlert}
 ]
 
 export default Drawer

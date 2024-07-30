@@ -70,10 +70,8 @@ const ProjectPage = () => {
     })
 
     const handleAlert = () => {
-        return async () => {
-            setIsContextMenuOpen(false)
-            setIsAlertOpen(true)
-        }
+        setIsContextMenuOpen(false)
+        setIsAlertOpen(true)
     }
 
     const contextMenuItems = makeContextMenuItems(theme, handleAlert)
@@ -111,6 +109,7 @@ const ProjectPage = () => {
         ))}
         {isSortMenuOpen &&
             <SortMenu
+                title="서랍"
                 items={sortMenuItems}
                 selectedButtonPosition={selectedSortMenuPosition}
                 ordering={ordering}
@@ -170,17 +169,18 @@ const NoDrawerText = styled.div`
 `
 
 const sortMenuItems = [
-    {"display": "제목 가나다순", "context": "name"},
-    {"display": "만든 지 최신순", "context": "created_at"},
-    {"display": "만든 지 오래된 순", "context": "-created_at"},
-    {"display": "미완료한 일↑", "context": "-uncompleted_task_count"},
-    {"display": "완료한 일↑", "context": "-completed_task_count"},
-    {"display": "완료한 일↓", "context": "completed_task_count"},
+    {"display": "이름 사전순", "context": "name"},
+    {"display": "이름 사전 역순", "context": "-name"},
+    {"display": "생성일자 최신순", "context": "created_at"},
+    {"display": "생성일자 오래된순", "context": "-created_at"},
+    {"display": "미완료 작업 많은순", "context": "-uncompleted_task_count"},
+    {"display": "완료 작업 많은순", "context": "-completed_task_count"},
+    {"display": "완료 작업 적은순", "context": "completed_task_count"},
 ]
 
 const makeContextMenuItems = (theme, handleAlert) => [
     {"icon": "edit", "display": "수정", "color": theme.textColor, "func": () => {}},
-    {"icon": "trash-2", "display": "삭제", "color": theme.project.danger, "func": handleAlert()}
+    {"icon": "trash-2", "display": "삭제", "color": theme.project.danger, "func": handleAlert}
 ]
 
 export default ProjectPage
