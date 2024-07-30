@@ -42,7 +42,7 @@ const Time = styled.time`
     ${props => props.$skeleton && css`
         width: 70px;
         height: 1em;
-        ${skeletonCSS(props)} 
+        ${skeletonCSS} 
     `}
 `
 
