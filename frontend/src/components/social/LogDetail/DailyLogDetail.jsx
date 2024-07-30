@@ -30,10 +30,12 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
 
     const dailyCommentReactionsMutation = useMutation({
         mutationFn: ({id, emoji, action}) => {
-            if(action === 'post')
-                return postReaction('daily_comment', dailyComment.id, emoji)
-            else if(action === 'delete')
-                return deleteReaction('daily_comment', dailyComment.id, emoji)
+            if(action === 'post') {
+                return postReaction('daily_comment', id, emoji)
+            }
+            else if(action === 'delete') {
+                return deleteReaction('daily_comment', id, emoji)
+            }
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['reaction', 'daily', 'comment', dailyComment.id]})
@@ -68,6 +70,12 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
         Object.values(dailyCommentReactions.my_reactions) 
         : []
 
+    const saveReaction = (emojiID, action) => {
+        const id = dailyComment.id
+        const emoji = emojiID
+        dailyCommentReactionsMutation.mutate({id, emoji, action})
+    }
+
     return <>
         <DetailHeader>
         <CommentRow>
@@ -97,9 +105,11 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
         </CommentRow>
 
         <ReactionBox>
-            {dailyCommentReactions && Object.values(dailyCommentReactions.reaction_counts).map((reaction) => (
-                <ReactionButton key={reaction.id} emoji={reaction} isSelected={
-                    myReactions.some((myReaction) => myReaction.id === reaction[0].id)}/> 
+            {dailyCommentReactions && Object.values(dailyCommentReactions.reaction_counts).map((reaction, index) => (
+                <ReactionButton key={index} emoji={reaction} 
+                    isSelected={myReactions.some((myReaction) => myReaction.id === reaction[0].id)}
+                    saveReaction={saveReaction}
+                    /> 
             ))}
             <EmojiPickerButton />
         </ReactionBox>
