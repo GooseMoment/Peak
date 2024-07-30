@@ -209,6 +209,7 @@
         }
     },
     "users": {
+        "follows_you": "나를 팔로우 중",
         "followings": "팔로잉",
         "followers": "팔로워",
         "bio": "바이오",

@@ -8,6 +8,7 @@ import Error from "@components/errors/ErrorLayout"
 
 import { getUserByUsername } from "@api/users.api"
 import { getProjectListByUser } from "@api/projects.api"
+import { getFollow } from "@api/social.api"
 import { getCurrentUsername } from "@api/client"
 
 import { useQuery } from "@tanstack/react-query"
@@ -26,6 +27,12 @@ const UserPage = () => {
     const username = usernameWithAt.slice(1)
     const currentUsername = getCurrentUsername()
     const isMine = currentUsername === username
+
+    const { data: followingYou } = useQuery({
+        queryKey: ["followings", username, currentUsername],
+        queryFn: () => getFollow(username, currentUsername),
+        enabled: currentUsername !== username,
+    })
 
     const { data: user, isPending: userPending, isError: userError } = useQuery({
         queryKey: ["users", username],
@@ -51,7 +58,7 @@ const UserPage = () => {
     }
 
     return <>
-        <UserProfileHeader user={user} isPending={userPending} isMine={isMine} />
+        <UserProfileHeader user={user} followingYou={followingYou} isPending={userPending} isMine={isMine} />
         <Bio bio={user?.bio} isPending={userPending} isMine={isMine} />
         <ProjectList projects={projects} isPending={projectPending} isMine={isMine} />
     </>

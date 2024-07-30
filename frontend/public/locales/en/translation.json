@@ -209,6 +209,7 @@
         }
     },
     "users": {
+        "follows_you": "Follows you",
         "followings": "Followings",
         "followers": "Followers",
         "bio": "Bio",
@@ -315,7 +316,7 @@
         "unknown_error_text": "Oops.",
         "unknown_error_bottom": "Go to the home page",
         "404_error_text": "The page you requested is not found.",
-        "404_error_bottom": "Back to the previous page",
+        "404_error_bottom": "Back to the previous page"
     },
     "sign": {
         "sign_in": "Sign In",
