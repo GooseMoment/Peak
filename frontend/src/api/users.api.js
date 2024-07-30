@@ -32,17 +32,17 @@ export const patchUser = async (data) => {
 
 export const signIn = async (email, password) => {
     try {
-        const res = await client.post("sign_in/", {
+        await client.post("sign_in/", {
             email: email,
             password: password,
         })
 
         setToken(res.data.token)
         setCurrentUsername(res.data.user.username)
-        return true
 
+        return true
     } catch (e) {
-        return false
+        throw e
     }
 }
 
