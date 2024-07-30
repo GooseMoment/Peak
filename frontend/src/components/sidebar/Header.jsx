@@ -3,12 +3,12 @@ import { useEffect, useRef } from "react"
 import MildButton from "@components/common/MildButton"
 import { cubicBeizer } from "@assets/keyframes"
 import useScreenSize from "@utils/useScreenSize"
-import { WIDTH_M } from "@utils/useScreenType"
+import { WIDTH_TABLET } from "@utils/useScreenType"
 
 import styled, { css, keyframes } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-const autoCollapseWidth = WIDTH_M
+const autoCollapseWidth = WIDTH_TABLET
 
 const Header = ({collapsed, setCollapsed, setSidebarHidden, isMobile}) => {
     const screenSize = useScreenSize()

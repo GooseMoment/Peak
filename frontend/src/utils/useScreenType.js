@@ -1,21 +1,44 @@
 import useScreenSize from "@utils/useScreenSize"
 
-export const WIDTH_S = 500
-export const WIDTH_M = 1000
+export const WIDTH_MOBILE = 500
+export const WIDTH_TABLET = 1000
 
 export const useScreenType = () => {
     const screenSize = useScreenSize()
 
-    if (screenSize.width <= WIDTH_S) {
-        return "S"
+    let screenType = {
+        widthType: "desktop",
+        isMobile: false,
+        isTablet: false,
+        isDesktop: false, 
     }
 
-    if (screenSize.width <= WIDTH_M) {
-        return "M"
+    if (screenSize.width <= WIDTH_MOBILE) {
+        screenType.widthType = "mobile"
+
+        screenType.isMobile = true
+        screenType.isTablet = false
+        screenType.isDesktop = false
     }
 
-    return "L"
+    if (WIDTH_MOBILE < screenSize.width && screenSize.width <= WIDTH_TABLET) {
+        screenType.widthType = "tablet"
+
+        screenType.isMobile = false
+        screenType.isTablet = true
+        screenType.isDesktop = false
+    }
+
+    if (WIDTH_TABLET < screenSize.width) {
+        screenType.widthType = "desktop"
+
+        screenType.isMobile = false
+        screenType.isTablet = false
+        screenType.isDesktop = true
+    }
+
+    return screenType
 }
 
-export const ifWidthS = `@media screen and (max-width: ${WIDTH_S}px)`
-export const ifWidthM = `@media screen and (max-width: ${WIDTH_M}px)`
+export const ifMobile = `@media screen and (max-width: ${WIDTH_MOBILE}px)`
+export const ifTablet = `@media screen and (max-width: ${WIDTH_TABLET}px)`

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import Sidebar from "@components/sidebar/Sidebar"
 import Navbar from "@components/navbar/Navbar"
 
-import { ifWidthM, ifWidthS, useScreenType } from "@utils/useScreenType"
+import { ifTablet, ifMobile, useScreenType } from "@utils/useScreenType"
 import { useClientSetting } from "@utils/clientSettings"
 import { cubicBeizer, modalFadeIn } from "@assets/keyframes"
 
@@ -16,11 +16,11 @@ const Layout = ({children}) => {
     const [sidebarCollapsed, setSidebarCollapsed] = useState(clientSetting["close_sidebar_on_startup"])
     const contentPadding = clientSetting["main_width"] || "5rem"
 
-    const widthType = useScreenType()
+    const { isMobile } = useScreenType()
 
     useEffect(() => {
-        setSidebarHidden(widthType === "S")
-    }, [widthType])
+        setSidebarHidden(isMobile)
+    }, [isMobile])
 
     const openSidebarFromNavbar = () => {
         setSidebarHidden(false)
@@ -29,10 +29,10 @@ const Layout = ({children}) => {
     
     return (
     <App>
-        {widthType === "S" && <Navbar openSidebar={openSidebarFromNavbar} />}
+        {isMobile && <Navbar openSidebar={openSidebarFromNavbar} />}
         {!sidebarHidden && 
-            <Sidebar isMobile={widthType === "S"} setSidebarHidden={setSidebarHidden} collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />}
-        {widthType === "S" && !sidebarHidden && <BackgroundWall onClick={() => setSidebarHidden(true)} />}
+            <Sidebar isMobile={isMobile} setSidebarHidden={setSidebarHidden} collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />}
+        {isMobile && !sidebarHidden && <BackgroundWall onClick={() => setSidebarHidden(true)} />}
         <Content $sidebarCollapsed={sidebarCollapsed} $sidePadding={contentPadding}>
             {children}
         </Content>
@@ -56,12 +56,12 @@ const Content = styled.main`
     box-sizing: border-box;
     color: ${p => p.theme.textColor};
 
-    ${ifWidthM} {
+    ${ifTablet} {
         padding: 2rem 1.75rem;
         padding-left: calc(6rem + 1.75rem);
     }
 
-    ${ifWidthS} {
+    ${ifMobile} {
         padding: 2rem 1.5rem;
         padding-bottom: calc(2rem + 6rem);
     }

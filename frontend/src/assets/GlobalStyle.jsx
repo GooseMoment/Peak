@@ -1,5 +1,5 @@
 import { scaleForward, scaleBack, modalFadeOut, modalFadeIn, cubicBeizer } from '@assets/keyframes'
-import { ifWidthS } from '@utils/useScreenType'
+import { ifMobile } from '@utils/useScreenType'
 
 import { createGlobalStyle } from 'styled-components'
 import reset from 'styled-reset'
@@ -108,7 +108,7 @@ body {
     line-height: 1.3;
 }
 
-${ifWidthS} {
+${ifMobile} {
     body { // https://stackoverflow.com/a/3428477
         -webkit-text-size-adjust: 100%;
     }
