@@ -38,7 +38,7 @@ const ProjectCreate = ({onClose}) => {
         try {
             if (name === 'Inbox' || name === 'inbox') {
                 toast.error("프로젝트 이름은 Inbox로 설정할 수 없습니다.")
-                return 0
+                return
             }
 
             const edit = {
@@ -48,20 +48,15 @@ const ProjectCreate = ({onClose}) => {
             }
             await postProject(edit)
             toast.success("프로젝트 생성에 성공하였습니다.")
-            return 1
+            onClose()
+            queryClient.invalidateQueries({queryKey: ['projects']})
         } catch (e) {
             toast.error("프로젝트 생성에 실패했습니다.")
-            return 0
         }
     }
 
     const submit = async () => {
-        const isSuccess = await makeProject(name, color, type)
-
-        if (isSuccess) {
-            onClose()
-            queryClient.invalidateQueries({queryKey: ['projects']})
-        }
+        await makeProject(name, color, type)
     }
 
     return (
