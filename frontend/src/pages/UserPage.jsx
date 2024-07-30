@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
 import UserProfileHeader from "@components/users/UserProfileHeader"
+import Requests from "@components/users/Requests"
 import Bio from "@components/users/Bio"
 import ProjectList from "@components/users/ProjectList"
 import Error from "@components/errors/ErrorLayout"
@@ -59,6 +60,7 @@ const UserPage = () => {
 
     return <>
         <UserProfileHeader user={user} followingYou={followingYou} isPending={userPending} isMine={isMine} />
+        {followingYou?.status === "requested" && <Requests user={user} />}
         <Bio bio={user?.bio} isPending={userPending} isMine={isMine} />
         <ProjectList projects={projects} isPending={projectPending} isMine={isMine} />
     </>
