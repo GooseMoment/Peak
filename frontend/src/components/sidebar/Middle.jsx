@@ -32,8 +32,8 @@ const Middle = ({ collapsed }) => {
             </ItemBox>
         </SidebarLink>)}
 
-        <ProjectItemsContainer $collapsed={collapsed}>
-            {isPending && [...Array(5)].map((e, i) => <ProjectItemBox key={i} $skeleton />)}
+        <ProjectItemsContainer $collapsed={collapsed} $noScrollbar={isPending}>
+            {isPending && [...Array(10)].map((e, i) => <ProjectItemBox key={i} $skeleton />)}
 
             {isError && <ProjectLoadErrorBox $collapsed={collapsed} onClick={onClickErrorBox}>
                 <FeatherIcon icon="alert-triangle" />
@@ -99,6 +99,10 @@ const ProjectItemsContainer = styled.div`
 
     ${props => props.$collapsed && css`
         scrollbar-width: none;
+    `}
+
+    ${p => p.$noScrollbar && css`
+        overflow-y: hidden;
     `}
 `
 
