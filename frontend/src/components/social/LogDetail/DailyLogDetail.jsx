@@ -1,5 +1,5 @@
 import { useState, Fragment, useEffect } from "react"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import SimpleProfile from "@components/social/SimpleProfile"
@@ -9,9 +9,11 @@ import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import { TaskList } from "@components/drawers/Drawer"
 import TaskFrame from "@components/tasks/TaskFrame"
 
-import { getReactions } from "@api/social.api"
+import { deleteReaction, getReactions, postReaction } from "@api/social.api"
+import queryClient from "@/queries/queryClient"
+import { toast } from "react-toastify"
 
-const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, saveDailyComment, day}) => {
+const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, day}) => {
     const [inputState, setInputState] = useState(false)
     const [comment, setComment] = useState(dailyComment.comment)
     // const [emojiClick, setEmojiClick] = useState(false)
@@ -47,10 +49,9 @@ const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, sav
         saveDailyComment({day, comment})
     }
 
-    const processReactions = (reactionsObject) => {
-        const reactions = Object.values(reactionsObject)[1]
-        return Object.values(reactions)
-    }
+    const myReactions = dailyCommentReactions ? 
+        Object.values(dailyCommentReactions.my_reactions) 
+        : []
 
     return <>
         <DetailHeader>
@@ -81,8 +82,9 @@ const DailyLogDetail = ({dailyComment, userLogDetails, userLogsDetail, user, sav
         </CommentRow>
 
         <ReactionBox>
-            {dailyCommentReactions && processReactions(dailyCommentReactions).map((reaction, index) => (
-                <ReactionButton key={index} emoji={reaction}/> 
+            {dailyCommentReactions && Object.values(dailyCommentReactions.reaction_counts).map((reaction) => (
+                <ReactionButton key={reaction.id} emoji={reaction} isSelected={
+                    myReactions.some((myReaction) => myReaction.id === reaction[0].id)}/> 
             ))}
             <EmojiPickerButton />
         </ReactionBox>

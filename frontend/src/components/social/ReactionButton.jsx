@@ -1,14 +1,14 @@
 import { useState } from "react"
 import styled from "styled-components"
 
-const ReactionButton = ({emoji}) => {
+const ReactionButton = ({emoji, isSelected}) => {
     const [emojiClick, setEmojiClick] = useState(false)
     
     const handleEmoji = () => {
         setEmojiClick(prev => !prev)
     }
     // onClick={handleEmoji} 
-    return <EmojiBox $bgcolor={emojiClick? "#FFD7C7" : "#F2F2F2"}>
+    return <EmojiBox $bgcolor={isSelected? "#FFD7C7" : "#F2F2F2"}>
         <Emoji src={emoji[0].img_uri} />
         <EmojiCounts>{emoji[1]}</EmojiCounts>
     </ EmojiBox>
