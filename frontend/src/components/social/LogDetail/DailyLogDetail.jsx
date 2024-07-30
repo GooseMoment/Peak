@@ -28,6 +28,21 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
         enabled: !!dailyComment.id
     })
 
+    const dailyCommentReactionsMutation = useMutation({
+        mutationFn: ({id, emoji, action}) => {
+            if(action === 'post')
+                return postReaction('daily_comment', dailyComment.id, emoji)
+            else if(action === 'delete')
+                return deleteReaction('daily_comment', dailyComment.id, emoji)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['reaction', 'daily', 'comment', dailyComment.id]})
+        },
+        onError: () => {
+            toast.error(e)
+        }
+    })
+
     const handleInputState = () => {
         if(dailyComment.user.username === user.username) 
             setInputState(true)
