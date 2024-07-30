@@ -5,10 +5,13 @@
         "notifications": "Notifications",
         "today": "Today",
         "social": "Social",
-        "projects": "Projects"
+        "projects": "Projects",
+        "projects_list_refetch": "Click to retry",
+        "user_error": "Unable to load your user information. Please restart the app."
     },
     "notifications": {
         "title": "Notifications",
+        "empty": "No notifications.",
         "no_more": "No more notifications!",
         "fail_to_load": "Fail to load notifications.",
         "type_all": "All",
@@ -19,6 +22,7 @@
         "type_follow": "Follow",
         "content_comment_task": "commented on \"<ellipsis>{{task_name}}</ellipsis>\": \"<ellipsis>{{comment}}</ellipsis>\"",
         "content_peck": "pecked \"<ellipsis>{{task_name}}</ellipsis>\" {{count}} times",
+        "content_reaction_task": "Reacted to \"<ellipsis>{{task_name}}</ellipsis>\"",
         "content_daily_comment": "Daily Comment of {{date}}",
         "content_follow": "follows you",
         "content_follow_request": "wants to follow you",
@@ -41,6 +45,9 @@
         "button_go_back": "Go back"
     },
     "settings": {
+        "online": {
+            "sync_help": "The values of {{name}} are synced across all your devices."
+        },
         "sidebar": {
             "account": "Account",
             "general": "General",
@@ -86,6 +93,10 @@
                     "home": "Home",
                     "today": "Today"
                 }
+            },
+            "delete_task_after_alert": {
+                "name": "Alert before task deletion",
+                "description": "Show an alert before deleting tasks."
             }
         },
         "privacy": {
@@ -106,7 +117,8 @@
                     "protected": "Limit to my followers",
                     "private": "Only me"
                 }
-            }
+            },
+            "setting_submitted": "Privacy settings were saved."
         },
         "languages_and_time": {
             "title": "Languages & Time",
@@ -183,8 +195,10 @@
             "title": "Blocks",
             "blockees": {
                 "name": "Users blocked by me",
-                "description": "These users cannot be found.",
-                "button_unblock": "Unblock"
+                "description": "These users don't appear to you.",
+                "button_unblock": "Unblock",
+                "button_block": "Re-block",
+                "empty": "Nobody is here."
             }
         },
         "info": {
@@ -195,6 +209,23 @@
                 "branch": "Branch"
             }
         }
+    },
+    "users": {
+        "followings": "Followings",
+        "followers": "Followers",
+        "bio": "Bio",
+        "bio_empty": "Empty here.",
+        "bio_empty_mine": "Click 'Edit Profile' to edit your bio.",
+        "projects": "Projects",
+        "projects_empty": "There are no projects.",
+        "button_edit_profile": "Edit Profile",
+        "error_user_not_found": "This user is not found.",
+        "following_list_title": "@{{username}}'s followings",
+        "following_list_empty": "Nothing is here.",
+        "following_list_error": "Unable to load followings.",
+        "follower_list_title": "@{{username}}'s followers",
+        "follower_list_empty": "Nothing is here.",
+        "follower_list_error": "Unable to load followers."
     },
     "intro": {
         "section_top": {
@@ -267,6 +298,52 @@
                 "theme_light": "Light",
                 "theme_dark": "Dark"
             }
+        }
+    },
+    "follow_button": {
+        "button_follow": "Follow",
+        "button_accepted": "Following",
+        "button_requested": "Requested",
+        "success_follow": "Following @{{username}}.",
+        "success_requested": "Sent a follow request to @{{username}}.",
+        "error_follow": "Failed to send a follow request to @{{username}}.",
+        "success_unfollow": "Unfollowed @{{username}}.",
+        "success_cancel": "Canceled your follow request to {{username}}.",
+        "error_unfollow": "Failed to unfollow @{{username}}.",
+        "error_cancel": "Failed to cancel a follow request to @{{username}}."
+    },
+    "error-page": {
+        "unknown_error_code": "X_X",
+        "unknown_error_text": "Oops.",
+        "unknown_error_bottom": "Go to the home page",
+        "404_error_text": "The page you requested is not found.",
+        "404_error_bottom": "Back to the previous page",
+    },
+    "sign": {
+        "sign_in": "Sign In",
+        "sign_in_success": "Signed in successfully. Welcome back!",
+        "sign_in_failed": "Signing in failed. Please check again your password.",
+        "network_error": "Problem occured. Check your network.",
+        "loading": "Loading...",
+        "button_sign_in": "Sign In",
+        "button_forgot_password": "Forgot password",
+        "button_create_account": "Create account",
+        "sign_up": "Sign Up",
+        "sign_up_success": "You became our member! Please sign in.",
+        "email": "Email",
+        "password": "Password",
+        "username": "Username",
+        "button_sign_up": "Register",
+        "tos": "By clicking 'Register', you agree to our <linkToTos>Terms of Service</linkToTos>.",
+        "button_already_have_account": "Have Account",
+        "sign_up_errors": {
+            "SIGNUP_NETWORK_ERROR": "Please check your network.",
+            "SIGNUP_SIGNED_IN_USER": "You already signed in.",
+            "SIGNUP_USERNAME_TOO_SHORT": "Username should be more than 4 letters.",
+            "SIGNUP_PASSWORD_TOO_SHORT": "Password should be more than 8 letters.",
+            "SIGNUP_USERNAME_WRONG": "Username should only contain alphabets, underscore and digits.",
+            "SIGNUP_INTERNAL_ERROR": "Something's wrong with our service. Please try again.",
+            "SIGNUP_UNKNOWN_ERROR": "Please try later."
         }
     }
 }

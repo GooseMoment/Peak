@@ -10,6 +10,7 @@ import { getProjectListByUser } from "@api/projects.api"
 import { getCurrentUsername } from "@api/client"
 
 import { useQuery } from "@tanstack/react-query"
+import { useTranslation } from "react-i18next"
 
 const UserPage = () => {
     const navigate = useNavigate()
@@ -30,21 +31,22 @@ const UserPage = () => {
         queryFn: () => getUserByUsername(username),
     })
 
-    const { data: projects } = useQuery({
+    const { data: projects, isPending: projectPending } = useQuery({
         queryKey: ["userProjects", username],
         queryFn: () => getProjectListByUser(username),
-        enabled: !userPending && !userError,
     })
+
+    const { t } = useTranslation(null, {keyPrefix: "users"})
 
     if (userError) {
         // TODO: Edit here after building a new error page
-        return "UserNotFound!"
+        return t("error_user_not_found")
     }
 
     return <>
-        <UserProfileHeader user={user} isMine={isMine} />
-        <Bio bio={user?.bio} isMine={isMine} />
-        <ProjectList projects={projects} isMine={isMine} />
+        <UserProfileHeader user={user} isPending={userPending} isMine={isMine} />
+        <Bio bio={user?.bio} isPending={userPending} isMine={isMine} />
+        <ProjectList projects={projects} isPending={projectPending} isMine={isMine} />
     </>
 }
 

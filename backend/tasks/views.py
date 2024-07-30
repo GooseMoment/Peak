@@ -26,8 +26,8 @@ class TaskDetail(mixins.RetrieveModelMixin,
     
     def patch(self, request, *args, **kwargs):
         try:
-            new_completed = request.data.get("completed_at")
-        except Exception as e:
+            new_completed = request.data["completed_at"]
+        except KeyError as e:
             pass
         else:
             task: Task = self.get_object()
