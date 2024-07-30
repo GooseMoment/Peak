@@ -142,12 +142,26 @@ export const getReactions = async(type, id) => {
     }
 }
 
-export const postReaction = (taskID, emoji) => {
-
+export const postReaction = async(type, id, emoji) => {
+    try {
+        const res = await client.post(`social/reaction/${type}/${id}/`, {
+            emoji: emoji
+        })
+        return res.data
+    } catch(e) {
+        throw e
+    }
 }
 
-export const deleteReaction = (taskID) => {
+export const deleteReaction = async(type, id, emoji) => {
+    const params = new URLSearchParams({emoji: emoji})
 
+    try {
+        const res = await client.delete(`social/reaction/${type}/${id}/?${params.toString()}`)
+        return res.status
+    } catch(e) {
+        throw e
+    }
 }
 
 export const postCommentToTask = (taskID, comment) => {
