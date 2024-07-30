@@ -63,7 +63,7 @@ const ButtonContainer = styled.div`
 display: flex;
 justify-content: flex-end;
 font-size: 1em;
-padding: 0.75em 0 0.75em 0.5em;
+padding: 0.75em 0.5em 0.75em 0.5em;
 margin: 0 0.75em;
 
 ${({$collapsed}) => $collapsed ? css`
@@ -91,11 +91,17 @@ const rotateToRight = keyframes`
 `
 
 const CollapseButton = styled(MildButton)`
+    padding: 0.75em;
+
     & svg {
+        top: 0;
+        margin-right: 0;
         animation: ${rotateToLeft} 0.5s ${cubicBeizer} forwards;
     }
 
     ${props => props.$collapsed && css`
+        padding: inherit;
+
         & svg {
             animation: ${rotateToRight} 0.5s ${cubicBeizer} forwards;
         }
