@@ -14,5 +14,5 @@ def create_inbox(sender, instance: User=None, created=False, **kwargs):
         name="Inbox", user=instance, order=0, color="cccccc", type="inbox",  
     )
     return Drawer.objects.create(
-        name='', user=instance, project=project, order=0, 
+        name='Inbox', user=instance, project=project, order=0, 
     )
