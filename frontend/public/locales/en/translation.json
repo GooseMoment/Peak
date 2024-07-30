@@ -336,9 +336,13 @@
         "sign_up_errors": {
             "SIGNUP_NETWORK_ERROR": "Please check your network.",
             "SIGNUP_SIGNED_IN_USER": "You already signed in.",
+            "SIGNUP_REQUIRED_FIELDS_MISSING": "Please enter email, password, username.",
             "SIGNUP_USERNAME_TOO_SHORT": "Username should be more than 4 letters.",
+            "SIGNUP_EMAIL_WRONG": "Please enter a valid email.",
             "SIGNUP_PASSWORD_TOO_SHORT": "Password should be more than 8 letters.",
             "SIGNUP_USERNAME_WRONG": "Username should only contain alphabets, underscore and digits.",
+            "SIGNUP_EMAIL_EXISTS": "An email you entered already exists. Perhaps have an account?",
+            "SIGNUP_USERNAME_EXISTS": "An username you entered already exists.",
             "SIGNUP_INTERNAL_ERROR": "Something's wrong with our service. Please try again.",
             "SIGNUP_UNKNOWN_ERROR": "Please try later."
         }
