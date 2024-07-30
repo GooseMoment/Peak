@@ -5,7 +5,9 @@
         "notifications": "알림",
         "today": "오늘",
         "social": "소셜",
-        "projects": "프로젝트"
+        "projects": "프로젝트",
+        "projects_list_refetch": "눌러서 재시도",
+        "user_error": "유저 정보를 불러올 수 없습니다. 앱을 다시 실행해 주세요."
     },
     "notifications": {
         "title": "알림",

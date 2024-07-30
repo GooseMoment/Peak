@@ -5,7 +5,9 @@
         "notifications": "Notifications",
         "today": "Today",
         "social": "Social",
-        "projects": "Projects"
+        "projects": "Projects",
+        "projects_list_refetch": "Click to retry",
+        "user_error": "Unable to load your user information. Please restart the app."
     },
     "notifications": {
         "title": "Notifications",
