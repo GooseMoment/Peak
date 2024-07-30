@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import Sidebar from "@components/sidebar/Sidebar"
 import Navbar from "@components/navbar/Navbar"
 
-import { ifTablet, ifMobile, useScreenType } from "@utils/useScreenType"
+import useScreenType, { ifTablet, ifMobile } from "@utils/useScreenType"
 import { useClientSetting } from "@utils/clientSettings"
 import { cubicBeizer, modalFadeIn } from "@assets/keyframes"
 
@@ -31,7 +31,7 @@ const Layout = ({children}) => {
     <App>
         {isMobile && <Navbar openSidebar={openSidebarFromNavbar} />}
         {!sidebarHidden && 
-            <Sidebar isMobile={isMobile} setSidebarHidden={setSidebarHidden} collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />}
+            <Sidebar setSidebarHidden={setSidebarHidden} collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />}
         {isMobile && !sidebarHidden && <BackgroundWall onClick={() => setSidebarHidden(true)} />}
         <Content $sidebarCollapsed={sidebarCollapsed} $sidePadding={contentPadding}>
             {children}

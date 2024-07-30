@@ -7,10 +7,9 @@ import { ifMobile } from "@utils/useScreenType"
 
 import styled, { css } from "styled-components"
 
-const Sidebar = ({collapsed, setCollapsed, setSidebarHidden, isMobile}) => {
+const Sidebar = ({collapsed, setCollapsed, setSidebarHidden}) => {
     return <SidebarBox $collapsed={collapsed}>
-        <Header collapsed={collapsed} setCollapsed={setCollapsed} setSidebarHidden={setSidebarHidden} isMobile={isMobile} />
-        <Header collapsed={collapsed} setCollapsed={setCollapsed} />
+        <Header collapsed={collapsed} setCollapsed={setCollapsed} setSidebarHidden={setSidebarHidden} />
         <Middle collapsed={collapsed} />
         <Footer collapsed={collapsed} />
     </SidebarBox>
