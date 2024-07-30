@@ -1,7 +1,6 @@
 import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value, Sync, Description } from "@components/settings/Section"
 import Button from "@components/common/Button"
-import Loading from "@components/settings/Loading"
 import Error from "@components/settings/Error"
 import ListUserProfile from "@components/users/ListUserProfile"
 
@@ -12,6 +11,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
+import styled from "styled-components"
 
 const Blocks = () => {
     const {data: blocks, isPending, isError} = useQuery({
@@ -35,26 +35,36 @@ const Blocks = () => {
         mutation.mutate(null)
     }
 
-    if (isPending) {
-        return <Loading />
-    }
-
     if (isError) {
         return <Error />
     }
 
     return <>
-        <PageTitle>{t("title")} <Sync /></PageTitle>
+        <PageTitle>{t("title")} <Sync name={t("title")} /></PageTitle>
         <Section>
             <Name>{t("blockees.name")}</Name>
             <Description>{t("blockees.description")}</Description>
             <Value>
-                {blocks.map(user => <ListUserProfile user={user} key={user.username}>
+                {isPending && [...Array(10)].map((_, i) => <ListUserProfile key={i} skeleton />)}
+                {blocks?.map(user => <ListUserProfile user={user} key={user.username}>
                     <Button onClick={onClick}>{t("blockees.button_unblock")}</Button>
                 </ListUserProfile>)}
+                {blocks?.length === 0 && <Message>{t("blockees.empty")}</Message>}
             </Value>
         </Section>
     </>
 }
+
+// TODO: Integrate with @components/users/FollowList.jsx
+const Message = styled.div`
+    color: ${p => p.theme.grey};
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    aspect-ratio: 3/2;
+`
 
 export default Blocks

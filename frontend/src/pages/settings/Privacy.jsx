@@ -21,17 +21,17 @@ const Privacy = () => {
         queryFn: () => getSettings(),
     })
 
+    const { t } = useTranslation(null, {keyPrefix: "settings.privacy"})
+
     const mutation = useMutation({
         mutationFn: (data) => {
             return patchSettings(data)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ["settings"]})
-            toast.success("Setting was saved on the server.")
+            toast.success(t("setting_submitted"), {toastId: "privacy_setting_submitted", })
         },
     })
-
-    const { t } = useTranslation(null, {keyPrefix: "settings.privacy"})
     
     const privacyChoices = useMemo(() => makePrivacyChoices(t), [t])
 
@@ -44,7 +44,7 @@ const Privacy = () => {
     }
 
     return <>
-        <PageTitle>{t("title")} <Sync /></PageTitle>
+        <PageTitle>{t("title")} <Sync name={t("title")} /></PageTitle>
         <Section>
             <Name>{t("follow_request_approval_manually.name")}</Name>
             <Description>{t("follow_request_approval_manually.description")}</Description>

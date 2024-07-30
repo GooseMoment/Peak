@@ -19,7 +19,7 @@ import TaskCreateElement from "@components/project/taskDetails/TaskCreateElement
 import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement"
 
 import { getMe, signOut } from "@api/users.api"
-import { getProject, getProjectList } from "@api/projects.api"
+import { getProjectList } from "@api/projects.api"
 import { getToken } from "@api/client"
 
 const redirectIfSignedIn = () => {
@@ -65,9 +65,6 @@ const routes = [
                 projects: await getProjectList(),
                 user: await getMe(),
             }
-        },
-        shouldRevalidate: ({currentUrl}) => {
-            return currentUrl.pathname.startsWith("/app/settings/account") || currentUrl.pathname === "/app/projects"
         },
         errorElement: <ErrorPage />,
         children: [

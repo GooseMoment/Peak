@@ -95,7 +95,7 @@ const ContentTitle = styled.h3`
     ${props => props.$skeleton && css`
         width: 140px;
         height: 1em;
-        ${skeletonCSS(props)} 
+        ${skeletonCSS} 
     `}
 `
 
@@ -107,7 +107,7 @@ const ContentDetail = styled.p`
     ${props => props.$skeleton && css`
         width: 140px;
         height: 1em;
-        ${skeletonCSS(props)} 
+        ${skeletonCSS} 
     `}
 `
 

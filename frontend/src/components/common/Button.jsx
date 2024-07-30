@@ -1,5 +1,6 @@
 import MildButton from "./MildButton"
 import { states } from "@assets/themes"
+import { cubicBeizer } from "@assets/keyframes"
 import LoaderCircle from "@components/common/LoaderCircle"
 
 import styled from "styled-components"
@@ -40,7 +41,6 @@ const CommonButton = styled(MildButton)`
     position: relative;
     text-decoration: none;
     touch-action: manipulation;
-    transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
     user-select: none;
     -webkit-user-select: none;
     width: auto;
@@ -65,6 +65,12 @@ const CommonButton = styled(MildButton)`
         cursor: not-allowed;
         opacity: 1;
     }
+
+    transition: 
+        box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s,
+        background-color 0.5s ${cubicBeizer}, border-color 0.5s ${cubicBeizer},
+        color 0.5s ${cubicBeizer};
+    ;
 `
 
 const FilledButton = styled(CommonButton)`
