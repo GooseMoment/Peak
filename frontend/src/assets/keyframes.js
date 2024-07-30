@@ -110,3 +110,13 @@ export const rotateToUnder = keyframes`
         transform: rotate(-180deg);
     }
 `
+
+export const slideLeftToRight = keyframes`
+    0% {
+        transform: translateX(-200%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+`

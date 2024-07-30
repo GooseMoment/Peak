@@ -4,6 +4,7 @@ import Header from "./Header"
 import Middle from "./Middle"
 import Footer from "./Footer"
 
+import { cubicBeizer, slideLeftToRight } from "@assets/keyframes"
 import { ifMobile } from "@utils/useScreenType"
 
 import styled, { css } from "styled-components"
@@ -53,7 +54,11 @@ ${({$collapsed}) => $collapsed ? css`
 }
 
     ${ifMobile} {
-        width: 15rem;
+        width: 100dvw;
+        padding-left: 1em;
+        padding-right: 1em;
+
+        animation: ${slideLeftToRight} 0.25s ${cubicBeizer};
     }
 `
 
