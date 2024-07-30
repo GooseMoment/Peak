@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import UserProfileHeader from "@components/users/UserProfileHeader"
 import Bio from "@components/users/Bio"
 import ProjectList from "@components/users/ProjectList"
+import Error from "@components/errors/ErrorLayout"
 
 import { getUserByUsername } from "@api/users.api"
 import { getProjectListByUser } from "@api/projects.api"
@@ -29,6 +30,13 @@ const UserPage = () => {
     const { data: user, isPending: userPending, isError: userError } = useQuery({
         queryKey: ["users", username],
         queryFn: () => getUserByUsername(username),
+        retry: (count, err) => {
+            if (err.response.status === 404) {
+                return false
+            }
+
+            return count < 3
+        } 
     })
 
     const { data: projects, isPending: projectPending } = useQuery({
@@ -39,8 +47,7 @@ const UserPage = () => {
     const { t } = useTranslation(null, {keyPrefix: "users"})
 
     if (userError) {
-        // TODO: Edit here after building a new error page
-        return t("error_user_not_found")
+        return <Error height="100%" code="404" text={t("error_user_not_found")} />
     }
 
     return <>
