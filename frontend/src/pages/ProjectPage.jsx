@@ -91,7 +91,6 @@ const ProjectPage = () => {
                 <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedButtonPosition, setIsContextMenuOpen)}/>
             </Icons>
         </TitleBox>
-        {project.type === 'inbox'}
         {drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
         : drawers.map((drawer) => (
             <Drawer key={drawer.id} project={project} drawer={drawer} color={project.color}/>

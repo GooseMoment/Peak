@@ -112,7 +112,7 @@ const Drawer = ({project, drawer, color}) => {
     
     return (
         <>
-            {project.type === 'inbox' ? <div/> :
+            {project.type === 'inbox' ? null :
             <DrawerBox $color = {color}>
                 <DrawerName $color = {color}>{drawer.name}</DrawerName>
                 <DrawerIcon $color = {color}>
