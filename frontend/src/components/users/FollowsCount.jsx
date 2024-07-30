@@ -3,25 +3,29 @@ import { useState, useEffect } from "react"
 import ModalPortal from "@components/common/ModalPortal"
 import { FollowerList, FollowingList } from "@components/users/FollowList"
 
-import styled from "styled-components"
+import { skeletonCSS } from "@assets/skeleton"
 
-const FollowsCount = ({user}) => {
+import styled, { css } from "styled-components"
+import { useTranslation } from "react-i18next"
+
+const FollowsCount = ({user, isPending}) => {
+    const { t } = useTranslation(null, {keyPrefix: "users"})
     const [window, setWindow] = useState("")
 
     useEffect(() => {
         setWindow("")
     }, [user])
 
-    if (!user) {
+    if (isPending) {
         return <Items>
-            <Item>Followers <Count>000</Count></Item>
-            <Item>Followings <Count>000</Count></Item>
+            <Item>{t("followers")} <Count $skeleton /></Item>
+            <Item>{t("followings")} <Count $skeleton /></Item>
         </Items>
     }
 
     return <Items>
-        <Item onClick={() => setWindow("followers")}>Followers <Count>{user.followers_count}</Count></Item>
-        <Item onClick={() => setWindow("followings")}>Followings <Count>{user.followings_count}</Count></Item>
+        <Item onClick={() => setWindow("followers")}>{t("followers")} <Count>{user.followers_count}</Count></Item>
+        <Item onClick={() => setWindow("followings")}>{t("followings")} <Count>{user.followings_count}</Count></Item>
         {window !== "" &&
             <ModalPortal closeModal={() => setWindow("")}>
                 {window === "followers" && <FollowerList user={user} />} 
@@ -38,10 +42,19 @@ const Items = styled.div`
 
 const Item = styled.div`
     cursor: pointer;
+
+    display: flex;
+    gap: 0.5em;
 `
 
 const Count = styled.span`
     font-weight: 700;
+
+    ${p => p.$skeleton && css`
+        height: 1em;
+        width: 1.5em;
+        ${skeletonCSS}
+    `}
 `
 
 export default FollowsCount
