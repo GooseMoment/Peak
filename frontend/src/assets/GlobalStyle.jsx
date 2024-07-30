@@ -1,5 +1,5 @@
 import { scaleForward, scaleBack, modalFadeOut, modalFadeIn, cubicBeizer } from '@assets/keyframes'
-import { ifWidthS } from '@utils/screenType'
+import { ifWidthS } from '@utils/useScreenType'
 
 import { createGlobalStyle } from 'styled-components'
 import reset from 'styled-reset'

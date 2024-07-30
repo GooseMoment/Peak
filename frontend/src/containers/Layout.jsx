@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import Sidebar from "@components/sidebar/Sidebar"
 import Navbar from "@components/navbar/Navbar"
 
-import { ifWidthM, ifWidthS, useScreenType } from "@utils/screenType"
+import { ifWidthM, ifWidthS, useScreenType } from "@utils/useScreenType"
 import { useClientSetting } from "@utils/clientSettings"
 import { cubicBeizer, modalFadeIn } from "@assets/keyframes"
 

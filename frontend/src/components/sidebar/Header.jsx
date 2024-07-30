@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react"
 import MildButton from "@components/common/MildButton"
 import { cubicBeizer } from "@assets/keyframes"
 import useScreenSize from "@utils/useScreenSize"
-import { WIDTH_M } from "@utils/screenType"
+import { WIDTH_M } from "@utils/useScreenType"
 
 import styled, { css, keyframes } from "styled-components"
 import FeatherIcon from "feather-icons-react"

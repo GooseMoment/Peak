@@ -4,7 +4,7 @@ import Header from "./Header"
 import Middle from "./Middle"
 import Footer from "./Footer"
 
-import { ifWidthS } from "@utils/screenType"
+import { ifWidthS } from "@utils/useScreenType"
 
 import styled, { css } from "styled-components"
 
