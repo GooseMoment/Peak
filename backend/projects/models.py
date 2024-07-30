@@ -23,3 +23,6 @@ class Project(Base):
 
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"
+    
+    class Meta:
+        db_table = "projects"

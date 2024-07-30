@@ -21,6 +21,10 @@ export const putFollowRequest = async (username) => {
 
     try {
         const res = await client.put(`social/follow/@${follower}/@${followee}/`)
+        if (res.status === 208) {
+            throw new Error("Following already exists.")
+        }
+
         return res.data
     } catch (e) {
         throw e
