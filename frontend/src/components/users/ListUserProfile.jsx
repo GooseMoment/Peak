@@ -62,6 +62,11 @@ const Username = styled.div`
     font-weight: 600;
     color: ${p => p.theme.textColor};
 
+    width: 7.5em;
+    white-space: nowrap;
+    overflow-x: clip;
+    text-overflow: ellipsis;
+
     ${p => p.$skeleton && css`
         height: 1em;
         width: 5em;
