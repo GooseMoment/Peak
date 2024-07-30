@@ -4,12 +4,12 @@ import styled from "styled-components"
 
 import Title from "@components/project/common/Title"
 import Middle from "@components/project/common/Middle"
-import notify from "@utils/notify"
 import Color from "./Color"
 import Type from "./Type"
 
 import queryClient from "@queries/queryClient"
 import { postProject } from "@api/projects.api"
+import { toast } from "react-toastify"
 
 const ProjectCreate = ({onClose}) => {
     const [name, setName] = useState('')
@@ -32,22 +32,32 @@ const ProjectCreate = ({onClose}) => {
 
     const makeProject = async (name, color, type) => {
         try {
+            if (name === 'Inbox' || name === 'inbox') {
+                toast.error("프로젝트 이름은 Inbox로 설정할 수 없습니다.")
+                return 0
+            }
+
             const edit = {
                 'name': name,
                 'color': color,
                 'type': type,
             }
             await postProject(edit)
-            notify.success("프로젝트 생성에 성공하였습니다.")
+            toast.success("프로젝트 생성에 성공하였습니다.")
+            return 1
         } catch (e) {
-            notify.error("프로젝트 생성에 실패했습니다.")
+            toast.error("프로젝트 생성에 실패했습니다.")
+            return 0
         }
     }
 
-    const submit = async (e) => {
-        await makeProject(name, color, type)
-        onClose()
-        queryClient.invalidateQueries({queryKey: ['projects']})
+    const submit = async () => {
+        const isSuccess = await makeProject(name, color, type)
+
+        if (isSuccess) {
+            onClose()
+            queryClient.invalidateQueries({queryKey: ['projects']})
+        }
     }
 
     return (
