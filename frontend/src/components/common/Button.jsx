@@ -60,10 +60,8 @@ const CommonButton = styled(MildButton)`
     }
 
     &:disabled {
-        border-color: #DDDDDD;
-        color: #DDDDDD;
         cursor: not-allowed;
-        opacity: 1;
+        opacity: 0.6;
     }
 
     transition: 
@@ -75,7 +73,7 @@ const CommonButton = styled(MildButton)`
 
 const FilledButton = styled(CommonButton)`
     background-color: ${p => p.theme.primaryColors[p.$state]};
-    border-color: ${p => p.theme.primaryColors[p.$state]};
+    border-color: ${p => p.theme.backgroundColor};
     color: ${p => p.theme.backgroundColor};
 `
 
@@ -92,7 +90,9 @@ const buttons = {
 
 const ButtonLoader = styled(LoaderCircle)`
     margin-right: 0.25em;
-    opacity: 0.5;
+    opacity: 0.9;
+    border-color: inherit;
+    border-left-color: transparent;
 `
 
 export default Button

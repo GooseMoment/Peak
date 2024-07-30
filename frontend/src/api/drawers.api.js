@@ -1,9 +1,9 @@
 import client from "@api/client"
 
-export const getDrawersByProject = async (project_id) => {
+export const getDrawersByProject = async (projectID, ordering) => {
     try {
-        const res = await client.get(`projects/${project_id}`)
-        return res.data.drawers
+        const res = await client.get(`drawers?project=${projectID}&ordering=${ordering}`)
+        return res.data.results
     } catch (e) {
         throw e
     }

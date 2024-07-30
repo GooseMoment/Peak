@@ -110,3 +110,14 @@ export const rotateToUnder = keyframes`
         transform: rotate(-180deg);
     }
 `
+
+export const dropdown = keyframes`
+    0% {
+        opacity: 60%;
+        transform: translateY(-5px);
+    }
+    100% {
+        opacity: 100%;
+        transform: translateY(0);
+    }
+`
