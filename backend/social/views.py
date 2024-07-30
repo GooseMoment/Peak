@@ -250,7 +250,11 @@ class ReactionView(APIView):
                                                 daily_comment=daily_comment).order_by("created_at")
         
         reactionCountsDir = dict()
+        myReactions = []
         for reaction in reactions:
+            if reaction.user == user:
+                myReactions.append(EmojiSerializer(reaction.emoji).data)
+            
             emoji_id = f"{reaction.emoji.id}"
             reactionNum = reactionCountsDir.get(emoji_id)
             if reactionNum:
@@ -262,7 +266,8 @@ class ReactionView(APIView):
         
         data = {
             'reactions': serializer.data,
-            'reaction_counts': reactionCountsDir
+            'reaction_counts': reactionCountsDir,
+            'my_reactions': myReactions
         }
         
         return Response(data, status=status.HTTP_200_OK)
