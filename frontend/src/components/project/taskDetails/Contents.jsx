@@ -20,7 +20,6 @@ import ModalPortal from "@components/common/ModalPortal"
 import taskDate from "@components/tasks/utils/taskDate"
 
 const Contents = ({task, setFunc}) => {
-    const { id: projectID } = useParams()
     const navigate = useNavigate()
 
     const [isComponentOpen, setIsComponentOpen] = useState(false)
@@ -39,7 +38,7 @@ const Contents = ({task, setFunc}) => {
         navigate(`.`)
     }
 
-    const {formatted_due_date, formatted_due_time, formatted_assigned_date} = taskDate(task)
+    const {formatted_due_datetime, formatted_assigned_date} = taskDate(task)
     
     const items = [
         {
@@ -53,8 +52,8 @@ const Contents = ({task, setFunc}) => {
             id: 2,
             name: "due",
             icon: <img src={hourglass} />,
-            display: task.due_date ? (task.due_time ? formatted_due_date + ' ' + formatted_due_time : formatted_due_date) : "없음",
-            component: <Due setFunc={setFunc} closeComponent={closeComponent}/>
+            display: task.due_date ? formatted_due_datetime : "없음",
+            component: <Due task={task} setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 3,
@@ -62,7 +61,7 @@ const Contents = ({task, setFunc}) => {
             icon: <img src={alarmclock} />,
             display: task?.reminders && task.reminders?.length !== 0 ? 
                 <RemindersBox name="reminder">
-                    {task.reminders.map(reminder => <ReminderBlock name="reminder">{displayReminder[reminder.delta]}</ReminderBlock>)}
+                    {task.reminders.map(reminder => <ReminderBlock key={reminder.id} name="reminder">{displayReminder[reminder.delta]}</ReminderBlock>)}
                 </RemindersBox> 
                 : (task.due_date ? <EmptyReminderBox name="reminder">+</EmptyReminderBox>
                 : <EmptyReminderBox onClick={()=>{toast.error("알람 설정 전에 기한을 설정해주세요")}}>-</EmptyReminderBox>),
