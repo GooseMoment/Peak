@@ -3,6 +3,7 @@ import { createPortal } from "react-dom"
 
 import { cubicBeizer, scaleDown, scaleUp } from "@assets/keyframes"
 import useDelayUnmount from "@utils/useDelayUnmount"
+import useStopScroll from "@utils/useStopScroll"
 
 import styled, { css } from "styled-components"
 
@@ -16,11 +17,7 @@ const ModalPortal = ({ children, closeModal, additional=false, closeESC=true }) 
     
     const shouldRender = !additional ? useDelayUnmount(isOpen, 100, closeModal) : true
 
-    useEffect(() => {
-        document.body.style.overflow = 'hidden';
-        document.querySelector('html').scrollTop = window.scrollY;
-            return () => document.body.style.overflow = null;
-    }, [])
+    useStopScroll()
 
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)
@@ -53,7 +50,7 @@ const ModalPortal = ({ children, closeModal, additional=false, closeESC=true }) 
     }
 
     const handleKeyDown = e => {
-        if (e.key === "Escape") {
+        if (closeESC && e.key === "Escape") {
             e.preventDefault()
             setIsOpen(false)
         }

@@ -6,7 +6,6 @@ import FeatherIcon from 'feather-icons-react'
 
 import TaskNameInput from "@components/tasks/TaskNameInput"
 import DeleteAlert from "@components/common/DeleteAlert"
-import ModalPortal from "@components/common/ModalPortal"
 import Contents from "./Contents"
 
 import queryClient from "@queries/queryClient"
@@ -98,9 +97,7 @@ const TaskDetail = () => {
             </TaskNameBox>
             <Contents task={task} setFunc={patchMutation.mutate}/>
             {isAlertOpen &&
-                <ModalPortal closeModal={() => {setIsAlertOpen(false)}} additional={true}>
-                    <DeleteAlert title={`"${task.name}"\n 할 일을`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
-                </ModalPortal>
+                <DeleteAlert title={`"${task.name}"\n 할 일을`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
             }
         </TaskDetailBox>
     )
