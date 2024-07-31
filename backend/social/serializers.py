@@ -1,14 +1,9 @@
 from rest_framework import serializers
 
-from django.utils import timezone
 from django.core.cache import cache
-from django.db.models import Q
-
-from datetime import datetime
 
 from .models import *
 from projects.models import Project
-from tasks.models import Task
 
 from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
