@@ -32,7 +32,7 @@ export const patchUser = async (data) => {
 
 export const signIn = async (email, password) => {
     try {
-        await client.post("sign_in/", {
+        const res = await client.post("sign_in/", {
             email: email,
             password: password,
         })
