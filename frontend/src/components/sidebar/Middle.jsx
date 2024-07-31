@@ -73,7 +73,7 @@ export const MiddleBox = styled.div`
 `
 
 export const ItemBox = styled.div`
-    font-size: 1em;
+    font-size: 1.1em;
     padding: 0.75em 0 0.75em 0.5em;
     margin: 0 0.75em;
 
@@ -115,9 +115,14 @@ const ProjectItemsContainer = styled.div`
     ${p => p.$noScrollbar && css`
         overflow-y: hidden;
     `}
+
+    ${ifMobile} {
+        height: 30dvh;
+    }
 `
 
 const ProjectItemBox = styled.div`
+    font-size: 1.1em;
     padding: 0.5em 0.5em;
     margin: 0 1.5em;
     background-color: inherit;

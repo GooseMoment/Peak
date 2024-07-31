@@ -41,8 +41,8 @@ export const SidebarBox = styled.nav`
 
     ${ifMobile} {
         width: 100dvw;
-        padding-left: 1em;
-        padding-right: 1em;
+        padding-left: 0.75em;
+        padding-right: 0.75em;
 
         animation: ${slideLeftToRight} 0.25s ${cubicBeizer};
     }
