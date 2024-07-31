@@ -11,7 +11,7 @@ import { deleteReaction, getReactions, postReaction } from "@api/social.api"
 import { useEffect } from "react"
 
 const ReactionBox = ({contentType, content}) => {
-    const [pickedEmoji, setPickedEmoji] = useState(false)
+    const [pickedEmoji, setPickedEmoji] = useState(null)
 
     const { data: contentReactions, isError: contentReactionsError } = useQuery({
         queryKey: ['reaction', contentType, content.id],
@@ -41,9 +41,12 @@ const ReactionBox = ({contentType, content}) => {
         : []
 
     const handleEmoji = (pickedEmoji) => {
-        const action = (myReactions.some((myReaction) => myReaction.id === pickedEmoji.id)) ? 'delete' : 'post'
-        
-        contentReactionsMutation.mutate({action, emojiID: pickedEmoji.id})
+        if(pickedEmoji) {
+            if(!(myReactions.some((myReaction) => myReaction.id === pickedEmoji.id))) {
+                contentReactionsMutation.mutate({action: 'post', emojiID: pickedEmoji.id})
+            }
+            setPickedEmoji(null)
+        }
     }
 
     useEffect(() => (
@@ -52,7 +55,7 @@ const ReactionBox = ({contentType, content}) => {
 
     return <Box>
         {contentReactions && Object.values(contentReactions.reaction_counts).map((reaction, index) => (
-                <ReactionButton key={index} emoji={reaction} 
+                <ReactionButton key={index} emoji={reaction}
                     isSelected={myReactions.some((myReaction) => myReaction.id === reaction[0].id)}
                     saveReaction={contentReactionsMutation.mutate}
                 /> 
