@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 
-import { ButtonGroup } from "@components/common/Button"
+import Button, { ButtonGroup } from "@components/common/Button"
 import { cubicBeizer, slideDown, slideUp } from "@assets/keyframes"
 
 import styled, { css } from "styled-components"
@@ -42,7 +42,7 @@ const Confirmation = ({ question, buttons, onClose }) => {
     return createPortal(visible && <Frame $closing={closing}>
         <Question>{question}</Question>     
         <ButtonGroup>
-            {buttons}
+            {buttons?.map(button => button === "close" ? <Button onClick={closeWithDelay}>닫기</Button> : button)}
         </ButtonGroup>
     </Frame>, el)
 }
@@ -51,8 +51,10 @@ const Frame = styled.div`
     height: fit-content;
     width: fit-content;
 
+    max-width: 30em;
+
     box-sizing: border-box;
-    padding: 1em;
+    padding: 1.5em;
     border-radius: 16px;
 
     color: ${p => p.theme.textColor};
@@ -66,7 +68,9 @@ const Frame = styled.div`
 `
 
 const Question = styled.div`
-    font-weight: bold;
+    font-weight: 500;
+    line-height: 1.3;
+    text-align: center;
 
     margin-bottom: 1.25em;
     display: flex;

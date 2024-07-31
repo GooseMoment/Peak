@@ -123,9 +123,7 @@ const ProjectPage = () => {
             />
         }
         {isAlertOpen &&
-            <ModalPortal closeModal={() => {setIsAlertOpen(false)}}>
-                <DeleteAlert title={`"${project.name}" 프로젝트를`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
-            </ModalPortal>
+            <DeleteAlert title={`"${project.name}" 프로젝트를`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
         }
         {isDrawerCreateOpen &&
             <ModalPortal closeModal={() => {setIsDrawerCreateOpen(false)}}>
