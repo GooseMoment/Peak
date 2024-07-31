@@ -18,7 +18,7 @@ const FilterButtonGroup = ({active, setActive, filters}) => {
             left: node.offsetLeft,
             width: node.offsetWidth,
         })
-    }, [])
+    }, [filters])
 
     return <FilterGroup>
         <BackgroundButton 

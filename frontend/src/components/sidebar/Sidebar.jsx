@@ -1,51 +1,55 @@
-import { useRouteLoaderData } from "react-router-dom"
-
 import Header from "./Header"
 import Middle from "./Middle"
 import Footer from "./Footer"
 
+import { cubicBeizer, slideLeftToRight } from "@assets/keyframes"
+import { ifMobile } from "@utils/useScreenType"
+
 import styled, { css } from "styled-components"
 
-const Sidebar = ({collapsed, setCollapsed}) => {
-    const routeData = useRouteLoaderData("app")
-
-    if (!routeData) {
-        return null
-    }
-
-    const {projects, user} = routeData
-
+const Sidebar = ({collapsed, setCollapsed, setSidebarHidden}) => {
     return <SidebarBox $collapsed={collapsed}>
-        <Header collapsed={collapsed} setCollapsed={setCollapsed} />
-        <Middle collapsed={collapsed} projects={projects} />
-        <Footer collapsed={collapsed} user={user} />
+        <Header collapsed={collapsed} setCollapsed={setCollapsed} setSidebarHidden={setSidebarHidden} />
+        <Middle collapsed={collapsed} setSidebarHidden={setSidebarHidden} />
+        <Footer collapsed={collapsed} />
     </SidebarBox>
 }
 
 export const SidebarBox = styled.nav`
-z-index: 99;
+    z-index: 99;
 
-position: fixed;
-height: 100vh;
-width: 18rem;
+    padding-bottom: calc(env(safe-area-inset-bottom) - 1em);
+    box-sizing: border-box;
 
-display: flex;
-flex-direction: column;
-justify-content: space-between;
+    position: fixed;
+    height: 100dvh;
+    width: 18rem;
 
-color: ${p => p.theme.textColor};
-background-color: ${p => p.theme.sidebar.backgroundColor};
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-${({$collapsed}) => $collapsed ? css`
-    width: unset;
-` : null}
+    color: ${p => p.theme.textColor};
+    background-color: ${p => p.theme.sidebar.backgroundColor};
 
-& * {
-    user-select: none;
-    -ms-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-}
+    & * {
+        user-select: none;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+    }
+
+    ${ifMobile} {
+        width: 100dvw;
+        padding-left: 0.75em;
+        padding-right: 0.75em;
+
+        animation: ${slideLeftToRight} 0.25s ${cubicBeizer};
+    }
+
+    ${p => p.$collapsed && css`
+        width: unset;
+    `}
 `
 
 export default Sidebar

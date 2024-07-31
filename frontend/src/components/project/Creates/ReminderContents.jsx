@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react"
+
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-import LoaderCircle from "@/components/common/LoaderCircle"
+import LoaderCircle from "@components/common/LoaderCircle"
 
 const ReminderIcons = ({ item, reminders, handleReminder, ReminderID }) => {
     const [isLoading, setIsLoading] = useState(true)
@@ -58,12 +59,12 @@ const ItemBlock = styled.div`
 const ItemText = styled.p`
     font-weight: normal;
     font-size: 1em;
-    color: ${p => p.theme.textColor};
+    color: ${p=>p.theme.textColor};
+    cursor: pointer;
 
     &:hover {
         font-weight: bolder;
         color: ${p => p.theme.goose};
-        cursor: pointer;
     }
 `
 

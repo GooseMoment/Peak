@@ -21,6 +21,9 @@ def create_notification_for_reaction(sender, instance: Reaction=None, created=Fa
     elif instance.parent_type == Reaction.FOR_DAILY_COMMENT:
         target_user = instance.daily_comment.user
 
+    if target_user == instance.user:
+        return
+
     return Notification.objects.create(
         user=target_user, reaction=instance, type=noti_type,
     )
@@ -31,6 +34,9 @@ def create_notification_for_peck(sender, instance: Peck=None, created=False, **k
 
     target_user = instance.task.user
     noti_type = Notification.FOR_PECK
+
+    if target_user == instance.user:
+        return
 
     return Notification.objects.create(
         user=target_user, peck=instance, type=noti_type,
@@ -60,6 +66,9 @@ def create_notification_for_following(sender, instance: Following=None, created=
 @receiver(post_save, sender=Comment)
 def create_notification_for_comment(sender, instance: Comment=None, created=False, **kwargs):
     if not created:
+        return
+
+    if instance.task.user == instance.user:
         return
 
     return Notification.objects.create(

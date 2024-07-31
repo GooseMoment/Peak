@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.db.utils import IntegrityError
 
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -52,7 +53,7 @@ class SignInView(KnoxLoginView):
         
         return super(SignInView, self).post(request, format=None)
 
-username_validation = re.compile(r"^[a-z0-9_-]{4,15}$")
+username_validation = re.compile(r"^[a-z0-9_]{4,15}$")
 
 @api_view(["POST"])
 @permission_classes((AllowAny, ))
@@ -104,9 +105,32 @@ def sign_up(request: Request):
             "code": "SIGNUP_PASSWORD_TOO_SHORT",
             "message": "password should be longer than 8."
         }, status=status.HTTP_400_BAD_REQUEST)
-
+    
     new_user.set_password(payload["password"])
-    new_user.save()
+
+
+    try:
+        new_user.save()
+    except IntegrityError as e:
+        if not "unique constraint" in str(e):
+            return Response({
+                "code": "SIGNUP_UNKNOWN_ERROR",
+                "message": "unknown error occuered."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if "email" in str(e):
+            return Response({
+                "code": "SIGNUP_EMAIL_EXISTS",
+                "message": "a user with a provided email already exists."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if "username" in str(e):
+            return Response({
+                "code": "SIGNUP_USERNAME_EXISTS",
+                "message": "a user with a provided username already exists."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return Response(status=status.HTTP_200_OK)
 

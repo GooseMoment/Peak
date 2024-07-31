@@ -1,14 +1,14 @@
-import reset from 'styled-reset'
-
-import { scaleForward, scaleBack, modalFadeOut, scaleUp, modalFadeIn, cubicBeizer } from '@assets/keyframes'
+import { scaleForward, scaleBack, modalFadeOut, modalFadeIn, cubicBeizer } from '@assets/keyframes'
+import { ifMobile } from '@utils/useScreenType'
 
 import { createGlobalStyle } from 'styled-components'
+import reset from 'styled-reset'
 
 const GlobalStyle = createGlobalStyle`
 ${reset}
 
 html {
-    height: 100vh;
+    height: 100dvh;
     width: 100vw;
 
     accent-color: ${p => p.theme.accentColor};
@@ -53,12 +53,36 @@ html {
     left: 0;
 
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
     padding: 0.5em;
 
     z-index: 99;
 
     animation: ${modalFadeIn} 0.5s ${cubicBeizer} forwards !important;
+}
+
+#confirmation {
+    transition: background-color 1s ${cubicBeizer}
+}
+
+#confirmation:has(div) {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    z-index: 100;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+    width: 100dvw;
+    height: 100dvh;
+
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
 }
 
 a {
@@ -83,6 +107,7 @@ textarea, input {
 
 body {
     overflow-x: hidden;
+    transition: background-color 0.25s ${cubicBeizer};
 }
 
 .feather {
@@ -102,6 +127,24 @@ body {
 .reactEasyCrop_Container {
     position: fixed !important;
     z-index: 999;
+}
+
+.Toastify__toast-body {
+    line-height: 1.3;
+}
+
+${ifMobile} {
+    body { // https://stackoverflow.com/a/3428477
+        -webkit-text-size-adjust: 100%;
+    }
+
+    .Toastify__toast-body {
+        font-size: 0.9em;
+    }
+
+    .Toastify__toast--stacked[data-pos="bot"] {
+        bottom: 5em;
+    }
 }
 `
 

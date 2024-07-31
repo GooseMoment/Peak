@@ -2,14 +2,18 @@ import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
 import UserProfileHeader from "@components/users/UserProfileHeader"
+import Requests from "@components/users/Requests"
 import Bio from "@components/users/Bio"
 import ProjectList from "@components/users/ProjectList"
+import Error from "@components/errors/ErrorLayout"
 
 import { getUserByUsername } from "@api/users.api"
 import { getProjectListByUser } from "@api/projects.api"
+import { getFollow } from "@api/social.api"
 import { getCurrentUsername } from "@api/client"
 
 import { useQuery } from "@tanstack/react-query"
+import { useTranslation } from "react-i18next"
 
 const UserPage = () => {
     const navigate = useNavigate()
@@ -25,26 +29,40 @@ const UserPage = () => {
     const currentUsername = getCurrentUsername()
     const isMine = currentUsername === username
 
+    const { data: followingYou } = useQuery({
+        queryKey: ["followings", username, currentUsername],
+        queryFn: () => getFollow(username, currentUsername),
+        enabled: currentUsername !== username,
+    })
+
     const { data: user, isPending: userPending, isError: userError } = useQuery({
         queryKey: ["users", username],
         queryFn: () => getUserByUsername(username),
+        retry: (count, err) => {
+            if (err.response.status === 404) {
+                return false
+            }
+
+            return count < 3
+        } 
     })
 
-    const { data: projects } = useQuery({
+    const { data: projects, isPending: projectPending } = useQuery({
         queryKey: ["userProjects", username],
         queryFn: () => getProjectListByUser(username),
-        enabled: !userPending && !userError,
     })
 
+    const { t } = useTranslation(null, {keyPrefix: "users"})
+
     if (userError) {
-        // TODO: Edit here after building a new error page
-        return "UserNotFound!"
+        return <Error height="100%" code="404" text={t("error_user_not_found")} />
     }
 
     return <>
-        <UserProfileHeader user={user} isMine={isMine} />
-        <Bio bio={user?.bio} isMine={isMine} />
-        <ProjectList projects={projects} isMine={isMine} />
+        <UserProfileHeader user={user} followingYou={followingYou} isPending={userPending} isMine={isMine} />
+        {user && followingYou?.status === "requested" && <Requests user={user} />}
+        <Bio bio={user?.bio} isPending={userPending} isMine={isMine} />
+        <ProjectList projects={projects} isPending={projectPending} isMine={isMine} />
     </>
 }
 

@@ -14,7 +14,6 @@ import Color from "@components/project/Creates/Color"
 import ModalPortal from "@components/common/ModalPortal"
 
 import { getMe, patchUser } from "@api/users.api"
-import { states } from "@assets/themes"
 
 import styled from "styled-components"
 
@@ -73,7 +72,7 @@ const Account = () => {
     }
 
     return <>
-        <PageTitle>{t("title")} <Sync /></PageTitle>
+        <PageTitle>{t("title")} <Sync name={t("title")} /></PageTitle>
         <Section>
             <ImgNameEmailContainer>
                 <ProfileImg profile_img={user.profile_img} username={user.username} />
@@ -100,15 +99,20 @@ const Account = () => {
                 <Name>{t("header_color")}</Name>
                 <Value>
                     <ColorCircle onClick={onClickOpenPalette} $color={"#" + headerColor} />
-                    <input name="header_color" type="hidden" value={headerColor} />
+                    <input name="header_color" type="hidden" value={headerColor || ""} />
                 </Value>
-                {paletteOpen && <ModalPortal>
+                {paletteOpen && <ModalPortal additional>
                     <Color closeComponent={() => setPaletteOpen(false)} setColor={setHeaderColor} /> 
                 </ModalPortal>}
             </Section>
             <Section>
                 <ButtonGroup $justifyContent="right">
-                    <Button $form={buttonForms.filled} $state={states.primary} type="submit">{t("button_submit")}</Button>
+                    <Button 
+                        disabled={mutation.isPending} $loading={mutation.isPending}
+                        $form={buttonForms.filled} type="submit"
+                    >
+                        {t("button_submit")}
+                    </Button>
                 </ButtonGroup>
             </Section>
         </form>

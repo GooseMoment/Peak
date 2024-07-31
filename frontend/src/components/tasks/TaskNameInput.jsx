@@ -50,7 +50,7 @@ const TaskNameInput = ({task, setFunc, newTaskName, setNewTaskName, color}) => {
             type='text'
             onChange={onChange}
             onKeyDown={onEnter}
-            value={newTaskName}
+            value={newTaskName || ''}
             placeholder="할 일의 이름을 입력해주세요."
         />
     </Box>  

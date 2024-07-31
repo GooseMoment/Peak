@@ -13,7 +13,7 @@ import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 const TaskFrame = ({task, color, taskDetailPath, isLoading, toComplete}) => {
-    const {assigned, due} = taskCalculation(task)
+    const {due, assigned, calculate_due, calculate_assigned} = taskCalculation(task)
 
     const TaskName = <TaskNameBox $completed={task.completed_at}>
         {task?.name}
@@ -40,22 +40,22 @@ const TaskFrame = ({task, color, taskDetailPath, isLoading, toComplete}) => {
 
                 <Dates>
                     {task.assigned_at &&
-                    <AssignedDate $completed={task.completed_at} $isOutOfDue={assigned === "놓침"}>
+                    <AssignedDate $completed={task.completed_at} $isOutOfDue={calculate_assigned === "놓침"}>
                         <FeatherIcon icon="calendar" />
-                        {assigned}
+                        {task.completed_at ? assigned : calculate_assigned}
                     </AssignedDate>
                     }
                     {task.due_date && 
-                    <DueDate $completed={task.completed_at} $isOutOfDue={due === "기한 지남"}>
+                    <DueDate $completed={task.completed_at} $isOutOfDue={calculate_due === "기한 지남"}>
                         <img src={hourglass} />
-                        {due}
+                        {task.completed_at ? due : calculate_due}
                     </DueDate>}
-                    {task.reminders?.length !== 0 &&
+                    {task?.reminders ? task.reminders?.length !== 0 &&
                     <Reminder $completed={task.completed_at}>
                         <img src={alarmclock} />
                         {task.reminders?.length}
                     </Reminder>
-                    }
+                    : null}
                 </Dates>
             </div>
         </Box>

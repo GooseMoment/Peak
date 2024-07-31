@@ -24,6 +24,7 @@ export default defineConfig({
             { find: '@containers', replacement: path.resolve(__dirname, 'src', 'containers') },
             { find: '@assets', replacement: path.resolve(__dirname, 'src', 'assets') },
             { find: '@queries', replacement: path.resolve(__dirname, 'src', 'queries') },
+            { find: '@routers', replacement: path.resolve(__dirname, 'src', 'routers') },
         ]
     }
 })

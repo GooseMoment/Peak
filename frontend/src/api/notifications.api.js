@@ -1,3 +1,5 @@
+import { getClientSettings, setClientSettingsByName } from "@utils/clientSettings"
+import getDeviceType from "@utils/getDeviceType"
 import client from "@api/client"
 
 export const getReminder = async (id) => {
@@ -64,9 +66,15 @@ export const deleteNotification = async (id) => {
 }
 
 export const postSubscription = async (subscription) => {
+    let locale = getClientSettings()["locale"]
+    if (locale === "system") {
+        locale = navigator.language.startsWith("ko") ? "ko" : "en"
+    }
+
     const data = {
         subscription_info: subscription,
-        browser: "Firefox",
+        locale,
+        device: getDeviceType(),
         user_agent: navigator.userAgent,
     }
 
@@ -79,6 +87,16 @@ export const postSubscription = async (subscription) => {
 }
 
 export const deleteSubscription = async (id) => {
+    try {
+        const registration = await navigator.serviceWorker.ready
+        const subscription = await registration.pushManager.getSubscription()
+        await subscription.unsubscribe()
+    } catch (e) {
+        // ignore errors
+    }
+
+    setClientSettingsByName("push_notification_subscription", null)
+    
     try {
         const res = await client.delete(`notifications/subscribe/${id}`)
         return res.status

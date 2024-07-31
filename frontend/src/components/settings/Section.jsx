@@ -1,4 +1,5 @@
 import cloudIcon from "@assets/settings/cloud.svg"
+import { useTranslation } from "react-i18next"
 
 import styled from "styled-components"
 
@@ -38,8 +39,10 @@ const SyncStyleIcon = styled.img`
     margin-left: 0.1em;
 `
 
-export const Sync = () => {
-    return <label title="This setting is synchronized across all your devices.">
+export const Sync = ({name}) => {
+    const { t } = useTranslation(null, {keyPrefix: "settings.online"})
+
+    return <label title={t("sync_help", {name})}>
         <SyncStyleIcon src={cloudIcon} />
     </label>
 } 

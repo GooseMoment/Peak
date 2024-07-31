@@ -4,6 +4,7 @@ from .models import Drawer
 from .serializers import DrawerSerializer
 from api.permissions import IsUserMatch
 from api.views import CreateMixin
+from rest_framework.filters import OrderingFilter
 
 class DrawerDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -29,9 +30,16 @@ class DrawerList(CreateMixin,
                   generics.GenericAPIView):
     serializer_class = DrawerSerializer
     permission_classes = [IsUserMatch]
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['name', 'created_at', 'uncompleted_task_count', 'completed_task_count']
+    ordering = ['created_at']
 
     def get_queryset(self):
-        return Drawer.objects.filter(user=self.request.user).order_by("created_at").all()
+        queryset = Drawer.objects.filter(user=self.request.user).order_by("created_at").all()
+        project_id = self.request.query_params.get("project", None)
+        if project_id is not None:
+            queryset = queryset.filter(project__id=project_id)
+        return queryset
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

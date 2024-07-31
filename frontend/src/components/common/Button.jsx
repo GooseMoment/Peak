@@ -1,5 +1,6 @@
 import MildButton from "./MildButton"
 import { states } from "@assets/themes"
+import { cubicBeizer } from "@assets/keyframes"
 import LoaderCircle from "@components/common/LoaderCircle"
 
 import styled from "styled-components"
@@ -40,7 +41,6 @@ const CommonButton = styled(MildButton)`
     position: relative;
     text-decoration: none;
     touch-action: manipulation;
-    transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
     user-select: none;
     -webkit-user-select: none;
     width: auto;
@@ -60,16 +60,20 @@ const CommonButton = styled(MildButton)`
     }
 
     &:disabled {
-        border-color: #DDDDDD;
-        color: #DDDDDD;
         cursor: not-allowed;
-        opacity: 1;
+        opacity: 0.6;
     }
+
+    transition: 
+        box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s,
+        background-color 0.5s ${cubicBeizer}, border-color 0.5s ${cubicBeizer},
+        color 0.5s ${cubicBeizer};
+    ;
 `
 
 const FilledButton = styled(CommonButton)`
     background-color: ${p => p.theme.primaryColors[p.$state]};
-    border-color: ${p => p.theme.primaryColors[p.$state]};
+    border-color: ${p => p.theme.backgroundColor};
     color: ${p => p.theme.backgroundColor};
 `
 
@@ -86,7 +90,9 @@ const buttons = {
 
 const ButtonLoader = styled(LoaderCircle)`
     margin-right: 0.25em;
-    opacity: 0.5;
+    opacity: 0.9;
+    border-color: inherit;
+    border-left-color: transparent;
 `
 
 export default Button

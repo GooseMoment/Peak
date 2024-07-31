@@ -6,12 +6,13 @@ import Input from "@components/sign/Input"
 
 import { patchPassword } from "@api/users.api"
 
-import { Key, RotateCw } from "feather-icons-react"
-import styled from "styled-components"
 import { states } from "@assets/themes"
 
+import { Key, RotateCw } from "feather-icons-react"
+import styled from "styled-components"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { useMutation } from "@tanstack/react-query"
 
 const PasswordSection = () => {
     const { t } = useTranslation("", {keyPrefix: "settings.account"})
@@ -20,6 +21,27 @@ const PasswordSection = () => {
     const [currentPassword, setCurrentPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [newPasswordAgain, setNewPasswordAgain] = useState("")
+
+    const mutation = useMutation({
+        mutationFn: () => {
+            return patchPassword(currentPassword, newPassword)
+        },
+        onSuccess: () => {
+            toast.success(t("password_change_success"))
+
+            setCurrentPassword("")
+            setNewPassword("")
+            setNewPasswordAgain("")
+            setPasswordFormOpened(false)
+        },
+        onError: e => {
+            if (e.response?.data?.code === "PATCHPASSWORD_WRONG_CURRENT_PASSWORD") {
+                toast.error(t("password_wrong"))
+                return
+            }
+            toast.error(t("password_change_error"))
+        },
+    })
 
     const changePassword = async e => {
         e.preventDefault()
@@ -39,20 +61,7 @@ const PasswordSection = () => {
             return
         }
 
-        try {
-            const result = await patchPassword(currentPassword, newPassword)
-            if (result === true) {
-                toast.success(t("password_change_success"))
-                return
-            }
-        } catch (e) {
-            if (e.response?.data?.code === "PATCHPASSWORD_WRONG_CURRENT_PASSWORD") {
-                toast.error(t("password_wrong"))
-                return
-            }
-            toast.error(t("password_change_error"))
-        }
-
+        mutation.mutate()
     }
 
     return <Section>
@@ -78,7 +87,12 @@ const PasswordSection = () => {
                 />
                 <div>
                     <ButtonGroup $justifyContent="right">
-                        <Button $form={buttonForms.filled} $state={states.primary} type="submit">{t("button_change")}</Button>
+                    <Button 
+                        disabled={mutation.isPending} $loading={mutation.isPending}
+                        $form={buttonForms.filled} $state={states.danger} type="submit"
+                    >
+                        {t("button_change")}
+                    </Button>
                     </ButtonGroup>
                 </div>
             </PasswordChangeForm> : <PasswordChangeInputsEmpty />}

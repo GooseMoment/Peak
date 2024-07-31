@@ -35,7 +35,7 @@ const ProfileImgSkeleton = styled.div`
     height: 100%;
     aspect-ratio: 1 / 1;
 
-    ${p => skeletonCSS(p)}
+    ${skeletonCSS()}
 `
 
 const TaskReminderIconBox = styled.div`
