@@ -3,6 +3,7 @@ import { createPortal } from "react-dom"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import { cubicBeizer, slideDown, slideUp } from "@assets/keyframes"
+import useStopScroll from "@utils/useStopScroll"
 
 import styled, { css } from "styled-components"
 
@@ -11,6 +12,8 @@ const el = document.querySelector("#confirmation")
 const Confirmation = ({ question, buttons, onClose }) => {
     const [visible, setVisible] = useState(true)
     const [closing, setClosing] = useState(false)
+
+    useStopScroll()
 
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)
