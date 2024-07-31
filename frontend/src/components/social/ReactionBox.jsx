@@ -1,0 +1,70 @@
+import { useState } from "react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import styled from "styled-components"
+
+import queryClient from "@queries/queryClient"
+
+import ReactionButton from "@components/social/ReactionButton"
+import EmojiPickerButton from "@components/social/EmojiPickerButton"
+
+import { deleteReaction, getReactions, postReaction } from "@api/social.api"
+import { useEffect } from "react"
+
+const ReactionBox = ({contentType, content}) => {
+    const [pickedEmoji, setPickedEmoji] = useState(false)
+
+    const { data: contentReactions, isError: contentReactionsError } = useQuery({
+        queryKey: ['reaction', contentType, content.id],
+        queryFn: () => getReactions(contentType, content.id),
+        enabled: !!content.id
+    })
+
+    const contentReactionsMutation = useMutation({
+        mutationFn: ({action, emojiID}) => {
+            if(action === 'post') {
+                return postReaction(contentType, content.id, emojiID)
+            }
+            else if(action === 'delete') {
+                return deleteReaction(contentType, content.id, emojiID)
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['reaction', contentType, content.id]})
+        },
+        onError: () => {
+            toast.error(e)
+        }
+    })
+
+    const myReactions = contentReactions ? 
+        Object.values(contentReactions.my_reactions) 
+        : []
+
+    const handleEmoji = (pickedEmoji) => {
+        const action = (myReactions.some((myReaction) => myReaction.id === pickedEmoji.id)) ? 'delete' : 'post'
+        
+        contentReactionsMutation.mutate({action, emojiID: pickedEmoji.id})
+    }
+
+    useEffect(() => (
+        handleEmoji(pickedEmoji)
+    ), [pickedEmoji])
+
+    return <Box>
+        {contentReactions && Object.values(contentReactions.reaction_counts).map((reaction, index) => (
+                <ReactionButton key={index} emoji={reaction} 
+                    isSelected={myReactions.some((myReaction) => myReaction.id === reaction[0].id)}
+                    saveReaction={contentReactionsMutation.mutate}
+                /> 
+            ))}
+        <EmojiPickerButton pickedEmoji={pickedEmoji} setPickedEmoji={setPickedEmoji}/>
+    </Box>
+}
+
+const Box = styled.div`
+    margin-left: auto;
+
+    display: flex;
+`
+
+export default ReactionBox

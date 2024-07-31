@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import SimpleProfile from "@components/social/SimpleProfile"
+import ReactionBox from "@components/social/ReactionBox"
 import ReactionButton from "@components/social/ReactionButton"
 import EmojiPickerButton from "@components/social/EmojiPickerButton"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
@@ -10,40 +11,16 @@ import { TaskList } from "@components/drawers/Drawer"
 import TaskFrame from "@components/tasks/TaskFrame"
 
 import { deleteReaction, getReactions, postReaction } from "@api/social.api"
-import queryClient from "@/queries/queryClient"
+import queryClient from "@queries/queryClient"
 import { toast } from "react-toastify"
 
 const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, day}) => {
     const [inputState, setInputState] = useState(false)
     const [comment, setComment] = useState(dailyComment.comment)
-    // const [emojiClick, setEmojiClick] = useState(false)
-
+    
     useEffect(() => {
         setComment(dailyComment.comment)
     }, [dailyComment, day])
-
-    const { data: dailyCommentReactions, isError: dailyCommentReactionsError } = useQuery({
-        queryKey: ['reaction', 'daily', 'comment', dailyComment.id],
-        queryFn: () => getReactions('daily_comment', dailyComment.id),
-        enabled: !!dailyComment.id
-    })
-
-    const dailyCommentReactionsMutation = useMutation({
-        mutationFn: ({id, emoji, action}) => {
-            if(action === 'post') {
-                return postReaction('daily_comment', id, emoji)
-            }
-            else if(action === 'delete') {
-                return deleteReaction('daily_comment', id, emoji)
-            }
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['reaction', 'daily', 'comment', dailyComment.id]})
-        },
-        onError: () => {
-            toast.error(e)
-        }
-    })
 
     const handleInputState = () => {
         if(dailyComment.user.username === user.username) 
@@ -64,16 +41,6 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
     const handleBlur = () => {
         setInputState(false)
         saveDailyComment({day, comment})
-    }
-
-    const myReactions = dailyCommentReactions ? 
-        Object.values(dailyCommentReactions.my_reactions) 
-        : []
-
-    const saveReaction = (emojiID, action) => {
-        const id = dailyComment.id
-        const emoji = emojiID
-        dailyCommentReactionsMutation.mutate({id, emoji, action})
     }
 
     return <>
@@ -104,15 +71,7 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
             </CommentBox>
         </CommentRow>
 
-        <ReactionBox>
-            {dailyCommentReactions && Object.values(dailyCommentReactions.reaction_counts).map((reaction, index) => (
-                <ReactionButton key={index} emoji={reaction} 
-                    isSelected={myReactions.some((myReaction) => myReaction.id === reaction[0].id)}
-                    saveReaction={saveReaction}
-                    /> 
-            ))}
-            <EmojiPickerButton />
-        </ReactionBox>
+        {dailyComment.id && <ReactionBox contentType={'daily_comment'} content={dailyComment} />}
 
         {/* TODO: who and what emoji */}
         </DetailHeader>
@@ -126,7 +85,10 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
                     </DrawerBox>
                     <TaskList>
                         {drawer.tasks.map((task) => (
-                            <TaskFrame key={task.id} task={task} color={drawer.color} />
+                            <Fragment key={task.id}>
+                                <TaskFrame task={task} color={drawer.color} />
+                                {task.completed_at && <ReactionBox contentType={'task'} content={task} />}
+                            </Fragment>
                         ))}
                     </TaskList>
                 </Fragment>
@@ -178,7 +140,7 @@ border: 0;
 white-space: normal;
 `
 
-const ReactionBox = styled.div`
+const ReactionBoxTemp = styled.div`
 margin-left: auto;
 
 display: flex;

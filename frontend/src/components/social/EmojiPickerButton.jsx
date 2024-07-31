@@ -7,9 +7,8 @@ import EmojiModal from "@components/social/EmojiModal"
 
 import { getEmojis } from "@api/social.api"
 
-const EmojiPickerButton = () => {
+const EmojiPickerButton = ({pickedEmoji, setPickedEmoji}) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [selectedEmoji, setSelectedEmoji] = useState(false)
     const [modalPosition, setModalPosition] = useState({top: 0, left: 0})
     const buttonRef = useRef(null)
 
@@ -31,35 +30,27 @@ const EmojiPickerButton = () => {
         setIsModalOpen(prev => !prev)
     }
 
-    const handleSelectEmoji = (emoji) => {
-        if (emoji === selectedEmoji) setSelectedEmoji(false)
-        else setSelectedEmoji(emoji)
+    const handleEmoji = (emoji) => {
+        setPickedEmoji(emoji)
         setIsModalOpen(false)
     }
 
     return <>
         <PickerButton onClick={handleOpenModal} ref={buttonRef}>
-            <FeatherIcon icon={isModalOpen ? "x-square" : "plus-square"}/>
+            <FeatherIcon icon={isModalOpen ? "x-square" : "plus-square"} />
         </PickerButton>
-        {selectedEmoji && (
-                <div>
-                    <img src={selectedEmoji.img_uri} alt={selectedEmoji.name} />
-                    <span>{selectedEmoji.name}</span>
-                </div>
-        )}
-
         <EmojiModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(prev => !prev)}
             emojis={serverEmojis?Object.values(serverEmojis):null}
-            onSelect={handleSelectEmoji}
+            onSelect={handleEmoji}
             position={modalPosition}
         /> 
     </>
 }
 
 const PickerButton = styled.div`
-height: 1em;
+height: 1.2em;
 width: 1.5em;
 padding: 0.5em;
 
