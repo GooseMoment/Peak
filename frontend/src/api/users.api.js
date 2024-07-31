@@ -40,10 +40,10 @@ export const signIn = async (email, password) => {
 
         setToken(res.data.token)
         setCurrentUsername(res.data.user.username)
-        return true
 
+        return true
     } catch (e) {
-        return false
+        throw e
     }
 }
 

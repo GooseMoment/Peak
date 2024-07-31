@@ -324,6 +324,7 @@
         "sign_in_success": "로그인 성공! 다시 만나서 기뻐요.",
         "sign_in_failed": "로그인 실패. 유저네임과 암호를 다시 확인하세요.",
         "network_error": "문제가 발생했습니다. 네트워크 상황을 확인하세요.",
+        "internal_error": "문제가 발생했습니다. 다시 시도해 주세요.",
         "loading": "로딩 중",
         "button_sign_in": "로그인",
         "button_forgot_password": "암호 찾기",
@@ -339,9 +340,13 @@
         "sign_up_errors": {
             "SIGNUP_NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
             "SIGNUP_SIGNED_IN_USER": "이미 로그인되어 있습니다.",
+            "SIGNUP_REQUIRED_FIELDS_MISSING": "이메일 주소, 암호, 사용자 이름을 모두 입력해주세요.",
             "SIGNUP_USERNAME_TOO_SHORT": "사용자 이름은 4글자 이상이어야 합니다.",
             "SIGNUP_PASSWORD_TOO_SHORT": "암호는 8글자 이상이어야 합니다.",
+            "SIGNUP_EMAIL_WRONG": "올바른 이메일 주소를 입력해주세요.",
             "SIGNUP_USERNAME_WRONG": "사용자 이름은 알파벳, 언더스코어(_), 숫자만 포함할 수 있습니다.",
+            "SIGNUP_EMAIL_EXISTS": "이미 존재하는 이메일 주소입니다.",
+            "SIGNUP_USERNAME_EXISTS": "이미 존재하는 사용자 이름입니다.",
             "SIGNUP_INTERNAL_ERROR": "문제가 발생했습니다. 다시 시도해 주세요.",
             "SIGNUP_UNKNOWN_ERROR": "나중에 시도해 주세요."
         }

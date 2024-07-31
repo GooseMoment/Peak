@@ -42,19 +42,26 @@ const SignInForm = ({setActive}) => {
         const password = e.target.password.value
 
         try {
-            const res = await signIn(email, password)
-            if (res) {
-                toast.success(t("sign_in_success"))
-                await sleep(1000)
-                navigate("/app/")
-            } else {
-                toast.error(t("sign_in_failed"))
-                setIsLoading(false)
-            }
+
+            await signIn(email, password)
+            toast.success(t("sign_in_success"))
+            await sleep(1000)
+
+            // TODO: don't navigate; redirect
+            navigate("/app/")
+
         } catch (err) {
-            toast.error(t("network_error"))
+            const status = err?.response?.status
+
+            if (status === 400) {
+                toast.error(t("sign_in_failed"))
+            } else if (status === 500) {
+                toast.error(t("internal_error"))
+            } else {
+                toast.error(t("network_error"))
+            }
+
             setIsLoading(false)
-            return
         }
     }
 
@@ -134,6 +141,7 @@ const SignUpForm = ({setActive}) => {
 
 const Box = styled.section`
     display: flex;
+    overflow-y: scroll;
     justify-content: center;
     flex-direction: column;
     gap: 5rem;
