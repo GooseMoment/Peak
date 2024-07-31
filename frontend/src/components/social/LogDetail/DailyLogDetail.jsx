@@ -6,6 +6,7 @@ import SimpleProfile from "@components/social/SimpleProfile"
 import ReactionBox from "@components/social/ReactionBox"
 import ReactionButton from "@components/social/ReactionButton"
 import EmojiPickerButton from "@components/social/EmojiPickerButton"
+import LogDetailsTask from "@components/social/LogDetailsTask"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import { TaskList } from "@components/drawers/Drawer"
 import TaskFrame from "@components/tasks/TaskFrame"
@@ -85,10 +86,7 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
                     </DrawerBox>
                     <TaskList>
                         {drawer.tasks.map((task) => (
-                            <Fragment key={task.id}>
-                                <TaskFrame task={task} color={drawer.color} />
-                                {task.completed_at && <ReactionBox contentType={'task'} content={task} />}
-                            </Fragment>
+                            <LogDetailsTask key={task.id} task={task} color={drawer.color}/>
                         ))}
                     </TaskList>
                 </Fragment>
