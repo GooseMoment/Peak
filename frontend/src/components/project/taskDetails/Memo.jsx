@@ -27,7 +27,7 @@ const Memo = ({previousMemo, setFunc, closeComponent}) => {
                 <Editor
                     type='text'
                     onChange={onChange}
-                    value={memo}
+                    value={memo || ''}
                     placeholder="메모를 입력해주세요."
                 />
             </FlexBox>

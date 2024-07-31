@@ -26,9 +26,6 @@ const taskCalculation = (task) => {
     const task_due_time = new Date(`${task.due_date}${task.due_time ? "T"+task.due_time : ""}`)
     const assigned_at_date = new Date(task.assigned_at)
     
-    const new_due_date = `${task_due_time.getMonth()+1}월 ${task_due_time.getDate()}일`
-    const new_assigned_at_date = `${assigned_at_date.getMonth()+1}월 ${assigned_at_date.getDate()}일`
-    
     const dtoday = DateTime.fromJSDate(today)
     const ddue = DateTime.fromJSDate(task_due_time)
     const dassigned = DateTime.fromJSDate(assigned_at_date)
@@ -36,10 +33,22 @@ const taskCalculation = (task) => {
     const diff_due = ddue.diff(dtoday, ["years", "months", "days"]).toObject()
     const diff_assigned = dassigned.diff(dtoday, ["years", "months", "days"]).toObject()
 
-    let due = calculate("due", new_due_date, diff_due)
-    let assigned = calculate("assigned", new_assigned_at_date, diff_assigned)
+    let new_due_date = `${task_due_time.getMonth()+1}월 ${task_due_time.getDate()}일`
+    if (today.getFullYear() - task_due_time.getFullYear() > 0) {
+        new_due_date = `${task_due_time.getFullYear()}년 ${task_due_time.getMonth()+1}월 ${task_due_time.getDate()}일`
+    }
+    let new_assigned_at_date = `${assigned_at_date.getMonth()+1}월 ${assigned_at_date.getDate()}일`
+    if (today.getFullYear() - assigned_at_date.getFullYear() > 0) {
+        new_assigned_at_date = `${assigned_at_date.getFullYear()}년 ${assigned_at_date.getMonth()+1}월 ${assigned_at_date.getDate()}일`
+    }
 
-    return {assigned, due}
+    let due = new_due_date
+    let assigned = new_assigned_at_date
+
+    let calculate_due = calculate("due", new_due_date, diff_due)
+    let calculate_assigned = calculate("assigned", new_assigned_at_date, diff_assigned)
+
+    return {due, assigned, calculate_due, calculate_assigned}
 }
 
 export default taskCalculation
