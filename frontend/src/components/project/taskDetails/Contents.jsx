@@ -14,6 +14,7 @@ import Priority from "./Priority"
 import Drawer from "./Drawer"
 import Memo from "./Memo"
 
+import { toast } from "react-toastify"
 import ToolTip from "@components/project/common/ToolTip"
 import ModalPortal from "@components/common/ModalPortal"
 import taskDate from "@components/tasks/utils/taskDate"
@@ -52,17 +53,19 @@ const Contents = ({task, setFunc}) => {
             id: 2,
             name: "due",
             icon: <img src={hourglass} />,
-            display: task.due_date && formatted_due_time ? formatted_due_date + ' ' + formatted_due_time : "없음",
+            display: task.due_date ? (task.due_time ? formatted_due_date + ' ' + formatted_due_time : formatted_due_date) : "없음",
             component: <Due setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 3,
             name: "reminder",
             icon: <img src={alarmclock} />,
-            display: task.reminders?.length !== 0 ? <RemindersBox name="reminder">
-                {task.reminders.map(reminder => 
-                <ReminderBlock name="reminder" key={reminder.delta}>{displayReminder[reminder.delta]}</ReminderBlock>)}
-            </RemindersBox> : <PlusReminder name="reminder">+</PlusReminder>,
+            display: task?.reminders && task.reminders?.length !== 0 ? 
+                <RemindersBox name="reminder">
+                    {task.reminders.map(reminder => <ReminderBlock name="reminder">{displayReminder[reminder.delta]}</ReminderBlock>)}
+                </RemindersBox> 
+                : (task.due_date ? <EmptyReminderBox name="reminder">+</EmptyReminderBox>
+                : <EmptyReminderBox onClick={()=>{toast.error("알람 설정 전에 기한을 설정해주세요")}}>-</EmptyReminderBox>),
             component: <Reminder task={task} closeComponent={closeComponent}/>
         },
         {
@@ -186,7 +189,7 @@ const ReminderBlock = styled.div`
     align-items: center;
 `
 
-const PlusReminder = styled.div`
+const EmptyReminderBox = styled.div`
     font-size: 0.9em;
     width: 1em;
     padding: 0.3em;
@@ -196,7 +199,6 @@ const PlusReminder = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-
 `
 
 const priorities = [
@@ -206,6 +208,7 @@ const priorities = [
 ]
 
 const displayReminder = {
+    0: "그때",
     5: "5분 전",
     15: "15분 전",
     30: "30분 전",

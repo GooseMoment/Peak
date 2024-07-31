@@ -1,8 +1,5 @@
-import styled from "styled-components"
-
 import queryClient from "@queries/queryClient"
 import { useMutation } from "@tanstack/react-query"
-import { toast } from "react-toastify"
 import { postReminder, deleteReminder } from "@api/notifications.api"
 
 import Detail from "@components/project/common/Detail"
@@ -12,6 +9,7 @@ import before_5 from "@assets/project/reminder/before_5.svg"
 import before_15 from "@assets/project/reminder/before_15.svg"
 import before_30 from "@assets/project/reminder/before_30.svg"
 import before_1h from "@assets/project/reminder/before_1h.svg"
+import before_D from "@assets/project/reminder/before_D.svg"
 import before_1D from "@assets/project/reminder/before_1D.svg"
 import before_2D from "@assets/project/reminder/before_2D.svg"
 
@@ -45,10 +43,6 @@ const Reminder = ({ task, closeComponent }) => {
     }
 
     const handleReminder = (delta) => {
-        if (!task.due_date) {
-            toast.error("알람 설정 전에 기한을 설정해주세요")
-            return true
-        }
         const id = getReminderID(delta)
         if (id) {
             deleteMutation.mutate(id)
@@ -76,12 +70,13 @@ const Reminder = ({ task, closeComponent }) => {
 }
 
 const items = [
-    {id: 0, icon: <img src={before_5}/>, content: "5분 전", delta: 5},
-    {id: 1, icon: <img src={before_15}/>, content: "15분 전", delta: 15},
-    {id: 2, icon: <img src={before_30}/>, content: "30분 전", delta: 30},
-    {id: 3, icon: <img src={before_1h}/>, content: "1시간 전", delta: 60},
-    {id: 4, icon: <img src={before_1D}/>, content: "1일 전", delta: 1440},
-    {id: 5, icon: <img src={before_2D}/>, content: "2일 전", delta: 2880},
+    {id: 0, icon: <img src={before_D}/>, content: "그때", delta: 0},
+    {id: 1, icon: <img src={before_5}/>, content: "5분 전", delta: 5},
+    {id: 2, icon: <img src={before_15}/>, content: "15분 전", delta: 15},
+    {id: 3, icon: <img src={before_30}/>, content: "30분 전", delta: 30},
+    {id: 4, icon: <img src={before_1h}/>, content: "1시간 전", delta: 60},
+    {id: 5, icon: <img src={before_1D}/>, content: "1일 전", delta: 1440},
+    {id: 6, icon: <img src={before_2D}/>, content: "2일 전", delta: 2880},
 ]
 
 export default Reminder

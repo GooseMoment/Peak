@@ -6,8 +6,7 @@ from .models import Notification, WebPushSubscription, TaskReminder
 from tasks.models import Task
 from .serializers import NotificatonSerializer, WebPushSubscriptionSerializer, TaskReminderSerializer
 from api.permissions import IsUserMatch
-
-from datetime import timedelta, datetime
+from .utils import caculateScheduled
 
 class IsUserMatchInReminder(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj):
@@ -40,12 +39,12 @@ class ReminderList(mixins.CreateModelMixin, generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         task = serializer.validated_data["task"]
         task = Task.objects.get(id=task.id)
-        task_due = task.due_datetime()
-        serializer.validated_data["scheduled"] = task_due - timedelta(minutes=serializer.validated_data["delta"])
+        new_scheduled = caculateScheduled(task.due_datetime(), serializer.validated_data["delta"])
+        serializer.validated_data["scheduled"] = new_scheduled
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
+
 class NotificationListPagination(CursorPagination):
     page_size = 20
     ordering = "-created_at"

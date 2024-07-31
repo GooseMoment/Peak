@@ -15,7 +15,7 @@ class TaskReminder(Base):
     scheduled = models.DateTimeField()
 
     def __str__(self) -> str:
-        return f"Reminder for {self.task.name} at {self.scheduled}"
+        return f"Reminder for {self.task.name} before {self.delta}min at {self.scheduled}"
 
     class Meta:
         db_table = "task_reminders"
