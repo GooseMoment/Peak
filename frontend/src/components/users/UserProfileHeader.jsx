@@ -1,29 +1,40 @@
+import { useEffect, useState } from "react"
+
 import Button from "@components/common/Button"
 import FollowsCount from "@components/users/FollowsCount"
 import FollowButton from "@components/users/FollowButton"
 
 import { cubicBeizer } from "@assets/keyframes"
+import { skeletonBreathingCSS } from "@assets/skeleton"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
+import { useTranslation } from "react-i18next"
 
-const UserProfileHeader = ({user, isMine}) => {
+const UserProfileHeader = ({user, isMine, isPending}) => {
+    const { t } = useTranslation(null, {keyPrefix: "users"})
+    const [imgLoaded, setImgLoaded] = useState(false)
+
+    useEffect(() => {
+        setImgLoaded(false)
+    }, [user?.profile_img])
 
     return <>
         <Banner $headerColor={user?.header_color} />
         <Profile>
-            <ProfileImg src={user?.profile_img} />
+            <ProfileImg $display={imgLoaded} src={user?.profile_img} onLoad={() => setImgLoaded(true)} />
+            <ProfileImgEmpty $display={!imgLoaded} />
             <ProfileTexts>
                 <Names>
-                    <DisplayName>{user?.display_name || "-----"}</DisplayName>
-                    <Username>@{user?.username}</Username>
+                    <DisplayName $skeleton={isPending}>{user?.display_name || user?.username}</DisplayName>
+                    <Username $skeleton={isPending}>{user && "@" + user.username}</Username>
                 </Names>
                 <Datas>
-                    <FollowsCount user={user} />
+                    <FollowsCount user={user} isPending={isPending} />
                 </Datas>
             </ProfileTexts>
             <ProfileButtons>
                 {isMine ? 
-                    <a href="#/settings/account"><Button>Edit Profile</Button></a> : <FollowButton user={user} /> 
+                    <a href="#/settings/account"><Button>{t("button_edit_profile")}</Button></a> : <FollowButton disabled={!user} user={user} /> 
                 }
             </ProfileButtons>
         </Profile>
@@ -32,7 +43,7 @@ const UserProfileHeader = ({user, isMine}) => {
 }
 
 const Banner = styled.div`
-    background-color: ${p => p.$headerColor ? "#" + p.$headerColor : p.theme.thirdBackgroundColor};
+    background-color: ${p => p.$headerColor ? "#" + p.$headerColor : p.theme.skeleton.defaultColor};
     height: 15em;
     width: 100vw;
     margin: -3em -10em;
@@ -55,6 +66,23 @@ const ProfileImg = styled.img`
     border-radius: 50%;
     height: 10em;
     aspect-ratio: 1/1;
+
+    display: ${p => p.$display ? "unset" : "none"};
+    opacity: ${p => p.$display ? 1 : 0};
+
+    transition: opcity 0.5s ${cubicBeizer};
+`
+
+const ProfileImgEmpty = styled.div`
+    background-color: ${p => p.theme.thirdBackgroundColor};
+
+    border-radius: 50%;
+    height: 10em;
+    aspect-ratio: 1/1;
+
+    display: ${p => p.$display ? "unset" : "none"};
+
+    ${skeletonBreathingCSS}
 `
 
 const ProfileTexts = styled.div`
@@ -85,9 +113,19 @@ const DisplayName = styled.h1`
 
     font-weight: 700;
     font-size: 2em;
+
+    ${p => p.$skeleton && css`
+        height: 1em;
+        width: 5em;
+    `}
 `
 
-const Username = styled.div``
+const Username = styled.div`
+    ${p => p.$skeleton && css`
+        height: 1em;
+        width: 5em;
+    `}
+`
 
 const Datas = styled.div``
 

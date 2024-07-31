@@ -1,17 +1,36 @@
+import { Link } from "react-router-dom"
 import { Section, SectionTitle } from "@components/users/Section"
 
-import styled from "styled-components"
+import { skeletonCSS } from "@assets/skeleton"
 
-const ProjectList = ({projects}) => {
+import styled, { css } from "styled-components"
+import { useTranslation } from "react-i18next"
+
+const ProjectList = ({projects, isMine, isPending}) => {
+    const { t } = useTranslation(null, {keyPrefix: "users"})
+
     return <Section>
-        <SectionTitle>Projects</SectionTitle>
+        <SectionTitle>{t("projects")}</SectionTitle>
 
         <Projects>
-            {projects?.map(project => <Project key={project.id}>
-                <Circle $color={"#" + project.color} /> <Name>{project.name}</Name> 
-            </Project>)}
-        </Projects>
+            {isPending && [...Array(10)].map((_, i) => <Project key={i} $skeleton />)}
 
+            {projects?.map(project => {
+                const projectCompo = <Project key={project.id}>
+                    <Circle $color={"#" + project.color} /> <Name>{project.name}</Name> 
+                </Project>
+
+                if (!isMine) {
+                    return projectCompo
+                }
+
+                return <Link to={isMine && `/app/projects/${project.id}`} key={project.id}>
+                    {projectCompo}
+                </Link>
+            })}
+
+            {projects?.length === 0 && t("projects_empty")}
+        </Projects>
     </Section>
 }
 
@@ -29,6 +48,14 @@ const Project = styled.div`
     gap: 0.25em;
     font-size: 1.25em;
     align-items: center;
+
+    ${p => p.$skeleton && css`
+        height: 1.25em;
+        width: 5em;
+        border-radius: 8px;
+
+        ${skeletonCSS}    
+    `}
 `
 
 const Circle = styled.div`

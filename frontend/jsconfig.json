@@ -9,7 +9,8 @@
          "@utils/*": ["src/utils/*"],
          "@containers/*": ["src/containers/*"],
          "@assets/*": ["src/assets/*"],
-         "@queries/*": ["src/queries/*"]
+         "@queries/*": ["src/queries/*"],
+         "@routers/*": ["src/routers/*"],
        }
     }
 }

@@ -1,7 +1,10 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
-const SocialPage = () => {
+import SocialFollowingPage from "@pages/SocialFollowingPage"
+import SocialExplorePage from "@pages/SocialExplorePage"
+
+const SocialRedirector = () => {
     const navigate = useNavigate()
 
     useEffect(()=> {
@@ -11,4 +14,4 @@ const SocialPage = () => {
     return null
 }
 
-export default SocialPage
+export { SocialRedirector, SocialFollowingPage, SocialExplorePage }
