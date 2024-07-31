@@ -4,14 +4,10 @@ import styled from "styled-components"
 
 import SimpleProfile from "@components/social/SimpleProfile"
 import ReactionBox from "@components/social/ReactionBox"
-import ReactionButton from "@components/social/ReactionButton"
-import EmojiPickerButton from "@components/social/EmojiPickerButton"
 import LogDetailsTask from "@components/social/LogDetailsTask"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import { TaskList } from "@components/drawers/Drawer"
-import TaskFrame from "@components/tasks/TaskFrame"
 
-import { deleteReaction, getReactions, postReaction } from "@api/social.api"
 import queryClient from "@queries/queryClient"
 import { toast } from "react-toastify"
 

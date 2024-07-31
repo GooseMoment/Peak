@@ -22,8 +22,8 @@ const EmojiPickerButton = ({pickedEmoji, setPickedEmoji}) => {
             if(buttonRef.current) {
                 const rect = buttonRef.current.getBoundingClientRect();
                 setModalPosition({
-                    top: rect.top + window.scrollY,
-                    left: rect.left + window.scrollX,
+                    top: rect.top,
+                    left: rect.left,
                 });
             }
         }
