@@ -82,6 +82,11 @@ const ProjectPage = () => {
         toast.success(`"${project.name}" 프로젝트가 삭제되었습니다`)
     }
 
+    const openInboxTaskCreate = () => {
+        navigate(`/app/projects/${project.id}/tasks/create/`,
+        {state: {project_name : project.name, drawer_id : project.drawers[0].id, drawer_name : project.drawers[0].name}})
+    }
+
     if (isProjectLoading) {
         return <div>로딩중...</div>
         // 민영아.. 스켈레톤 뭐시기 만들어..
@@ -96,7 +101,7 @@ const ProjectPage = () => {
         <TitleBox>
             <PageTitle $color={"#" + project.color}>{project.name}</PageTitle>
             <Icons>
-                <FeatherIcon icon="plus" onClick={() => {setIsDrawerCreateOpen(true)}}/>
+                <FeatherIcon icon="plus" onClick={project.type === 'inbox' ? openInboxTaskCreate : () => {setIsDrawerCreateOpen(true)}}/>
                 <SortIconBox onClick={handleToggleContextMenu(setSelectedSortMenuPosition, setIsSortMenuOpen, setIsContextMenuOpen)}>
                     <SortIcon color={theme.textColor}/>
                 </SortIconBox>
@@ -123,9 +128,7 @@ const ProjectPage = () => {
             />
         }
         {isAlertOpen &&
-            <ModalPortal closeModal={() => {setIsAlertOpen(false)}}>
-                <DeleteAlert title={`"${project.name}" 프로젝트를`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
-            </ModalPortal>
+            <DeleteAlert title={`"${project.name}" 프로젝트를`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
         }
         {isDrawerCreateOpen &&
             <ModalPortal closeModal={() => {setIsDrawerCreateOpen(false)}}>

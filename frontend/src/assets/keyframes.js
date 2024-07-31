@@ -111,6 +111,16 @@ export const rotateToUnder = keyframes`
     }
 `
 
+export const slideLeftToRight = keyframes`
+    0% {
+        transform: translateX(-200%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+`
+
 export const dropdown = keyframes`
     0% {
         opacity: 60%;
@@ -119,5 +129,29 @@ export const dropdown = keyframes`
     100% {
         opacity: 100%;
         transform: translateY(0);
+    }
+`
+
+export const slideUp = keyframes`
+    0% {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+`
+
+export const slideDown = keyframes`
+    0% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(100px);
     }
 `

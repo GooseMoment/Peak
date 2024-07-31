@@ -9,7 +9,6 @@ import Button from "@components/common/Button"
 import Task from "@components/tasks/Task"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
-import ModalPortal from "@components/common/ModalPortal"
 import DrawerBox, { DrawerName, DrawerIcon } from "@components/drawers/DrawerBox"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
@@ -119,6 +118,7 @@ const Drawer = ({project, drawer, color}) => {
     
     return (
         <>
+            {project.type === 'inbox' ? null :
             <DrawerBox $color = {color}>
                 <DrawerName $color = {color}>{drawer.name}</DrawerName>
                 <DrawerIcon $color = {color}>
@@ -126,7 +126,7 @@ const Drawer = ({project, drawer, color}) => {
                         <Fragment key={i}>{item.icon}</Fragment>
                     ))}
                 </DrawerIcon>
-            </DrawerBox>
+            </DrawerBox>}
             {collapsed ? null :
                 <TaskList>
                     {data?.pages?.map((group) => (
@@ -151,9 +151,7 @@ const Drawer = ({project, drawer, color}) => {
                 />
             }
             {isAlertOpen &&
-                <ModalPortal closeModal={() => {setIsAlertOpen(false)}}>
-                    <DeleteAlert title={`"${drawer.name}" 서랍을`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
-                </ModalPortal>
+                <DeleteAlert title={`"${drawer.name}" 서랍을`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete} />
             }
             {/*isSimpleOpen &&
                 <TaskCreateSimple 

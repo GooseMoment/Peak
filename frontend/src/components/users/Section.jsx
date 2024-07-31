@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export const Section = styled.div`
+export const Section = styled.section`
     position: relative;
     margin: 3em 0;
 `

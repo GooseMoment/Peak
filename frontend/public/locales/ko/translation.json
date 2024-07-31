@@ -20,6 +20,7 @@
         "type_reactions": "리액션",
         "type_pecking": "콕 쪼기",
         "type_follow": "팔로우",
+        "content_task_reminder": "{{delta}}분 전 알림입니다.",
         "content_comment_task": "\"<ellipsis>{{task_name}}</ellipsis>\"에 댓글을 남겼습니다: \"<ellipsis>{{comment}}</ellipsis>\"",
         "content_peck": "\"<ellipsis>{{task_name}}</ellipsis>\"을(를) {{count}}번 콕 쪼았습니다.",
         "content_reaction_task": "\"<ellipsis>{{task_name}}</ellipsis>\"에 리액션 했습니다.",
@@ -147,8 +148,10 @@
                     "button_disable": "끄기"
                 },
                 "disabled_push_notification": "알림을 비활성화 했습니다.",
+                "disabled_push_notification_error": "이 기기에서 알림을 비활성화 했습니다.",
                 "declined_push_notification": "알림 권한이 없습니다. 설정에서 권한을 허용해 주세요.",
-                "enabled_push_notification": "이제 Peak에서 보내는 알림을 받을 수 있습니다."
+                "enabled_push_notification": "이제 Peak에서 보내는 알림을 받을 수 있습니다.",
+                "enabled_push_notification_error": "알림 활성화 중 오류가 발생했습니다."
             },
             "play_notification_sound": {
                 "name": "알림음 재생하기"
@@ -168,6 +171,7 @@
             },
             "main_width": {
                 "name": "콘텐츠 너비",
+                "description": "좌우로 긴 화면에만 적용됩니다.",
                 "values": {
                     "narrow": "좁게",
                     "normal": "일반",
@@ -209,8 +213,17 @@
         }
     },
     "users": {
+        "follows_you": "나를 팔로우 중",
         "followings": "팔로잉",
         "followers": "팔로워",
+        "requests_exist": "@{{username}} 님의 요청",
+        "follow_request_sent_to_me": "내게 팔로우 요청을 보냈습니다.",
+        "button_follow_request_accept": "승인",
+        "button_follow_request_reject": "거절",
+        "follow_request_accepted": "팔로우 요청을 승인했습니다.",
+        "follow_request_acceptance_error": "팔로우 요청을 받을 수 없습니다. 다시 시도해주세요.",
+        "follow_request_rejected": "팔로우 요청을 거절했습니다.",
+        "follow_request_rejection_error": "팔로우 요청을 거절 수 없습니다. 다시 시도해주세요.",
         "bio": "바이오",
         "bio_empty": "비어 있습니다.",
         "bio_empty_mine": "프로필 수정을 눌러 바이오를 작성해보세요.",
@@ -322,6 +335,7 @@
         "sign_in_success": "로그인 성공! 다시 만나서 기뻐요.",
         "sign_in_failed": "로그인 실패. 유저네임과 암호를 다시 확인하세요.",
         "network_error": "문제가 발생했습니다. 네트워크 상황을 확인하세요.",
+        "internal_error": "문제가 발생했습니다. 다시 시도해 주세요.",
         "loading": "로딩 중",
         "button_sign_in": "로그인",
         "button_forgot_password": "암호 찾기",
@@ -337,9 +351,13 @@
         "sign_up_errors": {
             "SIGNUP_NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
             "SIGNUP_SIGNED_IN_USER": "이미 로그인되어 있습니다.",
+            "SIGNUP_REQUIRED_FIELDS_MISSING": "이메일 주소, 암호, 사용자 이름을 모두 입력해주세요.",
             "SIGNUP_USERNAME_TOO_SHORT": "사용자 이름은 4글자 이상이어야 합니다.",
             "SIGNUP_PASSWORD_TOO_SHORT": "암호는 8글자 이상이어야 합니다.",
+            "SIGNUP_EMAIL_WRONG": "올바른 이메일 주소를 입력해주세요.",
             "SIGNUP_USERNAME_WRONG": "사용자 이름은 알파벳, 언더스코어(_), 숫자만 포함할 수 있습니다.",
+            "SIGNUP_EMAIL_EXISTS": "이미 존재하는 이메일 주소입니다.",
+            "SIGNUP_USERNAME_EXISTS": "이미 존재하는 사용자 이름입니다.",
             "SIGNUP_INTERNAL_ERROR": "문제가 발생했습니다. 다시 시도해 주세요.",
             "SIGNUP_UNKNOWN_ERROR": "나중에 시도해 주세요."
         }

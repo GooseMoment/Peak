@@ -19,7 +19,8 @@ services:
       - 443:443/udp
     volumes:
       - django_admin_static:/srv/django_static
-      - ./Caddyfile.prod:/etc/caddy/Caddyfile
+      - ./web/Caddyfile.prod:/etc/caddy/Caddyfile
+      - ./web/:/web/
       - caddy_data:/data
       - caddy_config:/config
       - frontend-dist:/srv/frontend
@@ -38,6 +39,16 @@ services:
     env_file:
       - path: ./.env
         required: true
+  api_cron:
+    build: ./backend
+    command: crond -f -l 2
+    volumes:
+      - ./backend/api.crontab:/etc/crontabs/root
+    depends_on:
+      api:
+        condition: service_healthy
+    env_file:
+      - ./.env
   db: 
     image: postgres:16.2-alpine3.19
     volumes:

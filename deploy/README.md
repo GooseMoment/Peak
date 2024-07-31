@@ -116,3 +116,11 @@ docker volume remove db_data
 docker-volume create db_data
 docker-compose up
 ```
+
+### `Caddyfile(.prod)`를 변경했을 때
+
+```bash
+docker-compose exec web caddy reload --config /etc/caddy/Caddyfile
+```
+
+를 입력하면 Caddyfile이 다시 로드 됩니다.

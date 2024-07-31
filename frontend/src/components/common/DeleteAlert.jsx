@@ -1,25 +1,19 @@
 import styled from "styled-components"
 
 import Button from "@components/common/Button"
+import Confirmation from "@components/common/Confirmation"
 
 const DeleteAlert = ({ title, onClose, func }) => {
-    return (
-        <DeleteAlertBox>
-            {title} 삭제하시겠습니까?
-            <FlexBox>
-                <Button onClick={onClose}>취소</Button>
-                <Button $form="filled" $state="danger" onClick={func}>삭제</Button>
-            </FlexBox>
-        </DeleteAlertBox>
-    )
+    const buttons = [
+        "close", <Button $form="filled" $state="danger" onClick={func}>삭제</Button>
+    ]
+
+    return <Confirmation question={`${title} 삭제하시겠습니까?`} onClose={onClose} buttons={buttons} />
 }
 
 const DeleteAlertBox = styled.div`
     min-width: 20em;
     max-width: 25em;
-    min-height: 6.5em;
-    padding: 1em;
-    background-color: ${p => p.theme.backgroundColor};
     border: solid 1px ${p => p.theme.project.borderColor};
     border-radius: 15px;
     color: ${p => p.theme.textColor};
@@ -27,10 +21,6 @@ const DeleteAlertBox = styled.div`
     text-align: center;
     line-height: 1.2em;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     gap: 1.3em;
 `
 

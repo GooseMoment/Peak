@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 
 import FollowButton from "@components/users/FollowButton"
 import { skeletonCSS } from "@assets/skeleton"
+import { getCurrentUsername } from "@api/client"
 
 import styled, { css } from "styled-components"
 
@@ -19,7 +20,7 @@ const ListUserProfile = ({user, children, skeleton}) => {
             </>}
         </Profile>
         <div>
-            {skeleton || children || <FollowButton user={user} />}
+            {skeleton || children || user.username !== getCurrentUsername() && <FollowButton user={user} />}
         </div>
     </UserContainer>
 }
@@ -60,6 +61,11 @@ const ProfileImgSkeleton = styled.div`
 const Username = styled.div`
     font-weight: 600;
     color: ${p => p.theme.textColor};
+
+    width: 7.5em;
+    white-space: nowrap;
+    overflow-x: clip;
+    text-overflow: ellipsis;
 
     ${p => p.$skeleton && css`
         height: 1em;

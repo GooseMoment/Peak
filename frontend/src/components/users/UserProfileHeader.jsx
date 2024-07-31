@@ -10,7 +10,7 @@ import { skeletonBreathingCSS } from "@assets/skeleton"
 import styled, { css } from "styled-components"
 import { useTranslation } from "react-i18next"
 
-const UserProfileHeader = ({user, isMine, isPending}) => {
+const UserProfileHeader = ({user, followingYou, isMine, isPending}) => {
     const { t } = useTranslation(null, {keyPrefix: "users"})
     const [imgLoaded, setImgLoaded] = useState(false)
 
@@ -20,6 +20,7 @@ const UserProfileHeader = ({user, isMine, isPending}) => {
 
     return <>
         <Banner $headerColor={user?.header_color} />
+        {followingYou?.status === "accepted" && <FollowsYou>{t("follows_you")}</FollowsYou>}
         <Profile>
             <ProfileImg $display={imgLoaded} src={user?.profile_img} onLoad={() => setImgLoaded(true)} />
             <ProfileImgEmpty $display={!imgLoaded} />
@@ -45,16 +46,31 @@ const UserProfileHeader = ({user, isMine, isPending}) => {
 const Banner = styled.div`
     background-color: ${p => p.$headerColor ? "#" + p.$headerColor : p.theme.skeleton.defaultColor};
     height: 15em;
-    width: 100vw;
-    margin: -3em -10em;
+    width: 100%;
+
+    transform: scale(10, 1) translateY(-5em);
 
     transition: background-color 0.25s ${cubicBeizer};
+`
+
+const FollowsYou = styled.div`
+    position: absolute;
+    top: 2em;
+
+    font-size: 0.75em;
+    font-weight: bold;
+    width: fit-content;
+
+    color: ${p => p.theme.white};
+    background-color: ${p => p.theme.black};
+    padding: 0.6em 0.75em;
+    border-radius: 8px;
 `
 
 const Profile = styled.div`
     position: relative;
     box-sizing: border-box;
-    margin-top: -5em;
+    margin-top: -10em;
 
     display: flex;
     gap: 2em;

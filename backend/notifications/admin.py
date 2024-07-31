@@ -57,7 +57,7 @@ class WebPushSubscriptionAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ["subscription_info", "browser", "user_agent"],
+                "fields": ["subscription_info", "locale", "device", "user_agent"],
             },
         ),
         fieldset_base,

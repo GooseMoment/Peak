@@ -8,11 +8,11 @@ const DrawerFolder = ({ project, changeDrawer }) => {
 
     return (
         <>
-            <ItemBox onClick={() => setCollapsed(prev => !prev)}>
+            <ItemBox onClick={project.type === 'inbox' ? changeDrawer(project.drawers[0].id) : () => setCollapsed(prev => !prev)}>
                 <Circle $color={project.color}/>
                 <ItemText $is_project={true}>{project.name}</ItemText>
             </ItemBox>
-            {collapsed ? null :
+            {project.type === 'inbox' ? null : collapsed ? null :
                 project.drawers && project.drawers.map(drawer => (
                 <ItemBox key={drawer.id} onClick={changeDrawer(drawer.id)}>
                     <FeatherIcon icon="arrow-right"/>
