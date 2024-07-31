@@ -73,7 +73,7 @@ export const MiddleBox = styled.div`
 `
 
 export const ItemBox = styled.div`
-    font-size: 1.1em;
+    font-size: 1em;
     padding: 0.75em 0 0.75em 0.5em;
     margin: 0 0.75em;
 
@@ -97,12 +97,14 @@ export const ItemBox = styled.div`
     `}
 
     ${ifMobile} {
+        font-size: 1.1em;
         padding: 1em 0 1em 1em;
     }
 `
 
 const ProjectItemsContainer = styled.div`
     overflow-y: auto;
+    height: calc(100dvh - 25em);
 
     scrollbar-width: thin;
     scrollbar-color: ${p => p.theme.sidebar.scrollbarColor} transparent;
@@ -122,7 +124,6 @@ const ProjectItemsContainer = styled.div`
 `
 
 const ProjectItemBox = styled.div`
-    font-size: 1.1em;
     padding: 0.5em 0.5em;
     margin: 0 1.5em;
     background-color: inherit;
@@ -157,6 +158,7 @@ const ProjectItemBox = styled.div`
     `}
 
     ${ifMobile} {
+        font-size: 1.1em;
         padding: 1em;
     }
 `
