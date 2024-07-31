@@ -8,7 +8,7 @@ translation = {
         },
         Notification.FOR_REACTION: {
             "title": ":{emoji}: @{username}",
-            "body": "Reacted to \"{task}\"",
+            "body": "RE: {content}",
         },
         Notification.FOR_FOLLOW: {
             "title": "📩 @{username}",
@@ -28,7 +28,7 @@ translation = {
         },
         Notification.FOR_COMMENT: {
             "title": "💬 @{username}",
-            "body": "{task}\n↳ {comment}",
+            "body": "{comment}\n\nRE: {task}",
         },
     },
 }

@@ -2,6 +2,7 @@ from django.conf import settings
 
 from users.models import User
 from .models import Notification, WebPushSubscription
+from social.models import Reaction
 from .locale import get_translations
 
 from pywebpush import webpush, WebPushException
@@ -41,10 +42,18 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
             data["title"] = t["title"].format(task=notification.task_reminder.task.name)
             data["body"] = t["body"].format(delta=notification.task_reminder.delta)
         case Notification.FOR_REACTION:
-            related_user = notification.reaction.task.user
+            content: str = ""
+
+            if notification.reaction.parent_type == Reaction.FOR_DAILY_COMMENT:
+                related_user = notification.reaction.daily_comment.user
+                content = notification.reaction.daily_comment.comment
+            else:
+                related_user = notification.reaction.task.user
+                content = notification.reaction.task.name
+
             t = t[Notification.FOR_REACTION]
             data["title"] = t["title"].format(emoji=notification.reaction.emoji.name, username=related_user.username)
-            data["body"] = t["body"].format(delta=notification.task_reminder.delta)
+            data["body"] = t["body"].format(content=content)
         case Notification.FOR_FOLLOW:
             related_user = notification.following.follower
             t = t[Notification.FOR_FOLLOW]
@@ -52,12 +61,12 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
             data["body"] = t["body"]
         case Notification.FOR_FOLLOW_REQUEST:
             related_user = notification.following.follower
-            t = t[Notification.FOR_FOLLOW]
+            t = t[Notification.FOR_FOLLOW_REQUEST]
             data["title"] = t["title"].format(username=related_user.username)
             data["body"] = t["body"]
         case Notification.FOR_FOLLOW_REQUEST_ACCEPTED:
             related_user = notification.following.followee
-            t = t[Notification.FOR_FOLLOW]
+            t = t[Notification.FOR_FOLLOW_REQUEST_ACCEPTED]
             data["title"] = t["title"].format(username=related_user.username)
             data["body"] = t["body"]
         case Notification.FOR_PECK:
@@ -67,7 +76,7 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
             data["body"] = t["body"].format(task=notification.peck.task.name, count=notification.peck.count)
         case Notification.FOR_COMMENT:
             related_user = notification.comment.user
-            t = t[Notification.FOR_PECK]
+            t = t[Notification.FOR_COMMENT]
             data["title"] = t["title"].format(username=related_user.username)
             data["body"] = t["body"].format(task=notification.comment.task.name, comment=notification.comment.comment)
         
