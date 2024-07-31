@@ -147,8 +147,10 @@
                     "button_disable": "끄기"
                 },
                 "disabled_push_notification": "알림을 비활성화 했습니다.",
+                "disabled_push_notification_error": "이 기기에서 알림을 비활성화 했습니다.",
                 "declined_push_notification": "알림 권한이 없습니다. 설정에서 권한을 허용해 주세요.",
-                "enabled_push_notification": "이제 Peak에서 보내는 알림을 받을 수 있습니다."
+                "enabled_push_notification": "이제 Peak에서 보내는 알림을 받을 수 있습니다.",
+                "enabled_push_notification_error": "알림 활성화 중 오류가 발생했습니다."
             },
             "play_notification_sound": {
                 "name": "알림음 재생하기"
