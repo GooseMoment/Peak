@@ -60,7 +60,7 @@ const UserPage = () => {
 
     return <>
         <UserProfileHeader user={user} followingYou={followingYou} isPending={userPending} isMine={isMine} />
-        {followingYou?.status === "requested" && <Requests user={user} />}
+        {user && followingYou?.status === "requested" && <Requests user={user} />}
         <Bio bio={user?.bio} isPending={userPending} isMine={isMine} />
         <ProjectList projects={projects} isPending={projectPending} isMine={isMine} />
     </>
