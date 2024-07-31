@@ -4,10 +4,12 @@ from api.models import Base
 from users.models import User
 
 class Project(Base):
+    INBOX = "inbox"
     REGULAR = "regular"
     GOAL = "goal"
 
     PROJECT_TYPE_CHOICES = [
+        (INBOX, "Inbox"),
         (REGULAR, "Regular"),
         (GOAL, "Goal"),
     ]

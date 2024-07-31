@@ -76,7 +76,8 @@ const Contents = ({task, setFunc}) => {
             id: 5,
             name: "drawer",
             icon: <FeatherIcon icon="archive" />,
-            display: task.drawer_name ? `${task.project_name} / ${task.drawer_name}` : "없음",
+            display: task.project_name === 'Inbox' ? `${task.project_name}` : 
+                task.drawer_name ? `${task.project_name} / ${task.drawer_name}` : "없음",
             component: <Drawer setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
