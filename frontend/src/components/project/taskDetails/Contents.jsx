@@ -165,7 +165,7 @@ const ContentText = styled.div`
     margin-left: 1.3em;
     text-decoration: none;
     white-space: nowrap;
-    overflow: hidden;
+    overflow-x: clip;
     text-overflow: ellipsis;
 
     &:hover {
