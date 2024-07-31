@@ -45,7 +45,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
                 prev_due_date = task.due_date.strftime("%Y-%m-%d")
 
             if task.due_time is not None:
-                prev_due_time = task.due_time.strftime("T%H:%M:%SZ")
+                prev_due_time = task.due_time.strftime("%H:%M:%S")
 
             # new_due_date is None
             if (new_due_date is None) and (prev_due_date is not None):
@@ -56,10 +56,10 @@ class TaskDetail(mixins.RetrieveModelMixin,
                     converted_due_date = datetime.strptime(new_due_date, "%Y-%m-%d").date()
                     # new_due_time is None -> 9시 설정
                     if new_due_time is None:
-                        converted_due_time = datetime.strptime("T09:00:00Z", "T%H:%M:%SZ").time()
+                        converted_due_time = datetime.strptime("09:00:00", "%H:%M:%S").time()
                     # new_due_time is true -> new_due_time 대로 설정
                     else:
-                        converted_due_time = datetime.strptime(new_due_time, "T%H:%M:%SZ").time()
+                        converted_due_time = datetime.strptime(new_due_time, "%H:%M:%S").time()
                     
                     reminders = TaskReminder.objects.filter(task=task.id)
                     for reminder in reminders:

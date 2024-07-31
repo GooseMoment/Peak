@@ -20,6 +20,7 @@
         "type_reactions": "리액션",
         "type_pecking": "콕 쪼기",
         "type_follow": "팔로우",
+        "content_task_reminder": "{{delta}}분 전 알림입니다.",
         "content_comment_task": "\"<ellipsis>{{task_name}}</ellipsis>\"에 댓글을 남겼습니다: \"<ellipsis>{{comment}}</ellipsis>\"",
         "content_peck": "\"<ellipsis>{{task_name}}</ellipsis>\"을(를) {{count}}번 콕 쪼았습니다.",
         "content_reaction_task": "\"<ellipsis>{{task_name}}</ellipsis>\"에 리액션 했습니다.",

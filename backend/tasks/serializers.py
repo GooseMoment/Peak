@@ -8,10 +8,22 @@ from datetime import datetime
 
 class TaskReminderSerializer(serializers.ModelSerializer):
     scheduled = serializers.DateTimeField(default=datetime.now(), required=False)
+    task_name = serializers.SerializerMethodField(read_only=True)
+    project_color = serializers.SerializerMethodField(read_only=True)
+    project_id = serializers.SerializerMethodField(read_only=True)
+
+    def get_task_name(self, obj):
+        return obj.task.name
+    
+    def get_project_color(self, obj):
+        return obj.task.drawer.project.color
+    
+    def get_project_id(self, obj):
+        return obj.task.drawer.project.id
      
     class Meta:
         model = TaskReminder
-        fields = ["id", "task", "delta", "scheduled"]
+        fields = ["id", "task", "delta", "scheduled", "task_name", "project_color", "project_id"]
 
 class TaskSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(required=False, queryset=User.objects.all())

@@ -1,13 +1,18 @@
-import { skeletonCSS } from "@/assets/skeleton"
+import { skeletonCSS } from "@assets/skeleton"
 import { cubicBeizer } from "@assets/keyframes"
 
+import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-const Images = ({profile_img, reaction, skeleton=false}) => {
+const Images = ({profile_img, project_color, reaction, skeleton=false}) => {
     const emojiURL = reaction?.emoji?.img_uri
 
     return <Container>
-        {skeleton ? <ProfileImgSkeleton /> : <ProfileImg src={profile_img} />}
+        {skeleton && <ProfileImgSkeleton />}
+        {profile_img && <ProfileImg src={profile_img} />}
+        {project_color && <TaskReminderIconBox $color={"#" + project_color}>
+            <FeatherIcon icon="clock" />
+        </TaskReminderIconBox>}
         {emojiURL && <EmojiContainer>
             <Emoji src={emojiURL} />
         </EmojiContainer>}
@@ -31,6 +36,26 @@ const ProfileImgSkeleton = styled.div`
     aspect-ratio: 1 / 1;
 
     ${skeletonCSS()}
+`
+
+const TaskReminderIconBox = styled.div`
+    border-radius: 50%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+
+    background-color: ${p => p.$color};
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & svg {
+        margin-right: 0;
+        top: 0;
+        font-size: 2.5em;
+        color: white;
+        mix-blend-mode: difference;
+    }
 `
 
 const EmojiContainer = styled.div`

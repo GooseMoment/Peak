@@ -1,0 +1,2 @@
+* * * * * python3 /backend/manage.py cachereminders > /dev/stdout
+* * * * * python3 /backend/manage.py notifyreminders > /dev/stdout

@@ -23,6 +23,11 @@ const Content = ({type, payload, actionUser, skeleton=false}) => {
     }
 
     switch (type) {
+        case "task_reminder":
+            const taskURL = "/app/projects/" + payload?.project_id + "/?task_id=" + payload?.task
+            title = <ContentTitleLink to={taskURL}>{payload?.task_name}</ContentTitleLink>
+            detail = t("content_task_reminder", {delta: payload?.delta})
+            break
         case "comment":
             detail = <ContentDetailLink to={`/app/projects/${payload.task?.project_id}`}>
                     <Trans 
