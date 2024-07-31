@@ -212,8 +212,17 @@
         }
     },
     "users": {
+        "follows_you": "Follows you",
         "followings": "Followings",
         "followers": "Followers",
+        "requests_exist": "Requests from @{{username}}",
+        "follow_request_sent_to_me": "Sends you follow request.",
+        "button_follow_request_accept": "Accept",
+        "button_follow_request_reject": "Reject",
+        "follow_request_accepted": "Accepted follow request.",
+        "follow_request_acceptance_error": "Unable to accept request. Try again.",
+        "follow_request_rejected": "Rejected follow request.",
+        "follow_request_rejection_error": "Unable to reject request. Try again.",
         "bio": "Bio",
         "bio_empty": "Empty here.",
         "bio_empty_mine": "Click 'Edit Profile' to edit your bio.",

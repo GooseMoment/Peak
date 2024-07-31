@@ -4,8 +4,8 @@ import RoadSign from "@assets/errors/RoadSign"
 
 import styled from "styled-components"
 
-const Error = ({code, text, bottomText, bottomLinkTo, bottomA=false}) => {
-    return <Container>
+const Error = ({code, text, bottomText, bottomLinkTo, bottomA=false, height="100vh"}) => {
+    return <Container $height={height}>
         <Main>
             <RoadSign text={code} /> 
             <Text>{text}</Text> 
@@ -21,7 +21,7 @@ const Error = ({code, text, bottomText, bottomLinkTo, bottomA=false}) => {
 
 const Container = styled.div`
     width: 100%;
-    height: 100vh;
+    height: ${p => p.$height};
     padding: 5em 0;
     box-sizing: border-box;
 
