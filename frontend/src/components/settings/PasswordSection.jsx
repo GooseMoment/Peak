@@ -28,6 +28,11 @@ const PasswordSection = () => {
         },
         onSuccess: () => {
             toast.success(t("password_change_success"))
+
+            setCurrentPassword("")
+            setNewPassword("")
+            setNewPasswordAgain("")
+            setPasswordFormOpened(false)
         },
         onError: e => {
             if (e.response?.data?.code === "PATCHPASSWORD_WRONG_CURRENT_PASSWORD") {
