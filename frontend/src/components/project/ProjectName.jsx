@@ -19,7 +19,10 @@ const ProjectName = ({project, demo=false}) => {
         <FlexBox>
             <FeatherIcon icon="circle" fill={`#`+ project.color}/>
             {nameParts}
-            <TypeText>{project.type === 'regular' ? t("type_regular") : t("type_goal")}</TypeText>
+            <TypeText>
+                {project.type === 'regular' && t("type_regular")}
+                {project.type === 'goal' && t("type_goal")}
+            </TypeText>
         </FlexBox>
         {!demo && <FlexBox>
             <Text>{t("completed_tasks")}: {project.completed_task_count} / {t("uncompleted_tasks")}: {project.uncompleted_task_count}</Text>
@@ -56,6 +59,7 @@ const NameText = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.3em;
 
     &:hover {
         color: #FF4A03;
@@ -67,6 +71,7 @@ const TypeText = styled.div`
     font-weight: normal;
     font-size: 1em;
     margin-left: 0.6em;
+    margin-top: 0.1em;
     color: ${p => p.theme.grey};
 `
 

@@ -11,7 +11,7 @@ import { Image as ImageIcon } from "feather-icons-react"
 import styled from "styled-components"
 import queryClient from "@queries/queryClient"
 
-const ProfileImg = ({profile_img}) => {
+const ProfileImg = ({profile_img, username}) => {
     const [file, setFile] = useState(null)
     const [fileName, setFileName] = useState("")
     const [fileType, setFileType] = useState(null)
@@ -68,6 +68,7 @@ const ProfileImg = ({profile_img}) => {
 
         await uploadProfileImg(formData)
         queryClient.invalidateQueries({queryKey: ["users", "me"]})
+        queryClient.invalidateQueries({queryKey: ["users", username]})
     }
 
     return ( 

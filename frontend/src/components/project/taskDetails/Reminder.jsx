@@ -58,6 +58,7 @@ const Reminder = ({ task, closeComponent }) => {
         <Detail title="알람 설정" onClose={closeComponent}>
             {items.map(item => (
                 <ReminderContents
+                    key={item.id}
                     item={item}
                     reminders={task.reminders}
                     handleReminder={handleReminder}

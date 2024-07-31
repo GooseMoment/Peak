@@ -79,8 +79,9 @@ const Contents = ({task, setFunc}) => {
             id: 5,
             name: "drawer",
             icon: <FeatherIcon icon="archive" />,
-            display: task.drawer_name ? `${task.project_name} / ${task.drawer_name}` : "없음",
-            component: <Drawer projectID={projectID} task={task} setFunc={setFunc} closeComponent={closeComponent}/>
+            display: task.project_name === 'Inbox' ? `${task.project_name}` : 
+                task.drawer_name ? `${task.project_name} / ${task.drawer_name}` : "없음",
+            component: <Drawer setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 6,
@@ -94,21 +95,21 @@ const Contents = ({task, setFunc}) => {
     return (
         <ContentsBlock>
             {items.map(item => (
-            <Fragment key={item.id}>
-                <ContentsBox>
-                    <ToolTip message={item.name}>
-                        {item.icon}
-                    </ToolTip>
-                    <VLine $end={item.id === 1 || item.id === 6} />
-                    <ContentText name={item.name} onClick={handleClickContent}>
+                <Fragment key={item.id}>
+                    <ContentsBox>
+                        <ToolTip message={item.name}>
+                            {item.icon}
+                        </ToolTip>
+                        <VLine $end={item.id === 1 || item.id === 6} />
+                        <ContentText name={item.name} onClick={handleClickContent}>
                             {item.display}
-                    </ContentText>
-                    {(content === item.name && isComponentOpen) ? 
-                    <ModalPortal closeModal={closeComponent} additional>
-                        {item.component}
-                    </ModalPortal> : null}
-                </ContentsBox>
-            </Fragment>
+                        </ContentText>
+                        {(content === item.name && isComponentOpen) ? 
+                        <ModalPortal closeModal={closeComponent} additional>
+                            {item.component}
+                        </ModalPortal> : null}
+                    </ContentsBox>
+                </Fragment>
             ))}
         </ContentsBlock>
     )

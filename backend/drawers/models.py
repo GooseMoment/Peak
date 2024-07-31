@@ -22,3 +22,6 @@ class Drawer(Base, PrivacyMixin):
 
     def __str__(self) -> str:
         return f"{self.name} in {self.project}"
+
+    class Meta:
+        db_table = "drawers"

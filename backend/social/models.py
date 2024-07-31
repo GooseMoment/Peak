@@ -10,6 +10,9 @@ class Emoji(Base):
 
     def __str__(self) -> str:
         return f":{self.name}:"
+    
+    class Meta:
+        db_table = "emojis"
 
 class Peck(Base):
     user = models.ForeignKey(
@@ -24,17 +27,23 @@ class Peck(Base):
 
     def __str__(self) -> str:
         return f"{self.count} pecks by {self.user} → '{self.task.name}'"
+    
+    class Meta:
+        db_table = "pecks"
 
 class DailyComment(Base):
     user = models.ForeignKey(
-        User,
+        User, 
         on_delete=models.CASCADE,
     )
     comment = models.TextField()
-    date = models.DateField()
-
+    date = models.DateTimeField(null=True, blank=True)
+    
     def __str__(self) -> str:
         return f"DailyComment of {self.date} by {self.user}"
+    
+    class Meta:
+        db_table = "daily_comments"
 
 class Reaction(Base):
     FOR_TASK = "task"
@@ -74,6 +83,9 @@ class Reaction(Base):
 
     def __str__(self) -> str:
         return f"{self.emoji} by {self.user} → {self.daily_comment or self.task}"
+    
+    class Meta:
+        db_table = "reactions"
 
 class Comment(Base):
     user = models.ForeignKey(
@@ -88,6 +100,9 @@ class Comment(Base):
 
     def __str__(self) -> str:
         return f"Comment by {self.user} → {self.task.name}"
+    
+    class Meta:
+        db_table = "comments"
 
 class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
     # 보내는사람
@@ -121,13 +136,15 @@ class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
+    def __str__(self) -> str:
+        return f"Following {self.follower} → {self.followee} (status: {self.status})"
+
     class Meta:
+        db_table = "followings"
+
         constraints = [
             models.UniqueConstraint(fields=["follower", "followee"], name="constraint_follower_followee"),
         ]
-
-    def __str__(self) -> str:
-        return f"Following {self.follower} → {self.followee} (status: {self.status})"
 
 class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
     blocker = models.ForeignKey(
@@ -145,10 +162,12 @@ class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
+    def __str__(self) -> str:
+        return f"Block {self.blocker} → {self.blockee}"
+
     class Meta:
+        db_table = "blocks"
+
         constraints = [
             models.UniqueConstraint(fields=["blocker", "blockee"], name="constraint_blocker_blockee"),
         ]
-
-    def __str__(self) -> str:
-        return f"Block {self.blocker} → {self.blockee}"

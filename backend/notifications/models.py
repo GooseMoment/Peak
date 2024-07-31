@@ -17,6 +17,9 @@ class TaskReminder(Base):
     def __str__(self) -> str:
         return f"Reminder for {self.task.name} before {self.delta}min at {self.scheduled}"
 
+    class Meta:
+        db_table = "task_reminders"
+
 class Notification(Base):
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#choices
 
@@ -82,6 +85,9 @@ class Notification(Base):
 
     def __str__(self) -> str:
         return f"{self.type} for {self.user}"
+    
+    class Meta:
+        db_table = "notifications"
 
 class WebPushSubscription(Base):
     user = models.ForeignKey(
@@ -89,9 +95,13 @@ class WebPushSubscription(Base):
         on_delete=models.CASCADE,
     )
     subscription_info = models.JSONField()
-    browser = models.CharField(max_length=128)
+    locale = models.CharField(max_length=128, null=True, blank=True)
+    device = models.CharField(max_length=128)
     user_agent = models.CharField(max_length=500, blank=True)
     fail_cnt = models.IntegerField(default=0)
 
     def __str__(self) -> str:
-        return f"Subscription for {self.user}"
+        return f"Subscription of {self.user} for {self.device}"
+
+    class Meta:
+        db_table = "web_push_subscriptions"

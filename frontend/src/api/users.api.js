@@ -1,10 +1,11 @@
-import client, { setToken } from "@api/client"
-import { deleteSubscription } from "./notifications.api"
-import { getClientSettings } from "@/utils/clientSettings"
+import client, { setToken, setCurrentUsername } from "@api/client"
+import { deleteSubscription } from "@api/notifications.api"
+import { getClientSettings } from "@utils/clientSettings"
 
 export const getMe = async () => {
     try {
         const res = await client.get("users/me")
+        setCurrentUsername(res.data.username)
         return res.data
     } catch (e) {
         throw e
@@ -38,10 +39,11 @@ export const signIn = async (email, password) => {
         })
 
         setToken(res.data.token)
-        return true
+        setCurrentUsername(res.data.user.username)
 
+        return true
     } catch (e) {
-        return false
+        throw e
     }
 }
 
@@ -50,37 +52,24 @@ export const signUp = async (email, password, username) => {
         const res = await client.post("sign_up/", {email, password, username})
         return res
     } catch (err) {
-        let msg = ""
+        let code = ""
         if (err && err.code === "ERR_NETWORK") {
-            msg = "Please check your network."
+            code = "SIGNUP_NETWORK_ERROR"
         } else if (err && err.response && err.response.status === 400) {
-            switch (err.response.data.code) {
-                case 'SIGNUP_SIGNED_IN_USER':
-                    msg = "You already signed in! Please go back to your app."
-                    break
-                case 'SIGNUP_USERNAME_TOO_SHORT':
-                    msg = "username should be more than 4 characters."
-                    break
-                case 'SIGNUP_PASSWORD_TOO_SHORT':
-                    msg = "You already signed in! Please go back to your app."
-                    break
-                case 'SIGNUP_USERNAME_WRONG':
-                    msg = "username should only contain alphabets, underscore, and digits."
-                    break
-            }
+            code = err.response.data.code
         } else if (err && err.response && err.response.status === 500) {
-            msg = "Something's wrong with our server. Please try later."
-            return
+            code = "SIGNUP_INTERNAL_ERROR"
         } else {
-            throw err
+            code = "SIGNUP_UNKNOWN_ERROR"
         }
 
-        throw new Error(msg)
+        throw new Error(code)
     }
 }
 
 export const signOut = async () => {
     setToken(null)
+    setCurrentUsername(null)
 
     const subscriptionID = getClientSettings()["push_notification_subscription"]
 

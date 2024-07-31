@@ -1,29 +1,68 @@
-import { useState } from "react"
-import { useLoaderData } from "react-router-dom"
+import { useEffect } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 
-import { patchUser } from "@api/users.api"
+import UserProfileHeader from "@components/users/UserProfileHeader"
+import Requests from "@components/users/Requests"
+import Bio from "@components/users/Bio"
+import ProjectList from "@components/users/ProjectList"
+import Error from "@components/errors/ErrorLayout"
+
+import { getUserByUsername } from "@api/users.api"
+import { getProjectListByUser } from "@api/projects.api"
+import { getFollow } from "@api/social.api"
+import { getCurrentUsername } from "@api/client"
+
+import { useQuery } from "@tanstack/react-query"
+import { useTranslation } from "react-i18next"
 
 const UserPage = () => {
-    const user = useLoaderData()
-    const [bio, setBio] = useState(user.bio)
+    const navigate = useNavigate()
+    const { username: usernameWithAt } = useParams()
 
-    const changeBio = async e => {
-        const res = await patchUser({bio})
-        if (res === 200) alert("OK")
+    useEffect(() => {
+        if (usernameWithAt.at(0) !== "@") {
+            navigate("/app/users/@" + usernameWithAt)
+        }
+    }, [usernameWithAt])
+
+    const username = usernameWithAt.slice(1)
+    const currentUsername = getCurrentUsername()
+    const isMine = currentUsername === username
+
+    const { data: followingYou } = useQuery({
+        queryKey: ["followings", username, currentUsername],
+        queryFn: () => getFollow(username, currentUsername),
+        enabled: currentUsername !== username,
+    })
+
+    const { data: user, isPending: userPending, isError: userError } = useQuery({
+        queryKey: ["users", username],
+        queryFn: () => getUserByUsername(username),
+        retry: (count, err) => {
+            if (err.response.status === 404) {
+                return false
+            }
+
+            return count < 3
+        } 
+    })
+
+    const { data: projects, isPending: projectPending } = useQuery({
+        queryKey: ["userProjects", username],
+        queryFn: () => getProjectListByUser(username),
+    })
+
+    const { t } = useTranslation(null, {keyPrefix: "users"})
+
+    if (userError) {
+        return <Error height="100%" code="404" text={t("error_user_not_found")} />
     }
 
-    // TODO: @andless2004 영서의 페이지
-
     return <>
-        <h1>@{user.username}'s profile</h1>
-        <ul>
-            <img src={user.profile_img} />
-            <li>display_name: {user.display_name}</li>
-        </ul>
-        <br/>
-        <h1>Let's edit bio!</h1>
-        <textarea value={bio} onChange={e => setBio(e.target.value)} />
-        <button onClick={changeBio}>Change Bio</button>
+        <UserProfileHeader user={user} followingYou={followingYou} isPending={userPending} isMine={isMine} />
+        {user && followingYou?.status === "requested" && <Requests user={user} />}
+        <Bio bio={user?.bio} isPending={userPending} isMine={isMine} />
+        <ProjectList projects={projects} isPending={projectPending} isMine={isMine} />
     </>
 }
 

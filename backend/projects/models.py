@@ -4,10 +4,12 @@ from api.models import Base
 from users.models import User
 
 class Project(Base):
+    INBOX = "inbox"
     REGULAR = "regular"
     GOAL = "goal"
 
     PROJECT_TYPE_CHOICES = [
+        (INBOX, "Inbox"),
         (REGULAR, "Regular"),
         (GOAL, "Goal"),
     ]
@@ -23,3 +25,6 @@ class Project(Base):
 
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"
+    
+    class Meta:
+        db_table = "projects"

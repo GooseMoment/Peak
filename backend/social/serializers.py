@@ -8,6 +8,9 @@ from datetime import datetime
 from .models import *
 from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
+from projects.serializers import ProjectSerializer
+
+from projects.models import *
 
 class EmojiSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,11 +29,11 @@ class DailyLogsSerializer(UserSerializer):
     recent_task = serializers.SerializerMethodField()
     
     class Meta(UserSerializer.Meta):
-        fields = UserSerializer.Meta.fields + ['recent_task']
-    
+        fields = UserSerializer.Meta.fields + ["recent_task"]
+        
     def get_recent_task(self, obj):
-        day_min = self.context.get('day_min', None)
-        day_max = self.context.get('day_max', None)
+        day_min = self.context.get("day_min", None)
+        day_max = self.context.get("day_max", None)
                 
         recent_task = obj.tasks.filter(
             completed_at__range=(day_min, day_max)
@@ -48,13 +51,30 @@ class DailyLogsSerializer(UserSerializer):
         is_read = True
         if cache_data:
             # last_visted = timezone.make_aware()
-            last_visted =cache_data[self.context.get('user_id', None)]
+            last_visted = cache_data[self.context.get("user_id", None)]
             is_read = last_visted > recent_task.completed_at
         
+        #need to delete
+        is_read = False
+        
         recent_task = TaskSerializer(recent_task).data
-        recent_task['is_read'] = is_read
+        recent_task["is_read"] = is_read
+        recent_task["project_color"] = Project.objects.get(id=recent_task["project_id"]).color
         
         return recent_task
+    
+    # for sort in backend
+    # def to_representation(self, instance):
+    #     ret = super().to_representation(instance)
+        
+    #     if 'recent_task' in ret:
+    #         ret['recent_task'] = sorted(ret['recent_task'], key=lambda x: x['recent_task__completed_at'])
+    #     return ret
+
+class DailyLogSerializer(serializers.Serializer):
+    class Meta:
+        pass
+    pass
 
 class DailyCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
@@ -62,6 +82,13 @@ class DailyCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = DailyComment
         fields = ["id", "user", "comment", "date"]
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+        
+    #     if not instance.comment:
+    #         return {'user': data['user']}
+        
+    #     return data
 
 class ReactionSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)

@@ -10,6 +10,7 @@ from notifications.models import TaskReminder
 from datetime import datetime
 from notifications.utils import caculateScheduled
 from .utils import combine_due_datetime
+from rest_framework.filters import OrderingFilter
 
 class TaskDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -65,8 +66,8 @@ class TaskDetail(mixins.RetrieveModelMixin,
                         reminder.save()
     
         try:
-            new_completed = request.data.get("completed_at")
-        except Exception as e:
+            new_completed = request.data["completed_at"]
+        except KeyError as e:
             pass
         else:
             task: Task = self.get_object()
@@ -91,6 +92,9 @@ class TaskList(CreateMixin,
                   generics.GenericAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsUserMatch]
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['name', 'assigned_at', 'due_date', 'due_time', 'priority', 'created_at', 'reminders']
+    ordering = ['created_at']
 
     def get_queryset(self):
         queryset = Task.objects.filter(user=self.request.user).order_by("created_at").all()

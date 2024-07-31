@@ -22,6 +22,9 @@ class Repeat(Base):
 
     def __str__(self) -> str:
         return f"Repeat by {self.user}"
+    
+    class Meta:
+        db_table = "repeats"
 
 class Task(Base, PrivacyMixin):
     name = models.CharField(max_length=128)
@@ -32,7 +35,7 @@ class Task(Base, PrivacyMixin):
     )
     due_date = models.DateField(null=True, blank=True)
     due_time = models.TimeField(null=True, blank=True)
-    due_tz = models.CharField(max_length=128)
+    due_tz = models.CharField(max_length=128, null=True, blank=True)
     assigned_at = models.DateField(null=True, blank=True)
     priority = models.IntegerField(default=0)
     memo = models.TextField(null=True, blank=True)
@@ -53,3 +56,6 @@ class Task(Base, PrivacyMixin):
 
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"
+    
+    class Meta:
+        db_table = "tasks"

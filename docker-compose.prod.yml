@@ -19,7 +19,8 @@ services:
       - 443:443/udp
     volumes:
       - django_admin_static:/srv/django_static
-      - ./Caddyfile.prod:/etc/caddy/Caddyfile
+      - ./web/Caddyfile.prod:/etc/caddy/Caddyfile
+      - ./web/:/web/
       - caddy_data:/data
       - caddy_config:/config
       - frontend-dist:/srv/frontend
@@ -33,6 +34,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     env_file:
       - path: ./.env
         required: true
@@ -45,6 +48,16 @@ services:
     healthcheck:
       test: ["CMD", "pg_isready", "-q", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"] 
       # https://github.com/peter-evans/docker-compose-healthcheck/issues/16#issuecomment-1039718816
+      interval: 1s
+      timeout: 5s
+      retries: 10
+  redis:
+    container_name: redis-cache
+    image: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
       interval: 1s
       timeout: 5s
       retries: 10

@@ -35,7 +35,8 @@ SCHEME = os.environ.get("SCHEME")
 WEB_HOSTNAME = os.environ.get("WEB_HOSTNAME")
 API_HOSTNAME = os.environ.get("API_HOSTNAME")
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ") + [API_HOSTNAME]
+API_HOSTNAME_NO_PORT = API_HOSTNAME.split(":")[0]
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ") + [API_HOSTNAME_NO_PORT]
 
 # Application definition
 
@@ -176,14 +177,10 @@ CORS_ALLOW_CREDENTIALS = True
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
+LANGUAGE_CODE = 'en'
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
