@@ -4,28 +4,35 @@ import SidebarLink from "@components/sidebar/SidebarLink"
 import { cubicBeizer } from "@assets/keyframes"
 import { skeletonCSS } from "@assets/skeleton"
 import { getProjectList } from "@api/projects.api"
+import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { useQuery } from "@tanstack/react-query"
 
-const Middle = ({ collapsed }) => {
+const Middle = ({ collapsed, setSidebarHidden }) => {
     const { data: projects, isPending, isError, refetch } = useQuery({
         queryKey: ["projects"],
         queryFn: () => getProjectList(),
     })
 
     const { t } = useTranslation("", {keyPrefix: "sidebar"})
-
+    const { isMobile } = useScreenType()
     const items = useMemo(() => getItems(t), [t])
+
+    const onClickLink = () => {
+        if (isMobile) {
+            setSidebarHidden(true)
+        }
+    }
 
     const onClickErrorBox = () => {
         refetch()
     }
 
     return <MiddleBox>
-        {items.map(item => <SidebarLink to={item.to} draggable="false" key={item.to} end={item.end}>
+        {items.map(item => <SidebarLink to={item.to} draggable="false" key={item.to} end={item.end} onClick={onClickLink}>
             <ItemBox $collapsed={collapsed} key={item.name}>   
                 <FeatherIcon icon={item.icon} />
                 {collapsed ? null : item.name}
@@ -40,7 +47,7 @@ const Middle = ({ collapsed }) => {
                 {!collapsed && t("projects_list_refetch")}
             </ProjectLoadErrorBox>}
 
-            {projects?.map(project => <SidebarLink to={`projects/` + project.id} draggable="false" key={project.id}>
+            {projects?.map(project => <SidebarLink to={`projects/` + project.id} draggable="false" key={project.id} onClick={onClickLink}>
                 <ProjectItemBox $collapsed={collapsed}>
                     <FeatherIcon icon="circle" fill={`#` + project.color} />
                     {!collapsed && project.name}
@@ -88,6 +95,10 @@ export const ItemBox = styled.div`
             margin-right: 0;
         }
     `}
+
+    ${ifMobile} {
+        padding: 1em 0 1em 1em;
+    }
 `
 
 const ProjectItemsContainer = styled.div`
@@ -139,6 +150,10 @@ const ProjectItemBox = styled.div`
             margin-right: 0;
         }
     `}
+
+    ${ifMobile} {
+        padding: 1em;
+    }
 `
 
 const ProjectLoadErrorBox = styled(ProjectItemBox)`

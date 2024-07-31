@@ -10,7 +10,7 @@ import styled, { css } from "styled-components"
 const Sidebar = ({collapsed, setCollapsed, setSidebarHidden}) => {
     return <SidebarBox $collapsed={collapsed}>
         <Header collapsed={collapsed} setCollapsed={setCollapsed} setSidebarHidden={setSidebarHidden} />
-        <Middle collapsed={collapsed} />
+        <Middle collapsed={collapsed} setSidebarHidden={setSidebarHidden} />
         <Footer collapsed={collapsed} />
     </SidebarBox>
 }
