@@ -15,7 +15,18 @@
 	}
 
 	handle_errors {
-		respond "{err.status_code} {err.status_text}"
+		root * /web
+
+		@5xx `{err.status_code} >= 500 && {err.status_code} < 600`
+		handle @5xx {
+			rewrite * /error.html
+			templates
+			file_server
+		}
+
+		handle {
+			respond "another error"
+		}
 	}
 }
 
