@@ -50,7 +50,7 @@ const ModalPortal = ({ children, closeModal, additional=false, closeESC=true }) 
     }
 
     const handleKeyDown = e => {
-        if (e.key === "Escape") {
+        if (closeESC && e.key === "Escape") {
             e.preventDefault()
             setIsOpen(false)
         }
