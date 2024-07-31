@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+    <title>Peak</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <style>
+        :root {
+            --black: #222222;
+            --white: #FEFDFC;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif !important;
+        }
+
+        #container {
+            width: 100dvw;
+            height: 100dvh;
+            box-sizing: border-box;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2em;
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--black);
+        }
+
+        p {
+            font-weight: normal;
+            color: var(--black);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: var(--black);
+            }
+
+            h1, p {
+                color: var(--white);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1 id="title">Oops!</h1>
+        <p id="description">Sorry, we are working to fix the problem.</p>
+    </div>
+    <script>
+        const title = document.querySelector("#title")
+        const description = document.querySelector("#description")
+
+        const locale = navigator.language.startsWith("ko") ? "ko" : "en"
+
+        const translations = {
+            ko: {
+                title: "502",
+                description: "서버가 응답하지 않습니다. 문제를 고치는 중입니다.",
+            },
+            en: {
+                title: "502",
+                description: "The server does not respond. We are working to fix the problem.",
+            },
+        }
+
+        title.textContent = translations[locale].title
+        description.textContent = translations[locale].description
+    </script>
+</body>
+</html>

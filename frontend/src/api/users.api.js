@@ -1,10 +1,11 @@
 import client, { setToken, setCurrentUsername } from "@api/client"
-import { deleteSubscription } from "./notifications.api"
+import { deleteSubscription } from "@api/notifications.api"
 import { getClientSettings } from "@utils/clientSettings"
 
 export const getMe = async () => {
     try {
         const res = await client.get("users/me")
+        setCurrentUsername(res.data.username)
         return res.data
     } catch (e) {
         throw e
@@ -39,10 +40,10 @@ export const signIn = async (email, password) => {
 
         setToken(res.data.token)
         setCurrentUsername(res.data.user.username)
-        return true
 
+        return true
     } catch (e) {
-        return false
+        throw e
     }
 }
 
@@ -68,6 +69,7 @@ export const signUp = async (email, password, username) => {
 
 export const signOut = async () => {
     setToken(null)
+    setCurrentUsername(null)
 
     const subscriptionID = getClientSettings()["push_notification_subscription"]
 

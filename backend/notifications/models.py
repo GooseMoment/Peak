@@ -95,12 +95,13 @@ class WebPushSubscription(Base):
         on_delete=models.CASCADE,
     )
     subscription_info = models.JSONField()
-    browser = models.CharField(max_length=128)
+    locale = models.CharField(max_length=128, null=True, blank=True)
+    device = models.CharField(max_length=128)
     user_agent = models.CharField(max_length=500, blank=True)
     fail_cnt = models.IntegerField(default=0)
 
     def __str__(self) -> str:
-        return f"Subscription for {self.user}"
+        return f"Subscription of {self.user} for {self.device}"
 
     class Meta:
         db_table = "web_push_subscriptions"

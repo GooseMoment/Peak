@@ -1,4 +1,5 @@
 import { scaleForward, scaleBack, modalFadeOut, modalFadeIn, cubicBeizer } from '@assets/keyframes'
+import { ifMobile } from '@utils/useScreenType'
 
 import { createGlobalStyle } from 'styled-components'
 import reset from 'styled-reset'
@@ -7,7 +8,7 @@ const GlobalStyle = createGlobalStyle`
 ${reset}
 
 html {
-    height: 100vh;
+    height: 100dvh;
     width: 100vw;
 
     accent-color: ${p => p.theme.accentColor};
@@ -52,7 +53,7 @@ html {
     left: 0;
 
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
     padding: 0.5em;
 
     z-index: 99;
@@ -130,6 +131,20 @@ body {
 
 .Toastify__toast-body {
     line-height: 1.3;
+}
+
+${ifMobile} {
+    body { // https://stackoverflow.com/a/3428477
+        -webkit-text-size-adjust: 100%;
+    }
+
+    .Toastify__toast-body {
+        font-size: 0.9em;
+    }
+
+    .Toastify__toast--stacked[data-pos="bot"] {
+        bottom: 5em;
+    }
 }
 `
 
