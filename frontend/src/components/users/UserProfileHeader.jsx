@@ -57,7 +57,7 @@ const FollowsYou = styled.div`
     position: absolute;
     top: 2em;
 
-    font-size: 0.65em;
+    font-size: 0.75em;
     font-weight: bold;
     width: fit-content;
 
