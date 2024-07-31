@@ -27,7 +27,7 @@ const ReminderIcons = ({ item, reminders, handleReminder, ReminderID }) => {
     }, [reminders])
     
     return (
-        <ItemBlock key={item.id}>
+        <ItemBlock>
             {item.icon}
             <ItemText
                 onClick={clickReminder(item.delta)}
