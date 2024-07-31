@@ -73,9 +73,7 @@ class Reaction(Base):
     )
     emoji = models.ForeignKey(
         Emoji,
-        null=True, 
-        # 입력 받을 때는 null=False인 것처럼.
-        # Emoji가 삭제되었을 때만 null
+        null=True,
         blank=True,
         on_delete = models.SET_NULL,
         related_name = "reactions"

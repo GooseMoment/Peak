@@ -224,7 +224,7 @@ def get_daily_log_details(requset: HttpRequest, followee, day):
     serializer = DailyLogDetailsSerializer(drawers, many=True)
     
     return Response(serializer.data, status=status.HTTP_200_OK)
-      
+    
 def get_following_feed(request: HttpRequest, date):
     pass
 
@@ -347,6 +347,50 @@ class ReactionView(APIView):
         reaction.delete()
         
         return Response(status=status.HTTP_200_OK)
+
+class PeckView(APIView):
+    def get(self, request, id):
+        task = get_object_or_404(Task, id=id)
+        pecks = Peck.objects.filter(task=task)
+        
+        serializer = PeckSerializer(pecks, many=True)
+        pecksCounts = self.countPeck(pecks)
+        
+        data = {
+            'pecks': serializer.data,
+            'pecks_counts': pecksCounts
+        }
+        
+        return Response(data, status=status.HTTP_201_CREATED)
+        
+    def post(self, request, id):
+        user = request.user
+        task = get_object_or_404(Task, id=id)
+        peck = Peck.objects.filter(user=user, task=task).first()
+        
+        if peck:
+            peck.count += 1
+            peck.save()
+        else:
+            peck = Peck.objects.create(user=user, task=task, count=1)    
+        pecks = Peck.objects.filter(task=task)
+        
+        serializer = PeckSerializer(pecks, many=True)
+        pecksCounts = self.countPeck(pecks)
+        
+        data = {
+            'pecks': serializer.data,
+            'pecks_counts': pecksCounts
+        }
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def countPeck(self, pecks):
+        pecksCounts = 0
+        for peck in pecks:
+            pecksCounts += peck.count
+    
+        return pecksCounts
 
 def post_comment_to_task(request: HttpRequest, task_id, comment):
     pass

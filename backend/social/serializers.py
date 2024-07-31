@@ -14,14 +14,6 @@ class EmojiSerializer(serializers.ModelSerializer):
         model = Emoji
         fields = ["id", "name", "img_uri"]
 
-class PeckSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-    task = TaskSerializer()
-    
-    class Meta:
-        model = Peck
-        fields = ["id", "user", "task", "count"]
-
 class DailyLogsSerializer(UserSerializer):
     recent_task = serializers.SerializerMethodField()
     
@@ -102,7 +94,15 @@ class ReactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reaction
         fields = ["id", "user", "parent_type", "task", "daily_comment", "emoji"]
-        
+
+class PeckSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False, read_only=True)
+    task = TaskSerializer()
+    
+    class Meta:
+        model = Peck
+        fields = ["id", "user", "task", "count"]
+ 
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     task = TaskSerializer()
