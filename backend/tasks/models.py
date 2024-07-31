@@ -52,7 +52,7 @@ class Task(Base, PrivacyMixin):
     )
 
     def due_datetime(self): 
-        return combine_due_datetime(self.due_date, self.due_time)
+        return combine_due_datetime(self.due_tz, self.due_date, self.due_time)
 
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"

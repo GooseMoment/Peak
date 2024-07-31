@@ -31,6 +31,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
     
     def patch(self, request, *args, **kwargs):
         try:
+            due_tz = request.data["due_tz"]
             new_due_date = request.data["due_date"]
             new_due_time = request.data["due_time"]
         except KeyError as e:
@@ -62,7 +63,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
                     
                     reminders = TaskReminder.objects.filter(task=task.id)
                     for reminder in reminders:
-                        reminder.scheduled = caculateScheduled(combine_due_datetime(converted_due_date, converted_due_time), reminder.delta)
+                        reminder.scheduled = caculateScheduled(combine_due_datetime(due_tz, converted_due_date, converted_due_time), reminder.delta)
                         reminder.save()
     
         try:
