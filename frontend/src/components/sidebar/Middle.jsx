@@ -104,6 +104,7 @@ export const ItemBox = styled.div`
 
 const ProjectItemsContainer = styled.div`
     overflow-y: auto;
+    height: calc(100dvh - 25em);
 
     scrollbar-width: thin;
     scrollbar-color: ${p => p.theme.sidebar.scrollbarColor} transparent;
