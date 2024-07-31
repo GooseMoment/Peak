@@ -10,9 +10,7 @@ import Blocks from "./Blocks"
 import Info from "./Info"
 import ErrorPage from "./ErrorPage"
 
-const settings = {
+export {
     Layout, ErrorPage,
     Account, General, Privacy, LanguagesAndTime, Appearance, Reactions, Notifications, Blocks, Info
 }
-
-export default settings

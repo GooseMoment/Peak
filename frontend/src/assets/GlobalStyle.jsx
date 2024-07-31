@@ -83,6 +83,7 @@ textarea, input {
 
 body {
     overflow-x: hidden;
+    transition: background-color 0.25s ${cubicBeizer};
 }
 
 .feather {
