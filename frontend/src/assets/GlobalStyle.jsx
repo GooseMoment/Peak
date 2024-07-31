@@ -60,6 +60,30 @@ html {
     animation: ${modalFadeIn} 0.5s ${cubicBeizer} forwards !important;
 }
 
+#confirmation {
+    transition: background-color 1s ${cubicBeizer}
+}
+
+#confirmation:has(div) {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    z-index: 100;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+    width: 100dvw;
+    height: 100dvh;
+
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+}
+
 a {
     color: inherit;
     text-decoration: none;
