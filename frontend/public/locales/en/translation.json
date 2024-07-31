@@ -170,6 +170,7 @@
             },
             "main_width": {
                 "name": "Content width",
+                "description": "Only applied in long-width screens.",
                 "values": {
                     "narrow": "narrow",
                     "normal": "normal",

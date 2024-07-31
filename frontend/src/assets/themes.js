@@ -45,6 +45,9 @@ export const light = {
         backgroundColor: "#F9F7F6",
         scrollbarColor: "#FFC6C6",
     },
+    navbar: {
+        backgroundColor: "rgb(255, 255, 255, 0.7)",
+    },
     project: {
         borderColor: "#D9D9D9",
         lineColor: "#D9D9D9",
@@ -114,6 +117,9 @@ export const dark = {
         hoverBackgroundColor: `rgb(255 74 3 / 0.35)`,
         backgroundColor: "#2F2F2F",
         scrollbarColor: "#4A4A4A",
+    },
+    navbar: {
+        backgroundColor: "rgb(0, 0, 0, 0.7)",
     },
     project: {
         borderColor: "#474747",

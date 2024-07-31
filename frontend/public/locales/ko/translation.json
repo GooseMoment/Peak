@@ -170,6 +170,7 @@
             },
             "main_width": {
                 "name": "콘텐츠 너비",
+                "description": "좌우로 긴 화면에만 적용됩니다.",
                 "values": {
                     "narrow": "좁게",
                     "normal": "일반",

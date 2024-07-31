@@ -2,12 +2,15 @@ import Header from "./Header"
 import Middle from "./Middle"
 import Footer from "./Footer"
 
+import { cubicBeizer, slideLeftToRight } from "@assets/keyframes"
+import { ifMobile } from "@utils/useScreenType"
+
 import styled, { css } from "styled-components"
 
-const Sidebar = ({collapsed, setCollapsed}) => {
+const Sidebar = ({collapsed, setCollapsed, setSidebarHidden}) => {
     return <SidebarBox $collapsed={collapsed}>
-        <Header collapsed={collapsed} setCollapsed={setCollapsed} />
-        <Middle collapsed={collapsed} />
+        <Header collapsed={collapsed} setCollapsed={setCollapsed} setSidebarHidden={setSidebarHidden} />
+        <Middle collapsed={collapsed} setSidebarHidden={setSidebarHidden} />
         <Footer collapsed={collapsed} />
     </SidebarBox>
 }
@@ -15,8 +18,11 @@ const Sidebar = ({collapsed, setCollapsed}) => {
 export const SidebarBox = styled.nav`
     z-index: 99;
 
+    padding-bottom: calc(env(safe-area-inset-bottom) - 1em);
+    box-sizing: border-box;
+
     position: fixed;
-    height: 100vh;
+    height: 100dvh;
     width: 18rem;
 
     display: flex;
@@ -33,7 +39,15 @@ export const SidebarBox = styled.nav`
         -webkit-user-select: none;
     }
 
-    ${({$collapsed}) => $collapsed && css`
+    ${ifMobile} {
+        width: 100dvw;
+        padding-left: 0.75em;
+        padding-right: 0.75em;
+
+        animation: ${slideLeftToRight} 0.25s ${cubicBeizer};
+    }
+
+    ${p => p.$collapsed && css`
         width: unset;
     `}
 `

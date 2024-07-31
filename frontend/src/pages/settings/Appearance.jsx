@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 
 import PageTitle from "@components/common/PageTitle"
-import Section, { Name, Value } from "@components/settings/Section"
+import Section, { Name, Description, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
 
@@ -26,6 +26,7 @@ const Appearance = () => {
 
         <Section>
             <Name>{t("main_width.name")}</Name>
+            <Description>{t("main_width.description")}</Description>
             <Value>
                 <Select choices={widthChoices} name="main_width" />
             </Value>

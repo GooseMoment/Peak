@@ -3,6 +3,8 @@ import { useState, useEffect } from "react"
 import { useClientTheme } from "@utils/clientSettings"
 import { ThemeProvider } from "styled-components"
 
+const metaThemeColor = document.head.querySelector("meta[name='theme-color']")
+
 const ClientThemeProvider = ({children}) => {
     const windowMatchMediaDark = window.matchMedia('(prefers-color-scheme: dark)')
     const [systemTheme, setSystemTheme] = useState(
@@ -25,6 +27,7 @@ const ClientThemeProvider = ({children}) => {
 
     useEffect(() => {
         document.body.style = `background-color: ${theme.backgroundColor}`
+        metaThemeColor.setAttribute("content", theme.backgroundColor)
     }, [theme])
 
     return <ThemeProvider theme={theme}>
