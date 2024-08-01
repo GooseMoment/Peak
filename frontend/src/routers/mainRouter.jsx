@@ -21,6 +21,7 @@ import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement
 import { getMe, signOut } from "@api/users.api"
 import { getProjectList } from "@api/projects.api"
 import { getToken } from "@api/client"
+import EmailConfirmationPage from "@/pages/EmailConfirmationPage"
 
 const redirectIfSignedIn = () => {
     if (getToken()) {
@@ -50,6 +51,10 @@ const routes = [
                     return { Component: SignPage }
                 },
             },
+            {
+                path: "confirmation",
+                element: <EmailConfirmationPage />,
+            }
         ]
     },
     {

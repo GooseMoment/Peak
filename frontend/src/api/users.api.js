@@ -67,6 +67,20 @@ export const signUp = async (email, password, username, locale) => {
     }
 }
 
+export const confirmEmail = async (token) => {
+    try {
+        const res = await client.post(`sign_up/email_confirmation/`, {
+            token,
+        })
+
+        if (res.status === 200) {
+            return res.data.email
+        }
+    } catch (e) {
+        throw e
+    }
+}
+
 export const signOut = async () => {
     setToken(null)
     setCurrentUsername(null)

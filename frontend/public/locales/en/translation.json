@@ -330,6 +330,11 @@
         "404_error_text": "The page you requested is not found.",
         "404_error_bottom": "Back to the previous page"
     },
+    "email_confirmation": {
+        "invalid_access": "Invalid access.",
+        "confirmed": "{{email}} was confirmed. Now you can sign in.",
+        "link_sign": "Click to Sign In"
+    },
     "sign": {
         "sign_in": "Sign In",
         "sign_in_success": "Signed in successfully. Welcome back!",
