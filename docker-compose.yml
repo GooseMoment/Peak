@@ -39,8 +39,11 @@ services:
     volumes:
       - ./backend/:/backend/
       - ./backend/api.crontab:/etc/crontabs/root
+    init: true
     depends_on:
-      api:
+      db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     env_file:
       - ./.env
