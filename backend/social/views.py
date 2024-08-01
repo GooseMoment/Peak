@@ -272,48 +272,30 @@ class ReactionView(APIView):
         
         return Response(data, status=status.HTTP_200_OK)
     
-    def post(self, request, type, id):
+    def post(self, request: Request, type, id):
         # TODO: Need to check block
         emoji_id = request.data.get('emoji')
         emoji = get_object_or_404(Emoji, id=emoji_id)
         user = request.user
         
-        # 404는 부적절한가..?
-        
-        if type == 'task':
+        if type == Reaction.FOR_TASK:
             task = get_object_or_404(Task, id=id)
-            
-            ## 정상적인 동작에선 찾을 필요가 없긴 함
-            reaction = Reaction.objects.filter(user=user,
-                                               parent_type=Reaction.FOR_TASK,
-                                               task=task,
-                                               emoji=emoji).first()
-            if reaction: 
-                return Response(status=status.HTTP_208_ALREADY_REPORTED)
-            ## END
-            
-            reaction = Reaction.objects.create(user=user,
-                                               parent_type=Reaction.FOR_TASK,
-                                               task=task,
-                                               emoji=emoji)
-        elif type == 'daily_comment':
+            reaction, created = Reaction.objects.get_or_create(user=user,
+                                                               parent_type=Reaction.FOR_TASK,
+                                                               task=task,
+                                                               emoji=emoji)
+        
+        elif type == Reaction.FOR_DAILY_COMMENT:
             daily_comment = get_object_or_404(DailyComment, id=id)
-            
-            ## 정상적인 동작에선 찾을 필요가 없긴 함
-            reaction = Reaction.objects.filter(user=user,
-                                               parent_type=Reaction.FOR_DAILY_COMMENT,
-                                               daily_comment=daily_comment,
-                                               emoji=emoji).first()
-            if reaction: 
-                return Response(status=status.HTTP_208_ALREADY_REPORTED)
-            ## END
-            
-            reaction = Reaction.objects.create(user=user,
-                                               parent_type=Reaction.FOR_DAILY_COMMENT,
-                                               daily_comment=daily_comment,
-                                               emoji=emoji)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST) #맞나..?
+            reaction, created = Reaction.objects.get_or_create(user=user,
+                                                               parent_type=Reaction.FOR_DAILY_COMMENT,
+                                                               daily_comment=daily_comment,
+                                                               emoji=emoji)
+        else :
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        if not created:
+            return Response(status=status.HTTP_208_ALREADY_REPORTED)
         
         serializer = ReactionSerializer(reaction)
         return Response(serializer.data, status=status.HTTP_200_OK)
