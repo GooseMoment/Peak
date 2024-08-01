@@ -8,6 +8,7 @@ import Button, { ButtonGroup } from "@components/common/Button"
 import { signIn, signUp } from "@api/users.api"
 
 import sleep from "@utils/sleep"
+import { useClientLocale } from "@utils/clientSettings"
 
 import styled from "styled-components"
 import { Mail, AtSign, Key, HelpCircle, UserPlus, LogIn } from "feather-icons-react"
@@ -89,6 +90,7 @@ const SignInForm = ({setActive}) => {
 
 const SignUpForm = ({setActive}) => {
     const { t } = useTranslation(null, {keyPrefix: "sign"})
+    const locale = useClientLocale()
 
     const goToSignIn = e => {
         e.preventDefault()
@@ -105,7 +107,7 @@ const SignUpForm = ({setActive}) => {
         const username = e.target.username.value
 
         try {
-            await signUp(email, password, username)
+            await signUp(email, password, username, locale)
             toast.success(t("sign_up_success"))
             setActive("signIn")
         } catch (err) {

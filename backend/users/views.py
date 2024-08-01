@@ -73,7 +73,7 @@ def sign_up(request: Request):
     payload = request.data
     
     required_fields = [
-        "username", "password", "email"
+        "username", "password", "email",
     ]
 
     new_user = User()
@@ -138,7 +138,8 @@ def sign_up(request: Request):
 
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    confirmation = UserEmailConfirmation.objects.create(user=new_user, token=uuid.uuid4().hex)
+    locale = payload.get("locale", "")
+    confirmation = UserEmailConfirmation.objects.create(user=new_user, token=uuid.uuid4().hex, locale=locale)
     
     send_mail_confirm_email(new_user, confirmation)
 
