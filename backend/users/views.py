@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.db import transaction
 from django.db.utils import IntegrityError
 
 from rest_framework.request import Request
@@ -11,10 +12,14 @@ from rest_framework.permissions import AllowAny
 
 from knox.views import LoginView as KnoxLoginView
 
+import uuid
+from datetime import datetime, UTC
+
 import re
 
-from .models import User
+from .models import User, UserEmailConfirmation
 from .serializers import UserSerializer
+from .utils import send_mail_confirm_email
 from social.views import get_blocks
 
 class UserDetail(mixins.RetrieveModelMixin,
@@ -44,7 +49,7 @@ class SignInView(KnoxLoginView):
         email: str = request.data["email"]
         password: str = request.data["password"]
 
-        user = authenticate(request, email=email, password=password)
+        user: User | None = authenticate(request, email=email, password=password)
 
         if user is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -57,6 +62,7 @@ username_validation = re.compile(r"^[a-z0-9_]{4,15}$")
 
 @api_view(["POST"])
 @permission_classes((AllowAny, ))
+@transaction.atomic
 def sign_up(request: Request):
     if request.user.is_authenticated:
         return Response({
@@ -131,6 +137,29 @@ def sign_up(request: Request):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    confirmation = UserEmailConfirmation.objects.create(user=new_user, token=uuid.uuid4().hex)
+    
+    send_mail_confirm_email(new_user, confirmation)
+
+    return Response(status=status.HTTP_200_OK)
+
+@api_view(["POST"])
+@permission_classes((AllowAny, ))
+def patch_user_email_confirmation(request: Request):
+    confirmation_token = request.data.get("confirmation")
+    if confirmation_token is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        confirmation = UserEmailConfirmation.objects.get(token=confirmation_token)
+    except UserEmailConfirmation.DoesNotExist:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    confirmation.confirmed_at = datetime.now(UTC)
+    confirmation.save()
+    confirmation.user.is_active = True
+    confirmation.user.save()
 
     return Response(status=status.HTTP_200_OK)
 
