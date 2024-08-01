@@ -192,7 +192,19 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# TODO: EMAIL_BACKEND
+# Email Backend
+# https://docs.djangoproject.com/en/4.2/topics/email/
+
+EMAIL_HOST = os.environ.get("DJANGO_EMAIL_HOST", "")
+EMAIL_PORT = int(os.environ.get("DJANGO_EMAIL_PORT", "25"))
+EMAIL_HOST_USER = os.environ.get("DJANGO_EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("DJANGO_EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_SSL = os.environ.get("DJANGO_USE_SSL", "0") == "1"
+EMAIL_USE_TLS = os.environ.get("DJANGO_EMAIL_USE_TLS", "0") == "1"
+EMAIL_SUBJECT_PREFIX = "[Peak] "
+DEFAULT_FROM_EMAIL=os.environ.get("DJANGO_FROM_EMAIL", "")
+
+# Storages & Caches
 
 STORAGES = {
     "default": {
@@ -221,10 +233,14 @@ CACHES = {
     }
 }
 
+# WebNotification
+
 WEBPUSH = {
     "vapid_private_key": os.environ.get("VAPID_PRIVATE_KEY"), 
     "vapid_claims_email": os.environ.get("VAPID_CLAIMS_EMAIL"),
 }
+
+# Token Authentication
 
 REST_KNOX = {
     "TOKEN_TTL": timedelta(days=14),
