@@ -53,6 +53,9 @@ class SignInView(KnoxLoginView):
 
         if user is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        if not user.is_active:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         login(request, user)
         
@@ -148,7 +151,7 @@ def sign_up(request: Request):
 @api_view(["POST"])
 @permission_classes((AllowAny, ))
 def patch_user_email_confirmation(request: Request):
-    confirmation_token = request.data.get("confirmation")
+    confirmation_token = request.data.get("token")
     if confirmation_token is None:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -157,12 +160,17 @@ def patch_user_email_confirmation(request: Request):
     except UserEmailConfirmation.DoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
+    if confirmation.confirmed_at is not None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
     confirmation.confirmed_at = datetime.now(UTC)
     confirmation.save()
     confirmation.user.is_active = True
     confirmation.user.save()
 
-    return Response(status=status.HTTP_200_OK)
+    return Response({
+        "email": confirmation.user.email,
+    }, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 def get_me(request: Request):

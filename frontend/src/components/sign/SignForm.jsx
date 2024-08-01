@@ -56,6 +56,8 @@ const SignInForm = ({setActive}) => {
 
             if (status === 400) {
                 toast.error(t("sign_in_failed"))
+            } else if (status === 403) {
+                toast.error(t("email_confirm_required"))
             } else if (status === 500) {
                 toast.error(t("internal_error"))
             } else {
