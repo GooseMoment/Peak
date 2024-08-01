@@ -37,7 +37,7 @@ const Color = ({setColor, setDisplayColor, closeComponent}) => {
             <TabBox>
             {themes.map(theme => (
                 <TabButton
-                    key={theme.themeName}
+                    key={theme.id}
                     $isActive={activeTab === theme.themeName}
                     onClick={clickTab(theme.id, theme.themeName)}
                 >

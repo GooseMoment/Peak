@@ -25,7 +25,7 @@ const Type = ({setType, setDisplayType, closeComponent}) => {
     return (
         <Detail title={t("title")} onClose={closeComponent}>
             {items.map(item => (
-                <ItemBlock key={item.id}>
+                <ItemBlock key={item.type}>
                     {item.icon}
                     <ItemText onClick={changeType(item.type, item.display)}>{item.display}</ItemText>
                 </ItemBlock>

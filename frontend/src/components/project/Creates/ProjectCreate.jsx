@@ -40,7 +40,7 @@ const ProjectCreate = ({onClose}) => {
     const makeProject = async (name, color, type) => { /*privacy 추가해야함*/
         try {
             if (name === 'Inbox' || name === 'inbox') {
-                toast.error(t("create_cannot_use_inbox"))
+                toast.error(t("project_create_cannot_use_inbox"))
                 return
             }
 
@@ -50,11 +50,11 @@ const ProjectCreate = ({onClose}) => {
                 'type': type,
             }
             await postProject(edit)
-            toast.success(t("create_success"))
+            toast.success(t("project_create_success"))
             onClose()
             queryClient.invalidateQueries({queryKey: ['projects']})
         } catch (e) {
-            toast.error(t("create_error"))
+            toast.error(t("project_create_error"))
         }
     }
 

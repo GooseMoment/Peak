@@ -4,20 +4,22 @@ import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
 import { cubicBeizer } from "@assets/keyframes"
-import notify from "@utils/notify"
 import Title from "@components/project/common/Title"
 import Middle from "@components/project/common/Middle"
 import Privacy from "./Privacy"
 
 import { postDrawer } from "@api/drawers.api"
 import queryClient from "@queries/queryClient"
+import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const DrawerCreate = ({onClose}) => {
+    const { t } = useTranslation(null, {keyPrefix: "project.create"})
     const { id } = useParams()
 
     const [name, setName] = useState('')
     const [privacy, setPrivacy] = useState('public')
-    const [displayPrivacy, setDisplayPrivacy] = useState('전체공개')
+    const [displayPrivacy, setDisplayPrivacy] = useState(t("privacy.public"))
 
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
@@ -38,9 +40,9 @@ const DrawerCreate = ({onClose}) => {
                 'privacy': privacy,
             }
             await postDrawer(edit)
-            notify.success("서랍 생성에 성공하였습니다.")
+            toast.success(t("drawer_create_success"))
         } catch (e) {
-            notify.error("서랍 생성에 실패했습니다.")
+            toast.error(t("drawer_create_error"))
         }
     }
 

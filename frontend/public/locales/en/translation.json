@@ -45,9 +45,11 @@
         "error_load_task": "Couldn't load tasks 😂",
         "button_go_back": "Go back",
         "create": {
-            "create_success": "Project creation was successful.",
-            "create_error": "Project creation failed.",
-            "create_cannot_use_inbox": "Project name cannot be set to Inbox.",
+            "project_create_success": "Successfully created the project.",
+            "project_create_error": "Failed to create the project.",
+            "project_create_cannot_use_inbox": "Project name cannot be set to Inbox.",
+            "drawer_create_success": "Successfully created the drawer.",
+            "drawer_create_error": "Failed to create the drawer.",
             "color": {
                 "title": "Color Settings",
                 "theme1": "basics",

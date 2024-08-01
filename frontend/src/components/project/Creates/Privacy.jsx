@@ -27,7 +27,7 @@ const Privacy = ({setPrivacy, setDisplayPrivacy, closeComponent}) => {
     return (
         <Detail title={t("title")} onClose={closeComponent}>
             {items.map(item => (
-                <ItemBlock key={item.id}>
+                <ItemBlock key={item.privacy}>
                     {item.icon}
                     <ItemText onClick={changePrivacy(item.privacy, item.display)}>{item.display}</ItemText>
                 </ItemBlock>
