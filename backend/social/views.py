@@ -305,18 +305,17 @@ class ReactionView(APIView):
         emoji = get_object_or_404(Emoji, id=emoji_id)
         
         # emoji = Emoji.objects.filter(id=emoji_id).first()
-        # 404는 부적절한가..?22
         
         user = request.user
         
-        if type == 'task':
+        if type == Reaction.FOR_TASK:
             task = get_object_or_404(Task, id=id)
             reaction = get_object_or_404(Reaction,
                                          user=user,
                                          parent_type=Reaction.FOR_TASK,
                                          task=task,
                                          emoji=emoji)
-        elif type == 'daily_comment':
+        elif type == Reaction.FOR_DAILY_COMMENT:
             daily_comment = get_object_or_404(DailyComment, id=id)
             reaction = get_object_or_404(Reaction,
                                          user=user,
