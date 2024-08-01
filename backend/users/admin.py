@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User
+from .models import User, UserEmailConfirmation
 from api.admin import fieldset_base, readonly_fields_base
 
 # https://docs.djangoproject.com/en/4.2/ref/contrib/admin/#django.contrib.admin.register
@@ -30,4 +30,18 @@ class UserAdmin(admin.ModelAdmin):
             },
         ),
         fieldset_base,
+    ]
+
+@admin.register(UserEmailConfirmation)
+class UserEmailConfirmationAdmin(admin.ModelAdmin):
+    ordering = ("-created_at", )
+    search_fields = ("user__username", "user__email", )
+    readonly_fields = ("created_at", )
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ("user", "token", "confirmed_at", "created_at", ),
+            },
+        ),
     ]
