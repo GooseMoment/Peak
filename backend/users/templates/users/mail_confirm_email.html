@@ -1,0 +1,16 @@
+{% extends "./mail_base.html" %}
+
+{% block content %}
+
+<h1>{{title}}</h1>
+<p>{{greeting}}</p>
+<p>{{click_button}}</p>
+
+<a href="{{button_link}}"><button>{{button_confirm}}</button></a>
+
+<hr />
+
+<p>{{copy_link}}</p>
+<textarea readonly>{{button_link}}</textarea>
+
+{% endblock %}
