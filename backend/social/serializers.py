@@ -80,9 +80,6 @@ class DailyLogDetailsSerializer(DrawerSerializer):
     
     class Meta(DrawerSerializer.Meta):
         fields = DrawerSerializer.Meta.fields + ['color', 'tasks']
-        
-    def get_color(self, obj):
-        return obj['color']
 
 class ReactionSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
