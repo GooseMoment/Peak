@@ -189,19 +189,19 @@ def post_comment_to_daily_comment(request: Request, day):
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @api_view(["GET"])
-def get_daily_log_details(requset: HttpRequest, followee, day):
+def get_daily_log_details(request: Request, followee, day):
     followeeUser = get_object_or_404(User, username=followee)
     
     is_follower = Following.objects.filter(
-        follower=requset.user,
+        follower=request.user,
         followee=followeeUser,
         status=Following.ACCEPTED
     ).exists()
 
-    if requset.user.username == followee:   # is me
+    if request.user.username == followee:   # is me
         privacyFilter = Q()
     elif is_follower:   # is follower
-        privacyFilter = (Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(privacy=PrivacyMixin.FOR_PROTECTED))
+        privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(privacy=PrivacyMixin.FOR_PROTECTED)
     else:
         privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
     # TODO: need to check block
