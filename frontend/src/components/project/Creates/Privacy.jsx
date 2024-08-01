@@ -1,12 +1,14 @@
 import styled from "styled-components"
 
 import Detail from "@components/project/common/Detail"
+import { useTranslation } from "react-i18next"
 
 import publicsvg from "@assets/project/privacy/public.svg"
 import protectedsvg from "@assets/project/privacy/protected.svg"
 import privatesvg from "@assets/project/privacy/private.svg"
 
 const Privacy = ({setPrivacy, setDisplayPrivacy, closeComponent}) => {
+    const { t } = useTranslation(null, {keyPrefix: "project.create.privacy"})
 
     const changePrivacy = (privacy, displayPrivacy) => {
         return async () => {
@@ -16,8 +18,14 @@ const Privacy = ({setPrivacy, setDisplayPrivacy, closeComponent}) => {
         }
     }
 
+    const items = [
+        {icon: <img src={publicsvg}/>, display: t("public"), privacy: "public"},
+        {icon: <img src={protectedsvg}/>, display: t("protected"), privacy: "protected"},
+        {icon: <img src={privatesvg}/>, display: t("private"), privacy: "private"}
+    ]
+
     return (
-        <Detail title="프로젝트 설정" onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
@@ -54,11 +62,5 @@ const ItemText = styled.p`
         cursor: pointer;
     }
 `
-
-const items = [
-    {icon: <img src={publicsvg}/>, display: "전체공개", privacy: "public"},
-    {icon: <img src={protectedsvg}/>, display: "팔로워공개", privacy: "protected"},
-    {icon: <img src={privatesvg}/>, display: "비공개", privacy: "private"}
-]
 
 export default Privacy

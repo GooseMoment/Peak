@@ -1,11 +1,13 @@
 import styled from "styled-components"
 
 import Detail from "@components/project/common/Detail"
+import { useTranslation } from "react-i18next"
 
 import goal from "@assets/project/type/goal.svg"
 import regular from "@assets/project/type/regular.svg"
 
 const Type = ({setType, setDisplayType, closeComponent}) => {
+    const { t } = useTranslation(null, {keyPrefix: "project.create.type"})
 
     const changeType = (type, displaytype) => {
         return async () => {
@@ -15,8 +17,13 @@ const Type = ({setType, setDisplayType, closeComponent}) => {
         }
     }
 
+    const items = [
+        {icon: <img src={regular}/>, display: t("regular"), type: "regular"},
+        {icon: <img src={goal}/>, display: t("goal"), type: "goal"}
+    ]
+
     return (
-        <Detail title="프로젝트 설정" onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
@@ -53,10 +60,5 @@ const ItemText = styled.p`
         cursor: pointer;
     }
 `
-
-const items = [
-    {icon: <img src={regular}/>, display: "상시 프로젝트", type: "regular"},
-    {icon: <img src={goal}/>, display: "목표 프로젝트", type: "goal"}
-]
 
 export default Type

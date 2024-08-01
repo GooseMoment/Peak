@@ -11,15 +11,18 @@ import Privacy from "./Privacy"
 import queryClient from "@queries/queryClient"
 import { postProject } from "@api/projects.api"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
 const ProjectCreate = ({onClose}) => {
+    const { t } = useTranslation(null, {keyPrefix: "project.create"})
+
     const [name, setName] = useState('')
     const [color, setColor] = useState('DC2E2E')
     const [displayColor, setDisplayColor] = useState('빨강')
     const [type, setType] = useState('regular')
-    const [displayType, setDisplayType] = useState('상시 프로젝트')
+    const [displayType, setDisplayType] = useState(t("type.regular"))
     const [privacy, setPrivacy] = useState('public')
-    const [displayPrivacy, setDisplayPrivacy] = useState('전체공개')
+    const [displayPrivacy, setDisplayPrivacy] = useState(t("privacy.public"))
 
      //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
@@ -37,7 +40,7 @@ const ProjectCreate = ({onClose}) => {
     const makeProject = async (name, color, type) => { /*privacy 추가해야함*/
         try {
             if (name === 'Inbox' || name === 'inbox') {
-                toast.error("프로젝트 이름은 Inbox로 설정할 수 없습니다.")
+                toast.error(t("create_cannot_use_inbox"))
                 return
             }
 
@@ -47,11 +50,11 @@ const ProjectCreate = ({onClose}) => {
                 'type': type,
             }
             await postProject(edit)
-            toast.success("프로젝트 생성에 성공하였습니다.")
+            toast.success(t("create_success"))
             onClose()
             queryClient.invalidateQueries({queryKey: ['projects']})
         } catch (e) {
-            toast.error("프로젝트 생성에 실패했습니다.")
+            toast.error(t("create_error"))
         }
     }
 

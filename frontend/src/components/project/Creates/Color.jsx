@@ -2,11 +2,14 @@ import { useState } from "react"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
 import Detail from "@components/project/common/Detail"
 import palettes from "./palettes"
 
 const Color = ({setColor, setDisplayColor, closeComponent}) => {
+    const { t } = useTranslation(null, {keyPrefix: "project.create.color"})
+
     const [activeTab, setActiveTab] = useState('기본')
     const [usePalettes, setUsePalettes] = useState(palettes[0])
 
@@ -24,8 +27,13 @@ const Color = ({setColor, setDisplayColor, closeComponent}) => {
         }
     }
 
+    const themes = [
+        {id: 0, themeName: t("theme1")},
+        {id: 1, themeName: t("theme2")},
+    ]    
+
     return (
-        <Detail title="색깔 설정" onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeComponent}>
             <TabBox>
             {themes.map(theme => (
                 <TabButton
@@ -53,13 +61,12 @@ const TabBox = styled.div`
 `
 
 const TabButton = styled.button`
-    font-weight: 400;
+    font-weight: 500;
     font-size: 0.9em;
-    padding: 0.3em;
+    padding: 0.35em;
     margin-left: 1em;
-    width: 3em;
     border: 1px solid;
-    border-radius: 15px;
+    border-radius: 13px;
     border-color: ${p => p.theme.project.lineColor};
     background-color: ${p => p.theme.backgroundColor};
     color: ${p => p.theme.textColor};
@@ -83,10 +90,5 @@ const ItemBlock = styled.div`
         cursor: pointer;
     }
 `
-
-const themes = [
-    {id: 0, themeName: '기본'},
-    {id: 1, themeName: '여름'},
-]
 
 export default Color

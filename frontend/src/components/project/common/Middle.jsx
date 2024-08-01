@@ -6,8 +6,11 @@ import FeatherIcon from "feather-icons-react"
 import ModalPortal from "@components/common/ModalPortal"
 import Button from "@components/common/Button"
 import { Fragment } from "react"
+import { useTranslation } from "react-i18next"
 
 const Middle = ({items, submit, isComponentOpen, setIsComponentOpen}) => {
+    const { t } = useTranslation(null, {keyPrefix: "project.create.common"})
+    
     const [content, setContent] = useState()
     
     const handleClickContent = (e) => {
@@ -26,7 +29,7 @@ const Middle = ({items, submit, isComponentOpen, setIsComponentOpen}) => {
                     <FeatherIcon icon={item.icon} />}
                     <VLine $end={item.id === 1 || item.id === 3}/>
                     <ContentText id ={item.icon} onClick={handleClickContent}>
-                        {item.display ? item.display : "없음"}
+                        {item.display ? item.display : t("none")}
                     </ContentText>
                 </ContentsBox>
                 {(content === item.icon && isComponentOpen) ? 
@@ -35,7 +38,7 @@ const Middle = ({items, submit, isComponentOpen, setIsComponentOpen}) => {
                 </ModalPortal> : null}
             </Fragment>
             ))}
-            <AddButton onClick={submit}>추가하기</AddButton>
+            <AddButton onClick={submit}>{t("button_add")}</AddButton>
         </>
     )
 }

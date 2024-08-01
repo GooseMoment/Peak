@@ -1,7 +1,10 @@
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
-const Title = ({name, setName, icon, onClose}) => {    
+const Title = ({name, setName, icon, onClose}) => { 
+    const { t } = useTranslation(null, {keyPrefix: "project.create.common"})
+
     const changeName = (e) => {
         setName(e.target.value)
     }
@@ -14,7 +17,7 @@ const Title = ({name, setName, icon, onClose}) => {
                     type='text'
                     value={name}
                     onChange={changeName}
-                    placeholder="이름을 입력하세요"
+                    placeholder={t("name_placeholder")}
                 />
             </TitleBox>
             <Icons>
