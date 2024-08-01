@@ -52,7 +52,7 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = ["display_name", "password", "email"]
 
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     def get_full_name(self):
         return self.id + "|@" + self.username
@@ -67,3 +67,19 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
 
     class Meta:
         db_table = "users"
+
+class UserEmailConfirmation(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+
+    token = models.CharField(max_length=256)
+
+    locale = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True)
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "user_email_confirmations"
