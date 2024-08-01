@@ -5,7 +5,7 @@ translation = {
         "html_title": "Confirm Your Email",
         "greeting": "Hi, @{username}.",
         "click_button": "To complete your signing up at Peak, click the button below.",
-        "button_confirm": "I'm @{username}",
+        "button_confirm": "Confirm as @{username}",
         "copy_link": "or, you can just copy & paste the link below into your browser:",
     },
 }
