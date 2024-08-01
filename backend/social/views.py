@@ -238,12 +238,12 @@ class ReactionView(APIView):
     def get(self, request, type, id):
         user = request.user
 
-        if type == 'task':
+        if type == Reaction.FOR_TASK:
             task = get_object_or_404(Task, id=id)
             # parent_type을 비교하는 게 속도 향상에 도움이 될진 모르겠음
             reactions = Reaction.objects.filter(parent_type=Reaction.FOR_TASK,
                                                 task=task).order_by("created_at")
-        elif type == 'daily_comment':
+        elif type == Reaction.FOR_DAILY_COMMENT:
             daily_comment = get_object_or_404(DailyComment, id=id)
             # parent_type을 비교하는 게 속도 향상에 도움이 될진 모르겠음
             reactions = Reaction.objects.filter(parent_type=Reaction.FOR_DAILY_COMMENT,
