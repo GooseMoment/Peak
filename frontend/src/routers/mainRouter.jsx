@@ -5,8 +5,6 @@ import {
 
 import AppLayout from "@containers/AppLayout"
 
-import { EmailVerificationForm, EmailVerificationResendForm, SignInForm, SignUpForm } from "@components/sign/forms"
-
 import ErrorPage from "@pages/ErrorPage"
 import NotificationsPage from "@pages/NotificationsPage"
 
@@ -58,19 +56,31 @@ const routes = [
                     },
                     {
                         path: "in",
-                        element: <SignInForm />,
+                        async lazy() {
+                            const { SignInForm } = await import ("@components/sign/forms")
+                            return { Component: SignInForm }
+                        }
                     },
                     {
                         path: "up",
-                        element: <SignUpForm />,
+                        async lazy() {
+                            const { SignUpForm } = await import ("@components/sign/forms")
+                            return { Component: SignUpForm }
+                        }
                     },
                     {
                         path: "verification",
-                        element: <EmailVerificationForm />,
+                        async lazy() {
+                            const { EmailVerificationForm } = await import ("@components/sign/forms")
+                            return { Component: EmailVerificationForm }
+                        }
                     },
                     {
                         path: "verification-resend",
-                        element: <EmailVerificationResendForm />,
+                        async lazy() {
+                            const { EmailVerificationResendForm } = await import ("@components/sign/forms")
+                            return { Component: EmailVerificationResendForm }
+                        }
                     },
                 ],
             },
