@@ -88,7 +88,7 @@ class EmailVerificationToken(models.Model):
     
     @property
     def link(self) -> str:
-        return f"{settings.SCHEME}{settings.WEB_HOSTNAME}/verification/?token={self.token.hex}"
+        return f"{settings.SCHEME}{settings.WEB_HOSTNAME}/sign/verification/?token={self.token.hex}"
 
     class Meta:
         db_table = "user_email_verification_token"

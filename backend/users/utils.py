@@ -39,7 +39,7 @@ def send_mail_verification_email(user: User, verification: EmailVerificationToke
 def send_mail_already_verified(user: User, locale: str):
     t = get_translations(locale)["mail_already_verified"]
 
-    link = f"{settings.SCHEME}{settings.WEB_HOSTNAME}/sign/"
+    link = f"{settings.SCHEME}{settings.WEB_HOSTNAME}/sign/in"
 
     subject = t["subject"]
 
@@ -60,7 +60,7 @@ def send_mail_already_verified(user: User, locale: str):
 def send_mail_no_account(email: str, locale: str):
     t = get_translations(locale)["mail_no_account"]
 
-    link = f"{settings.SCHEME}{settings.WEB_HOSTNAME}/sign/"
+    link = f"{settings.SCHEME}{settings.WEB_HOSTNAME}/sign/up"
 
     subject = t["subject"]
 
