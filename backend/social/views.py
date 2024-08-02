@@ -255,7 +255,7 @@ class ReactionView(APIView):
             if reaction.user == user:
                 myReactions.append(EmojiSerializer(reaction.emoji).data)
             
-            emoji_id = f"{reaction.emoji.id}"
+            emoji_id = str(reaction.emoji.id)
             reactionNum = reactionCountsDir.get(emoji_id)
             if reactionNum:
                 reactionCountsDir[emoji_id][1] = reactionNum + 1
