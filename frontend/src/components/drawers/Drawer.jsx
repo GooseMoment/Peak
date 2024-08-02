@@ -67,8 +67,12 @@ const Drawer = ({project, drawer, color}) => {
             return deleteDrawer(drawer.id)
         },
         onSuccess: () => {
+            toast.success(t("delete.drawer_delete_success", {drawer_name: drawer.name}))
             queryClient.invalidateQueries({queryKey: ['drawers', {projectID: project.id}]})
         },
+        onError: () => {
+            toast.success(t("delete.drawer_delete_error", {drawer_name: drawer.name}))
+        }
     })
 
     const handleAlert = () => {
@@ -76,12 +80,8 @@ const Drawer = ({project, drawer, color}) => {
         setIsAlertOpen(true)
     }
 
-    const contextMenuItems = makeContextMenuItems(theme, handleAlert)
-
-    const handleDelete = () => {
-        deleteMutation.mutate()
-        toast.success(`"${drawer.name}" 서랍이 삭제되었습니다`)
-    }
+    const sortMenuItems = makeSortMenuItems(t)
+    const contextMenuItems = makeContextMenuItems(t, theme, handleAlert)
 
     const handleToggleSimpleCreate = () => {
         setIsSimpleOpen(prev => !prev)
@@ -137,7 +137,7 @@ const Drawer = ({project, drawer, color}) => {
             }
             {isSortMenuOpen &&
                 <SortMenu
-                    title="작업"
+                    title={t("sort.task_title")}
                     items={sortMenuItems}
                     selectedButtonPosition={selectedSortMenuPosition}
                     ordering={ordering}
@@ -151,7 +151,11 @@ const Drawer = ({project, drawer, color}) => {
                 />
             }
             {isAlertOpen &&
-                <DeleteAlert title={`"${drawer.name}" 서랍을`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete} />
+                <DeleteAlert 
+                    title={t("delete.alert_drawer_title", {drawer_name: drawer.name})}
+                    onClose={() => {setIsAlertOpen(false)}}
+                    func={deleteMutation.mutate}
+                />
             }
             {/*isSimpleOpen &&
                 <TaskCreateSimple 
@@ -226,20 +230,20 @@ const MoreButton = styled(Button)`
     width: 25em;
 `
 
-const sortMenuItems = [
-    {"display": "중요도순", "context": "-priority"},
-    {"display": "기한 이른 순서", "context": "assigned_at,due_date,due_time"},
-    {"display": "기한 늦은 순서", "context": "-assigned_at,-due_date,-due_time"},
-    {"display": "이름 사전순", "context": "name"},
-    {"display": "이름 사전 역순", "context": "-name"},
-    {"display": "생성일자 최신순", "context": "created_at"},
-    {"display": "생성일자 오래된 순", "context": "-created_at"},
-    {"display": "알림 설정 우선", "context": "reminders"},
+const makeSortMenuItems = (t) => [
+    {"display": t("sort.-priority"), "context": "-priority"},
+    {"display": t("sort.due_date"), "context": "assigned_at,due_date,due_time"},
+    {"display": t("sort.-due_date"), "context": "-assigned_at,-due_date,-due_time"},
+    {"display": t("sort.name"), "context": "name"},
+    {"display": t("sort.-name"), "context": "-name"},
+    {"display": t("sort.created_at"), "context": "created_at"},
+    {"display": t("sort.-created_at"), "context": "-created_at"},
+    {"display": t("sort.reminders"), "context": "reminders"},
 ]
 
-const makeContextMenuItems = (theme, handleAlert) => [
-    {"icon": "edit", "display": "수정", "color": theme.textColor, "func": () => {}},
-    {"icon": "trash-2", "display": "삭제", "color": theme.project.danger, "func": handleAlert}
+const makeContextMenuItems = (t, theme, handleAlert) => [
+    {"icon": "edit", "display": t("edit.display"), "color": theme.textColor, "func": () => {}},
+    {"icon": "trash-2", "display": t("delete.display"), "color": theme.project.danger, "func": handleAlert}
 ]
 
 export default Drawer

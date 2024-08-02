@@ -45,11 +45,11 @@
         "error_load_task": "Couldn't load tasks 😂",
         "button_go_back": "Go back",
         "create": {
-            "project_create_success": "Successfully created the project.",
-            "project_create_error": "Failed to create the project.",
+            "project_create_success": "The project was successfully created.",
+            "project_create_error": "The project creation failed.",
             "project_create_cannot_use_inbox": "Project name cannot be set to Inbox.",
-            "drawer_create_success": "Successfully created the drawer.",
-            "drawer_create_error": "Failed to create the drawer.",
+            "drawer_create_success": "The drawer was successfully created.",
+            "drawer_create_error": "The drawer creation failed.",
             "color": {
                 "title": "Color Settings",
                 "theme1": "basics",
@@ -71,6 +71,37 @@
                 "button_add": "Add",
                 "none": "none"
             }
+        },
+        "edit": {
+            "display": "Edit"
+        },
+        "delete": {
+            "display": "Delete",
+            "button_delete": "Delete",
+            "button_done": "Done",
+            "alert_project_title": "the \"{{project_name}}\" project",
+            "alert_drawer_title": "the \"{{drawer_name}}\" drawer",
+            "alert_question": "Are you sure you want to delete {{title}}?",
+            "project_delete_success": "The \"{{project_name}}\" project was deleted.",
+            "project_delete_error": "Deleting the \"{{project_name}}\" project failed.",
+            "drawer_delete_success": "The \"{{drawer_name}}\" drawer was deleted.",
+            "drawer_delete_error": "Deleting the \"{{drawer_name}}\" drawer failed."
+        },
+        "sort": {
+            "title": "{{title}} Sort by",
+            "drawer_title": "Drawer",
+            "task_title": "Task",
+            "name": "Name alphabetical order",
+            "-name": "Name alphabetical reverse order",
+            "created_at": "Creation Date Newest",
+            "-created_at": "Creation Date Oldest",
+            "-uncompleted_task_count": "Most Uncompleted tasks",
+            "-completed_task_count": "Most Completed tasks",
+            "completed_task_count": "Least Completed tasks",
+            "-priority": "Order of importance",
+            "due_date": "Early due date order",
+            "-due_date": "Late due date order",
+            "reminders": "Notifications first"
         }
     },
     "settings": {

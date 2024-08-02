@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
+import { useTranslation } from "react-i18next"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import { cubicBeizer, slideDown, slideUp } from "@assets/keyframes"
@@ -10,6 +11,8 @@ import styled, { css } from "styled-components"
 const el = document.querySelector("#confirmation")
 
 const Confirmation = ({ question, buttons, onClose }) => {
+    const { t } = useTranslation(null, {keyPrefix: "project.delete"})
+
     const [visible, setVisible] = useState(true)
     const [closing, setClosing] = useState(false)
 
@@ -45,7 +48,7 @@ const Confirmation = ({ question, buttons, onClose }) => {
     return createPortal(visible && <Frame $closing={closing}>
         <Question>{question}</Question>     
         <ButtonGroup>
-            {buttons?.map(button => button === "close" ? <Button onClick={closeWithDelay}>닫기</Button> : button)}
+            {buttons?.map(button => button === "close" ? <Button onClick={closeWithDelay}>{t("button_done")}</Button> : button)}
         </ButtonGroup>
     </Frame>, el)
 }

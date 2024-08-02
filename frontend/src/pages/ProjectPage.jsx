@@ -65,8 +65,12 @@ const ProjectPage = () => {
             return deleteProject(id)
         },
         onSuccess: () => {
+            toast.success(t("delete.project_delete_success", {project_name: project.name}))
             queryClient.invalidateQueries({queryKey: ['projects']})
         },
+        onError: () => {
+            toast.error(t("delete.project_delete_error", {project_name: project.name}))
+        }
     })
 
     const handleAlert = () => {
@@ -74,12 +78,12 @@ const ProjectPage = () => {
         setIsAlertOpen(true)
     }
 
-    const contextMenuItems = makeContextMenuItems(theme, handleAlert)
+    const sortMenuItems = makeSortMenuItems(t)
+    const contextMenuItems = makeContextMenuItems(t, theme, handleAlert)
 
     const handleDelete = () => {
         navigate(`/app/projects`)
         deleteMutation.mutate()
-        toast.success(`"${project.name}" 프로젝트가 삭제되었습니다`)
     }
 
     const openInboxTaskCreate = () => {
@@ -114,7 +118,7 @@ const ProjectPage = () => {
         ))}
         {isSortMenuOpen &&
             <SortMenu
-                title="서랍"
+                title={t("sort.drawer_title")}
                 items={sortMenuItems}
                 selectedButtonPosition={selectedSortMenuPosition}
                 ordering={ordering}
@@ -128,7 +132,11 @@ const ProjectPage = () => {
             />
         }
         {isAlertOpen &&
-            <DeleteAlert title={`"${project.name}" 프로젝트를`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
+            <DeleteAlert
+                title={t("delete.alert_project_title", {project_name: project.name})}
+                onClose={() => {setIsAlertOpen(false)}}
+                func={handleDelete}
+            />
         }
         {isDrawerCreateOpen &&
             <ModalPortal closeModal={() => {setIsDrawerCreateOpen(false)}}>
@@ -171,19 +179,19 @@ const NoDrawerText = styled.div`
     font-size: 1.4em;
 `
 
-const sortMenuItems = [
-    {"display": "이름 사전순", "context": "name"},
-    {"display": "이름 사전 역순", "context": "-name"},
-    {"display": "생성일자 최신순", "context": "created_at"},
-    {"display": "생성일자 오래된순", "context": "-created_at"},
-    {"display": "미완료 작업 많은순", "context": "-uncompleted_task_count"},
-    {"display": "완료 작업 많은순", "context": "-completed_task_count"},
-    {"display": "완료 작업 적은순", "context": "completed_task_count"},
+const makeSortMenuItems = (t) => [
+    {"display": t("sort.name"), "context": "name"},
+    {"display": t("sort.-name"), "context": "-name"},
+    {"display": t("sort.created_at"), "context": "created_at"},
+    {"display": t("sort.-created_at"), "context": "-created_at"},
+    {"display": t("sort.-uncompleted_task_count"), "context": "-uncompleted_task_count"},
+    {"display": t("sort.-completed_task_count"), "context": "-completed_task_count"},
+    {"display": t("sort.completed_task_count"), "context": "completed_task_count"},
 ]
 
-const makeContextMenuItems = (theme, handleAlert) => [
-    {"icon": "edit", "display": "수정", "color": theme.textColor, "func": () => {}},
-    {"icon": "trash-2", "display": "삭제", "color": theme.project.danger, "func": handleAlert}
+const makeContextMenuItems = (t, theme, handleAlert) => [
+    {"icon": "edit", "display": t("edit.display"), "color": theme.textColor, "func": () => {}},
+    {"icon": "trash-2", "display": t("delete.display"), "color": theme.project.danger, "func": handleAlert}
 ]
 
 export default ProjectPage
