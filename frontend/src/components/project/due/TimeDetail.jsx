@@ -6,18 +6,22 @@ import { toast } from "react-toastify"
 import Button from "@components/common/Button"
 import { useClientSetting, useClientTimezone } from "@utils/clientSettings"
 
-const TimeDetail = ({ due_date, setFunc, closeComponent }) => {
+const TimeDetail = ({ task, setFunc, closeComponent }) => {
     const [setting, ] = useClientSetting()
     const due_tz = useClientTimezone()
 
+    const due_time = task?.due_time || ''
+
     const [ampm, setAmpm] = useState(ampms[0].name)
-    const [hour, setHour] = useState()
-    const [min, setMin] = useState()
+    const [hour, setHour] = useState(due_time && parseInt(due_time.slice(0, 2)))
+    const [min, setMin] = useState(due_time && parseInt(due_time.slice(3, 5)))
 
     const changeTime = () => {
+        const due_date = task.due_date
         let converted_hour = !setting.time_as_24_hour && ampm === "pm" ? hour + 12 : hour
         const due_time = `${converted_hour}:${min}:00`
         setFunc({due_tz, due_date, due_time})
+        toast.success('시간이 변경되었습니다.')
         closeComponent()
     }
 

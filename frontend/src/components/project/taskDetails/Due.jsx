@@ -44,7 +44,7 @@ const Due = ({ task, setFunc, closeComponent }) => {
     const addComponent = [
         {name: "quick", display: "빠른 지정", icon: "menu", component: <QuickDue changeDueDate={changeDueDate}/>},
         {name: "calendar", display: "달력", icon: "calendar", component: <div>달력입니다</div>},
-        {name: "time", display: "시간 추가", icon: "clock", component: <TimeDetail due_date={task.due_date} setFunc={setFunc} closeComponent={closeComponent}/>},
+        {name: "time", display: "시간 추가", icon: "clock", component: <TimeDetail task={task} setFunc={setFunc} closeComponent={closeComponent}/>},
         {name: "repeat", display: "반복 설정", icon: "refresh-cw", component: <RepeatDetail/>},
     ]
 
