@@ -161,9 +161,8 @@ export const EmailVerificationResendForm = () => {
     }
 
     return <Box>
-        <Title>이메일 인증 재요청</Title>
+        <Title>{t("resend_title")}</Title>
         <Content>
-            <Text>{t("resend_you_can_request")}</Text>
             <form onSubmit={onSubmit}>
                 <Input icon={<Mail />} name="email" placeholder={t("placeholder_email")} type="email" required disabled={mutation.isPending} />
                 <ButtonGroup $justifyContent="right" $margin="1em 0">
@@ -215,8 +214,9 @@ export const EmailVerificationForm = () => {
     }
 
     return <Box>
+        <Title>{t("verified_title")}</Title>
         <Content>
-            <Text>{t("verified", {email})} </Text>
+            <VerifiedMessage>{t("verified", {email})}</VerifiedMessage>
             <Links>
                 <Link to="/sign/in">
                     <LinkText><LogIn />{t("link_sign")}</LinkText>
@@ -266,7 +266,12 @@ const Content = styled.div`
 
 const Text = styled.p`
     line-height: 1.3;
-    max-width: 500px;
+    margin-bottom: 1em;
+`
+
+const VerifiedMessage = styled.p`
+    margin-bottom: 3em;
+    font-weight: 500;
 `
 
 const Links = styled.div`
