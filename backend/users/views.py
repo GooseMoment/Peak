@@ -157,7 +157,10 @@ def verify_email_verification_token(request: Request):
     if token_hex is None:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    token = uuid.UUID(hex=token_hex)
+    try:
+        token = uuid.UUID(hex=token_hex)
+    except ValueError:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     try:
         verification = EmailVerificationToken.objects.get(token=token)
