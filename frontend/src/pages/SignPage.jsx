@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
+import { Link, useSearchParams, Outlet } from "react-router-dom"
 
 import Brand, {Box as BrandTitle} from "@components/sign/Brand"
 import Showcase from "@components/sign/Showcase"
-import SignForm from "@components/sign/SignForm"
 
 import generateActivities from "@components/sign/activities"
 
@@ -14,7 +13,7 @@ import { useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 
 const SignPage = () => {
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams, ] = useSearchParams()
     const [activities, setActivities] = useState([])
 
     useEffect(() => {
@@ -24,7 +23,6 @@ const SignPage = () => {
                 toast.error("Please sign in again.", {toastId: "flag401"})
                 break
         }
-        setSearchParams({})
     }, [])
 
     const { data: serverEmojis, isError, isFetching } = useQuery({
@@ -51,7 +49,7 @@ const SignPage = () => {
             <Brand />
         </Link>
         <Showcase activities={activities} />
-        <SignForm />
+        <Outlet />
     </Root>
 }
 

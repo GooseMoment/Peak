@@ -1,37 +1,26 @@
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 
 import Form from "@components/sign/Form"
 import Input from "@components/sign/Input"
 import Button, { ButtonGroup } from "@components/common/Button"
+import LoaderCircle from "@components/common/LoaderCircle"
+import Error from "@components/errors/ErrorLayout"
 
-import { signIn, signUp } from "@api/users.api"
+import { resendVerificationEmail, signIn, signUp, verifyEmail } from "@api/users.api"
 
 import sleep from "@utils/sleep"
 import { useClientLocale } from "@utils/clientSettings"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { Mail, AtSign, Key, HelpCircle, UserPlus, LogIn } from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { useQuery, useMutation } from "@tanstack/react-query"
 
-const SignForm = () => {
-    const [active, setActive] = useState("signIn")
-
-    if (active === "signIn") {
-        return <SignInForm setActive={setActive} />
-    } else if (active === "signUp") {
-        return <SignUpForm setActive={setActive} />
-    }
-}
-
-const SignInForm = ({setActive}) => {
+export const SignInForm = () => {
     const { t } = useTranslation(null, {keyPrefix: "sign"})
     
-    const goToSignUp = e => {
-        e.preventDefault()
-        setActive("signUp")
-    }
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
@@ -80,27 +69,24 @@ const SignInForm = ({setActive}) => {
             </ButtonGroup>
         </Form>
         <Links>
-            <Link onClick={goToSignUp}>
+            <Link to="/sign/up">
                 <LinkText><UserPlus />{t("button_create_account")}</LinkText>
             </Link>
-            <Link to="/password-recovery">
+            <Link to="/sign/password-recovery">
                 <LinkText><HelpCircle />{t("button_forgot_password")}</LinkText>
             </Link>
-            <Link to="/verification">
+            <Link to="/sign/verification-resend">
                 <LinkText><Mail />{t("button_resend_verification")}</LinkText>
             </Link>
         </Links>
     </Box>
 }
 
-const SignUpForm = ({setActive}) => {
+export const SignUpForm = () => {
     const { t } = useTranslation(null, {keyPrefix: "sign"})
     const locale = useClientLocale()
+    const navigate = useNavigate()
 
-    const goToSignIn = e => {
-        e.preventDefault()
-        setActive("signIn")
-    }
     const [isLoading, setIsLoading] = useState(false)
 
     const onSubmit = async e => {
@@ -114,7 +100,7 @@ const SignUpForm = ({setActive}) => {
         try {
             await signUp(email, password, username, locale)
             toast.success(t("sign_up_success"))
-            setActive("signIn")
+            navigate("/sign/in")
         } catch (err) {
             toast.error(t("sign_up_errors." + err.message))
             setIsLoading(false)
@@ -139,10 +125,104 @@ const SignUpForm = ({setActive}) => {
             </ButtonGroup>
         </Form>
         <Links>
-            <Link onClick={goToSignIn}>
+            <Link to="/sign/in">
                 <LinkText><LogIn />{t("button_already_have_account")}</LinkText>
             </Link>
         </Links>
+    </Box>
+}
+
+export const EmailVerificationResendForm = () => {
+    const { t } = useTranslation(null, {keyPrefix: "email_verification"})
+
+    const mutation = useMutation({
+        mutationFn: ({email}) => resendVerificationEmail(email),
+        onSuccess: () => {
+            toast.success(t("resend_success"))
+        },
+        onError: e => {
+            if (e.response.status === 425) {
+                const seconds = e.response.data.seconds
+                const minutes = Math.floor(seconds / 60) + 1
+
+                return toast.error(t("resend_error_limit", {minutes}))
+            } else if (e.response.status === 400) {
+                return toast.error(t("resend_error_bad_request"))
+            }
+            
+            return toast.error(t("resend_error_any"))
+        }
+    })
+
+    const onSubmit = e => {
+        e.preventDefault()
+        const email = e.target.email.value
+        mutation.mutate({email})
+    }
+
+    return <Box>
+        <Title>이메일 인증 재요청</Title>
+        <Content>
+            <Text>{t("resend_you_can_request")}</Text>
+            <form onSubmit={onSubmit}>
+                <Input icon={<Mail />} name="email" placeholder={t("placeholder_email")} type="email" required disabled={mutation.isPending} />
+                <ButtonGroup $justifyContent="right" $margin="1em 0">
+                    <Button $loading={mutation.isPending} type="submit" disabled={mutation.isPending}>{t("button_submit")}</Button>
+                </ButtonGroup>
+            </form>
+            <Text>{t("resend_other_cases")}</Text>
+            <Text>{t("resend_known_issues")}</Text>
+            <Links>
+                <Link to="/sign/in">
+                    <LinkText><LogIn />{t("link_sign")}</LinkText>
+                </Link>
+            </Links>
+        </Content>
+    </Box>
+}
+
+export const EmailVerificationForm = () => {
+    const { t } = useTranslation(null, {keyPrefix: "email_verification"})
+
+    const [searchParams, ] = useSearchParams()
+
+    const token = searchParams.get("token")
+
+    const { data: email, isPending, isError } = useQuery({
+        queryKey: ["email_verifications", token],
+        queryFn: () => verifyEmail(token),
+        enabled: !!token,
+        refetchOnWindowFocus: false,
+        retry: (count, err) => {
+            if (err?.response?.status === 400) {
+                return false
+            }
+
+            return count < 3
+        }
+    })
+
+    if (isPending) {
+        return <Box $verticalCenter>
+            <FullLoader />
+        </Box>
+    }
+
+    if (isError) {
+        return <Box>
+            <Error code="?_?" text={t("invalid_access")} />
+        </Box>
+    }
+
+    return <Box>
+        <Content>
+            <Text>{t("verified", {email})} </Text>
+            <Links>
+                <Link to="/sign/in">
+                    <LinkText><LogIn />{t("link_sign")}</LinkText>
+                </Link>
+            </Links>
+        </Content>
     </Box>
 }
 
@@ -166,11 +246,27 @@ const Box = styled.section`
             width: 100%;
         }
     }
+
+    ${p => p.$verticalCenter && css`
+        align-items: center;
+    `}
 `
 
 const Title = styled.h2`
     font-weight: bold;
     font-size: 2rem;
+`
+
+const Content = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    gap: 1rem;
+`
+
+const Text = styled.p`
+    line-height: 1.3;
+    max-width: 500px;
 `
 
 const Links = styled.div`
@@ -199,4 +295,10 @@ const TosAgreement = styled.p`
     }
 `
 
-export default SignForm
+const FullLoader = styled(LoaderCircle)`
+    width: 3em;
+    color: inherit;
+    opacity: 0.7;
+
+    border-width: 0.35em;
+`
