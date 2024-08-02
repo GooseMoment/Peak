@@ -36,7 +36,7 @@ class UserAdmin(admin.ModelAdmin):
 class EmailVerificationTokenAdmin(admin.ModelAdmin):
     ordering = ("-created_at", )
     search_fields = ("user__username", "user__email", )
-    readonly_fields = ("created_at", )
+    readonly_fields = ("created_at", "token", )
     fieldsets = [
         (
             None,
