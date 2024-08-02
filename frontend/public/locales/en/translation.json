@@ -333,7 +333,16 @@
     "email_verification": {
         "invalid_access": "Invalid access.",
         "verified": "{{email}} was verified. Now you can sign in.",
-        "link_sign": "Click to Sign In"
+        "link_sign": "Click to Sign In",
+        "resend_you_can_request": "Haven't you got a verification mail? You can request again below:",
+        "resend_other_cases": "In cases that the email entered is already verified or not registered, Other types of mail will be sent.",
+        "resend_known_issues": "It is reported that some mail services like Outlook do not accept emails from Peak. If your mail service does so, please sign up with another mail address.",
+        "resend_success": "A mail was sent. Please check your inbox or junk box.",
+        "resend_error_limit": "Try again in {{minutes}} minute(s).",
+        "resend_error_bad_request": "Invalid email address.",
+        "resend_error_any": "Unable to send a mail. Try again later.",
+        "placeholder_email": "Enter your email",
+        "button_submit": "Submit"
     },
     "sign": {
         "sign_in": "Sign In",

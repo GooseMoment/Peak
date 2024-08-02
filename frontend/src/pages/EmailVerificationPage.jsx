@@ -38,19 +38,19 @@ const EmailVerificationPage = () => {
     const mutation = useMutation({
         mutationFn: ({email}) => resendVerificationEmail(email),
         onSuccess: () => {
-            toast.success("인증 메일을 다시 전송했습니다. 메일함 또는 스팸함을 확인하세요.")
+            toast.success(t("resend_success"))
         },
         onError: e => {
             if (e.response.status === 425) {
                 const seconds = e.response.data.seconds
                 const minutes = Math.floor(seconds / 60) + 1
 
-                return toast.error(`약 ${minutes}분 후 다시 시도하십시오.`)
+                return toast.error(t("resend_error_limit", {minutes}))
             } else if (e.response.status === 400) {
-                return toast.error("메일 형식이 올바르지 않습니다.")
+                return toast.error(t("resend_error_bad_request"))
             }
             
-            return toast.error("오류가 발생했습니다.")
+            return toast.error(t("resend_error_any"))
         }
     })
 
@@ -64,15 +64,16 @@ const EmailVerificationPage = () => {
         return <Frame>
             <Link to="/"><Brand /></Link> 
             <Content>
-                <Text>이메일 인증 메일을 받지 못한 경우, 다시 요청할 수 있습니다.</Text>
+                <Text>{t("resend_you_can_request")}</Text>
                 <form onSubmit={onSubmit}>
-                    <Input icon={<Mail />} name="email" placeholder="이메일 주소 입력" type="email" required disabled={mutation.isPending} />
+                    <Input icon={<Mail />} name="email" placeholder={t("placeholder_email")} type="email" required disabled={mutation.isPending} />
                     <ButtonGroup $justifyContent="right" $margin="1em 0">
-                        <Button $loading={mutation.isPending} type="submit" disabled={mutation.isPending}>제출</Button>
+                        <Button $loading={mutation.isPending} type="submit" disabled={mutation.isPending}>{t("button_submit")}</Button>
                     </ButtonGroup>
                 </form>
-                <Text>만약 이미 인증되었거나, 등록되지 않은 이메일이라면 다른 메일이 전송됩니다.</Text>
-                <Text>Outlook 등의 이메일 서비스에서는 스팸으로 간주되어 전송이 불가합니다. 해당 경우에는 다른 주소로 가입하여 주십시오.</Text>
+                <Text>{t("resend_other_cases")}</Text>
+                <Text>{t("resend_known_issues")}</Text>
+                <Link to="/sign"><Button>{t("link_sign")}</Button></Link>
             </Content>
         </Frame>
     }
