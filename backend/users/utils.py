@@ -1,12 +1,13 @@
 from django.core.mail import EmailMultiAlternatives
 from django.template import loader
-from django.conf import settings
 
 from .models import User, EmailVerificationToken
 from .locale import get_translations
 
-def send_mail_confirm_email(user: User, verification: EmailVerificationToken):
-    t = get_translations(verification.locale)["mail_confirm_email"]
+from datetime import datetime, UTC
+
+def send_mail_verification_email(user: User, verification: EmailVerificationToken):
+    t = get_translations(verification.locale)["mail_verification_email"]
 
     link = verification.link
 
@@ -17,7 +18,7 @@ def send_mail_confirm_email(user: User, verification: EmailVerificationToken):
         link=link,
     )
     
-    tmpl = loader.get_template("users/mail_confirm_email.html")
+    tmpl = loader.get_template("users/mail_verification_email.html")
     context = {
         "username": user.username,
         "title": t["html_title"],
@@ -26,7 +27,7 @@ def send_mail_confirm_email(user: User, verification: EmailVerificationToken):
         ),
         "click_button": t["click_button"],
         "button_link": link,
-        "button_confirm": t["button_confirm"].format(
+        "button_verify": t["button_verify"].format(
             username=user.username,
         ),
         "copy_link": t["copy_link"],
@@ -42,3 +43,5 @@ def send_mail_confirm_email(user: User, verification: EmailVerificationToken):
 
     email.attach_alternative(html_content, "text/html")
     email.send()
+
+    verification.last_sent_at = datetime.now(UTC)

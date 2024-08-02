@@ -19,7 +19,7 @@ import re
 
 from .models import User, EmailVerificationToken
 from .serializers import UserSerializer
-from .utils import send_mail_confirm_email
+from .utils import send_mail_verification_email
 from social.views import get_blocks
 
 class UserDetail(mixins.RetrieveModelMixin,
@@ -144,7 +144,7 @@ def sign_up(request: Request):
     locale = payload.get("locale", "")
     verification = EmailVerificationToken.objects.create(user=new_user, locale=locale)
     
-    send_mail_confirm_email(new_user, verification)
+    send_mail_verification_email(new_user, verification)
 
     return Response(status=status.HTTP_200_OK)
 

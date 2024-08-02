@@ -332,7 +332,7 @@
     },
     "email_verification": {
         "invalid_access": "Invalid access.",
-        "verified": "{{email}} was confirmed. Now you can sign in.",
+        "verified": "{{email}} was verified. Now you can sign in.",
         "link_sign": "Click to Sign In"
     },
     "sign": {
