@@ -47,9 +47,9 @@ export const signIn = async (email, password) => {
     }
 }
 
-export const signUp = async (email, password, username, locale) => {
+export const signUp = async (email, password, username) => {
     try {
-        const res = await client.post("sign_up/", {email, password, username, locale})
+        const res = await client.post("sign_up/", {email, password, username})
         return res
     } catch (err) {
         let code = ""

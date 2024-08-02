@@ -10,7 +10,6 @@ import Error from "@components/errors/ErrorLayout"
 import { resendVerificationEmail, signIn, signUp, verifyEmail } from "@api/users.api"
 
 import sleep from "@utils/sleep"
-import { useClientLocale } from "@utils/clientSettings"
 
 import styled, { css } from "styled-components"
 import { Mail, AtSign, Key, HelpCircle, UserPlus, LogIn } from "feather-icons-react"
@@ -84,7 +83,6 @@ export const SignInForm = () => {
 
 export const SignUpForm = () => {
     const { t } = useTranslation(null, {keyPrefix: "sign"})
-    const locale = useClientLocale()
     const navigate = useNavigate()
 
     const [isLoading, setIsLoading] = useState(false)
@@ -98,7 +96,7 @@ export const SignUpForm = () => {
         const username = e.target.username.value
 
         try {
-            await signUp(email, password, username, locale)
+            await signUp(email, password, username)
             toast.success(t("sign_up_success"))
             navigate("/sign/in")
         } catch (err) {
