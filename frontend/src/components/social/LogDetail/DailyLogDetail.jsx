@@ -93,45 +93,44 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
 }
 
 const DetailHeader = styled.div`
-display: flex;
-flex-direction: column;
-gap: 1em;
+    padding: 1.2em 1em 0.2em;
 
-padding: 1.2em 1em 0.2em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 `
 
 const CommentRow = styled.div`
-display: flex;
-gap: 1em;
+    display: flex;
+    gap: 0.5em;
 `
 
 const CommentBox = styled.div`
-display: flex;
-background-color: #e6e6e6;
-border-radius: 10pt;
-width: 70%;
-padding: 1em;
-cursor: pointer;
+    width: 72%;
+    border-radius: 1em;
+    background-color: #e6e6e6;
+    padding: 1em;
 
-justify-content: center;
-align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
 `
 
 const Comment = styled.div`
-white-space: normal;
-color: ${props => props.$color};
-font-style: ${props => props.$fontstyle};
+    white-space: normal;
+    color: ${props => props.$color};
+    font-style: ${props => props.$fontstyle};
 `
 
 const CommentInput = styled.input`
-display: flex;
-height: 100%;
-width: 100%;
-text-align: center;
-font-size: 1em;
-background-color: inherit;
-border: 0;
-white-space: normal;
+    height: 100%;
+    width: 100%;
+    background-color: inherit;
+    text-align: center;
+    font-size: 1em;
+    white-space: normal;
 `
 
 const ReactionBoxTemp = styled.div`

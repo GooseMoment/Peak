@@ -4,6 +4,7 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 import EmojiModal from "@components/social/EmojiModal"
+import MildButton from "@components/common/MildButton"
 
 import { getEmojis } from "@api/social.api"
 
@@ -49,17 +50,18 @@ const EmojiPickerButton = ({pickedEmoji, setPickedEmoji}) => {
     </>
 }
 
-const PickerButton = styled.div`
-height: 1.2em;
-width: 1.5em;
-padding: 0.5em;
+const PickerButton = styled(MildButton)`
+    height: 2em;
+    width: 1.5em;
 
-border: 0;
-background-color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-display: flex;
-align-items: center;
-justify-content: center;
+    & svg {
+        top: unset;
+        margin-right: unset;
+    }
 `
 
 export default EmojiPickerButton
