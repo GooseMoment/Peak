@@ -5,11 +5,13 @@ from django.db import transaction
 from django.db.utils import IntegrityError
 from django.conf import settings
 
+from rest_framework import status, mixins, generics
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework import status, mixins, generics
+from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
+from rest_framework.throttling import AnonRateThrottle
 
 from knox.views import LoginView as KnoxLoginView
 
@@ -150,82 +152,88 @@ def sign_up(request: Request):
 
     return Response(status=status.HTTP_200_OK)
 
-@api_view(["POST"])
-@permission_classes((AllowAny, ))
-def verify_email_verification_token(request: Request):
-    token_hex = request.data.get("token")
-    if token_hex is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+class VerifyEmailVerificationToken(GenericAPIView):
+    permission_classes = (AllowAny, )
 
-    try:
-        token = uuid.UUID(hex=token_hex)
-    except ValueError:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request: Request):
+        token_hex = request.data.get("token")
+        if token_hex is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    try:
-        verification = EmailVerificationToken.objects.get(token=token)
-    except EmailVerificationToken.DoesNotExist:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    
-    if verification.verified_at is not None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    
-    verification.verified_at = datetime.now(UTC)
-    verification.save()
-    verification.user.is_active = True
-    verification.user.save()
+        try:
+            token = uuid.UUID(hex=token_hex)
+        except ValueError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    return Response({
-        "email": verification.user.email,
-    }, status=status.HTTP_200_OK)
+        try:
+            verification = EmailVerificationToken.objects.get(token=token)
+        except EmailVerificationToken.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        if verification.verified_at is not None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        verification.verified_at = datetime.now(UTC)
+        verification.save()
+        verification.user.is_active = True
+        verification.user.save()
 
-@api_view(["POST"])
-@permission_classes((AllowAny, ))
-def resend_email_verification_mail(request: Request):
-    email = request.data.get("email")
-    if email is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    
-    try:
-        validate_email(email)
-    except ValidationError:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            "email": verification.user.email,
+        }, status=status.HTTP_200_OK)
 
-    locale = get_first_language(request)
-    
-    try:
-        user = User.objects.get(email=email)
-    except User.DoesNotExist:
-        send_mail_no_account(email, locale)
+class ResendAnonRateThrottle(AnonRateThrottle):
+    rate = "5/hour" # up to 5 times a hour
+
+class ResendEmailVerificationMail(GenericAPIView):
+    permission_classes = (AllowAny, )
+    throttle_classes = (ResendAnonRateThrottle, )
+
+    def post(self, request: Request):
+        email = request.data.get("email")
+        if email is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            validate_email(email)
+        except ValidationError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        locale = get_first_language(request)
+        
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            send_mail_no_account(email, locale)
+            return Response(status=status.HTTP_200_OK)
+        
+        if user.is_active:
+            send_mail_already_verified(user, locale)
+            return Response(status=status.HTTP_200_OK)
+
+        try:
+            verification = EmailVerificationToken.objects.get(user=user)
+        except EmailVerificationToken.DoesNotExist:
+            send_mail_already_verified(user, locale)
+            return Response(status=status.HTTP_200_OK)
+        
+        if verification.verified_at is not None:
+            send_mail_already_verified(user, locale)
+            return Response(status=status.HTTP_200_OK)
+        
+        now = datetime.now(UTC)
+
+        if verification.last_sent_at is not None:
+            delta = now - verification.last_sent_at
+
+            if delta <= settings.EMAIL_SEND_INTERVAL_MIN:
+                return Response({
+                    "seconds": delta.seconds,
+                }, status=status.HTTP_425_TOO_EARLY)
+        
+        send_mail_verification_email(verification.user, verification)
+
         return Response(status=status.HTTP_200_OK)
-    
-    if user.is_active:
-        send_mail_already_verified(user, locale)
-        return Response(status=status.HTTP_200_OK)
-
-    try:
-        verification = EmailVerificationToken.objects.get(user=user)
-    except EmailVerificationToken.DoesNotExist:
-        send_mail_already_verified(user, locale)
-        return Response(status=status.HTTP_200_OK)
-    
-    if verification.verified_at is not None:
-        send_mail_already_verified(user, locale)
-        return Response(status=status.HTTP_200_OK)
-    
-    now = datetime.now(UTC)
-
-    if verification.last_sent_at is not None:
-        delta = now - verification.last_sent_at
-
-        if delta <= settings.EMAIL_SEND_INTERVAL_MIN:
-            return Response({
-                "seconds": delta.seconds,
-            }, status=status.HTTP_425_TOO_EARLY)
-    
-    send_mail_verification_email(verification.user, verification)
-
-    return Response(status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 def get_me(request: Request):
