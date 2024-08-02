@@ -45,11 +45,17 @@
         "error_load_task": "작업을 불러오지 못했어요 😂",
         "button_go_back": "이전으로 돌아가기",
         "create": {
+            "name_placeholder": "이름을 입력하세요",
+            "button_add": "추가하기",
+            "none": "없음",
             "project_create_success": "프로젝트 생성에 성공하였습니다.",
             "project_create_error": "프로젝트 생성에 실패했습니다.",
             "project_create_cannot_use_inbox": "프로젝트 이름은 Inbox로 설정할 수 없습니다.",
             "drawer_create_success": "서랍 생성에 성공하였습니다.",
             "drawer_create_error": "서랍 생성에 실패했습니다.",
+            "task_create_success": "할 일 생성에 성공하였습니다.",
+            "task_create_error": "할 일 생성에 실패하였습니다.",
+            "task_create_no_name": "할 일의 이름을 적어주세요.",
             "color": {
                 "title": "색깔 설정",
                 "theme1": "기본",
@@ -65,11 +71,6 @@
                 "title": "프로젝트 종류 설정",
                 "regular": "상시 프로젝트",
                 "goal": "목표 프로젝트"
-            },
-            "common": {
-                "name_placeholder": "이름을 입력하세요",
-                "button_add": "추가하기",
-                "none": "없음"
             }
         },
         "edit": {
@@ -80,12 +81,15 @@
             "button_delete": "삭제",
             "button_done": "닫기",
             "alert_project_title": "\"{{project_name}}\" 프로젝트를",
-            "alert_drawer_title": "\"{{drawer_name}}\" 프로젝트를",
+            "alert_drawer_title": "\"{{drawer_name}}\" 서랍을",
+            "alert_task_title": "\"{{task_name}}\" 할 일을",
             "alert_question": "{{title}} 삭제하시겠습니까?",
             "project_delete_success": "\"{{project_name}}\" 프로젝트가 삭제되었습니다.",
             "project_delete_error": "\"{{project_name}}\" 프로젝트 삭제에 실패했습니다.",
             "drawer_delete_success": "\"{{drawer_name}}\" 서랍이 삭제되었습니다.",
-            "drawer_delete_error": "\"{{drawer_name}}\" 서랍 삭제에 실패했습니다."
+            "drawer_delete_error": "\"{{drawer_name}}\" 서랍 삭제에 실패했습니다.",
+            "task_delete_success": "\"{{task_name}}\" 할 일이 삭제되었습니다.",
+            "task_delete_error": "\"{{task_name}}\" 할 일 삭제에 실패했습니다."
         },
         "sort": {
             "title": "{{title}} 목록 정렬 기준",
@@ -105,6 +109,77 @@
         }
     },
     "drawer": {
+    },
+    "task": {
+        "none": "없음",
+        "due": {
+            "assigned_title": "할당 날짜 설정",
+            "due_title": "기한 지정",
+            "quick": {
+                "title": "빠른 지정",
+                "today": "오늘",
+                "tomorrow": "내일",
+                "next_week": "다음 주",
+                "next_two_weeks": "2주 뒤",
+                "next_month": "한달 뒤",
+                "no_date": "날짜없음"
+            },
+            "calendar": "달력",
+            "time": {
+                "title": "시간 추가",
+                "am": "오전",
+                "pm": "오후",
+                "button_add": "추가하기",
+                "acceptable_numbers": "입력 가능한 최대 숫자는 {{max}}입니다."
+            },
+            "repeat": {
+                "title": "반복 설정",
+                "button_add": "추가하기",
+                "acceptable_numbers": "입력 가능한 최대 숫자는 {{max}}입니다.",
+                "every_few_weeks_front": "",
+                "every_few_weeks_back": "주 마다",
+                "everyday": "매일",
+                "everyweek": "매주",
+                "everymonth": "매달",
+                "everyyear": "매년",
+                "weekday": "평일",
+                "weekend": "주말",
+                "sun": "일",
+                "mon": "월",
+                "tue": "화",
+                "wed": "수",
+                "thu": "목",
+                "fri": "금",
+                "sat": "토"
+            }
+        },
+        "reminder": {
+            "title": "알림 설정",
+            "reminder_before_due_date": "알람 설정 전에 기한을 설정해주세요",
+            "then": "그때",
+            "5_minutes_before": "5분 전",
+            "15_minutes_before": "15분 전",
+            "30_minutes_before": "30분 전",
+            "1_hour_before": "1시간 전",
+            "1_day_before": "1일 전",
+            "2_days_before": "2일 전"
+        },
+        "priority": {
+            "title": "중요도 설정",
+            "normal": "보통",
+            "important": "중요",
+            "critical": "매우 중요"
+        },
+        "drawer": {
+            "title": "서랍 선택",
+            "fetching_error": "데이터를 불러오는 중 오류가 발생했습니다."
+        },
+        "memo": {
+            "title": "메모 설정",
+            "memo_placeholder": "메모를 입력해주세요.",
+            "button_change": "변경하기",
+            "memo_edit_success": "메모가 변경되었습니다."
+        }
     },
     "settings": {
         "online": {

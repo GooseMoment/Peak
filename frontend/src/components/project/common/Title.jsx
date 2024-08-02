@@ -3,7 +3,7 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const Title = ({name, setName, icon, onClose}) => { 
-    const { t } = useTranslation(null, {keyPrefix: "project.create.common"})
+    const { t } = useTranslation(null, {keyPrefix: "project.create"})
 
     const changeName = (e) => {
         setName(e.target.value)

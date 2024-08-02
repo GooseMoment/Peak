@@ -45,11 +45,17 @@
         "error_load_task": "Couldn't load tasks 😂",
         "button_go_back": "Go back",
         "create": {
+            "name_placeholder": "Enter a name",
+            "button_add": "Add",
+            "none": "none",
             "project_create_success": "The project was successfully created.",
             "project_create_error": "The project creation failed.",
             "project_create_cannot_use_inbox": "Project name cannot be set to Inbox.",
             "drawer_create_success": "The drawer was successfully created.",
             "drawer_create_error": "The drawer creation failed.",
+            "task_create_success": "The task was successfully created.",
+            "task_create_error": "The task creation failed.",
+            "task_create_no_name": "Write a name for your task.",
             "color": {
                 "title": "Color Settings",
                 "theme1": "basics",
@@ -65,11 +71,6 @@
                 "title": "Project Type Settings",
                 "regular": "a regular project",
                 "goal": "a goal project"
-            },
-            "common": {
-                "name_placeholder": "Enter the project name",
-                "button_add": "Add",
-                "none": "none"
             }
         },
         "edit": {
@@ -81,11 +82,14 @@
             "button_done": "Done",
             "alert_project_title": "the \"{{project_name}}\" project",
             "alert_drawer_title": "the \"{{drawer_name}}\" drawer",
+            "alert_task_title": "the \"{{task_name}}\" task",
             "alert_question": "Are you sure you want to delete {{title}}?",
             "project_delete_success": "The \"{{project_name}}\" project was deleted.",
             "project_delete_error": "Deleting the \"{{project_name}}\" project failed.",
             "drawer_delete_success": "The \"{{drawer_name}}\" drawer was deleted.",
-            "drawer_delete_error": "Deleting the \"{{drawer_name}}\" drawer failed."
+            "drawer_delete_error": "Deleting the \"{{drawer_name}}\" drawer failed.",
+            "task_delete_success": "The \"{{task_name}}\" task was deleted.",
+            "task_delete_error": "Deleting the \"{{task_name}}\" task failed."
         },
         "sort": {
             "title": "{{title}} Sort by",
@@ -102,6 +106,77 @@
             "due_date": "Early due date order",
             "-due_date": "Late due date order",
             "reminders": "Notifications first"
+        }
+    },
+    "task": {
+        "none": "none",
+        "due": {
+            "assigned_title": "Assignment date Settings",
+            "due_title": "Due date Settings",
+            "quick": {
+                "title": "Quick Assignments",
+                "today": "today",
+                "tomorrow": "tomorrow",
+                "next_week": "next week",
+                "next_two_weeks": "2 weeks later",
+                "next_month": "1 month later",
+                "no_date": "no date"
+            },
+            "calendar": "Calendar",
+            "time": {
+                "title": "Add Time",
+                "am": "Am",
+                "pm": "Pm",
+                "button_add": "Add",
+                "acceptable_numbers": "The maximum number you can enter is {{max}}."
+            },
+            "repeat": {
+                "title": "Recurrence Settings",
+                "button_add": "Add",
+                "acceptable_numbers": "The maximum number you can enter is {{max}}.",
+                "every_few_weeks_front": "Every",
+                "every_few_weeks_back": "weeks",
+                "everyday": "Daily",
+                "everyweek": "Weekly",
+                "everymonth": "Monthly",
+                "everyyear": "Yearly",
+                "weekday": "Weekdays",
+                "weekend": "Weekends",
+                "sun": "S",
+                "mon": "M",
+                "tue": "T",
+                "wed": "W",
+                "thu": "T",
+                "fri": "F",
+                "sat": "S"
+            }
+        },
+        "reminder": {
+            "title":"Alarms Settings",
+            "reminder_before_due_date": "Set a due date before setting an alarm",
+            "then": "then",
+            "5_minutes_before": "5 minutes before",
+            "15_minutes_before": "15 minutes before",
+            "30_minutes_before": "30 minutes before",
+            "1_hour_before": "1 hour before",
+            "1_day_before": "1 day before",
+            "2_days_before": "2 days before"
+        },
+        "priority": {
+            "title": "Importance Settings",
+            "normal": "normal",
+            "important": "important",
+            "critical": "critical"
+        },
+        "drawer": {
+            "title": "Select a drawer",
+            "fetching_error": "An error occurred while fetching data."
+        },
+        "memo": {
+            "title": "Memo settings",
+            "memo_placeholder": "Enter a memo.",
+            "button_change": "Change",
+            "memo_edit_success": "The memo was changed."
         }
     },
     "settings": {

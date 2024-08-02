@@ -14,8 +14,11 @@ import { useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
 import { getTask, patchTask, deleteTask } from "@api/tasks.api"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
 const TaskDetail = () => {
+    const { t } = useTranslation(null, {keyPrefix: "project"})
+
     const [ projectID, color ] = useOutletContext()
     const { task_id } = useParams()
     const navigate = useNavigate()
@@ -24,7 +27,7 @@ const TaskDetail = () => {
     const [taskName, setTaskName] = useState("")
     const [isAlertOpen, setIsAlertOpen] = useState(false)
 
-    const { isPending, isError, data: task, error } = useQuery({
+    const { isPending, isError, data: task } = useQuery({
         queryKey: ['task', {taskID: task_id}],
         queryFn: () => getTask(task_id),
     })
@@ -46,7 +49,11 @@ const TaskDetail = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['task', {taskID: task_id}]})
             queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
+            toast.success(t("delete.task_delete_success", {"task_name": task.name}))
         },
+        onError: () => {
+            toast.error(t("delete.task_delete_error", {"task_name": task.name}))
+        }
     })
 
     useEffect(() => {
@@ -69,7 +76,6 @@ const TaskDetail = () => {
     const handleDelete = () => {
         navigate(`/app/projects/${projectID}`)
         deleteMutation.mutate()
-        toast.success(`"${task.name}" 할 일이 삭제되었습니다`)
     }
 
     if (isPending) {
@@ -97,7 +103,11 @@ const TaskDetail = () => {
             </TaskNameBox>
             <Contents task={task} setFunc={patchMutation.mutate}/>
             {isAlertOpen &&
-                <DeleteAlert title={`"${task.name}"\n 할 일을`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
+                <DeleteAlert 
+                    title={t("delete.alert_task_title", {"task_name": task.name})} 
+                    onClose={() => {setIsAlertOpen(false)}} 
+                    func={handleDelete}
+                />
             }
         </TaskDetailBox>
     )

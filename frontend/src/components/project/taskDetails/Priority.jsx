@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { useTranslation } from "react-i18next"
 
 import Detail from "@components/project/common/Detail"
 
@@ -7,6 +8,7 @@ import important from "@assets/project/priority/important.svg"
 import critical from "@assets/project/priority/critical.svg"
 
 const Priority = ({setFunc, closeComponent}) => {
+    const { t } = useTranslation(null, {keyPrefix: "task.priority"})
 
     const changePriority = (priority) => {
         return async () => {
@@ -15,8 +17,14 @@ const Priority = ({setFunc, closeComponent}) => {
         }
     }
 
+    const items = [
+        {id: 0, icon: <img src={normal}/>, content: t("normal")},
+        {id: 1, icon: <img src={important}/>, content: t("important")},
+        {id: 2, icon: <img src={critical}/>, content: t("critical")},
+    ]
+
     return (
-        <Detail title="중요도 설정" onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeComponent}>
             {items.map(item => (
                 <ItemBlock key={item.id}>
                     {item.icon}
@@ -46,11 +54,5 @@ const ItemText = styled.p`
         cursor: pointer;
     }
 `
-
-const items = [
-    {id: 0, icon: <img src={normal}/>, content: "보통"},
-    {id: 1, icon: <img src={important}/>, content: "중요"},
-    {id: 2, icon: <img src={critical}/>, content: "매우 중요"},
-]
 
 export default Priority

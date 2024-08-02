@@ -1,9 +1,18 @@
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import styled, { css } from "styled-components"
 import Button from "@components/common/Button"
 import { toast } from "react-toastify"
+import { t } from "i18next"
 
 const TimeDetail = () => {
+    const { t } = useTranslation(null, {keyPrefix: "task.due.time"})
+
+    const ampms = [
+        {name: "am", display: t("am")},
+        {name: "pm", display: t("pm")},
+    ]
+
     const [ampm, setAmpm] = useState(ampms[0].name)
     const [hour, setHour] = useState()
     const [min, setMin] = useState()
@@ -11,7 +20,7 @@ const TimeDetail = () => {
     const handleHour = (e) => {
         let validInputValue = parseInt(e.target.value)
         if (validInputValue > 12){
-            toast.error("입력 가능한 최대 숫자는 12입니다", {toastId: "handle_hour"})
+            toast.error(t("acceptable_numbers", {max: 12}), {toastId: "handle_hour"})
             validInputValue = 12
         }
         setHour(validInputValue)
@@ -20,7 +29,7 @@ const TimeDetail = () => {
     const handleMinute = (e) => {
         let validInputValue = parseInt(e.target.value)
         if (validInputValue > 59){
-            toast.error("입력 가능한 최대 숫자는 59입니다", {toastId: "handle_minute"})
+            toast.error(t("acceptable_numbers", {max: 59}), {toastId: "handle_minute"})
             validInputValue = 59
         }
         setMin(validInputValue)
@@ -51,7 +60,7 @@ const TimeDetail = () => {
                 </InputBox>
             </FlexBox>
             <FlexCenterBox>
-                <Button onClick={()=>console.log(hour, min)}>추가하기</Button>
+                <Button onClick={()=>console.log(hour, min)}>{t("button_add")}</Button>
             </FlexCenterBox>
         </DetailBox>
     )
@@ -143,10 +152,5 @@ const TimeInput = styled.input`
         -webkit-appearance: none;
     }
 `
-
-const ampms = [
-    {name: "am", display: "오전"},
-    {name: "pm", display: "오후"},
-]
 
 export default TimeDetail

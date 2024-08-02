@@ -1,4 +1,5 @@
 import { useState, Fragment } from "react"
+import { useTranslation } from "react-i18next"
 
 import FeatherIcon from "feather-icons-react"
 import styled, { css } from "styled-components"
@@ -10,6 +11,8 @@ import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 
 const Assigned = ({setFunc, closeComponent}) => {
+    const { t } = useTranslation(null, {keyPrefix: "task.due"})
+
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
     const handleAdditionalComp = (name) => {
@@ -32,13 +35,13 @@ const Assigned = ({setFunc, closeComponent}) => {
     }
 
     const addComponent = [
-        {name: "quick", display: "빠른 지정", icon: "menu", component: <QuickDue changeDueDate={changeAssignedDate}/>},
-        {name: "calendar", display: "달력", icon: "calendar", component: <div>달력입니다</div>},
-        {name: "repeat", display: "반복 설정", icon: "refresh-cw", component: <RepeatDetail/>},
+        {name: "quick", display: t("quick.title"), icon: "menu", component: <QuickDue changeDueDate={changeAssignedDate}/>},
+        {name: "calendar", display: t("calendar"), icon: "calendar", component: <div>달력입니다</div>},
+        {name: "repeat", display: t("repeat.title"), icon: "refresh-cw", component: <RepeatDetail/>},
     ]
 
     return (
-        <Detail title="할당 날짜 설정" onClose={closeComponent} special={true}>
+        <Detail title={t("assigned_title")} onClose={closeComponent} special={true}>
             {addComponent.map((comp, i)=>(
                 <Fragment key={comp.name}>
                     <FlexCenterBox>

@@ -11,8 +11,11 @@ import Contents from "./Contents"
 import { postTask } from "@api/tasks.api"
 import queryClient from "@queries/queryClient"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
 const TaskCreate = () => {
+    const { t } = useTranslation(null, {keyPrefix: "project.create"})
+
     const [projectId, color] = useOutletContext()
     const {state} = useLocation()
     const navigate = useNavigate()
@@ -45,14 +48,14 @@ const TaskCreate = () => {
         try {
             editNewTask({'name': newTaskName})
             await postTask(newTask)
-            toast.success("할 일 생성에 성공하였습니다!")
+            toast.success(t("task_create_success"))
             queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: state?.drawer_id}]})
             onClose()
         } catch (e) {
             if (newTask?.name)
-                toast.error("할 일 생성에 실패하였습니다.")
+                toast.error(t("task_create_error"))
             else
-                toast.error("할 일의 이름을 적어주세요.")
+                toast.error(t("task_create_no_name"))
         }
     }
 
@@ -71,7 +74,7 @@ const TaskCreate = () => {
                 </Icons>
             </TaskNameBox>
             <Contents task={newTask} setFunc={editNewTask}/>
-            <AddButton onClick={makeTask}>추가하기</AddButton>
+            <AddButton onClick={makeTask}>{t("button_add")}</AddButton>
         </TaskCreateBox>
     )
 }

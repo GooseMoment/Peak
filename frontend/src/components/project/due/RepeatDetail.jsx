@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import styled, { css } from "styled-components"
 import Button from "@components/common/Button"
 
@@ -11,9 +12,14 @@ import weekend from "@assets/project/repeat/weekend.svg"
 import { toast } from "react-toastify"
 
 const RepeatDetail = () => {
+    const { t } = useTranslation(null, {keyPrefix: "task.due.repeat"})
+
     const [quick, setQuick] = useState("")
     const [week, setWeek] = useState(0)
     const [days, setDays] = useState([])
+ 
+    const quickButtons = makeQuickButtons(t)
+    const daysOfWeek = makeDaysOfWeek(t)
 
     const handleQuick = (q) => {
         if (quick == q) setQuick("")
@@ -24,7 +30,7 @@ const RepeatDetail = () => {
         const inputValue = e.target.value
         let validInputValue = parseInt(inputValue)
         if (validInputValue > 128){
-            toast.error("입력 가능한 최대 숫자는 128입니다", {toastId: "handle_week"})
+            toast.error(t("acceptable_numbers", {max: 128}), {toastId: "handle_week"})
             validInputValue = 128
         }
         setWeek(validInputValue)
@@ -50,17 +56,18 @@ const RepeatDetail = () => {
             </ButtonFlexBox>
             <CLine/>
             <FlexCenterBox>
+                <TextContainer>{t("every_few_weeks_front")}</TextContainer>
                 <WeekInput
                     type="number"
                     value={week}
                     onChange={handleWeek}
                 />
-                <TextContainer>주 마다</TextContainer>
+                <TextContainer>{t("every_few_weeks_back")}</TextContainer>
             </FlexCenterBox>
             <FlexCenterBox>
             {daysOfWeek.map((day)=>(
                 <Circle 
-                    key={day.name} 
+                    key={day.name}
                     $isFirst={day.name== "sun"}
                     $active={days.includes(day.name)}
                     onClick={()=>handleDays(day.name)}
@@ -70,29 +77,29 @@ const RepeatDetail = () => {
             ))}
             </FlexCenterBox>
             <FlexCenterBox>
-                <Button onClick={()=>console.log(week, days)}>추가하기</Button>
+                <Button onClick={()=>console.log(week, days)}>{t("button_add")}</Button>
             </FlexCenterBox>
         </DetailBox>
     )
 }
 
-const quickButtons = [
-    {display: "매일", src: everyday},
-    {display: "매주", src: everyweek},
-    {display: "매달", src: everymonth},
-    {display: "매년", src: everyyear},
-    {display: "평일", src: weekday},
-    {display: "주말", src: weekend},
+const makeQuickButtons = (t) => [
+    {display: t("everyday"), src: everyday},
+    {display: t("everyweek"), src: everyweek},
+    {display: t("everymonth"), src: everymonth},
+    {display: t("everyyear"), src: everyyear},
+    {display: t("weekday"), src: weekday},
+    {display: t("weekend"), src: weekend},
 ]
 
-const daysOfWeek = [
-    {name: "sun", display: "일"},
-    {name: "mon", display: "월"},
-    {name: "tue", display: "화"},
-    {name: "wed", display: "수"},
-    {name: "thu", display: "목"},
-    {name: "fri", display: "금"},
-    {name: "sat", display: "토"},
+const makeDaysOfWeek = (t) => [
+    {name: "sun", display: t("sun")},
+    {name: "mon", display: t("mon")},
+    {name: "tue", display: t("tue")},
+    {name: "wed", display: t("wed")},
+    {name: "thu", display: t("thu")},
+    {name: "fri", display: t("fri")},
+    {name: "sat", display: t("sat")},
 ]
 
 const DetailBox = styled.div`
@@ -183,7 +190,7 @@ const Circle = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 1.7em;
+    height: 1.8em;
     aspect-ratio: 1;
     font-weight: 480;
     color: ${p => p.theme.textColor};

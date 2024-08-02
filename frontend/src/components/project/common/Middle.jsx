@@ -9,7 +9,7 @@ import { Fragment } from "react"
 import { useTranslation } from "react-i18next"
 
 const Middle = ({items, submit, isComponentOpen, setIsComponentOpen}) => {
-    const { t } = useTranslation(null, {keyPrefix: "project.create.common"})
+    const { t } = useTranslation(null, {keyPrefix: "project.create"})
     
     const [content, setContent] = useState()
     
