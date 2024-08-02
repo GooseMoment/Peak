@@ -20,7 +20,7 @@ import re
 
 from .models import User, EmailVerificationToken
 from .serializers import UserSerializer
-from .utils import send_mail_verification_email
+from .utils import get_first_language, send_mail_verification_email, send_mail_already_verified, send_mail_no_account
 from social.views import get_blocks
 
 class UserDetail(mixins.RetrieveModelMixin,
@@ -142,7 +142,8 @@ def sign_up(request: Request):
 
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    locale = payload.get("locale", "")
+    locale = get_first_language(request)
+
     verification = EmailVerificationToken.objects.create(user=new_user, locale=locale)
     
     send_mail_verification_email(new_user, verification)
@@ -180,25 +181,34 @@ def verify_email_verification_token(request: Request):
 def resend_email_verification_mail(request: Request):
     email = request.data.get("email")
     if email is None:
-        print("none")
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
     try:
         validate_email(email)
     except ValidationError:
-        print("validation")
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    locale = get_first_language(request)
+    
     try:
-        verification = EmailVerificationToken.objects.get(user__email=email)
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        send_mail_no_account(email, locale)
+        return Response(status=status.HTTP_200_OK)
+    
+    if user.is_active:
+        send_mail_already_verified(user, locale)
+        return Response(status=status.HTTP_200_OK)
+
+    try:
+        verification = EmailVerificationToken.objects.get(user=user)
     except EmailVerificationToken.DoesNotExist:
-        # TODO: send 'not found' mail
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        send_mail_already_verified(user, locale)
+        return Response(status=status.HTTP_200_OK)
     
     if verification.verified_at is not None:
-        # TODO: send 'already verified' mail
-        print("already verified")
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        send_mail_already_verified(user, locale)
+        return Response(status=status.HTTP_200_OK)
     
     now = datetime.now(UTC)
 
