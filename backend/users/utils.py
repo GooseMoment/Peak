@@ -45,3 +45,4 @@ def send_mail_verification_email(user: User, verification: EmailVerificationToke
     email.send()
 
     verification.last_sent_at = datetime.now(UTC)
+    verification.save()

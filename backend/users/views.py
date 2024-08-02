@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db import transaction
 from django.db.utils import IntegrityError
+from django.conf import settings
 
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -173,6 +174,45 @@ def verify_email_verification_token(request: Request):
     return Response({
         "email": verification.user.email,
     }, status=status.HTTP_200_OK)
+
+@api_view(["POST"])
+@permission_classes((AllowAny, ))
+def resend_email_verification_mail(request: Request):
+    email = request.data.get("email")
+    if email is None:
+        print("none")
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        validate_email(email)
+    except ValidationError:
+        print("validation")
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        verification = EmailVerificationToken.objects.get(user__email=email)
+    except EmailVerificationToken.DoesNotExist:
+        # TODO: send 'not found' mail
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if verification.verified_at is not None:
+        # TODO: send 'already verified' mail
+        print("already verified")
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    now = datetime.now(UTC)
+
+    if verification.last_sent_at is not None:
+        delta = now - verification.last_sent_at
+
+        if delta <= settings.EMAIL_SEND_INTERVAL_MIN:
+            return Response({
+                "seconds": delta.seconds,
+            }, status=status.HTTP_425_TOO_EARLY)
+    
+    send_mail_verification_email(verification.user, verification)
+
+    return Response(status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 def get_me(request: Request):

@@ -204,6 +204,8 @@ EMAIL_USE_TLS = os.environ.get("DJANGO_EMAIL_USE_TLS", "0") == "1"
 EMAIL_SUBJECT_PREFIX = "[Peak] "
 DEFAULT_FROM_EMAIL=os.environ.get("DJANGO_FROM_EMAIL", "")
 
+EMAIL_SEND_INTERVAL_MIN = timedelta(minutes=10)
+
 # Storages & Caches
 
 STORAGES = {

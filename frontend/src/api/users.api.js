@@ -81,6 +81,12 @@ export const verifyEmail = async (token) => {
     }
 }
 
+export const resendVerificationEmail = async (email) => {
+    return client.post(`sign_up/verification/resend/`, {
+        email,
+    })
+}
+
 export const signOut = async () => {
     setToken(null)
     setCurrentUsername(null)

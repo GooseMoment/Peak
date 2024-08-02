@@ -80,11 +80,14 @@ const SignInForm = ({setActive}) => {
             </ButtonGroup>
         </Form>
         <Links>
-            <Link to="/reset-password">
-                <LinkText><HelpCircle />{t("button_forgot_password")}</LinkText>
-            </Link>
             <Link onClick={goToSignUp}>
                 <LinkText><UserPlus />{t("button_create_account")}</LinkText>
+            </Link>
+            <Link to="/password-recovery">
+                <LinkText><HelpCircle />{t("button_forgot_password")}</LinkText>
+            </Link>
+            <Link to="/verification">
+                <LinkText><Mail />{t("button_resend_verification")}</LinkText>
             </Link>
         </Links>
     </Box>
