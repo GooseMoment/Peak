@@ -21,7 +21,6 @@ import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement
 import { getMe, signOut } from "@api/users.api"
 import { getProjectList } from "@api/projects.api"
 import { getToken } from "@api/client"
-import EmailConfirmationPage from "@/pages/EmailConfirmationPage"
 
 const redirectIfSignedIn = () => {
     if (getToken()) {
@@ -40,21 +39,24 @@ const routes = [
             {
                 index: true,
                 async lazy() {
-                    const { IntroPage } = await import("@/pages/chunks/OutsidePages")
+                    const { IntroPage } = await import("@pages/chunks/OutsidePages")
                     return { Component: IntroPage }
                 },
             },
             {
                 path: "sign",
                 async lazy() {
-                    const { SignPage } = await import("@/pages/chunks/OutsidePages")
+                    const { SignPage } = await import("@pages/chunks/OutsidePages")
                     return { Component: SignPage }
                 },
             },
             {
-                path: "confirmation",
-                element: <EmailConfirmationPage />,
-            }
+                path: "verification",
+                async lazy() {
+                    const { EmailVerificationPage } = await import("@pages/chunks/OutsidePages")
+                    return { Component: EmailVerificationPage }
+                },
+            },
         ]
     },
     {

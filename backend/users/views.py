@@ -17,7 +17,7 @@ from datetime import datetime, UTC
 
 import re
 
-from .models import User, UserEmailConfirmation
+from .models import User, EmailVerificationToken
 from .serializers import UserSerializer
 from .utils import send_mail_confirm_email
 from social.views import get_blocks
@@ -142,34 +142,36 @@ def sign_up(request: Request):
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     locale = payload.get("locale", "")
-    confirmation = UserEmailConfirmation.objects.create(user=new_user, token=uuid.uuid4().hex, locale=locale)
+    verification = EmailVerificationToken.objects.create(user=new_user, locale=locale)
     
-    send_mail_confirm_email(new_user, confirmation)
+    send_mail_confirm_email(new_user, verification)
 
     return Response(status=status.HTTP_200_OK)
 
 @api_view(["POST"])
 @permission_classes((AllowAny, ))
-def patch_user_email_confirmation(request: Request):
-    confirmation_token = request.data.get("token")
-    if confirmation_token is None:
+def verify_email_verification_token(request: Request):
+    token_hex = request.data.get("token")
+    if token_hex is None:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    token = uuid.UUID(hex=token_hex)
 
     try:
-        confirmation = UserEmailConfirmation.objects.get(token=confirmation_token)
-    except UserEmailConfirmation.DoesNotExist:
+        verification = EmailVerificationToken.objects.get(token=token)
+    except EmailVerificationToken.DoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
-    if confirmation.confirmed_at is not None:
+    if verification.verified_at is not None:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
-    confirmation.confirmed_at = datetime.now(UTC)
-    confirmation.save()
-    confirmation.user.is_active = True
-    confirmation.user.save()
+    verification.verified_at = datetime.now(UTC)
+    verification.save()
+    verification.user.is_active = True
+    verification.user.save()
 
     return Response({
-        "email": confirmation.user.email,
+        "email": verification.user.email,
     }, status=status.HTTP_200_OK)
 
 @api_view(["GET"])

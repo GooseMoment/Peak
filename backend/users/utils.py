@@ -2,13 +2,13 @@ from django.core.mail import EmailMultiAlternatives
 from django.template import loader
 from django.conf import settings
 
-from .models import User, UserEmailConfirmation
+from .models import User, EmailVerificationToken
 from .locale import get_translations
 
-def send_mail_confirm_email(user: User, confirmation: UserEmailConfirmation):
-    t = get_translations(confirmation.locale)["mail_confirm_email"]
+def send_mail_confirm_email(user: User, verification: EmailVerificationToken):
+    t = get_translations(verification.locale)["mail_confirm_email"]
 
-    link = f"{settings.SCHEME}{settings.WEB_HOSTNAME}/confirmation/?token={confirmation.token}"
+    link = verification.link
 
     subject = t["subject"]
 

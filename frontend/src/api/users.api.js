@@ -67,9 +67,9 @@ export const signUp = async (email, password, username, locale) => {
     }
 }
 
-export const confirmEmail = async (token) => {
+export const verifyEmail = async (token) => {
     try {
-        const res = await client.post(`sign_up/email_confirmation/`, {
+        const res = await client.post(`sign_up/verification/`, {
             token,
         })
 
