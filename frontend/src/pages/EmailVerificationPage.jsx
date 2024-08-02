@@ -117,10 +117,13 @@ const Content = styled.main`
     flex-direction: column;
 
     gap: 2em;
+
+    padding: 1em;
 `
 
 const Text = styled.p`
     line-height: 1.3;
+    max-width: 500px;
 `
 
 export default EmailVerificationPage
