@@ -40,13 +40,19 @@ const TaskFrame = ({task, color, taskDetailPath, isLoading, toComplete}) => {
 
                 <Dates>
                     {task.assigned_at &&
-                    <AssignedDate $completed={task.completed_at} $isOutOfDue={calculate_assigned === "놓침"}>
+                    <AssignedDate 
+                        $completed={task.completed_at} 
+                        $isOutOfDue={calculate_assigned === "놓침" || calculate_assigned === "Missed" }
+                    >
                         <FeatherIcon icon="calendar" />
                         {task.completed_at ? assigned : calculate_assigned}
                     </AssignedDate>
                     }
                     {task.due_date && 
-                    <DueDate $completed={task.completed_at} $isOutOfDue={calculate_due === "기한 지남"}>
+                    <DueDate 
+                        $completed={task.completed_at}
+                        $isOutOfDue={calculate_due === "기한 지남" || calculate_due === "Overdue"}
+                    >
                         <img src={hourglass} />
                         {task.completed_at ? due : calculate_due}
                     </DueDate>}

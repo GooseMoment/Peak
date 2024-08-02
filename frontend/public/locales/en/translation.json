@@ -109,6 +109,13 @@
         }
     },
     "task": {
+        "missed": "Missed",
+        "overdue": "Overdue",
+        "due_today": "due today",
+        "due_tomorrow": "day tomorrow",
+        "days_left": "days left",
+        "name_placeholder": "Enter a name for the task.",
+        "name_change_success": "The name has changed.",
         "none": "none",
         "due": {
             "assigned_title": "Assignment date Settings",

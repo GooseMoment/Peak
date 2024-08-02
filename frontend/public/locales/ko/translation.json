@@ -53,9 +53,9 @@
             "project_create_cannot_use_inbox": "프로젝트 이름은 Inbox로 설정할 수 없습니다.",
             "drawer_create_success": "서랍 생성에 성공하였습니다.",
             "drawer_create_error": "서랍 생성에 실패했습니다.",
-            "task_create_success": "할 일 생성에 성공하였습니다.",
-            "task_create_error": "할 일 생성에 실패하였습니다.",
-            "task_create_no_name": "할 일의 이름을 적어주세요.",
+            "task_create_success": "작업 생성에 성공하였습니다.",
+            "task_create_error": "작업 생성에 실패하였습니다.",
+            "task_create_no_name": "작업의 이름을 적어주세요.",
             "color": {
                 "title": "색깔 설정",
                 "theme1": "기본",
@@ -82,14 +82,14 @@
             "button_done": "닫기",
             "alert_project_title": "\"{{project_name}}\" 프로젝트를",
             "alert_drawer_title": "\"{{drawer_name}}\" 서랍을",
-            "alert_task_title": "\"{{task_name}}\" 할 일을",
+            "alert_task_title": "\"{{task_name}}\" 작업을",
             "alert_question": "{{title}} 삭제하시겠습니까?",
             "project_delete_success": "\"{{project_name}}\" 프로젝트가 삭제되었습니다.",
             "project_delete_error": "\"{{project_name}}\" 프로젝트 삭제에 실패했습니다.",
             "drawer_delete_success": "\"{{drawer_name}}\" 서랍이 삭제되었습니다.",
             "drawer_delete_error": "\"{{drawer_name}}\" 서랍 삭제에 실패했습니다.",
-            "task_delete_success": "\"{{task_name}}\" 할 일이 삭제되었습니다.",
-            "task_delete_error": "\"{{task_name}}\" 할 일 삭제에 실패했습니다."
+            "task_delete_success": "\"{{task_name}}\" 작업이 삭제되었습니다.",
+            "task_delete_error": "\"{{task_name}}\" 작업 삭제에 실패했습니다."
         },
         "sort": {
             "title": "{{title}} 목록 정렬 기준",
@@ -111,6 +111,13 @@
     "drawer": {
     },
     "task": {
+        "missed": "놓침",
+        "overdue": "기한 지남",
+        "due_today": "오늘 기한",
+        "due_tomorrow": "내일 기한",
+        "days_left": "일 남음",
+        "name_placeholder": "작업의 이름을 입력하세요.",
+        "name_change_success": "이름이 변경되었습니다.",
         "none": "없음",
         "due": {
             "assigned_title": "할당 날짜 설정",

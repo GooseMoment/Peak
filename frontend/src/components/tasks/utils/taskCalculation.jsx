@@ -1,18 +1,22 @@
 import { DateTime } from "luxon"
+import { useTranslation } from "react-i18next"
+import { useClientLocale } from "@utils/clientSettings"
 
 const calculate = (name, newDate, diff) => {
+    const { t } = useTranslation(null, {keyPrefix: "task"})
+    
     let calculatedDue = ''
     if (diff.years < 0 || diff.months < 0 || diff.days < -1) {
-        calculatedDue = (name === "assigned") ? "놓침" : "기한 지남"
+        calculatedDue = (name === "assigned") ? t("missed") : t("overdue")
     }
     else if (-1 <= diff.days && diff.days < 0) {
-        calculatedDue = "오늘 기한"
+        calculatedDue = t("due_today")
     }
     else if (0 <= diff.days && diff.days <= 1) {
-        calculatedDue = "내일 기한"
+        calculatedDue = t("due_tomorrow")
     }
     else if (1 < diff.days && diff.days <= 30) {
-        calculatedDue = `${Math.floor(diff.days)}일 남음`
+        calculatedDue = `${Math.floor(diff.days)}` + t("days_left")
     }
     else {
         calculatedDue = newDate
@@ -22,6 +26,9 @@ const calculate = (name, newDate, diff) => {
 }
 
 const taskCalculation = (task) => {
+    const locale = useClientLocale()
+    const option = { day: 'numeric', month: 'numeric' }
+
     const today = new Date()
     const task_due_time = new Date(`${task.due_date}${task.due_time ? "T"+task.due_time : ""}`)
     const assigned_at_date = new Date(task.assigned_at)
@@ -33,13 +40,13 @@ const taskCalculation = (task) => {
     const diff_due = ddue.diff(dtoday, ["years", "months", "days"]).toObject()
     const diff_assigned = dassigned.diff(dtoday, ["years", "months", "days"]).toObject()
 
-    let new_due_date = `${task_due_time.getMonth()+1}월 ${task_due_time.getDate()}일`
+    let new_due_date = task_due_time.toLocaleDateString(locale, option)
     if (today.getFullYear() - task_due_time.getFullYear() > 0) {
-        new_due_date = `${task_due_time.getFullYear()}년 ${task_due_time.getMonth()+1}월 ${task_due_time.getDate()}일`
+        new_due_date = task_due_time.toLocaleDateString(locale)
     }
-    let new_assigned_at_date = `${assigned_at_date.getMonth()+1}월 ${assigned_at_date.getDate()}일`
+    let new_assigned_at_date = assigned_at_date.toLocaleDateString(locale, option)
     if (today.getFullYear() - assigned_at_date.getFullYear() > 0) {
-        new_assigned_at_date = `${assigned_at_date.getFullYear()}년 ${assigned_at_date.getMonth()+1}월 ${assigned_at_date.getDate()}일`
+        new_assigned_at_date = assigned_at_date.toLocaleDateString(locale)
     }
 
     let due = new_due_date
