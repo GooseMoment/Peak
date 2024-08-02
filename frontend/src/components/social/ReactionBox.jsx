@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
@@ -8,7 +8,6 @@ import ReactionButton from "@components/social/ReactionButton"
 import EmojiPickerButton from "@components/social/EmojiPickerButton"
 
 import { deleteReaction, getReactions, postReaction } from "@api/social.api"
-import { useEffect } from "react"
 
 const ReactionBox = ({contentType, content}) => {
     const [pickedEmoji, setPickedEmoji] = useState(null)
@@ -31,7 +30,7 @@ const ReactionBox = ({contentType, content}) => {
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['reaction', contentType, content.id]})
         },
-        onError: () => {
+        onError: (e) => {
             toast.error(e)
         }
     })
@@ -41,6 +40,7 @@ const ReactionBox = ({contentType, content}) => {
         : []
 
     const handleEmoji = (pickedEmoji) => {
+        console.log(pickedEmoji)
         if(pickedEmoji) {
             if(!(myReactions.some((myReaction) => myReaction.id === pickedEmoji.id))) {
                 contentReactionsMutation.mutate({action: 'post', emojiID: pickedEmoji.id})
