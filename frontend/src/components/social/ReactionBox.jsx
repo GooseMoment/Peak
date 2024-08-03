@@ -40,7 +40,6 @@ const ReactionBox = ({contentType, content}) => {
         : []
 
     const handleEmoji = (pickedEmoji) => {
-        console.log(pickedEmoji)
         if(pickedEmoji) {
             if(!(myReactions.some((myReaction) => myReaction.id === pickedEmoji.id))) {
                 contentReactionsMutation.mutate({action: 'post', emojiID: pickedEmoji.id})
