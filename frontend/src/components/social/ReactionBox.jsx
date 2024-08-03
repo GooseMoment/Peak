@@ -68,6 +68,7 @@ const Box = styled.div`
     margin-left: auto;
 
     display: flex;
+    gap: 0.5em;
 `
 
 export default ReactionBox

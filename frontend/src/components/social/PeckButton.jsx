@@ -25,26 +25,31 @@ const PeckButton = ({taskID}) => {
         }
     })
 
+    const preprocess = (counts) => {
+        if(counts > 99) return '99+'
+        return counts
+    }
+
     return <PeckBox>
         <PeckButtonBox>
             <FeatherIcon icon="send"/>
         </PeckButtonBox>
-        {(peck && peck.pecks_counts != 0) && <PeckCounts>{peck.pecks_counts}</PeckCounts>}
+        {(peck && peck.pecks_counts != 0) && <PeckCounts>{preprocess(peck.pecks_counts)}</PeckCounts>}
     </PeckBox>
 }
 
 const PeckBox = styled.div`
     height: 2em;
+    width: 3.5em;
 
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.3em;
 `
 
 const PeckButtonBox = styled(MildButton)`
+    margin-left: 0.4em;
     height: 2em;
-    width: 1.5em;
 
     display: flex;
     align-items: center;
@@ -57,7 +62,8 @@ const PeckButtonBox = styled(MildButton)`
 `
 
 const PeckCounts = styled.div`
-    width: 1.3em;
+    flex-grow: 1;
+    margin-right: 0.1em;
 
     text-align: center;
     font-size: 1em;

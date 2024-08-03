@@ -14,7 +14,6 @@ const ReactionButton = ({emoji, isSelected, saveReaction}) => {
 }
 
 const EmojiBox = styled.div`
-    margin-right: 0.5em;
     height: 2em;
     width: 4em;
 
@@ -22,21 +21,19 @@ const EmojiBox = styled.div`
     background-color: ${props => props.$bgcolor};
 
     display: flex;
-    flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-    gap: 0.5em;
 `
 
 const Emoji = styled.img`
+    margin-left: 0.4em;
     width: 1.3em;
     height: 1.3em;
 `
 
 const EmojiCounts = styled.div`
-    width: 1.1em;
-    height: 1.6em;
-    
+    flex-grow: 1;
+    margin-right: 0.1em;
     font-size: 0.9em;
 
     display: flex;
