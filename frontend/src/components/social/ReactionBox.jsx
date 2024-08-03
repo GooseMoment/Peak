@@ -2,11 +2,11 @@ import { useState, useEffect } from "react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import queryClient from "@queries/queryClient"
-
 import ReactionButton from "@components/social/ReactionButton"
 import EmojiPickerButton from "@components/social/EmojiPickerButton"
+import PeckButton from "@components/social/PeckButton"
 
+import queryClient from "@queries/queryClient"
 import { deleteReaction, getReactions, postReaction } from "@api/social.api"
 
 const ReactionBox = ({contentType, content}) => {
@@ -60,6 +60,7 @@ const ReactionBox = ({contentType, content}) => {
                 /> 
             ))}
         <EmojiPickerButton pickedEmoji={pickedEmoji} setPickedEmoji={setPickedEmoji}/>
+        {contentType === 'task' && <PeckButton taskID={content.id}/>}
     </Box>
 }
 
