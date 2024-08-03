@@ -137,18 +137,18 @@ export const getEmojis = async () => {
     }
 }
 
-export const getReactions = async(type, id) => {
+export const getReactions = async(contentType, contentID) => {
     try {
-        const res = await client.get(`social/reaction/${type}/${id}/`)
+        const res = await client.get(`social/reaction/${contentType}/${contentID}/`)
         return res.data
     } catch (e) {
         throw e
     }
 }
 
-export const postReaction = async(type, id, emoji) => {
+export const postReaction = async(contentType, contentID, emoji) => {
     try {
-        const res = await client.post(`social/reaction/${type}/${id}/`, {
+        const res = await client.post(`social/reaction/${contentType}/${contentID}/`, {
             emoji: emoji
         })
         return res.data
@@ -157,14 +157,32 @@ export const postReaction = async(type, id, emoji) => {
     }
 }
 
-export const deleteReaction = async(type, id, emoji) => {
+export const deleteReaction = async(contentType, contentID, emoji) => {
     const params = new URLSearchParams({emoji: emoji})
 
     try {
-        const res = await client.delete(`social/reaction/${type}/${id}/?${params.toString()}`)
+        const res = await client.delete(`social/reaction/${contentType}/${contentID}/?${params.toString()}`)
         return res.status
     } catch(e) {
         throw e
+    }
+}
+
+export const getPeck = async(taskID) => {
+    try {
+        const res = await client.get(`social/peck/${taskID}/`)
+        return res.data
+    } catch(e) {
+        throw(e)
+    }
+}
+
+export const postPeck = async(taskID) => {
+    try {
+        const res = await client.post(`social/peck/${taskID}`)
+        return res.data
+    } catch(e) {
+        throw(e)
     }
 }
 
@@ -181,8 +199,4 @@ export const postCommentToDailyComment = async(date, dailycomment) => {
     } catch (e) {
         throw e
     }
-}
-
-export const postPeck = (taskID) => {
-
 }
