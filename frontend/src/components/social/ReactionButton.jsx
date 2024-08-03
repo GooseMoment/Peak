@@ -17,27 +17,24 @@ const EmojiBox = styled.div`
     margin-right: 0.5em;
     height: 2em;
     width: 4em;
-    padding: 0.1em;
 
     border-radius: 0.5em;
     background-color: ${props => props.$bgcolor};
 
-    font-size: 1em;
-
     display: flex;
-    flex: row nowrap;
+    flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
     gap: 0.5em;
 `
 
 const Emoji = styled.img`
-    width: 1.5em;
-    height: 1.5em;
+    width: 1.3em;
+    height: 1.3em;
 `
 
 const EmojiCounts = styled.div`
-    width: 1.4em;
+    width: 1.1em;
     height: 1.6em;
     
     font-size: 0.9em;
