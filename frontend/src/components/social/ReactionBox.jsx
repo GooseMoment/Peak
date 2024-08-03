@@ -60,7 +60,7 @@ const ReactionBox = ({contentType, content}) => {
                 /> 
             ))}
         <EmojiPickerButton pickedEmoji={pickedEmoji} setPickedEmoji={setPickedEmoji}/>
-        {contentType === 'task' && <PeckButton taskID={content.id}/>}
+        {contentType === 'task' && <PeckButton taskID={content.id} isUncomplete={!content.completed_at}/>}
     </Box>
 }
 

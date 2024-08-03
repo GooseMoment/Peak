@@ -8,7 +8,7 @@ import queryClient from "@queries/queryClient"
 
 import { getPeck, postPeck } from "@api/social.api"
 
-const PeckButton = ({taskID}) => {
+const PeckButton = ({taskID, isUncomplete}) => {
     const { data: peck, isError: peckError } = useQuery({
         queryKey: ['peck', taskID],
         queryFn: () => getPeck(taskID),
@@ -17,7 +17,6 @@ const PeckButton = ({taskID}) => {
 
     const peckMutation = useMutation({
         mutationFn: () => {
-            console.log(taskID)
             return postPeck(taskID)
         },
         onSuccess: () => {
@@ -28,18 +27,24 @@ const PeckButton = ({taskID}) => {
         }
     })
 
+    const handlePeck = () => {
+        if(isUncomplete){
+            peckMutation.mutate()
+        }
+    }
+
     const preprocess = (counts) => {
         if(counts > 99) return '99+'
         return counts
     }
 
-    return <PeckBox>
-        <PeckButtonBox onClick={peckMutation.mutate}> <FeatherIcon icon="send"/> </PeckButtonBox>
+    return <Box>
+        <PeckButtonBox onClick={handlePeck}> <FeatherIcon icon="send"/> </PeckButtonBox>
         {(peck && peck.pecks_counts != 0) && <PeckCounts>{preprocess(peck.pecks_counts)}</PeckCounts>}
-    </PeckBox>
+    </Box>
 }
 
-const PeckBox = styled.div`
+const Box = styled.div`
     height: 2em;
     width: 3.5em;
 

@@ -6,7 +6,7 @@ import TaskFrame from "@components/tasks/TaskFrame"
 const LogDetailsTask = ({task, color}) => {
     return <TaskContainer>
         <TaskFrame task={task} color={color}/>
-        {task.completed_at && <ReactionBox contentType={'task'} content={task} />}
+        <ReactionBox contentType={'task'} content={task} />
     </TaskContainer>
 }
 
