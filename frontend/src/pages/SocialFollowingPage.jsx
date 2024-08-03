@@ -14,25 +14,24 @@ import queryClient from "@queries/queryClient"
 
 import { getDailyComment, getDailyLogDetails, getDailyLogsPreview, postCommentToDailyComment } from "@api/social.api"
 
-const sortDailyLogs = (dailyLogs) => {
-    return Object.entries(dailyLogs).sort(([, a], [, b]) => {
-        if(!a.recent_task === !b.recent_task) {
-            // (when there is no completed task) Show the user with the earliest username in alphabetical order first
-            if(!a.recent_task) return a.username > b.username ? 1:-1
-            if(a.recent_task.is_read !== b.recent_task.is_read)
-                return a.recent_task.is_read - b.recent_task.is_read
-            return a.recent_task.is_read ? (
-                // Show the earliest completed tasks first
-                new Date(a.recent_task.completed_at) - new Date(b.recent_task.completed_at)
-            ) : (
-                // Show more recently completed tasks first when not read yet
-                new Date(b.recent_task.completed_at) - new Date(a.recent_task.completed_at)
-            )
+const compareDailyLogs = (a, b) => {
+    if(!a.recent_task === !b.recent_task) {
+        // (when there is no completed task) Show the user with the earliest username in alphabetical order first
+        if(!a.recent_task) return a.username > b.username ? 1:-1
+        if(a.recent_task.is_read !== b.recent_task.is_read)
+            return a.recent_task.is_read - b.recent_task.is_read
+        return a.recent_task.is_read ? (
+            // Show the earliest completed tasks first
+            new Date(a.recent_task.completed_at) - new Date(b.recent_task.completed_at)
+        ) : (
+            // Show more recently completed tasks first when not read yet
+            new Date(b.recent_task.completed_at) - new Date(a.recent_task.completed_at)
+        )
 
-        }
-        // Show user with recent work first
-        return !a.recent_task - !b.recent_task
-})}
+    }
+    // Show user with recent work first
+    return !a.recent_task - !b.recent_task
+}
 
 const SocialFollowingPage = () => {
     const initial_date = new Date()
@@ -90,7 +89,7 @@ const SocialFollowingPage = () => {
 
                 {/* DailyLogsPreview를 별도의 컴포넌트 파일로 구분할까 고민중 */}
                 <DailyLogsPreviewContainer>
-                    {dailyLogs && sortDailyLogs(dailyLogs).map(([index, dailyFollowerLog]) => (
+                    {dailyLogs?.sort(compareDailyLogs).map((dailyFollowerLog, index) => (
                         <DailyLogPreview
                             key={index}
                             dailyLog={dailyFollowerLog}
