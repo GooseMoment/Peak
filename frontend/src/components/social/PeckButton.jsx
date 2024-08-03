@@ -4,6 +4,8 @@ import FeatherIcon from "feather-icons-react"
 
 import MildButton from "@components/common/MildButton"
 
+import queryClient from "@queries/queryClient"
+
 import { getPeck, postPeck } from "@api/social.api"
 
 const PeckButton = ({taskID}) => {
@@ -15,6 +17,7 @@ const PeckButton = ({taskID}) => {
 
     const peckMutation = useMutation({
         mutationFn: () => {
+            console.log(taskID)
             return postPeck(taskID)
         },
         onSuccess: () => {
@@ -31,9 +34,7 @@ const PeckButton = ({taskID}) => {
     }
 
     return <PeckBox>
-        <PeckButtonBox>
-            <FeatherIcon icon="send"/>
-        </PeckButtonBox>
+        <PeckButtonBox onClick={peckMutation.mutate}> <FeatherIcon icon="send"/> </PeckButtonBox>
         {(peck && peck.pecks_counts != 0) && <PeckCounts>{preprocess(peck.pecks_counts)}</PeckCounts>}
     </PeckBox>
 }
