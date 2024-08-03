@@ -179,7 +179,7 @@ export const getPeck = async(taskID) => {
 
 export const postPeck = async(taskID) => {
     try {
-        const res = await client.post(`social/peck/${taskID}`)
+        const res = await client.post(`social/peck/${taskID}/`)
         return res.data
     } catch(e) {
         throw(e)
