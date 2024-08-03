@@ -240,12 +240,10 @@ class ReactionView(APIView):
 
         if type == Reaction.FOR_TASK:
             task = get_object_or_404(Task, id=id)
-            # parent_type을 비교하는 게 속도 향상에 도움이 될진 모르겠음
             reactions = Reaction.objects.filter(parent_type=Reaction.FOR_TASK,
                                                 task=task).order_by("created_at")
         elif type == Reaction.FOR_DAILY_COMMENT:
             daily_comment = get_object_or_404(DailyComment, id=id)
-            # parent_type을 비교하는 게 속도 향상에 도움이 될진 모르겠음
             reactions = Reaction.objects.filter(parent_type=Reaction.FOR_DAILY_COMMENT,
                                                 daily_comment=daily_comment).order_by("created_at")
         
@@ -258,7 +256,7 @@ class ReactionView(APIView):
             emoji_id = str(reaction.emoji.id)
             reactionNum = reactionCountsDir.get(emoji_id)
             if reactionNum:
-                reactionCountsDir[emoji_id][1] = reactionNum + 1
+                reactionCountsDir[emoji_id][1] = reactionNum[1] + 1
             else:
                 reactionCountsDir[emoji_id] = [EmojiSerializer(reaction.emoji).data, 1]
         
