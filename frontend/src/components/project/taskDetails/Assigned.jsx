@@ -72,7 +72,7 @@ const FlexCenterBox = styled.div`
 `
 
 const CLine = styled.div`
-    border-top: thin solid ${p => p.theme.project.clineColor};
+    border-top: thin solid ${p => p.theme.project.lineColor};
     width: 90%;
     margin: 0.8em;
 `

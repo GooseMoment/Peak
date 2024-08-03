@@ -43,7 +43,7 @@ const Contents = ({task, setFunc}) => {
         navigate(`.`)
     }
 
-    const {formatted_due_date, formatted_due_time, formatted_assigned_date} = taskDate(task)
+    const {formatted_due_datetime, formatted_assigned_date} = taskDate(task)
     
     const items = [
         {
@@ -57,8 +57,8 @@ const Contents = ({task, setFunc}) => {
             id: 2,
             name: "due",
             icon: <img src={hourglass} />,
-            display: task.due_date ? (task.due_time ? formatted_due_date + ' ' + formatted_due_time : formatted_due_date) : t("none"),
-            component: <Due setFunc={setFunc} closeComponent={closeComponent}/>
+            display: task.due_date ? formatted_due_datetime : t("none"),
+            component: <Due task={task} setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 3,
@@ -66,7 +66,7 @@ const Contents = ({task, setFunc}) => {
             icon: <img src={alarmclock} />,
             display: task?.reminders && task.reminders?.length !== 0 ? 
                 <RemindersBox name="reminder">
-                    {task.reminders.map(reminder => <ReminderBlock name="reminder">{displayReminder[0][reminder.delta]}</ReminderBlock>)}
+                    {task.reminders.map(reminder => <ReminderBlock key={reminder.id} name="reminder">{displayReminder[reminder.delta]}</ReminderBlock>)}
                 </RemindersBox> 
                 : (task.due_date ? <EmptyReminderBox name="reminder">+</EmptyReminderBox>
                 : <EmptyReminderBox onClick={()=>{toast.error(t("reminder.reminder_before_due_date"))}}>-</EmptyReminderBox>),
@@ -169,7 +169,7 @@ const ContentText = styled.div`
     margin-left: 1.3em;
     text-decoration: none;
     white-space: nowrap;
-    overflow: hidden;
+    overflow-x: clip;
     text-overflow: ellipsis;
 
     &:hover {

@@ -5,20 +5,29 @@ import FeatherIcon from "feather-icons-react"
 import styled, { css } from "styled-components"
 import { cubicBeizer } from "@assets/keyframes"
 import { rotateToUp, rotateToUnder } from "@assets/keyframes"
+import { toast } from "react-toastify"
 
 import Detail from "@components/project/common/Detail"
 import QuickDue from "@components/project/due/QuickDue"
 import TimeDetail from "@components/project/due/TimeDetail"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 
-const Due = ({setFunc, closeComponent}) => {
+const Due = ({ task, setFunc, closeComponent }) => {
     const { t } = useTranslation(null, {keyPrefix: "task.due"})
 
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
     const handleAdditionalComp = (name) => {
-        if (isAdditionalComp === name) setIsAdditionalComp("")
-        else setIsAdditionalComp(name)
+        if (isAdditionalComp === name) 
+            setIsAdditionalComp("")
+        else {
+            if (name === "time") {
+                if (!task.due_date) {
+                toast.error("시간 설정 전에 기한을 설정해주세요", {toastId: "handle_time_open"})
+                return
+            }}
+            setIsAdditionalComp(name)
+        }
     }
 
     let date = new Date()
@@ -38,7 +47,7 @@ const Due = ({setFunc, closeComponent}) => {
     const addComponent = [
         {name: "quick", display: t("quick.title"), icon: "menu", component: <QuickDue changeDueDate={changeDueDate}/>},
         {name: "calendar", display: t("calendar"), icon: "calendar", component: <div>달력입니다</div>},
-        {name: "time", display: t("time.title"), icon: "clock", component: <TimeDetail/>},
+        {name: "time", display: t("time.title"), icon: "clock", component: <TimeDetail task={task} setFunc={setFunc} closeComponent={closeComponent}/>},
         {name: "repeat", display: t("repeat.title"), icon: "refresh-cw", component: <RepeatDetail/>},
     ]
 
