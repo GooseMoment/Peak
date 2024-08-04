@@ -35,12 +35,13 @@ const PeckButton = ({taskID, isUncomplete}) => {
 
     const preprocess = (counts) => {
         if(counts > 99) return '99+'
+        else if(counts === 0) return ' '
         return counts
     }
 
     return <Box>
         <PeckButtonBox onClick={handlePeck}> <FeatherIcon icon="send"/> </PeckButtonBox>
-        {(peck && peck.pecks_counts != 0) && <PeckCounts>{preprocess(peck.pecks_counts)}</PeckCounts>}
+        {peck && <PeckCounts>{preprocess(peck.pecks_counts)}</PeckCounts>}
     </Box>
 }
 
@@ -64,6 +65,8 @@ const PeckButtonBox = styled(MildButton)`
     & svg {
         top: unset;
         margin-right: unset;
+
+        transform: rotate(45deg);
     }
 `
 
