@@ -20,6 +20,7 @@ import queryClient from "@queries/queryClient"
 import handleToggleContextMenu from "@utils/handleToggleContextMenu"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
+import { SkeletonDrawer } from "@components/intro/skeletons/SkeletonProjectPage"
 
 const getPageFromURL = (url) => {
     if (!url) return null
@@ -113,7 +114,7 @@ const Drawer = ({project, drawer, color}) => {
     }
 
     if (isLoading) {
-        return <div>로딩중..</div>
+        return <SkeletonDrawer/>
     }
     
     return (

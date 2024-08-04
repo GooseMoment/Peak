@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { getProject, patchProject, deleteProject } from "@api/projects.api"
 import { getDrawersByProject } from "@api/drawers.api"
+import { SkeletonProjectPage } from "@components/intro/skeletons/SkeletonProjectPage"
 
 const ProjectPage = () => {
     const { id } = useParams()
@@ -91,31 +92,26 @@ const ProjectPage = () => {
         {state: {project_name : project.name, drawer_id : project.drawers[0].id, drawer_name : project.drawers[0].name}})
     }
 
-    if (isProjectLoading) {
-        return <div>로딩중...</div>
-        // 민영아.. 스켈레톤 뭐시기 만들어..
-    }
-
-    if (isDrawersLoading) {
-        return <div>로딩중...</div>
+    if (isProjectLoading || isDrawersLoading) {
+        return <SkeletonProjectPage/>
     }
 
     return (
     <>
-        <TitleBox>
+        {isProjectLoading || <TitleBox>
             <PageTitle $color={"#" + project.color}>{project.name}</PageTitle>
             <Icons>
-                <FeatherIcon icon="plus" onClick={project.type === 'inbox' ? openInboxTaskCreate : () => {setIsDrawerCreateOpen(true)}}/>
+                <FeatherIcon icon="plus" onClick={project?.type === 'inbox' ? openInboxTaskCreate : () => {setIsDrawerCreateOpen(true)}}/>
                 <SortIconBox onClick={handleToggleContextMenu(setSelectedSortMenuPosition, setIsSortMenuOpen, setIsContextMenuOpen)}>
                     <SortIcon color={theme.textColor}/>
                 </SortIconBox>
                 <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedButtonPosition, setIsContextMenuOpen, setIsSortMenuOpen)}/>
             </Icons>
-        </TitleBox>
-        {drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
+        </TitleBox>}
+        {isDrawersLoading || (drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
         : drawers?.map((drawer) => (
             <Drawer key={drawer.id} project={project} drawer={drawer} color={project.color}/>
-        ))}
+        )))}
         {isSortMenuOpen &&
             <SortMenu
                 title={t("sort.drawer_title")}

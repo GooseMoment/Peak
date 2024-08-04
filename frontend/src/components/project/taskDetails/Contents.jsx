@@ -1,5 +1,5 @@
 import { useState, Fragment } from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
