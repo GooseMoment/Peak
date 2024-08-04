@@ -171,7 +171,7 @@ def get_daily_comment(requset: HttpRequest, followee, day):
 
 # POST social/daily/logs/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["POST"])
-def post_comment_to_daily_comment(request: Request, day):
+def post_daily_comment(request: Request, day):
     day_min = datetime.fromisoformat(day)
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
     
@@ -371,10 +371,10 @@ class PeckView(APIView):
     
         return pecksCounts
 
-def post_comment_to_task(request: HttpRequest, task_id, comment):
+class CommentView(APIView):
     pass
 
-def post_peck(request: HttpRequest, task_id):
+def post_comment_to_task(request: HttpRequest, task_id, comment):
     pass
     
 class EmojiListPagination(PageNumberPagination):
