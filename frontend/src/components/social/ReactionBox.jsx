@@ -35,6 +35,13 @@ const ReactionBox = ({contentType, content}) => {
         }
     })
 
+    const needPickerButton = () => {
+        if(contentType === 'daily_comment')
+            return true
+        if(contentType === 'task')
+            return !!content.completed_at
+    }
+
     const myReactions = contentReactions ? 
         Object.values(contentReactions.my_reactions) 
         : []
@@ -59,7 +66,7 @@ const ReactionBox = ({contentType, content}) => {
                     saveReaction={contentReactionsMutation.mutate}
                 /> 
             ))}
-        <EmojiPickerButton pickedEmoji={pickedEmoji} setPickedEmoji={setPickedEmoji}/>
+        {needPickerButton() && <EmojiPickerButton pickedEmoji={pickedEmoji} setPickedEmoji={setPickedEmoji}/>}
         {contentType === 'task' && <PeckButton taskID={content.id} isUncomplete={!content.completed_at}/>}
     </Box>
 }
