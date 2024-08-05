@@ -28,6 +28,7 @@ const ProjectListPage = () => {
         <>
             <PageTitle>{t("title")}</PageTitle>
             {isPending && <SkeletonProjectList/>}
+            {isError && <ErrorProjectList onClick={()=>refetch()}/>}
             {projects?.map((project) => <ProjectName key={project.id} project={project} />)}
             {isPending || <TaskCreateButton onClick={() => {setIsCreateOpen(true)}}>
                 <FeatherIcon icon="plus-circle"/>
