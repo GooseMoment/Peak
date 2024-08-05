@@ -9,26 +9,26 @@ import PeckButton from "@components/social/PeckButton"
 import queryClient from "@queries/queryClient"
 import { deleteReaction, getReactions, postReaction } from "@api/social.api"
 
-const ReactionBox = ({contentType, content}) => {
+const ReactionBox = ({parentType, parent}) => {
     const [pickedEmoji, setPickedEmoji] = useState(null)
 
-    const { data: contentReactions, isError: contentReactionsError } = useQuery({
-        queryKey: ['reaction', contentType, content.id],
-        queryFn: () => getReactions(contentType, content.id),
-        enabled: !!content.id
+    const { data: parentReactions, isError: parentReactionsError } = useQuery({
+        queryKey: ['reaction', parentType, parent.id],
+        queryFn: () => getReactions(parentType, parent.id),
+        enabled: !!parent.id
     })
 
-    const contentReactionsMutation = useMutation({
+    const parentReactionsMutation = useMutation({
         mutationFn: ({action, emojiID}) => {
             if(action === 'post') {
-                return postReaction(contentType, content.id, emojiID)
+                return postReaction(parentType, parent.id, emojiID)
             }
             else if(action === 'delete') {
-                return deleteReaction(contentType, content.id, emojiID)
+                return deleteReaction(parentType, parent.id, emojiID)
             }
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['reaction', contentType, content.id]})
+            queryClient.invalidateQueries({queryKey: ['reaction', parentType, parent.id]})
         },
         onError: (e) => {
             toast.error(e)
@@ -36,20 +36,20 @@ const ReactionBox = ({contentType, content}) => {
     })
 
     const needPickerButton = () => {
-        if(contentType === 'daily_comment')
+        if(parentType === 'daily_comment')
             return true
-        if(contentType === 'task')
-            return !!content.completed_at
+        if(parentType === 'task')
+            return !!parent.completed_at
     }
 
-    const myReactions = contentReactions ? 
-        Object.values(contentReactions.my_reactions) 
+    const myReactions = parentReactions ? 
+        Object.values(parentReactions.my_reactions) 
         : []
 
     const handleEmoji = (pickedEmoji) => {
         if(pickedEmoji) {
             if(!(myReactions.some((myReaction) => myReaction.id === pickedEmoji.id))) {
-                contentReactionsMutation.mutate({action: 'post', emojiID: pickedEmoji.id})
+                parentReactionsMutation.mutate({action: 'post', emojiID: pickedEmoji.id})
             }
             setPickedEmoji(null)
         }
@@ -60,14 +60,14 @@ const ReactionBox = ({contentType, content}) => {
     ), [pickedEmoji])
 
     return <Box>
-        {contentReactions && Object.values(contentReactions.reaction_counts).map((reaction, index) => (
+        {parentReactions && Object.values(parentReactions.reaction_counts).map((reaction, index) => (
                 <ReactionButton key={index} emoji={reaction}
                     isSelected={myReactions.some((myReaction) => myReaction.id === reaction[0].id)}
-                    saveReaction={contentReactionsMutation.mutate}
+                    saveReaction={parentReactionsMutation.mutate}
                 /> 
             ))}
         {needPickerButton() && <EmojiPickerButton pickedEmoji={pickedEmoji} setPickedEmoji={setPickedEmoji}/>}
-        {contentType === 'task' && <PeckButton taskID={content.id} isUncomplete={!content.completed_at}/>}
+        {parentType === 'task' && <PeckButton taskID={parent.id} isUncomplete={!parent.completed_at}/>}
     </Box>
 }
 

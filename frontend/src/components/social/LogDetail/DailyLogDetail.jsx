@@ -68,7 +68,7 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
             </CommentBox>
         </CommentRow>
 
-        {dailyComment.id && <ReactionBox contentType={'daily_comment'} content={dailyComment} />}
+        {dailyComment.id && <ReactionBox parentType={'daily_comment'} parent={dailyComment} />}
 
         {/* TODO: who and what emoji */}
         </DetailHeader>
