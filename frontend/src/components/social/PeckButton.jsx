@@ -55,7 +55,6 @@ const Box = styled.div`
 `
 
 const PeckButtonBox = styled(MildButton)`
-    margin-left: 0.4em;
     height: 2em;
 
     display: flex;
@@ -72,7 +71,6 @@ const PeckButtonBox = styled(MildButton)`
 
 const PeckCounts = styled.div`
     flex-grow: 1;
-    margin-right: 0.1em;
 
     text-align: center;
     font-size: 1em;
