@@ -1,26 +1,25 @@
-import { Fragment, useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { cubicBeizer, rotateToUp, rotateToUnder } from "@assets/keyframes"
-import styled, { css, useTheme } from "styled-components"
+import styled, { useTheme } from "styled-components"
 import FeatherIcon from 'feather-icons-react'
 
 import Button from "@components/common/Button"
 import Task from "@components/tasks/Task"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
-import DrawerBox, { DrawerName, DrawerIcon } from "@components/drawers/DrawerBox"
-import SortIcon from "@components/project/sorts/SortIcon"
+import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import SortMenu from "@components/project/sorts/SortMenu"
+import DrawerIcons from "./DrawerIcons"
+import { SkeletonDrawer } from "@components/intro/skeletons/SkeletonProjectPage"
+import { ErrorBox } from "@components/errors/ErrorProjectPage"
 
+import queryClient from "@queries/queryClient"
 import { useMutation, useInfiniteQuery } from "@tanstack/react-query"
 import { deleteDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
-import queryClient from "@queries/queryClient"
-import handleToggleContextMenu from "@utils/handleToggleContextMenu"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import { SkeletonDrawer } from "@components/intro/skeletons/SkeletonProjectPage"
 
 const getPageFromURL = (url) => {
     if (!url) return null
@@ -45,23 +44,19 @@ const Drawer = ({project, drawer, color}) => {
 
     const { t } = useTranslation(null, {keyPrefix: "project"})
 
-    const { data, isError, fetchNextPage, isLoading } = useInfiniteQuery({
+    const { data, isError, fetchNextPage, isLoading, refetch } = useInfiniteQuery({
         queryKey: ["tasks", {drawerID: drawer.id, ordering: ordering}],
         queryFn: (pages) => getTasksByDrawer(drawer.id, ordering, pages.pageParam || 1),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
+    const hasNextPage = data?.pages[data?.pages?.length-1].next !== null
+
     useEffect(() => {
         setIsContextMenuOpen(false)
         setIsSortMenuOpen(false)
     }, [project])
-
-    const hasNextPage = data?.pages[data?.pages?.length-1].next !== null
-
-    const handleCollapsed = () => {
-        {drawer.task_count !== 0 && setCollapsed(prev => !prev)}
-    }
 
     const deleteMutation = useMutation({
         mutationFn: () => {
@@ -88,45 +83,43 @@ const Drawer = ({project, drawer, color}) => {
         setIsSimpleOpen(prev => !prev)
     }
 
+    const handleCollapsed = () => {
+        {drawer.task_count !== 0 && setCollapsed(prev => !prev)}
+    }
+
     const clickPlus = () => {
         navigate(`/app/projects/${project.id}/tasks/create/`,
         {state: {project_name : project.name, drawer_id : drawer.id, drawer_name : drawer.name}})
     }
 
-    const drawerIcons = [
-        {icon: <FeatherIcon icon="plus" onClick={clickPlus}/>},
-        {icon: <div onClick={handleToggleContextMenu(setSelectedSortMenuPosition, setIsSortMenuOpen, setIsContextMenuOpen)}>
-            <SortIcon color={`#${color}`}/>
-        </div>},
-        {icon: <CollapseButton $collapsed={collapsed}>
-            <FeatherIcon icon="chevron-down" onClick={handleCollapsed}/>
-        </CollapseButton>},
-        {icon: <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedContextPosition, setIsContextMenuOpen, setIsSortMenuOpen)}/>},
-    ]
-
-    if (isError) {
-        return (
-            <>
-                <div>{t("error_load_task")}</div>
-                <div onClick={() => navigate(-1)}>{t("button_go_back")}</div>
-            </>
-        )
-    }
-
     if (isLoading) {
         return <SkeletonDrawer/>
     }
-    
+
+    if (isError) {
+        return (
+            <ErrorBox $isTasks={true} onClick={() => refetch()}>
+                <FeatherIcon icon="alert-triangle"/>
+                {t("error_load_task")}
+            </ErrorBox>
+        )
+    }
+
     return (
         <>
             {project.type === 'inbox' ? null :
             <DrawerBox $color = {color}>
                 <DrawerName $color = {color}>{drawer.name}</DrawerName>
-                <DrawerIcon $color = {color}>
-                    {drawerIcons.map((item, i) => (
-                        <Fragment key={i}>{item.icon}</Fragment>
-                    ))}
-                </DrawerIcon>
+                <DrawerIcons
+                    color={color}
+                    collapsed={collapsed}
+                    handleCollapsed={handleCollapsed}
+                    clickPlus={clickPlus}
+                    setIsSortMenuOpen={setIsSortMenuOpen}
+                    setSelectedSortMenuPosition={setSelectedSortMenuPosition}
+                    setIsContextMenuOpen={setIsContextMenuOpen}
+                    setSelectedContextPosition={setSelectedContextPosition}
+                />
             </DrawerBox>}
             {collapsed ? null :
                 <TaskList>
@@ -176,18 +169,6 @@ const Drawer = ({project, drawer, color}) => {
         </>
     );
 }
-
-const CollapseButton = styled.div`
-    & svg {
-        animation: ${rotateToUp} 0.5s ${cubicBeizer} forwards;
-    }
-
-    ${props => props.$collapsed && css`
-        & svg {
-            animation: ${rotateToUnder} 0.5s ${cubicBeizer} forwards;
-        }
-    `}
-`
 
 export const TaskList = styled.div`
     flex: 1;
