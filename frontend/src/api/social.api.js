@@ -190,10 +190,10 @@ export const postCommentToTask = (taskID, comment) => {
 
 }
 
-export const postCommentToDailyComment = async(date, dailycomment) => {
+export const postDailyComment = async(date, dailycomment) => {
     try {
         const res = await client.post(`social/daily/comment/${date}/`, {
-            comment: dailycomment
+            content: dailycomment
         })
         return res.data
     } catch (e) {

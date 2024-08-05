@@ -65,7 +65,7 @@ class DailyCommentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = DailyComment
-        fields = ["id", "user", "comment", "date"]
+        fields = ["id", "user", "content", "date"]
     # def to_representation(self, instance):
     #     data = super().to_representation(instance)
         

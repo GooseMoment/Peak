@@ -163,7 +163,7 @@ def get_daily_comment(requset: HttpRequest, followee, day):
     daily_comment = DailyComment.objects.filter(user__id=followeeUserID, date__range=(day_min, day_max)).first()
     
     if not daily_comment:
-        daily_comment = DailyComment(id=None, user=followeeUser, comment='', date=None)
+        daily_comment = DailyComment(id=None, user=followeeUser, content='', date=None)
     serializer = DailyCommentSerializer(daily_comment)
     
     # Response(cache_data, status=status.HTTP_200_OK)
@@ -176,13 +176,13 @@ def post_daily_comment(request: Request, day):
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
     
     daily_comment = DailyComment.objects.filter(user=request.user, date__range=(day_min, day_max)).first()
-    comment = request.data.get('comment')
+    content = request.data.get('content')
     
     if daily_comment:
-        daily_comment.comment = comment
+        daily_comment.content = content
         daily_comment.save()
     else:
-        daily_comment = DailyComment.objects.create(user=request.user, comment=comment, date=day)
+        daily_comment = DailyComment.objects.create(user=request.user, content=content, date=day)
     
     serializer = DailyCommentSerializer(daily_comment)
     
@@ -372,7 +372,10 @@ class PeckView(APIView):
         return pecksCounts
 
 class CommentView(APIView):
-    pass
+    def get(self, request, type, id):
+        pass
+    def post(self, requset, type, id):
+        pass
 
 def post_comment_to_task(request: HttpRequest, task_id, comment):
     pass

@@ -13,10 +13,10 @@ import { toast } from "react-toastify"
 
 const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, day}) => {
     const [inputState, setInputState] = useState(false)
-    const [comment, setComment] = useState(dailyComment.comment)
+    const [content, setContent] = useState(dailyComment.content)
     
     useEffect(() => {
-        setComment(dailyComment.comment)
+        setContent(dailyComment.content)
     }, [dailyComment, day])
 
     const handleInputState = () => {
@@ -25,19 +25,19 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
     }
 
     const handleChange = (e) => {
-        setComment(e.target.value)
+        setContent(e.target.value)
     }
 
     const handleKeyDown = (e) => {
         if(e.key == 'Enter') {
             setInputState(false)
-            saveDailyComment({day, comment})
+            saveDailyComment({day, content})
         }
     }
 
     const handleBlur = () => {
         setInputState(false)
-        saveDailyComment({day, comment})
+        saveDailyComment({day, content})
     }
 
     return <>
@@ -48,15 +48,15 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
                 {dailyComment.user.username === user.username && inputState ? (
                     <CommentInput
                         type="text"
-                        value={comment}
+                        value={content}
                         onChange={handleChange}
                         onKeyDown={handleKeyDown}
                         onBlur={handleBlur}
                         autoFocus
                     />
                 ):(
-                    dailyComment.comment ? (
-                        <Comment>{"\""+dailyComment.comment+"\""}</Comment>
+                    dailyComment.content ? (
+                        <Comment>{"\""+dailyComment.content+"\""}</Comment>
                     ) : (
                         dailyComment.user.username === user.username ? (
                             <Comment $color="#A4A4A4" $fontstyle="italic">{"Write your daily comments"}</Comment>

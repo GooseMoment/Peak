@@ -12,7 +12,7 @@ import SocialPageTitle from "@components/social/SocialPageTitle"
 
 import queryClient from "@queries/queryClient"
 
-import { getDailyComment, getDailyLogDetails, getDailyLogsPreview, postCommentToDailyComment } from "@api/social.api"
+import { getDailyComment, getDailyLogDetails, getDailyLogsPreview, postDailyComment } from "@api/social.api"
 
 const compareDailyLogs = (a, b) => {
     if(!a.recent_task === !b.recent_task) {
@@ -51,17 +51,17 @@ const SocialFollowingPage = () => {
     const dailyLogDetailUsername = selectedUsername?selectedUsername:user.username
 
     const { data: dailyComment, isError: dailyCommentError } = useQuery({
-        queryKey: ['daily', 'comment', dailyLogDetailUsername, selectedDate],
+        queryKey: ['daily', 'content', dailyLogDetailUsername, selectedDate],
         queryFn: () => getDailyComment(dailyLogDetailUsername, selectedDate),
         enabled: !!selectedDate
     })
 
     const dailyCommentMutation = useMutation({
-        mutationFn: ({day, comment}) => {
-            return postCommentToDailyComment(day, comment)
+        mutationFn: ({day, content}) => {
+            return postDailyComment(day, content)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['daily', 'comment', user.username, selectedDate]})
+            queryClient.invalidateQueries({queryKey: ['daily', 'content', user.username, selectedDate]})
         },
         onError: () => {
             toast.error(e)
