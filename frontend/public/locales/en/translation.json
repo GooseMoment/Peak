@@ -42,8 +42,8 @@
         "button_load_more": "Load more",
         "button_add_task": "Add new task",
         "loading": "Loading...",
+        "error_load_project_and_drawer": "Couldn't load project and drawers 😂",
         "error_load_task": "Couldn't load tasks 😂",
-        "button_go_back": "Go back",
         "create": {
             "name_placeholder": "Enter a name",
             "button_add": "Add",

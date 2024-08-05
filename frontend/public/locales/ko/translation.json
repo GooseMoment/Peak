@@ -42,8 +42,8 @@
         "button_load_more": "더보기",
         "button_add_task": "새 작업 추가",
         "loading": "로딩 중",
-        "error_load_task": "작업을 불러오지 못했어요 😂",
-        "button_go_back": "이전으로 돌아가기",
+        "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요 😢",
+        "error_load_task": "작업을 불러오지 못했어요 😢",
         "create": {
             "name_placeholder": "이름을 입력하세요",
             "button_add": "추가하기",

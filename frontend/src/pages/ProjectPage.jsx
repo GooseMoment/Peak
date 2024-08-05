@@ -14,13 +14,14 @@ import queryClient from "@queries/queryClient"
 import handleToggleContextMenu from "@utils/handleToggleContextMenu"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
+import { SkeletonProjectPage } from "@components/intro/skeletons/SkeletonProjectPage"
+import { ErrorBox } from "@components/errors/ErrorProjectPage"
 
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { getProject, patchProject, deleteProject } from "@api/projects.api"
 import { getDrawersByProject } from "@api/drawers.api"
-import { SkeletonProjectPage } from "@components/intro/skeletons/SkeletonProjectPage"
 
 const ProjectPage = () => {
     const { id } = useParams()
@@ -37,12 +38,12 @@ const ProjectPage = () => {
 
     const { t } = useTranslation(null, {keyPrefix: "project"})
     
-    const { isLoading: isProjectLoading, isError: isProjectError, data: project } = useQuery({
+    const { isLoading: isProjectLoading, isError: isProjectError, data: project, refetch: projectRefetch } = useQuery({
         queryKey: ['projects', id],
         queryFn: () => getProject(id),
     })
 
-    const { isLoading: isDrawersLoading, isError: isDrawersError, data: drawers } = useQuery({
+    const { isLoading: isDrawersLoading, isError: isDrawersError, data: drawers, refetch: drawersRefetch } = useQuery({
         queryKey: ['drawers', {projectID: id, ordering: ordering}],
         queryFn: () => getDrawersByProject(id, ordering),
     })
@@ -92,13 +93,25 @@ const ProjectPage = () => {
         {state: {project_name : project.name, drawer_id : project.drawers[0].id, drawer_name : project.drawers[0].name}})
     }
 
+    const onClickProjectErrorBox = () => {
+        projectRefetch()
+        drawersRefetch()
+    }
+
     if (isProjectLoading || isDrawersLoading) {
         return <SkeletonProjectPage/>
     }
 
+    if (isProjectError || isDrawersError) {
+        return <ErrorBox $isTasks={false} onClick={onClickProjectErrorBox}>
+            <FeatherIcon icon="alert-triangle"/>
+            {t("error_load_project_and_drawer")}
+        </ErrorBox>
+    }
+
     return (
     <>
-        {isProjectLoading || <TitleBox>
+        <TitleBox>
             <PageTitle $color={"#" + project.color}>{project.name}</PageTitle>
             <Icons>
                 <FeatherIcon icon="plus" onClick={project?.type === 'inbox' ? openInboxTaskCreate : () => {setIsDrawerCreateOpen(true)}}/>
@@ -107,8 +120,8 @@ const ProjectPage = () => {
                 </SortIconBox>
                 <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedButtonPosition, setIsContextMenuOpen, setIsSortMenuOpen)}/>
             </Icons>
-        </TitleBox>}
-        {isDrawersLoading || (drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
+        </TitleBox>
+        {(drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
         : drawers?.map((drawer) => (
             <Drawer key={drawer.id} project={project} drawer={drawer} color={project.color}/>
         )))}
