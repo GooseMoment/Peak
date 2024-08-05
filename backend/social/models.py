@@ -36,7 +36,7 @@ class DailyComment(Base):
         User, 
         on_delete=models.CASCADE,
     )
-    comment = models.TextField()
+    content = models.TextField()
     date = models.DateTimeField(null=True, blank=True)
     
     def __str__(self) -> str:
@@ -75,8 +75,8 @@ class Reaction(Base):
         Emoji,
         null=True,
         blank=True,
-        on_delete = models.SET_NULL,
-        related_name = "reactions"
+        on_delete=models.SET_NULL,
+        related_name="reactions"
     )
 
     def __str__(self) -> str:
@@ -86,13 +86,30 @@ class Reaction(Base):
         db_table = "reactions"
 
 class Comment(Base):
+    FOR_TASK = "task"
+    FOR_DAILY_COMMENT = "daily_comment"
+
+    COMMENT_TYPE = [
+        (FOR_TASK, "For task"),
+        (FOR_DAILY_COMMENT, "For daily comment"),
+    ]
+    
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
     )
+    parent_type = models.CharField(choices=COMMENT_TYPE, max_length=128)
     task = models.ForeignKey(
         Task,
         on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    daily_comment = models.ForeignKey(
+        DailyComment,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
     comment = models.TextField()
 
