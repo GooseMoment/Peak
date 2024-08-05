@@ -12,6 +12,7 @@ urlpatterns = [
     path('daily/comment/@<str:followee>/<str:day>/', views.get_daily_comment),
     path('daily/comment/<str:day>/', views.post_daily_comment),
     path('reaction/<str:type>/<str:id>/', views.ReactionView.as_view()),
+    path('comment/<str:type>/<str:id>/', views.CommentView.as_view()),
     path('peck/<str:id>/', views.PeckView.as_view()),
     path('emojis/', views.EmojiList.as_view()),
 ]
