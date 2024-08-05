@@ -135,7 +135,8 @@
                 "am": "Am",
                 "pm": "Pm",
                 "button_add": "Add",
-                "acceptable_numbers": "The maximum number you can enter is {{max}}."
+                "acceptable_numbers": "The maximum number you can enter is {{max}}.",
+                "time_change_success": "The time has changed."
             },
             "repeat": {
                 "title": "Recurrence Settings",

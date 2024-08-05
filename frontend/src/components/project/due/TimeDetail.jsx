@@ -28,7 +28,7 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
         let converted_hour = !setting.time_as_24_hour && ampm === "pm" ? hour + 12 : hour
         const due_time = `${converted_hour}:${min}:00`
         setFunc({due_tz, due_date, due_time})
-        toast.success('시간이 변경되었습니다.')
+        toast.success(t("time_change_success"))
         closeComponent()
     }
 

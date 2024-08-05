@@ -43,17 +43,17 @@ const ButtonBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.4em;
-    width: 40%;
-    height: 2em;
+    gap: 0.35em;
+    width: 43%;
+    height: 1.9em;
     border-radius: 15px;
     border: solid 1px ${p => p.theme.project.borderColor};
     color: ${p => p.theme.textColor};
-    font-weight: 500;
+    font-weight: normal;
 
     &:hover {
-        font-weight: bolder;
         color: ${p => p.theme.goose};
+        font-weight: bold;
         cursor: pointer;
     }
 `

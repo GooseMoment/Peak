@@ -138,23 +138,22 @@ const ButtonBox = styled.div`
     justify-content: center;
     align-items: center;
     gap: 0.4em;
-    width: 28%;
+    width: 43%;
     height: 1.7em;
-    border-radius: 13px;
+    border-radius: 15px;
     border: solid 1px ${p => p.theme.project.borderColor};
     color: ${p => p.theme.textColor};
-    font-weight: 500;
+    font-weight: normal;
 
     &:hover {
         cursor: pointer;
-        font-weight: bolder;
     }
 
     ${(props) =>
         props.$active && css`
             background-color: ${p => p.theme.goose};
             border: solid 1px ${p => p.theme.project.borderColor};
-            color: ${p => p.theme.backgroundColor};
+            color: ${p => p.theme.white};
         `
     }
 `
