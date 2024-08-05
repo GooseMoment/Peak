@@ -114,7 +114,7 @@ class Comment(Base):
     comment = models.TextField()
 
     def __str__(self) -> str:
-        return f"Comment by {self.user} → {self.task.name}"
+        return f"Comment by {self.user} → {self.daily_comment or self.task}"
     
     class Meta:
         db_table = "comments"

@@ -103,10 +103,11 @@ class PeckSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     task = TaskSerializer()
+    daily_comment = DailyCommentSerializer()
     
     class Meta:
         model = Comment
-        fields = ["id", "user", "task", "comment"]
+        fields = ["id", "user", "parent_type", "task", "daily_comment", "created_at", "comment"]
 
 class FollowingSerializer(serializers.ModelSerializer):
     follower = UserSerializer(many=False, read_only=True)
