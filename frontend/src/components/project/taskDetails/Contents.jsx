@@ -66,7 +66,7 @@ const Contents = ({task, setFunc}) => {
             icon: <img src={alarmclock} />,
             display: task?.reminders && task.reminders?.length !== 0 ? 
                 <RemindersBox name="reminder">
-                    {task.reminders.map(reminder => <ReminderBlock key={reminder.id} name="reminder">{displayReminder[reminder.delta]}</ReminderBlock>)}
+                    {task.reminders.map(reminder => <ReminderBlock key={reminder.id} name="reminder">{displayReminder[0][reminder.delta]}</ReminderBlock>)}
                 </RemindersBox> 
                 : (task.due_date ? <EmptyReminderBox name="reminder">+</EmptyReminderBox>
                 : <EmptyReminderBox onClick={()=>{toast.error(t("reminder.reminder_before_due_date"))}}>-</EmptyReminderBox>),
