@@ -31,7 +31,7 @@ const Memo = ({previousMemo, setFunc, closeComponent}) => {
                     type='text'
                     onChange={onChange}
                     value={memo || ''}
-                    placeholder="memo_placeholder"
+                    placeholder={t("memo_placeholder")}
                 />
             </FlexBox>
             <FlexBox>
