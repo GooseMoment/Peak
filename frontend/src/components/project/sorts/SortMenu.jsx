@@ -15,7 +15,7 @@ const SortMenu = ({ title, items, selectedButtonPosition, ordering, setOrdering 
             <CLine/>
             {items.map((item) => (
                 <DisplayBox key={item.display} onClick={()=>setOrdering(item.context)} $isSelected={item.context === ordering}>
-                    <FeatherIcon icon="check"/>
+                    <EmptyBox><FeatherIcon icon="check"/></EmptyBox>
                     {item.display}
                 </DisplayBox>
             ))}
@@ -64,6 +64,12 @@ const DisplayBox = styled.div`
         top: 0;
         color: ${props => props.$isSelected ? props.theme.primaryColors.success : 'transparent'};
     }
+`
+
+const EmptyBox = styled.div`
+    width: 16px;
+    height: 16px;
+    margin-right: 0.5em;
 `
 
 const CLine = styled.div`
