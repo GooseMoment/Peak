@@ -212,13 +212,13 @@ const makePriorities = (t) => [
 ]
 
 const makeDisplayReminder = (t) => [{
-    0: t("reminder.then"),
-    5: t("reminder.5_minutes_before"),
-    15: t("reminder.15_minutes_before"),
-    30: t("reminder.30_minutes_before"),
-    60: t("reminder.1_hour_before"),
-    1440: t("reminder.1_day_before"),
-    2880: t("reminder.2_days_before"),
+    0: t("reminder.display_then"),
+    5: t("reminder.display_5_minutes_before"),
+    15: t("reminder.display_15_minutes_before"),
+    30: t("reminder.display_30_minutes_before"),
+    60: t("reminder.display_1_hour_before"),
+    1440: t("reminder.display_1_day_before"),
+    2880: t("reminder.display_2_days_before"),
 }]
 
 export default Contents

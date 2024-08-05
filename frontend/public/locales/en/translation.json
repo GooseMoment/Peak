@@ -168,7 +168,14 @@
             "30_minutes_before": "30 minutes before",
             "1_hour_before": "1 hour before",
             "1_day_before": "1 day before",
-            "2_days_before": "2 days before"
+            "2_days_before": "2 days before",
+            "display_then": "then",
+            "display_5_minutes_before": "5 mins",
+            "display_15_minutes_before": "15 mins",
+            "display_30_minutes_before": "30 mins",
+            "display_1_hour_before": "1 hour",
+            "display_1_day_before": "1 day",
+            "display_2_days_before": "2 days"
         },
         "priority": {
             "title": "Importance Settings",

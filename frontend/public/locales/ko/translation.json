@@ -170,7 +170,14 @@
             "30_minutes_before": "30분 전",
             "1_hour_before": "1시간 전",
             "1_day_before": "1일 전",
-            "2_days_before": "2일 전"
+            "2_days_before": "2일 전",
+            "display_then": "그때",
+            "display_5_minutes_before": "5분 전",
+            "display_15_minutes_before": "15분 전",
+            "display_30_minutes_before": "30분 전",
+            "display_1_hour_before": "1시간 전",
+            "display_1_day_before": "1일 전",
+            "display_2_days_before": "2일 전"
         },
         "priority": {
             "title": "중요도 설정",
