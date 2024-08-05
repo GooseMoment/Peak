@@ -246,6 +246,8 @@ class ReactionView(APIView):
             daily_comment = get_object_or_404(DailyComment, id=id)
             reactions = Reaction.objects.filter(parent_type=Reaction.FOR_DAILY_COMMENT,
                                                 daily_comment=daily_comment).order_by("created_at")
+        else :
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         
         reactionCountsDir = dict()
         myReactions = []
@@ -373,13 +375,73 @@ class PeckView(APIView):
 
 class CommentView(APIView):
     def get(self, request, type, id):
-        pass
-    def post(self, requset, type, id):
-        pass
-
-def post_comment_to_task(request: HttpRequest, task_id, comment):
-    pass
+        if type == Comment.FOR_TASK:
+            task = get_object_or_404(Task, id=id)
+            comments = Comment.objects.filter(parent_type=Reaction.FOR_TASK,
+                                                task=task).order_by("created_at")
+        elif type == Comment.FOR_DAILY_COMMENT:
+            daily_comment = get_object_or_404(DailyComment, id=id)
+            comments = Comment.objects.filter(parent_type=Reaction.FOR_DAILY_COMMENT,
+                                                daily_comment=daily_comment).order_by("created_at")
+        
+        serializer = CommentSerializer(comments, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
+    def post(self, request, type, id):
+        user = request.user
+        comment = request.data.get('comment')
+        
+        # TODO: check block
+        if type == Comment.FOR_TASK:
+            task = get_object_or_404(Task, id=id)
+            created = Comment.objects.create(user=user,
+                                             parent_type=Reaction.FOR_TASK,
+                                             task=task,
+                                             comment=comment)
+        elif type == Comment.FOR_DAILY_COMMENT:
+            daily_comment = get_object_or_404(DailyComment, id=id)
+            created = Comment.objects.create(user=user,
+                                             parent_type=Reaction.FOR_DAILY_COMMENT,
+                                             daily_comment=daily_comment,
+                                             comment=comment)
+        else :
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = CommentSerializer(created, many=False)
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def patch(self, request, type, id):
+        user = request.user
+        
+        commentID = request.data.get('id')
+        comment = get_object_or_404(Comment, id=commentID)
+        if comment.user != user:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        # 과거 코맨트 기록들을 저장할 필요가 있을까?
+        newComment = request.data.get('comment')
+        # serializer = CommentSerializer(comment, data={'comment': newComment}, partial=True)
+        comment.comment = newComment
+        comment.save()
+        
+        serializer = CommentSerializer(comment)
+        
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+    
+    def delete(self, request, type, id):
+        user = request.user
+        
+        commentID = request.data.get('id')
+        comment = get_object_or_404(Comment, id=commentID)
+        if comment.user != user:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        # TODO: soft delete
+        comment.delete()
+        
+        return Response(status=status.HTTP_200_OK)
+        
 class EmojiListPagination(PageNumberPagination):
     page_size = 1000
 
