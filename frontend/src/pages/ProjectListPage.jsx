@@ -7,15 +7,17 @@ import PageTitle from "@components/common/PageTitle"
 import ProjectName from "@components/project/ProjectName"
 import ModalPortal from "@components/common/ModalPortal"
 import ProjectCreate from "@components/project/Creates/ProjectCreate"
+import SkeletonProjectList from "@components/project/skeletons/SkeletonProjectList" 
 
 import { getProjectList } from "@api/projects.api"
 import { useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
+import ErrorProjectList from "@/components/errors/ErrorProjectList"
 
 const ProjectListPage = () => {
     const { t } = useTranslation(null, {keyPrefix: "project_list"})
 
-    const { isPending, isError, data: projects, error } = useQuery({
+    const { isPending, isError, data: projects, refetch } = useQuery({
         queryKey: ['projects'],
         queryFn: () => getProjectList(),
     })
@@ -25,11 +27,12 @@ const ProjectListPage = () => {
     return(
         <>
             <PageTitle>{t("title")}</PageTitle>
+            {isPending && <SkeletonProjectList/>}
             {projects?.map((project) => <ProjectName key={project.id} project={project} />)}
-            <TaskCreateButton onClick={() => {setIsCreateOpen(true)}}>
+            {isPending || <TaskCreateButton onClick={() => {setIsCreateOpen(true)}}>
                 <FeatherIcon icon="plus-circle"/>
                 <TaskCreateText>{t("button_add_project")}</TaskCreateText>
-            </TaskCreateButton>
+            </TaskCreateButton>}
             { isCreateOpen &&
             <ModalPortal closeModal={() => {setIsCreateOpen(false)}}>
                 <ProjectCreate onClose={() => {setIsCreateOpen(false)}}/>
