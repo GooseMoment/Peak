@@ -39,16 +39,19 @@ const DrawerCreate = ({onClose}) => {
                 'privacy': privacy,
             }
             await postDrawer(edit)
+            queryClient.invalidateQueries({queryKey: ['drawers', {projectID: id}]})
             toast.success(t("drawer_create_success"))
+            onClose()
         } catch (e) {
-            toast.error(t("drawer_create_error"))
+            if (name)
+                toast.error(t("drawer_create_error"), {toastId: "drawer_create_error"})
+            else
+                toast.error(t("drawer_create_no_name"), {toastId: "drawer_create_no_name"})
         }
     }
 
-    const submit = async (e) => {
+    const submit = async () => {
         await makeDrawer(name, privacy)
-        onClose()
-        queryClient.invalidateQueries({queryKey: ['projects', id]})
     }
 
     return (
