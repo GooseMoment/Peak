@@ -1,5 +1,5 @@
 import { useNavigate, Outlet, useParams } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 
 import styled, { useTheme } from "styled-components"
 import FeatherIcon from "feather-icons-react"
@@ -14,7 +14,7 @@ import queryClient from "@queries/queryClient"
 import handleToggleContextMenu from "@utils/handleToggleContextMenu"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
-import { SkeletonProjectPage } from "@components/intro/skeletons/SkeletonProjectPage"
+import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 
 import { toast } from "react-toastify"
@@ -80,8 +80,8 @@ const ProjectPage = () => {
         setIsAlertOpen(true)
     }
 
-    const sortMenuItems = makeSortMenuItems(t)
-    const contextMenuItems = makeContextMenuItems(t, theme, handleAlert)
+    const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
+    const contextMenuItems = useMemo(() => makeContextMenuItems(t, theme, handleAlert), [t, theme])
 
     const handleDelete = () => {
         navigate(`/app/projects`)

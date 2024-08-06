@@ -48,7 +48,7 @@ const ProjectTitle = styled.div`
     ${skeletonCSS("-100px", "300px", "2s")}
 `
 
-const breathing = p => keyframes`
+const breathingBorder = p => keyframes`
     0%, 100% {
         border-color: ${p.theme.skeleton.defaultColor};
     }
@@ -64,7 +64,7 @@ const DrawerName = styled.div`
     box-sizing: border-box;
     border-radius: 15px;
     border: 0.25em solid ${p=>p.theme.skeleton.defaultColor};
-    animation: ${p => breathing(p)} 2s infinite linear;
+    animation: ${p => breathingBorder(p)} 2s infinite linear;
 `
 
 const TaskBox = styled.div`

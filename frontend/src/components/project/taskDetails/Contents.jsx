@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react"
+import { useState, Fragment, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 
 import styled, { css } from "styled-components"
@@ -26,8 +26,8 @@ const Contents = ({task, setFunc}) => {
 
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
-    const priorities = makePriorities(t)
-    const displayReminder = makeDisplayReminder(t)
+    const priorities = useMemo(() => makePriorities(t), [t])
+    const displayReminder = useMemo(() => makeDisplayReminder(t), [t])
 
     // text클릭 시 알맞는 component 띄우기
     const [content, setContent] = useState(null)
@@ -69,7 +69,7 @@ const Contents = ({task, setFunc}) => {
                     {task.reminders.map(reminder => <ReminderBlock key={reminder.id} name="reminder">{displayReminder[0][reminder.delta]}</ReminderBlock>)}
                 </RemindersBox> 
                 : (task.due_date ? <EmptyReminderBox name="reminder">+</EmptyReminderBox>
-                : <EmptyReminderBox onClick={()=>{toast.error(t("reminder.reminder_before_due_date"))}}>-</EmptyReminderBox>),
+                : <EmptyReminderBox name="none" onClick={()=>{toast.error(t("reminder.reminder_before_due_date"), {toastId: "reminder_before_due_date"})}}>-</EmptyReminderBox>),
             component: <Reminder task={task} closeComponent={closeComponent}/>
         },
         {
