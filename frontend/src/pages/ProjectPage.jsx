@@ -14,6 +14,7 @@ import queryClient from "@queries/queryClient"
 import handleToggleContextMenu from "@utils/handleToggleContextMenu"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
+import BarChart from "@components/project/common/BarChart"
 
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
@@ -108,6 +109,7 @@ const ProjectPage = () => {
                 <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedButtonPosition, setIsContextMenuOpen, setIsSortMenuOpen)}/>
             </Icons>
         </TitleBox>
+        {project.type === 'goal' && <BarChart project={project} drawers={drawers}/>}
         {drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
         : drawers?.map((drawer) => (
             <Drawer key={drawer.id} project={project} drawer={drawer} color={project.color}/>
