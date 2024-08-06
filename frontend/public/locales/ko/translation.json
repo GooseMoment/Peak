@@ -105,7 +105,7 @@
             "-priority": "중요도순",
             "due_date": "기한 이른 순서",
             "-due_date": "기한 늦은 순서",
-            "reminders": "알림 설정 우선"
+            "reminders": "리마인더 설정 우선"
         }
     },
     "drawer": {
@@ -113,11 +113,11 @@
     "task": {
         "missed": "놓침",
         "overdue": "기한 지남",
-        "due_today": "오늘 기한",
-        "due_tomorrow": "내일 기한",
+        "due_today": "오늘",
+        "due_tomorrow": "내일",
         "days_left": "일 남음",
         "name_placeholder": "작업의 이름을 입력하세요.",
-        "name_change_success": "이름이 변경되었습니다.",
+        "name_change_success": "이름을 변경했습니다.",
         "none": "없음",
         "due": {
             "assigned_title": "할당 날짜 설정",
@@ -162,8 +162,8 @@
             }
         },
         "reminder": {
-            "title": "알림 설정",
-            "reminder_before_due_date": "알람 설정 전에 기한을 설정해주세요",
+            "title": "리마인더 설정",
+            "reminder_before_due_date": "리마인더 설정 전에 기한을 설정해주세요",
             "then": "그때",
             "5_minutes_before": "5분 전",
             "15_minutes_before": "15분 전",

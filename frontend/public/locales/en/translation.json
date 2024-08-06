@@ -50,7 +50,7 @@
             "none": "none",
             "project_create_success": "The project was successfully created.",
             "project_create_error": "The project creation failed.",
-            "project_create_cannot_use_inbox": "Project name cannot be set to Inbox.",
+            "project_create_cannot_use_inbox": "Can't name a new project as an inbox.",
             "drawer_create_success": "The drawer was successfully created.",
             "drawer_create_error": "The drawer creation failed.",
             "task_create_success": "The task was successfully created.",
@@ -58,7 +58,7 @@
             "task_create_no_name": "Write a name for your task.",
             "color": {
                 "title": "Color Settings",
-                "theme1": "basics",
+                "theme1": "Basics",
                 "theme2": "Summer"
             },
             "privacy": {
@@ -83,7 +83,7 @@
             "alert_project_title": "the \"{{project_name}}\" project",
             "alert_drawer_title": "the \"{{drawer_name}}\" drawer",
             "alert_task_title": "the \"{{task_name}}\" task",
-            "alert_question": "Are you sure you want to delete {{title}}?",
+            "alert_question": "Delete {{title}}?",
             "project_delete_success": "The \"{{project_name}}\" project was deleted.",
             "project_delete_error": "Deleting the \"{{project_name}}\" project failed.",
             "drawer_delete_success": "The \"{{drawer_name}}\" drawer was deleted.",
@@ -105,14 +105,14 @@
             "-priority": "Order of importance",
             "due_date": "Early due date order",
             "-due_date": "Late due date order",
-            "reminders": "Notifications first"
+            "reminders": "Reminders first"
         }
     },
     "task": {
         "missed": "Missed",
         "overdue": "Overdue",
-        "due_today": "due today",
-        "due_tomorrow": "day tomorrow",
+        "due_today": "Today",
+        "due_tomorrow": "Tomorrow",
         "days_left": "days left",
         "name_placeholder": "Enter a name for the task.",
         "name_change_success": "The name has changed.",
@@ -122,18 +122,18 @@
             "due_title": "Due date Settings",
             "quick": {
                 "title": "Quick Assignments",
-                "today": "today",
-                "tomorrow": "tomorrow",
-                "next_week": "next week",
-                "next_two_weeks": "2 weeks later",
-                "next_month": "1 month later",
-                "no_date": "no date"
+                "today": "Today",
+                "tomorrow": "Tomorrow",
+                "next_week": "Next week",
+                "next_two_weeks": "In 2 weeks",
+                "next_month": "In 1 month",
+                "no_date": "No date"
             },
             "calendar": "Calendar",
             "time": {
                 "title": "Add Time",
-                "am": "Am",
-                "pm": "Pm",
+                "am": "AM",
+                "pm": "PM",
                 "button_add": "Add",
                 "acceptable_numbers": "The maximum number you can enter is {{max}}.",
                 "time_change_success": "The time has changed."
@@ -160,8 +160,8 @@
             }
         },
         "reminder": {
-            "title":"Alarms Settings",
-            "reminder_before_due_date": "Set a due date before setting an alarm",
+            "title":"Reminder Settings",
+            "reminder_before_due_date": "Set a due date before setting a reminder",
             "then": "then",
             "5_minutes_before": "5 minutes before",
             "15_minutes_before": "15 minutes before",
@@ -179,9 +179,9 @@
         },
         "priority": {
             "title": "Importance Settings",
-            "normal": "normal",
-            "important": "important",
-            "critical": "critical"
+            "normal": "Normal",
+            "important": "Important",
+            "critical": "Critical"
         },
         "drawer": {
             "title": "Select a drawer",
