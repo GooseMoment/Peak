@@ -111,6 +111,17 @@ export const getDailyComment = async(username, day) => {
     }
 }
 
+export const postDailyComment = async(date, dailycomment) => {
+    try {
+        const res = await client.post(`social/daily/comment/${date}/`, {
+            content: dailycomment
+        })
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
+
 export const getDailyLogDetails = async(username, day) => {
     try {
         const res = await client.get(`social/daily/log/details/@${username}/${day}/`)
@@ -137,18 +148,18 @@ export const getEmojis = async () => {
     }
 }
 
-export const getReactions = async(contentType, contentID) => {
+export const getReactions = async(parentType, parentID) => {
     try {
-        const res = await client.get(`social/reaction/${contentType}/${contentID}/`)
+        const res = await client.get(`social/reaction/${parentType}/${parentID}/`)
         return res.data
     } catch (e) {
         throw e
     }
 }
 
-export const postReaction = async(contentType, contentID, emoji) => {
+export const postReaction = async(parentType, parentID, emoji) => {
     try {
-        const res = await client.post(`social/reaction/${contentType}/${contentID}/`, {
+        const res = await client.post(`social/reaction/${parentType}/${parentID}/`, {
             emoji: emoji
         })
         return res.data
@@ -157,11 +168,11 @@ export const postReaction = async(contentType, contentID, emoji) => {
     }
 }
 
-export const deleteReaction = async(contentType, contentID, emoji) => {
+export const deleteReaction = async(parentType, parentID, emoji) => {
     const params = new URLSearchParams({emoji: emoji})
 
     try {
-        const res = await client.delete(`social/reaction/${contentType}/${contentID}/?${params.toString()}`)
+        const res = await client.delete(`social/reaction/${parentType}/${parentID}/?${params.toString()}`)
         return res.status
     } catch(e) {
         throw e
@@ -186,17 +197,45 @@ export const postPeck = async(taskID) => {
     }
 }
 
-export const postCommentToTask = (taskID, comment) => {
-
+export const getComment = async(parentType, parentID) => {
+    try {
+        const res = await client.get(`social/comment/${parentType}/${parentID}/`)
+        return res.data
+    } catch(e) {
+        throw(e)
+    }
 }
 
-export const postDailyComment = async(date, dailycomment) => {
+export const postComment = async(parentType, parentID, comment) => {
     try {
-        const res = await client.post(`social/daily/comment/${date}/`, {
-            content: dailycomment
+        const res = await client.post(`social/comment/${parentType}/${parentID}/`, {
+            comment: comment
         })
         return res.data
-    } catch (e) {
-        throw e
+    } catch(e) {
+        throw(e)
+    }
+}
+
+export const patchComment = async(parentType, parentID, commentID, comment) => {
+    try {
+        const res = await client.patch(`social/comment/${parentType}/${parentID}/`, {
+            id: commentID,
+            comment: comment
+        })
+        return res.data
+    } catch(e) {
+        throw(e)
+    }
+}
+
+export const deleteComment = async(parentType, parentID, commentID) => {
+    try {
+        const res = await client.delete(`social/comment/${parentType}/${parentID}/`, {
+            id: commentID
+        })
+        return res.status
+    } catch(e) {
+        throw(e)
     }
 }
