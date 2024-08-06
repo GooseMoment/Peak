@@ -48,11 +48,14 @@ const ProjectCreate = ({onClose}) => {
                 'type': type,
             }
             await postProject(edit)
+            queryClient.invalidateQueries({queryKey: ['projects']})
             toast.success(t("project_create_success"))
             onClose()
-            queryClient.invalidateQueries({queryKey: ['projects']})
         } catch (e) {
-            toast.error(t("project_create_error"))
+            if (name)
+                toast.error(t("project_create_error"), {toastId: "project_create_error"})
+            else
+                toast.error(t("project_create_no_name"), {toastId: "project_create_no_name"})
         }
     }
 

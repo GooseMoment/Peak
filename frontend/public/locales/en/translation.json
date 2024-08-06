@@ -50,9 +50,11 @@
             "none": "none",
             "project_create_success": "The project was successfully created.",
             "project_create_error": "The project creation failed.",
+            "project_create_no_name": "Write a name for your project.",
             "project_create_cannot_use_inbox": "Can't name a new project as an inbox.",
             "drawer_create_success": "The drawer was successfully created.",
             "drawer_create_error": "The drawer creation failed.",
+            "drawer_create_no_name": "Write a name for your drawer.",
             "task_create_success": "The task was successfully created.",
             "task_create_error": "The task creation failed.",
             "task_create_no_name": "Write a name for your task.",
@@ -135,6 +137,7 @@
                 "am": "AM",
                 "pm": "PM",
                 "button_add": "Add",
+                "no_due_before_time": "Set a due date before setting a time.",
                 "acceptable_numbers": "The maximum number you can enter is {{max}}.",
                 "time_change_success": "The time has changed."
             },
@@ -161,7 +164,7 @@
         },
         "reminder": {
             "title":"Reminder Settings",
-            "reminder_before_due_date": "Set a due date before setting a reminder",
+            "reminder_before_due_date": "Set a due date before setting a reminder.",
             "then": "then",
             "5_minutes_before": "5 minutes before",
             "15_minutes_before": "15 minutes before",

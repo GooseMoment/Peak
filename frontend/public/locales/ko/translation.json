@@ -50,9 +50,11 @@
             "none": "없음",
             "project_create_success": "프로젝트 생성에 성공하였습니다.",
             "project_create_error": "프로젝트 생성에 실패했습니다.",
+            "project_create_no_name": "프로젝트의 이름을 적어주세요.",
             "project_create_cannot_use_inbox": "프로젝트 이름은 Inbox로 설정할 수 없습니다.",
             "drawer_create_success": "서랍 생성에 성공하였습니다.",
             "drawer_create_error": "서랍 생성에 실패했습니다.",
+            "drawer_create_no_name": "서랍의 이름을 적어주세요.",
             "task_create_success": "작업 생성에 성공하였습니다.",
             "task_create_error": "작업 생성에 실패하였습니다.",
             "task_create_no_name": "작업의 이름을 적어주세요.",
@@ -137,6 +139,7 @@
                 "am": "오전",
                 "pm": "오후",
                 "button_add": "추가하기",
+                "no_due_before_time": "시간 설정 전에 기한을 설정해주세요.",
                 "acceptable_numbers": "입력 가능한 최대 숫자는 {{max}}입니다.",
                 "time_change_success": "시간이 변경되었습니다."
             },
@@ -163,7 +166,7 @@
         },
         "reminder": {
             "title": "리마인더 설정",
-            "reminder_before_due_date": "리마인더 설정 전에 기한을 설정해주세요",
+            "reminder_before_due_date": "리마인더 설정 전에 기한을 설정해주세요.",
             "then": "그때",
             "5_minutes_before": "5분 전",
             "15_minutes_before": "15분 전",

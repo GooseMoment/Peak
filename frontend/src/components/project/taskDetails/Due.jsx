@@ -23,7 +23,7 @@ const Due = ({ task, setFunc, closeComponent }) => {
         else {
             if (name === "time") {
                 if (!task.due_date) {
-                toast.error("시간 설정 전에 기한을 설정해주세요", {toastId: "handle_time_open"})
+                toast.error(t("time.no_due_before_time"), {toastId: "handle_time_open"})
                 return
             }}
             setIsAdditionalComp(name)
