@@ -22,14 +22,16 @@ export const SkeletonDrawer = ({ taskCount }) => {
 }
 
 const SkeletonTasks = ({ taskCount }) => {
-    const SkeletonCount = taskCount > 10 ? 10 : taskCount
+    const skeletonCount = taskCount > 10 ? 10 : taskCount
 
     return (
         <>
-            {[...Array(SkeletonCount)].map((e, i) => <TaskBox key={i}>
+            {[...Array(skeletonCount)].map((e, i) => <TaskBox key={i}>
                 <Circle/>
                 <Bar/>
-            </TaskBox>)}
+            </TaskBox>
+            )}
+            <EmptyBox/>
         </>
     )
 }
@@ -92,4 +94,10 @@ const Bar = styled.div`
     height: 1.4em;
     border-radius: 4px;
     ${skeletonCSS("-100px", "300px", "2s")}
+`
+
+const EmptyBox = styled.div`
+    width: 100%;
+    height: 1.1em;
+    margin-top: 1.8em;
 `
