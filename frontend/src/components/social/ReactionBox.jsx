@@ -4,6 +4,7 @@ import styled from "styled-components"
 
 import ReactionButton from "@components/social/ReactionButton"
 import EmojiPickerButton from "@components/social/EmojiPickerButton"
+import CommentButton from "@components/social/CommentButton"
 import PeckButton from "@components/social/PeckButton"
 
 import queryClient from "@queries/queryClient"
@@ -67,6 +68,7 @@ const ReactionBox = ({parentType, parent}) => {
                 /> 
             ))}
         {needPickerButton() && <EmojiPickerButton pickedEmoji={pickedEmoji} setPickedEmoji={setPickedEmoji}/>}
+        <CommentButton parentType={parentType} parent={parent}/>
         {parentType === 'task' && <PeckButton taskID={parent.id} isUncomplete={!parent.completed_at}/>}
     </Box>
 }
