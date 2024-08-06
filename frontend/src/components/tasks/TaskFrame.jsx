@@ -13,7 +13,7 @@ import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 const TaskFrame = ({task, color, taskDetailPath, isLoading, toComplete}) => {
-    const {due, assigned, calculate_due, calculate_assigned} = taskCalculation(task)
+    const {due, assigned, calculate_due, calculate_assigned, isOutOfDue, isOutOfAssigned} = taskCalculation(task)
 
     const TaskName = <TaskNameBox $completed={task.completed_at}>
         {task?.name}
@@ -42,7 +42,7 @@ const TaskFrame = ({task, color, taskDetailPath, isLoading, toComplete}) => {
                     {task.assigned_at &&
                     <AssignedDate 
                         $completed={task.completed_at} 
-                        $isOutOfDue={calculate_assigned === "놓침" || calculate_assigned === "Missed" }
+                        $isOutOfDue={isOutOfAssigned}
                     >
                         <FeatherIcon icon="calendar" />
                         {task.completed_at ? assigned : calculate_assigned}
@@ -51,7 +51,7 @@ const TaskFrame = ({task, color, taskDetailPath, isLoading, toComplete}) => {
                     {task.due_date && 
                     <DueDate 
                         $completed={task.completed_at}
-                        $isOutOfDue={calculate_due === "기한 지남" || calculate_due === "Overdue"}
+                        $isOutOfDue={isOutOfDue}
                     >
                         <img src={hourglass} />
                         {task.completed_at ? due : calculate_due}
