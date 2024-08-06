@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
@@ -11,8 +11,8 @@ import DeleteAlert from "@components/common/DeleteAlert"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import SortMenu from "@components/project/sorts/SortMenu"
 import DrawerIcons from "./DrawerIcons"
-import { SkeletonDrawer } from "@components/intro/skeletons/SkeletonProjectPage"
-import { ErrorBox } from "@components/errors/ErrorProjectPage"
+import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
+import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 
 import queryClient from "@queries/queryClient"
 import { useMutation, useInfiniteQuery } from "@tanstack/react-query"
@@ -76,8 +76,8 @@ const Drawer = ({project, drawer, color}) => {
         setIsAlertOpen(true)
     }
 
-    const sortMenuItems = makeSortMenuItems(t)
-    const contextMenuItems = makeContextMenuItems(t, theme, handleAlert)
+    const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
+    const contextMenuItems = useMemo(() => makeContextMenuItems(t, theme, handleAlert), [t, theme])
 
     const handleToggleSimpleCreate = () => {
         setIsSimpleOpen(prev => !prev)
@@ -98,10 +98,10 @@ const Drawer = ({project, drawer, color}) => {
 
     if (isError) {
         return (
-            <ErrorBox $isTasks={true} onClick={() => refetch()}>
+            <TaskErrorBox onClick={() => refetch()}>
                 <FeatherIcon icon="alert-triangle"/>
                 {t("error_load_task")}
-            </ErrorBox>
+            </TaskErrorBox>
         )
     }
 
