@@ -6,20 +6,19 @@ import { useTranslation } from "react-i18next"
 import goal from "@assets/project/type/goal.svg"
 import regular from "@assets/project/type/regular.svg"
 
-const Type = ({setType, setDisplayType, closeComponent}) => {
+const Type = ({setType, closeComponent}) => {
     const { t } = useTranslation(null, {keyPrefix: "project.create.type"})
 
-    const changeType = (type, displaytype) => {
-        return async () => {
-            await setType(type)
-            await setDisplayType(displaytype)
+    const changeType = (type) => {
+        return () => {
+            setType(type)
             closeComponent()
         }
     }
 
     const items = [
-        {icon: <img src={regular}/>, display: t("regular"), type: "regular"},
-        {icon: <img src={goal}/>, display: t("goal"), type: "goal"}
+        {icon: <img src={regular}/>, type: "regular"},
+        {icon: <img src={goal}/>, type: "goal"}
     ]
 
     return (
@@ -27,7 +26,7 @@ const Type = ({setType, setDisplayType, closeComponent}) => {
             {items.map(item => (
                 <ItemBlock key={item.type}>
                     {item.icon}
-                    <ItemText onClick={changeType(item.type, item.display)}>{item.display}</ItemText>
+                    <ItemText onClick={changeType(item.type)}>{t(item.type)}</ItemText>
                 </ItemBlock>
             ))}
         </Detail>

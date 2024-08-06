@@ -19,7 +19,6 @@ const DrawerCreate = ({onClose}) => {
 
     const [name, setName] = useState('')
     const [privacy, setPrivacy] = useState('public')
-    const [displayPrivacy, setDisplayPrivacy] = useState(t("privacy.public"))
 
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
@@ -29,7 +28,7 @@ const DrawerCreate = ({onClose}) => {
     }
 
     const items = [
-        {id: 1, icon: "server", display: displayPrivacy, component: <Privacy setPrivacy={setPrivacy} setDisplayPrivacy={setDisplayPrivacy} closeComponent={closeComponent}/>},
+        {id: 1, icon: "server", display: t("privacy." + privacy), component: <Privacy setPrivacy={setPrivacy} closeComponent={closeComponent}/>},
     ]
 
     const makeDrawer = async (name, privacy) => {

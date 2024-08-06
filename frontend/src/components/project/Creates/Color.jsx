@@ -20,9 +20,9 @@ const Color = ({setColor, setDisplayColor, closeComponent}) => {
         }}
 
     const changeColor = (color, displayColor) => {
-        return async () => {
-            await setColor(color)
-            await setDisplayColor(displayColor)
+        return () => {
+            setColor(color)
+            setDisplayColor(displayColor)
             closeComponent()
         }
     }

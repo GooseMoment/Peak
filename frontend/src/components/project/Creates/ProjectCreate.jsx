@@ -20,9 +20,7 @@ const ProjectCreate = ({onClose}) => {
     const [color, setColor] = useState('DC2E2E')
     const [displayColor, setDisplayColor] = useState('빨강')
     const [type, setType] = useState('regular')
-    const [displayType, setDisplayType] = useState(t("type.regular"))
     const [privacy, setPrivacy] = useState('public')
-    const [displayPrivacy, setDisplayPrivacy] = useState(t("privacy.public"))
 
      //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
@@ -33,8 +31,8 @@ const ProjectCreate = ({onClose}) => {
 
     const items = [
         {id: 1, icon: "circle", color: color, display: displayColor, component: <Color setColor={setColor} setDisplayColor={setDisplayColor} closeComponent={closeComponent}/>},
-        {id: 2, icon: "server", display: displayPrivacy, component: <Privacy setPrivacy={setPrivacy} setDisplayPrivacy={setDisplayPrivacy} closeComponent={closeComponent}/>},
-        {id: 3, icon: "award", display: displayType, component: <Type setType={setType} setDisplayType={setDisplayType} closeComponent={closeComponent}/>},
+        {id: 2, icon: "server", display: t("privacy." + privacy), component: <Privacy setPrivacy={setPrivacy} closeComponent={closeComponent}/>},
+        {id: 3, icon: "award", display: t("type." + type), component: <Type setType={setType} closeComponent={closeComponent}/>},
     ]
 
     const makeProject = async (name, color, type) => { /*privacy 추가해야함*/
