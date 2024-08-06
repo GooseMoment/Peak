@@ -5,26 +5,28 @@ export const SkeletonProjectPage = () => {
     return (
         <>
             <ProjectTitle/>
-            <SkeletonDrawer/>
-            <SkeletonDrawer/>
-            <SkeletonDrawer/>
+            <SkeletonDrawer taskCount={3}/>
+            <SkeletonDrawer taskCount={3}/>
+            <SkeletonDrawer taskCount={3}/>
         </>
     )
 }
 
-export const SkeletonDrawer = () => {
+export const SkeletonDrawer = ({ taskCount }) => {
     return (
         <Frame>
             <DrawerName/>
-            <SkeletonTasks/>
+            <SkeletonTasks taskCount={taskCount}/>
         </Frame>
     )
 }
 
-const SkeletonTasks = () => {
+const SkeletonTasks = ({ taskCount }) => {
+    const SkeletonCount = taskCount > 10 ? 10 : taskCount
+
     return (
         <>
-            {[...Array(3)].map((e, i) => <TaskBox key={i}>
+            {[...Array(SkeletonCount)].map((e, i) => <TaskBox key={i}>
                 <Circle/>
                 <Bar/>
             </TaskBox>)}

@@ -83,8 +83,10 @@ const Drawer = ({project, drawer, color}) => {
         setIsSimpleOpen(prev => !prev)
     }
 
+    const taskCount = drawer.uncompleted_task_count + drawer.completed_task_count
+
     const handleCollapsed = () => {
-        {drawer.task_count !== 0 && setCollapsed(prev => !prev)}
+        {taskCount !== 0 && setCollapsed(prev => !prev)}
     }
 
     const clickPlus = () => {
@@ -93,7 +95,7 @@ const Drawer = ({project, drawer, color}) => {
     }
 
     if (isLoading) {
-        return <SkeletonDrawer/>
+        return <SkeletonDrawer taskCount={taskCount}/>
     }
 
     if (isError) {
