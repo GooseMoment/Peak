@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 const SkeletonProjectList = () => {
     return (
-        [...Array(8)].map((e, i) => <SkeletonProjectName key={i} />)
+        [...Array(10)].map((e, i) => <SkeletonProjectName key={i} />)
     )
 }
 
@@ -20,7 +20,6 @@ const FlexBox = styled.div`
     display: flex;
     height: 3.7em;
     align-items: center;
-    margin: 1em 0.5em 0em;
     margin-left: 0.65em;
     gap: 1em;
 `
