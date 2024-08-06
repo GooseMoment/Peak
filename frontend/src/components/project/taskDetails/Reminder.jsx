@@ -19,7 +19,7 @@ const Reminder = ({ task, closeComponent }) => {
             return postReminder(data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['task', {taskID: task.id}]})
+            queryClient.invalidateQueries({queryKey: ['task', task.id]})
             queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
         },
     })
@@ -29,7 +29,7 @@ const Reminder = ({ task, closeComponent }) => {
             return deleteReminder(reminderId)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['task', {taskID: task.id}]})
+            queryClient.invalidateQueries({queryKey: ['task', task.id]})
             queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
         },
     })

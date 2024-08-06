@@ -24,8 +24,8 @@ const TaskDetail = () => {
     const [taskName, setTaskName] = useState("")
     const [isAlertOpen, setIsAlertOpen] = useState(false)
 
-    const { isPending, isError, data: task, error } = useQuery({
-        queryKey: ['task', {taskID: task_id}],
+    const { isPending, isError, data: task } = useQuery({
+        queryKey: ['task', task_id],
         queryFn: () => getTask(task_id),
     })
 
@@ -34,7 +34,7 @@ const TaskDetail = () => {
             return patchTask(task_id, data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['task', {taskID: task_id}]})
+            queryClient.invalidateQueries({queryKey: ['task', task_id]})
             queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
         },
     })
@@ -44,7 +44,7 @@ const TaskDetail = () => {
             return deleteTask(task_id)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['task', {taskID: task_id}]})
+            queryClient.invalidateQueries({queryKey: ['task', task_id]})
             queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
         },
     })

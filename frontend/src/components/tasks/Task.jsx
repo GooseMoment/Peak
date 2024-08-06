@@ -10,8 +10,10 @@ const Task = ({task, color}) => {
             return patchTask(task.id, data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['task', {taskID: task.id}]})
+            queryClient.invalidateQueries({queryKey: ['task', task.id]})
             queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
+            queryClient.invalidateQueries({queryKey: ['drawers', {projectID: task.project_id}]})
+            queryClient.invalidateQueries({queryKey: ['projects', task.project_id]})
         },
     })
 

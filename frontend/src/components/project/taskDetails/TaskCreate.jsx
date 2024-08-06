@@ -47,6 +47,8 @@ const TaskCreate = () => {
             await postTask(newTask)
             toast.success("할 일 생성에 성공하였습니다!")
             queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: state?.drawer_id}]})
+            queryClient.invalidateQueries({queryKey: ['drawers', {projectID: state?.project_id}]})
+            queryClient.invalidateQueries({queryKey: ['projects', state?.project_id]})
             onClose()
         } catch (e) {
             if (newTask?.name)
