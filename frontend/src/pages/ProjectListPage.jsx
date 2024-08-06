@@ -30,10 +30,10 @@ const ProjectListPage = () => {
             {isPending && <SkeletonProjectList/>}
             {isError && <ErrorProjectList onClick={()=>refetch()}/>}
             {projects?.map((project) => <ProjectName key={project.id} project={project} />)}
-            {isPending || <TaskCreateButton onClick={() => {setIsCreateOpen(true)}}>
+            {isPending || <ProjectCreateButton onClick={() => {setIsCreateOpen(true)}}>
                 <FeatherIcon icon="plus-circle"/>
-                <TaskCreateText>{t("button_add_project")}</TaskCreateText>
-            </TaskCreateButton>}
+                <ProjectCreateText>{t("button_add_project")}</ProjectCreateText>
+            </ProjectCreateButton>}
             { isCreateOpen &&
             <ModalPortal closeModal={() => {setIsCreateOpen(false)}}>
                 <ProjectCreate onClose={() => {setIsCreateOpen(false)}}/>
@@ -42,7 +42,7 @@ const ProjectListPage = () => {
     )
 }
 
-const TaskCreateButton = styled.div`
+const ProjectCreateButton = styled.div`
     flex: 1;
     display: flex;
     align-items: center;
@@ -61,7 +61,7 @@ const TaskCreateButton = styled.div`
     } 
 `
 
-const TaskCreateText = styled.div`
+const ProjectCreateText = styled.div`
     font-size: 1em;
     font-weight: medium;
     color: ${p => p.theme.textColor};
