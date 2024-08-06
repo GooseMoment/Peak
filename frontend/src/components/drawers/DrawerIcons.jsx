@@ -1,10 +1,9 @@
-import { Fragment } from "react"
 import styled, { css } from "styled-components"
-import FeatherIcon from 'feather-icons-react'
-import { cubicBeizer, rotateToUp, rotateToUnder } from "@assets/keyframes"
+import FeatherIcon from "feather-icons-react"
 import handleToggleContextMenu from "@utils/handleToggleContextMenu"
-import { DrawerIcon } from "./DrawerBox"
 import SortIcon from "@components/project/sorts/SortIcon"
+import { DrawerIcon } from "./DrawerBox"
+import { cubicBeizer, rotateToUp, rotateToUnder } from "@assets/keyframes"
 
 const DrawerIcons = ({ color, collapsed, handleCollapsed, clickPlus, setIsSortMenuOpen, setSelectedSortMenuPosition, 
     setIsContextMenuOpen, setSelectedContextPosition }) => {
@@ -23,7 +22,7 @@ const DrawerIcons = ({ color, collapsed, handleCollapsed, clickPlus, setIsSortMe
     return (
         <DrawerIcon $color = {color}>
             {drawerIcons.map((item, i) => (
-                <Fragment key={i}>{item.icon}</Fragment>
+                <Button key={i}>{item.icon}</Button>
             ))}
         </DrawerIcon>
     )
@@ -39,6 +38,11 @@ const CollapseButton = styled.div`
             animation: ${rotateToUnder} 0.5s ${cubicBeizer} forwards;
         }
     `}
+`
+
+const Button = styled.button`
+    border: 0;
+    background-color: transparent;
 `
 
 export default DrawerIcons
