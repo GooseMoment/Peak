@@ -55,7 +55,7 @@ const Confirmation = ({ question, buttons, onClose }) => {
                 <ButtonGroup>
                     {buttons?.map((button) =>
                         button === "close" ? (
-                            <Button onClick={closeWithDelay}>
+                            <Button key="close" onClick={closeWithDelay}>
                                 {t("button_done")}
                             </Button>
                         ) : (
