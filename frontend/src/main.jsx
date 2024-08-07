@@ -1,7 +1,9 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
 
-import GlobalStyle from "@assets/GlobalStyle"
+import { QueryClientProvider } from "@tanstack/react-query"
+
+import Root from "@containers/Root"
 
 import ClientThemeProvider from "@components/common/ThemeProvider"
 
@@ -9,13 +11,13 @@ import {
     ClientSettingProvider,
     initClientSettings,
 } from "@utils/clientSettings"
+import i18n, { I18nSetLocale } from "@utils/i18n.js"
 
-import { QueryClientProvider } from "@tanstack/react-query"
 import queryClient from "@queries/queryClient"
 
+import GlobalStyle from "@assets/GlobalStyle"
+
 import registerSW from "@/registerSW"
-import i18n, { I18nSetLocale } from "@utils/i18n.js"
-import Root from "@containers/Root"
 
 // initilize client-side settings
 initClientSettings()

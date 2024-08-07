@@ -1,12 +1,13 @@
-import { useState, Fragment, useEffect } from "react"
+import { Fragment, useEffect, useState } from "react"
+
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import SimpleProfile from "@components/social/SimpleProfile"
-import ReactionBox from "@components/social/ReactionBox"
-import LogDetailsTask from "@components/social/LogDetailsTask"
-import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import { TaskList } from "@components/drawers/Drawer"
+import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
+import LogDetailsTask from "@components/social/LogDetailsTask"
+import ReactionBox from "@components/social/ReactionBox"
+import SimpleProfile from "@components/social/SimpleProfile"
 
 const DailyLogDetail = ({
     dailyComment,

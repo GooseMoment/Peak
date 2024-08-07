@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react"
-import { createPortal } from "react-dom"
-import { useTranslation } from "react-i18next"
-
-import Button, { ButtonGroup } from "@components/common/Button"
-import { cubicBeizer, slideDown, slideUp } from "@assets/keyframes"
-import useStopScroll from "@utils/useStopScroll"
 
 import styled, { css } from "styled-components"
+
+import Button, { ButtonGroup } from "@components/common/Button"
+
+import useStopScroll from "@utils/useStopScroll"
+
+import { cubicBeizer, slideDown, slideUp } from "@assets/keyframes"
+
+import { createPortal } from "react-dom"
+import { useTranslation } from "react-i18next"
 
 const el = document.querySelector("#confirmation")
 

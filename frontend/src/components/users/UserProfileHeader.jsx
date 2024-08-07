@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react"
 
+import styled, { css } from "styled-components"
+
 import Button from "@components/common/Button"
-import FollowsCount from "@components/users/FollowsCount"
 import FollowButton from "@components/users/FollowButton"
+import FollowsCount from "@components/users/FollowsCount"
 
 import { cubicBeizer } from "@assets/keyframes"
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
-import styled, { css } from "styled-components"
 import { useTranslation } from "react-i18next"
 
 const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {

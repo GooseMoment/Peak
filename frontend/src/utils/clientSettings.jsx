@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo, useState } from "react"
+
 import themes from "@assets/themes"
 
 const KEY_CLIENT_SETTINGS = "client_settings"

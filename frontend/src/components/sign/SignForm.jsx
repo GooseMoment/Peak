@@ -1,22 +1,23 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
+import styled from "styled-components"
+
+import Button, { ButtonGroup } from "@components/common/Button"
 import Form from "@components/sign/Form"
 import Input from "@components/sign/Input"
-import Button, { ButtonGroup } from "@components/common/Button"
 
 import { signIn, signUp } from "@api/users.api"
 
 import sleep from "@utils/sleep"
 
-import styled from "styled-components"
 import {
-    Mail,
     AtSign,
-    Key,
     HelpCircle,
-    UserPlus,
+    Key,
     LogIn,
+    Mail,
+    UserPlus,
 } from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"

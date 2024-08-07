@@ -1,11 +1,13 @@
 import { useState } from "react"
 
 import styled, { css } from "styled-components"
-import FeatherIcon from "feather-icons-react"
-import { useTranslation } from "react-i18next"
 
 import Detail from "@components/project/common/Detail"
+
 import palettes from "./palettes"
+
+import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
 const Color = ({ setColor, setDisplayColor, closeComponent }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create.color" })

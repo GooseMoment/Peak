@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom"
 
-import { skeletonCSS } from "@assets/skeleton"
 import styled, { css } from "styled-components"
+
+import { skeletonCSS } from "@assets/skeleton"
 
 import { Trans, useTranslation } from "react-i18next"
 

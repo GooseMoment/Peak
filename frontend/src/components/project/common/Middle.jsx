@@ -1,11 +1,12 @@
 import { useState } from "react"
+import { Fragment } from "react"
 
 import styled, { css } from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
-import ModalPortal from "@components/common/ModalPortal"
 import Button from "@components/common/Button"
-import { Fragment } from "react"
+import ModalPortal from "@components/common/ModalPortal"
+
+import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const Middle = ({ items, submit, isComponentOpen, setIsComponentOpen }) => {

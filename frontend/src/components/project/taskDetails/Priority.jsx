@@ -1,11 +1,12 @@
 import styled from "styled-components"
-import { useTranslation } from "react-i18next"
 
 import Detail from "@components/project/common/Detail"
 
-import normal from "@assets/project/priority/normal.svg"
-import important from "@assets/project/priority/important.svg"
 import critical from "@assets/project/priority/critical.svg"
+import important from "@assets/project/priority/important.svg"
+import normal from "@assets/project/priority/normal.svg"
+
+import { useTranslation } from "react-i18next"
 
 const Priority = ({ setFunc, closeComponent }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.priority" })

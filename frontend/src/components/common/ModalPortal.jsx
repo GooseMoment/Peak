@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
-import { createPortal } from "react-dom"
 
-import { cubicBeizer, scaleDown, scaleUp } from "@assets/keyframes"
+import styled, { css } from "styled-components"
+
 import useDelayUnmount from "@utils/useDelayUnmount"
 import useStopScroll from "@utils/useStopScroll"
 
-import styled, { css } from "styled-components"
+import { cubicBeizer, scaleDown, scaleUp } from "@assets/keyframes"
+
+import { createPortal } from "react-dom"
 
 const el = document.getElementById("modal")
 const root = document.getElementById("root")

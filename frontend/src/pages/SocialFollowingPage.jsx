@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { useRouteLoaderData } from "react-router-dom"
-import { toast } from "react-toastify"
-import { styled, css } from "styled-components"
 
-import SocialCalendar from "@components/social/SocialCalendar"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { css, styled } from "styled-components"
+
 import DailyLogPreview from "@components/social/DailyLogPreview"
 import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail"
+import SocialCalendar from "@components/social/SocialCalendar"
 import SocialPageTitle from "@components/social/SocialPageTitle"
-
-import queryClient from "@queries/queryClient"
 
 import {
     getDailyComment,
@@ -18,6 +15,11 @@ import {
     getDailyLogsPreview,
     postDailyComment,
 } from "@api/social.api"
+
+import queryClient from "@queries/queryClient"
+
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import { toast } from "react-toastify"
 
 const compareDailyLogs = (a, b) => {
     if (!a.recent_task === !b.recent_task) {

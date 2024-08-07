@@ -1,7 +1,7 @@
-import { useTranslation } from "react-i18next"
-
 import Button from "@components/common/Button"
 import Confirmation from "@components/common/Confirmation"
+
+import { useTranslation } from "react-i18next"
 
 const DeleteAlert = ({ title, onClose, func }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.delete" })

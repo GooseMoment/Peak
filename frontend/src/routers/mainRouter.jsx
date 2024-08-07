@@ -3,21 +3,19 @@ import { createBrowserRouter, redirect } from "react-router-dom"
 import AppLayout from "@containers/AppLayout"
 
 import ErrorPage from "@pages/ErrorPage"
+import HomePage from "@pages/HomePage"
 import NotificationsPage from "@pages/NotificationsPage"
-
+import ProjectListPage from "@pages/ProjectListPage"
+import ProjectPage from "@pages/ProjectPage"
 import StartPage from "@pages/StartPage"
 import TodayPage from "@pages/TodayPage"
-import HomePage from "@pages/HomePage"
 
-import ProjectListPage from "@pages/ProjectListPage"
-
-import ProjectPage from "@pages/ProjectPage"
 import TaskCreateElement from "@components/project/taskDetails/TaskCreateElement"
 import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement"
 
-import { getMe, signOut } from "@api/users.api"
-import { getProjectList } from "@api/projects.api"
 import { getToken } from "@api/client"
+import { getProjectList } from "@api/projects.api"
+import { getMe, signOut } from "@api/users.api"
 
 const redirectIfSignedIn = () => {
     if (getToken()) {

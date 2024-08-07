@@ -1,8 +1,8 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
-import SocialFollowingPage from "@pages/SocialFollowingPage"
 import SocialExplorePage from "@pages/SocialExplorePage"
+import SocialFollowingPage from "@pages/SocialFollowingPage"
 
 const SocialRedirector = () => {
     const navigate = useNavigate()

@@ -1,9 +1,10 @@
+import client from "@api/client"
+
 import {
     getClientSettings,
     setClientSettingsByName,
 } from "@utils/clientSettings"
 import getDeviceType from "@utils/getDeviceType"
-import client from "@api/client"
 
 export const getReminder = async (id) => {
     try {

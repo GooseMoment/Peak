@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 
 import PageTitle from "@components/common/PageTitle"
-import Section, { Name, Description, Value } from "@components/settings/Section"
+import Section, { Description, Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
 

@@ -1,24 +1,25 @@
-import { useState, Fragment, useMemo } from "react"
+import { Fragment, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import styled, { css } from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
-import hourglass from "@assets/project/hourglass.svg"
-import alarmclock from "@assets/project/alarmclock.svg"
-
-import Due from "./Due"
-import Assigned from "./Assigned"
-import Reminder from "./Reminder"
-import Priority from "./Priority"
-import Drawer from "./Drawer"
-import Memo from "./Memo"
-
-import { toast } from "react-toastify"
-import { useTranslation } from "react-i18next"
-import ToolTip from "@components/project/common/ToolTip"
 import ModalPortal from "@components/common/ModalPortal"
+import ToolTip from "@components/project/common/ToolTip"
 import taskDate from "@components/tasks/utils/taskDate"
+
+import Assigned from "./Assigned"
+import Drawer from "./Drawer"
+import Due from "./Due"
+import Memo from "./Memo"
+import Priority from "./Priority"
+import Reminder from "./Reminder"
+
+import alarmclock from "@assets/project/alarmclock.svg"
+import hourglass from "@assets/project/hourglass.svg"
+
+import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const Contents = ({ task, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })

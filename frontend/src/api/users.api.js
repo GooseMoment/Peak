@@ -1,5 +1,6 @@
-import client, { setToken, setCurrentUsername } from "@api/client"
+import client, { setCurrentUsername, setToken } from "@api/client"
 import { deleteSubscription } from "@api/notifications.api"
+
 import { getClientSettings } from "@utils/clientSettings"
 
 export const getMe = async () => {

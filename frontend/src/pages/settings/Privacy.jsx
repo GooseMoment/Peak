@@ -1,24 +1,25 @@
 import { useMemo } from "react"
 
-import Loading from "@components/settings/Loading"
-import Error from "@components/settings/Error"
+import { useMutation, useQuery } from "@tanstack/react-query"
+
 import PageTitle from "@components/common/PageTitle"
+import Error from "@components/settings/Error"
+import Loading from "@components/settings/Loading"
 import Section, {
-    Name,
     Description,
-    Value,
+    Name,
     Sync,
+    Value,
 } from "@components/settings/Section"
-import Switch from "@components/settings/SettingSwitch"
 import Select from "@components/settings/Select"
+import Switch from "@components/settings/SettingSwitch"
 
 import { getSettings, patchSettings } from "@api/user_setting.api"
 
 import queryClient from "@queries/queryClient"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { toast } from "react-toastify"
 
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const Privacy = () => {
     const {

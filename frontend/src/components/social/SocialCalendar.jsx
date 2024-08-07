@@ -1,7 +1,8 @@
-import styled from "styled-components"
-import CommonCalendar from "@components/common/CommonCalendar"
-
 import { useState } from "react"
+
+import styled from "styled-components"
+
+import CommonCalendar from "@components/common/CommonCalendar"
 
 const SocialCalendar = ({ newLogDates, selectedDate, setSelectedDate }) => {
     const [tempDate, setTempDate] = useState(new Date())

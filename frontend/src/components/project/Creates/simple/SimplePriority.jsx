@@ -1,7 +1,8 @@
 import { useState } from "react"
 
-import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
+
+import FeatherIcon from "feather-icons-react"
 
 const SimplePriority = ({ inputRef }) => {
     const [priority, setPriority] = useState("보통")

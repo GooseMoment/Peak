@@ -1,5 +1,7 @@
 import { useState } from "react"
+
 import styled from "styled-components"
+
 import { Portal } from "react-portal"
 
 const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {

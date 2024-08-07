@@ -1,12 +1,14 @@
-import { useState, useRef } from "react"
+import { useRef, useState } from "react"
+
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
-import EmojiModal from "@components/social/EmojiModal"
 import MildButton from "@components/common/MildButton"
+import EmojiModal from "@components/social/EmojiModal"
 
 import { getEmojis } from "@api/social.api"
+
+import FeatherIcon from "feather-icons-react"
 
 const EmojiPickerButton = ({ pickedEmoji, setPickedEmoji }) => {
     const [isModalOpen, setIsModalOpen] = useState(false)

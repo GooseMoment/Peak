@@ -1,8 +1,8 @@
 import { useState } from "react"
 
-import { useClientSetting } from "@utils/clientSettings"
-
 import styled from "styled-components"
+
+import { useClientSetting } from "@utils/clientSettings"
 
 const Select = ({ name, submit, choices, onlineSetting }) => {
     const [clientSetting, setClientSetting] = useClientSetting()

@@ -1,27 +1,30 @@
-import { useNavigate, Outlet, useParams } from "react-router-dom"
-import { useState, useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { Outlet, useNavigate, useParams } from "react-router-dom"
 
+import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
-import PageTitle from "@components/common/PageTitle"
-import Drawer from "@components/drawers/Drawer"
-import DrawerCreate from "@components/project/Creates/DrawerCreate"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
 import ModalPortal from "@components/common/ModalPortal"
-import queryClient from "@queries/queryClient"
-import handleToggleContextMenu from "@utils/handleToggleContextMenu"
+import PageTitle from "@components/common/PageTitle"
+import Drawer from "@components/drawers/Drawer"
+import { ErrorBox } from "@components/errors/ErrorProjectPage"
+import DrawerCreate from "@components/project/Creates/DrawerCreate"
+import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
-import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
-import { ErrorBox } from "@components/errors/ErrorProjectPage"
 
-import { toast } from "react-toastify"
-import { useTranslation } from "react-i18next"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { getProject, patchProject, deleteProject } from "@api/projects.api"
 import { getDrawersByProject } from "@api/drawers.api"
+import { deleteProject, getProject, patchProject } from "@api/projects.api"
+
+import handleToggleContextMenu from "@utils/handleToggleContextMenu"
+
+import queryClient from "@queries/queryClient"
+
+import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const ProjectPage = () => {
     const { id } = useParams()

@@ -1,27 +1,25 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 
-import PageTitle from "@components/common/PageTitle"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import styled from "styled-components"
+
 import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
-import Input from "@components/sign/Input"
-
-import Loading from "@components/settings/Loading"
-import Error from "@components/settings/Error"
-import Section, { Name, Value, Sync } from "@components/settings/Section"
-import ProfileImg from "@components/settings/ProfileImg"
-import PasswordSection from "@components/settings/PasswordSection"
-
-import Color from "@components/project/Creates/Color"
 import ModalPortal from "@components/common/ModalPortal"
+import PageTitle from "@components/common/PageTitle"
+import Color from "@components/project/Creates/Color"
+import Error from "@components/settings/Error"
+import Loading from "@components/settings/Loading"
+import PasswordSection from "@components/settings/PasswordSection"
+import ProfileImg from "@components/settings/ProfileImg"
+import Section, { Name, Sync, Value } from "@components/settings/Section"
+import Input from "@components/sign/Input"
 
 import { getMe, patchUser } from "@api/users.api"
 
-import styled from "styled-components"
-
 import queryClient from "@queries/queryClient"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { toast } from "react-toastify"
 
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const Account = () => {
     const { t } = useTranslation("", { keyPrefix: "settings.account" })

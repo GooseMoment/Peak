@@ -1,10 +1,13 @@
-import styled from "styled-components"
 import { useState } from "react"
-import { useTranslation } from "react-i18next"
 
-import Detail from "@components/project/common/Detail"
+import styled from "styled-components"
+
 import Button from "@components/common/Button"
+import Detail from "@components/project/common/Detail"
+
 import notify from "@utils/notify"
+
+import { useTranslation } from "react-i18next"
 
 const Memo = ({ previousMemo, setFunc, closeComponent }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.memo" })

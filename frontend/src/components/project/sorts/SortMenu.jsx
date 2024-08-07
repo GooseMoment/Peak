@@ -1,7 +1,9 @@
+import styled from "styled-components"
+
+import { dropdown } from "@assets/keyframes"
+
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
-import styled from "styled-components"
-import { dropdown } from "@assets/keyframes"
 
 const SortMenu = ({
     title,

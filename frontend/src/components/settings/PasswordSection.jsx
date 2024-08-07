@@ -1,5 +1,8 @@
 import { useState } from "react"
 
+import { useMutation } from "@tanstack/react-query"
+import styled from "styled-components"
+
 import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
 import Section, { Name, Value } from "@components/settings/Section"
 import Input from "@components/sign/Input"
@@ -9,10 +12,8 @@ import { patchPassword } from "@api/users.api"
 import { states } from "@assets/themes"
 
 import { Key, RotateCw } from "feather-icons-react"
-import styled from "styled-components"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import { useMutation } from "@tanstack/react-query"
 
 const PasswordSection = () => {
     const { t } = useTranslation("", { keyPrefix: "settings.account" })

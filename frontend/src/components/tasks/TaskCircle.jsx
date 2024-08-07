@@ -1,5 +1,6 @@
+import styled, { css, keyframes } from "styled-components"
+
 import FeatherIcon from "feather-icons-react"
-import styled, { keyframes, css } from "styled-components"
 
 const TaskCircle = ({
     completed = false,

@@ -2,16 +2,19 @@ import { useState } from "react"
 
 import styled from "styled-components"
 
-import Title from "@components/project/common/Title"
 import Middle from "@components/project/common/Middle"
+import Title from "@components/project/common/Title"
+
 import Color from "./Color"
-import Type from "./Type"
 import Privacy from "./Privacy"
+import Type from "./Type"
+
+import { postProject } from "@api/projects.api"
 
 import queryClient from "@queries/queryClient"
-import { postProject } from "@api/projects.api"
-import { toast } from "react-toastify"
+
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const ProjectCreate = ({ onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })

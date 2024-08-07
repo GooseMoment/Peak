@@ -1,9 +1,11 @@
 import { useState } from "react"
-import moment from "moment"
+
 import styled from "styled-components"
+
+import { useClientLocale } from "@/utils/clientSettings"
+import moment from "moment"
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
-import { useClientLocale } from "@/utils/clientSettings"
 
 const CommonCalendar = ({
     isRangeSelectMode,

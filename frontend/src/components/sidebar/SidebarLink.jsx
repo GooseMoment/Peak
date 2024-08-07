@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom"
 
-import { cubicBeizer } from "@assets/keyframes"
 import styled, { css } from "styled-components"
+
+import { cubicBeizer } from "@assets/keyframes"
 
 const sidebarStyle = css`
     text-decoration: none;

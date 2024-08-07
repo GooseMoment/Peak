@@ -1,14 +1,17 @@
 import { useState } from "react"
-import { useTranslation } from "react-i18next"
+
 import styled, { css } from "styled-components"
+
 import Button from "@components/common/Button"
 
 import everyday from "@assets/project/repeat/everyday.svg"
-import everyweek from "@assets/project/repeat/everyweek.svg"
 import everymonth from "@assets/project/repeat/everymonth.svg"
+import everyweek from "@assets/project/repeat/everyweek.svg"
 import everyyear from "@assets/project/repeat/everyyear.svg"
 import weekday from "@assets/project/repeat/weekday.svg"
 import weekend from "@assets/project/repeat/weekend.svg"
+
+import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const RepeatDetail = () => {

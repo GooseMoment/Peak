@@ -1,18 +1,21 @@
 import { useState } from "react"
+
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
-import { Portal } from "react-portal"
-import { toast } from "react-toastify"
 
 import CommentBox from "@components/social/CommentBox"
 
-import queryClient from "@queries/queryClient"
 import {
     deleteComment,
-    postComment,
     getComment,
     patchComment,
+    postComment,
 } from "@api/social.api"
+
+import queryClient from "@queries/queryClient"
+
+import { Portal } from "react-portal"
+import { toast } from "react-toastify"
 
 const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
     const [commentValue, setCommentValue] = useState("")

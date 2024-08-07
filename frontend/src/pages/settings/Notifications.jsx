@@ -1,15 +1,18 @@
-import Switch from "@components/settings/SettingSwitch"
+import { useMutation } from "@tanstack/react-query"
+
 import Button from "@components/common/Button"
 import PageTitle from "@components/common/PageTitle"
-import Section, { Name, Description, Value } from "@components/settings/Section"
+import Section, { Description, Name, Value } from "@components/settings/Section"
+import Switch from "@components/settings/SettingSwitch"
 
 import { deleteSubscription, postSubscription } from "@api/notifications.api"
+
 import { useClientSetting } from "@utils/clientSettings"
+
 import { states } from "@assets/themes"
 
-import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import { useMutation } from "@tanstack/react-query"
+import { toast } from "react-toastify"
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
 

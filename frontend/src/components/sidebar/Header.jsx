@@ -1,11 +1,14 @@
 import { useEffect, useRef } from "react"
 
+import styled, { css, keyframes } from "styled-components"
+
 import MildButton from "@components/common/MildButton"
-import { cubicBeizer } from "@assets/keyframes"
+
 import useScreenSize from "@utils/useScreenSize"
 import useScreenType, { WIDTH_TABLET } from "@utils/useScreenType"
 
-import styled, { css, keyframes } from "styled-components"
+import { cubicBeizer } from "@assets/keyframes"
+
 import FeatherIcon from "feather-icons-react"
 
 const autoCollapseWidth = WIDTH_TABLET

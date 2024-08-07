@@ -1,9 +1,10 @@
 import { useCallback, useState } from "react"
 
-import MildButton from "@components/common/MildButton"
-import { cubicBeizer } from "@assets/keyframes"
-
 import styled from "styled-components"
+
+import MildButton from "@components/common/MildButton"
+
+import { cubicBeizer } from "@assets/keyframes"
 
 const FilterButtonGroup = ({ active, setActive, filters }) => {
     const [selectedButtonPosition, setSelectedButtonPosition] = useState({

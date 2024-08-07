@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom"
 
-import { Menu, Calendar, PlusCircle, Bell, Users } from "feather-icons-react"
-import { toast } from "react-toastify"
 import styled from "styled-components"
+
+import { Bell, Calendar, Menu, PlusCircle, Users } from "feather-icons-react"
+import { toast } from "react-toastify"
 
 const Navbar = ({ openSidebar }) => {
     const navigate = useNavigate()

@@ -1,10 +1,13 @@
 import { useState } from "react"
-import { useTranslation } from "react-i18next"
 
 import styled, { css } from "styled-components"
-import { toast } from "react-toastify"
+
 import Button from "@components/common/Button"
+
 import { useClientSetting, useClientTimezone } from "@utils/clientSettings"
+
+import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const TimeDetail = ({ task, setFunc, closeComponent }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.time" })

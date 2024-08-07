@@ -1,19 +1,22 @@
 import { useState } from "react"
 
+import { useMutation, useQuery } from "@tanstack/react-query"
+
 import Button, { buttonForms } from "@components/common/Button"
+
+import { getCurrentUsername } from "@api/client"
 import {
     deleteFollowRequest,
     getFollow,
     putFollowRequest,
 } from "@api/social.api"
-import { getCurrentUsername } from "@api/client"
 
-import { states } from "@assets/themes"
 import queryClient from "@queries/queryClient"
 
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { toast } from "react-toastify"
+import { states } from "@assets/themes"
+
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const FollowButton = ({ user, disabled = false }) => {
     const { t } = useTranslation(null, { keyPrefix: "follow_button" })

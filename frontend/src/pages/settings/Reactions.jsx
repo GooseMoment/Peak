@@ -1,9 +1,9 @@
 import PageTitle from "@components/common/PageTitle"
 import Section, {
-    Name,
-    Value,
-    Sync,
     Description,
+    Name,
+    Sync,
+    Value,
 } from "@components/settings/Section"
 
 import { useTranslation } from "react-i18next"

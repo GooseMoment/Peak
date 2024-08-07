@@ -1,12 +1,13 @@
-import FeatherIcon from "feather-icons-react"
+import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import { useTranslation } from "react-i18next"
-import { useQuery } from "@tanstack/react-query"
-
-import Detail from "@components/project/common/Detail"
 import DrawerFolder from "@components/project/Creates/DrawerFolder"
+import Detail from "@components/project/common/Detail"
+
 import { getProjectList } from "@api/projects.api"
+
+import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
 const Drawer = ({ setFunc, closeComponent }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.drawer" })

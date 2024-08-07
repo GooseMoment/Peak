@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
-import TaskCircle from "./TaskCircle"
-import Priority from "./Priority"
+import styled, { css } from "styled-components"
 
+import Priority from "./Priority"
+import TaskCircle from "./TaskCircle"
 import taskCalculation from "./utils/taskCalculation"
 
-import hourglass from "@assets/project/hourglass.svg"
 import alarmclock from "@assets/project/alarmclock.svg"
+import hourglass from "@assets/project/hourglass.svg"
 
-import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
 const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {

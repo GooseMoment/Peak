@@ -1,10 +1,11 @@
-import { useTranslation } from "react-i18next"
 import styled from "styled-components"
 
+import next_week from "@assets/project/calendar/next_week.svg"
 import today from "@assets/project/calendar/today.svg"
 import tomorrow from "@assets/project/calendar/tomorrow.svg"
-import next_week from "@assets/project/calendar/next_week.svg"
 import slach from "@assets/project/slach.svg"
+
+import { useTranslation } from "react-i18next"
 
 const QuickDue = ({ changeDueDate }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })

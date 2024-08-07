@@ -1,14 +1,17 @@
 import { useEffect } from "react"
 
+import { useQuery } from "@tanstack/react-query"
+import styled, { css } from "styled-components"
+
 import SidebarLink, { SidebarA } from "./SidebarLink"
-import { skeletonCSS } from "@assets/skeleton"
+
 import { getMe } from "@api/users.api"
 
-import styled, { css } from "styled-components"
+import { skeletonCSS } from "@assets/skeleton"
+
 import FeatherIcon from "feather-icons-react"
-import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import { useQuery } from "@tanstack/react-query"
+import { toast } from "react-toastify"
 
 const Footer = ({ collapsed }) => {
     const {

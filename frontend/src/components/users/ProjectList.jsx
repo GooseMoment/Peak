@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom"
+
+import styled, { css } from "styled-components"
+
 import { Section, SectionTitle } from "@components/users/Section"
 
 import { skeletonCSS } from "@assets/skeleton"
 
-import styled, { css } from "styled-components"
 import { useTranslation } from "react-i18next"
 
 const ProjectList = ({ projects, isMine, isPending }) => {

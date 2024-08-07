@@ -1,23 +1,22 @@
 import { Link } from "react-router-dom"
 
+import { useQuery } from "@tanstack/react-query"
+import styled from "styled-components"
+
 import Button from "@components/common/Button"
-import Brand from "@components/sign/Brand"
-
-import Section, {
-    SectionTitle,
-    SectionDescription,
-} from "@components/intro/Section"
-import SubSection, { SubGroup, SubTitle } from "@components/intro/SubSection"
-
-import DemoProject from "@components/intro/DemoProject"
 import DemoDrawer from "@components/intro/DemoDrawer"
 import DemoPlan from "@components/intro/DemoPlan"
+import DemoProject from "@components/intro/DemoProject"
 import DemoTheme from "@components/intro/DemoTheme"
+import Section, {
+    SectionDescription,
+    SectionTitle,
+} from "@components/intro/Section"
+import SubSection, { SubGroup, SubTitle } from "@components/intro/SubSection"
+import Brand from "@components/sign/Brand"
 
 import { getEmojis } from "@api/social.api"
 
-import { useQuery } from "@tanstack/react-query"
-import styled from "styled-components"
 import { useTranslation } from "react-i18next"
 
 const IntroPage = () => {

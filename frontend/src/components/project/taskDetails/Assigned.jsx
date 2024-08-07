@@ -1,14 +1,16 @@
-import { useState, Fragment } from "react"
-import { useTranslation } from "react-i18next"
+import { Fragment, useState } from "react"
 
-import FeatherIcon from "feather-icons-react"
 import styled, { css } from "styled-components"
-import { cubicBeizer } from "@assets/keyframes"
-import { rotateToUp, rotateToUnder } from "@assets/keyframes"
 
 import Detail from "@components/project/common/Detail"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
+
+import { cubicBeizer } from "@assets/keyframes"
+import { rotateToUnder, rotateToUp } from "@assets/keyframes"
+
+import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
 const Assigned = ({ setFunc, closeComponent }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due" })

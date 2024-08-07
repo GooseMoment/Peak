@@ -1,5 +1,6 @@
-import { skeletonBreathingCSS, skeletonCSS } from "@assets/skeleton"
 import styled from "styled-components"
+
+import { skeletonBreathingCSS, skeletonCSS } from "@assets/skeleton"
 
 const SkeletonProjectList = () => {
     return [...Array(10)].map((e, i) => <SkeletonProjectName key={i} />)

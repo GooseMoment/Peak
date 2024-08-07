@@ -1,20 +1,24 @@
-import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
+import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 
-import styled from "styled-components"
-import FeatherIcon from "feather-icons-react"
-
-import TaskNameInput from "@components/tasks/TaskNameInput"
-import DeleteAlert from "@components/common/DeleteAlert"
-import Contents from "./Contents"
-
-import queryClient from "@queries/queryClient"
-import { useClientSetting } from "@utils/clientSettings"
 import { useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
-import { getTask, patchTask, deleteTask } from "@api/tasks.api"
-import { toast } from "react-toastify"
+import styled from "styled-components"
+
+import DeleteAlert from "@components/common/DeleteAlert"
+import TaskNameInput from "@components/tasks/TaskNameInput"
+
+import Contents from "./Contents"
+
+import { deleteTask, getTask, patchTask } from "@api/tasks.api"
+
+import { useClientSetting } from "@utils/clientSettings"
+
+import queryClient from "@queries/queryClient"
+
+import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const TaskDetail = () => {
     const { t } = useTranslation(null, { keyPrefix: "project" })

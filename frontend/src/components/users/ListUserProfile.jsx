@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom"
 
+import styled, { css } from "styled-components"
+
 import FollowButton from "@components/users/FollowButton"
-import { skeletonCSS } from "@assets/skeleton"
+
 import { getCurrentUsername } from "@api/client"
 
-import styled, { css } from "styled-components"
+import { skeletonCSS } from "@assets/skeleton"
 
 const ListUserProfile = ({ user, children, skeleton }) => {
     return (

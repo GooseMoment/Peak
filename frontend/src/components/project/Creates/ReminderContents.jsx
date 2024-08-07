@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 
 import styled from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
 import LoaderCircle from "@components/common/LoaderCircle"
+
+import FeatherIcon from "feather-icons-react"
 
 const ReminderIcons = ({ item, reminders, handleReminder, ReminderID }) => {
     const [isLoading, setIsLoading] = useState(true)

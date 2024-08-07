@@ -1,25 +1,28 @@
-import { useState, useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
 import Button from "@components/common/Button"
-import Task from "@components/tasks/Task"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
-import SortMenu from "@components/project/sorts/SortMenu"
-import DrawerIcons from "./DrawerIcons"
-import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
+import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
+import SortMenu from "@components/project/sorts/SortMenu"
+import Task from "@components/tasks/Task"
 
-import queryClient from "@queries/queryClient"
-import { useMutation, useInfiniteQuery } from "@tanstack/react-query"
+import DrawerIcons from "./DrawerIcons"
+
 import { deleteDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
-import { toast } from "react-toastify"
+
+import queryClient from "@queries/queryClient"
+
+import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const getPageFromURL = (url) => {
     if (!url) return null

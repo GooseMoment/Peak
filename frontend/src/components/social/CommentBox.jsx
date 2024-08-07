@@ -1,5 +1,6 @@
-import { DateTime } from "luxon"
 import styled from "styled-components"
+
+import { DateTime } from "luxon"
 
 const CommentBox = ({ comment }) => {
     return (

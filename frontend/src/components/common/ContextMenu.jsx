@@ -1,7 +1,10 @@
 import { Fragment } from "react"
-import FeatherIcon from "feather-icons-react"
+
 import styled from "styled-components"
+
 import { dropdown } from "@assets/keyframes"
+
+import FeatherIcon from "feather-icons-react"
 
 const ContextMenu = ({ items, selectedButtonPosition }) => {
     return (

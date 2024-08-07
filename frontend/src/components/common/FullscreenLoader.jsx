@@ -1,6 +1,6 @@
-import LoaderCircle from "@components/common/LoaderCircle"
-
 import styled from "styled-components"
+
+import LoaderCircle from "@components/common/LoaderCircle"
 
 const FullscreenLoader = () => {
     return (

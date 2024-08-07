@@ -1,9 +1,11 @@
-import { useState, useRef } from "react"
+import { useRef, useState } from "react"
+
 import styled from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
 import MildButton from "@components/common/MildButton"
 import CommentModal from "@components/social/CommentModal"
+
+import FeatherIcon from "feather-icons-react"
 
 const CommentButton = ({ parentType, parent }) => {
     const [isModalOpen, setIsModalOpen] = useState(false)

@@ -1,14 +1,14 @@
 import { useMemo } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 
-import { SidebarBox } from "@components/sidebar/Sidebar"
-import { ItemBox, MiddleBox } from "@components/sidebar/Middle"
-import SidebarLink, { SidebarA } from "@components/sidebar/SidebarLink"
-import ModalPortal from "@components/common/ModalPortal"
-
 import styled from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
+import ModalPortal from "@components/common/ModalPortal"
+import { ItemBox, MiddleBox } from "@components/sidebar/Middle"
+import { SidebarBox } from "@components/sidebar/Sidebar"
+import SidebarLink, { SidebarA } from "@components/sidebar/SidebarLink"
+
+import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const pathRoot = "/settings/"

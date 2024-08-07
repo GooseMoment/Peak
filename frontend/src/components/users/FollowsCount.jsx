@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
+
+import styled, { css } from "styled-components"
 
 import ModalPortal from "@components/common/ModalPortal"
 import { FollowerList, FollowingList } from "@components/users/FollowList"
 
 import { skeletonCSS } from "@assets/skeleton"
 
-import styled, { css } from "styled-components"
 import { useTranslation } from "react-i18next"
 
 const FollowsCount = ({ user, isPending }) => {

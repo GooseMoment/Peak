@@ -1,22 +1,22 @@
-import { useState, useMemo } from "react"
-
-import SubSection from "@components/intro/SubSection"
-import RadioGroup from "@components/intro/RadioGroup"
-import Radio from "@components/intro/Radio"
-import DemoTask from "@components/intro/DemoTask"
-
-import { yesterday, today, tomorrow, nextWeek, twoWeeksLater } from "./todays"
+import { useMemo, useState } from "react"
 
 import styled from "styled-components"
-import { useTranslation } from "react-i18next"
 
-import normal from "@assets/project/priority/normal.svg"
-import important from "@assets/project/priority/important.svg"
-import critical from "@assets/project/priority/critical.svg"
+import DemoTask from "@components/intro/DemoTask"
+import Radio from "@components/intro/Radio"
+import RadioGroup from "@components/intro/RadioGroup"
+import SubSection from "@components/intro/SubSection"
 
+import { nextWeek, today, tomorrow, twoWeeksLater, yesterday } from "./todays"
+
+import next_weekIcon from "@assets/project/calendar/next_week.svg"
 import todayIcon from "@assets/project/calendar/today.svg"
 import tomorrowIcon from "@assets/project/calendar/tomorrow.svg"
-import next_weekIcon from "@assets/project/calendar/next_week.svg"
+import critical from "@assets/project/priority/critical.svg"
+import important from "@assets/project/priority/important.svg"
+import normal from "@assets/project/priority/normal.svg"
+
+import { useTranslation } from "react-i18next"
 
 const deadlineTable = {
     today,

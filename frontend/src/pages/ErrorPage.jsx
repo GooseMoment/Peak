@@ -8,6 +8,7 @@ import {
 import ErrorLayout from "@components/errors/ErrorLayout"
 
 import { setToken } from "@api/client"
+
 import { useTranslation } from "react-i18next"
 
 const ErrorPage = () => {

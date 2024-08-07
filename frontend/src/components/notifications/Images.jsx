@@ -1,8 +1,9 @@
-import { skeletonCSS } from "@assets/skeleton"
+import styled from "styled-components"
+
 import { cubicBeizer } from "@assets/keyframes"
+import { skeletonCSS } from "@assets/skeleton"
 
 import FeatherIcon from "feather-icons-react"
-import styled from "styled-components"
 
 const Images = ({ profile_img, project_color, reaction, skeleton = false }) => {
     const emojiURL = reaction?.emoji?.img_uri

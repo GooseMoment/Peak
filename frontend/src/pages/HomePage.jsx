@@ -1,8 +1,8 @@
+import { useQuery } from "@tanstack/react-query"
+
 import PageTitle from "@components/common/PageTitle"
 
 import { getMe } from "@api/users.api"
-
-import { useQuery } from "@tanstack/react-query"
 
 const HomePage = () => {
     const { data: me, isPending } = useQuery({

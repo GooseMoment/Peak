@@ -1,6 +1,6 @@
+import { execSync } from "child_process"
 import { writeFileSync } from "fs"
 import { resolve } from "path"
-import { execSync } from "child_process"
 
 // from: https://zwbetz.com/create-react-app-show-current-git-branch-and-commit-hash-from-any-os/
 

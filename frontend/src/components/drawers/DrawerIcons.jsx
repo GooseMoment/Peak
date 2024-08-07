@@ -1,9 +1,14 @@
 import styled, { css } from "styled-components"
-import FeatherIcon from "feather-icons-react"
-import handleToggleContextMenu from "@utils/handleToggleContextMenu"
+
 import SortIcon from "@components/project/sorts/SortIcon"
+
 import { DrawerIcon } from "./DrawerBox"
-import { cubicBeizer, rotateToUp, rotateToUnder } from "@assets/keyframes"
+
+import handleToggleContextMenu from "@utils/handleToggleContextMenu"
+
+import { cubicBeizer, rotateToUnder, rotateToUp } from "@assets/keyframes"
+
+import FeatherIcon from "feather-icons-react"
 
 const DrawerIcons = ({
     color,

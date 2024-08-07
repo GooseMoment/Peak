@@ -1,9 +1,11 @@
-import MildButton from "./MildButton"
-import { states } from "@assets/themes"
-import { cubicBeizer } from "@assets/keyframes"
+import styled from "styled-components"
+
 import LoaderCircle from "@components/common/LoaderCircle"
 
-import styled from "styled-components"
+import MildButton from "./MildButton"
+
+import { cubicBeizer } from "@assets/keyframes"
+import { states } from "@assets/themes"
 
 export const buttonForms = {
     filled: "filled",

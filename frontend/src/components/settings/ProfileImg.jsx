@@ -1,15 +1,19 @@
-import { useState, useRef } from "react"
+import { useRef, useState } from "react"
+
+import styled from "styled-components"
 
 import ImageCropper from "@components/settings/ImageCropper"
 
-import { cubicBeizer } from "@assets/keyframes"
 import { uploadProfileImg } from "@api/users.api"
+
 import getCroppedImg from "@utils/cropImage"
 
-import { toast } from "react-toastify"
-import { Image as ImageIcon } from "feather-icons-react"
-import styled from "styled-components"
 import queryClient from "@queries/queryClient"
+
+import { cubicBeizer } from "@assets/keyframes"
+
+import { Image as ImageIcon } from "feather-icons-react"
+import { toast } from "react-toastify"
 
 const ProfileImg = ({ profile_img, username }) => {
     const [file, setFile] = useState(null)

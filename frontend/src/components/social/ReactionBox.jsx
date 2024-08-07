@@ -1,14 +1,16 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
+
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import ReactionButton from "@components/social/ReactionButton"
-import EmojiPickerButton from "@components/social/EmojiPickerButton"
 import CommentButton from "@components/social/CommentButton"
+import EmojiPickerButton from "@components/social/EmojiPickerButton"
 import PeckButton from "@components/social/PeckButton"
+import ReactionButton from "@components/social/ReactionButton"
+
+import { deleteReaction, getReactions, postReaction } from "@api/social.api"
 
 import queryClient from "@queries/queryClient"
-import { deleteReaction, getReactions, postReaction } from "@api/social.api"
 
 const ReactionBox = ({ parentType, parent }) => {
     const [pickedEmoji, setPickedEmoji] = useState(null)

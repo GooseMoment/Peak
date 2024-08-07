@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components"
+
 import { skeletonCSS } from "@assets/skeleton"
 
 export const SkeletonProjectPage = () => {

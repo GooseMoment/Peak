@@ -1,8 +1,10 @@
-import ListUserProfile from "@components/users/ListUserProfile"
-import { getFollowersByUser, getFollowingsByUser } from "@api/social.api"
-
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
+
+import ListUserProfile from "@components/users/ListUserProfile"
+
+import { getFollowersByUser, getFollowingsByUser } from "@api/social.api"
+
 import { Trans, useTranslation } from "react-i18next"
 
 export const FollowerList = ({ user }) => {

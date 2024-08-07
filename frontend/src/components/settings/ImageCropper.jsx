@@ -1,10 +1,12 @@
 import { useState } from "react"
 
-import Button, { buttonForms, ButtonGroup } from "@components/common/Button"
+import styled from "styled-components"
+
+import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
+
+import { states } from "@assets/themes"
 
 import Cropper from "react-easy-crop"
-import styled from "styled-components"
-import { states } from "@assets/themes"
 
 const ImageCropper = ({
     file,

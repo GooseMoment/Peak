@@ -1,8 +1,10 @@
+import { useMutation } from "@tanstack/react-query"
+
 import TaskFrame from "./TaskFrame"
+
 import { patchTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
-import { useMutation } from "@tanstack/react-query"
 
 const Task = ({ task, color }) => {
     const mutation = useMutation({

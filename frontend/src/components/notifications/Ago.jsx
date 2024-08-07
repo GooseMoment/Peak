@@ -1,10 +1,12 @@
 import { useState } from "react"
 
+import styled, { css } from "styled-components"
+
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
+
 import { skeletonCSS } from "@assets/skeleton"
 
 import { DateTime } from "luxon"
-import styled, { css } from "styled-components"
 
 const Ago = ({ created_at, skeleton = false }) => {
     const [isHover, setIsHover] = useState(false)

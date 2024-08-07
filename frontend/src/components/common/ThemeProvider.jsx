@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
+
+import { ThemeProvider } from "styled-components"
 
 import { useClientTheme } from "@utils/clientSettings"
-import { ThemeProvider } from "styled-components"
 
 const metaThemeColor = document.head.querySelector("meta[name='theme-color']")
 

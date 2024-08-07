@@ -1,22 +1,23 @@
-import PageTitle from "@components/common/PageTitle"
-import Section, {
-    Name,
-    Value,
-    Sync,
-    Description,
-} from "@components/settings/Section"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import styled from "styled-components"
+
 import Button from "@components/common/Button"
+import PageTitle from "@components/common/PageTitle"
 import Error from "@components/settings/Error"
+import Section, {
+    Description,
+    Name,
+    Sync,
+    Value,
+} from "@components/settings/Section"
 import ListUserProfile from "@components/users/ListUserProfile"
 
 import { getBlocks } from "@api/users.api"
 
-import { toast } from "react-toastify"
-import { useMutation, useQuery } from "@tanstack/react-query"
 import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
-import styled from "styled-components"
+import { toast } from "react-toastify"
 
 const Blocks = () => {
     const {

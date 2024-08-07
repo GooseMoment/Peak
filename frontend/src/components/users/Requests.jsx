@@ -1,16 +1,18 @@
-import { Section, SectionTitle } from "@components/users/Section"
+import { useMutation } from "@tanstack/react-query"
+import styled from "styled-components"
+
 import Button, { ButtonGroup } from "@components/common/Button"
+import { Section, SectionTitle } from "@components/users/Section"
 
 import { getCurrentUsername } from "@api/client"
 import { patchFollowRequest } from "@api/social.api"
-import { states } from "@assets/themes"
 
 import queryClient from "@queries/queryClient"
 
-import { useMutation } from "@tanstack/react-query"
-import styled from "styled-components"
-import { toast } from "react-toastify"
+import { states } from "@assets/themes"
+
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const Requests = ({ user }) => {
     const currentUsername = getCurrentUsername()

@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 
+import { useQuery } from "@tanstack/react-query"
+import styled from "styled-components"
+
 import Brand, { Box as BrandTitle } from "@components/sign/Brand"
 import Showcase from "@components/sign/Showcase"
 import SignForm from "@components/sign/SignForm"
-
 import generateActivities from "@components/sign/activities"
 
 import { getEmojis } from "@api/social.api"
 
-import styled from "styled-components"
-import { useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 
 const SignPage = () => {

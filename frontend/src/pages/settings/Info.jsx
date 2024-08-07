@@ -1,10 +1,9 @@
-import Section, { Name, Value } from "@components/settings/Section"
-import PageTitle from "@components/common/PageTitle"
-
-import generatedGitInfo from "@/generatedGitInfo.json"
-
 import styled from "styled-components"
 
+import PageTitle from "@components/common/PageTitle"
+import Section, { Name, Value } from "@components/settings/Section"
+
+import generatedGitInfo from "@/generatedGitInfo.json"
 import { useTranslation } from "react-i18next"
 
 const Info = () => {

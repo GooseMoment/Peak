@@ -1,8 +1,8 @@
-import priority2 from "@assets/project/priority/priority2.svg"
-import priority1 from "@assets/project/priority/priority1.svg"
-import priority0 from "@assets/project/priority/priority0.svg"
-
 import styled, { css } from "styled-components"
+
+import priority0 from "@assets/project/priority/priority0.svg"
+import priority1 from "@assets/project/priority/priority1.svg"
+import priority2 from "@assets/project/priority/priority2.svg"
 
 const Priority = ({ priority, completed, hasDate }) => {
     const prioritys = [

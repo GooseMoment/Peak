@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react"
 
-import Sidebar from "@components/sidebar/Sidebar"
-import Navbar from "@components/navbar/Navbar"
-
-import useScreenType, { ifTablet, ifMobile } from "@utils/useScreenType"
-import { useClientSetting } from "@utils/clientSettings"
-import { cubicBeizer, modalFadeIn } from "@assets/keyframes"
-
 import styled, { css } from "styled-components"
+
+import Navbar from "@components/navbar/Navbar"
+import Sidebar from "@components/sidebar/Sidebar"
+
+import { useClientSetting } from "@utils/clientSettings"
+import useScreenType, { ifMobile, ifTablet } from "@utils/useScreenType"
+
+import { cubicBeizer, modalFadeIn } from "@assets/keyframes"
 
 const Layout = ({ children }) => {
     const [clientSetting] = useClientSetting()

@@ -1,6 +1,8 @@
 import styled from "styled-components"
-import { DateTime } from "luxon"
+
 import SimpleProfile from "./SimpleProfile"
+
+import { DateTime } from "luxon"
 
 const putEllipsis = (text, maxLength) => {
     return text.length > maxLength

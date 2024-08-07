@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 import ModalPortal from "@components/common/ModalPortal"
+
 import TaskDetail from "./TaskDetail"
 
 const TaskDetailElement = () => {

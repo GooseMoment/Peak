@@ -1,13 +1,15 @@
-import {
-    scaleForward,
-    scaleBack,
-    modalFadeOut,
-    modalFadeIn,
-    cubicBeizer,
-} from "@assets/keyframes"
+import { createGlobalStyle } from "styled-components"
+
 import { ifMobile } from "@utils/useScreenType"
 
-import { createGlobalStyle } from "styled-components"
+import {
+    cubicBeizer,
+    modalFadeIn,
+    modalFadeOut,
+    scaleBack,
+    scaleForward,
+} from "@assets/keyframes"
+
 import reset from "styled-reset"
 
 const GlobalStyle = createGlobalStyle`

@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"
 
-import RoadSign from "@assets/errors/RoadSign"
-
 import styled from "styled-components"
+
+import RoadSign from "@assets/errors/RoadSign"
 
 const Error = ({
     code,

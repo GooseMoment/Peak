@@ -1,10 +1,11 @@
 import styled from "styled-components"
 
 import Detail from "@components/project/common/Detail"
-import { useTranslation } from "react-i18next"
 
 import goal from "@assets/project/type/goal.svg"
 import regular from "@assets/project/type/regular.svg"
+
+import { useTranslation } from "react-i18next"
 
 const Type = ({ setType, closeComponent }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create.type" })

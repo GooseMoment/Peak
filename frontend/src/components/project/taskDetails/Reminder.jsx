@@ -1,18 +1,21 @@
-import queryClient from "@queries/queryClient"
 import { useMutation } from "@tanstack/react-query"
-import { postReminder, deleteReminder } from "@api/notifications.api"
-import { useTranslation } from "react-i18next"
 
-import Detail from "@components/project/common/Detail"
 import ReminderContents from "@components/project/Creates/ReminderContents"
+import Detail from "@components/project/common/Detail"
 
+import { deleteReminder, postReminder } from "@api/notifications.api"
+
+import queryClient from "@queries/queryClient"
+
+import before_1D from "@assets/project/reminder/before_1D.svg"
+import before_1h from "@assets/project/reminder/before_1h.svg"
+import before_2D from "@assets/project/reminder/before_2D.svg"
 import before_5 from "@assets/project/reminder/before_5.svg"
 import before_15 from "@assets/project/reminder/before_15.svg"
 import before_30 from "@assets/project/reminder/before_30.svg"
-import before_1h from "@assets/project/reminder/before_1h.svg"
 import before_D from "@assets/project/reminder/before_D.svg"
-import before_1D from "@assets/project/reminder/before_1D.svg"
-import before_2D from "@assets/project/reminder/before_2D.svg"
+
+import { useTranslation } from "react-i18next"
 
 const Reminder = ({ task, closeComponent }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.reminder" })

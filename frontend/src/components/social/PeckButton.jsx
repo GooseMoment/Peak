@@ -1,12 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
 import MildButton from "@components/common/MildButton"
 
+import { getPeck, postPeck } from "@api/social.api"
+
 import queryClient from "@queries/queryClient"
 
-import { getPeck, postPeck } from "@api/social.api"
+import FeatherIcon from "feather-icons-react"
 
 const PeckButton = ({ taskID, isUncomplete }) => {
     const { data: peck, isError: peckError } = useQuery({

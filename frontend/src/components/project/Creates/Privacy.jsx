@@ -1,11 +1,12 @@
 import styled from "styled-components"
 
 import Detail from "@components/project/common/Detail"
-import { useTranslation } from "react-i18next"
 
-import publicsvg from "@assets/project/privacy/public.svg"
-import protectedsvg from "@assets/project/privacy/protected.svg"
 import privatesvg from "@assets/project/privacy/private.svg"
+import protectedsvg from "@assets/project/privacy/protected.svg"
+import publicsvg from "@assets/project/privacy/public.svg"
+
+import { useTranslation } from "react-i18next"
 
 const Privacy = ({ setPrivacy, closeComponent }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create.privacy" })

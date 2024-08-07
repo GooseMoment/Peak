@@ -3,13 +3,17 @@ import { useParams } from "react-router-dom"
 
 import styled from "styled-components"
 
-import { cubicBeizer } from "@assets/keyframes"
-import Title from "@components/project/common/Title"
 import Middle from "@components/project/common/Middle"
+import Title from "@components/project/common/Title"
+
 import Privacy from "./Privacy"
 
 import { postDrawer } from "@api/drawers.api"
+
 import queryClient from "@queries/queryClient"
+
+import { cubicBeizer } from "@assets/keyframes"
+
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 

@@ -1,12 +1,12 @@
 import { forwardRef } from "react"
 
-import Images from "./Images"
-import Content from "./Content"
+import styled, { css, keyframes } from "styled-components"
+
 import Ago from "./Ago"
+import Content from "./Content"
+import Images from "./Images"
 
 import { cubicBeizer } from "@assets/keyframes"
-
-import styled, { css, keyframes } from "styled-components"
 
 const Box = forwardRef(
     ({ notification, highlight = false, skeleton = false }, ref) => {

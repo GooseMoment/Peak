@@ -1,11 +1,12 @@
+import styled, { css } from "styled-components"
+
+import Footer from "./Footer"
 import Header from "./Header"
 import Middle from "./Middle"
-import Footer from "./Footer"
 
-import { cubicBeizer, slideLeftToRight } from "@assets/keyframes"
 import { ifMobile } from "@utils/useScreenType"
 
-import styled, { css } from "styled-components"
+import { cubicBeizer, slideLeftToRight } from "@assets/keyframes"
 
 const Sidebar = ({ collapsed, setCollapsed, setSidebarHidden }) => {
     return (

@@ -1,14 +1,14 @@
-import Layout from "./Layout"
 import Account from "./Account"
-import General from "./General"
-import Privacy from "./Privacy"
-import LanguagesAndTime from "./LanguagesAndTime"
-import Reactions from "./Reactions"
 import Appearance from "./Appearance"
-import Notifications from "./Notifications"
 import Blocks from "./Blocks"
-import Info from "./Info"
 import ErrorPage from "./ErrorPage"
+import General from "./General"
+import Info from "./Info"
+import LanguagesAndTime from "./LanguagesAndTime"
+import Layout from "./Layout"
+import Notifications from "./Notifications"
+import Privacy from "./Privacy"
+import Reactions from "./Reactions"
 
 export {
     Layout,

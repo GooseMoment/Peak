@@ -1,27 +1,28 @@
 import {
     Fragment,
     useCallback,
-    useMemo,
     useEffect,
+    useMemo,
     useRef,
     useState,
 } from "react"
 import { useSearchParams } from "react-router-dom"
 
+import { useInfiniteQuery } from "@tanstack/react-query"
+import styled from "styled-components"
+
 import FilterButtonGroup from "@components/common/FilterButtonGroup"
-import Box from "@components/notifications/Box"
 import PageTitle from "@components/common/PageTitle"
+import Box from "@components/notifications/Box"
 
 import { getNotifications } from "@api/notifications.api"
+
 import { useClientLocale } from "@utils/clientSettings"
 
-import { useInfiniteQuery } from "@tanstack/react-query"
 import { ImpressionArea } from "@toss/impression-area"
-import styled from "styled-components"
-import { toast } from "react-toastify"
 import { DateTime } from "luxon"
-
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const getCursorFromURL = (url) => {
     if (!url) return null

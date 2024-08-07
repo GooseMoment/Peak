@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
-
-import TaskCircle from "../tasks/TaskCircle"
-import notify from "@utils/notify"
 
 import styled from "styled-components"
+
+import TaskCircle from "../tasks/TaskCircle"
+
+import notify from "@utils/notify"
+
+import { useTranslation } from "react-i18next"
 
 const TaskNameInput = ({
     task,

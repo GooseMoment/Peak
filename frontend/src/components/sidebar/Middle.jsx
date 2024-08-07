@@ -1,15 +1,19 @@
 import { useMemo } from "react"
 
+import { useQuery } from "@tanstack/react-query"
+import styled, { css } from "styled-components"
+
 import SidebarLink from "@components/sidebar/SidebarLink"
-import { cubicBeizer } from "@assets/keyframes"
-import { skeletonCSS } from "@assets/skeleton"
+
 import { getProjectList } from "@api/projects.api"
+
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
-import styled, { css } from "styled-components"
+import { cubicBeizer } from "@assets/keyframes"
+import { skeletonCSS } from "@assets/skeleton"
+
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
-import { useQuery } from "@tanstack/react-query"
 
 const Middle = ({ collapsed, setSidebarHidden }) => {
     const {

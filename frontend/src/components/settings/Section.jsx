@@ -1,7 +1,8 @@
-import cloudIcon from "@assets/settings/cloud.svg"
-import { useTranslation } from "react-i18next"
-
 import styled from "styled-components"
+
+import cloudIcon from "@assets/settings/cloud.svg"
+
+import { useTranslation } from "react-i18next"
 
 const Section = styled.section`
     margin-top: 2em;

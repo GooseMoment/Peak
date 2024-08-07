@@ -1,18 +1,19 @@
 import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
-import UserProfileHeader from "@components/users/UserProfileHeader"
-import Requests from "@components/users/Requests"
+import { useQuery } from "@tanstack/react-query"
+
+import Error from "@components/errors/ErrorLayout"
 import Bio from "@components/users/Bio"
 import ProjectList from "@components/users/ProjectList"
-import Error from "@components/errors/ErrorLayout"
+import Requests from "@components/users/Requests"
+import UserProfileHeader from "@components/users/UserProfileHeader"
 
-import { getUserByUsername } from "@api/users.api"
+import { getCurrentUsername } from "@api/client"
 import { getProjectListByUser } from "@api/projects.api"
 import { getFollow } from "@api/social.api"
-import { getCurrentUsername } from "@api/client"
+import { getUserByUsername } from "@api/users.api"
 
-import { useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 
 const UserPage = () => {

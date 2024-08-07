@@ -1,6 +1,7 @@
+import { useClientLocale } from "@utils/clientSettings"
+
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
-import { useClientLocale } from "@utils/clientSettings"
 
 const calculate = (name, newDate, diff) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
