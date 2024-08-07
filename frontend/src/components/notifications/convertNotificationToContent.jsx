@@ -111,7 +111,9 @@ const convertNotificationToContent = (t, type, payload, actionUser) => {
             detail = t("content_follow")
             break
         case "follow_request":
-            detail = t("content_follow_request")
+            detail = <ContentDetailLink to={`/app/users/@${actionUser.username}`}>
+                {t("content_follow_request")}
+            </ContentDetailLink>
             break
         case "follow_request_accepted":
             detail = t("content_follow_request_accepted")
