@@ -31,7 +31,10 @@ const SkeletonTasks = ({ taskCount }) => {
                 <Bar/>
             </TaskBox>
             )}
-            <EmptyBox/>
+            <CreateEmptyBox/>
+            <FlexCenterBox>
+                {taskCount > 10 && <MoreButtonEmptyBox/>}
+            </FlexCenterBox>
         </>
     )
 }
@@ -40,8 +43,7 @@ const Frame = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1em;
-    margin: 2em 0em;
-    margin-bottom: 3em;
+    margin: 1.5em 0em 0em;
 `
 
 const ProjectTitle = styled.div`
@@ -96,8 +98,22 @@ const Bar = styled.div`
     ${skeletonCSS("-100px", "300px", "2s")}
 `
 
-const EmptyBox = styled.div`
+const CreateEmptyBox = styled.div`
     width: 100%;
     height: 1.1em;
     margin-top: 1.8em;
+`
+
+const FlexCenterBox = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 1em;
+`
+
+const MoreButtonEmptyBox = styled.div`
+    height: 2.35em;
+    width: 25em;
+    border-radius: 10px;
+    border: 3px solid ${p=>p.theme.skeleton.defaultColor};
+    animation: ${p => breathingBorder(p)} 2s infinite linear;
 `
