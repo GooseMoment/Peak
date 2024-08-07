@@ -9,7 +9,13 @@ import ModalPortal from "@components/common/ModalPortal"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Middle = ({ items, isCreate, submit=()=>{}, isComponentOpen, setIsComponentOpen }) => {
+const Middle = ({
+    items,
+    isCreate,
+    submit = () => {},
+    isComponentOpen,
+    setIsComponentOpen,
+}) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
 
     const [content, setContent] = useState()
@@ -52,7 +58,11 @@ const Middle = ({ items, isCreate, submit=()=>{}, isComponentOpen, setIsComponen
                     ) : null}
                 </Fragment>
             ))}
-            {isCreate ? <AddButton onClick={submit}>{t("button_add")}</AddButton> : <EmptyBox/>}
+            {isCreate ? (
+                <AddButton onClick={submit}>{t("button_add")}</AddButton>
+            ) : (
+                <EmptyBox />
+            )}
         </>
     )
 }

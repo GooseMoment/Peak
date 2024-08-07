@@ -1,4 +1,4 @@
-import { styled, css } from "styled-components"
+import { css, styled } from "styled-components"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -13,8 +13,10 @@ const Title = ({ name, setName, setFunc, isCreate, icon, onClose }) => {
     }
 
     const changeName = () => {
-        setFunc({name})
-        toast.success(t("edit.name_change_success"), {toastId: "name_change_success"})
+        setFunc({ name })
+        toast.success(t("edit.name_change_success"), {
+            toastId: "name_change_success",
+        })
     }
 
     const onEnter = (e) => {
@@ -29,14 +31,14 @@ const Title = ({ name, setName, setFunc, isCreate, icon, onClose }) => {
                 <FeatherIcon icon={icon} />
                 <InputText
                     type="text"
-                    value={name || ''}
+                    value={name || ""}
                     onChange={onchange}
-                    onKeyDown={isCreate ? ()=>{} : onEnter}
+                    onKeyDown={isCreate ? () => {} : onEnter}
                     placeholder={t("create.name_placeholder")}
                 />
             </TitleBox>
             <Icons $isCreate={isCreate}>
-                {isCreate || <FeatherIcon icon="check" onClick={changeName}/>}
+                {isCreate || <FeatherIcon icon="check" onClick={changeName} />}
                 <FeatherIcon icon="x" onClick={onClose} />
             </Icons>
         </TitleFrameBox>
@@ -97,15 +99,17 @@ const Icons = styled.div`
         color: ${(p) => p.theme.primaryColors.danger};
     }
 
-    ${props=>props.$isCreate || css`
-        & :nth-child(1) {
-            color: ${(p)=>p.theme.primaryColors.info};
-        }
+    ${(props) =>
+        props.$isCreate ||
+        css`
+            & :nth-child(1) {
+                color: ${(p) => p.theme.primaryColors.info};
+            }
 
-        & :nth-child(2) {
-            stroke: ${(p)=>p.theme.primaryColors.danger};
-        }
-    `}
+            & :nth-child(2) {
+                stroke: ${(p) => p.theme.primaryColors.danger};
+            }
+        `}
 `
 
 export default Title

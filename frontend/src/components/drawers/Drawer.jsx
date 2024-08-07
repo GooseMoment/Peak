@@ -7,14 +7,14 @@ import styled, { useTheme } from "styled-components"
 import Button from "@components/common/Button"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
+import ModalPortal from "@components/common/ModalPortal"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
+import DrawerIcons from "@components/drawers/DrawerIcons"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
+import DrawerEdit from "@components/project/edit/DrawerEdit"
 import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenu from "@components/project/sorts/SortMenu"
 import Task from "@components/tasks/Task"
-import ModalPortal from "@components/common/ModalPortal"
-import DrawerEdit from "@components/project/edit/DrawerEdit"
-import DrawerIcons from "@components/drawers/DrawerIcons"
 
 import { deleteDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
@@ -198,9 +198,10 @@ const Drawer = ({ project, drawer, color }) => {
             )}
             {isDrawerEditOpen && (
                 <ModalPortal
-                closeModal={() => {
-                    setIsDrawerEditOpen(false)
-                }}>
+                    closeModal={() => {
+                        setIsDrawerEditOpen(false)
+                    }}
+                >
                     <DrawerEdit
                         projectID={project.id}
                         drawer={drawer}
