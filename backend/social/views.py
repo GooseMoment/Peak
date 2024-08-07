@@ -137,7 +137,6 @@ def get_blocks(request: HttpRequest, username):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 ## Daily Logs
-# GET social/daily/logs/@username/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["GET"])
 def get_daily_logs(request: HttpRequest, username, day):
     followings = Following.objects.filter(
@@ -155,9 +154,8 @@ def get_daily_logs(request: HttpRequest, username, day):
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-# GET social/daily/comment/@followee/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["GET"])
-def get_daily_comment(requset: HttpRequest, followee, day):    
+def get_daily_quote(requset: HttpRequest, followee, day):    
     followeeUser = get_object_or_404(User, username=followee)
     
     followerUserID = str(requset.user.id)
@@ -177,31 +175,30 @@ def get_daily_comment(requset: HttpRequest, followee, day):
     
     day_min = datetime.fromisoformat(day)
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
-    daily_comment = DailyComment.objects.filter(user__id=followeeUserID, date__range=(day_min, day_max)).first()
+    quote = Quote.objects.filter(user__id=followeeUserID, date__range=(day_min, day_max)).first()
     
-    if not daily_comment:
-        daily_comment = DailyComment(id=None, user=followeeUser, content='', date=None)
-    serializer = DailyCommentSerializer(daily_comment)
+    if not quote:
+        quote = Quote(id=None, user=followeeUser, content='', date=None)
+    serializer = QuoteSerializer(quote)
     
     # Response(cache_data, status=status.HTTP_200_OK)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-# POST social/daily/logs/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["POST"])
-def post_daily_comment(request: Request, day):
+def post_daily_quote(request: Request, day):
     day_min = datetime.fromisoformat(day)
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
     
-    daily_comment = DailyComment.objects.filter(user=request.user, date__range=(day_min, day_max)).first()
+    quote = Quote.objects.filter(user=request.user, date__range=(day_min, day_max)).first()
     content = request.data.get('content')
     
-    if daily_comment:
-        daily_comment.content = content
-        daily_comment.save()
+    if quote:
+        quote.content = content
+        quote.save()
     else:
-        daily_comment = DailyComment.objects.create(user=request.user, content=content, date=day)
+        quote = Quote.objects.create(user=request.user, content=content, date=day)
     
-    serializer = DailyCommentSerializer(daily_comment)
+    serializer = QuoteSerializer(quote)
     
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -253,10 +250,10 @@ class ReactionView(APIView):
             task = get_object_or_404(Task, id=id)
             reactions = Reaction.objects.filter(parent_type=Reaction.FOR_TASK,
                                                 task=task).order_by("created_at")
-        elif type == Reaction.FOR_DAILY_COMMENT:
-            daily_comment = get_object_or_404(DailyComment, id=id)
-            reactions = Reaction.objects.filter(parent_type=Reaction.FOR_DAILY_COMMENT,
-                                                daily_comment=daily_comment).order_by("created_at")
+        elif type == Reaction.FOR_QUOTE:
+            quote = get_object_or_404(Quote, id=id)
+            reactions = Reaction.objects.filter(parent_type=Reaction.FOR_QUOTE,
+                                                quote=quote).order_by("created_at")
         else :
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
@@ -296,11 +293,11 @@ class ReactionView(APIView):
                                                                task=task,
                                                                emoji=emoji)
         
-        elif type == Reaction.FOR_DAILY_COMMENT:
-            daily_comment = get_object_or_404(DailyComment, id=id)
+        elif type == Reaction.FOR_QUOTE:
+            quote = get_object_or_404(Quote, id=id)
             reaction, created = Reaction.objects.get_or_create(user=user,
-                                                               parent_type=Reaction.FOR_DAILY_COMMENT,
-                                                               daily_comment=daily_comment,
+                                                               parent_type=Reaction.FOR_QUOTE,
+                                                               quote=quote,
                                                                emoji=emoji)
         else :
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -326,12 +323,12 @@ class ReactionView(APIView):
                                          parent_type=Reaction.FOR_TASK,
                                          task=task,
                                          emoji=emoji)
-        elif type == Reaction.FOR_DAILY_COMMENT:
-            daily_comment = get_object_or_404(DailyComment, id=id)
+        elif type == Reaction.FOR_QUOTE:
+            quote = get_object_or_404(Quote, id=id)
             reaction = get_object_or_404(Reaction,
                                          user=user,
-                                         parent_type=Reaction.FOR_DAILY_COMMENT,
-                                         daily_comment=daily_comment,
+                                         parent_type=Reaction.FOR_QUOTE,
+                                         quote=quote,
                                          emoji=emoji)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -390,10 +387,10 @@ class CommentView(APIView):
             task = get_object_or_404(Task, id=id)
             comments = Comment.objects.filter(parent_type=Reaction.FOR_TASK,
                                                 task=task).order_by("-created_at")
-        elif type == Comment.FOR_DAILY_COMMENT:
-            daily_comment = get_object_or_404(DailyComment, id=id)
-            comments = Comment.objects.filter(parent_type=Reaction.FOR_DAILY_COMMENT,
-                                                daily_comment=daily_comment).order_by("-created_at")
+        elif type == Comment.FOR_QUOTE:
+            quote = get_object_or_404(Quote, id=id)
+            comments = Comment.objects.filter(parent_type=Reaction.FOR_QUOTE,
+                                                quote=quote).order_by("-created_at")
         
         serializer = CommentSerializer(comments, many=True)
         
@@ -410,11 +407,11 @@ class CommentView(APIView):
                                              parent_type=Reaction.FOR_TASK,
                                              task=task,
                                              comment=comment)
-        elif type == Comment.FOR_DAILY_COMMENT:
-            daily_comment = get_object_or_404(DailyComment, id=id)
+        elif type == Comment.FOR_QUOTE:
+            quote = get_object_or_404(Quote, id=id)
             created = Comment.objects.create(user=user,
-                                             parent_type=Reaction.FOR_DAILY_COMMENT,
-                                             daily_comment=daily_comment,
+                                             parent_type=Reaction.FOR_QUOTE,
+                                             quote=quote,
                                              comment=comment)
         else :
             return Response(status=status.HTTP_400_BAD_REQUEST)

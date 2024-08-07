@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Emoji, Peck, DailyComment, Reaction, Comment, Following, Block
+from .models import Emoji, Peck, Quote, Reaction, Comment, Following, Block
 from api.admin import fieldset_base, readonly_fields_base
 
 @admin.register(Emoji)
@@ -33,8 +33,8 @@ class PeckAdmin(admin.ModelAdmin):
         fieldset_base,
     ]
 
-@admin.register(DailyComment)
-class DailyCommentAdmin(admin.ModelAdmin):
+@admin.register(Quote)
+class QuoteAdmin(admin.ModelAdmin):
     ordering = ["-date", "updated_at"]
     search_fields = ["user__username", "date"]
     autocomplete_fields = ["user"]
@@ -53,7 +53,7 @@ class DailyCommentAdmin(admin.ModelAdmin):
 class ReactionAdmin(admin.ModelAdmin):
     ordering = ["-updated_at"]
     search_fields = ["user__username", "emoji"]
-    autocomplete_fields = ["user", "task", "daily_comment", "emoji"]
+    autocomplete_fields = ["user", "task", "quote", "emoji"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
@@ -65,7 +65,7 @@ class ReactionAdmin(admin.ModelAdmin):
         (
             "Payloads",
             {
-                "fields": ["task", "daily_comment"],
+                "fields": ["task", "quote"],
             },
         ),
         fieldset_base,
@@ -75,13 +75,19 @@ class ReactionAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     ordering = ["-updated_at"]
     search_fields = ["user__username", "task"]
-    autocomplete_fields = ["user", "task"]
+    autocomplete_fields = ["user", "task", "quote"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
             None,
             {
-                "fields": ["user", "task", "comment"],
+                "fields": ["user", "parent_type", "comment"],
+            },
+        ),
+        (
+            "Payloads",
+            {
+                "fields": ["task", "quote"],
             },
         ),
         fieldset_base,

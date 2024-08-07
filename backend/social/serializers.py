@@ -60,11 +60,11 @@ class DailyLogsSerializer(UserSerializer):
     #         ret['recent_task'] = sorted(ret['recent_task'], key=lambda x: x['recent_task__completed_at'])
     #     return ret
 
-class DailyCommentSerializer(serializers.ModelSerializer):
+class QuoteSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     
     class Meta:
-        model = DailyComment
+        model = Quote
         fields = ["id", "user", "content", "date"]
     # def to_representation(self, instance):
     #     data = super().to_representation(instance)
@@ -86,7 +86,7 @@ class ReactionSerializer(serializers.ModelSerializer):
     emoji = EmojiSerializer(many=False, read_only=True)
 
     task = TaskSerializer()
-    daily_comment = DailyCommentSerializer()
+    daily_comment = QuoteSerializer()
     
     class Meta:
         model = Reaction
@@ -103,7 +103,7 @@ class PeckSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     task = TaskSerializer()
-    daily_comment = DailyCommentSerializer()
+    daily_comment = QuoteSerializer()
     
     class Meta:
         model = Comment
