@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 
 import styled from "styled-components"
 
@@ -11,31 +10,20 @@ import Color from "@components/project/Creates/Color"
 import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
 
-import { getProject, patchProject } from "@api/projects.api"
+import { patchProject } from "@api/projects.api"
 
 import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import { useMutation } from "@tanstack/react-query"
 
-const ProjectEdit = ({ onClose }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.edit" })
-    const { id } = useParams()
+const ProjectEdit = ({ project, onClose }) => {
+    const { t } = useTranslation(null, { keyPrefix: "project" })
 
-    const {
-        isPending,
-        isError,
-        data: project,
-    } = useQuery({
-        queryKey: ["projects", { project: id }],
-        queryFn: () => getProject(id),
-    })
-
-    const [name, setName] = useState("")
+    const [name, setName] = useState(project.name)
 
     useEffect(() => {
-        setName(project?.name)
+        setName(project.name)
     }, [project])
 
     //Component
@@ -47,13 +35,13 @@ const ProjectEdit = ({ onClose }) => {
 
     const patchMutation = useMutation({
         mutationFn: (data) => {
-            return patchProject(id, data)
+            return patchProject(project.id, data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["projects"] })
+            queryClient.invalidateQueries({ queryKey: ["projects", project.id] })
         },
         onError: () => {
-            toast.error(t("project_change_error"))
+            toast.error(t("edit.project_change_error"))
         }
     })
 
@@ -61,7 +49,7 @@ const ProjectEdit = ({ onClose }) => {
         {
             id: 1,
             icon: "circle",
-            color: project?.color,
+            color: project.color,
             display: "빨강",
             component: (
                 <Color
@@ -74,7 +62,7 @@ const ProjectEdit = ({ onClose }) => {
         {
             id: 2,
             icon: "server",
-            display: t("privacy." + project?.privacy),
+            display: t("privacy." + project.privacy),
             component: (
                 <Privacy
                     setPrivacy={patchMutation.mutate}
@@ -85,7 +73,7 @@ const ProjectEdit = ({ onClose }) => {
         {
             id: 3,
             icon: "award",
-            display: t("type." + project?.type),
+            display: t("type." + project.type),
             component: (
                 <Type
                     setType={patchMutation.mutate}
@@ -94,12 +82,6 @@ const ProjectEdit = ({ onClose }) => {
             ),
         },
     ]
-
-    if (isPending) {
-        return (
-            <ProjectEditBox/>
-        )
-    }
 
     return (
         <ProjectEditBox>

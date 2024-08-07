@@ -237,6 +237,7 @@ const ProjectPage = () => {
                         setIsProjectEditOpen(false)
                     }}>
                     <ProjectEdit
+                        project={project}
                         onClose={() => {
                             setIsProjectEditOpen(false)
                         }}
