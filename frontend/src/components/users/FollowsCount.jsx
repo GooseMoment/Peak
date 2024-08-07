@@ -12,8 +12,12 @@ const FollowsCount = ({user, isPending}) => {
     const { t } = useTranslation(null, {keyPrefix: "users"})
     const [window, setWindow] = useState("")
 
-    useEffect(() => {
+    const closeModal = () => {
         setWindow("")
+    }
+
+    useEffect(() => {
+        closeModal()
     }, [user])
 
     if (isPending) {
@@ -27,9 +31,9 @@ const FollowsCount = ({user, isPending}) => {
         <Item onClick={() => setWindow("followers")}>{t("followers")} <Count>{user.followers_count}</Count></Item>
         <Item onClick={() => setWindow("followings")}>{t("followings")} <Count>{user.followings_count}</Count></Item>
         {window !== "" &&
-            <ModalPortal closeModal={() => setWindow("")}>
-                {window === "followers" && <FollowerList user={user} />} 
-                {window === "followings" && <FollowingList user={user} />} 
+            <ModalPortal closeModal={closeModal}>
+                {window === "followers" && <FollowerList closeModal={closeModal} user={user} />} 
+                {window === "followings" && <FollowingList closeModal={closeModal} user={user} />} 
             </ModalPortal>
         }
     </Items>

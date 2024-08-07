@@ -1,11 +1,13 @@
 import ListUserProfile from "@components/users/ListUserProfile"
 import { getFollowersByUser, getFollowingsByUser } from "@api/social.api"
+import { ifMobile } from "@utils/useScreenType"
 
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 import { Trans, useTranslation } from "react-i18next"
+import FeatherIcon from "feather-icons-react"
 
-export const FollowerList = ({user}) => {
+export const FollowerList = ({ user, closeModal }) => {
     const { t } = useTranslation(null, {keyPrefix: "users"})
 
     const { data: followers, isPending, isError } = useQuery({
@@ -14,7 +16,10 @@ export const FollowerList = ({user}) => {
     })
 
     return <Window>
-        <Title><Trans t={t} i18nKey="follower_list_title" values={{username: user?.username}} /></Title>
+        <TitleBar>
+            <Title><Trans t={t} i18nKey="follower_list_title" values={{username: user?.username}} /></Title>
+            <CloseButton onClick={closeModal}><FeatherIcon icon="x" /></CloseButton>
+        </TitleBar>
         <List>
             {isPending && [...Array(10)].map((_, i) => <ListUserProfile key={i} skeleton />)}
             {isError && <Message>{t("follower_list_error")}</Message>}
@@ -24,7 +29,7 @@ export const FollowerList = ({user}) => {
     </Window>
 }
 
-export const FollowingList = ({user}) => {
+export const FollowingList = ({ user, closeModal }) => {
     const { t } = useTranslation(null, {keyPrefix: "users"})
 
     const { data: followings, isPending, isError } = useQuery({
@@ -33,7 +38,10 @@ export const FollowingList = ({user}) => {
     })
 
     return <Window>
-        <Title><Trans t={t} i18nKey="following_list_title" values={{username: user?.username}} /></Title>
+        <TitleBar>
+            <Title><Trans t={t} i18nKey="following_list_title" values={{username: user?.username}} /></Title>
+            <CloseButton onClick={closeModal}><FeatherIcon icon="x" /></CloseButton>
+        </TitleBar>
         <List>
             {isPending && [...Array(10)].map((_, i) => <ListUserProfile key={i} skeleton />)}
             {isError && <Message>{t("following_list_error")}</Message>}
@@ -49,20 +57,57 @@ const Window = styled.div`
     width: 25rem;
 
     box-sizing: border-box;
-    padding: 1.5em;
+
+    padding-top: max(env(safe-area-inset-top), 1.5em);
+    padding-right: max(env(safe-area-inset-right), 1.5em);
+    padding-bottom: max(env(safe-area-inset-bottom), 1.5em);
+    padding-left: max(env(safe-area-inset-left), 1.5em);
+
     border-radius: 16px;
+
+    ${ifMobile} {
+        border-radius: 0;
+        width: 100dvw;
+        height: 100dvh;
+    }
+`
+
+const TitleBar = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `
 
 const Title = styled.h2`
     font-weight: 700;
-    margin-bottom: 1em;
+`
+
+const CloseButton = styled.div`
+    display: none;
+
+    ${ifMobile} {
+        display: block;
+        cursor: pointer;
+        padding: 1em;
+    }
+
+    & svg {
+        top: 0;
+        margin-right: 0;
+    }
 `
 
 const List = styled.div`
     position: relative;
 
-    max-height: 70vh;
+    max-height: 70dvh;
     overflow-y: auto;
+
+    ${ifMobile} {
+        max-height: 85dvh;
+        overflow-y: scroll;
+    }
 `
 
 const Message = styled.div`
