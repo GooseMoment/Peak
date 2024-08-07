@@ -10,9 +10,11 @@ import generateActivities from "@components/sign/activities"
 
 import { getEmojis } from "@api/social.api"
 
+import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const SignPage = () => {
+    const { t } = useTranslation(null, { keyPrefix: "sign" })
     const [searchParams] = useSearchParams()
     const [activities, setActivities] = useState([])
 
@@ -20,7 +22,7 @@ const SignPage = () => {
         const flag = searchParams.get("flag")
         switch (flag) {
             case "401":
-                toast.error("Please sign in again.", { toastId: "flag401" })
+                toast.error(t("sign_in_again"), { toastId: "flag401" })
                 break
         }
     }, [])
