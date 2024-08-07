@@ -378,11 +378,11 @@ class CommentView(APIView):
         if type == Comment.FOR_TASK:
             task = get_object_or_404(Task, id=id)
             comments = Comment.objects.filter(parent_type=Reaction.FOR_TASK,
-                                                task=task).order_by("created_at")
+                                                task=task).order_by("-created_at")
         elif type == Comment.FOR_DAILY_COMMENT:
             daily_comment = get_object_or_404(DailyComment, id=id)
             comments = Comment.objects.filter(parent_type=Reaction.FOR_DAILY_COMMENT,
-                                                daily_comment=daily_comment).order_by("created_at")
+                                                daily_comment=daily_comment).order_by("-created_at")
         
         serializer = CommentSerializer(comments, many=True)
         
