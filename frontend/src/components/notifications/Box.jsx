@@ -64,12 +64,12 @@ const Box = forwardRef(function BoxInternal(
     )
 })
 
-const blink = (p) => keyframes`
+const blink = keyframes`
     0% {
         border-color: transparent;
     }
     20%, 80% {
-        border-color: ${p.theme.accentColor};
+        border-color: ${(p) => p.theme.accentColor};
     }
     100% {
         border-color: transparent;
@@ -102,7 +102,7 @@ const Frame = styled.article`
     ${(p) =>
         p.$highlight &&
         css`
-            animation: ${blink(p)} 1.5s ${cubicBeizer};
+            animation: ${blink} 1.5s ${cubicBeizer};
             animation-delay: 0.5s;
         `}
 `
