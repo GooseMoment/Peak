@@ -152,7 +152,7 @@ const ContentTitle = styled.h3`
 
 const ContentDetail = styled.p`
     text-overflow: ellipsis;
-    overflow: hidden;
+    overflow-x: clip;
     white-space: nowrap;
 
     ${(props) =>
