@@ -9,19 +9,23 @@ const shineLines = (start, end) => keyframes`
     }
 `
 
-export const skeletonCSS = (start="-100px", end="140px", interval="1.6s") => css`
+export const skeletonCSS = (
+    start = "-100px",
+    end = "140px",
+    interval = "1.6s",
+) => css`
     background-image: linear-gradient(
-        90deg, 
-        ${p => p.theme.skeleton.defaultColor} 0px, 
-        ${p => p.theme.skeleton.shineColor} 40px, 
-        ${p => p.theme.skeleton.defaultColor} 80px
+        90deg,
+        ${(p) => p.theme.skeleton.defaultColor} 0px,
+        ${(p) => p.theme.skeleton.shineColor} 40px,
+        ${(p) => p.theme.skeleton.defaultColor} 80px
     );
     background-size: 600px;
 
     animation: ${shineLines(start, end)} ${interval} infinite linear;
 `
 
-const breathing = p => keyframes`
+const breathing = (p) => keyframes`
     0%, 100% {
         background-color: ${p.theme.skeleton.defaultColor};
     }
@@ -31,6 +35,6 @@ const breathing = p => keyframes`
 `
 
 export const skeletonBreathingCSS = css`
-    background-color: ${p => p.theme.skeleton.defaultColor};
-    animation: ${p => breathing(p)} 2s infinite linear;
+    background-color: ${(p) => p.theme.skeleton.defaultColor};
+    animation: ${(p) => breathing(p)} 2s infinite linear;
 `

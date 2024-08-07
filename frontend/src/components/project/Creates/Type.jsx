@@ -5,22 +5,31 @@ import Detail from "@components/project/common/Detail"
 import goal from "@assets/project/type/goal.svg"
 import regular from "@assets/project/type/regular.svg"
 
-const Type = ({setType, setDisplayType, closeComponent}) => {
+import { useTranslation } from "react-i18next"
 
-    const changeType = (type, displaytype) => {
-        return async () => {
-            await setType(type)
-            await setDisplayType(displaytype)
+const Type = ({ setType, closeComponent }) => {
+    const { t } = useTranslation(null, { keyPrefix: "project.create.type" })
+
+    const changeType = (type) => {
+        return () => {
+            setType(type)
             closeComponent()
         }
     }
 
+    const items = [
+        { icon: <img src={regular} />, type: "regular" },
+        { icon: <img src={goal} />, type: "goal" },
+    ]
+
     return (
-        <Detail title="프로젝트 설정" onClose={closeComponent}>
-            {items.map(item => (
-                <ItemBlock key={item.id}>
+        <Detail title={t("title")} onClose={closeComponent}>
+            {items.map((item) => (
+                <ItemBlock key={item.type}>
                     {item.icon}
-                    <ItemText onClick={changeType(item.type, item.display)}>{item.display}</ItemText>
+                    <ItemText onClick={changeType(item.type)}>
+                        {t(item.type)}
+                    </ItemText>
                 </ItemBlock>
             ))}
         </Detail>
@@ -45,18 +54,13 @@ const ItemBlock = styled.div`
 const ItemText = styled.p`
     font-weight: normal;
     font-size: 1em;
-    color: ${p => p.theme.textColor};
+    color: ${(p) => p.theme.textColor};
 
     &:hover {
         font-weight: bolder;
-        color: ${p => p.theme.goose};
+        color: ${(p) => p.theme.goose};
         cursor: pointer;
     }
 `
-
-const items = [
-    {icon: <img src={regular}/>, display: "상시 프로젝트", type: "regular"},
-    {icon: <img src={goal}/>, display: "목표 프로젝트", type: "goal"}
-]
 
 export default Type

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 import ModalPortal from "@components/common/ModalPortal"
+
 import TaskCreate from "./TaskCreate"
 
 const TaskCreateElement = () => {
@@ -11,9 +12,11 @@ const TaskCreateElement = () => {
         navigate(`..`)
     }
 
-    return <ModalPortal closeModal={closeCreate}>
-        <TaskCreate />
-    </ModalPortal>
+    return (
+        <ModalPortal closeModal={closeCreate}>
+            <TaskCreate />
+        </ModalPortal>
+    )
 }
 
 export default TaskCreateElement

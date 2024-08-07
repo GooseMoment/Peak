@@ -6,7 +6,7 @@ const Box = styled.h1`
     gap: 0.25em;
 
     z-index: 999;
-    color: ${p => p.theme.frontSignPageTextColor};
+    color: ${(p) => p.theme.frontSignPageTextColor};
 
     font-size: 2em;
     font-weight: bold;
@@ -28,9 +28,12 @@ const LogoBox = styled.img`
 `
 
 const Brand = () => {
-    return <Box>
-        <LogoBox src="/logo.svg" draggable="false"/>Peak <By>by GooseMoment</By>
-    </Box>
+    return (
+        <Box>
+            <LogoBox src="/logo.svg" draggable="false" />
+            Peak <By>by GooseMoment</By>
+        </Box>
+    )
 }
 
 export default Brand

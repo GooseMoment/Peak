@@ -43,7 +43,7 @@ class DailyCommentAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ["user", "comment", "date"],
+                "fields": ["user", "content", "date"],
             },
         ),
         fieldset_base,

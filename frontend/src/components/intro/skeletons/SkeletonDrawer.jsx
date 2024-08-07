@@ -1,19 +1,23 @@
 import styled from "styled-components"
 
 const SkeletonDrawer = () => {
-    return <Frame>
-        <DrawerName />
-        <SkeletonTask />
-        <SkeletonTask />
-        <SkeletonTask />
-    </Frame>
+    return (
+        <Frame>
+            <DrawerName />
+            <SkeletonTask />
+            <SkeletonTask />
+            <SkeletonTask />
+        </Frame>
+    )
 }
 
 const SkeletonTask = () => {
-    return <TaskBox>
-        <Circle />
-        <Bar />
-    </TaskBox>
+    return (
+        <TaskBox>
+            <Circle />
+            <Bar />
+        </TaskBox>
+    )
 }
 
 const Frame = styled.div`
@@ -56,7 +60,7 @@ const Bar = styled.div`
     height: 1em;
     border-radius: 4px;
 
-    background-color: ${p => p.theme.secondBackgroundColor};
+    background-color: ${(p) => p.theme.secondBackgroundColor};
 `
 
 export default SkeletonDrawer

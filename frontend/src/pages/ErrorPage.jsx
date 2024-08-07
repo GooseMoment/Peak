@@ -1,15 +1,20 @@
 import { useEffect } from "react"
-import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router-dom"
+import {
+    isRouteErrorResponse,
+    useNavigate,
+    useRouteError,
+} from "react-router-dom"
 
 import ErrorLayout from "@components/errors/ErrorLayout"
 
 import { setToken } from "@api/client"
+
 import { useTranslation } from "react-i18next"
 
 const ErrorPage = () => {
     const error = useRouteError()
     const navigate = useNavigate()
-    const { t } = useTranslation(null, {keyPrefix: "error-page"})
+    const { t } = useTranslation(null, { keyPrefix: "error-page" })
 
     useEffect(() => {
         if (isRouteErrorResponse(error) && error.status === 401) {
@@ -25,10 +30,24 @@ const ErrorPage = () => {
     }, [error])
 
     if (isRouteErrorResponse(error)) {
-        return <ErrorLayout code={"" + error.status} text={t("404_error_text")} bottomText={t("404_error_bottom")} bottomLinkTo=".." />
+        return (
+            <ErrorLayout
+                code={"" + error.status}
+                text={t("404_error_text")}
+                bottomText={t("404_error_bottom")}
+                bottomLinkTo=".."
+            />
+        )
     }
 
-    return <ErrorLayout code={t("unknown_error_code")} text={t("unknown_error_text")} bottomText={t("unknown_error_bottom")} bottomLinkTo="/app/" />
+    return (
+        <ErrorLayout
+            code={t("unknown_error_code")}
+            text={t("unknown_error_text")}
+            bottomText={t("unknown_error_bottom")}
+            bottomLinkTo="/app/"
+        />
+    )
 }
 
 export default ErrorPage

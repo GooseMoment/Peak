@@ -1,11 +1,9 @@
-import {
-    defineConfig,
-} from '@vite-pwa/assets-generator/config'
+import { defineConfig } from "@vite-pwa/assets-generator/config"
 
 const preset = {
     transparent: {
         sizes: [64, 192, 512],
-        favicons: [[48, 'favicon.ico']],
+        favicons: [[48, "favicon.ico"]],
         padding: 0,
     },
     maskable: {
@@ -17,14 +15,14 @@ const preset = {
         padding: 0.11,
         resizeOptions: {
             background: "#ff4a03",
-        }
-    }
+        },
+    },
 }
-  
+
 export default defineConfig({
     headLinkOptions: {
-        preset: '2023'
+        preset: "2023",
     },
     preset,
-    images: ['public/logo.svg']
+    images: ["public/logo.svg"],
 })

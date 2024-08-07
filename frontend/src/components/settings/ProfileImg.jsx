@@ -1,17 +1,21 @@
-import { useState, useRef } from "react"
+import { useRef, useState } from "react"
+
+import styled from "styled-components"
 
 import ImageCropper from "@components/settings/ImageCropper"
 
-import { cubicBeizer } from "@assets/keyframes"
 import { uploadProfileImg } from "@api/users.api"
+
 import getCroppedImg from "@utils/cropImage"
 
-import { toast } from "react-toastify"
-import { Image as ImageIcon } from "feather-icons-react"
-import styled from "styled-components"
 import queryClient from "@queries/queryClient"
 
-const ProfileImg = ({profile_img, username}) => {
+import { cubicBeizer } from "@assets/keyframes"
+
+import { Image as ImageIcon } from "feather-icons-react"
+import { toast } from "react-toastify"
+
+const ProfileImg = ({ profile_img, username }) => {
     const [file, setFile] = useState(null)
     const [fileName, setFileName] = useState("")
     const [fileType, setFileType] = useState(null)
@@ -26,7 +30,7 @@ const ProfileImg = ({profile_img, username}) => {
         input.current.click()
     }
 
-    const handleFileChange = e => {
+    const handleFileChange = (e) => {
         if (!e.target.files) {
             return
         }
@@ -35,7 +39,7 @@ const ProfileImg = ({profile_img, username}) => {
         setFileType(e.target.files[0].type)
 
         const reader = new FileReader()
-        reader.addEventListener("loadend", e => {
+        reader.addEventListener("loadend", (e) => {
             setFile(e.target.result)
         })
 
@@ -60,26 +64,39 @@ const ProfileImg = ({profile_img, username}) => {
     const cropAndUpload = async () => {
         const cropped = await getCroppedImg(file, croppedAreaPixels, fileType)
 
-        let blob = await fetch(cropped).then(r => r.blob());
+        let blob = await fetch(cropped).then((r) => r.blob())
         const croppedFile = new File([blob], fileName)
 
         let formData = new FormData()
         formData.append("profile_img", croppedFile)
 
         await uploadProfileImg(formData)
-        queryClient.invalidateQueries({queryKey: ["users", "me"]})
-        queryClient.invalidateQueries({queryKey: ["users", username]})
+        queryClient.invalidateQueries({ queryKey: ["users", "me"] })
+        queryClient.invalidateQueries({ queryKey: ["users", username] })
     }
 
-    return ( 
+    return (
         <ProfileImgContainer>
             <Img src={profile_img} />
             <ProfileImgOverlay onClick={clickInput}>
                 <ImageIcon />
             </ProfileImgOverlay>
-            <HiddenInput ref={input} accept=".jpg,.jpeg,.png" id="img_file" type="file" onChange={handleFileChange} />
-            {file && openCropper && <ImageCropper file={file} setCroppedAreaPixels={setCroppedAreaPixels} onClickCancel={onClickCancel} onClickOk={onClickOk} />}
-        </ProfileImgContainer> 
+            <HiddenInput
+                ref={input}
+                accept=".jpg,.jpeg,.png"
+                id="img_file"
+                type="file"
+                onChange={handleFileChange}
+            />
+            {file && openCropper && (
+                <ImageCropper
+                    file={file}
+                    setCroppedAreaPixels={setCroppedAreaPixels}
+                    onClickCancel={onClickCancel}
+                    onClickOk={onClickOk}
+                />
+            )}
+        </ProfileImgContainer>
     )
 }
 
@@ -93,7 +110,7 @@ const ProfileImgOverlay = styled.div`
     left: 0;
     width: 7em;
     height: 7em;
-    
+
     border-radius: 999px;
     color: white;
     background-color: black;

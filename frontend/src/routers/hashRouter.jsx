@@ -5,11 +5,13 @@ const routes = [
         path: "/",
         element: null,
     },
-    { 
+    {
         path: "settings",
         id: "settings",
         async lazy() {
-            const { Layout, ErrorPage } = await import("@pages/settings/settings")
+            const { Layout, ErrorPage } = await import(
+                "@pages/settings/settings"
+            )
             return { Component: Layout, ErrorBoundary: ErrorPage }
         },
         children: [
@@ -41,28 +43,36 @@ const routes = [
             {
                 path: "languages-and-time",
                 async lazy() {
-                    const { LanguagesAndTime } = await import("@pages/settings/settings")
+                    const { LanguagesAndTime } = await import(
+                        "@pages/settings/settings"
+                    )
                     return { Component: LanguagesAndTime }
                 },
             },
             {
                 path: "appearance",
                 async lazy() {
-                    const { Appearance } = await import("@pages/settings/settings")
+                    const { Appearance } = await import(
+                        "@pages/settings/settings"
+                    )
                     return { Component: Appearance }
                 },
             },
             {
                 path: "reactions",
                 async lazy() {
-                    const { Reactions } = await import("@pages/settings/settings")
+                    const { Reactions } = await import(
+                        "@pages/settings/settings"
+                    )
                     return { Component: Reactions }
                 },
             },
             {
                 path: "notifications",
                 async lazy() {
-                    const { Notifications } = await import("@pages/settings/settings")
+                    const { Notifications } = await import(
+                        "@pages/settings/settings"
+                    )
                     return { Component: Notifications }
                 },
             },
@@ -80,7 +90,7 @@ const routes = [
                     return { Component: Info }
                 },
             },
-        ]
+        ],
     },
 ]
 

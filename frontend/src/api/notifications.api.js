@@ -1,6 +1,10 @@
-import { getClientSettings, setClientSettingsByName } from "@utils/clientSettings"
-import getDeviceType from "@utils/getDeviceType"
 import client from "@api/client"
+
+import {
+    getClientSettings,
+    setClientSettingsByName,
+} from "@utils/clientSettings"
+import getDeviceType from "@utils/getDeviceType"
 
 export const getReminder = async (id) => {
     try {
@@ -27,7 +31,6 @@ export const patchReminder = async (id, edit) => {
     } catch (e) {
         throw e
     }
-
 }
 
 export const deleteReminder = async (id) => {
@@ -45,7 +48,9 @@ export const getNotifications = async (query) => {
     const types = params.types.types.join("|")
 
     try {
-        const res = await client.get(`notifications/?types=${types}&cursor=${cursor}`)
+        const res = await client.get(
+            `notifications/?types=${types}&cursor=${cursor}`,
+        )
         return res.data
     } catch (e) {
         throw e
@@ -96,7 +101,7 @@ export const deleteSubscription = async (id) => {
     }
 
     setClientSettingsByName("push_notification_subscription", null)
-    
+
     try {
         const res = await client.delete(`notifications/subscribe/${id}`)
         return res.status

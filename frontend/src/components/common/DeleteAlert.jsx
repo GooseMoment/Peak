@@ -1,34 +1,25 @@
-import styled from "styled-components"
-
 import Button from "@components/common/Button"
 import Confirmation from "@components/common/Confirmation"
 
+import { useTranslation } from "react-i18next"
+
 const DeleteAlert = ({ title, onClose, func }) => {
+    const { t } = useTranslation(null, { keyPrefix: "project.delete" })
+
     const buttons = [
-        "close", <Button $form="filled" $state="danger" onClick={func}>삭제</Button>
+        "close",
+        <Button $form="filled" $state="danger" onClick={func}>
+            {t("button_delete")}
+        </Button>,
     ]
 
-    return <Confirmation question={`${title} 삭제하시겠습니까?`} onClose={onClose} buttons={buttons} />
+    return (
+        <Confirmation
+            question={t("alert_question", { title: title })}
+            onClose={onClose}
+            buttons={buttons}
+        />
+    )
 }
-
-const DeleteAlertBox = styled.div`
-    min-width: 20em;
-    max-width: 25em;
-    border: solid 1px ${p => p.theme.project.borderColor};
-    border-radius: 15px;
-    color: ${p => p.theme.textColor};
-    white-space:pre-wrap;
-    text-align: center;
-    line-height: 1.2em;
-
-    gap: 1.3em;
-`
-
-const FlexBox = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1em;
-`
 
 export default DeleteAlert

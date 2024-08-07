@@ -1,29 +1,40 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
-import TaskCircle from "./TaskCircle"
-import Priority from "./Priority"
+import styled, { css } from "styled-components"
 
+import Priority from "./Priority"
+import TaskCircle from "./TaskCircle"
 import taskCalculation from "./utils/taskCalculation"
 
-import hourglass from "@assets/project/hourglass.svg"
 import alarmclock from "@assets/project/alarmclock.svg"
+import hourglass from "@assets/project/hourglass.svg"
 
-import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-const TaskFrame = ({task, color, taskDetailPath, isLoading, toComplete}) => {
-    const {due, assigned, calculate_due, calculate_assigned} = taskCalculation(task)
+const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
+    const {
+        due,
+        assigned,
+        calculate_due,
+        calculate_assigned,
+        isOutOfDue,
+        isOutOfAssigned,
+    } = taskCalculation(task)
 
-    const TaskName = <TaskNameBox $completed={task.completed_at}>
-        {task?.name}
-    </TaskNameBox>
+    const TaskName = (
+        <TaskNameBox $completed={task.completed_at}>{task?.name}</TaskNameBox>
+    )
 
     const hasDate = task.due_date || task.assigned_at
 
     return (
         <Box>
-            <Priority hasDate={hasDate} priority={task.priority} completed={task.completed_at} />
+            <Priority
+                hasDate={hasDate}
+                priority={task.priority}
+                completed={task.completed_at}
+            />
             <div>
                 <CircleName>
                     <TaskCircle
@@ -33,29 +44,45 @@ const TaskFrame = ({task, color, taskDetailPath, isLoading, toComplete}) => {
                         isLoading={isLoading}
                         onClick={toComplete}
                     />
-                    {taskDetailPath ? <Link to={taskDetailPath} style={{ textDecoration: 'none' }}> 
-                        {TaskName}
-                    </Link> : TaskName}
+                    {taskDetailPath ? (
+                        <Link
+                            to={taskDetailPath}
+                            style={{ textDecoration: "none" }}
+                        >
+                            {TaskName}
+                        </Link>
+                    ) : (
+                        TaskName
+                    )}
                 </CircleName>
 
                 <Dates>
-                    {task.assigned_at &&
-                    <AssignedDate $completed={task.completed_at} $isOutOfDue={calculate_assigned === "놓침"}>
-                        <FeatherIcon icon="calendar" />
-                        {task.completed_at ? assigned : calculate_assigned}
-                    </AssignedDate>
-                    }
-                    {task.due_date && 
-                    <DueDate $completed={task.completed_at} $isOutOfDue={calculate_due === "기한 지남"}>
-                        <img src={hourglass} />
-                        {task.completed_at ? due : calculate_due}
-                    </DueDate>}
-                    {task?.reminders ? task.reminders?.length !== 0 &&
-                    <Reminder $completed={task.completed_at}>
-                        <img src={alarmclock} />
-                        {task.reminders?.length}
-                    </Reminder>
-                    : null}
+                    {task.assigned_at && (
+                        <AssignedDate
+                            $completed={task.completed_at}
+                            $isOutOfDue={isOutOfAssigned}
+                        >
+                            <FeatherIcon icon="calendar" />
+                            {task.completed_at ? assigned : calculate_assigned}
+                        </AssignedDate>
+                    )}
+                    {task.due_date && (
+                        <DueDate
+                            $completed={task.completed_at}
+                            $isOutOfDue={isOutOfDue}
+                        >
+                            <img src={hourglass} />
+                            {task.completed_at ? due : calculate_due}
+                        </DueDate>
+                    )}
+                    {task?.reminders
+                        ? task.reminders?.length !== 0 && (
+                              <Reminder $completed={task.completed_at}>
+                                  <img src={alarmclock} />
+                                  {task.reminders?.length}
+                              </Reminder>
+                          )
+                        : null}
                 </Dates>
             </div>
         </Box>
@@ -74,7 +101,7 @@ const TaskNameBox = styled.div`
     width: 60em;
     font-style: normal;
     font-size: 1.1em;
-    color: ${p => p.$completed ? p.theme.grey : p.theme.textColor};
+    color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -98,14 +125,24 @@ const AssignedDate = styled.div`
     font-style: normal;
     font-size: 0.8em;
     margin-left: 0.5em;
-    color: ${(props) => (props.$completed ? props.theme.grey : props.$isOutOfDue ? props.theme.project.danger : props.theme.project.assignColor)};
+    color: ${(props) =>
+        props.$completed
+            ? props.theme.grey
+            : props.$isOutOfDue
+              ? props.theme.project.danger
+              : props.theme.project.assignColor};
 
     & .feather {
         top: 0;
         width: 1em;
         height: 1em;
         margin-right: 0.3em;
-        color: ${(props) => (props.$completed ? props.theme.grey : props.$isOutOfDue ? props.theme.project.danger : props.theme.project.assignColor)};
+        color: ${(props) =>
+            props.$completed
+                ? props.theme.grey
+                : props.$isOutOfDue
+                  ? props.theme.project.danger
+                  : props.theme.project.assignColor};
     }
 `
 
@@ -115,20 +152,30 @@ const DueDate = styled.div`
     font-style: normal;
     font-size: 0.8em;
     margin-left: 0.5em;
-    color: ${(props) => (props.$completed ? props.theme.grey : props.$isOutOfDue ? props.theme.project.danger : props.theme.project.dueColor)};
+    color: ${(props) =>
+        props.$completed
+            ? props.theme.grey
+            : props.$isOutOfDue
+              ? props.theme.project.danger
+              : props.theme.project.dueColor};
 
     & img {
         width: 1em;
         height: 1em;
         margin-right: 0.2em;
-        
-        ${(props) => (props.$completed ? css`
-            filter: ${p => p.theme.project.imgGreyColor};
-        ` : props.$isOutOfDue ? css`
-            filter: ${p => p.theme.project.imgDangerColor};
-        ` : css`
-            filter: ${p => p.theme.project.imgDueColor};
-        `)};
+
+        ${(props) =>
+            props.$completed
+                ? css`
+                      filter: ${(p) => p.theme.project.imgGreyColor};
+                  `
+                : props.$isOutOfDue
+                  ? css`
+                        filter: ${(p) => p.theme.project.imgDangerColor};
+                    `
+                  : css`
+                        filter: ${(p) => p.theme.project.imgDueColor};
+                    `};
     }
 `
 
@@ -138,18 +185,24 @@ const Reminder = styled.div`
     font-style: normal;
     font-size: 0.8em;
     margin-left: 0.5em;
-    color: ${(props) => (props.$completed ? props.theme.grey : props.theme.project.reminderColor)};
-    
+    color: ${(props) =>
+        props.$completed
+            ? props.theme.grey
+            : props.theme.project.reminderColor};
+
     & img {
         width: 1em;
         height: 1em;
         margin-right: 0.2em;
         top: 0;
-        filter: ${(props) => (props.$completed ? css`
-            ${p=>p.theme.project.imgGreyColor};
-        ` : css`
-            ${p=>p.theme.project.imgReminderColor};
-        `)};
+        filter: ${(props) =>
+            props.$completed
+                ? css`
+                      ${(p) => p.theme.project.imgGreyColor};
+                  `
+                : css`
+                      ${(p) => p.theme.project.imgReminderColor};
+                  `};
     }
 `
 
