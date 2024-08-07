@@ -48,7 +48,6 @@ export const scaleForward = keyframes`
     }
 `
 
-
 export const modalFadeIn = keyframes`
     0% {
         opacity: 0%;

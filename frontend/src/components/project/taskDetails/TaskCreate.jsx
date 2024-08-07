@@ -2,7 +2,7 @@ import { useNavigate, useOutletContext, useLocation } from "react-router-dom"
 import { useState } from "react"
 
 import styled from "styled-components"
-import FeatherIcon from 'feather-icons-react'
+import FeatherIcon from "feather-icons-react"
 
 import TaskNameInput from "@components/tasks/TaskNameInput"
 import Button from "@components/common/Button"
@@ -14,10 +14,10 @@ import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 
 const TaskCreate = () => {
-    const { t } = useTranslation(null, {keyPrefix: "project.create"})
+    const { t } = useTranslation(null, { keyPrefix: "project.create" })
 
     const [projectId, color] = useOutletContext()
-    const {state} = useLocation()
+    const { state } = useLocation()
     const navigate = useNavigate()
 
     const [newTaskName, setNewTaskName] = useState(null)
@@ -27,17 +27,17 @@ const TaskCreate = () => {
     }
 
     const [newTask, setNewTask] = useState({
-        'name': newTaskName,
-        'assigned_at': null,
-        'due_date': null,
-        'due_time': null,
-        'reminders': [],
-        'priority': 0,
-        'drawer': state?.drawer_id,
-        'drawer_name': state?.drawer_name,
-        'project_name': state?.project_name,
-        'memo': '',
-        'privacy': 'public'
+        name: newTaskName,
+        assigned_at: null,
+        due_date: null,
+        due_time: null,
+        reminders: [],
+        priority: 0,
+        drawer: state?.drawer_id,
+        drawer_name: state?.drawer_name,
+        project_name: state?.project_name,
+        memo: "",
+        privacy: "public",
     })
 
     const editNewTask = (edit) => {
@@ -46,16 +46,16 @@ const TaskCreate = () => {
 
     const makeTask = async () => {
         try {
-            editNewTask({'name': newTaskName})
+            editNewTask({ name: newTaskName })
             await postTask(newTask)
             toast.success(t("task_create_success"))
-            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: state?.drawer_id}]})
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", { drawerID: state?.drawer_id }],
+            })
             onClose()
         } catch (e) {
-            if (newTask?.name)
-                toast.error(t("task_create_error"))
-            else
-                toast.error(t("task_create_no_name"))
+            if (newTask?.name) toast.error(t("task_create_error"))
+            else toast.error(t("task_create_no_name"))
         }
     }
 
@@ -63,17 +63,17 @@ const TaskCreate = () => {
         <TaskCreateBox>
             <TaskNameBox>
                 <TaskNameInput
-                    task={newTask} 
-                    setFunc={editNewTask} 
-                    newTaskName={newTaskName} 
-                    setNewTaskName={setNewTaskName} 
-                    color={color} 
+                    task={newTask}
+                    setFunc={editNewTask}
+                    newTaskName={newTaskName}
+                    setNewTaskName={setNewTaskName}
+                    color={color}
                 />
                 <Icons>
                     <FeatherIcon icon="x" onClick={onClose} />
                 </Icons>
             </TaskNameBox>
-            <Contents task={newTask} setFunc={editNewTask}/>
+            <Contents task={newTask} setFunc={editNewTask} />
             <AddButton onClick={makeTask}>{t("button_add")}</AddButton>
         </TaskCreateBox>
     )
@@ -81,8 +81,8 @@ const TaskCreate = () => {
 
 const TaskCreateBox = styled.div`
     width: 50em;
-    background-color: ${p => p.theme.backgroundColor};
-    border: solid 1px ${p => p.theme.secondBackgroundColor};
+    background-color: ${(p) => p.theme.backgroundColor};
+    border: solid 1px ${(p) => p.theme.secondBackgroundColor};
     border-radius: 15px;
 
     &::after {
@@ -108,7 +108,7 @@ const Icons = styled.div`
     & svg {
         top: 0.4em;
         cursor: pointer;
-        stroke: ${p => p.theme.goose};
+        stroke: ${(p) => p.theme.goose};
         margin-left: 1em;
     }
 `

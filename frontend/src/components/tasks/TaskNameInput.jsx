@@ -6,8 +6,14 @@ import notify from "@utils/notify"
 
 import styled from "styled-components"
 
-const TaskNameInput = ({task, setFunc, newTaskName, setNewTaskName, color}) => {  
-    const { t } = useTranslation(null, {keyPrefix: "task"})
+const TaskNameInput = ({
+    task,
+    setFunc,
+    newTaskName,
+    setNewTaskName,
+    color,
+}) => {
+    const { t } = useTranslation(null, { keyPrefix: "task" })
 
     const [isLoading, setIsLoading] = useState(false)
 
@@ -21,11 +27,11 @@ const TaskNameInput = ({task, setFunc, newTaskName, setNewTaskName, color}) => {
     }
 
     const changeTaskName = async (name) => {
-        setFunc({name})
+        setFunc({ name })
     }
 
     const onEnter = async (e) => {
-        if(e.key === 'Enter') {
+        if (e.key === "Enter") {
             changeTaskName(newTaskName)
             notify.success(t("name_change_success"))
         }
@@ -37,26 +43,28 @@ const TaskNameInput = ({task, setFunc, newTaskName, setNewTaskName, color}) => {
         if (!task.completed_at) {
             completed_at = new Date().toISOString()
         }
-        setFunc({completed_at})
+        setFunc({ completed_at })
     }
 
-    return <Box>
-        <TaskCircle
-            completed={task.completed_at}
-            color={color}
-            isLoading={isLoading}
-            onClick={toComplete}
-            isInput
-        />
-        <InputText
-            $completed={task.completed_at}
-            type='text'
-            onChange={onChange}
-            onKeyDown={onEnter}
-            value={newTaskName || ''}
-            placeholder={t("name_placeholder")}
-        />
-    </Box>  
+    return (
+        <Box>
+            <TaskCircle
+                completed={task.completed_at}
+                color={color}
+                isLoading={isLoading}
+                onClick={toComplete}
+                isInput
+            />
+            <InputText
+                $completed={task.completed_at}
+                type="text"
+                onChange={onChange}
+                onKeyDown={onEnter}
+                value={newTaskName || ""}
+                placeholder={t("name_placeholder")}
+            />
+        </Box>
+    )
 }
 
 const Box = styled.div`
@@ -71,7 +79,7 @@ const InputText = styled.input`
     height: auto;
     font-weight: normal;
     font-size: 1.1em;
-    color: ${p => p.$completed ? p.theme.grey : p.theme.textColor};
+    color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};
     margin-top: 0.1em;
     line-height: 1.3em;
 `

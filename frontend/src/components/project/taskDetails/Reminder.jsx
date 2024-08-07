@@ -15,15 +15,19 @@ import before_1D from "@assets/project/reminder/before_1D.svg"
 import before_2D from "@assets/project/reminder/before_2D.svg"
 
 const Reminder = ({ task, closeComponent }) => {
-    const { t } = useTranslation(null, {keyPrefix: "task.reminder"})
+    const { t } = useTranslation(null, { keyPrefix: "task.reminder" })
 
     const postMutation = useMutation({
         mutationFn: (data) => {
             return postReminder(data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['task', {taskID: task.id}]})
-            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
+            queryClient.invalidateQueries({
+                queryKey: ["task", { taskID: task.id }],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", { drawerID: task.drawer }],
+            })
         },
     })
 
@@ -32,16 +36,21 @@ const Reminder = ({ task, closeComponent }) => {
             return deleteReminder(reminderId)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['task', {taskID: task.id}]})
-            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
+            queryClient.invalidateQueries({
+                queryKey: ["task", { taskID: task.id }],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", { drawerID: task.drawer }],
+            })
         },
     })
 
     const getReminderID = (delta) => {
-        for (let i=0; i < task.reminders.length; i++) {
+        for (let i = 0; i < task.reminders.length; i++) {
             if (task.reminders[i].delta === delta) {
                 return task.reminders[i].id
-        }}
+            }
+        }
         return null
     }
 
@@ -52,24 +61,54 @@ const Reminder = ({ task, closeComponent }) => {
             return
         }
         postMutation.mutate({
-            "task": task.id,
-            "delta": delta,
+            task: task.id,
+            delta: delta,
         })
     }
-    
+
     const items = [
-        {id: 0, icon: <img src={before_D}/>, content: t("then"), delta: 0},
-        {id: 1, icon: <img src={before_5}/>, content: t("5_minutes_before"), delta: 5},
-        {id: 2, icon: <img src={before_15}/>, content: t("15_minutes_before"), delta: 15},
-        {id: 3, icon: <img src={before_30}/>, content: t("30_minutes_before"), delta: 30},
-        {id: 4, icon: <img src={before_1h}/>, content: t("1_hour_before"), delta: 60},
-        {id: 5, icon: <img src={before_1D}/>, content: t("1_day_before"), delta: 1440},
-        {id: 6, icon: <img src={before_2D}/>, content: t("2_days_before"), delta: 2880},
+        { id: 0, icon: <img src={before_D} />, content: t("then"), delta: 0 },
+        {
+            id: 1,
+            icon: <img src={before_5} />,
+            content: t("5_minutes_before"),
+            delta: 5,
+        },
+        {
+            id: 2,
+            icon: <img src={before_15} />,
+            content: t("15_minutes_before"),
+            delta: 15,
+        },
+        {
+            id: 3,
+            icon: <img src={before_30} />,
+            content: t("30_minutes_before"),
+            delta: 30,
+        },
+        {
+            id: 4,
+            icon: <img src={before_1h} />,
+            content: t("1_hour_before"),
+            delta: 60,
+        },
+        {
+            id: 5,
+            icon: <img src={before_1D} />,
+            content: t("1_day_before"),
+            delta: 1440,
+        },
+        {
+            id: 6,
+            icon: <img src={before_2D} />,
+            content: t("2_days_before"),
+            delta: 2880,
+        },
     ]
 
     return (
         <Detail title={t("title")} onClose={closeComponent}>
-            {items.map(item => (
+            {items.map((item) => (
                 <ReminderContents
                     key={item.id}
                     item={item}

@@ -49,7 +49,7 @@ export const signIn = async (email, password) => {
 
 export const signUp = async (email, password, username) => {
     try {
-        const res = await client.post("sign_up/", {email, password, username})
+        const res = await client.post("sign_up/", { email, password, username })
         return res
     } catch (err) {
         let code = ""
@@ -90,7 +90,8 @@ export const signOut = async () => {
 export const patchPassword = async (current_password, new_password) => {
     try {
         const res = await client.patch("users/me/password/", {
-            current_password, new_password
+            current_password,
+            new_password,
         })
         if (res.status === 200) {
             return true

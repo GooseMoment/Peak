@@ -4,19 +4,25 @@ import { cubicBeizer } from "@assets/keyframes"
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-const Images = ({profile_img, project_color, reaction, skeleton=false}) => {
+const Images = ({ profile_img, project_color, reaction, skeleton = false }) => {
     const emojiURL = reaction?.emoji?.img_uri
 
-    return <Container>
-        {skeleton && <ProfileImgSkeleton />}
-        {profile_img && <ProfileImg src={profile_img} />}
-        {project_color && <TaskReminderIconBox $color={"#" + project_color}>
-            <FeatherIcon icon="clock" />
-        </TaskReminderIconBox>}
-        {emojiURL && <EmojiContainer>
-            <Emoji src={emojiURL} />
-        </EmojiContainer>}
-    </Container> 
+    return (
+        <Container>
+            {skeleton && <ProfileImgSkeleton />}
+            {profile_img && <ProfileImg src={profile_img} />}
+            {project_color && (
+                <TaskReminderIconBox $color={"#" + project_color}>
+                    <FeatherIcon icon="clock" />
+                </TaskReminderIconBox>
+            )}
+            {emojiURL && (
+                <EmojiContainer>
+                    <Emoji src={emojiURL} />
+                </EmojiContainer>
+            )}
+        </Container>
+    )
 }
 
 const Container = styled.div`
@@ -43,7 +49,7 @@ const TaskReminderIconBox = styled.div`
     height: 100%;
     aspect-ratio: 1 / 1;
 
-    background-color: ${p => p.$color};
+    background-color: ${(p) => p.$color};
 
     display: flex;
     justify-content: center;
@@ -63,9 +69,9 @@ const EmojiContainer = styled.div`
     top: 2.5em;
     left: 2.5em;
 
-    background-color: ${p => p.theme.backgroundColor};
+    background-color: ${(p) => p.theme.backgroundColor};
     border-radius: 50%;
-    
+
     width: 3em;
     height: 3em;
 

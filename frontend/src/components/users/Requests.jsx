@@ -12,10 +12,10 @@ import styled from "styled-components"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 
-const Requests = ({user}) => {
+const Requests = ({ user }) => {
     const currentUsername = getCurrentUsername()
 
-    const { t } = useTranslation(null, {keyPrefix: "users"})
+    const { t } = useTranslation(null, { keyPrefix: "users" })
 
     const acceptance = useMutation({
         mutationFn: () => patchFollowRequest(user.username, true),
@@ -25,7 +25,11 @@ const Requests = ({user}) => {
             })
         },
         onError: () => {
-            toast.error(t("follow_request_acceptance_error", {username: user.username}))
+            toast.error(
+                t("follow_request_acceptance_error", {
+                    username: user.username,
+                }),
+            )
         },
     })
 
@@ -37,42 +41,61 @@ const Requests = ({user}) => {
             })
         },
         onError: () => {
-            toast.error(t("follow_request_rejection_error", {username: user.username}))
+            toast.error(
+                t("follow_request_rejection_error", {
+                    username: user.username,
+                }),
+            )
         },
     })
 
     const isPending = acceptance.isPending || rejection.isPending
 
-    return <Section>
-        <SectionTitle>{t("requests_exist", {username: user.username})}</SectionTitle>
-        {!acceptance.isSuccess && !rejection.isSuccess && <Box>
-            {t("follow_request_sent_to_me")}
-            <ButtonGroup $justifyContent="right">
-                <Button
-                    $state={states.danger} onClick={rejection.mutate} 
-                    $loading={rejection.isPending} disabled={isPending}
-                    >{t("button_follow_request_reject")}</Button>
-                <Button
-                    $state={states.success} onClick={acceptance.mutate}
-                    $loading={acceptance.isPending} disabled={isPending}
-                    >{t("button_follow_request_accept")}</Button>
-            </ButtonGroup>
-        </Box>}
-        {acceptance.isSuccess && <Box $accepted>
-            {t("follow_request_accepted")}
-        </Box>}
-        {rejection.isSuccess && <Box $rejected>
-            {t("follow_request_rejected")}
-        </Box>}
-    </Section>
+    return (
+        <Section>
+            <SectionTitle>
+                {t("requests_exist", { username: user.username })}
+            </SectionTitle>
+            {!acceptance.isSuccess && !rejection.isSuccess && (
+                <Box>
+                    {t("follow_request_sent_to_me")}
+                    <ButtonGroup $justifyContent="right">
+                        <Button
+                            $state={states.danger}
+                            onClick={rejection.mutate}
+                            $loading={rejection.isPending}
+                            disabled={isPending}
+                        >
+                            {t("button_follow_request_reject")}
+                        </Button>
+                        <Button
+                            $state={states.success}
+                            onClick={acceptance.mutate}
+                            $loading={acceptance.isPending}
+                            disabled={isPending}
+                        >
+                            {t("button_follow_request_accept")}
+                        </Button>
+                    </ButtonGroup>
+                </Box>
+            )}
+            {acceptance.isSuccess && (
+                <Box $accepted>{t("follow_request_accepted")}</Box>
+            )}
+            {rejection.isSuccess && (
+                <Box $rejected>{t("follow_request_rejected")}</Box>
+            )}
+        </Section>
+    )
 }
 
 const Box = styled.div`
-    background-color: ${p => p.theme.thirdBackgroundColor};
-    border: 1px solid ${p => 
-        p.$accepted && p.theme.primaryColors.success
-        || p.$rejected && p.theme.primaryColors.danger
-        || p.theme.primaryColors.link};
+    background-color: ${(p) => p.theme.thirdBackgroundColor};
+    border: 1px solid
+        ${(p) =>
+            (p.$accepted && p.theme.primaryColors.success) ||
+            (p.$rejected && p.theme.primaryColors.danger) ||
+            p.theme.primaryColors.link};
     border-radius: 16px;
 
     line-height: 1.5em;

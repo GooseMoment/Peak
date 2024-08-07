@@ -12,10 +12,17 @@ const root = document.getElementById("root")
 
 // see: https://github.com/remix-run/react-router/discussions/9864#discussioncomment-6350903
 
-const ModalPortal = ({ children, closeModal, additional=false, closeESC=true }) => {
+const ModalPortal = ({
+    children,
+    closeModal,
+    additional = false,
+    closeESC = true,
+}) => {
     const [isOpen, setIsOpen] = useState(true)
-    
-    const shouldRender = !additional ? useDelayUnmount(isOpen, 100, closeModal) : true
+
+    const shouldRender = !additional
+        ? useDelayUnmount(isOpen, 100, closeModal)
+        : true
 
     useStopScroll()
 
@@ -40,7 +47,7 @@ const ModalPortal = ({ children, closeModal, additional=false, closeESC=true }) 
         }
     }, [])
 
-    const handleOutsideClick = e => {
+    const handleOutsideClick = (e) => {
         if (e.target !== el) {
             return
         }
@@ -49,7 +56,7 @@ const ModalPortal = ({ children, closeModal, additional=false, closeESC=true }) 
         setIsOpen(false)
     }
 
-    const handleKeyDown = e => {
+    const handleKeyDown = (e) => {
         if (closeESC && e.key === "Escape") {
             e.preventDefault()
             setIsOpen(false)
@@ -57,16 +64,22 @@ const ModalPortal = ({ children, closeModal, additional=false, closeESC=true }) 
     }
 
     return createPortal(
-        <AnimationProvider onKeyDown={handleKeyDown} $open={isOpen}>{ shouldRender ? children : null}</AnimationProvider>, el
+        <AnimationProvider onKeyDown={handleKeyDown} $open={isOpen}>
+            {shouldRender ? children : null}
+        </AnimationProvider>,
+        el,
     )
 }
 
 const AnimationProvider = styled.div`
-    ${props => props.$open ? css`
-        animation: ${scaleUp} 0.5s ${cubicBeizer};
-    ` : css`
-        animation: ${scaleDown} 0.5s ${cubicBeizer} forwards;
-    `}
+    ${(props) =>
+        props.$open
+            ? css`
+                  animation: ${scaleUp} 0.5s ${cubicBeizer};
+              `
+            : css`
+                  animation: ${scaleDown} 0.5s ${cubicBeizer} forwards;
+              `}
 `
 
 export default ModalPortal

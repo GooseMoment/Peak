@@ -11,9 +11,11 @@ const TaskDetailElement = () => {
         navigate(`..`)
     }
 
-    return <ModalPortal closeModal={closeDetail}>
-        <TaskDetail/>
-    </ModalPortal>
+    return (
+        <ModalPortal closeModal={closeDetail}>
+            <TaskDetail />
+        </ModalPortal>
+    )
 }
 
 export default TaskDetailElement

@@ -4,13 +4,22 @@ import Button from "@components/common/Button"
 import Confirmation from "@components/common/Confirmation"
 
 const DeleteAlert = ({ title, onClose, func }) => {
-    const { t } = useTranslation(null, {keyPrefix: "project.delete"})
+    const { t } = useTranslation(null, { keyPrefix: "project.delete" })
 
     const buttons = [
-        "close", <Button $form="filled" $state="danger" onClick={func}>{t("button_delete")}</Button>
+        "close",
+        <Button $form="filled" $state="danger" onClick={func}>
+            {t("button_delete")}
+        </Button>,
     ]
 
-    return <Confirmation question={t("alert_question", {title: title})} onClose={onClose} buttons={buttons} />
+    return (
+        <Confirmation
+            question={t("alert_question", { title: title })}
+            onClose={onClose}
+            buttons={buttons}
+        />
+    )
 }
 
 export default DeleteAlert

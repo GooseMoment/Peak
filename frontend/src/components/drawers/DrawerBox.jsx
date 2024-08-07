@@ -7,13 +7,15 @@ const DrawerBox = styled.div`
     justify-content: space-between;
     margin-top: 1.5em;
     text-decoration: double;
-    border: solid 0.25em #${props => props.$color};
+    border: solid 0.25em #${(props) => props.$color};
     border-radius: 15px;
 
-    ${p => p.$demo && css`
-        padding-left: 1em;
-        padding-right: 1em;
-    `}
+    ${(p) =>
+        p.$demo &&
+        css`
+            padding-left: 1em;
+            padding-right: 1em;
+        `}
 `
 
 export default DrawerBox
@@ -25,16 +27,18 @@ export const DrawerName = styled.h1`
     font-weight: bold;
     text-align: left;
     margin-left: 1.45em;
-    color: #${props => props.$color};
+    color: #${(props) => props.$color};
     stroke-opacity: 0.2;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
-    ${p => p.$demo && css`
-        width: unset;
-        margin-left: unset;
-    `}
+    ${(p) =>
+        p.$demo &&
+        css`
+            width: unset;
+            margin-left: unset;
+        `}
 `
 
 export const DrawerIcon = styled.div`
@@ -45,7 +49,7 @@ export const DrawerIcon = styled.div`
     & svg {
         top: 0;
         margin-right: 1em;
-        color: #${props => props.$color};
+        color: #${(props) => props.$color};
         cursor: pointer;
     }
 `

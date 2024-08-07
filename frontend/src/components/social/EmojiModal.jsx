@@ -1,31 +1,37 @@
-import { useState } from 'react'
-import styled from 'styled-components'
-import { Portal } from 'react-portal'
+import { useState } from "react"
+import styled from "styled-components"
+import { Portal } from "react-portal"
 
 const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
     if (!isOpen || !emojis) return null
 
-    const [emojiSearchQuery, setEmojiSearchQuery] = useState('')
+    const [emojiSearchQuery, setEmojiSearchQuery] = useState("")
 
-    const filteredEmojis = emojis.filter(emoji =>
-        emoji.name.toLowerCase().includes(emojiSearchQuery.toLowerCase())
-    );
+    const filteredEmojis = emojis.filter((emoji) =>
+        emoji.name.toLowerCase().includes(emojiSearchQuery.toLowerCase()),
+    )
 
     return (
         <Portal>
             <Wrapper>
                 <EmojiModalOverlay onClick={onClose} />
                 <Modal $posY={position.top} $posX={position.left}>
-                    <EmojiSearchBox 
-                        type='text'
-                        placeholder='Search emojis'
+                    <EmojiSearchBox
+                        type="text"
+                        placeholder="Search emojis"
                         value={emojiSearchQuery}
                         onChange={(e) => setEmojiSearchQuery(e.target.value)}
                     />
                     <EmojiList>
                         {filteredEmojis.map((emoji) => (
-                            <EmojiListCell key={emoji.id} onClick={() => onSelect(emoji)}>
-                                <EmojiCell src={emoji.img_uri} alt={emoji.name} />
+                            <EmojiListCell
+                                key={emoji.id}
+                                onClick={() => onSelect(emoji)}
+                            >
+                                <EmojiCell
+                                    src={emoji.img_uri}
+                                    alt={emoji.name}
+                                />
                             </EmojiListCell>
                         ))}
                     </EmojiList>
@@ -58,8 +64,8 @@ const EmojiModalOverlay = styled.div`
 
 const Modal = styled.div`
     position: absolute;
-    top: ${props => props.$posY}px;
-    left: calc(${props => props.$posX}px - 33em); // 32 + 1(shadow)
+    top: ${(props) => props.$posY}px;
+    left: calc(${(props) => props.$posX}px - 33em); // 32 + 1(shadow)
     background: white;
     padding: 1em;
     border-radius: 1em;
@@ -92,12 +98,12 @@ const EmojiList = styled.div`
 
 const EmojiListCell = styled.li`
     aspect-ratio: 1/1;
-    width: calc(100%/8);
-    
+    width: calc(100% / 8);
+
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     cursor: pointer;
     &:hover {
         background-color: #f0f0f0;
@@ -110,4 +116,4 @@ const EmojiCell = styled.img`
     height: 2.4em;
 `
 
-export default EmojiModal;
+export default EmojiModal

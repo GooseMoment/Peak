@@ -1,18 +1,20 @@
 import styled from "styled-components"
 
 const SkeletonSidebar = () => {
-    return <Frame>
-        <Items>
-            <Item />
-            <Item />
-            <Item />
-            <Item />
-        </Items>
-        <Profile>
-            <ProfileImg />
-            <ProfileName />
-        </Profile>
-    </Frame>
+    return (
+        <Frame>
+            <Items>
+                <Item />
+                <Item />
+                <Item />
+                <Item />
+            </Items>
+            <Profile>
+                <ProfileImg />
+                <ProfileName />
+            </Profile>
+        </Frame>
+    )
 }
 
 const Frame = styled.div`
@@ -28,7 +30,7 @@ const Frame = styled.div`
 
     padding: 1.25em;
 
-    background-color: ${p => p.theme.sidebar.backgroundColor};
+    background-color: ${(p) => p.theme.sidebar.backgroundColor};
 `
 
 const Items = styled.div`
@@ -43,7 +45,7 @@ const Item = styled.div`
     width: 100%;
     height: 1.5em;
 
-    background-color: ${p => p.theme.sidebar.activeBackgroundColor};
+    background-color: ${(p) => p.theme.sidebar.activeBackgroundColor};
 `
 
 const Profile = styled.div`
@@ -57,7 +59,7 @@ const ProfileImg = styled.div`
     border-radius: 50%;
     aspect-ratio: 1/1;
 
-    background-color: ${p => p.theme.grey};
+    background-color: ${(p) => p.theme.grey};
 `
 
 const ProfileName = styled.div`
@@ -65,7 +67,7 @@ const ProfileName = styled.div`
     height: 2em;
 
     border-radius: 4px;
-    background-color: ${p => p.theme.grey};
+    background-color: ${(p) => p.theme.grey};
 `
 
 export default SkeletonSidebar

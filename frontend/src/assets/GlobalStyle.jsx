@@ -1,8 +1,14 @@
-import { scaleForward, scaleBack, modalFadeOut, modalFadeIn, cubicBeizer } from '@assets/keyframes'
-import { ifMobile } from '@utils/useScreenType'
+import {
+    scaleForward,
+    scaleBack,
+    modalFadeOut,
+    modalFadeIn,
+    cubicBeizer,
+} from "@assets/keyframes"
+import { ifMobile } from "@utils/useScreenType"
 
-import { createGlobalStyle } from 'styled-components'
-import reset from 'styled-reset'
+import { createGlobalStyle } from "styled-components"
+import reset from "styled-reset"
 
 const GlobalStyle = createGlobalStyle`
 ${reset}
@@ -11,8 +17,8 @@ html {
     height: 100dvh;
     width: 100vw;
 
-    accent-color: ${p => p.theme.accentColor};
-    scrollbar-color: ${p => p.theme.scrollbarColor} transparent;
+    accent-color: ${(p) => p.theme.accentColor};
+    scrollbar-color: ${(p) => p.theme.scrollbarColor} transparent;
     scrollbar-width: thin;
 
     -webkit-font-smoothing: antialiased;

@@ -4,36 +4,44 @@ import { Menu, Calendar, PlusCircle, Bell, Users } from "feather-icons-react"
 import { toast } from "react-toastify"
 import styled from "styled-components"
 
-const Navbar = ({openSidebar}) => {
+const Navbar = ({ openSidebar }) => {
     const navigate = useNavigate()
 
     const onClickTaskCreate = () => {
         toast.info("TaskCreate")
     }
 
-    return <Frame>
-        <Item key="sidebar" onClick={openSidebar}>
-            <Menu />
-        </Item>
-        <Item key="today" onClick={() => navigate("/app/today")}>
-            <Calendar />
-        </Item>
-        <Item key="taskCreate" onClick={onClickTaskCreate}>
-            <PlusCircle />
-        </Item>
-        <Item key="notifications" onClick={() => navigate("/app/notifications")}>
-            <Bell />
-        </Item>
-        <Item key="social" onClick={() => navigate("/app/social/following")}>
-            <Users />
-        </Item>
-    </Frame>
+    return (
+        <Frame>
+            <Item key="sidebar" onClick={openSidebar}>
+                <Menu />
+            </Item>
+            <Item key="today" onClick={() => navigate("/app/today")}>
+                <Calendar />
+            </Item>
+            <Item key="taskCreate" onClick={onClickTaskCreate}>
+                <PlusCircle />
+            </Item>
+            <Item
+                key="notifications"
+                onClick={() => navigate("/app/notifications")}
+            >
+                <Bell />
+            </Item>
+            <Item
+                key="social"
+                onClick={() => navigate("/app/social/following")}
+            >
+                <Users />
+            </Item>
+        </Frame>
+    )
 }
 
 const Frame = styled.nav`
     z-index: 97;
 
-    position: fixed;    
+    position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
@@ -50,15 +58,15 @@ const Frame = styled.nav`
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
 
-    background-color: ${p => p.theme.navbar.backgroundColor};
+    background-color: ${(p) => p.theme.navbar.backgroundColor};
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 `
 
 const Item = styled.div`
-    color: ${p => p.theme.textColor};
-    background-color: ${p => p.theme.backgroundColor};
-    
+    color: ${(p) => p.theme.textColor};
+    background-color: ${(p) => p.theme.backgroundColor};
+
     box-sizing: border-box;
     aspect-ratio: 1/1;
     height: 3.5em;
@@ -68,7 +76,7 @@ const Item = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
     cursor: pointer;
 
     & svg {

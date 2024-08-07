@@ -7,36 +7,60 @@ import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DemoTask from "@components/intro/DemoTask"
 import { TaskList } from "@components/drawers/Drawer"
 
-import {today, tomorrow, yesterday, dayAfterTomorrow, dayLongAfter} from "./todays"
+import {
+    today,
+    tomorrow,
+    yesterday,
+    dayAfterTomorrow,
+    dayLongAfter,
+} from "./todays"
 
 import { useTranslation } from "react-i18next"
 
 const projectColor = "0E4A84"
 
 const DemoDrawer = () => {
-    const { t } = useTranslation(null, {keyPrefix: "intro.section_organize.demo_drawer"}) 
+    const { t } = useTranslation(null, {
+        keyPrefix: "intro.section_organize.demo_drawer",
+    })
     const drawers = useMemo(() => makeDrawers(t), [t])
     const [count, setCount] = useState(1)
 
-    return <SubSection>
-        <SubTitle>{t("title")}</SubTitle>
+    return (
+        <SubSection>
+            <SubTitle>{t("title")}</SubTitle>
 
-        <PageTitle $color={"#" + projectColor}>{t("project_name")}</PageTitle>
-        {drawers?.slice(0, count)?.map((drawer, i) => <Fragment key={i}>
-            <DrawerBox $color={projectColor} $demo>
-                <DrawerName $color={projectColor} $demo>{drawer.name}</DrawerName>
-            </DrawerBox>
-            <TaskList>
-                {drawer.tasks?.map((task, i) => <DemoTask color={projectColor} task={task} key={i} /> )}
-            </TaskList>
-        </Fragment> )}
+            <PageTitle $color={"#" + projectColor}>
+                {t("project_name")}
+            </PageTitle>
+            {drawers?.slice(0, count)?.map((drawer, i) => (
+                <Fragment key={i}>
+                    <DrawerBox $color={projectColor} $demo>
+                        <DrawerName $color={projectColor} $demo>
+                            {drawer.name}
+                        </DrawerName>
+                    </DrawerBox>
+                    <TaskList>
+                        {drawer.tasks?.map((task, i) => (
+                            <DemoTask
+                                color={projectColor}
+                                task={task}
+                                key={i}
+                            />
+                        ))}
+                    </TaskList>
+                </Fragment>
+            ))}
 
-        {count < drawers?.length && 
-            <ButtonGroup $justifyContent="right" $margin="1em 0">
-                <Button onClick={() => setCount(count + 1)}>{t("button_add")}</Button>
-            </ButtonGroup>
-        }
-    </SubSection>
+            {count < drawers?.length && (
+                <ButtonGroup $justifyContent="right" $margin="1em 0">
+                    <Button onClick={() => setCount(count + 1)}>
+                        {t("button_add")}
+                    </Button>
+                </ButtonGroup>
+            )}
+        </SubSection>
+    )
 }
 
 // tasks는 각 drawer별로 2-3개씩
@@ -65,7 +89,7 @@ const makeDrawers = (t) => [
                 assigned_at: null,
                 priority: 0,
             },
-        ]
+        ],
     },
     {
         name: t("drawer1.drawer_name"),

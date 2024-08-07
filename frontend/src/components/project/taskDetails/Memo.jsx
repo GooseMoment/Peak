@@ -6,14 +6,14 @@ import Detail from "@components/project/common/Detail"
 import Button from "@components/common/Button"
 import notify from "@utils/notify"
 
-const Memo = ({previousMemo, setFunc, closeComponent}) => {
-    const { t } = useTranslation(null, {keyPrefix: "task.memo"})
+const Memo = ({ previousMemo, setFunc, closeComponent }) => {
+    const { t } = useTranslation(null, { keyPrefix: "task.memo" })
 
     const [memo, setMemo] = useState(previousMemo)
 
     const changeMemo = () => {
         return async () => {
-            setFunc({memo})
+            setFunc({ memo })
             closeComponent()
             notify.success(t("memo_edit_success"))
         }
@@ -28,9 +28,9 @@ const Memo = ({previousMemo, setFunc, closeComponent}) => {
         <Detail title={t("title")} onClose={closeComponent}>
             <FlexBox>
                 <Editor
-                    type='text'
+                    type="text"
                     onChange={onChange}
-                    value={memo || ''}
+                    value={memo || ""}
                     placeholder={t("memo_placeholder")}
                 />
             </FlexBox>
@@ -54,13 +54,13 @@ const Editor = styled.textarea`
     font-weight: normal;
     resize: none;
     font-size: 0.95em;
-    color: ${p => p.theme.textColor};
-    border: 1px solid ${p => p.theme.project.borderColor};
+    color: ${(p) => p.theme.textColor};
+    border: 1px solid ${(p) => p.theme.project.borderColor};
     border-radius: 15px;
     margin-top: 0.7em;
     padding: 0.8em;
     white-space: pre-wrap;
-    
+
     &:focus {
         outline: none;
     }

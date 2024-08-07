@@ -5,7 +5,10 @@ import GlobalStyle from "@assets/GlobalStyle"
 
 import ClientThemeProvider from "@components/common/ThemeProvider"
 
-import { ClientSettingProvider, initClientSettings } from "@utils/clientSettings"
+import {
+    ClientSettingProvider,
+    initClientSettings,
+} from "@utils/clientSettings"
 
 import { QueryClientProvider } from "@tanstack/react-query"
 import queryClient from "@queries/queryClient"
@@ -22,7 +25,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <ClientSettingProvider>
             <ClientThemeProvider>
                 <GlobalStyle />
-                <QueryClientProvider client={queryClient} >
+                <QueryClientProvider client={queryClient}>
                     <Root />
                 </QueryClientProvider>
                 <I18nSetLocale i18n={i18n} />

@@ -12,33 +12,41 @@ import { useTranslation } from "react-i18next"
 import styled, { ThemeProvider } from "styled-components"
 
 const DemoTheme = () => {
-    const { t } = useTranslation(null, {keyPrefix: "intro.section_customize.demo"})
+    const { t } = useTranslation(null, {
+        keyPrefix: "intro.section_customize.demo",
+    })
     const [activeTheme, setActiveTheme] = useState("light")
     const filters = useMemo(() => makeFilters(t), [t])
 
-    return <SubSection>
-        <FilterButtonGroup active={activeTheme} setActive={setActiveTheme} filters={filters} />
-        <Wrapper>
-            <ThemeProvider theme={themes[activeTheme]}>
-                <SkeletonFrame>
-                    <SkeletonSidebar />
-                    <SkeletonPage>
-                        <SkeletonProjectName />
-                        <SkeletonDrawer />
-                        <SkeletonDrawer />
-                    </SkeletonPage>            
-                </SkeletonFrame>
-            </ThemeProvider>
-        </Wrapper>
-    </SubSection>
+    return (
+        <SubSection>
+            <FilterButtonGroup
+                active={activeTheme}
+                setActive={setActiveTheme}
+                filters={filters}
+            />
+            <Wrapper>
+                <ThemeProvider theme={themes[activeTheme]}>
+                    <SkeletonFrame>
+                        <SkeletonSidebar />
+                        <SkeletonPage>
+                            <SkeletonProjectName />
+                            <SkeletonDrawer />
+                            <SkeletonDrawer />
+                        </SkeletonPage>
+                    </SkeletonFrame>
+                </ThemeProvider>
+            </Wrapper>
+        </SubSection>
+    )
 }
 
 const makeFilters = (t) => ({
-    "light": {
-        display: t("theme_light"), 
+    light: {
+        display: t("theme_light"),
     },
-    "dark": {
-        display: t("theme_dark"), 
+    dark: {
+        display: t("theme_dark"),
     },
 })
 
@@ -62,13 +70,13 @@ const SkeletonFrame = styled.div`
 
     overflow: hidden;
 
-    border: 1px solid ${p => p.theme.textColor};
+    border: 1px solid ${(p) => p.theme.textColor};
     border-radius: 16px;
 
     height: 400px;
     aspect-ratio: 16/9;
 
-    background-color: ${p => p.theme.backgroundColor};
+    background-color: ${(p) => p.theme.backgroundColor};
 `
 
 const SkeletonPage = styled.div`

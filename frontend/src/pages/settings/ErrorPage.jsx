@@ -6,7 +6,9 @@ const ErrorPage = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        toast.error("Error on Settings. Please try again.", {toastId: "errorSettings"})
+        toast.error("Error on Settings. Please try again.", {
+            toastId: "errorSettings",
+        })
         navigate("/")
     }, [])
 

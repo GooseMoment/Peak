@@ -8,8 +8,8 @@ import { skeletonCSS } from "@assets/skeleton"
 import styled, { css } from "styled-components"
 import { useTranslation } from "react-i18next"
 
-const FollowsCount = ({user, isPending}) => {
-    const { t } = useTranslation(null, {keyPrefix: "users"})
+const FollowsCount = ({ user, isPending }) => {
+    const { t } = useTranslation(null, { keyPrefix: "users" })
     const [window, setWindow] = useState("")
 
     useEffect(() => {
@@ -17,22 +17,34 @@ const FollowsCount = ({user, isPending}) => {
     }, [user])
 
     if (isPending) {
-        return <Items>
-            <Item>{t("followers")} <Count $skeleton /></Item>
-            <Item>{t("followings")} <Count $skeleton /></Item>
-        </Items>
+        return (
+            <Items>
+                <Item>
+                    {t("followers")} <Count $skeleton />
+                </Item>
+                <Item>
+                    {t("followings")} <Count $skeleton />
+                </Item>
+            </Items>
+        )
     }
 
-    return <Items>
-        <Item onClick={() => setWindow("followers")}>{t("followers")} <Count>{user.followers_count}</Count></Item>
-        <Item onClick={() => setWindow("followings")}>{t("followings")} <Count>{user.followings_count}</Count></Item>
-        {window !== "" &&
-            <ModalPortal closeModal={() => setWindow("")}>
-                {window === "followers" && <FollowerList user={user} />} 
-                {window === "followings" && <FollowingList user={user} />} 
-            </ModalPortal>
-        }
-    </Items>
+    return (
+        <Items>
+            <Item onClick={() => setWindow("followers")}>
+                {t("followers")} <Count>{user.followers_count}</Count>
+            </Item>
+            <Item onClick={() => setWindow("followings")}>
+                {t("followings")} <Count>{user.followings_count}</Count>
+            </Item>
+            {window !== "" && (
+                <ModalPortal closeModal={() => setWindow("")}>
+                    {window === "followers" && <FollowerList user={user} />}
+                    {window === "followings" && <FollowingList user={user} />}
+                </ModalPortal>
+            )}
+        </Items>
+    )
 }
 
 const Items = styled.div`
@@ -50,11 +62,13 @@ const Item = styled.div`
 const Count = styled.span`
     font-weight: 700;
 
-    ${p => p.$skeleton && css`
-        height: 1em;
-        width: 1.5em;
-        ${skeletonCSS}
-    `}
+    ${(p) =>
+        p.$skeleton &&
+        css`
+            height: 1em;
+            width: 1.5em;
+            ${skeletonCSS}
+        `}
 `
 
 export default FollowsCount

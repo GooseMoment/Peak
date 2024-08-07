@@ -7,8 +7,8 @@ import publicsvg from "@assets/project/privacy/public.svg"
 import protectedsvg from "@assets/project/privacy/protected.svg"
 import privatesvg from "@assets/project/privacy/private.svg"
 
-const Privacy = ({setPrivacy, closeComponent}) => {
-    const { t } = useTranslation(null, {keyPrefix: "project.create.privacy"})
+const Privacy = ({ setPrivacy, closeComponent }) => {
+    const { t } = useTranslation(null, { keyPrefix: "project.create.privacy" })
 
     const changePrivacy = (privacy) => {
         return () => {
@@ -18,17 +18,19 @@ const Privacy = ({setPrivacy, closeComponent}) => {
     }
 
     const items = [
-        {icon: <img src={publicsvg}/>, privacy: "public"},
-        {icon: <img src={protectedsvg}/>, privacy: "protected"},
-        {icon: <img src={privatesvg}/>, privacy: "private"}
+        { icon: <img src={publicsvg} />, privacy: "public" },
+        { icon: <img src={protectedsvg} />, privacy: "protected" },
+        { icon: <img src={privatesvg} />, privacy: "private" },
     ]
 
     return (
         <Detail title={t("title")} onClose={closeComponent}>
-            {items.map(item => (
+            {items.map((item) => (
                 <ItemBlock key={item.privacy}>
                     {item.icon}
-                    <ItemText onClick={changePrivacy(item.privacy)}>{t(item.privacy)}</ItemText>
+                    <ItemText onClick={changePrivacy(item.privacy)}>
+                        {t(item.privacy)}
+                    </ItemText>
                 </ItemBlock>
             ))}
         </Detail>
@@ -53,11 +55,11 @@ const ItemBlock = styled.div`
 const ItemText = styled.p`
     font-weight: normal;
     font-size: 1em;
-    color: ${p => p.theme.textColor};
+    color: ${(p) => p.theme.textColor};
 
     &:hover {
         font-weight: bolder;
-        color: ${p => p.theme.goose};
+        color: ${(p) => p.theme.goose};
         cursor: pointer;
     }
 `

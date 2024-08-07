@@ -7,8 +7,8 @@ import SocialExplorePage from "@pages/SocialExplorePage"
 const SocialRedirector = () => {
     const navigate = useNavigate()
 
-    useEffect(()=> {
-        navigate("/app/social/following", {replace: true})
+    useEffect(() => {
+        navigate("/app/social/following", { replace: true })
     }, [])
 
     return null

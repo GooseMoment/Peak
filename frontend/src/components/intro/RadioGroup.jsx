@@ -5,7 +5,9 @@ const RadioGroup = ({ label, children, ...rest }) => {
     return (
         <fieldset>
             <Legend>{label}</Legend>
-            <RadioContext.Provider value={rest}>{children}</RadioContext.Provider>
+            <RadioContext.Provider value={rest}>
+                {children}
+            </RadioContext.Provider>
         </fieldset>
     )
 }

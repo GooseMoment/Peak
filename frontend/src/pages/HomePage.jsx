@@ -14,9 +14,11 @@ const HomePage = () => {
         return <div>Loading...</div>
     }
 
-    return <>
-        <PageTitle>Good morning, @{me.username}</PageTitle>
-    </>
+    return (
+        <>
+            <PageTitle>Good morning, @{me.username}</PageTitle>
+        </>
+    )
 }
 
 export default HomePage

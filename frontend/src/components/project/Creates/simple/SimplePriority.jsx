@@ -3,8 +3,8 @@ import { useState } from "react"
 import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
 
-const SimplePriority = ({inputRef}) => {
-    const [priority, setPriority] = useState('보통')
+const SimplePriority = ({ inputRef }) => {
+    const [priority, setPriority] = useState("보통")
 
     const onChange = (e) => {
         setPriority(e.target.value)
@@ -12,10 +12,10 @@ const SimplePriority = ({inputRef}) => {
 
     return (
         <Box>
-            <FeatherIcon icon="alert-circle"/>
-            <VLine/>
+            <FeatherIcon icon="alert-circle" />
+            <VLine />
             <InputText
-                type='text'
+                type="text"
                 onChange={onChange}
                 value={priority}
                 ref={inputRef}
@@ -38,7 +38,7 @@ const Box = styled.div`
 `
 
 const VLine = styled.div`
-    border-left: thin solid #D9D9D9;
+    border-left: thin solid #d9d9d9;
     height: 1.3em;
     margin-right: 0.8em;
 `
@@ -47,7 +47,7 @@ const InputText = styled.input`
     width: 36em;
     font-weight: normal;
     font-size: 1.1em;
-    color: ${(props) => (props.$completed ? '#A4A4A4' : '#000000')};
+    color: ${(props) => (props.$completed ? "#A4A4A4" : "#000000")};
     border: none;
     margin-top: 0.1em;
 

@@ -5,22 +5,57 @@ import SortIcon from "@components/project/sorts/SortIcon"
 import { DrawerIcon } from "./DrawerBox"
 import { cubicBeizer, rotateToUp, rotateToUnder } from "@assets/keyframes"
 
-const DrawerIcons = ({ color, collapsed, handleCollapsed, clickPlus, setIsSortMenuOpen, setSelectedSortMenuPosition, 
-    setIsContextMenuOpen, setSelectedContextPosition }) => {
-
+const DrawerIcons = ({
+    color,
+    collapsed,
+    handleCollapsed,
+    clickPlus,
+    setIsSortMenuOpen,
+    setSelectedSortMenuPosition,
+    setIsContextMenuOpen,
+    setSelectedContextPosition,
+}) => {
     const drawerIcons = [
-        {icon: <FeatherIcon icon="plus" onClick={clickPlus}/>},
-        {icon: <div onClick={handleToggleContextMenu(setSelectedSortMenuPosition, setIsSortMenuOpen, setIsContextMenuOpen)}>
-            <SortIcon color={`#${color}`}/>
-        </div>},
-        {icon: <CollapseButton $collapsed={collapsed}>
-            <FeatherIcon icon="chevron-down" onClick={handleCollapsed}/>
-        </CollapseButton>},
-        {icon: <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedContextPosition, setIsContextMenuOpen, setIsSortMenuOpen)}/>},
+        { icon: <FeatherIcon icon="plus" onClick={clickPlus} /> },
+        {
+            icon: (
+                <div
+                    onClick={handleToggleContextMenu(
+                        setSelectedSortMenuPosition,
+                        setIsSortMenuOpen,
+                        setIsContextMenuOpen,
+                    )}
+                >
+                    <SortIcon color={`#${color}`} />
+                </div>
+            ),
+        },
+        {
+            icon: (
+                <CollapseButton $collapsed={collapsed}>
+                    <FeatherIcon
+                        icon="chevron-down"
+                        onClick={handleCollapsed}
+                    />
+                </CollapseButton>
+            ),
+        },
+        {
+            icon: (
+                <FeatherIcon
+                    icon="more-horizontal"
+                    onClick={handleToggleContextMenu(
+                        setSelectedContextPosition,
+                        setIsContextMenuOpen,
+                        setIsSortMenuOpen,
+                    )}
+                />
+            ),
+        },
     ]
 
     return (
-        <DrawerIcon $color = {color}>
+        <DrawerIcon $color={color}>
             {drawerIcons.map((item, i) => (
                 <Button key={i}>{item.icon}</Button>
             ))}
@@ -33,11 +68,13 @@ const CollapseButton = styled.div`
         animation: ${rotateToUp} 0.5s ${cubicBeizer} forwards;
     }
 
-    ${props => props.$collapsed && css`
-        & svg {
-            animation: ${rotateToUnder} 0.5s ${cubicBeizer} forwards;
-        }
-    `}
+    ${(props) =>
+        props.$collapsed &&
+        css`
+            & svg {
+                animation: ${rotateToUnder} 0.5s ${cubicBeizer} forwards;
+            }
+        `}
 `
 
 const Button = styled.button`

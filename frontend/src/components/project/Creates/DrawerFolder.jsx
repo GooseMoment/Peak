@@ -8,27 +8,41 @@ const DrawerFolder = ({ project, changeDrawer }) => {
 
     return (
         <>
-            <ItemBox onClick={project.type === 'inbox' ? changeDrawer(project.drawers[0].id) : () => setCollapsed(prev => !prev)}>
-                <Circle $color={project.color}/>
+            <ItemBox
+                onClick={
+                    project.type === "inbox"
+                        ? changeDrawer(project.drawers[0].id)
+                        : () => setCollapsed((prev) => !prev)
+                }
+            >
+                <Circle $color={project.color} />
                 <ItemText $is_project={true}>{project.name}</ItemText>
             </ItemBox>
-            {project.type === 'inbox' ? null : collapsed ? null :
-                project.drawers && project.drawers.map(drawer => (
-                <ItemBox key={drawer.id} onClick={changeDrawer(drawer.id)}>
-                    <FeatherIcon icon="arrow-right"/>
-                    <ItemText $is_project={false}>{drawer.name}</ItemText>
-                </ItemBox>
-            ))}
+            {project.type === "inbox"
+                ? null
+                : collapsed
+                  ? null
+                  : project.drawers &&
+                    project.drawers.map((drawer) => (
+                        <ItemBox
+                            key={drawer.id}
+                            onClick={changeDrawer(drawer.id)}
+                        >
+                            <FeatherIcon icon="arrow-right" />
+                            <ItemText $is_project={false}>
+                                {drawer.name}
+                            </ItemText>
+                        </ItemBox>
+                    ))}
         </>
     )
 }
-
 
 const Circle = styled.div`
     position: relative;
     width: 1.1em;
     height: 1.1em;
-    background-color: #${props => props.$color};
+    background-color: #${(props) => props.$color};
     border-radius: 50%;
     margin-right: 0.6em;
 `
@@ -43,22 +57,22 @@ const ItemBox = styled.div`
     & svg {
         margin-left: 1.3em;
         top: 0;
-        color: ${p => p.theme.textColor};
+        color: ${(p) => p.theme.textColor};
     }
 `
 
 const ItemText = styled.div`
     width: 10em;
-    font-weight: ${props => props.$is_project ? '500' : 'normal'};
+    font-weight: ${(props) => (props.$is_project ? "500" : "normal")};
     font-size: 1em;
-    color: ${p => p.theme.textColor};
+    color: ${(p) => p.theme.textColor};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
     &:hover {
         font-weight: bolder;
-        color: ${p => p.theme.goose};
+        color: ${(p) => p.theme.goose};
         cursor: pointer;
     }
 `

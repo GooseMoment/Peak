@@ -1,23 +1,27 @@
 import { DateTime } from "luxon"
 import styled from "styled-components"
 
-const CommentBox = ({comment}) => {
-    return <Box>
-        <ProfileImgWrapper>
-            <img src={comment.user.profile_img}/>
-        </ProfileImgWrapper>
-        <Wrapper>
-            <InfoBox>
-                <Username>@{comment.user.username}</Username>
-                {/* TODO: Set locale */}
-                <Ago>{DateTime.fromISO(comment.created_at).toRelative({locale: 'ko'})}</Ago>
-            </InfoBox>
+const CommentBox = ({ comment }) => {
+    return (
+        <Box>
+            <ProfileImgWrapper>
+                <img src={comment.user.profile_img} />
+            </ProfileImgWrapper>
+            <Wrapper>
+                <InfoBox>
+                    <Username>@{comment.user.username}</Username>
+                    {/* TODO: Set locale */}
+                    <Ago>
+                        {DateTime.fromISO(comment.created_at).toRelative({
+                            locale: "ko",
+                        })}
+                    </Ago>
+                </InfoBox>
 
-            <Comment>
-                {comment.comment}
-            </Comment>
-        </Wrapper>
-    </Box>
+                <Comment>{comment.comment}</Comment>
+            </Wrapper>
+        </Box>
+    )
 }
 
 const Box = styled.div`
@@ -37,7 +41,8 @@ const ProfileImgWrapper = styled.div`
         margin-right: 0;
     }
 
-    & img, & svg {
+    & img,
+    & svg {
         width: auto;
         height: 3em;
     }
@@ -55,8 +60,7 @@ const InfoBox = styled.div`
     gap: 0.5em;
 `
 
-const Username = styled.div`
-`
+const Username = styled.div``
 
 const Ago = styled.div`
     font-size: 0.8em;

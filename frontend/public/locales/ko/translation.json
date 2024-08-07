@@ -110,8 +110,7 @@
             "reminders": "리마인더 설정 우선"
         }
     },
-    "drawer": {
-    },
+    "drawer": {},
     "task": {
         "missed": "놓침",
         "overdue": "기한 지남",
@@ -279,11 +278,11 @@
             "title": "언어 및 시간",
             "locale": {
                 "name": "언어",
-                "system":"자동"
+                "system": "자동"
             },
             "timezone": {
                 "name": "시간대",
-                "system":"시스템 설정대로"
+                "system": "시스템 설정대로"
             },
             "start_of_the_week_monday": {
                 "name": "주의 시작은 월요일"

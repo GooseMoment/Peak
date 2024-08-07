@@ -3,9 +3,10 @@ import CommonCalendar from "@components/common/CommonCalendar"
 
 import { useState } from "react"
 
-const SocialCalendar = ({newLogDates, selectedDate, setSelectedDate}) => {
+const SocialCalendar = ({ newLogDates, selectedDate, setSelectedDate }) => {
     const [tempDate, setTempDate] = useState(new Date())
-    return <StyledSocialCalendar
+    return (
+        <StyledSocialCalendar
             isRangeSelectMode={false}
             selectedStartDate={selectedDate}
             setSelectedStartDate={setSelectedDate}
@@ -13,9 +14,9 @@ const SocialCalendar = ({newLogDates, selectedDate, setSelectedDate}) => {
             setSelectedEndDate={setTempDate}
             contentedDates={newLogDates}
         />
+    )
 }
 
-const StyledSocialCalendar = styled(CommonCalendar)`
-`
+const StyledSocialCalendar = styled(CommonCalendar)``
 
 export default SocialCalendar

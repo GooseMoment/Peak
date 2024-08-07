@@ -11,9 +11,11 @@ const TaskCreateElement = () => {
         navigate(`..`)
     }
 
-    return <ModalPortal closeModal={closeCreate}>
-        <TaskCreate />
-    </ModalPortal>
+    return (
+        <ModalPortal closeModal={closeCreate}>
+            <TaskCreate />
+        </ModalPortal>
+    )
 }
 
 export default TaskCreateElement

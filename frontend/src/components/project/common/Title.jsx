@@ -2,8 +2,8 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Title = ({name, setName, icon, onClose}) => { 
-    const { t } = useTranslation(null, {keyPrefix: "project.create"})
+const Title = ({ name, setName, icon, onClose }) => {
+    const { t } = useTranslation(null, { keyPrefix: "project.create" })
 
     const changeName = (e) => {
         setName(e.target.value)
@@ -12,16 +12,16 @@ const Title = ({name, setName, icon, onClose}) => {
     return (
         <TitleFrameBox>
             <TitleBox>
-                <FeatherIcon icon={icon}/>
+                <FeatherIcon icon={icon} />
                 <InputText
-                    type='text'
+                    type="text"
                     value={name}
                     onChange={changeName}
                     placeholder={t("name_placeholder")}
                 />
             </TitleBox>
             <Icons>
-                <FeatherIcon icon="x" onClick={onClose}/>
+                <FeatherIcon icon="x" onClick={onClose} />
             </Icons>
         </TitleFrameBox>
     )
@@ -44,7 +44,7 @@ const TitleBox = styled.div`
     & svg {
         width: 1.3em;
         height: 1.3em;
-        stroke: ${p => p.theme.textColor};
+        stroke: ${(p) => p.theme.textColor};
         margin-right: 0.6em;
         top: 0;
     }
@@ -55,7 +55,7 @@ const InputText = styled.input`
     margin: 0.3em;
     font-weight: bold;
     font-size: 1.1em;
-    color: ${p => p.theme.textColor};
+    color: ${(p) => p.theme.textColor};
     border: none;
 
     &:focus {
@@ -77,9 +77,8 @@ const Icons = styled.div`
         height: 1.1em;
         top: 0.2em;
         cursor: pointer;
-        stroke: ${p => p.theme.primaryColors.danger};
+        stroke: ${(p) => p.theme.primaryColors.danger};
     }
 `
-
 
 export default Title

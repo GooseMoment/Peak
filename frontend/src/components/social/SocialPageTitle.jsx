@@ -1,21 +1,27 @@
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import { useNavigate } from "react-router-dom"
+import styled from "styled-components"
 
-import PageTitle from "@components/common/PageTitle";
+import PageTitle from "@components/common/PageTitle"
 
-const SocialPageTitle = ({active}) => {
-
+const SocialPageTitle = ({ active }) => {
     if (active === "following")
-        return <PageTitleGroup>
-            <PageTitleButton to="../following">Following</PageTitleButton>
-            <PageTitleButton to="../explore" $color="#A4A4A4">Explore</PageTitleButton>
+        return (
+            <PageTitleGroup>
+                <PageTitleButton to="../following">Following</PageTitleButton>
+                <PageTitleButton to="../explore" $color="#A4A4A4">
+                    Explore
+                </PageTitleButton>
+            </PageTitleGroup>
+        )
+
+    return (
+        <PageTitleGroup>
+            <PageTitleButton to="../explore">Explore</PageTitleButton>
+            <PageTitleButton to="../following" $color="#A4A4A4">
+                Following
+            </PageTitleButton>
         </PageTitleGroup>
-
-    return <PageTitleGroup>
-        <PageTitleButton to="../explore">Explore</PageTitleButton>
-        <PageTitleButton to="../following" $color="#A4A4A4">Following</PageTitleButton>
-    </PageTitleGroup>
-
+    )
 }
 
 const PageTitleGroup = styled.div`
@@ -24,11 +30,17 @@ const PageTitleGroup = styled.div`
     user-select: none;
 `
 
-const PageTitleButton = ({$color, to, children}) => {
+const PageTitleButton = ({ $color, to, children }) => {
     const navigate = useNavigate()
-    return <PageTitle $cursor="pointer" $color={$color} onClick={() => navigate(to)}>
-        {children}
-    </PageTitle>
+    return (
+        <PageTitle
+            $cursor="pointer"
+            $color={$color}
+            onClick={() => navigate(to)}
+        >
+            {children}
+        </PageTitle>
+    )
 }
 
 export default SocialPageTitle

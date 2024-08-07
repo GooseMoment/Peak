@@ -4,11 +4,13 @@ import { useClientSetting } from "@utils/clientSettings"
 
 import styled from "styled-components"
 
-const Select = ({name, submit, choices, onlineSetting}) => {
+const Select = ({ name, submit, choices, onlineSetting }) => {
     const [clientSetting, setClientSetting] = useClientSetting()
-    const [value, setValue] = useState(onlineSetting ? onlineSetting[name] : clientSetting[name])
+    const [value, setValue] = useState(
+        onlineSetting ? onlineSetting[name] : clientSetting[name],
+    )
 
-    const onChange = e => {
+    const onChange = (e) => {
         setValue(e.target.value)
 
         if (onlineSetting) {
@@ -21,26 +23,30 @@ const Select = ({name, submit, choices, onlineSetting}) => {
         setClientSetting(name, e.target.value)
     }
 
-    return <StyledSelect onChange={onChange} defaultValue={value}>
-        {choices.map(
-            choice => <option key={choice.value} value={choice.value}>{choice.display}</option>
-        )}
-    </StyledSelect>
+    return (
+        <StyledSelect onChange={onChange} defaultValue={value}>
+            {choices.map((choice) => (
+                <option key={choice.value} value={choice.value}>
+                    {choice.display}
+                </option>
+            ))}
+        </StyledSelect>
+    )
 }
 
 // from: https://codepen.io/vkjgr/pen/VYMeXp
 const StyledSelect = styled.select`
-    color: ${p => p.theme.textColor};
-    background-color: ${p => p.theme.backgroundColor};
+    color: ${(p) => p.theme.textColor};
+    background-color: ${(p) => p.theme.backgroundColor};
 
-    border: thin solid ${p => p.theme.textColor};
+    border: thin solid ${(p) => p.theme.textColor};
     border-radius: 4px;
     display: inline-block;
     font: inherit;
     line-height: 1.5em;
     padding: 0.5em 3.5em 0.5em 1em;
 
-    margin: 0;      
+    margin: 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -48,8 +54,7 @@ const StyledSelect = styled.select`
     -webkit-appearance: none;
     -moz-appearance: none;
 
-    background-image:
-        linear-gradient(45deg, transparent 50%, gray 50%),
+    background-image: linear-gradient(45deg, transparent 50%, gray 50%),
         linear-gradient(135deg, gray 50%, transparent 50%),
         linear-gradient(to right, #ccc, #ccc);
     background-position:

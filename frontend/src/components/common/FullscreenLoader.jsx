@@ -3,15 +3,17 @@ import LoaderCircle from "@components/common/LoaderCircle"
 import styled from "styled-components"
 
 const FullscreenLoader = () => {
-    return <Container>
-        <Box>
-            <Logo>
-                <Img src="/logo.svg" draggable="false" />
-                <Name>Peak</Name>
-            </Logo>
-            <Loader />
-        </Box>
-    </Container>
+    return (
+        <Container>
+            <Box>
+                <Logo>
+                    <Img src="/logo.svg" draggable="false" />
+                    <Name>Peak</Name>
+                </Logo>
+                <Loader />
+            </Box>
+        </Container>
+    )
 }
 
 const Container = styled.div`
@@ -51,7 +53,7 @@ const Name = styled.h1`
     font-size: 1.5em;
     font-weight: bold;
 
-    color: ${p => p.theme.textColor};
+    color: ${(p) => p.theme.textColor};
 `
 
 const Loader = styled(LoaderCircle)`

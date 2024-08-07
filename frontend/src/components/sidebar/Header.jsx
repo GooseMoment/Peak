@@ -21,12 +21,19 @@ const Header = ({ collapsed, setCollapsed, setSidebarHidden }) => {
             return
         }
 
-        if (previousScreenSize.current.width > autoCollapseWidth && screenSize.width <= autoCollapseWidth ) {
+        if (
+            previousScreenSize.current.width > autoCollapseWidth &&
+            screenSize.width <= autoCollapseWidth
+        ) {
             // if screen width became shorter than autoCollapseWidth
             setCollapsed(true)
         }
 
-        if (autoControlled.current && previousScreenSize.current.width <= autoCollapseWidth && screenSize.width > autoCollapseWidth) {
+        if (
+            autoControlled.current &&
+            previousScreenSize.current.width <= autoCollapseWidth &&
+            screenSize.width > autoCollapseWidth
+        ) {
             // if screen width became longer than autoCollapseWidth
             setCollapsed(false)
         }
@@ -35,10 +42,11 @@ const Header = ({ collapsed, setCollapsed, setSidebarHidden }) => {
     }, [screenSize])
 
     const onClickCollapseButton = () => {
-        setCollapsed(previous => {
-            if (previous) { // It was collapsed, and user wants to expend 
+        setCollapsed((previous) => {
+            if (previous) {
+                // It was collapsed, and user wants to expend
                 autoControlled.current = true
-            } else { 
+            } else {
                 autoControlled.current = false
             }
 
@@ -46,30 +54,39 @@ const Header = ({ collapsed, setCollapsed, setSidebarHidden }) => {
         })
     }
 
-    return <header>
-        <ButtonContainer $collapsed={collapsed}>
-            {isMobile ? 
-                <CollapseButton onClick={() => setSidebarHidden(true)}>
-                    <FeatherIcon icon="x" />
-                </CollapseButton>
-                : <CollapseButton onClick={onClickCollapseButton} $collapsed={collapsed} >
-                    <FeatherIcon icon="chevrons-left" />
-                </CollapseButton>
-            }
-        </ButtonContainer>
-    </header>
+    return (
+        <header>
+            <ButtonContainer $collapsed={collapsed}>
+                {isMobile ? (
+                    <CollapseButton onClick={() => setSidebarHidden(true)}>
+                        <FeatherIcon icon="x" />
+                    </CollapseButton>
+                ) : (
+                    <CollapseButton
+                        onClick={onClickCollapseButton}
+                        $collapsed={collapsed}
+                    >
+                        <FeatherIcon icon="chevrons-left" />
+                    </CollapseButton>
+                )}
+            </ButtonContainer>
+        </header>
+    )
 }
 
 const ButtonContainer = styled.div`
-display: flex;
-justify-content: flex-end;
-font-size: 1em;
-padding: 0.75em 0.5em 0.75em 0.5em;
-margin: 0 0.75em;
+    display: flex;
+    justify-content: flex-end;
+    font-size: 1em;
+    padding: 0.75em 0.5em 0.75em 0.5em;
+    margin: 0 0.75em;
 
-${({$collapsed}) => $collapsed ? css`
-    justify-content: center;
-` : null}
+    ${({ $collapsed }) =>
+        $collapsed
+            ? css`
+                  justify-content: center;
+              `
+            : null}
 `
 const rotateToLeft = keyframes`
     0% {
@@ -100,13 +117,15 @@ const CollapseButton = styled(MildButton)`
         animation: ${rotateToLeft} 0.5s ${cubicBeizer} forwards;
     }
 
-    ${props => props.$collapsed && css`
-        padding: inherit;
+    ${(props) =>
+        props.$collapsed &&
+        css`
+            padding: inherit;
 
-        & svg {
-            animation: ${rotateToRight} 0.5s ${cubicBeizer} forwards;
-        }
-    `}
+            & svg {
+                animation: ${rotateToRight} 0.5s ${cubicBeizer} forwards;
+            }
+        `}
 `
 
 export default Header

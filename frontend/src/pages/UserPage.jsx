@@ -35,7 +35,11 @@ const UserPage = () => {
         enabled: currentUsername !== username,
     })
 
-    const { data: user, isPending: userPending, isError: userError } = useQuery({
+    const {
+        data: user,
+        isPending: userPending,
+        isError: userError,
+    } = useQuery({
         queryKey: ["users", username],
         queryFn: () => getUserByUsername(username),
         retry: (count, err) => {
@@ -44,7 +48,7 @@ const UserPage = () => {
             }
 
             return count < 3
-        } 
+        },
     })
 
     const { data: projects, isPending: projectPending } = useQuery({
@@ -52,18 +56,33 @@ const UserPage = () => {
         queryFn: () => getProjectListByUser(username),
     })
 
-    const { t } = useTranslation(null, {keyPrefix: "users"})
+    const { t } = useTranslation(null, { keyPrefix: "users" })
 
     if (userError) {
-        return <Error height="100%" code="404" text={t("error_user_not_found")} />
+        return (
+            <Error height="100%" code="404" text={t("error_user_not_found")} />
+        )
     }
 
-    return <>
-        <UserProfileHeader user={user} followingYou={followingYou} isPending={userPending} isMine={isMine} />
-        {user && followingYou?.status === "requested" && <Requests user={user} />}
-        <Bio bio={user?.bio} isPending={userPending} isMine={isMine} />
-        <ProjectList projects={projects} isPending={projectPending} isMine={isMine} />
-    </>
+    return (
+        <>
+            <UserProfileHeader
+                user={user}
+                followingYou={followingYou}
+                isPending={userPending}
+                isMine={isMine}
+            />
+            {user && followingYou?.status === "requested" && (
+                <Requests user={user} />
+            )}
+            <Bio bio={user?.bio} isPending={userPending} isMine={isMine} />
+            <ProjectList
+                projects={projects}
+                isPending={projectPending}
+                isMine={isMine}
+            />
+        </>
+    )
 }
 
 export default UserPage

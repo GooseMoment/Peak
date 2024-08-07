@@ -1,7 +1,4 @@
-import {
-    createBrowserRouter,
-    redirect,
-} from "react-router-dom"
+import { createBrowserRouter, redirect } from "react-router-dom"
 
 import AppLayout from "@containers/AppLayout"
 
@@ -39,18 +36,22 @@ const routes = [
             {
                 index: true,
                 async lazy() {
-                    const { IntroPage } = await import("@/pages/chunks/OutsidePages")
+                    const { IntroPage } = await import(
+                        "@/pages/chunks/OutsidePages"
+                    )
                     return { Component: IntroPage }
                 },
             },
             {
                 path: "sign",
                 async lazy() {
-                    const { SignPage } = await import("@/pages/chunks/OutsidePages")
+                    const { SignPage } = await import(
+                        "@/pages/chunks/OutsidePages"
+                    )
                     return { Component: SignPage }
                 },
             },
-        ]
+        ],
     },
     {
         path: "/app",
@@ -94,33 +95,39 @@ const routes = [
                     {
                         index: true,
                         async lazy() {
-                            const { SocialRedirector } = await import("@pages/chunks/SocialPages")
+                            const { SocialRedirector } = await import(
+                                "@pages/chunks/SocialPages"
+                            )
                             return { Component: SocialRedirector }
                         },
                     },
                     {
                         path: "following",
                         async lazy() {
-                            const { SocialFollowingPage } = await import("@pages/chunks/SocialPages")
+                            const { SocialFollowingPage } = await import(
+                                "@pages/chunks/SocialPages"
+                            )
                             return { Component: SocialFollowingPage }
                         },
                     },
                     {
                         path: "explore",
                         async lazy() {
-                            const { SocialExplorePage } = await import("@pages/chunks/SocialPages")
+                            const { SocialExplorePage } = await import(
+                                "@pages/chunks/SocialPages"
+                            )
                             return { Component: SocialExplorePage }
                         },
                     },
-                ]
+                ],
             },
             {
                 path: "projects",
-                element: <ProjectListPage/>,
+                element: <ProjectListPage />,
             },
             {
                 path: "projects/:id",
-                element: <ProjectPage/>,
+                element: <ProjectPage />,
                 children: [
                     {
                         path: "tasks/create/",
@@ -129,14 +136,16 @@ const routes = [
                     {
                         path: "tasks/:task_id/detail/",
                         id: "task",
-                        element: <TaskDetailElement/>,
+                        element: <TaskDetailElement />,
                     },
-                ]
+                ],
             },
             {
                 path: "users/:username",
                 async lazy() {
-                    const { default: UserPage } = await import("@pages/UserPage")
+                    const { default: UserPage } = await import(
+                        "@pages/UserPage"
+                    )
                     return { Component: UserPage }
                 },
             },
@@ -148,8 +157,8 @@ const routes = [
                 },
                 element: null,
             },
-        ]
-    }
+        ],
+    },
 ]
 
 const router = createBrowserRouter(routes)

@@ -12,22 +12,26 @@ import SocialPageTitle from "@components/social/SocialPageTitle"
 
 import queryClient from "@queries/queryClient"
 
-import { getDailyComment, getDailyLogDetails, getDailyLogsPreview, postDailyComment } from "@api/social.api"
+import {
+    getDailyComment,
+    getDailyLogDetails,
+    getDailyLogsPreview,
+    postDailyComment,
+} from "@api/social.api"
 
 const compareDailyLogs = (a, b) => {
-    if(!a.recent_task === !b.recent_task) {
+    if (!a.recent_task === !b.recent_task) {
         // (when there is no completed task) Show the user with the earliest username in alphabetical order first
-        if(!a.recent_task) return a.username > b.username ? 1:-1
-        if(a.recent_task.is_read !== b.recent_task.is_read)
+        if (!a.recent_task) return a.username > b.username ? 1 : -1
+        if (a.recent_task.is_read !== b.recent_task.is_read)
             return a.recent_task.is_read - b.recent_task.is_read
-        return a.recent_task.is_read ? (
-            // Show the earliest completed tasks first
-            new Date(a.recent_task.completed_at) - new Date(b.recent_task.completed_at)
-        ) : (
-            // Show more recently completed tasks first when not read yet
-            new Date(b.recent_task.completed_at) - new Date(a.recent_task.completed_at)
-        )
-
+        return a.recent_task.is_read
+            ? // Show the earliest completed tasks first
+              new Date(a.recent_task.completed_at) -
+                  new Date(b.recent_task.completed_at)
+            : // Show more recently completed tasks first when not read yet
+              new Date(b.recent_task.completed_at) -
+                  new Date(a.recent_task.completed_at)
     }
     // Show user with recent work first
     return !a.recent_task - !b.recent_task
@@ -40,78 +44,95 @@ const SocialFollowingPage = () => {
     const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
     const [selectedUsername, setSelectedUsername] = useState(null)
 
-    const {user} = useRouteLoaderData("app")
+    const { user } = useRouteLoaderData("app")
 
     const { data: dailyLogs, isError: dailyLogsError } = useQuery({
-        queryKey: ['daily', 'logs', user.username, selectedDate],
+        queryKey: ["daily", "logs", user.username, selectedDate],
         queryFn: () => getDailyLogsPreview(user.username, selectedDate),
-        enabled: !!selectedDate
+        enabled: !!selectedDate,
     })
 
-    const dailyLogDetailUsername = selectedUsername?selectedUsername:user.username
+    const dailyLogDetailUsername = selectedUsername
+        ? selectedUsername
+        : user.username
 
     const { data: dailyComment, isError: dailyCommentError } = useQuery({
-        queryKey: ['daily', 'content', dailyLogDetailUsername, selectedDate],
+        queryKey: ["daily", "content", dailyLogDetailUsername, selectedDate],
         queryFn: () => getDailyComment(dailyLogDetailUsername, selectedDate),
-        enabled: !!selectedDate
+        enabled: !!selectedDate,
     })
 
     const dailyCommentMutation = useMutation({
-        mutationFn: ({day, content}) => {
+        mutationFn: ({ day, content }) => {
             return postDailyComment(day, content)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['daily', 'content', user.username, selectedDate]})
+            queryClient.invalidateQueries({
+                queryKey: ["daily", "content", user.username, selectedDate],
+            })
         },
         onError: () => {
             toast.error(e)
-        }
+        },
     })
 
     const { data: dailyLogDetails, isError: dailyLogDetailsError } = useQuery({
-        queryKey: ['daily', 'log', 'details', dailyLogDetailUsername, selectedDate],
+        queryKey: [
+            "daily",
+            "log",
+            "details",
+            dailyLogDetailUsername,
+            selectedDate,
+        ],
         queryFn: () => getDailyLogDetails(dailyLogDetailUsername, selectedDate),
-        enabled: !!selectedDate
+        enabled: !!selectedDate,
     })
 
-    return <>
-        <SocialPageTitle active="following" />
+    return (
+        <>
+            <SocialPageTitle active="following" />
 
-        <Wrapper>
-            <Container>
-                <CalendarContainer>
-                    <SocialCalendar
-                        newLogDates={mockNewLogDates}
-                        selectedDate={selectedDate}
-                        setSelectedDate={setSelectedDate}
-                    />
-                </CalendarContainer>
+            <Wrapper>
+                <Container>
+                    <CalendarContainer>
+                        <SocialCalendar
+                            newLogDates={mockNewLogDates}
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
+                        />
+                    </CalendarContainer>
 
-                {/* DailyLogsPreview를 별도의 컴포넌트 파일로 구분할까 고민중 */}
-                <DailyLogsPreviewContainer>
-                    {dailyLogs?.sort(compareDailyLogs).map((dailyFollowerLog, index) => (
-                        <DailyLogPreview
-                            key={index}
-                            dailyLog={dailyFollowerLog}
-                            selectedUsername={selectedUsername}
-                            setSelectedUsername={setSelectedUsername} />
-                    ))}
-                </DailyLogsPreviewContainer>
-            </Container>
+                    {/* DailyLogsPreview를 별도의 컴포넌트 파일로 구분할까 고민중 */}
+                    <DailyLogsPreviewContainer>
+                        {dailyLogs
+                            ?.sort(compareDailyLogs)
+                            .map((dailyFollowerLog, index) => (
+                                <DailyLogPreview
+                                    key={index}
+                                    dailyLog={dailyFollowerLog}
+                                    selectedUsername={selectedUsername}
+                                    setSelectedUsername={setSelectedUsername}
+                                />
+                            ))}
+                    </DailyLogsPreviewContainer>
+                </Container>
 
-            <Container $isSticky={true}>
-                {dailyComment?<DailyLogDetail
-                    dailyComment={dailyComment}
-                    userLogDetails={dailyLogDetails}
-                    userLogsDetail={mockDailyFollowerLogsDetail[0]}
-                    user={user}
-                    saveDailyComment={dailyCommentMutation.mutate}
-                    day={selectedDate}
-                />:null}
-            </Container>
-        </Wrapper>
-        {/* <ReactQueryDevtools initialIsOpen></ReactQueryDevtools> */}
-    </>
+                <Container $isSticky={true}>
+                    {dailyComment ? (
+                        <DailyLogDetail
+                            dailyComment={dailyComment}
+                            userLogDetails={dailyLogDetails}
+                            userLogsDetail={mockDailyFollowerLogsDetail[0]}
+                            user={user}
+                            saveDailyComment={dailyCommentMutation.mutate}
+                            day={selectedDate}
+                        />
+                    ) : null}
+                </Container>
+            </Wrapper>
+            {/* <ReactQueryDevtools initialIsOpen></ReactQueryDevtools> */}
+        </>
+    )
 }
 
 const Wrapper = styled.div`
@@ -122,14 +143,17 @@ const Wrapper = styled.div`
 const Container = styled.div`
     width: 50%;
     min-width: 27.5rem;
-    ${props => props.$isSticky ? css`
-        /* align-self: flex-start; */
-        position: sticky;
-        top: 2.5rem;
-        gap: 0rem;
-    ` : css`
-        gap: 1rem;
-    `}
+    ${(props) =>
+        props.$isSticky
+            ? css`
+                  /* align-self: flex-start; */
+                  position: sticky;
+                  top: 2.5rem;
+                  gap: 0rem;
+              `
+            : css`
+                  gap: 1rem;
+              `}
     margin-bottom: auto;
 
     padding: 0 1rem 0;
@@ -150,37 +174,61 @@ const CalendarContainer = styled.div`
 const DailyLogsPreviewContainer = styled.div``
 
 const mockNewLogDates = [
-    "2024-05-12T15:00:00.000Z", "2024-05-11T15:00:00.000Z", "2024-05-09T00:00:00.000Z"
-];
+    "2024-05-12T15:00:00.000Z",
+    "2024-05-11T15:00:00.000Z",
+    "2024-05-09T00:00:00.000Z",
+]
 
 const mockDailyFollowerLogsDetail = [
     {
         user: {
-            username: "minyoy", profileImgURI: "https://avatars.githubusercontent.com/u/65756020?v=4",
+            username: "minyoy",
+            profileImgURI:
+                "https://avatars.githubusercontent.com/u/65756020?v=4",
         },
         dailyComment: {
             name: "오늘도 열시미 살아보았나 내가 보기엔 아닌 거 같은데 너가 보기엔 어떻니",
             reaction: [
                 { emoji: "🥳", reactionNum: 2 },
-                { emoji: "😅", reactionNum: 3 }
-            ]
+                { emoji: "😅", reactionNum: 3 },
+            ],
         },
         dailyProjects: [
             {
-                projectID: "개발", projectColor: "2E61DC",
+                projectID: "개발",
+                projectColor: "2E61DC",
                 dailytasks: [
-                    { id: "TEMP11", name: "빨래하기", completed_at: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }] },
-                    { id: "TEMP12", name: "총장하기", completed_at: null, reaction: [{ emoji: null, reactionNum: 4 }] }
-                ]
+                    {
+                        id: "TEMP11",
+                        name: "빨래하기",
+                        completed_at: new Date(2024, 2, 2, 7, 4, 1),
+                        reaction: [{ emoji: "🥳", reactionNum: 2 }],
+                    },
+                    {
+                        id: "TEMP12",
+                        name: "총장하기",
+                        completed_at: null,
+                        reaction: [{ emoji: null, reactionNum: 4 }],
+                    },
+                ],
             },
             {
-                projectID: "수강신청", projectColor: "ff0022",
+                projectID: "수강신청",
+                projectColor: "ff0022",
                 dailytasks: [
-                    { id: "TEMP15", name: "빨래하기", completed_at: new Date(2024, 2, 2, 7, 4, 1), reaction: [{ emoji: "🥳", reactionNum: 2 }, { emoji: "😅", reactionNum: 3 }] },
-                ]
+                    {
+                        id: "TEMP15",
+                        name: "빨래하기",
+                        completed_at: new Date(2024, 2, 2, 7, 4, 1),
+                        reaction: [
+                            { emoji: "🥳", reactionNum: 2 },
+                            { emoji: "😅", reactionNum: 3 },
+                        ],
+                    },
+                ],
             },
-        ]
-    }
+        ],
+    },
 ]
 
 export default SocialFollowingPage

@@ -11,6 +11,15 @@ import Info from "./Info"
 import ErrorPage from "./ErrorPage"
 
 export {
-    Layout, ErrorPage,
-    Account, General, Privacy, LanguagesAndTime, Appearance, Reactions, Notifications, Blocks, Info
+    Layout,
+    ErrorPage,
+    Account,
+    General,
+    Privacy,
+    LanguagesAndTime,
+    Appearance,
+    Reactions,
+    Notifications,
+    Blocks,
+    Info,
 }

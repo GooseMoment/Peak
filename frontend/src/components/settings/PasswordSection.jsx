@@ -15,7 +15,7 @@ import { toast } from "react-toastify"
 import { useMutation } from "@tanstack/react-query"
 
 const PasswordSection = () => {
-    const { t } = useTranslation("", {keyPrefix: "settings.account"})
+    const { t } = useTranslation("", { keyPrefix: "settings.account" })
 
     const [passwordFormOpened, setPasswordFormOpened] = useState(false)
     const [currentPassword, setCurrentPassword] = useState("")
@@ -34,8 +34,11 @@ const PasswordSection = () => {
             setNewPasswordAgain("")
             setPasswordFormOpened(false)
         },
-        onError: e => {
-            if (e.response?.data?.code === "PATCHPASSWORD_WRONG_CURRENT_PASSWORD") {
+        onError: (e) => {
+            if (
+                e.response?.data?.code ===
+                "PATCHPASSWORD_WRONG_CURRENT_PASSWORD"
+            ) {
                 toast.error(t("password_wrong"))
                 return
             }
@@ -43,7 +46,7 @@ const PasswordSection = () => {
         },
     })
 
-    const changePassword = async e => {
+    const changePassword = async (e) => {
         e.preventDefault()
 
         if (newPassword.length < 8) {
@@ -64,40 +67,70 @@ const PasswordSection = () => {
         mutation.mutate()
     }
 
-    return <Section>
-        <Name>
-            {t("change_password")}
-            <ToggleButton onClick={() => setPasswordFormOpened(prev => !prev)}>
-                {passwordFormOpened ? t("section_close") : t("section_open")}
-            </ToggleButton>
-        </Name>
-        <Value>
-            {passwordFormOpened ? <PasswordChangeForm onSubmit={changePassword}>
-                <Input 
-                    icon={<Key />} name="password" type="password" placeholder={t("current_password")} required
-                    value={currentPassword} onChange={e => setCurrentPassword(e.target.value)}
-                />
-                <Input
-                    icon={<Key />} name="new_password" type="password" placeholder={t("new_password")} required
-                    value={newPassword} onChange={e => setNewPassword(e.target.value)}
-                />
-                <Input
-                    icon={<RotateCw />} name="new_password_again" type="password" placeholder={t("new_password_again")} required 
-                    value={newPasswordAgain} onChange={e => setNewPasswordAgain(e.target.value)}
-                />
-                <div>
-                    <ButtonGroup $justifyContent="right">
-                    <Button 
-                        disabled={mutation.isPending} $loading={mutation.isPending}
-                        $form={buttonForms.filled} $state={states.danger} type="submit"
-                    >
-                        {t("button_change")}
-                    </Button>
-                    </ButtonGroup>
-                </div>
-            </PasswordChangeForm> : <PasswordChangeInputsEmpty />}
-        </Value>
-    </Section>
+    return (
+        <Section>
+            <Name>
+                {t("change_password")}
+                <ToggleButton
+                    onClick={() => setPasswordFormOpened((prev) => !prev)}
+                >
+                    {passwordFormOpened
+                        ? t("section_close")
+                        : t("section_open")}
+                </ToggleButton>
+            </Name>
+            <Value>
+                {passwordFormOpened ? (
+                    <PasswordChangeForm onSubmit={changePassword}>
+                        <Input
+                            icon={<Key />}
+                            name="password"
+                            type="password"
+                            placeholder={t("current_password")}
+                            required
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                        />
+                        <Input
+                            icon={<Key />}
+                            name="new_password"
+                            type="password"
+                            placeholder={t("new_password")}
+                            required
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                        />
+                        <Input
+                            icon={<RotateCw />}
+                            name="new_password_again"
+                            type="password"
+                            placeholder={t("new_password_again")}
+                            required
+                            value={newPasswordAgain}
+                            onChange={(e) =>
+                                setNewPasswordAgain(e.target.value)
+                            }
+                        />
+                        <div>
+                            <ButtonGroup $justifyContent="right">
+                                <Button
+                                    disabled={mutation.isPending}
+                                    $loading={mutation.isPending}
+                                    $form={buttonForms.filled}
+                                    $state={states.danger}
+                                    type="submit"
+                                >
+                                    {t("button_change")}
+                                </Button>
+                            </ButtonGroup>
+                        </div>
+                    </PasswordChangeForm>
+                ) : (
+                    <PasswordChangeInputsEmpty />
+                )}
+            </Value>
+        </Section>
+    )
 }
 
 const ToggleButton = styled(Button)`

@@ -10,8 +10,8 @@ import Detail from "@components/project/common/Detail"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 
-const Assigned = ({setFunc, closeComponent}) => {
-    const { t } = useTranslation(null, {keyPrefix: "task.due"})
+const Assigned = ({ setFunc, closeComponent }) => {
+    const { t } = useTranslation(null, { keyPrefix: "task.due" })
 
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
@@ -29,30 +29,55 @@ const Assigned = ({setFunc, closeComponent}) => {
             if (!(set === null)) {
                 assigned_at = date.toISOString().slice(0, 10)
             }
-            setFunc({assigned_at})
+            setFunc({ assigned_at })
             closeComponent()
         }
     }
 
     const addComponent = [
-        {name: "quick", display: t("quick.title"), icon: "menu", component: <QuickDue changeDueDate={changeAssignedDate}/>},
-        {name: "calendar", display: t("calendar"), icon: "calendar", component: <div>달력입니다</div>},
-        {name: "repeat", display: t("repeat.title"), icon: "refresh-cw", component: <RepeatDetail/>},
+        {
+            name: "quick",
+            display: t("quick.title"),
+            icon: "menu",
+            component: <QuickDue changeDueDate={changeAssignedDate} />,
+        },
+        {
+            name: "calendar",
+            display: t("calendar"),
+            icon: "calendar",
+            component: <div>달력입니다</div>,
+        },
+        {
+            name: "repeat",
+            display: t("repeat.title"),
+            icon: "refresh-cw",
+            component: <RepeatDetail />,
+        },
     ]
 
     return (
-        <Detail title={t("assigned_title")} onClose={closeComponent} special={true}>
-            {addComponent.map((comp, i)=>(
+        <Detail
+            title={t("assigned_title")}
+            onClose={closeComponent}
+            special={true}
+        >
+            {addComponent.map((comp, i) => (
                 <Fragment key={comp.name}>
                     <FlexCenterBox>
-                        <IndexBox $start={i===0} $end={i===2} onClick={() => handleAdditionalComp(comp.name)}>
-                            <EmptyBlock/>
+                        <IndexBox
+                            $start={i === 0}
+                            $end={i === 2}
+                            onClick={() => handleAdditionalComp(comp.name)}
+                        >
+                            <EmptyBlock />
                             <Box>
-                                <FeatherIcon icon={comp.icon}/>
+                                <FeatherIcon icon={comp.icon} />
                                 {comp.display}
                             </Box>
-                            <CollapseButton $collapsed={isAdditionalComp === comp.name}>
-                                <FeatherIcon icon="chevron-down"/>
+                            <CollapseButton
+                                $collapsed={isAdditionalComp === comp.name}
+                            >
+                                <FeatherIcon icon="chevron-down" />
                             </CollapseButton>
                         </IndexBox>
                     </FlexCenterBox>
@@ -72,7 +97,7 @@ const FlexCenterBox = styled.div`
 `
 
 const CLine = styled.div`
-    border-top: thin solid ${p => p.theme.project.lineColor};
+    border-top: thin solid ${(p) => p.theme.project.lineColor};
     width: 90%;
     margin: 0.8em;
 `
@@ -83,14 +108,14 @@ const IndexBox = styled.div`
     align-items: center;
     width: 80%;
     height: 1.8em;
-    background-color: ${p => p.theme.backgroundColor};
-    border: solid 1px ${p => p.theme.project.borderColor};
+    background-color: ${(p) => p.theme.backgroundColor};
+    border: solid 1px ${(p) => p.theme.project.borderColor};
     border-radius: 15px;
-    color: ${p => p.theme.textColor};
+    color: ${(p) => p.theme.textColor};
     font-size: 1em;
     padding: 0em 0.5em;
-    margin-top: ${props=>props.$start ? 0.8 : 0}em;
-    margin-bottom: ${props=>props.$end ? 0.8 : 0}em;
+    margin-top: ${(props) => (props.$start ? 0.8 : 0)}em;
+    margin-bottom: ${(props) => (props.$end ? 0.8 : 0)}em;
 
     & svg {
         margin-right: unset;
@@ -98,7 +123,7 @@ const IndexBox = styled.div`
 
     &:hover {
         font-weight: bolder;
-        color: ${p => p.theme.goose};
+        color: ${(p) => p.theme.goose};
         cursor: pointer;
     }
 `
@@ -119,11 +144,13 @@ const CollapseButton = styled.div`
         animation: ${rotateToUp} 0.3s ${cubicBeizer} forwards;
     }
 
-    ${props => props.$collapsed && css`
-        & svg {
-            animation: ${rotateToUnder} 0.3s ${cubicBeizer} forwards;
-        }
-    `}
+    ${(props) =>
+        props.$collapsed &&
+        css`
+            & svg {
+                animation: ${rotateToUnder} 0.3s ${cubicBeizer} forwards;
+            }
+        `}
 `
 
 export default Assigned

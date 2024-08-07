@@ -5,66 +5,88 @@ import { cubicBeizer } from "@assets/keyframes"
 
 import styled from "styled-components"
 
-const FilterButtonGroup = ({active, setActive, filters}) => {
-    const [selectedButtonPosition, setSelectedButtonPosition] = useState({top: "0.5em", left: 0, width: 0})
+const FilterButtonGroup = ({ active, setActive, filters }) => {
+    const [selectedButtonPosition, setSelectedButtonPosition] = useState({
+        top: "0.5em",
+        left: 0,
+        width: 0,
+    })
 
-    const onRefChange = useCallback(node => {
-        if (!node) {
-            return
-        }
+    const onRefChange = useCallback(
+        (node) => {
+            if (!node) {
+                return
+            }
 
-        setSelectedButtonPosition({
-            top: node.offsetTop,
-            left: node.offsetLeft,
-            width: node.offsetWidth,
-        })
-    }, [filters])
+            setSelectedButtonPosition({
+                top: node.offsetTop,
+                left: node.offsetLeft,
+                width: node.offsetWidth,
+            })
+        },
+        [filters],
+    )
 
-    return <FilterGroup>
-        <BackgroundButton 
-            $top={selectedButtonPosition.top} $left={selectedButtonPosition.left} $width={selectedButtonPosition.width} />
-        {Object.entries(filters).map(([name, filter]) => 
-            <FilterButton ref={active === name ? onRefChange : undefined} key={name} onClick={e => setActive(name)} $active={active === name}>{filter.display}</FilterButton>)
-        }
-    </FilterGroup>
+    return (
+        <FilterGroup>
+            <BackgroundButton
+                $top={selectedButtonPosition.top}
+                $left={selectedButtonPosition.left}
+                $width={selectedButtonPosition.width}
+            />
+            {Object.entries(filters).map(([name, filter]) => (
+                <FilterButton
+                    ref={active === name ? onRefChange : undefined}
+                    key={name}
+                    onClick={(e) => setActive(name)}
+                    $active={active === name}
+                >
+                    {filter.display}
+                </FilterButton>
+            ))}
+        </FilterGroup>
+    )
 }
 
 const FilterGroup = styled.div`
-display: inline-flex;
-position: relative;
-justify-content: space-between;
-gap: 0.25em;
+    display: inline-flex;
+    position: relative;
+    justify-content: space-between;
+    gap: 0.25em;
 
-background-color: ${p => p.theme.secondBackgroundColor};
-border-radius: 60px;
-padding: 0.3em;
+    background-color: ${(p) => p.theme.secondBackgroundColor};
+    border-radius: 60px;
+    padding: 0.3em;
 `
 
 const FilterButton = styled(MildButton)`
-flex: 1 1 auto;
+    flex: 1 1 auto;
 
-font-size: 0.9rem;
-font-weight: 500;
-border-radius: 50px;
-padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 50px;
+    padding: 0.5rem 0.75rem;
 
-cursor: pointer;
+    cursor: pointer;
 
-z-index: 3;
+    z-index: 3;
 `
 
 const BackgroundButton = styled(MildButton)`
     position: absolute;
 
-    top: ${props => props.$top - 1}px;
-    left: ${props => props.$left}px;
-    width: ${props => props.$width}px;
+    top: ${(props) => props.$top - 1}px;
+    left: ${(props) => props.$left}px;
+    width: ${(props) => props.$width}px;
 
-    transition: top 0.25s ${cubicBeizer}, left 0.25s ${cubicBeizer}, width 0.25s ${cubicBeizer};
+    transition:
+        top 0.25s ${cubicBeizer},
+        left 0.25s ${cubicBeizer},
+        width 0.25s ${cubicBeizer};
 
     height: calc(1em + 1rem);
 
-    background-color: ${p => p.theme.backgroundColor};
+    background-color: ${(p) => p.theme.backgroundColor};
     border-radius: 50px;
     filter: drop-shadow(2px 2px 3px #00000041);
 
