@@ -19,6 +19,7 @@
         "@trivago/prettier-plugin-sort-imports": "^4.3.0",
         "axios": "^1.6.7",
         "eslint-config-airbnb": "^19.0.4",
+        "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-react": "^7.35.0",
         "feather-icons-react": "^0.7.0",
         "grapheme-splitter": "^1.0.4",
