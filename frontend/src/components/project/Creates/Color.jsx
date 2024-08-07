@@ -10,7 +10,7 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const Color = ({ setColor, setDisplayColor, closeComponent }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.create.color" })
+    const { t } = useTranslation(null, { keyPrefix: "project.color" })
 
     const [activeTab, setActiveTab] = useState("기본")
     const [usePalettes, setUsePalettes] = useState(palettes[0])

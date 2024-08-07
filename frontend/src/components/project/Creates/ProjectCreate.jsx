@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const ProjectCreate = ({ onClose }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.create" })
+    const { t } = useTranslation(null, { keyPrefix: "project" })
 
     const [name, setName] = useState("")
 
@@ -85,16 +85,16 @@ const ProjectCreate = ({ onClose }) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["projects"] })
-            toast.success(t("project_create_success"))
+            toast.success(t("create.project_create_success"))
             onClose()
         },
         onError: () => {
             if (newProject.name)
-                toast.error(t("project_create_error"), {
+                toast.error(t("create.project_create_error"), {
                     toastId: "project_create_error",
                 })
             else
-                toast.error(t("project_create_no_name"), {
+                toast.error(t("create.project_create_no_name"), {
                     toastId: "project_create_no_name",
                 })
         },
@@ -104,7 +104,7 @@ const ProjectCreate = ({ onClose }) => {
         editNewProject({name})
 
         if (newProject.name === "Inbox" || newProject.name === "inbox") {
-            toast.error(t("project_create_cannot_use_inbox"))
+            toast.error(t("create.project_create_cannot_use_inbox"))
             return
         }
 

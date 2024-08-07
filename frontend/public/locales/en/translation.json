@@ -44,6 +44,22 @@
         "loading": "Loading...",
         "error_load_project_and_drawer": "Couldn't load project and drawers 😢",
         "error_load_task": "Couldn't load tasks 😢",
+        "color": {
+            "title": "Color Settings",
+            "theme1": "Basics",
+            "theme2": "Summer"
+        },
+        "privacy": {
+            "title": "Privacy Settings",
+            "public": "Everyone",
+            "protected": "Limit to my followers",
+            "private": "Only me"
+        },
+        "type": {
+            "title": "Project Type Settings",
+            "regular": "a regular project",
+            "goal": "a goal project"
+        },
         "create": {
             "name_placeholder": "Enter a name",
             "button_add": "Add",
@@ -57,28 +73,13 @@
             "drawer_create_no_name": "Write a name for your drawer.",
             "task_create_success": "The task was successfully created.",
             "task_create_error": "The task creation failed.",
-            "task_create_no_name": "Write a name for your task.",
-            "color": {
-                "title": "Color Settings",
-                "theme1": "Basics",
-                "theme2": "Summer"
-            },
-            "privacy": {
-                "title": "Privacy Settings",
-                "public": "Everyone",
-                "protected": "Limit to my followers",
-                "private": "Only me"
-            },
-            "type": {
-                "title": "Project Type Settings",
-                "regular": "a regular project",
-                "goal": "a goal project"
-            }
+            "task_create_no_name": "Write a name for your task."
         },
         "edit": {
             "display": "Edit",
             "name_change_success": "The name has changed.",
-            "project_change_error": "The project change failed."
+            "project_change_error": "The project change failed.",
+            "drawer_change_error": "The drawer change failed."
         },
         "delete": {
             "display": "Delete",
