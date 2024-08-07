@@ -88,6 +88,19 @@ export const resendVerificationEmail = async (email) => {
     })
 }
 
+export const requestPasswordRecoveryToken = async (email) => {
+    return client.post(`password_recovery/`, {
+        email,
+    }) 
+}
+
+export const patchPasswordWithPasswordRecoveryToken = async (token, newPassword) => {
+    return client.patch(`password_recovery/`, {
+        token,
+        new_password: newPassword,
+    }) 
+}
+
 export const signOut = async () => {
     setToken(null)
     setCurrentUsername(null)

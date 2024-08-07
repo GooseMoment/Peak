@@ -249,3 +249,7 @@ REST_KNOX = {
     "USER_SERIALIZER": "users.serializers.UserSerializer",
     "AUTO_REFRESH": True,
 }
+
+# Password Recovery Token
+
+PASSWORD_RECOVERY_TOKEN_TTL = timedelta(minutes=10)

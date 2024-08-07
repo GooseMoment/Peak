@@ -81,6 +81,24 @@ const routes = [
                         },
                     },
                     {
+                        path: "password-recovery",
+                        async lazy() {
+                            const { PasswordRecoveryForm } = await import(
+                                "@components/sign/forms"
+                            )
+                            return { Component: PasswordRecoveryForm }
+                        },
+                    },
+                    {
+                        path: "request-password-recovery",
+                        async lazy() {
+                            const { PasswordRecoveryRequestForm } = await import(
+                                "@components/sign/forms"
+                            )
+                            return { Component: PasswordRecoveryRequestForm }
+                        },
+                    },
+                    {
                         path: "verification",
                         async lazy() {
                             const { EmailVerificationForm } = await import(

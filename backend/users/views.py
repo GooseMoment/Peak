@@ -9,7 +9,7 @@ from rest_framework import status, mixins, generics
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.throttling import AnonRateThrottle
 
@@ -241,13 +241,13 @@ def get_me(request: Request):
     return Response(serializer.data)
 
 class PasswordRecoveryAnonRateThrottle(AnonRateThrottle):
-    rate = "5/hour" # up to 5 times a hour
+    rate = "5/minute" # up to 5 times a hour
 
 class PasswordRecoveryView(GenericAPIView):
     permission_classes = (AllowAny, )
-    throttle_classes = (PasswordRecoveryAnonRateThrottle, )
 
     # generate a token
+    @throttle_classes((PasswordRecoveryAnonRateThrottle, ))
     def post(self, request: Request):
         email: str | None = request.data.get("email")
         
@@ -273,6 +273,9 @@ class PasswordRecoveryView(GenericAPIView):
             tokens.delete()
 
         token = PasswordRecoveryToken.objects.create(user=user)
+        token.expires_at = token.created_at + settings.PASSWORD_RECOVERY_TOKEN_TTL
+        token.save()
+
         send_mail_password_recovery(user, token.link, locale)
 
         return Response(status=status.HTTP_200_OK)
@@ -287,17 +290,22 @@ class PasswordRecoveryView(GenericAPIView):
             token_uuid = uuid.UUID(hex=token_hex)
         except ValueError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
         
         try:
             token = PasswordRecoveryToken.objects.get(token=token_uuid)
         except PasswordRecoveryToken.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
+        if token.expires_at < datetime.now(UTC):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
         new_password = request.data.get("new_password")
         if new_password is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
+        if len(new_password) < 8:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         token.user.set_password(new_password)
         token.user.save()
 

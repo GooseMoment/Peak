@@ -92,7 +92,7 @@ def send_mail_password_recovery(user: User, link: str, locale: str):
         subject=subject,
         body=text_content,
         from_email=None,
-        to=(email, ),
+        to=(user.email, ),
     )
 
     email.send()

@@ -533,5 +533,25 @@
             "SIGNUP_INTERNAL_ERROR": "문제가 발생했습니다. 다시 시도해 주세요.",
             "SIGNUP_UNKNOWN_ERROR": "나중에 시도해 주세요."
         }
+    },
+    "password_recovery": {
+        "request_title": "암호를 잊었나요?",
+        "request_description": "암호를 잊은 경우, 암호 재설정 링크를 이메일로 받을 수 있습니다.",
+        "placeholder_email": "이메일 주소 입력",
+        "button_submit": "제출",
+        "request_success": "암호 재설정 메일이 전송되었습니다. 메일함을 확인하세요.",
+        "request_error_limit": "한 시간 후에 다시 시도해주세요.",
+        "request_error_bad_request": "잘못된 요청입니다. 페이지 새로고침 후 다시 시도하세요.",
+        "request_error_any": "오류가 발생했습니다. 네트워크 상황을 확인하세요.",
+        "link_sign_in": "로그인",
+        "recovery_title": "암호 재설정",
+        "recovery_description": "새 암호는 8자 이상이어야 합니다.",
+        "placeholder_password": "새 암호 입력",
+        "placeholder_password_again": "한 번 더 입력",
+        "button_set": "암호 변경",
+        "recovery_success": "암호를 변경했습니다. 새 암호로 로그인하세요.",
+        "recovery_error_password_length": "암호는 8자 이상이어야 합니다.",
+        "recovery_error_password_unmatch": "새 암호가 서로 다릅니다.",
+        "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다."
     }
 }

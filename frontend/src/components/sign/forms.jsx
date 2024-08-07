@@ -11,6 +11,8 @@ import Form from "@components/sign/Form"
 import Input from "@components/sign/Input"
 
 import {
+    patchPasswordWithPasswordRecoveryToken,
+    requestPasswordRecoveryToken,
     resendVerificationEmail,
     signIn,
     signUp,
@@ -26,6 +28,7 @@ import {
     LogIn,
     Mail,
     UserPlus,
+    RotateCw,
 } from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -102,7 +105,7 @@ export const SignInForm = () => {
                         {t("button_create_account")}
                     </LinkText>
                 </Link>
-                <Link to="/sign/password-recovery">
+                <Link to="/sign/request-password-recovery">
                     <LinkText>
                         <HelpCircle />
                         {t("button_forgot_password")}
@@ -348,6 +351,138 @@ export const EmailVerificationForm = () => {
                     </Link>
                 </Links>
             </Content>
+        </Box>
+    )
+}
+
+export const PasswordRecoveryRequestForm = () => {
+    const { t } = useTranslation(null, { keyPrefix: "password_recovery" })
+
+    const mutation = useMutation({
+        mutationFn: ({ email }) => requestPasswordRecoveryToken(email),
+        onSuccess: () => {
+            toast.success(t("request_success"))
+        },
+        onError: (e) => {
+            if (e.response.status === 429) {
+                return toast.error(t("request_error_limit"))
+            } else if (e.response.status === 400) {
+                return toast.error(t("request_error_bad_request"))
+            }
+
+            return toast.error(t("request_error_any"))
+        },
+    })
+
+    const onSubmit = (e) => {
+        e.preventDefault()
+        const email = e.target.email.value
+        mutation.mutate({ email })
+    }
+
+    return (
+        <Box>
+            <Title>{t("request_title")}</Title>
+            <Content>
+                <Text>{t("request_description")}</Text>
+                <form onSubmit={onSubmit}>
+                    <Input
+                        icon={<Mail />}
+                        name="email"
+                        placeholder={t("placeholder_email")}
+                        type="email"
+                        required
+                        disabled={mutation.isPending}
+                    />
+                    <ButtonGroup $justifyContent="right" $margin="1em 0">
+                        <Button
+                            $loading={mutation.isPending}
+                            type="submit"
+                            disabled={mutation.isPending}
+                        >
+                            {t("button_submit")}
+                        </Button>
+                    </ButtonGroup>
+                </form>
+                <Links>
+                    <Link to="/sign/in">
+                        <LinkText>
+                            <LogIn />
+                            {t("link_sign_in")}
+                        </LinkText>
+                    </Link>
+                </Links>
+            </Content>
+        </Box>
+    )
+}
+
+export const PasswordRecoveryForm = () => {
+    const { t } = useTranslation(null, { keyPrefix: "password_recovery" })
+    const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
+
+    const token = searchParams.get("token")
+
+    const mutation = useMutation({
+        mutationFn: ({ token, password }) => patchPasswordWithPasswordRecoveryToken(token, password),
+        onSuccess: () => {
+            toast.success(t("recovery_success"))
+            navigate("/sign/in")
+        },
+        onError: () => {
+            return toast.error(t("recovery_error"))
+        },
+    })
+
+    const onSubmit = (e) => {
+        e.preventDefault()
+        const password = e.target.password.value
+        const passwordAgain = e.target.password_again.value
+
+        if (password.length < 8) {
+            return toast.error(t("recovery_error_password_length"))
+        }
+
+        if (password != passwordAgain) {
+            return toast.error(t("recovery_error_password_unmatch"))
+        }
+
+        mutation.mutate({ token, password })
+    }
+
+    return (
+        <Box>
+            <Title>{t("recovery_title")}</Title>
+            <Form onSubmit={onSubmit}>
+                <Text>{t("recovery_description")}</Text>
+                <Input
+                    icon={<Key />}
+                    name="password"
+                    placeholder={t("placeholder_password")}
+                    type="password"
+                    minLength="8"
+                    required
+                    disabled={mutation.isPending}
+                />
+                <Input
+                    icon={<RotateCw />}
+                    name="password_again"
+                    placeholder={t("placeholder_password_again")}
+                    type="password"
+                    required
+                    disabled={mutation.isPending}
+                />
+                <ButtonGroup $justifyContent="right" $margin="1em 0">
+                    <Button
+                        $loading={mutation.isPending}
+                        type="submit"
+                        disabled={mutation.isPending}
+                    >
+                        {t("button_set")}
+                    </Button>
+                </ButtonGroup>
+            </Form>
         </Box>
     )
 }
