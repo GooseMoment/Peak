@@ -32,33 +32,35 @@ const getCursorFromURL = (url) => {
     return cursor
 }
 
+const defaultFilter = "all"
+
 const NotificationsPage = () => {
     const locale = useClientLocale()
     const { t } = useTranslation("", { keyPrefix: "notifications" })
 
-    const [activeFilter, setActiveFilter] = useState("all")
-    const [searchParams] = useSearchParams()
+    const filters = useMemo(() => makeFilters(t), [t])
 
-    const id = searchParams.get("id")
+    const [searchParams, setSearchParams] = useSearchParams()
+    const focusID = searchParams.get("id")
+    const paramActiveFilter = searchParams.get("active")
+
+    const [activeFilter, setActiveFilter] = useState(
+        Object.keys(filters).includes(paramActiveFilter)
+            ? paramActiveFilter
+            : defaultFilter,
+    )
 
     const scrollToBox = useCallback((node) => {
         node?.scrollIntoView({ block: "center", scrollBehavior: "smooth" })
     })
-    const filters = useMemo(() => makeFilters(t), [t])
 
-    const {
-        data,
-        isError,
-        error,
-        fetchNextPage,
-        isFetching,
-        isFetchingNextPage,
-    } = useInfiniteQuery({
-        queryKey: ["notifications", { types: filters[activeFilter] }],
-        queryFn: getNotifications,
-        initialPageParam: "",
-        getNextPageParam: (lastPage, pages) => getCursorFromURL(lastPage.next),
-    })
+    const { data, isError, fetchNextPage, isFetching, isFetchingNextPage } =
+        useInfiniteQuery({
+            queryKey: ["notifications", { types: filters[activeFilter] }],
+            queryFn: getNotifications,
+            initialPageParam: "",
+            getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
+        })
 
     // useInfiniteQuery에서 제공하는 hasNextPage가 제대로 작동 안함. 어째서?
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
@@ -67,6 +69,7 @@ const NotificationsPage = () => {
     const lastDate = useRef(null)
     useEffect(() => {
         lastDate.current = null
+        setSearchParams({ active: activeFilter })
     }, [activeFilter])
 
     const header = (
@@ -122,9 +125,9 @@ const NotificationsPage = () => {
                                 {dateDelimiter}
                                 <Box
                                     notification={notification}
-                                    highlight={notification.id === id}
+                                    highlight={notification.id === focusID}
                                     ref={
-                                        notification.id === id
+                                        notification.id === focusID
                                             ? scrollToBox
                                             : null
                                     }
