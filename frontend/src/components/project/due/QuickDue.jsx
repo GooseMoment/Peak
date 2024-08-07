@@ -1,27 +1,47 @@
 import styled from "styled-components"
 
+import next_week from "@assets/project/calendar/next_week.svg"
 import today from "@assets/project/calendar/today.svg"
 import tomorrow from "@assets/project/calendar/tomorrow.svg"
-import next_week from "@assets/project/calendar/next_week.svg"
 import slach from "@assets/project/slach.svg"
 
-const QuickDue = ({changeDueDate}) => {
+import { useTranslation } from "react-i18next"
+
+const QuickDue = ({ changeDueDate }) => {
+    const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
+
     const items = [
-        {id: 0, icon: <img src={today}/>, display: "오늘", set: 0},
-        {id: 1, icon: <img src={tomorrow}/>, display: "내일", set: 1},
-        {id: 2, icon: <img src={next_week}/>, display: "다음 주", set: 7},
-        {id: 3, icon: <img src={next_week}/>, display: "2주 뒤", set: 14},
-        {id: 4, icon: <img src={next_week}/>, display: "한달 뒤", set: 30},
-        {id: 5, icon: <img src={slach}/>, display: "날짜없음", set: null},
+        { id: 0, icon: <img src={today} />, display: t("today"), set: 0 },
+        { id: 1, icon: <img src={tomorrow} />, display: t("tomorrow"), set: 1 },
+        {
+            id: 2,
+            icon: <img src={next_week} />,
+            display: t("next_week"),
+            set: 7,
+        },
+        {
+            id: 3,
+            icon: <img src={next_week} />,
+            display: t("next_two_weeks"),
+            set: 14,
+        },
+        {
+            id: 4,
+            icon: <img src={next_week} />,
+            display: t("next_month"),
+            set: 30,
+        },
+        { id: 5, icon: <img src={slach} />, display: t("no_date"), set: null },
     ]
-    
+
     return (
         <ButtonFlexBox>
-        {items.map(item=>(
-            <ButtonBox key={item.id} onClick={changeDueDate(item.set)}>
-                {item.icon}
-                <DisplayText>{item.display}</DisplayText>
-            </ButtonBox>))}
+            {items.map((item) => (
+                <ButtonBox key={item.id} onClick={changeDueDate(item.set)}>
+                    {item.icon}
+                    <DisplayText>{item.display}</DisplayText>
+                </ButtonBox>
+            ))}
         </ButtonFlexBox>
     )
 }
@@ -40,23 +60,22 @@ const ButtonBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.4em;
-    width: 40%;
-    height: 1.7em;
-    border-radius: 13px;
-    border: solid 1px ${p => p.theme.project.borderColor};
-    color: ${p => p.theme.textColor};
-    font-weight: 500;
+    gap: 0.35em;
+    width: 43%;
+    height: 1.9em;
+    border-radius: 15px;
+    border: solid 1px ${(p) => p.theme.project.borderColor};
+    color: ${(p) => p.theme.textColor};
+    font-weight: normal;
 
     &:hover {
-        font-weight: bolder;
-        color: ${p => p.theme.goose};
+        color: ${(p) => p.theme.goose};
+        font-weight: bold;
         cursor: pointer;
     }
 `
 
 const DisplayText = styled.div`
-    width: 3.5em;
     text-align: center;
 `
 

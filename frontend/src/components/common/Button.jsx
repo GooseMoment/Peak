@@ -1,9 +1,11 @@
-import MildButton from "./MildButton"
-import { states } from "@assets/themes"
-import { cubicBeizer } from "@assets/keyframes"
+import styled from "styled-components"
+
 import LoaderCircle from "@components/common/LoaderCircle"
 
-import styled from "styled-components"
+import MildButton from "./MildButton"
+
+import { cubicBeizer } from "@assets/keyframes"
+import { states } from "@assets/themes"
 
 export const buttonForms = {
     filled: "filled",
@@ -12,24 +14,30 @@ export const buttonForms = {
 
 /**
  * 공용 버튼 컴포넌트
- * @param {Object} props - button의 모든 props 
+ * @param {Object} props - button의 모든 props
  * @param {?string} $form - buttonForms 목록 중 사용 (기본: outlined)
  * @param {?string} $state - assets/themes/states 목록 중 사용 (기본: states.TEXT)
  */
 const Button = (props) => {
-    const { $form=buttonForms.outlined, $state=states.text, $loading } = props
+    const {
+        $form = buttonForms.outlined,
+        $state = states.text,
+        $loading,
+    } = props
     const SelectedButton = buttons[$form]
 
-    return <SelectedButton {...props} $state={$state}>
-        {$loading && <ButtonLoader />} {props.children}
-    </SelectedButton>
+    return (
+        <SelectedButton {...props} $state={$state}>
+            {$loading && <ButtonLoader />} {props.children}
+        </SelectedButton>
+    )
 }
 
 export const ButtonGroup = styled.div`
     display: flex;
     gap: 1em;
-    justify-content: ${p => p.$justifyContent || "center"};
-    margin: ${p => p.$margin || "none"};
+    justify-content: ${(p) => p.$justifyContent || "center"};
+    margin: ${(p) => p.$margin || "none"};
 `
 
 const CommonButton = styled(MildButton)`
@@ -48,15 +56,17 @@ const CommonButton = styled(MildButton)`
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    
+
     &:focus-visible {
-        box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
-        transition: box-shadow .2s;
+        box-shadow:
+            #222222 0 0 0 2px,
+            rgba(255, 255, 255, 0.8) 0 0 0 4px;
+        transition: box-shadow 0.2s;
     }
 
     &:active:hover:enabled {
-        filter: brightness(.9);
-        transform: scale(.9);
+        filter: brightness(0.9);
+        transform: scale(0.9);
     }
 
     &:disabled {
@@ -64,23 +74,26 @@ const CommonButton = styled(MildButton)`
         opacity: 0.6;
     }
 
-    transition: 
-        box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s,
-        background-color 0.5s ${cubicBeizer}, border-color 0.5s ${cubicBeizer},
+    transition:
+        box-shadow 0.2s,
+        -ms-transform 0.1s,
+        -webkit-transform 0.1s,
+        transform 0.1s,
+        background-color 0.5s ${cubicBeizer},
+        border-color 0.5s ${cubicBeizer},
         color 0.5s ${cubicBeizer};
-    ;
 `
 
 const FilledButton = styled(CommonButton)`
-    background-color: ${p => p.theme.primaryColors[p.$state]};
-    border-color: ${p => p.theme.backgroundColor};
-    color: ${p => p.theme.backgroundColor};
+    background-color: ${(p) => p.theme.primaryColors[p.$state]};
+    border-color: ${(p) => p.theme.backgroundColor};
+    color: ${(p) => p.theme.backgroundColor};
 `
 
 const OutlinedButton = styled(CommonButton)`
-    background-color: ${p => p.theme.backgroundColor};
-    border-color: ${p => p.theme.primaryColors[p.$state]};
-    color: ${p => p.theme.primaryColors[p.$state]};
+    background-color: ${(p) => p.theme.backgroundColor};
+    border-color: ${(p) => p.theme.primaryColors[p.$state]};
+    color: ${(p) => p.theme.primaryColors[p.$state]};
 `
 
 const buttons = {

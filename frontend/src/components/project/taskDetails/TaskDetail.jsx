@@ -1,31 +1,42 @@
-import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
+import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 
-import styled from "styled-components"
-import FeatherIcon from 'feather-icons-react'
-
-import TaskNameInput from "@components/tasks/TaskNameInput"
-import DeleteAlert from "@components/common/DeleteAlert"
-import Contents from "./Contents"
-
-import queryClient from "@queries/queryClient"
-import { useClientSetting } from "@utils/clientSettings"
 import { useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
-import { getTask, patchTask, deleteTask } from "@api/tasks.api"
+import styled from "styled-components"
+
+import DeleteAlert from "@components/common/DeleteAlert"
+import TaskNameInput from "@components/tasks/TaskNameInput"
+
+import Contents from "./Contents"
+
+import { deleteTask, getTask, patchTask } from "@api/tasks.api"
+
+import { useClientSetting } from "@utils/clientSettings"
+
+import queryClient from "@queries/queryClient"
+
+import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const TaskDetail = () => {
-    const [ projectID, color ] = useOutletContext()
+    const { t } = useTranslation(null, { keyPrefix: "project" })
+
+    const [projectID, color] = useOutletContext()
     const { task_id } = useParams()
     const navigate = useNavigate()
-    const [setting, ] = useClientSetting()
+    const [setting] = useClientSetting()
 
     const [taskName, setTaskName] = useState("")
     const [isAlertOpen, setIsAlertOpen] = useState(false)
 
-    const { isPending, isError, data: task, error } = useQuery({
-        queryKey: ['task', {taskID: task_id}],
+    const {
+        isPending,
+        isError,
+        data: task,
+    } = useQuery({
+        queryKey: ["task", { taskID: task_id }],
         queryFn: () => getTask(task_id),
     })
 
@@ -34,8 +45,12 @@ const TaskDetail = () => {
             return patchTask(task_id, data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['task', {taskID: task_id}]})
-            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
+            queryClient.invalidateQueries({
+                queryKey: ["task", { taskID: task_id }],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", { drawerID: task.drawer }],
+            })
         },
     })
 
@@ -44,8 +59,18 @@ const TaskDetail = () => {
             return deleteTask(task_id)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['task', {taskID: task_id}]})
-            queryClient.invalidateQueries({queryKey: ['tasks', {drawerID: task.drawer}]})
+            queryClient.invalidateQueries({
+                queryKey: ["task", { taskID: task_id }],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", { drawerID: task.drawer }],
+            })
+            toast.success(
+                t("delete.task_delete_success", { task_name: task.name }),
+            )
+        },
+        onError: () => {
+            toast.error(t("delete.task_delete_error", { task_name: task.name }))
         },
     })
 
@@ -60,8 +85,7 @@ const TaskDetail = () => {
     const handleAlert = () => {
         if (setting.delete_task_after_alert) {
             setIsAlertOpen(true)
-        }
-        else {
+        } else {
             handleDelete()
         }
     }
@@ -69,7 +93,6 @@ const TaskDetail = () => {
     const handleDelete = () => {
         navigate(`/app/projects/${projectID}`)
         deleteMutation.mutate()
-        toast.success(`"${task.name}" 할 일이 삭제되었습니다`)
     }
 
     if (isPending) {
@@ -88,17 +111,22 @@ const TaskDetail = () => {
                     color={color}
                 />
                 <Icons>
-                    <FeatherIcon 
-                        icon="trash-2"
-                        onClick={handleAlert}
-                    />
+                    <FeatherIcon icon="trash-2" onClick={handleAlert} />
                     <FeatherIcon icon="x" onClick={onClose} />
                 </Icons>
             </TaskNameBox>
-            <Contents task={task} setFunc={patchMutation.mutate}/>
-            {isAlertOpen &&
-                <DeleteAlert title={`"${task.name}"\n 할 일을`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
-            }
+            <Contents task={task} setFunc={patchMutation.mutate} />
+            {isAlertOpen && (
+                <DeleteAlert
+                    title={t("delete.alert_task_title", {
+                        task_name: task.name,
+                    })}
+                    onClose={() => {
+                        setIsAlertOpen(false)
+                    }}
+                    func={handleDelete}
+                />
+            )}
         </TaskDetailBox>
     )
 }
@@ -106,8 +134,8 @@ const TaskDetail = () => {
 const TaskDetailBox = styled.div`
     width: 50em;
     height: 23.5em;
-    background-color: ${p => p.theme.backgroundColor};
-    border: solid 1px ${p => p.theme.project.borderColor};
+    background-color: ${(p) => p.theme.backgroundColor};
+    border: solid 1px ${(p) => p.theme.project.borderColor};
     border-radius: 15px;
 `
 
@@ -126,7 +154,7 @@ const Icons = styled.div`
     & svg {
         top: 0.4em;
         cursor: pointer;
-        stroke: ${p => p.theme.primaryColors.danger};
+        stroke: ${(p) => p.theme.primaryColors.danger};
         margin-left: 1em;
     }
 `

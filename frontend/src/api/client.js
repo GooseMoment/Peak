@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios"
 
 const baseURL = import.meta.env.VITE_API_BASEURL
 
@@ -11,7 +11,7 @@ export const getToken = () => {
     return token
 }
 
-export const setToken = token => {
+export const setToken = (token) => {
     return localStorage.setItem("token", token)
 }
 
@@ -24,7 +24,7 @@ export const getCurrentUsername = () => {
     return token
 }
 
-export const setCurrentUsername = username => {
+export const setCurrentUsername = (username) => {
     return localStorage.setItem("username", username)
 }
 
@@ -33,7 +33,7 @@ const client = axios.create({
     withCredentials: true,
 })
 
-client.interceptors.request.use(config => {
+client.interceptors.request.use((config) => {
     const token = getToken()
 
     if (token) {
@@ -43,15 +43,16 @@ client.interceptors.request.use(config => {
     return config
 })
 
-client.interceptors.response.use(res => {
-    return res
-}, err => {
-    if (err.response && err.response.status === 401) {
-        throw new Response(
-            "", {status: 401},
-        )
-    }
-    throw err
-})
+client.interceptors.response.use(
+    (res) => {
+        return res
+    },
+    (err) => {
+        if (err.response && err.response.status === 401) {
+            throw new Response("", { status: 401 })
+        }
+        throw err
+    },
+)
 
 export default client

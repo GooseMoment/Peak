@@ -1,31 +1,35 @@
 import { useEffect, useState } from "react"
-import { Link, useSearchParams, Outlet } from "react-router-dom"
+import { Link, Outlet, useSearchParams } from "react-router-dom"
 
-import Brand, {Box as BrandTitle} from "@components/sign/Brand"
+import { useQuery } from "@tanstack/react-query"
+import styled from "styled-components"
+
+import Brand, { Box as BrandTitle } from "@components/sign/Brand"
 import Showcase from "@components/sign/Showcase"
-
 import generateActivities from "@components/sign/activities"
 
 import { getEmojis } from "@api/social.api"
 
-import styled from "styled-components"
-import { useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 
 const SignPage = () => {
-    const [searchParams, ] = useSearchParams()
+    const [searchParams] = useSearchParams()
     const [activities, setActivities] = useState([])
 
     useEffect(() => {
         const flag = searchParams.get("flag")
         switch (flag) {
             case "401":
-                toast.error("Please sign in again.", {toastId: "flag401"})
+                toast.error("Please sign in again.", { toastId: "flag401" })
                 break
         }
     }, [])
 
-    const { data: serverEmojis, isError, isFetching } = useQuery({
+    const {
+        data: serverEmojis,
+        isError,
+        isFetching,
+    } = useQuery({
         queryKey: ["emojis"],
         queryFn: () => getEmojis(),
         staleTime: 1000 * 60 * 60 * 5,
@@ -44,13 +48,15 @@ const SignPage = () => {
         setActivities(generateActivities(serverEmojis))
     }, [serverEmojis])
 
-    return <Root>
-        <Link to="/">
-            <Brand />
-        </Link>
-        <Showcase activities={activities} />
-        <Outlet />
-    </Root>
+    return (
+        <Root>
+            <Link to="/">
+                <Brand />
+            </Link>
+            <Showcase activities={activities} />
+            <Outlet />
+        </Root>
+    )
 }
 
 const Root = styled.div`
@@ -58,13 +64,13 @@ const Root = styled.div`
     width: 100%;
     height: 100vh;
 
-    background-color: ${p => p.theme.frontSignPageBackgroundColor};
+    background-color: ${(p) => p.theme.frontSignPageBackgroundColor};
 
     display: grid;
     grid-template-columns: 1.75fr 1fr;
     grid-template-rows: 1fr;
     grid-column-gap: 0px;
-    grid-row-gap: 0px; 
+    grid-row-gap: 0px;
 
     ${BrandTitle} {
         position: absolute;
@@ -79,7 +85,7 @@ const Root = styled.div`
         }
 
         ${BrandTitle} {
-            color: ${p => p.theme.textColor};
+            color: ${(p) => p.theme.textColor};
         }
     }
 `

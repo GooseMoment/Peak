@@ -8,7 +8,6 @@ export const getFollow = async (follower, followee) => {
         if (e.response.status === 404) {
             return false
         }
-
         throw e
     }
 }
@@ -38,9 +37,12 @@ export const patchFollowRequest = async (username, accept) => {
     const followee = getCurrentUsername()
 
     try {
-        const res = await client.patch(`social/follow/@${follower}/@${followee}/`, {
-            status: accept ? "accepted" : "rejected",
-        })
+        const res = await client.patch(
+            `social/follow/@${follower}/@${followee}/`,
+            {
+                status: accept ? "accepted" : "rejected",
+            },
+        )
 
         return res.data
     } catch (e) {
@@ -55,7 +57,9 @@ export const deleteFollowRequest = async (username) => {
     const followee = username
 
     try {
-        const res = await client.delete(`social/follow/@${follower}/@${followee}/`)
+        const res = await client.delete(
+            `social/follow/@${follower}/@${followee}/`,
+        )
 
         return res.data
     } catch (e) {
@@ -81,43 +85,57 @@ export const getFollowingsByUser = async (username) => {
     }
 }
 
-export const getBlocks = () => {
+export const getBlocks = () => {}
 
-}
+export const postBlock = (userID) => {}
 
-export const postBlock = (userID) => {
+export const deleteBlock = (userID) => {}
 
-}
-
-export const deleteBlock = (userID) => {
-
-}
-
-export const getDailyLogsPreview = async(username, day) => {
+export const getDailyLogsPreview = async (username, day) => {
     try {
         const res = await client.get(`social/daily/logs/@${username}/${day}/`)
         return res.data
-    } catch(e) {
+    } catch (e) {
         throw e
     }
 }
 
-export const getDailyComment = async(username, day) => {
+export const getDailyComment = async (username, day) => {
     try {
-        const res = await client.get(`social/daily/comment/@${username}/${day}/`)
+        const res = await client.get(
+            `social/daily/comment/@${username}/${day}/`,
+        )
         return res.data
-    } catch(e) {
+    } catch (e) {
         throw e
     }
 }
 
-export const getFollowingFeed = (date) => {
-
+export const postDailyComment = async (date, dailycomment) => {
+    try {
+        const res = await client.post(`social/daily/comment/${date}/`, {
+            content: dailycomment,
+        })
+        return res.data
+    } catch (e) {
+        throw e
+    }
 }
 
-export const getExploreFeed = (userID) => {
-
+export const getDailyLogDetails = async (username, day) => {
+    try {
+        const res = await client.get(
+            `social/daily/log/details/@${username}/${day}/`,
+        )
+        return res.data
+    } catch (e) {
+        throw e
+    }
 }
+
+export const getFollowingFeed = (date) => {}
+
+export const getExploreFeed = (userID) => {}
 
 export const getEmojis = async () => {
     try {
@@ -128,29 +146,117 @@ export const getEmojis = async () => {
     }
 }
 
-export const postReaction = (taskID, emoji) => {
-
-}
-
-export const deleteReaction = (taskID) => {
-
-}
-
-export const postCommentToTask = (taskID, comment) => {
-
-}
-
-export const postCommentToDailyComment = async(date, dailycomment) => {
+export const getReactions = async (parentType, parentID) => {
     try {
-        const res = await client.post(`social/daily/comment/${date}/`, {
-            comment: dailycomment
-        })
+        const res = await client.get(
+            `social/reaction/${parentType}/${parentID}/`,
+        )
         return res.data
     } catch (e) {
         throw e
     }
 }
 
-export const postPeck = (taskID) => {
+export const postReaction = async (parentType, parentID, emoji) => {
+    try {
+        const res = await client.post(
+            `social/reaction/${parentType}/${parentID}/`,
+            {
+                emoji: emoji,
+            },
+        )
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
 
+export const deleteReaction = async (parentType, parentID, emoji) => {
+    const params = new URLSearchParams({ emoji: emoji })
+
+    try {
+        const res = await client.delete(
+            `social/reaction/${parentType}/${parentID}/?${params.toString()}`,
+        )
+        return res.status
+    } catch (e) {
+        throw e
+    }
+}
+
+export const getPeck = async (taskID) => {
+    try {
+        const res = await client.get(`social/peck/${taskID}/`)
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
+
+export const postPeck = async (taskID) => {
+    try {
+        const res = await client.post(`social/peck/${taskID}/`)
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
+
+export const getComment = async (parentType, parentID) => {
+    try {
+        const res = await client.get(
+            `social/comment/${parentType}/${parentID}/`,
+        )
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
+
+export const postComment = async (parentType, parentID, comment) => {
+    try {
+        const res = await client.post(
+            `social/comment/${parentType}/${parentID}/`,
+            {
+                comment: comment,
+            },
+        )
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
+
+export const patchComment = async (
+    parentType,
+    parentID,
+    commentID,
+    comment,
+) => {
+    try {
+        const res = await client.patch(
+            `social/comment/${parentType}/${parentID}/`,
+            {
+                id: commentID,
+                comment: comment,
+            },
+        )
+        return res.data
+    } catch (e) {
+        throw e
+    }
+}
+
+export const deleteComment = async (parentType, parentID, commentID) => {
+    try {
+        const res = await client.delete(
+            `social/comment/${parentType}/${parentID}/`,
+            {
+                id: commentID,
+            },
+        )
+        return res.status
+    } catch (e) {
+        throw e
+    }
 }

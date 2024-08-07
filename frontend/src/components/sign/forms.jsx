@@ -1,9 +1,11 @@
 import { useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 
+import styled, { css } from "styled-components"
+
+import Button, { ButtonGroup } from "@components/common/Button"
 import Form from "@components/sign/Form"
 import Input from "@components/sign/Input"
-import Button, { ButtonGroup } from "@components/common/Button"
 import LoaderCircle from "@components/common/LoaderCircle"
 import Error from "@components/errors/ErrorLayout"
 
@@ -12,7 +14,14 @@ import { resendVerificationEmail, signIn, signUp, verifyEmail } from "@api/users
 import sleep from "@utils/sleep"
 
 import styled, { css } from "styled-components"
-import { Mail, AtSign, Key, HelpCircle, UserPlus, LogIn } from "feather-icons-react"
+import {
+    AtSign,
+    HelpCircle,
+    Key,
+    LogIn,
+    Mail,
+    UserPlus,
+} from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 import { useQuery, useMutation } from "@tanstack/react-query"
@@ -23,7 +32,7 @@ export const SignInForm = () => {
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
-    const onSubmit = async e => {
+    const onSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true)
 
@@ -31,14 +40,12 @@ export const SignInForm = () => {
         const password = e.target.password.value
 
         try {
-
             await signIn(email, password)
             toast.success(t("sign_in_success"))
             await sleep(1000)
 
             // TODO: don't navigate; redirect
             navigate("/app/")
-
         } catch (err) {
             const status = err?.response?.status
 
@@ -87,7 +94,7 @@ export const SignUpForm = () => {
 
     const [isLoading, setIsLoading] = useState(false)
 
-    const onSubmit = async e => {
+    const onSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true)
 
@@ -232,8 +239,8 @@ const Box = styled.section`
     gap: 5rem;
 
     padding: 2.25rem;
-    color: ${p => p.theme.textColor};
-    background-color: ${p => p.theme.backgroundColor};
+    color: ${(p) => p.theme.textColor};
+    background-color: ${(p) => p.theme.backgroundColor};
 
     grid-area: 1 / 2 / 2 / 3;
 
@@ -290,7 +297,7 @@ const LinkText = styled.p`
 const TosAgreement = styled.p`
     text-align: center;
     font-size: 0.75em !important;
-    color: ${p => p.theme.grey};
+    color: ${(p) => p.theme.grey};
 
     & a {
         display: inline-block;

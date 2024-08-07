@@ -1,32 +1,34 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 
-import PageTitle from "@components/common/PageTitle"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import styled from "styled-components"
+
 import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
-import Input from "@components/sign/Input"
-
-import Loading from "@components/settings/Loading"
-import Error from "@components/settings/Error"
-import Section, { Name, Value, Sync } from "@components/settings/Section"
-import ProfileImg from "@components/settings/ProfileImg"
-import PasswordSection from "@components/settings/PasswordSection"
-
-import Color from "@components/project/Creates/Color"
 import ModalPortal from "@components/common/ModalPortal"
+import PageTitle from "@components/common/PageTitle"
+import Color from "@components/project/Creates/Color"
+import Error from "@components/settings/Error"
+import Loading from "@components/settings/Loading"
+import PasswordSection from "@components/settings/PasswordSection"
+import ProfileImg from "@components/settings/ProfileImg"
+import Section, { Name, Sync, Value } from "@components/settings/Section"
+import Input from "@components/sign/Input"
 
 import { getMe, patchUser } from "@api/users.api"
 
-import styled from "styled-components"
-
 import queryClient from "@queries/queryClient"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { toast } from "react-toastify"
 
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const Account = () => {
-    const { t } = useTranslation("", {keyPrefix: "settings.account"})
+    const { t } = useTranslation("", { keyPrefix: "settings.account" })
 
-    const {data: user, isPending, isError} = useQuery({
+    const {
+        data: user,
+        isPending,
+        isError,
+    } = useQuery({
         queryKey: ["users", "me"],
         queryFn: () => getMe(),
     })
@@ -39,8 +41,10 @@ const Account = () => {
             return patchUser(data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["users", "me"]})
-            queryClient.invalidateQueries({queryKey: ["users", user.username]})
+            queryClient.invalidateQueries({ queryKey: ["users", "me"] })
+            queryClient.invalidateQueries({
+                queryKey: ["users", user.username],
+            })
             toast.success(t("account_edited"))
         },
         onError: () => {
@@ -52,12 +56,12 @@ const Account = () => {
         setHeaderColor(user?.header_color)
     }, [user])
 
-    const onClickOpenPalette = e => {
+    const onClickOpenPalette = (e) => {
         e.preventDefault()
         setPaletteOpen(true)
     }
 
-    const onSubmit = e => {
+    const onSubmit = (e) => {
         e.preventDefault()
         const formData = new FormData(e.target)
         mutation.mutate(formData)
@@ -71,54 +75,85 @@ const Account = () => {
         return <Error />
     }
 
-    return <>
-        <PageTitle>{t("title")} <Sync name={t("title")} /></PageTitle>
-        <Section>
-            <ImgNameEmailContainer>
-                <ProfileImg profile_img={user.profile_img} username={user.username} />
-                <NameEmail>
-                    <Username>@{user.username}</Username>
-                    <Email>{user.email}</Email>
-                </NameEmail>
-            </ImgNameEmailContainer>
-        </Section>
-        <form onSubmit={onSubmit}>
+    return (
+        <>
+            <PageTitle>
+                {t("title")} <Sync name={t("title")} />
+            </PageTitle>
             <Section>
-                <Name>{t("display_name")}</Name>
-                <Value>
-                    <Input name="display_name" type="text" defaultValue={user.display_name} placeholder={t("display_name_placeholder")} />
-                </Value>
+                <ImgNameEmailContainer>
+                    <ProfileImg
+                        profile_img={user.profile_img}
+                        username={user.username}
+                    />
+                    <NameEmail>
+                        <Username>@{user.username}</Username>
+                        <Email>{user.email}</Email>
+                    </NameEmail>
+                </ImgNameEmailContainer>
             </Section>
-            <Section>
-                <Name>{t("bio")}</Name>
-                <Value>
-                    <Bio autoComplete="off" name="bio" defaultValue={user.bio} placeholder={t("bio_placeholder")} />
-                </Value>
-            </Section>
-            <Section>
-                <Name>{t("header_color")}</Name>
-                <Value>
-                    <ColorCircle onClick={onClickOpenPalette} $color={"#" + headerColor} />
-                    <input name="header_color" type="hidden" value={headerColor || ""} />
-                </Value>
-                {paletteOpen && <ModalPortal additional>
-                    <Color closeComponent={() => setPaletteOpen(false)} setColor={setHeaderColor} /> 
-                </ModalPortal>}
-            </Section>
-            <Section>
-                <ButtonGroup $justifyContent="right">
-                    <Button 
-                        disabled={mutation.isPending} $loading={mutation.isPending}
-                        $form={buttonForms.filled} type="submit"
-                    >
-                        {t("button_submit")}
-                    </Button>
-                </ButtonGroup>
-            </Section>
-        </form>
+            <form onSubmit={onSubmit}>
+                <Section>
+                    <Name>{t("display_name")}</Name>
+                    <Value>
+                        <Input
+                            name="display_name"
+                            type="text"
+                            defaultValue={user.display_name}
+                            placeholder={t("display_name_placeholder")}
+                        />
+                    </Value>
+                </Section>
+                <Section>
+                    <Name>{t("bio")}</Name>
+                    <Value>
+                        <Bio
+                            autoComplete="off"
+                            name="bio"
+                            defaultValue={user.bio}
+                            placeholder={t("bio_placeholder")}
+                        />
+                    </Value>
+                </Section>
+                <Section>
+                    <Name>{t("header_color")}</Name>
+                    <Value>
+                        <ColorCircle
+                            onClick={onClickOpenPalette}
+                            $color={"#" + headerColor}
+                        />
+                        <input
+                            name="header_color"
+                            type="hidden"
+                            value={headerColor || ""}
+                        />
+                    </Value>
+                    {paletteOpen && (
+                        <ModalPortal additional>
+                            <Color
+                                closeComponent={() => setPaletteOpen(false)}
+                                setColor={setHeaderColor}
+                            />
+                        </ModalPortal>
+                    )}
+                </Section>
+                <Section>
+                    <ButtonGroup $justifyContent="right">
+                        <Button
+                            disabled={mutation.isPending}
+                            $loading={mutation.isPending}
+                            $form={buttonForms.filled}
+                            type="submit"
+                        >
+                            {t("button_submit")}
+                        </Button>
+                    </ButtonGroup>
+                </Section>
+            </form>
 
-        <PasswordSection />
-    </>
+            <PasswordSection />
+        </>
+    )
 }
 
 const ImgNameEmailContainer = styled.div`
@@ -139,9 +174,7 @@ const Username = styled.div`
     font-size: 1.25em;
 `
 
-const Email = styled.div`
-
-`
+const Email = styled.div``
 
 const Bio = styled.textarea`
     height: 7em;
@@ -152,24 +185,24 @@ const Bio = styled.textarea`
     border: none;
     font-size: 1em;
 
-    border: 1px solid ${p => p.theme.textColor};
+    border: 1px solid ${(p) => p.theme.textColor};
     border-radius: 10px;
 
     &:focus {
-        border-color: ${p => p.theme.goose};
+        border-color: ${(p) => p.theme.goose};
     }
 `
 
 const ColorCircle = styled.div`
     border-radius: 50%;
-    border: 1.5px solid ${p => p.theme.secondBackgroundColor};
+    border: 1.5px solid ${(p) => p.theme.secondBackgroundColor};
     aspect-ratio: 1/1;
 
     height: 2em;
 
     cursor: pointer;
 
-    background-color: ${p => p.$color};
+    background-color: ${(p) => p.$color};
 `
 
 export default Account

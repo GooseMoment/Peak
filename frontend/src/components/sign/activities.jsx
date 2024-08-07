@@ -1,22 +1,39 @@
-import Activity, {Emoji} from '@components/sign/Activity'
+import Activity, { Emoji } from "@components/sign/Activity"
 
-import GraphemeSplitter from 'grapheme-splitter'
+import GraphemeSplitter from "grapheme-splitter"
 
-const pick = array => {
+const pick = (array) => {
     const random = Math.floor(Math.random() * array.length)
     return array[random]
 }
 
 const usernames = [
-    "andless2004", "dksgo", "jedbeom", "minyoy", "aksae",
+    "andless2004",
+    "dksgo",
+    "jedbeom",
+    "minyoy",
+    "aksae",
     // TODO: more usernames
-    "haruka", "miki", "chihaya", "iori", "yayoi", "hibiki", "ami", "mami", "makoto", "takane", "ritsuko", "azusa", "yukiho",
+    "haruka",
+    "miki",
+    "chihaya",
+    "iori",
+    "yayoi",
+    "hibiki",
+    "ami",
+    "mami",
+    "makoto",
+    "takane",
+    "ritsuko",
+    "azusa",
+    "yukiho",
 ]
 
 const splitter = new GraphemeSplitter()
 
-const emojis_str = "😀😃😄😁😆😅😂🤣🥲🥹☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😮‍💨😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🫣🤗🫡🤔🫢🤭🤫🤥😶😶‍🌫️😐😑😬🫨🫠🙄😯😦😧😮😲🥱😴🤤😪😵😵‍💫🫥🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾"
-    + "👋🤚🖐✋🖖👌🤌🤏✌️🤞🫰🤟🤘🤙🫵🫱🫲🫸🫷🫳🫴👈👉👆🖕👇☝️👍👎✊👊🤛🤜👏🫶🙌👐🤲🤝🙏✍️💅🤳💪🦾🦵🦿🦶👣👂🦻👃🫀🫁🧠"
+const emojis_str =
+    "😀😃😄😁😆😅😂🤣🥲🥹☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😮‍💨😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🫣🤗🫡🤔🫢🤭🤫🤥😶😶‍🌫️😐😑😬🫨🫠🙄😯😦😧😮😲🥱😴🤤😪😵😵‍💫🫥🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾" +
+    "👋🤚🖐✋🖖👌🤌🤏✌️🤞🫰🤟🤘🤙🫵🫱🫲🫸🫷🫳🫴👈👉👆🖕👇☝️👍👎✊👊🤛🤜👏🫶🙌👐🤲🤝🙏✍️💅🤳💪🦾🦵🦿🦶👣👂🦻👃🫀🫁🧠"
 
 const systemEmojis = splitter.splitGraphemes(emojis_str)
 
@@ -120,11 +137,11 @@ const comments = [
 ]
 
 const timeUnitsMap = {
-    "seconds": 59-2,
-    "minutes": 59-2,
-    "hours": 23-2,
-    "days": 29-2,
-    "months": 11-2,
+    seconds: 59 - 2,
+    minutes: 59 - 2,
+    hours: 23 - 2,
+    days: 29 - 2,
+    months: 11 - 2,
 }
 
 const generateActivities = (serverEmojis) => {
@@ -135,7 +152,7 @@ const generateActivities = (serverEmojis) => {
     }
 
     const verbDetailMap = {
-        "reacted": emojis,
+        reacted: emojis,
         "completed a task": tasks,
         "made a task": tasks,
         "made a project": projects,
@@ -143,8 +160,8 @@ const generateActivities = (serverEmojis) => {
     }
 
     let activities = []
-    
-    for (let i=0; i<20; i++) {
+
+    for (let i = 0; i < 20; i++) {
         const username = pick(usernames)
 
         let verb = pick(Object.keys(verbDetailMap))
@@ -159,11 +176,17 @@ const generateActivities = (serverEmojis) => {
 
         const timeUnit = pick(Object.keys(timeUnitsMap))
         const timeValue = Math.floor(Math.random() * timeUnitsMap[timeUnit]) + 2
-        activities.push(<Activity key={`activity-${i}`} action={"@" + username + " " + verb} detail={detail} ago={timeValue + " " + timeUnit + " ago"} />)
+        activities.push(
+            <Activity
+                key={`activity-${i}`}
+                action={"@" + username + " " + verb}
+                detail={detail}
+                ago={timeValue + " " + timeUnit + " ago"}
+            />,
+        )
     }
 
     return activities
 }
-
 
 export default generateActivities

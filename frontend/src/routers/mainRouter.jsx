@@ -1,26 +1,21 @@
-import {
-    createBrowserRouter,
-    redirect,
-} from "react-router-dom"
+import { createBrowserRouter, redirect } from "react-router-dom"
 
 import AppLayout from "@containers/AppLayout"
 
 import ErrorPage from "@pages/ErrorPage"
+import HomePage from "@pages/HomePage"
 import NotificationsPage from "@pages/NotificationsPage"
-
+import ProjectListPage from "@pages/ProjectListPage"
+import ProjectPage from "@pages/ProjectPage"
 import StartPage from "@pages/StartPage"
 import TodayPage from "@pages/TodayPage"
-import HomePage from "@pages/HomePage"
 
-import ProjectListPage from "@pages/ProjectListPage"
-
-import ProjectPage from "@pages/ProjectPage"
 import TaskCreateElement from "@components/project/taskDetails/TaskCreateElement"
 import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement"
 
-import { getMe, signOut } from "@api/users.api"
-import { getProjectList } from "@api/projects.api"
 import { getToken } from "@api/client"
+import { getProjectList } from "@api/projects.api"
+import { getMe, signOut } from "@api/users.api"
 
 const redirectIfSignedIn = () => {
     if (getToken()) {
@@ -39,14 +34,18 @@ const routes = [
             {
                 index: true,
                 async lazy() {
-                    const { IntroPage } = await import("@pages/chunks/OutsidePages")
+                    const { IntroPage } = await import(
+                        "@pages/chunks/OutsidePages"
+                    )
                     return { Component: IntroPage }
                 },
             },
             {
                 path: "sign",
                 async lazy() {
-                    const { SignPage } = await import("@pages/chunks/OutsidePages")
+                    const { SignPage } = await import(
+                        "@pages/chunks/OutsidePages"
+                    )
                     return { element: <SignPage /> }
                 },
                 children: [
@@ -57,34 +56,41 @@ const routes = [
                     {
                         path: "in",
                         async lazy() {
-                            const { SignInForm } = await import ("@components/sign/forms")
+                            const { SignInForm } = await import(
+                                "@components/sign/forms"
+                            )
                             return { Component: SignInForm }
-                        }
+                        },
                     },
                     {
                         path: "up",
                         async lazy() {
-                            const { SignUpForm } = await import ("@components/sign/forms")
+                            const { SignUpForm } = await import(
+                                "@components/sign/forms"
+                            )
                             return { Component: SignUpForm }
-                        }
+                        },
                     },
                     {
                         path: "verification",
                         async lazy() {
-                            const { EmailVerificationForm } = await import ("@components/sign/forms")
+                            const { EmailVerificationForm } = await import(
+                                "@components/sign/forms"
+                            )
                             return { Component: EmailVerificationForm }
-                        }
+                        },
                     },
                     {
                         path: "verification-resend",
                         async lazy() {
-                            const { EmailVerificationResendForm } = await import ("@components/sign/forms")
+                            const { EmailVerificationResendForm } =
+                                await import("@components/sign/forms")
                             return { Component: EmailVerificationResendForm }
-                        }
+                        },
                     },
                 ],
             },
-        ]
+        ],
     },
     {
         path: "/app",
@@ -128,33 +134,39 @@ const routes = [
                     {
                         index: true,
                         async lazy() {
-                            const { SocialRedirector } = await import("@pages/chunks/SocialPages")
+                            const { SocialRedirector } = await import(
+                                "@pages/chunks/SocialPages"
+                            )
                             return { Component: SocialRedirector }
                         },
                     },
                     {
                         path: "following",
                         async lazy() {
-                            const { SocialFollowingPage } = await import("@pages/chunks/SocialPages")
+                            const { SocialFollowingPage } = await import(
+                                "@pages/chunks/SocialPages"
+                            )
                             return { Component: SocialFollowingPage }
                         },
                     },
                     {
                         path: "explore",
                         async lazy() {
-                            const { SocialExplorePage } = await import("@pages/chunks/SocialPages")
+                            const { SocialExplorePage } = await import(
+                                "@pages/chunks/SocialPages"
+                            )
                             return { Component: SocialExplorePage }
                         },
                     },
-                ]
+                ],
             },
             {
                 path: "projects",
-                element: <ProjectListPage/>,
+                element: <ProjectListPage />,
             },
             {
                 path: "projects/:id",
-                element: <ProjectPage/>,
+                element: <ProjectPage />,
                 children: [
                     {
                         path: "tasks/create/",
@@ -163,14 +175,16 @@ const routes = [
                     {
                         path: "tasks/:task_id/detail/",
                         id: "task",
-                        element: <TaskDetailElement/>,
+                        element: <TaskDetailElement />,
                     },
-                ]
+                ],
             },
             {
                 path: "users/:username",
                 async lazy() {
-                    const { default: UserPage } = await import("@pages/UserPage")
+                    const { default: UserPage } = await import(
+                        "@pages/UserPage"
+                    )
                     return { Component: UserPage }
                 },
             },
@@ -182,8 +196,8 @@ const routes = [
                 },
                 element: null,
             },
-        ]
-    }
+        ],
+    },
 ]
 
 const router = createBrowserRouter(routes)

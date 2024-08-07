@@ -3,8 +3,8 @@ import styled from "styled-components"
 const Section = styled.section`
     position: relative;
 
-    color: ${p => p.theme.textColor};
-    background-color: ${p => p.theme.backgroundColor};
+    color: ${(p) => p.theme.textColor};
+    background-color: ${(p) => p.theme.backgroundColor};
     padding: 3em 10em;
 
     @media screen and (max-width: 1000px) {

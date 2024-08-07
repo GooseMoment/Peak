@@ -1,65 +1,72 @@
 import { useEffect } from "react"
 
+import { useQuery } from "@tanstack/react-query"
+import styled, { css } from "styled-components"
+
 import SidebarLink, { SidebarA } from "./SidebarLink"
-import { skeletonCSS } from "@assets/skeleton"
+
 import { getMe } from "@api/users.api"
 
-import styled, { css } from "styled-components"
+import { skeletonCSS } from "@assets/skeleton"
+
 import FeatherIcon from "feather-icons-react"
-import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import { useQuery } from "@tanstack/react-query"
+import { toast } from "react-toastify"
 
 const Footer = ({ collapsed }) => {
-    const { data: user, isPending, isError } = useQuery({
+    const {
+        data: user,
+        isPending,
+        isError,
+    } = useQuery({
         queryKey: ["users", "me"],
         queryFn: () => getMe(),
     })
 
-    const { t } = useTranslation(null, {keyPrefix: "sidebar"})
+    const { t } = useTranslation(null, { keyPrefix: "sidebar" })
 
     useEffect(() => {
         if (isError) {
-            toast.error(t("user_error"), {toastId: "sidebar_footer_user_load_error"})
+            toast.error(t("user_error"), {
+                toastId: "sidebar_footer_user_load_error",
+            })
         }
     }, [isError])
 
-    return <FooterBox $collapsed={collapsed}>
-
-        {isPending && 
-            <MeProfile>
-                <MeProfileImgSkeleton />
-                {!collapsed && <UsernameSkeleton />}
-            </MeProfile>
-        }
-
-        {isError &&
-            <MeProfile />
-        }
-
-        {user && 
-            <SidebarLink to={`users/@${user.username}`} draggable="false">
+    return (
+        <FooterBox $collapsed={collapsed}>
+            {isPending && (
                 <MeProfile>
-                    <MeProfileImg src={user.profile_img} />
-                    {!collapsed &&  <Username>{user.username}</Username>}
+                    <MeProfileImgSkeleton />
+                    {!collapsed && <UsernameSkeleton />}
                 </MeProfile>
-            </SidebarLink>
-        }
+            )}
 
-        {!collapsed &&
-            <SidebarA href="#/settings/account" draggable="false">
-                <SettingIconContainer>
-                    <FeatherIcon icon="settings" />
-                </SettingIconContainer>
-            </SidebarA>
-        }
+            {isError && <MeProfile />}
 
-    </FooterBox>
+            {user && (
+                <SidebarLink to={`users/@${user.username}`} draggable="false">
+                    <MeProfile>
+                        <MeProfileImg src={user.profile_img} />
+                        {!collapsed && <Username>{user.username}</Username>}
+                    </MeProfile>
+                </SidebarLink>
+            )}
+
+            {!collapsed && (
+                <SidebarA href="#/settings/account" draggable="false">
+                    <SettingIconContainer>
+                        <FeatherIcon icon="settings" />
+                    </SettingIconContainer>
+                </SidebarA>
+            )}
+        </FooterBox>
+    )
 }
 
 const FooterBox = styled.footer`
     display: flex;
-    flex-direction: ${props => props.$collapsed ? "column" : "row"};
+    flex-direction: ${(props) => (props.$collapsed ? "column" : "row")};
     justify-content: space-between;
 
     margin: 1em;

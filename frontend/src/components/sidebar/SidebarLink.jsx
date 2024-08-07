@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom"
 
-import { cubicBeizer } from "@assets/keyframes"
 import styled, { css } from "styled-components"
+
+import { cubicBeizer } from "@assets/keyframes"
 
 const sidebarStyle = css`
     text-decoration: none;
@@ -12,13 +13,13 @@ const sidebarStyle = css`
     transition-timing-function: ${cubicBeizer};
 
     &.active {
-        color: ${p => p.theme.sidebar.activeColor};
-        background-color: ${p => p.theme.sidebar.activeBackgroundColor};
+        color: ${(p) => p.theme.sidebar.activeColor};
+        background-color: ${(p) => p.theme.sidebar.activeBackgroundColor};
     }
 
     &:hover:not(.active) {
-        color: ${p => p.theme.sidebar.hoverColor};
-        background-color: ${p => p.theme.sidebar.hoverBackgroundColor};
+        color: ${(p) => p.theme.sidebar.hoverColor};
+        background-color: ${(p) => p.theme.sidebar.hoverBackgroundColor};
     }
 `
 

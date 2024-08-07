@@ -1,18 +1,25 @@
-import Header from "./Header"
-import Middle from "./Middle"
-import Footer from "./Footer"
-
-import { cubicBeizer, slideLeftToRight } from "@assets/keyframes"
-import { ifMobile } from "@utils/useScreenType"
-
 import styled, { css } from "styled-components"
 
-const Sidebar = ({collapsed, setCollapsed, setSidebarHidden}) => {
-    return <SidebarBox $collapsed={collapsed}>
-        <Header collapsed={collapsed} setCollapsed={setCollapsed} setSidebarHidden={setSidebarHidden} />
-        <Middle collapsed={collapsed} setSidebarHidden={setSidebarHidden} />
-        <Footer collapsed={collapsed} />
-    </SidebarBox>
+import Footer from "./Footer"
+import Header from "./Header"
+import Middle from "./Middle"
+
+import { ifMobile } from "@utils/useScreenType"
+
+import { cubicBeizer, slideLeftToRight } from "@assets/keyframes"
+
+const Sidebar = ({ collapsed, setCollapsed, setSidebarHidden }) => {
+    return (
+        <SidebarBox $collapsed={collapsed}>
+            <Header
+                collapsed={collapsed}
+                setCollapsed={setCollapsed}
+                setSidebarHidden={setSidebarHidden}
+            />
+            <Middle collapsed={collapsed} setSidebarHidden={setSidebarHidden} />
+            <Footer collapsed={collapsed} />
+        </SidebarBox>
+    )
 }
 
 export const SidebarBox = styled.nav`
@@ -29,8 +36,8 @@ export const SidebarBox = styled.nav`
     flex-direction: column;
     justify-content: space-between;
 
-    color: ${p => p.theme.textColor};
-    background-color: ${p => p.theme.sidebar.backgroundColor};
+    color: ${(p) => p.theme.textColor};
+    background-color: ${(p) => p.theme.sidebar.backgroundColor};
 
     & * {
         user-select: none;
@@ -47,9 +54,11 @@ export const SidebarBox = styled.nav`
         animation: ${slideLeftToRight} 0.25s ${cubicBeizer};
     }
 
-    ${p => p.$collapsed && css`
-        width: unset;
-    `}
+    ${(p) =>
+        p.$collapsed &&
+        css`
+            width: unset;
+        `}
 `
 
 export default Sidebar

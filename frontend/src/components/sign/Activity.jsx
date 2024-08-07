@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 // Activity: 구 landing/sign.html의 log
-const Activity = ({action, detail, ago}) => {
+const Activity = ({ action, detail, ago }) => {
     return (
         <ActivityBox>
             <Content>
@@ -11,7 +11,6 @@ const Activity = ({action, detail, ago}) => {
         </ActivityBox>
     )
 }
-
 
 const ActivityBox = styled.div`
     display: flex;
@@ -58,4 +57,4 @@ const Ago = styled.p`
 `
 
 export default Activity
-export {Emoji}
+export { Emoji }
