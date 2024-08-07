@@ -12,8 +12,9 @@ import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenu from "@components/project/sorts/SortMenu"
 import Task from "@components/tasks/Task"
-
-import DrawerIcons from "./DrawerIcons"
+import ModalPortal from "@components/common/ModalPortal"
+import DrawerEdit from "@components/project/edit/DrawerEdit"
+import DrawerIcons from "@components/drawers/DrawerIcons"
 
 import { deleteDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
@@ -49,6 +50,7 @@ const Drawer = ({ project, drawer, color }) => {
         top: 0,
         left: 0,
     })
+    const [isDrawerEditOpen, setIsDrawerEditOpen] = useState(false)
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
 
     const { t } = useTranslation(null, { keyPrefix: "project" })
@@ -88,6 +90,11 @@ const Drawer = ({ project, drawer, color }) => {
         },
     })
 
+    const handleEdit = () => {
+        setIsContextMenuOpen(false)
+        setIsDrawerEditOpen(true)
+    }
+
     const handleAlert = () => {
         setIsContextMenuOpen(false)
         setIsAlertOpen(true)
@@ -95,7 +102,7 @@ const Drawer = ({ project, drawer, color }) => {
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
     const contextMenuItems = useMemo(
-        () => makeContextMenuItems(t, theme, handleAlert),
+        () => makeContextMenuItems(t, theme, handleEdit, handleAlert),
         [t, theme],
     )
 
@@ -189,6 +196,20 @@ const Drawer = ({ project, drawer, color }) => {
                     func={deleteMutation.mutate}
                 />
             )}
+            {isDrawerEditOpen && (
+                <ModalPortal
+                closeModal={() => {
+                    setIsDrawerEditOpen(false)
+                }}>
+                    <DrawerEdit
+                        projectID={project.id}
+                        drawer={drawer}
+                        onClose={() => {
+                            setIsDrawerEditOpen(false)
+                        }}
+                    />
+                </ModalPortal>
+            )}
             {/*isSimpleOpen &&
                 <TaskCreateSimple 
                     color={color}
@@ -268,12 +289,12 @@ const makeSortMenuItems = (t) => [
     { display: t("sort.reminders"), context: "reminders" },
 ]
 
-const makeContextMenuItems = (t, theme, handleAlert) => [
+const makeContextMenuItems = (t, theme, handleEdit, handleAlert) => [
     {
         icon: "edit",
         display: t("edit.display"),
         color: theme.textColor,
-        func: () => {},
+        func: handleEdit,
     },
     {
         icon: "trash-2",
