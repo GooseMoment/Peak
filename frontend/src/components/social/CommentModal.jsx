@@ -1,13 +1,42 @@
 import { useState } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import styled from 'styled-components'
 import { Portal } from 'react-portal'
+import { toast } from 'react-toastify'
 
 import CommentBox from '@components/social/CommentBox'
 
-const CommentModal = ({ isOpen, onClose, position, parentComments, saveComment}) => {
-    if (!isOpen) return null
+import queryClient from '@queries/queryClient'
+import { deleteComment, postComment, getComment, patchComment} from '@api/social.api'
 
+const CommentModal = ({ isOpen, onClose, position, parentType, parent}) => {
     const [commentValue, setCommentValue] = useState('')
+
+    const { data: parentComments, isError: parentCommentError, isFetching } = useQuery({
+        queryKey: ["comment", parentType, parent.id],
+        queryFn: () => getComment(parentType, parent.id),
+    })
+
+
+    const parentCommentsMutation = useMutation({
+        mutationFn: ({action, commentID, comment}) => {
+            if(action === 'post') {
+                return postComment(parentType, parent.id, comment)
+            } else if(action === 'patch') {
+                return patchComment(parentType, parent.id, commentID, comment)
+            } else if(action === 'delete') {
+                return deleteComment(parentType, parent.id, commentID)
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['comment', parentType, parent.id]})
+        },
+        onError: (e) => {
+            toast.error(e)
+        }
+    })
+
+    if(!isOpen) return null
 
     const handleChange = (e) => {
         setCommentValue(e.target.value)
@@ -15,7 +44,7 @@ const CommentModal = ({ isOpen, onClose, position, parentComments, saveComment})
 
     const handleKeyDown = (e) => {
         if(e.key == 'Enter') {
-            saveComment({action: 'post', comment: commentValue})
+            parentCommentsMutation.mutate({action: 'post', comment: commentValue})
             setCommentValue('')
         }
     }
