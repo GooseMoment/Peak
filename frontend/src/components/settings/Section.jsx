@@ -1,21 +1,21 @@
-import cloudIcon from "@assets/settings/cloud.svg"
-import { useTranslation } from "react-i18next"
-
 import styled from "styled-components"
+
+import cloudIcon from "@assets/settings/cloud.svg"
+
+import { useTranslation } from "react-i18next"
 
 const Section = styled.section`
     margin-top: 2em;
 
     &::after {
-        display: block; 
-        height: 0; 
-        content: ' ';
+        display: block;
+        height: 0;
+        content: " ";
         clear: both;
     }
 `
 
-export const Name = styled.h2`
-`
+export const Name = styled.h2``
 
 export const Description = styled.span`
     display: block;
@@ -32,19 +32,21 @@ export const Value = styled.div`
 
 const SyncStyleIcon = styled.img`
     position: relative;
-    filter: ${p => p.theme.imgIconFilter};
-    top: .13em;
+    filter: ${(p) => p.theme.imgIconFilter};
+    top: 0.13em;
     width: 0.75em;
     height: 0.75em;
     margin-left: 0.1em;
 `
 
-export const Sync = ({name}) => {
-    const { t } = useTranslation(null, {keyPrefix: "settings.online"})
+export const Sync = ({ name }) => {
+    const { t } = useTranslation(null, { keyPrefix: "settings.online" })
 
-    return <label title={t("sync_help", {name})}>
-        <SyncStyleIcon src={cloudIcon} />
-    </label>
-} 
+    return (
+        <label title={t("sync_help", { name })}>
+            <SyncStyleIcon src={cloudIcon} />
+        </label>
+    )
+}
 
 export default Section

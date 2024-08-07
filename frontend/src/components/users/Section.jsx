@@ -1,6 +1,6 @@
-import { ifMobile } from "@utils/useScreenType"
-
 import styled from "styled-components"
+
+import { ifMobile } from "@utils/useScreenType"
 
 export const Section = styled.section`
     position: relative;

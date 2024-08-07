@@ -2,26 +2,36 @@ import styled from "styled-components"
 
 import Detail from "@components/project/common/Detail"
 
-import publicsvg from "@assets/project/privacy/public.svg"
-import protectedsvg from "@assets/project/privacy/protected.svg"
 import privatesvg from "@assets/project/privacy/private.svg"
+import protectedsvg from "@assets/project/privacy/protected.svg"
+import publicsvg from "@assets/project/privacy/public.svg"
 
-const Privacy = ({setPrivacy, setDisplayPrivacy, closeComponent}) => {
+import { useTranslation } from "react-i18next"
 
-    const changePrivacy = (privacy, displayPrivacy) => {
-        return async () => {
-            await setPrivacy(privacy)
-            await setDisplayPrivacy(displayPrivacy)
+const Privacy = ({ setPrivacy, closeComponent }) => {
+    const { t } = useTranslation(null, { keyPrefix: "project.create.privacy" })
+
+    const changePrivacy = (privacy) => {
+        return () => {
+            setPrivacy(privacy)
             closeComponent()
         }
     }
 
+    const items = [
+        { icon: <img src={publicsvg} />, privacy: "public" },
+        { icon: <img src={protectedsvg} />, privacy: "protected" },
+        { icon: <img src={privatesvg} />, privacy: "private" },
+    ]
+
     return (
-        <Detail title="프로젝트 설정" onClose={closeComponent}>
-            {items.map(item => (
-                <ItemBlock key={item.id}>
+        <Detail title={t("title")} onClose={closeComponent}>
+            {items.map((item) => (
+                <ItemBlock key={item.privacy}>
                     {item.icon}
-                    <ItemText onClick={changePrivacy(item.privacy, item.display)}>{item.display}</ItemText>
+                    <ItemText onClick={changePrivacy(item.privacy)}>
+                        {t(item.privacy)}
+                    </ItemText>
                 </ItemBlock>
             ))}
         </Detail>
@@ -46,19 +56,13 @@ const ItemBlock = styled.div`
 const ItemText = styled.p`
     font-weight: normal;
     font-size: 1em;
-    color: ${p => p.theme.textColor};
+    color: ${(p) => p.theme.textColor};
 
     &:hover {
         font-weight: bolder;
-        color: ${p => p.theme.goose};
+        color: ${(p) => p.theme.goose};
         cursor: pointer;
     }
 `
-
-const items = [
-    {icon: <img src={publicsvg}/>, display: "전체공개", privacy: "public"},
-    {icon: <img src={protectedsvg}/>, display: "팔로워공개", privacy: "protected"},
-    {icon: <img src={privatesvg}/>, display: "비공개", privacy: "private"}
-]
 
 export default Privacy

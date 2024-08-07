@@ -1,6 +1,6 @@
-import { writeFileSync } from 'fs'
-import { resolve } from 'path'
-import { execSync } from 'child_process'
+import { execSync } from "child_process"
+import { writeFileSync } from "fs"
+import { resolve } from "path"
 
 // from: https://zwbetz.com/create-react-app-show-current-git-branch-and-commit-hash-from-any-os/
 
@@ -15,15 +15,15 @@ const execSyncWrapper = (command) => {
 }
 
 const main = () => {
-    let gitBranch = execSyncWrapper('git rev-parse --abbrev-ref HEAD')
-    let gitCommitHash = execSyncWrapper('git rev-parse --short=7 HEAD')
+    let gitBranch = execSyncWrapper("git rev-parse --abbrev-ref HEAD")
+    let gitCommitHash = execSyncWrapper("git rev-parse --short=7 HEAD")
 
     const obj = {
         gitBranch,
-        gitCommitHash
+        gitCommitHash,
     }
 
-    const filePath = resolve('src', 'generatedGitInfo.json')
+    const filePath = resolve("src", "generatedGitInfo.json")
     const fileContents = JSON.stringify(obj, null, 2)
 
     writeFileSync(filePath, fileContents)

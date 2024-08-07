@@ -2,7 +2,9 @@ import client from "@api/client"
 
 export const getDrawersByProject = async (projectID, ordering) => {
     try {
-        const res = await client.get(`drawers?project=${projectID}&ordering=${ordering}`)
+        const res = await client.get(
+            `drawers?project=${projectID}&ordering=${ordering}`,
+        )
         return res.data.results
     } catch (e) {
         throw e
@@ -34,7 +36,6 @@ export const patchDrawer = async (id, edit) => {
     } catch (e) {
         throw e
     }
-
 }
 
 export const deleteDrawer = async (id) => {

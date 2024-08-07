@@ -1,22 +1,23 @@
 import { Link } from "react-router-dom"
 
+import { useQuery } from "@tanstack/react-query"
+import styled from "styled-components"
+
 import Button from "@components/common/Button"
-import Brand from "@components/sign/Brand"
-
-import Section, { SectionTitle, SectionDescription } from "@components/intro/Section"
-import SubSection, { SubGroup, SubTitle } from "@components/intro/SubSection"
-
-import DemoProject from "@components/intro/DemoProject"
 import DemoDrawer from "@components/intro/DemoDrawer"
 import DemoPlan from "@components/intro/DemoPlan"
+import DemoProject from "@components/intro/DemoProject"
 import DemoTheme from "@components/intro/DemoTheme"
+import Section, {
+    SectionDescription,
+    SectionTitle,
+} from "@components/intro/Section"
+import SubSection, { SubGroup, SubTitle } from "@components/intro/SubSection"
+import Brand from "@components/sign/Brand"
 
 import { getEmojis } from "@api/social.api"
 
-import { useQuery } from "@tanstack/react-query"
-import styled from "styled-components"
 import { useTranslation } from "react-i18next"
-
 
 const IntroPage = () => {
     useQuery({
@@ -25,75 +26,89 @@ const IntroPage = () => {
         staleTime: 1000 * 60 * 60 * 5,
     })
 
-    const { t } = useTranslation(null, {keyPrefix: "intro"})
+    const { t } = useTranslation(null, { keyPrefix: "intro" })
 
-    return <>
-    <Nav>
-        <Brand /> 
-        <Link to="sign">
-            <Button >
-                {t("section_top.button_sign_in")}
-            </Button>
-        </Link>
-    </Nav>
-    <TopHero>
-        <TopTitle>
-            {t("section_top.title1")}
-            <br/>
-            {t("section_top.title2")}
-        </TopTitle>
-        <Link to="sign">
-            <TopHeroButton>
-                {t("section_top.button_start")}
-            </TopHeroButton>
-        </Link>
-    </TopHero>
+    return (
+        <>
+            <Nav>
+                <Brand />
+                <Link to="sign">
+                    <Button>{t("section_top.button_sign_in")}</Button>
+                </Link>
+            </Nav>
+            <TopHero>
+                <TopTitle>
+                    {t("section_top.title1")}
+                    <br />
+                    {t("section_top.title2")}
+                </TopTitle>
+                <Link to="sign">
+                    <TopHeroButton>
+                        {t("section_top.button_start")}
+                    </TopHeroButton>
+                </Link>
+            </TopHero>
 
-    <Section>
-        <SectionTitle>{t("section_plan.title")}</SectionTitle>
-        <SectionDescription>{t("section_plan.description")}</SectionDescription>
-        <SubGroup>
-            <DemoPlan />
-        </SubGroup>
-    </Section>
+            <Section>
+                <SectionTitle>{t("section_plan.title")}</SectionTitle>
+                <SectionDescription>
+                    {t("section_plan.description")}
+                </SectionDescription>
+                <SubGroup>
+                    <DemoPlan />
+                </SubGroup>
+            </Section>
 
-    <Section>
-        <SectionTitle>{t("section_organize.title")}</SectionTitle>
-        <SectionDescription>{t("section_organize.description")}</SectionDescription>
-        <SubGroup>
-            <DemoProject />
-            <DemoDrawer />
-        </SubGroup>
-    </Section>
+            <Section>
+                <SectionTitle>{t("section_organize.title")}</SectionTitle>
+                <SectionDescription>
+                    {t("section_organize.description")}
+                </SectionDescription>
+                <SubGroup>
+                    <DemoProject />
+                    <DemoDrawer />
+                </SubGroup>
+            </Section>
 
-    <Section>
-        <SectionTitle>{t("section_cheer.title")}</SectionTitle>
-        <SectionDescription>{t("section_cheer.description")}</SectionDescription>
-        <SubGroup>
-            <SubSection>
-                <SubTitle>*** Emoji Selector Box should be here ***</SubTitle>
-            </SubSection>
-        </SubGroup>
-    </Section>
+            <Section>
+                <SectionTitle>{t("section_cheer.title")}</SectionTitle>
+                <SectionDescription>
+                    {t("section_cheer.description")}
+                </SectionDescription>
+                <SubGroup>
+                    <SubSection>
+                        <SubTitle>
+                            *** Emoji Selector Box should be here ***
+                        </SubTitle>
+                    </SubSection>
+                </SubGroup>
+            </Section>
 
-    <Section>
-        <SectionTitle>{t("section_share.title")}</SectionTitle>
-        <SectionDescription>{t("section_share.description")}</SectionDescription>
-        <SubGroup>
-            <SubSection>
-                <SubTitle>*** UserLogDetail should be here ***</SubTitle>
-            </SubSection>
-        </SubGroup>
-    </Section>
+            <Section>
+                <SectionTitle>{t("section_share.title")}</SectionTitle>
+                <SectionDescription>
+                    {t("section_share.description")}
+                </SectionDescription>
+                <SubGroup>
+                    <SubSection>
+                        <SubTitle>
+                            *** UserLogDetail should be here ***
+                        </SubTitle>
+                    </SubSection>
+                </SubGroup>
+            </Section>
 
-    <Section>
-        <SectionTitle>{t("section_customize.title")}</SectionTitle>
-        <SectionDescription>{t("section_customize.description")}</SectionDescription>
-        <SubGroup>
-            <DemoTheme />
-        </SubGroup>
-    </Section>
-    </>
+            <Section>
+                <SectionTitle>{t("section_customize.title")}</SectionTitle>
+                <SectionDescription>
+                    {t("section_customize.description")}
+                </SectionDescription>
+                <SubGroup>
+                    <DemoTheme />
+                </SubGroup>
+            </Section>
+        </>
+    )
 }
 
 const Nav = styled.nav`
@@ -110,8 +125,8 @@ const Nav = styled.nav`
 `
 
 const TopHero = styled(Section)`
-    color: ${p => p.theme.frontSignPageTextColor};
-    background-color: ${p => p.theme.frontSignPageBackgroundColor};
+    color: ${(p) => p.theme.frontSignPageTextColor};
+    background-color: ${(p) => p.theme.frontSignPageBackgroundColor};
     padding-top: 10em;
     padding-bottom: 10em;
 `
@@ -126,10 +141,9 @@ const TopHeroButton = styled(Button)`
     margin-top: 3em;
     font-size: 1.25em;
     color: inherit;
-    background-color: ${p => p.theme.frontSignPageBackgroundColor};
-    border-color: ${p => p.theme.frontSignPageTextColor};
+    background-color: ${(p) => p.theme.frontSignPageBackgroundColor};
+    border-color: ${(p) => p.theme.frontSignPageTextColor};
     border-width: 0.15em;
 `
-
 
 export default IntroPage

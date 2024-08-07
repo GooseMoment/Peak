@@ -1,45 +1,55 @@
-import { useState, useMemo } from "react"
+import { useMemo, useState } from "react"
 
-import FilterButtonGroup from "@components/common/FilterButtonGroup"
-import SubSection from "./SubSection"
-import SkeletonSidebar from "./skeletons/SkeletonSidebar"
-import SkeletonDrawer from "./skeletons/SkeletonDrawer"
-
-import themes from "@assets/themes"
-import { cubicBeizer } from "@assets/keyframes"
-import { ifMobile, ifTablet } from "@utils/useScreenType"
-
-import { useTranslation } from "react-i18next"
 import styled, { ThemeProvider } from "styled-components"
 
+import FilterButtonGroup from "@components/common/FilterButtonGroup"
+import SubSection from "@components/intro/SubSection"
+import SkeletonDrawer from "@components/intro/skeletons/SkeletonDrawer"
+import SkeletonSidebar from "@components/intro/skeletons/SkeletonSidebar"
+
+import { ifMobile, ifTablet } from "@utils/useScreenType"
+
+import { cubicBeizer } from "@assets/keyframes"
+import themes from "@assets/themes"
+
+import { useTranslation } from "react-i18next"
+
 const DemoTheme = () => {
-    const { t } = useTranslation(null, {keyPrefix: "intro.section_customize.demo"})
+    const { t } = useTranslation(null, {
+        keyPrefix: "intro.section_customize.demo",
+    })
     const [activeTheme, setActiveTheme] = useState("light")
     const filters = useMemo(() => makeFilters(t), [t])
 
-    return <SubSection>
-        <FilterButtonGroup active={activeTheme} setActive={setActiveTheme} filters={filters} />
-        <Wrapper>
-            <ThemeProvider theme={themes[activeTheme]}>
-                <SkeletonFrame>
-                    <SkeletonSidebar />
-                    <SkeletonPage>
-                        <SkeletonProjectName />
-                        <SkeletonDrawer />
-                        <SkeletonDrawer />
-                    </SkeletonPage>            
-                </SkeletonFrame>
-            </ThemeProvider>
-        </Wrapper>
-    </SubSection>
+    return (
+        <SubSection>
+            <FilterButtonGroup
+                active={activeTheme}
+                setActive={setActiveTheme}
+                filters={filters}
+            />
+            <Wrapper>
+                <ThemeProvider theme={themes[activeTheme]}>
+                    <SkeletonFrame>
+                        <SkeletonSidebar />
+                        <SkeletonPage>
+                            <SkeletonProjectName />
+                            <SkeletonDrawer />
+                            <SkeletonDrawer />
+                        </SkeletonPage>
+                    </SkeletonFrame>
+                </ThemeProvider>
+            </Wrapper>
+        </SubSection>
+    )
 }
 
 const makeFilters = (t) => ({
-    "light": {
-        display: t("theme_light"), 
+    light: {
+        display: t("theme_light"),
     },
-    "dark": {
-        display: t("theme_dark"), 
+    dark: {
+        display: t("theme_dark"),
     },
 })
 
@@ -67,13 +77,13 @@ const SkeletonFrame = styled.div`
 
     overflow: hidden;
 
-    border: 1px solid ${p => p.theme.textColor};
+    border: 1px solid ${(p) => p.theme.textColor};
     border-radius: 16px;
 
     height: 400px;
     aspect-ratio: 16/9;
 
-    background-color: ${p => p.theme.backgroundColor};
+    background-color: ${(p) => p.theme.backgroundColor};
 
     ${ifTablet} {
         height: 16em;

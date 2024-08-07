@@ -1,16 +1,18 @@
 import styled, { keyframes } from "styled-components"
 
-const Showcase = ({activities}) => {
-    return <Box>
-        <DisplayArea>
-            <ScreenTop />
-            <ScreenBottom />
+const Showcase = ({ activities }) => {
+    return (
+        <Box>
+            <DisplayArea>
+                <ScreenTop />
+                <ScreenBottom />
 
-            {/* 무한 스크롤을 위해 ActivitiesBox가 두 개 필요 */}
-            <ActivitiesBox>{activities}</ActivitiesBox>
-            <ActivitiesBox>{activities}</ActivitiesBox>
-        </DisplayArea>
-    </Box>
+                {/* 무한 스크롤을 위해 ActivitiesBox가 두 개 필요 */}
+                <ActivitiesBox>{activities}</ActivitiesBox>
+                <ActivitiesBox>{activities}</ActivitiesBox>
+            </DisplayArea>
+        </Box>
+    )
 }
 
 const Box = styled.section`
@@ -20,7 +22,7 @@ const Box = styled.section`
     align-items: center;
 
     padding: 3rem;
-    color: #FE4902;
+    color: #fe4902;
 
     grid-area: 1 / 1 / 2 / 2;
 
@@ -53,7 +55,11 @@ const ScreenTop = styled.div`
     height: 35%;
 
     top: 0;
-    background: linear-gradient(180deg, #FFD7C7 29.5%, rgba(255, 215, 199, 0) 100%);
+    background: linear-gradient(
+        180deg,
+        #ffd7c7 29.5%,
+        rgba(255, 215, 199, 0) 100%
+    );
 `
 
 const ScreenBottom = styled(ScreenTop)`
@@ -69,7 +75,7 @@ const scroll = keyframes`
     to {
         transform: translateY(calc(-100% - 2rem));
     }
-` 
+`
 
 const ActivitiesBox = styled.div`
     user-select: none;
