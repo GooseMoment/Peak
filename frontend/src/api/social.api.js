@@ -8,7 +8,6 @@ export const getFollow = async (follower, followee) => {
         if (e.response.status === 404) {
             return false
         }
-
         throw e
     }
 }
@@ -184,7 +183,7 @@ export const getPeck = async(taskID) => {
         const res = await client.get(`social/peck/${taskID}/`)
         return res.data
     } catch(e) {
-        throw(e)
+        throw e
     }
 }
 
@@ -193,7 +192,7 @@ export const postPeck = async(taskID) => {
         const res = await client.post(`social/peck/${taskID}/`)
         return res.data
     } catch(e) {
-        throw(e)
+        throw e
     }
 }
 
@@ -202,7 +201,7 @@ export const getComment = async(parentType, parentID) => {
         const res = await client.get(`social/comment/${parentType}/${parentID}/`)
         return res.data
     } catch(e) {
-        throw(e)
+        throw e
     }
 }
 
@@ -213,7 +212,7 @@ export const postComment = async(parentType, parentID, comment) => {
         })
         return res.data
     } catch(e) {
-        throw(e)
+        throw e
     }
 }
 
@@ -225,7 +224,7 @@ export const patchComment = async(parentType, parentID, commentID, comment) => {
         })
         return res.data
     } catch(e) {
-        throw(e)
+        throw e
     }
 }
 
@@ -236,6 +235,6 @@ export const deleteComment = async(parentType, parentID, commentID) => {
         })
         return res.status
     } catch(e) {
-        throw(e)
+        throw e
     }
 }
