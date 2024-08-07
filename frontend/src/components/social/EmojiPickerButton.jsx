@@ -13,7 +13,6 @@ const EmojiPickerButton = ({pickedEmoji, setPickedEmoji}) => {
     const [modalPosition, setModalPosition] = useState({top: 0, left: 0})
     const buttonRef = useRef(null)
 
-    // TODO: EmojiModal에서 시행?
     const { data: serverEmojis, isError: emojiError, isFetching } = useQuery({
         queryKey: ["emojis"],
         queryFn: () => getEmojis(),

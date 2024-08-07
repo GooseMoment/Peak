@@ -59,13 +59,13 @@ const CommentButton = ({parentType, parent}) => {
         <ButtonBox onClick={handleOpenModal} ref={buttonRef}>
             <FeatherIcon icon={'message-square'}/>
         </ButtonBox>
-        <CommentModal
+        {isModalOpen && <CommentModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(prev => !prev)}
             position={modalPosition}
             parentComments={parentComments}
             saveComment={parentCommentsMutation.mutate}
-        /> 
+        />}
     </>
 }
 
