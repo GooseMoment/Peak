@@ -28,27 +28,26 @@ const IntroPage = () => {
 
     const { t } = useTranslation(null, { keyPrefix: "intro" })
 
-    return <>
-    <Nav>
-        <Brand /> 
-        <Link to="/sign/in">
-            <Button >
-                {t("section_top.button_sign_in")}
-            </Button>
-        </Link>
-    </Nav>
-    <TopHero>
-        <TopTitle>
-            {t("section_top.title1")}
-            <br/>
-            {t("section_top.title2")}
-        </TopTitle>
-        <Link to="/sign/up">
-            <TopHeroButton>
-                {t("section_top.button_start")}
-            </TopHeroButton>
-        </Link>
-    </TopHero>
+    return (
+        <>
+            <Nav>
+                <Brand />
+                <Link to="/sign/in">
+                    <Button>{t("section_top.button_sign_in")}</Button>
+                </Link>
+            </Nav>
+            <TopHero>
+                <TopTitle>
+                    {t("section_top.title1")}
+                    <br />
+                    {t("section_top.title2")}
+                </TopTitle>
+                <Link to="/sign/up">
+                    <TopHeroButton>
+                        {t("section_top.button_start")}
+                    </TopHeroButton>
+                </Link>
+            </TopHero>
 
             <Section>
                 <SectionTitle>{t("section_plan.title")}</SectionTitle>

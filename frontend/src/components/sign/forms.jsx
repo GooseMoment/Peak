@@ -13,7 +13,6 @@ import { resendVerificationEmail, signIn, signUp, verifyEmail } from "@api/users
 
 import sleep from "@utils/sleep"
 
-import styled, { css } from "styled-components"
 import {
     AtSign,
     HelpCircle,
