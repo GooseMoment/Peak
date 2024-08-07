@@ -3,9 +3,9 @@ import styled from "styled-components"
 
 const CommentBox = ({comment}) => {
     return <Box>
-        <ProfileImg>
+        <ProfileImgWrapper>
             <img src={comment.user.profile_img}/>
-        </ProfileImg>
+        </ProfileImgWrapper>
         <Wrapper>
             <InfoBox>
                 <Username>@{comment.user.username}</Username>
@@ -27,7 +27,7 @@ const Box = styled.div`
     gap: 0.5em;
 `
 
-const ProfileImg = styled.div`
+const ProfileImgWrapper = styled.div`
     & img {
         border-radius: 2em;
     }
