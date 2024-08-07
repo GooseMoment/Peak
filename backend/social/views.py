@@ -155,7 +155,7 @@ def get_daily_logs(request: HttpRequest, username, day):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
-def get_daily_quote(requset: HttpRequest, followee, day):    
+def get_quote(requset: HttpRequest, followee, day):    
     followeeUser = get_object_or_404(User, username=followee)
     
     followerUserID = str(requset.user.id)
@@ -185,7 +185,7 @@ def get_daily_quote(requset: HttpRequest, followee, day):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(["POST"])
-def post_daily_quote(request: Request, day):
+def post_quote(request: Request, day):
     day_min = datetime.fromisoformat(day)
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
     
