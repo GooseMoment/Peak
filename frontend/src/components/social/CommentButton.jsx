@@ -64,6 +64,7 @@ const CommentButton = ({parentType, parent}) => {
             onClose={() => setIsModalOpen(prev => !prev)}
             position={modalPosition}
             parentComments={parentComments}
+            saveComment={parentCommentsMutation.mutate}
         /> 
     </>
 }
