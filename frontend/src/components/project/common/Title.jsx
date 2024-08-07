@@ -1,13 +1,26 @@
-import styled from "styled-components"
+import { styled, css } from "styled-components"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
-const Title = ({ name, setName, icon, onClose }) => {
+const Title = ({ name, setName, setFunc, isCreate, icon, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
 
-    const changeName = (e) => {
-        setName(e.target.value)
+    const onchange = (e) => {
+        const newName = e.target.value
+        setName(newName)
+    }
+
+    const changeName = () => {
+        setFunc({name})
+        toast.success(t("name_change_success"), {toastId: "name_change_success"})
+    }
+
+    const onEnter = (e) => {
+        if (e.key === "Enter") {
+            changeName()
+        }
     }
 
     return (
@@ -16,12 +29,14 @@ const Title = ({ name, setName, icon, onClose }) => {
                 <FeatherIcon icon={icon} />
                 <InputText
                     type="text"
-                    value={name}
-                    onChange={changeName}
+                    value={name || ''}
+                    onChange={onchange}
+                    onKeyDown={isCreate ? ()=>{} : onEnter}
                     placeholder={t("name_placeholder")}
                 />
             </TitleBox>
-            <Icons>
+            <Icons $isCreate={isCreate}>
+                {isCreate || <FeatherIcon icon="check" onClick={changeName}/>}
                 <FeatherIcon icon="x" onClick={onClose} />
             </Icons>
         </TitleFrameBox>
@@ -72,14 +87,25 @@ const Icons = styled.div`
     display: flex;
     align-items: center;
     margin-right: 1.3em;
+    gap: 0.6em;
 
     & svg {
         width: 1.1em;
         height: 1.1em;
         top: 0.2em;
         cursor: pointer;
-        stroke: ${(p) => p.theme.primaryColors.danger};
+        color: ${(p) => p.theme.primaryColors.danger};
     }
+
+    ${props=>props.$isCreate || css`
+        & :nth-child(1) {
+            color: ${(p)=>p.theme.primaryColors.info};
+        }
+
+        & :nth-child(2) {
+            stroke: ${(p)=>p.theme.primaryColors.danger};
+        }
+    `}
 `
 
 export default Title

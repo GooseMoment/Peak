@@ -24,8 +24,8 @@ const Color = ({ setColor, setDisplayColor, closeComponent }) => {
 
     const changeColor = (color, displayColor) => {
         return () => {
-            setColor(color)
-            setDisplayColor(displayColor)
+            setColor({color})
+            setDisplayColor({displayColor})
             closeComponent()
         }
     }
@@ -48,8 +48,8 @@ const Color = ({ setColor, setDisplayColor, closeComponent }) => {
                     </TabButton>
                 ))}
             </TabBox>
-            {usePalettes.map((palette) => (
-                <ItemBlock>
+            {usePalettes.map((palette, i) => (
+                <ItemBlock key={i}>
                     <FeatherIcon
                         icon="circle"
                         fill={"#" + palette.color}

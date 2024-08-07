@@ -12,7 +12,7 @@ const Type = ({ setType, closeComponent }) => {
 
     const changeType = (type) => {
         return () => {
-            setType(type)
+            setType({type})
             closeComponent()
         }
     }
