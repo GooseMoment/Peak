@@ -121,8 +121,6 @@ const AddButton = styled(Button)`
   margin: 1em;
   margin-right: 2.5em;
   margin-bottom: 1.5em;
-`;
-
-export default TaskCreate;
+`
 
 export default TaskCreate

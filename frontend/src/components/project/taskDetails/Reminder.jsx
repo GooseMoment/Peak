@@ -56,8 +56,6 @@ const Reminder = ({ task, closeComponent }) => {
         }
         return null
     }
-    return null;
-  };
 
     const handleReminder = (delta) => {
         const id = getReminderID(delta)

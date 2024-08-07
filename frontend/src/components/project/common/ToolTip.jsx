@@ -9,18 +9,6 @@ const ToolTip = ({ message, children }) => {
     )
 }
 
-const Container = styled.div`
-  position: relative;
-  width: fit-content;
-  height: fit-content;
-
-  &:hover {
-    ${ToolTipBox} {
-      display: block;
-    }
-  }
-`;
-
 const ToolTipBox = styled.div`
     display: none;
     z-index: 200;
@@ -46,6 +34,17 @@ const ToolTipBox = styled.div`
         left: 50%;
         transform: translate(-50%) rotate(45deg);
     }
+`
+const Container = styled.div`
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+
+  &:hover {
+    ${ToolTipBox} {
+      display: block;
+    }
+  }
 `
 
 export default ToolTip

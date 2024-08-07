@@ -42,4 +42,4 @@ const Task = ({ task, color }) => {
     )
 }
 
-export default Task;
+export default Task

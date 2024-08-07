@@ -11,10 +11,10 @@ import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import DrawerCreate from "@components/project/Creates/DrawerCreate"
+import BarChart from "@components/project/common/BarChart"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
-import BarChart from "@components/project/common/BarChart"
 
 import { getDrawersByProject } from "@api/drawers.api"
 import { deleteProject, getProject, patchProject } from "@api/projects.api"
@@ -183,6 +183,9 @@ const ProjectPage = () => {
                     />
                 </Icons>
             </TitleBox>
+            {project.type === "goal" && (
+                <BarChart project={project} drawers={drawers} />
+            )}
             {drawers && drawers.length === 0 ? (
                 <NoDrawerText>{t("no_drawer")}</NoDrawerText>
             ) : (

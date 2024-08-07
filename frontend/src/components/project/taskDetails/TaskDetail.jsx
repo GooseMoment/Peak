@@ -28,8 +28,8 @@ const TaskDetail = () => {
     const navigate = useNavigate()
     const [setting] = useClientSetting()
 
-  const [taskName, setTaskName] = useState("");
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const [taskName, setTaskName] = useState("")
+    const [isAlertOpen, setIsAlertOpen] = useState(false)
 
     const {
         isPending,
@@ -74,13 +74,13 @@ const TaskDetail = () => {
         },
     })
 
-  useEffect(() => {
-    setTaskName(task?.name)
-  }, [task])
+    useEffect(() => {
+        setTaskName(task?.name)
+    }, [task])
 
-  const onClose = () => {
-    navigate(`/app/projects/${projectID}`)
-  }
+    const onClose = () => {
+        navigate(`/app/projects/${projectID}`)
+    }
 
     const handleAlert = () => {
         if (setting.delete_task_after_alert) {
@@ -140,16 +140,16 @@ const TaskDetailBox = styled.div`
 `
 
 const TaskNameBox = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 1em 1.8em;
-`;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1em 1.8em;
+`
 
 const Icons = styled.div`
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 
     & svg {
         top: 0.4em;

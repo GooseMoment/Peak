@@ -157,8 +157,8 @@ const Contents = ({ task, setFunc }) => {
                     </ContentsBox>
                 </Fragment>
             ))}
-          </ContentsBlock>
-        )
+        </ContentsBlock>
+    )
 }
 
 const ContentsBlock = styled.div`
