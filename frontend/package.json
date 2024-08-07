@@ -17,6 +17,7 @@
     "@tanstack/react-query-devtools": "^5.51.3",
     "@toss/impression-area": "^1.4.0",
     "axios": "^1.6.7",
+    "eslint-plugin-react": "^7.35.0",
     "feather-icons-react": "^0.7.0",
     "grapheme-splitter": "^1.0.4",
     "i18next": "^23.11.4",
@@ -43,9 +44,6 @@
     "@vite-pwa/assets-generator": "^0.2.4",
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^9.8.0",
-    "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5",
     "globals": "^15.9.0",
     "vite": "^5.1.7"
   }
