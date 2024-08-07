@@ -1,6 +1,7 @@
 import globals from "globals"
 import pluginJs from "@eslint/js"
 import pluginReact from "eslint-plugin-react"
+import airbnb from "eslint-config-airbnb" // TODO: convert to flat config after airbnb updates its repo
 
 
 export default [
@@ -8,6 +9,9 @@ export default [
     pluginReact.configs.flat.recommended, 
     pluginReact.configs.flat["jsx-runtime"],
     {
+        plugins: {
+            airbnb,
+        },
         files: ["**/*.{js,mjs,cjs,jsx}"],
         languageOptions: { 
             globals: {...globals.browser, ...globals.node},
