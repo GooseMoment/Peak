@@ -24,7 +24,7 @@
         "content_comment_task": "commented on \"<ellipsis>{{task_name}}</ellipsis>\": \"<ellipsis>{{comment}}</ellipsis>\"",
         "content_peck": "pecked \"<ellipsis>{{task_name}}</ellipsis>\" {{count}} times",
         "content_reaction_task": "Reacted to \"<ellipsis>{{task_name}}</ellipsis>\"",
-        "content_daily_comment": "Daily Comment of {{date}}",
+        "content_reaction_daily_comment": "Daily Comment of {{date}}",
         "content_follow": "follows you",
         "content_follow_request": "wants to follow you",
         "content_follow_request_accepted": "accepted follow request"

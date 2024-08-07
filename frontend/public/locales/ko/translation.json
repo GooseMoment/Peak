@@ -110,7 +110,6 @@
             "reminders": "리마인더 설정 우선"
         }
     },
-    "drawer": {},
     "task": {
         "missed": "놓침",
         "overdue": "기한 지남",
