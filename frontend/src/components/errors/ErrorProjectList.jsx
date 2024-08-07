@@ -1,5 +1,6 @@
-import FeatherIcon from "feather-icons-react"
 import styled from "styled-components"
+
+import FeatherIcon from "feather-icons-react"
 
 const ErrorProjectList = () => {
     return (
@@ -18,8 +19,8 @@ const ErrorBox = styled.div`
     margin: 1.5em 0em;
     border-radius: 15px;
     font-size: 1.3em;
-    color: ${p=>p.theme.white};
-    background-color: ${p=>p.theme.primaryColors.danger};
+    color: ${(p) => p.theme.white};
+    background-color: ${(p) => p.theme.primaryColors.danger};
     cursor: pointer;
 `
 

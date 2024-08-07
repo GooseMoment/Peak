@@ -10,7 +10,7 @@ const useScreenType = () => {
         widthType: "desktop",
         isMobile: false,
         isTablet: false,
-        isDesktop: false, 
+        isDesktop: false,
     }
 
     if (screenSize.width <= WIDTH_MOBILE) {

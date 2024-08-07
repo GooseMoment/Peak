@@ -1,10 +1,14 @@
-const handleToggleContextMenu = (setSelectedButtonPosition, setIsMenuOpen, setCloseOtherModals) => {
+const handleToggleContextMenu = (
+    setSelectedButtonPosition,
+    setIsMenuOpen,
+    setCloseOtherModals,
+) => {
     return async (e) => {
         setSelectedButtonPosition({
             top: e.target.getBoundingClientRect().top,
             left: e.target.getBoundingClientRect().left,
         })
-        setIsMenuOpen(prev => !prev)
+        setIsMenuOpen((prev) => !prev)
         setCloseOtherModals(false)
     }
 }

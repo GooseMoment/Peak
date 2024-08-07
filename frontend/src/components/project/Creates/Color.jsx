@@ -1,23 +1,26 @@
 import { useState } from "react"
 
 import styled, { css } from "styled-components"
+
+import Detail from "@components/project/common/Detail"
+
+import palettes from "./palettes"
+
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-import Detail from "@components/project/common/Detail"
-import palettes from "./palettes"
+const Color = ({ setColor, setDisplayColor, closeComponent }) => {
+    const { t } = useTranslation(null, { keyPrefix: "project.create.color" })
 
-const Color = ({setColor, setDisplayColor, closeComponent}) => {
-    const { t } = useTranslation(null, {keyPrefix: "project.create.color"})
-
-    const [activeTab, setActiveTab] = useState('기본')
+    const [activeTab, setActiveTab] = useState("기본")
     const [usePalettes, setUsePalettes] = useState(palettes[0])
 
     const clickTab = (id, themeName) => {
         return async () => {
             setUsePalettes(palettes[id])
             setActiveTab(themeName)
-        }}
+        }
+    }
 
     const changeColor = (color, displayColor) => {
         return () => {
@@ -28,26 +31,30 @@ const Color = ({setColor, setDisplayColor, closeComponent}) => {
     }
 
     const themes = [
-        {id: 0, themeName: t("theme1")},
-        {id: 1, themeName: t("theme2")},
-    ]    
+        { id: 0, themeName: t("theme1") },
+        { id: 1, themeName: t("theme2") },
+    ]
 
     return (
         <Detail title={t("title")} onClose={closeComponent}>
             <TabBox>
-            {themes.map(theme => (
-                <TabButton
-                    key={theme.id}
-                    $isActive={activeTab === theme.themeName}
-                    onClick={clickTab(theme.id, theme.themeName)}
-                >
-                    {theme.themeName}
-                </TabButton>
-            ))}
+                {themes.map((theme) => (
+                    <TabButton
+                        key={theme.id}
+                        $isActive={activeTab === theme.themeName}
+                        onClick={clickTab(theme.id, theme.themeName)}
+                    >
+                        {theme.themeName}
+                    </TabButton>
+                ))}
             </TabBox>
-            {usePalettes.map(palette => (
+            {usePalettes.map((palette) => (
                 <ItemBlock>
-                    <FeatherIcon icon="circle" fill={'#'+palette.color} onClick={changeColor(palette.color, palette.display)}/>
+                    <FeatherIcon
+                        icon="circle"
+                        fill={"#" + palette.color}
+                        onClick={changeColor(palette.color, palette.display)}
+                    />
                 </ItemBlock>
             ))}
         </Detail>
@@ -67,14 +74,16 @@ const TabButton = styled.button`
     margin-left: 1em;
     border: 1px solid;
     border-radius: 13px;
-    border-color: ${p => p.theme.project.lineColor};
-    background-color: ${p => p.theme.backgroundColor};
-    color: ${p => p.theme.textColor};
+    border-color: ${(p) => p.theme.project.lineColor};
+    background-color: ${(p) => p.theme.backgroundColor};
+    color: ${(p) => p.theme.textColor};
     cursor: pointer;
 
-    ${props => props.$isActive && css`
-        background-color: ${p => p.theme.goose};
-    `}
+    ${(props) =>
+        props.$isActive &&
+        css`
+            background-color: ${(p) => p.theme.goose};
+        `}
 `
 
 const ItemBlock = styled.div`

@@ -163,7 +163,7 @@
             }
         },
         "reminder": {
-            "title":"Reminder Settings",
+            "title": "Reminder Settings",
             "reminder_before_due_date": "Set a due date before setting a reminder.",
             "then": "then",
             "5_minutes_before": "5 minutes before",
@@ -277,11 +277,11 @@
             "title": "Languages & Time",
             "locale": {
                 "name": "Language",
-                "system":"Auto"
+                "system": "Auto"
             },
             "timezone": {
                 "name": "Timezone",
-                "system":"Same as system"
+                "system": "Same as system"
             },
             "start_of_the_week_monday": {
                 "name": "Display the start of the week as Monday"

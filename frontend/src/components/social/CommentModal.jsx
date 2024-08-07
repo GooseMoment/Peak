@@ -1,51 +1,67 @@
-import { useState } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import styled from 'styled-components'
-import { Portal } from 'react-portal'
-import { toast } from 'react-toastify'
+import { useState } from "react"
 
-import CommentBox from '@components/social/CommentBox'
+import { useMutation, useQuery } from "@tanstack/react-query"
+import styled from "styled-components"
 
-import queryClient from '@queries/queryClient'
-import { deleteComment, postComment, getComment, patchComment} from '@api/social.api'
+import CommentBox from "@components/social/CommentBox"
 
-const CommentModal = ({ isOpen, onClose, position, parentType, parent}) => {
-    const [commentValue, setCommentValue] = useState('')
+import {
+    deleteComment,
+    getComment,
+    patchComment,
+    postComment,
+} from "@api/social.api"
 
-    const { data: parentComments, isError: parentCommentError, isFetching } = useQuery({
+import queryClient from "@queries/queryClient"
+
+import { Portal } from "react-portal"
+import { toast } from "react-toastify"
+
+const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
+    const [commentValue, setCommentValue] = useState("")
+
+    const {
+        data: parentComments,
+        isError: parentCommentError,
+        isFetching,
+    } = useQuery({
         queryKey: ["comment", parentType, parent.id],
         queryFn: () => getComment(parentType, parent.id),
     })
 
-
     const parentCommentsMutation = useMutation({
-        mutationFn: ({action, commentID, comment}) => {
-            if(action === 'post') {
+        mutationFn: ({ action, commentID, comment }) => {
+            if (action === "post") {
                 return postComment(parentType, parent.id, comment)
-            } else if(action === 'patch') {
+            } else if (action === "patch") {
                 return patchComment(parentType, parent.id, commentID, comment)
-            } else if(action === 'delete') {
+            } else if (action === "delete") {
                 return deleteComment(parentType, parent.id, commentID)
             }
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['comment', parentType, parent.id]})
+            queryClient.invalidateQueries({
+                queryKey: ["comment", parentType, parent.id],
+            })
         },
         onError: (e) => {
             toast.error(e)
-        }
+        },
     })
 
-    if(!isOpen) return null
+    if (!isOpen) return null
 
     const handleChange = (e) => {
         setCommentValue(e.target.value)
     }
 
     const handleKeyDown = (e) => {
-        if(e.key == 'Enter') {
-            parentCommentsMutation.mutate({action: 'post', comment: commentValue})
-            setCommentValue('')
+        if (e.key == "Enter") {
+            parentCommentsMutation.mutate({
+                action: "post",
+                comment: commentValue,
+            })
+            setCommentValue("")
         }
     }
 
@@ -55,17 +71,18 @@ const CommentModal = ({ isOpen, onClose, position, parentType, parent}) => {
                 <CommentModalOverlay onClick={onClose} />
                 <Modal $posY={position.top} $posX={position.left}>
                     <CommentContainer>
-                        {parentComments?(
-                            Object.values(parentComments).map((comment) => (
-                                <CommentBox key={comment.id} comment={comment}/>
-                            ))
-                        ) : (
-                            // TODO: design no comments
-                            "no comments"
-                        )}
+                        {parentComments
+                            ? Object.values(parentComments).map((comment) => (
+                                  <CommentBox
+                                      key={comment.id}
+                                      comment={comment}
+                                  />
+                              ))
+                            : // TODO: design no comments
+                              "no comments"}
                     </CommentContainer>
                     <CommentInput
-                        type='text'
+                        type="text"
                         value={commentValue}
                         onChange={handleChange}
                         onKeyDown={handleKeyDown}
@@ -100,8 +117,8 @@ const CommentModalOverlay = styled.div`
 
 const Modal = styled.div`
     position: absolute;
-    top: ${props => props.$posY}px;
-    left: calc(${props => props.$posX}px - 28em); // 27 + 1(shadow)
+    top: ${(props) => props.$posY}px;
+    left: calc(${(props) => props.$posX}px - 28em); // 27 + 1(shadow)
     background: white;
     padding: 1em;
     border-radius: 1em;
@@ -137,8 +154,8 @@ const CommentInput = styled.input`
     font-size: 1em;
 
     border-radius: 0.5em;
-    
+
     border: solid black;
 `
 
-export default CommentModal;
+export default CommentModal

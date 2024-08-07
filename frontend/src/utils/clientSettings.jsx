@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo, useState } from "react"
+
 import themes from "@assets/themes"
 
 const KEY_CLIENT_SETTINGS = "client_settings"
@@ -27,7 +28,9 @@ const defaultSettings = {
 }
 
 export const getClientSettings = () => {
-    return JSON.parse(localStorage.getItem(KEY_CLIENT_SETTINGS)) || defaultSettings
+    return (
+        JSON.parse(localStorage.getItem(KEY_CLIENT_SETTINGS)) || defaultSettings
+    )
 }
 
 export const setClientSettingsByName = (name, value) => {
@@ -38,7 +41,7 @@ export const setClientSettingsByName = (name, value) => {
 
 export const initClientSettings = () => {
     let settings = getClientSettings()
-    if (!(settings?.theme)) {
+    if (!settings?.theme) {
         settings = defaultSettings
     }
     settings = Object.assign({}, defaultSettings, settings)
@@ -47,21 +50,27 @@ export const initClientSettings = () => {
 
 const ClientSettingContext = createContext()
 
-export const ClientSettingProvider = ({children}) => {
+export const ClientSettingProvider = ({ children }) => {
     const [setting, setSetting] = useState(getClientSettings())
 
     const updateSetting = useMemo(
-        () => ((key, val) => {
+        () => (key, val) => {
             setClientSettingsByName(key, val)
             setSetting(getClientSettings())
-        }), []
+        },
+        [],
     )
 
-    const providerValue = useMemo(() => [setting, updateSetting], [setting, updateSetting])
+    const providerValue = useMemo(
+        () => [setting, updateSetting],
+        [setting, updateSetting],
+    )
 
-    return <ClientSettingContext.Provider value={providerValue} >
-        {children}
-    </ClientSettingContext.Provider>
+    return (
+        <ClientSettingContext.Provider value={providerValue}>
+            {children}
+        </ClientSettingContext.Provider>
+    )
 }
 
 export const useClientSetting = () => {
@@ -77,7 +86,7 @@ const getTimezone = (settingTz) => {
 }
 
 export const useClientLocale = () => {
-    const [setting, ] = useContext(ClientSettingContext)
+    const [setting] = useContext(ClientSettingContext)
 
     const settingLocale = setting?.locale
     let locale = settingLocale
@@ -89,7 +98,7 @@ export const useClientLocale = () => {
 }
 
 export const useClientTimezone = () => {
-    const [setting, ] = useContext(ClientSettingContext)
+    const [setting] = useContext(ClientSettingContext)
 
     const settingTz = setting?.timezone
     const tz = getTimezone(settingTz)
@@ -98,7 +107,7 @@ export const useClientTimezone = () => {
 }
 
 export const useClientTheme = (systemTheme) => {
-    const [setting, ] = useContext(ClientSettingContext)
+    const [setting] = useContext(ClientSettingContext)
     const theme = setting?.theme === "system" ? systemTheme : setting?.theme
 
     return themes[theme]

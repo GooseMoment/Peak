@@ -15,8 +15,8 @@ const StartPage = () => {
         to = "home"
     }
 
-    useEffect(()=> {
-        navigate("/app/"+to, {replace: true})
+    useEffect(() => {
+        navigate("/app/" + to, { replace: true })
     }, [])
 
     return null
