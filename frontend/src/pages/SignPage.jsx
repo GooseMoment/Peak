@@ -10,6 +10,8 @@ import generateActivities from "@components/sign/activities"
 
 import { getEmojis } from "@api/social.api"
 
+import { ifTablet } from "@utils/useScreenType"
+
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -81,10 +83,8 @@ const Root = styled.div`
         left: 2rem;
     }
 
-    @media screen and (max-width: 800px) {
-        & {
-            display: flex;
-        }
+    ${ifTablet} {
+        display: flex;
 
         ${BrandTitle} {
             color: ${(p) => p.theme.textColor};

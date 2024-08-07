@@ -20,6 +20,7 @@ import {
 } from "@api/users.api"
 
 import sleep from "@utils/sleep"
+import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import {
     AtSign,
@@ -503,10 +504,13 @@ const Box = styled.section`
 
     font-size: 1rem;
 
-    @media screen and (max-width: 800px) {
-        & {
-            width: 100%;
-        }
+    ${ifTablet} {
+        width: 100%;
+        padding: 2.25rem 5.5em;
+    }
+
+    ${ifMobile} {
+        padding: 2.25rem;
     }
 
     ${(p) =>
