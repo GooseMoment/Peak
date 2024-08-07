@@ -134,11 +134,16 @@ export const getFollowingFeed = (date) => {
 
 }
 
-export const getExploreFeed = (userID) => {
-
+export const getExploreFeed = async() => {
+    try {
+        const res = await client.get(`social/explore/`)
+        return res.data
+    } catch (e) {
+        throw e
+    }
 }
 
-export const getEmojis = async () => {
+export const getEmojis = async() => {
     try {
         const res = await client.get(`social/emojis/`)
         return res.data.results
