@@ -8,11 +8,11 @@ import Button from "@components/common/Button"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
+import DrawerIcons from "@components/drawers/DrawerIcons"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenu from "@components/project/sorts/SortMenu"
 import Task from "@components/tasks/Task"
-import DrawerIcons from "@components/drawers/DrawerIcons"
 
 import { deleteDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
@@ -82,10 +82,10 @@ const Drawer = ({ project, drawer, color }) => {
         },
     })
 
-  const handleAlert = () => {
-    setIsContextMenuOpen(false);
-    setIsAlertOpen(true);
-  };
+    const handleAlert = () => {
+        setIsContextMenuOpen(false)
+        setIsAlertOpen(true)
+    }
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
     const contextMenuItems = useMemo(
@@ -207,9 +207,9 @@ const Drawer = ({ project, drawer, color }) => {
 }
 
 export const TaskList = styled.div`
-  flex: 1;
-  margin-left: 0.5em;
-`;
+    flex: 1;
+    margin-left: 0.5em;
+`
 
 const TaskCreateButton = styled.div`
     flex: 1;
@@ -238,15 +238,15 @@ const TaskCreateText = styled.div`
 `
 
 const FlexBox = styled.div`
-  display: flex;
-  margin-top: 1em;
-  align-items: center;
-  justify-content: center;
-`;
+    display: flex;
+    margin-top: 1em;
+    align-items: center;
+    justify-content: center;
+`
 
 const MoreButton = styled(Button)`
-  width: 25em;
-`;
+    width: 25em;
+`
 
 const makeSortMenuItems = (t) => [
     { display: t("sort.-priority"), context: "-priority" },

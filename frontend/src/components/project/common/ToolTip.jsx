@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components"
 
 const ToolTip = ({ message, children }) => {
     return (
@@ -36,15 +36,15 @@ const ToolTipBox = styled.div`
     }
 `
 const Container = styled.div`
-  position: relative;
-  width: fit-content;
-  height: fit-content;
+    position: relative;
+    width: fit-content;
+    height: fit-content;
 
-  &:hover {
-    ${ToolTipBox} {
-      display: block;
+    &:hover {
+        ${ToolTipBox} {
+            display: block;
+        }
     }
-  }
 `
 
 export default ToolTip

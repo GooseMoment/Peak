@@ -25,7 +25,7 @@ const Contents = ({ task, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
     const navigate = useNavigate()
 
-    const [isComponentOpen, setIsComponentOpen] = useState(false);
+    const [isComponentOpen, setIsComponentOpen] = useState(false)
 
     const priorities = useMemo(() => makePriorities(t), [t])
     const displayReminder = useMemo(() => makeDisplayReminder(t), [t])
@@ -39,8 +39,8 @@ const Contents = ({ task, setFunc }) => {
         setIsComponentOpen(true)
     }
     const closeComponent = () => {
-      setIsComponentOpen(false)
-      navigate(`.`)
+        setIsComponentOpen(false)
+        navigate(`.`)
     }
 
     const { formatted_due_datetime, formatted_assigned_date } = taskDate(task)
@@ -162,18 +162,18 @@ const Contents = ({ task, setFunc }) => {
 }
 
 const ContentsBlock = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 3.8em;
-`;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 3.8em;
+`
 
 const ContentsBox = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 
     & svg,
     img {
@@ -217,15 +217,15 @@ const ContentText = styled.div`
     overflow-x: clip;
     text-overflow: ellipsis;
 
-  &:hover {
-    cursor: pointer;
-  }
-`;
+    &:hover {
+        cursor: pointer;
+    }
+`
 
 const RemindersBox = styled.div`
-  display: flex;
-  gap: 0.5em;
-`;
+    display: flex;
+    gap: 0.5em;
+`
 
 const ReminderBlock = styled.div`
     width: auto;

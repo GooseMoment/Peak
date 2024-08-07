@@ -25,9 +25,9 @@ const TaskCreate = () => {
 
     const [newTaskName, setNewTaskName] = useState(null)
 
-  const onClose = () => {
-    navigate(`/app/projects/${projectId}`);
-  };
+    const onClose = () => {
+        navigate(`/app/projects/${projectId}`)
+    }
 
     const [newTask, setNewTask] = useState({
         name: newTaskName,
@@ -43,9 +43,9 @@ const TaskCreate = () => {
         privacy: "public",
     })
 
-  const editNewTask = (edit) => {
-    setNewTask(Object.assign(newTask, edit))
-  }
+    const editNewTask = (edit) => {
+        setNewTask(Object.assign(newTask, edit))
+    }
 
     const makeTask = async () => {
         try {
@@ -88,25 +88,25 @@ const TaskCreateBox = styled.div`
     border: solid 1px ${(p) => p.theme.secondBackgroundColor};
     border-radius: 15px;
 
-  &::after {
-    content: " ";
-    display: block;
-    height: 0;
-    clear: both;
-  }
-`;
+    &::after {
+        content: " ";
+        display: block;
+        height: 0;
+        clear: both;
+    }
+`
 
 const TaskNameBox = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 1em 1.8em;
-`;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1em 1.8em;
+`
 
 const Icons = styled.div`
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 
     & svg {
         top: 0.4em;
@@ -117,10 +117,10 @@ const Icons = styled.div`
 `
 
 const AddButton = styled(Button)`
-  float: right;
-  margin: 1em;
-  margin-right: 2.5em;
-  margin-bottom: 1.5em;
+    float: right;
+    margin: 1em;
+    margin-right: 2.5em;
+    margin-bottom: 1.5em;
 `
 
 export default TaskCreate
