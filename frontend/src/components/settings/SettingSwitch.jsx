@@ -4,9 +4,11 @@ import Switch from "@components/common/Switch"
 
 import { useClientSetting } from "@utils/clientSettings"
 
-const SettingSwitch = ({submit, name, onlineSetting}) => {
+const SettingSwitch = ({ submit, name, onlineSetting }) => {
     const [clientSetting, setClientSetting] = useClientSetting()
-    const [value, setValue] = useState(onlineSetting ? onlineSetting[name] : clientSetting[name])
+    const [value, setValue] = useState(
+        onlineSetting ? onlineSetting[name] : clientSetting[name],
+    )
 
     const timer = useRef(null)
 
@@ -17,7 +19,7 @@ const SettingSwitch = ({submit, name, onlineSetting}) => {
         timer.current = null
     }
 
-    const onChange = e => {
+    const onChange = (e) => {
         const checked = e.target.checked
         setValue(checked)
 

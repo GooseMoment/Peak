@@ -1,17 +1,16 @@
-import { skeletonBreathingCSS, skeletonCSS } from "@assets/skeleton"
 import styled from "styled-components"
 
+import { skeletonBreathingCSS, skeletonCSS } from "@assets/skeleton"
+
 const SkeletonProjectList = () => {
-    return (
-        [...Array(10)].map((e, i) => <SkeletonProjectName key={i} />)
-    )
+    return [...Array(10)].map((e, i) => <SkeletonProjectName key={i} />)
 }
 
 const SkeletonProjectName = () => {
     return (
         <FlexBox>
-            <Circle/>
-            <Bar/>
+            <Circle />
+            <Bar />
         </FlexBox>
     )
 }
@@ -35,7 +34,7 @@ const Circle = styled.div`
 const Bar = styled.div`
     width: 100%;
     height: 2em;
-    background-color: ${p=>p.theme.skeleton.defaultColor};
+    background-color: ${(p) => p.theme.skeleton.defaultColor};
     ${skeletonCSS("-100px", "360px", "1.8s")}
 `
 

@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-const ToolTip = ({message, children}) => {
+const ToolTip = ({ message, children }) => {
     return (
         <Container>
             {children}
@@ -46,4 +46,4 @@ const Content = styled.div`
     }
 `
 
-export default ToolTip;
+export default ToolTip

@@ -1,16 +1,24 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
+import styled from "styled-components"
+
+import Button, { ButtonGroup } from "@components/common/Button"
 import Form from "@components/sign/Form"
 import Input from "@components/sign/Input"
-import Button, { ButtonGroup } from "@components/common/Button"
 
 import { signIn, signUp } from "@api/users.api"
 
 import sleep from "@utils/sleep"
 
-import styled from "styled-components"
-import { Mail, AtSign, Key, HelpCircle, UserPlus, LogIn } from "feather-icons-react"
+import {
+    AtSign,
+    HelpCircle,
+    Key,
+    LogIn,
+    Mail,
+    UserPlus,
+} from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -24,17 +32,17 @@ const SignForm = () => {
     }
 }
 
-const SignInForm = ({setActive}) => {
-    const { t } = useTranslation(null, {keyPrefix: "sign"})
-    
-    const goToSignUp = e => {
+const SignInForm = ({ setActive }) => {
+    const { t } = useTranslation(null, { keyPrefix: "sign" })
+
+    const goToSignUp = (e) => {
         e.preventDefault()
         setActive("signUp")
     }
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
-    const onSubmit = async e => {
+    const onSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true)
 
@@ -42,14 +50,12 @@ const SignInForm = ({setActive}) => {
         const password = e.target.password.value
 
         try {
-
             await signIn(email, password)
             toast.success(t("sign_in_success"))
             await sleep(1000)
 
             // TODO: don't navigate; redirect
             navigate("/app/")
-
         } catch (err) {
             const status = err?.response?.status
 
@@ -65,38 +71,62 @@ const SignInForm = ({setActive}) => {
         }
     }
 
-    return <Box>
-        <Title>{t("sign_in")}</Title>
-        <Form onSubmit={onSubmit}>
-            <Input icon={<Mail />} name="email" type="email" placeholder={t("email")} required />
-            <Input icon={<Key />} name="password" type="password" placeholder={t("password")} required />
-            <ButtonGroup $justifyContent="right" $margin="1em 0 0 0">
-                <Button type="submit" disabled={isLoading} $loading={isLoading}>
-                    {isLoading ? t("loading") : t("button_sign_in")}
-                </Button>
-            </ButtonGroup>
-        </Form>
-        <Links>
-            <Link to="/reset-password">
-                <LinkText><HelpCircle />{t("button_forgot_password")}</LinkText>
-            </Link>
-            <Link onClick={goToSignUp}>
-                <LinkText><UserPlus />{t("button_create_account")}</LinkText>
-            </Link>
-        </Links>
-    </Box>
+    return (
+        <Box>
+            <Title>{t("sign_in")}</Title>
+            <Form onSubmit={onSubmit}>
+                <Input
+                    icon={<Mail />}
+                    name="email"
+                    type="email"
+                    placeholder={t("email")}
+                    required
+                />
+                <Input
+                    icon={<Key />}
+                    name="password"
+                    type="password"
+                    placeholder={t("password")}
+                    required
+                />
+                <ButtonGroup $justifyContent="right" $margin="1em 0 0 0">
+                    <Button
+                        type="submit"
+                        disabled={isLoading}
+                        $loading={isLoading}
+                    >
+                        {isLoading ? t("loading") : t("button_sign_in")}
+                    </Button>
+                </ButtonGroup>
+            </Form>
+            <Links>
+                <Link to="/reset-password">
+                    <LinkText>
+                        <HelpCircle />
+                        {t("button_forgot_password")}
+                    </LinkText>
+                </Link>
+                <Link onClick={goToSignUp}>
+                    <LinkText>
+                        <UserPlus />
+                        {t("button_create_account")}
+                    </LinkText>
+                </Link>
+            </Links>
+        </Box>
+    )
 }
 
-const SignUpForm = ({setActive}) => {
-    const { t } = useTranslation(null, {keyPrefix: "sign"})
+const SignUpForm = ({ setActive }) => {
+    const { t } = useTranslation(null, { keyPrefix: "sign" })
 
-    const goToSignIn = e => {
+    const goToSignIn = (e) => {
         e.preventDefault()
         setActive("signIn")
     }
     const [isLoading, setIsLoading] = useState(false)
 
-    const onSubmit = async e => {
+    const onSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true)
 
@@ -115,28 +145,61 @@ const SignUpForm = ({setActive}) => {
         }
     }
 
-    return <Box>
-        <Title>{t("sign_up")}</Title>
-        <Form onSubmit={onSubmit}>
-            <Input icon={<Mail />} name="email" type="email" placeholder={t("email")} required />
-            <Input icon={<Key />} name="password" type="password" placeholder={t("password")} minLength="8" required />
-            <Input icon={<AtSign />} name="username" type="text" 
-                placeholder={t("username")} pattern="^[a-z0-9_]{4,15}$" minLength="4" required />
-            <TosAgreement>
-                <Trans t={t} i18nKey="tos" components={{linkToTos: <a href="/tos" />}} />
-            </TosAgreement>
-            <ButtonGroup $justifyContent="right" $margin="1em 0">
-                <Button type="submit" disabled={isLoading} $loading={isLoading}>
-                    {isLoading ? t("loading") : t("button_sign_up")}
-                </Button>
-            </ButtonGroup>
-        </Form>
-        <Links>
-            <Link onClick={goToSignIn}>
-                <LinkText><LogIn />{t("button_already_have_account")}</LinkText>
-            </Link>
-        </Links>
-    </Box>
+    return (
+        <Box>
+            <Title>{t("sign_up")}</Title>
+            <Form onSubmit={onSubmit}>
+                <Input
+                    icon={<Mail />}
+                    name="email"
+                    type="email"
+                    placeholder={t("email")}
+                    required
+                />
+                <Input
+                    icon={<Key />}
+                    name="password"
+                    type="password"
+                    placeholder={t("password")}
+                    minLength="8"
+                    required
+                />
+                <Input
+                    icon={<AtSign />}
+                    name="username"
+                    type="text"
+                    placeholder={t("username")}
+                    pattern="^[a-z0-9_]{4,15}$"
+                    minLength="4"
+                    required
+                />
+                <TosAgreement>
+                    <Trans
+                        t={t}
+                        i18nKey="tos"
+                        components={{ linkToTos: <a href="/tos" /> }}
+                    />
+                </TosAgreement>
+                <ButtonGroup $justifyContent="right" $margin="1em 0">
+                    <Button
+                        type="submit"
+                        disabled={isLoading}
+                        $loading={isLoading}
+                    >
+                        {isLoading ? t("loading") : t("button_sign_up")}
+                    </Button>
+                </ButtonGroup>
+            </Form>
+            <Links>
+                <Link onClick={goToSignIn}>
+                    <LinkText>
+                        <LogIn />
+                        {t("button_already_have_account")}
+                    </LinkText>
+                </Link>
+            </Links>
+        </Box>
+    )
 }
 
 const Box = styled.section`
@@ -147,8 +210,8 @@ const Box = styled.section`
     gap: 5rem;
 
     padding: 2.25rem;
-    color: ${p => p.theme.textColor};
-    background-color: ${p => p.theme.backgroundColor};
+    color: ${(p) => p.theme.textColor};
+    background-color: ${(p) => p.theme.backgroundColor};
 
     grid-area: 1 / 2 / 2 / 3;
 
@@ -184,7 +247,7 @@ const LinkText = styled.p`
 const TosAgreement = styled.p`
     text-align: center;
     font-size: 0.75em !important;
-    color: ${p => p.theme.grey};
+    color: ${(p) => p.theme.grey};
 
     & a {
         display: inline-block;

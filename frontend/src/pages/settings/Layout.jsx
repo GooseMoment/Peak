@@ -1,55 +1,68 @@
 import { useMemo } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 
-import { SidebarBox } from "@components/sidebar/Sidebar"
-import { ItemBox, MiddleBox } from "@components/sidebar/Middle"
-import SidebarLink, { SidebarA } from "@components/sidebar/SidebarLink"
-import ModalPortal from "@components/common/ModalPortal"
-
 import styled from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
+import ModalPortal from "@components/common/ModalPortal"
+import { ItemBox, MiddleBox } from "@components/sidebar/Middle"
+import { SidebarBox } from "@components/sidebar/Sidebar"
+import SidebarLink, { SidebarA } from "@components/sidebar/SidebarLink"
+
+import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const pathRoot = "/settings/"
 
 const Layout = () => {
     const navigate = useNavigate()
-    const { t } = useTranslation("", {keyPrefix: "settings.sidebar"})
+    const { t } = useTranslation("", { keyPrefix: "settings.sidebar" })
 
     const goOutside = () => {
         navigate("/")
-        history.pushState("", document.title, window.location.pathname + window.location.search)
+        history.pushState(
+            "",
+            document.title,
+            window.location.pathname + window.location.search,
+        )
     }
 
     const menuItems = useMemo(() => getMenuItems(t), [t])
 
-    const content = <ModalFrame>
-        <Sidebar>
-            <MiddleBox>
-                {menuItems.map(menuItem => (
-                    <SidebarLink key={menuItem.to} to={pathRoot + menuItem.to}>
-                        <ItemBox><FeatherIcon icon={menuItem.icon} />{menuItem.display}</ItemBox>
-                    </SidebarLink>
-                ))}
-            </MiddleBox>
-            <FooterBox>
-                <SidebarA href="/app/sign_out">
-                    <ItemBox><FeatherIcon icon="log-out" />{t("sign_out")}</ItemBox>
-                </SidebarA>
-            </FooterBox>
-        </Sidebar>
-        <Main>
-            <Outlet />
-        </Main>
-    </ModalFrame>
+    const content = (
+        <ModalFrame>
+            <Sidebar>
+                <MiddleBox>
+                    {menuItems.map((menuItem) => (
+                        <SidebarLink
+                            key={menuItem.to}
+                            to={pathRoot + menuItem.to}
+                        >
+                            <ItemBox>
+                                <FeatherIcon icon={menuItem.icon} />
+                                {menuItem.display}
+                            </ItemBox>
+                        </SidebarLink>
+                    ))}
+                </MiddleBox>
+                <FooterBox>
+                    <SidebarA href="/app/sign_out">
+                        <ItemBox>
+                            <FeatherIcon icon="log-out" />
+                            {t("sign_out")}
+                        </ItemBox>
+                    </SidebarA>
+                </FooterBox>
+            </Sidebar>
+            <Main>
+                <Outlet />
+            </Main>
+        </ModalFrame>
+    )
 
-    return <ModalPortal closeModal={goOutside}>
-        {content}
-    </ModalPortal>
+    return <ModalPortal closeModal={goOutside}>{content}</ModalPortal>
 }
 
-const getMenuItems = t => [
+const getMenuItems = (t) => [
     {
         icon: "user",
         display: t("account"),
@@ -101,8 +114,8 @@ const ModalFrame = styled.div`
     display: flex;
     overflow: hidden; // to make sidebar obey parent's radius
 
-    color: ${p => p.theme.textColor};
-    background-color: ${p => p.theme.backgroundColor};
+    color: ${(p) => p.theme.textColor};
+    background-color: ${(p) => p.theme.backgroundColor};
     height: 70vh;
 
     @media screen and (max-width: 800px) {

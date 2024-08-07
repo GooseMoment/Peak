@@ -1,24 +1,30 @@
-import { useState, Fragment, useEffect } from "react"
+import { Fragment, useEffect, useState } from "react"
+
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import SimpleProfile from "@components/social/SimpleProfile"
-import ReactionBox from "@components/social/ReactionBox"
-import LogDetailsTask from "@components/social/LogDetailsTask"
-import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import { TaskList } from "@components/drawers/Drawer"
+import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
+import LogDetailsTask from "@components/social/LogDetailsTask"
+import ReactionBox from "@components/social/ReactionBox"
+import SimpleProfile from "@components/social/SimpleProfile"
 
-const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, day}) => {
+const DailyLogDetail = ({
+    dailyComment,
+    userLogDetails,
+    user,
+    saveDailyComment,
+    day,
+}) => {
     const [inputState, setInputState] = useState(false)
     const [content, setContent] = useState(dailyComment.content)
-    
+
     useEffect(() => {
         setContent(dailyComment.content)
     }, [dailyComment, day])
 
     const handleInputState = () => {
-        if(dailyComment.user.username === user.username) 
-            setInputState(true)
+        if (dailyComment.user.username === user.username) setInputState(true)
     }
 
     const handleChange = (e) => {
@@ -26,67 +32,85 @@ const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, d
     }
 
     const handleKeyDown = (e) => {
-        if(e.key == 'Enter') {
+        if (e.key == "Enter") {
             setInputState(false)
-            saveDailyComment({day, content})
+            saveDailyComment({ day, content })
         }
     }
 
     const handleBlur = () => {
         setInputState(false)
-        saveDailyComment({day, content})
+        saveDailyComment({ day, content })
     }
 
-    return <>
-        <DetailHeader>
-        <CommentRow>
-            <SimpleProfile user={dailyComment.user}/>
-            <CommentBox onClick={handleInputState}>
-                {dailyComment.user.username === user.username && inputState ? (
-                    <CommentInput
-                        type="text"
-                        value={content}
-                        onChange={handleChange}
-                        onKeyDown={handleKeyDown}
-                        onBlur={handleBlur}
-                        autoFocus
-                    />
-                ):(
-                    dailyComment.content ? (
-                        <Comment>{"\""+dailyComment.content+"\""}</Comment>
-                    ) : (
-                        dailyComment.user.username === user.username ? (
-                            <Comment $color="#A4A4A4" $fontstyle="italic">{"Write your daily comments"}</Comment>
+    return (
+        <>
+            <DetailHeader>
+                <CommentRow>
+                    <SimpleProfile user={dailyComment.user} />
+                    <CommentBox onClick={handleInputState}>
+                        {dailyComment.user.username === user.username &&
+                        inputState ? (
+                            <CommentInput
+                                type="text"
+                                value={content}
+                                onChange={handleChange}
+                                onKeyDown={handleKeyDown}
+                                onBlur={handleBlur}
+                                autoFocus
+                            />
+                        ) : dailyComment.content ? (
+                            <Comment>
+                                {'"' + dailyComment.content + '"'}
+                            </Comment>
+                        ) : dailyComment.user.username === user.username ? (
+                            <Comment $color="#A4A4A4" $fontstyle="italic">
+                                {"Write your daily comments"}
+                            </Comment>
                         ) : (
-                            <Comment $color="#A4A4A4" $fontstyle="italic">{"No daily comments yet"}</Comment>
-                        )
-                    )
+                            <Comment $color="#A4A4A4" $fontstyle="italic">
+                                {"No daily comments yet"}
+                            </Comment>
+                        )}
+                    </CommentBox>
+                </CommentRow>
+
+                {dailyComment.id && (
+                    <ReactionBox
+                        parentType={"daily_comment"}
+                        parent={dailyComment}
+                    />
                 )}
-            </CommentBox>
-        </CommentRow>
 
-        {dailyComment.id && <ReactionBox parentType={'daily_comment'} parent={dailyComment} />}
+                {/* TODO: who and what emoji */}
+            </DetailHeader>
 
-        {/* TODO: who and what emoji */}
-        </DetailHeader>
-        
-        <DetailBody>
-        {
-            userLogDetails && Object.values(userLogDetails).map((drawer) => (
-                (drawer.tasks.length !== 0) && <Fragment key={drawer.id}>
-                    <DrawerBox $color={drawer.color}>
-                        <DrawerName $color={drawer.color}>{drawer.name}</DrawerName>
-                    </DrawerBox>
-                    <TaskList>
-                        {drawer.tasks.map((task) => (
-                            <LogDetailsTask key={task.id} task={task} color={drawer.color}/>
-                        ))}
-                    </TaskList>
-                </Fragment>
-            ))
-        }
-        </DetailBody>
-    </>
+            <DetailBody>
+                {userLogDetails &&
+                    Object.values(userLogDetails).map(
+                        (drawer) =>
+                            drawer.tasks.length !== 0 && (
+                                <Fragment key={drawer.id}>
+                                    <DrawerBox $color={drawer.color}>
+                                        <DrawerName $color={drawer.color}>
+                                            {drawer.name}
+                                        </DrawerName>
+                                    </DrawerBox>
+                                    <TaskList>
+                                        {drawer.tasks.map((task) => (
+                                            <LogDetailsTask
+                                                key={task.id}
+                                                task={task}
+                                                color={drawer.color}
+                                            />
+                                        ))}
+                                    </TaskList>
+                                </Fragment>
+                            ),
+                    )}
+            </DetailBody>
+        </>
+    )
 }
 
 const DetailHeader = styled.div`
@@ -117,8 +141,8 @@ const CommentBox = styled.div`
 
 const Comment = styled.div`
     white-space: normal;
-    color: ${props => props.$color};
-    font-style: ${props => props.$fontstyle};
+    color: ${(props) => props.$color};
+    font-style: ${(props) => props.$fontstyle};
 `
 
 const CommentInput = styled.input`
@@ -131,23 +155,23 @@ const CommentInput = styled.input`
 `
 
 const ReactionBoxTemp = styled.div`
-margin-left: auto;
+    margin-left: auto;
 
-display: flex;
+    display: flex;
 `
 
 const DetailBody = styled.div`
-max-height: 70%;
-overflow-y: auto;
+    max-height: 70%;
+    overflow-y: auto;
 
-// IE and Edge
--ms-overflow-style: none;
-// Firefox
-scrollbar-width: none;
-// Chrome, Safari, Opera
-&::-webkit-scrollbar {
-    display: none;
-}
+    // IE and Edge
+    -ms-overflow-style: none;
+    // Firefox
+    scrollbar-width: none;
+    // Chrome, Safari, Opera
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `
 
 export default DailyLogDetail

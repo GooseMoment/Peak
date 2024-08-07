@@ -1,35 +1,41 @@
-import { useState, useRef } from "react"
+import { useRef, useState } from "react"
+
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
-import EmojiModal from "@components/social/EmojiModal"
 import MildButton from "@components/common/MildButton"
+import EmojiModal from "@components/social/EmojiModal"
 
 import { getEmojis } from "@api/social.api"
 
-const EmojiPickerButton = ({pickedEmoji, setPickedEmoji}) => {
+import FeatherIcon from "feather-icons-react"
+
+const EmojiPickerButton = ({ pickedEmoji, setPickedEmoji }) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [modalPosition, setModalPosition] = useState({top: 0, left: 0})
+    const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
     const buttonRef = useRef(null)
 
-    const { data: serverEmojis, isError: emojiError, isFetching } = useQuery({
+    const {
+        data: serverEmojis,
+        isError: emojiError,
+        isFetching,
+    } = useQuery({
         queryKey: ["emojis"],
         queryFn: () => getEmojis(),
-        staleTime: 60*60*5*1000,
+        staleTime: 60 * 60 * 5 * 1000,
     })
 
     const handleOpenModal = () => {
-        if(!isModalOpen) {
-            if(buttonRef.current) {
-                const rect = buttonRef.current.getBoundingClientRect();
+        if (!isModalOpen) {
+            if (buttonRef.current) {
+                const rect = buttonRef.current.getBoundingClientRect()
                 setModalPosition({
                     top: rect.top,
                     left: rect.left,
-                });
+                })
             }
         }
-        setIsModalOpen(prev => !prev)
+        setIsModalOpen((prev) => !prev)
     }
 
     const handleEmoji = (emoji) => {
@@ -37,18 +43,20 @@ const EmojiPickerButton = ({pickedEmoji, setPickedEmoji}) => {
         setIsModalOpen(false)
     }
 
-    return <>
-        <PickerButton onClick={handleOpenModal} ref={buttonRef}>
-            <FeatherIcon icon={isModalOpen ? "x-square" : "plus-square"} />
-        </PickerButton>
-        <EmojiModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(prev => !prev)}
-            emojis={serverEmojis?Object.values(serverEmojis):null}
-            onSelect={handleEmoji}
-            position={modalPosition}
-        /> 
-    </>
+    return (
+        <>
+            <PickerButton onClick={handleOpenModal} ref={buttonRef}>
+                <FeatherIcon icon={isModalOpen ? "x-square" : "plus-square"} />
+            </PickerButton>
+            <EmojiModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen((prev) => !prev)}
+                emojis={serverEmojis ? Object.values(serverEmojis) : null}
+                onSelect={handleEmoji}
+                position={modalPosition}
+            />
+        </>
+    )
 }
 
 const PickerButton = styled(MildButton)`

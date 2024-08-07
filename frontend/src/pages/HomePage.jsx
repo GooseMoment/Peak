@@ -1,8 +1,8 @@
+import { useQuery } from "@tanstack/react-query"
+
 import PageTitle from "@components/common/PageTitle"
 
 import { getMe } from "@api/users.api"
-
-import { useQuery } from "@tanstack/react-query"
 
 const HomePage = () => {
     const { data: me, isPending } = useQuery({
@@ -14,9 +14,11 @@ const HomePage = () => {
         return <div>Loading...</div>
     }
 
-    return <>
-        <PageTitle>Good morning, @{me.username}</PageTitle>
-    </>
+    return (
+        <>
+            <PageTitle>Good morning, @{me.username}</PageTitle>
+        </>
+    )
 }
 
 export default HomePage

@@ -8,8 +8,8 @@ export const ErrorBox = styled.div`
     padding: 0.6em;
     border-radius: 15px;
     margin: 0em 0em 1em;
-    color: ${p=>p.theme.white};
-    background-color: ${p=>p.theme.primaryColors.danger};
+    color: ${(p) => p.theme.white};
+    background-color: ${(p) => p.theme.primaryColors.danger};
     cursor: pointer;
 
     & svg {

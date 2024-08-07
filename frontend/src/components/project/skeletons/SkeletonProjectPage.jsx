@@ -1,13 +1,14 @@
 import styled, { keyframes } from "styled-components"
+
 import { skeletonCSS } from "@assets/skeleton"
 
 export const SkeletonProjectPage = () => {
     return (
         <>
-            <ProjectTitle/>
-            <SkeletonDrawer taskCount={3}/>
-            <SkeletonDrawer taskCount={3}/>
-            <SkeletonDrawer taskCount={3}/>
+            <ProjectTitle />
+            <SkeletonDrawer taskCount={3} />
+            <SkeletonDrawer taskCount={3} />
+            <SkeletonDrawer taskCount={3} />
         </>
     )
 }
@@ -15,8 +16,8 @@ export const SkeletonProjectPage = () => {
 export const SkeletonDrawer = ({ taskCount }) => {
     return (
         <Frame>
-            <DrawerName/>
-            <SkeletonTasks taskCount={taskCount}/>
+            <DrawerName />
+            <SkeletonTasks taskCount={taskCount} />
         </Frame>
     )
 }
@@ -26,14 +27,15 @@ const SkeletonTasks = ({ taskCount }) => {
 
     return (
         <>
-            {[...Array(skeletonCount)].map((e, i) => <TaskBox key={i}>
-                <Circle/>
-                <Bar/>
-            </TaskBox>
-            )}
-            <CreateEmptyBox/>
+            {[...Array(skeletonCount)].map((e, i) => (
+                <TaskBox key={i}>
+                    <Circle />
+                    <Bar />
+                </TaskBox>
+            ))}
+            <CreateEmptyBox />
             <FlexCenterBox>
-                {taskCount > 10 && <MoreButtonEmptyBox/>}
+                {taskCount > 10 && <MoreButtonEmptyBox />}
             </FlexCenterBox>
         </>
     )
@@ -54,7 +56,7 @@ const ProjectTitle = styled.div`
     ${skeletonCSS("-100px", "300px", "2s")}
 `
 
-const breathingBorder = p => keyframes`
+const breathingBorder = (p) => keyframes`
     0%, 100% {
         border-color: ${p.theme.skeleton.defaultColor};
     }
@@ -69,8 +71,8 @@ const DrawerName = styled.div`
 
     box-sizing: border-box;
     border-radius: 15px;
-    border: 0.25em solid ${p=>p.theme.skeleton.defaultColor};
-    animation: ${p => breathingBorder(p)} 2s infinite linear;
+    border: 0.25em solid ${(p) => p.theme.skeleton.defaultColor};
+    animation: ${(p) => breathingBorder(p)} 2s infinite linear;
 `
 
 const TaskBox = styled.div`
@@ -114,6 +116,6 @@ const MoreButtonEmptyBox = styled.div`
     height: 2.35em;
     width: 25em;
     border-radius: 10px;
-    border: 3px solid ${p=>p.theme.skeleton.defaultColor};
-    animation: ${p => breathingBorder(p)} 2s infinite linear;
+    border: 3px solid ${(p) => p.theme.skeleton.defaultColor};
+    animation: ${(p) => breathingBorder(p)} 2s infinite linear;
 `

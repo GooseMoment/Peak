@@ -1,27 +1,30 @@
-import { useNavigate, Outlet, useParams } from "react-router-dom"
-import { useState, useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { Outlet, useNavigate, useParams } from "react-router-dom"
 
+import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
-import PageTitle from "@components/common/PageTitle"
-import Drawer from "@components/drawers/Drawer"
-import DrawerCreate from "@components/project/Creates/DrawerCreate"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
 import ModalPortal from "@components/common/ModalPortal"
-import queryClient from "@queries/queryClient"
-import handleToggleContextMenu from "@utils/handleToggleContextMenu"
+import PageTitle from "@components/common/PageTitle"
+import Drawer from "@components/drawers/Drawer"
+import { ErrorBox } from "@components/errors/ErrorProjectPage"
+import DrawerCreate from "@components/project/Creates/DrawerCreate"
+import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
-import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
-import { ErrorBox } from "@components/errors/ErrorProjectPage"
 
-import { toast } from "react-toastify"
-import { useTranslation } from "react-i18next"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { getProject, patchProject, deleteProject } from "@api/projects.api"
 import { getDrawersByProject } from "@api/drawers.api"
+import { deleteProject, getProject, patchProject } from "@api/projects.api"
+
+import handleToggleContextMenu from "@utils/handleToggleContextMenu"
+
+import queryClient from "@queries/queryClient"
+
+import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const ProjectPage = () => {
     const { id } = useParams()
@@ -31,20 +34,36 @@ const ProjectPage = () => {
     const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
     const [ordering, setOrdering] = useState("created_at")
     const [isSortMenuOpen, setIsSortMenuOpen] = useState(false)
-    const [selectedSortMenuPosition, setSelectedSortMenuPosition] = useState({top: 0, left: 0})
+    const [selectedSortMenuPosition, setSelectedSortMenuPosition] = useState({
+        top: 0,
+        left: 0,
+    })
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
-    const [selectedButtonPosition, setSelectedButtonPosition] = useState({top: 0, left: 0})
+    const [selectedButtonPosition, setSelectedButtonPosition] = useState({
+        top: 0,
+        left: 0,
+    })
 
-    const { t } = useTranslation(null, {keyPrefix: "project"})
-    
-    const { isLoading: isProjectLoading, isError: isProjectError, data: project, refetch: projectRefetch } = useQuery({
-        queryKey: ['projects', id],
+    const { t } = useTranslation(null, { keyPrefix: "project" })
+
+    const {
+        isLoading: isProjectLoading,
+        isError: isProjectError,
+        data: project,
+        refetch: projectRefetch,
+    } = useQuery({
+        queryKey: ["projects", id],
         queryFn: () => getProject(id),
     })
 
-    const { isLoading: isDrawersLoading, isError: isDrawersError, data: drawers, refetch: drawersRefetch } = useQuery({
-        queryKey: ['drawers', {projectID: id, ordering: ordering}],
+    const {
+        isLoading: isDrawersLoading,
+        isError: isDrawersError,
+        data: drawers,
+        refetch: drawersRefetch,
+    } = useQuery({
+        queryKey: ["drawers", { projectID: id, ordering: ordering }],
         queryFn: () => getDrawersByProject(id, ordering),
     })
 
@@ -58,7 +77,7 @@ const ProjectPage = () => {
             return patchProject(id, data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['projects']})
+            queryClient.invalidateQueries({ queryKey: ["projects"] })
         },
     }) // 수정 만드셈
 
@@ -67,12 +86,20 @@ const ProjectPage = () => {
             return deleteProject(id)
         },
         onSuccess: () => {
-            toast.success(t("delete.project_delete_success", {project_name: project.name}))
-            queryClient.invalidateQueries({queryKey: ['projects']})
+            toast.success(
+                t("delete.project_delete_success", {
+                    project_name: project.name,
+                }),
+            )
+            queryClient.invalidateQueries({ queryKey: ["projects"] })
         },
         onError: () => {
-            toast.error(t("delete.project_delete_error", {project_name: project.name}))
-        }
+            toast.error(
+                t("delete.project_delete_error", {
+                    project_name: project.name,
+                }),
+            )
+        },
     })
 
     const handleAlert = () => {
@@ -81,7 +108,10 @@ const ProjectPage = () => {
     }
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
-    const contextMenuItems = useMemo(() => makeContextMenuItems(t, theme, handleAlert), [t, theme])
+    const contextMenuItems = useMemo(
+        () => makeContextMenuItems(t, theme, handleAlert),
+        [t, theme],
+    )
 
     const handleDelete = () => {
         navigate(`/app/projects`)
@@ -89,8 +119,13 @@ const ProjectPage = () => {
     }
 
     const openInboxTaskCreate = () => {
-        navigate(`/app/projects/${project.id}/tasks/create/`,
-        {state: {project_name : project.name, drawer_id : project.drawers[0].id, drawer_name : project.drawers[0].name}})
+        navigate(`/app/projects/${project.id}/tasks/create/`, {
+            state: {
+                project_name: project.name,
+                drawer_id: project.drawers[0].id,
+                drawer_name: project.drawers[0].name,
+            },
+        })
     }
 
     const onClickProjectErrorBox = () => {
@@ -99,61 +134,107 @@ const ProjectPage = () => {
     }
 
     if (isProjectLoading || isDrawersLoading) {
-        return <SkeletonProjectPage/>
+        return <SkeletonProjectPage />
     }
 
     if (isProjectError || isDrawersError) {
-        return <ErrorBox $isTasks={false} onClick={onClickProjectErrorBox}>
-            <FeatherIcon icon="alert-triangle"/>
-            {t("error_load_project_and_drawer")}
-        </ErrorBox>
+        return (
+            <ErrorBox $isTasks={false} onClick={onClickProjectErrorBox}>
+                <FeatherIcon icon="alert-triangle" />
+                {t("error_load_project_and_drawer")}
+            </ErrorBox>
+        )
     }
 
     return (
-    <>
-        <TitleBox>
-            <PageTitle $color={"#" + project.color}>{project.name}</PageTitle>
-            <Icons>
-                <FeatherIcon icon="plus" onClick={project?.type === 'inbox' ? openInboxTaskCreate : () => {setIsDrawerCreateOpen(true)}}/>
-                <SortIconBox onClick={handleToggleContextMenu(setSelectedSortMenuPosition, setIsSortMenuOpen, setIsContextMenuOpen)}>
-                    <SortIcon color={theme.textColor}/>
-                </SortIconBox>
-                <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedButtonPosition, setIsContextMenuOpen, setIsSortMenuOpen)}/>
-            </Icons>
-        </TitleBox>
-        {(drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
-        : drawers?.map((drawer) => (
-            <Drawer key={drawer.id} project={project} drawer={drawer} color={project.color}/>
-        )))}
-        {isSortMenuOpen &&
-            <SortMenu
-                title={t("sort.drawer_title")}
-                items={sortMenuItems}
-                selectedButtonPosition={selectedSortMenuPosition}
-                ordering={ordering}
-                setOrdering={setOrdering}
-            />
-        }
-        {isContextMenuOpen &&
-            <ContextMenu
-                items={contextMenuItems}
-                selectedButtonPosition={selectedButtonPosition}
-            />
-        }
-        {isAlertOpen &&
-            <DeleteAlert
-                title={t("delete.alert_project_title", {project_name: project.name})}
-                onClose={() => {setIsAlertOpen(false)}}
-                func={handleDelete}
-            />
-        }
-        {isDrawerCreateOpen &&
-            <ModalPortal closeModal={() => {setIsDrawerCreateOpen(false)}}>
-                <DrawerCreate onClose={() => {setIsDrawerCreateOpen(false)}}/>
-            </ModalPortal>
-        }
-        <Outlet context={[id, project.color]} />
-    </>
+        <>
+            <TitleBox>
+                <PageTitle $color={"#" + project.color}>
+                    {project.name}
+                </PageTitle>
+                <Icons>
+                    <FeatherIcon
+                        icon="plus"
+                        onClick={
+                            project?.type === "inbox"
+                                ? openInboxTaskCreate
+                                : () => {
+                                      setIsDrawerCreateOpen(true)
+                                  }
+                        }
+                    />
+                    <SortIconBox
+                        onClick={handleToggleContextMenu(
+                            setSelectedSortMenuPosition,
+                            setIsSortMenuOpen,
+                            setIsContextMenuOpen,
+                        )}
+                    >
+                        <SortIcon color={theme.textColor} />
+                    </SortIconBox>
+                    <FeatherIcon
+                        icon="more-horizontal"
+                        onClick={handleToggleContextMenu(
+                            setSelectedButtonPosition,
+                            setIsContextMenuOpen,
+                            setIsSortMenuOpen,
+                        )}
+                    />
+                </Icons>
+            </TitleBox>
+            {drawers && drawers.length === 0 ? (
+                <NoDrawerText>{t("no_drawer")}</NoDrawerText>
+            ) : (
+                drawers?.map((drawer) => (
+                    <Drawer
+                        key={drawer.id}
+                        project={project}
+                        drawer={drawer}
+                        color={project.color}
+                    />
+                ))
+            )}
+            {isSortMenuOpen && (
+                <SortMenu
+                    title={t("sort.drawer_title")}
+                    items={sortMenuItems}
+                    selectedButtonPosition={selectedSortMenuPosition}
+                    ordering={ordering}
+                    setOrdering={setOrdering}
+                />
+            )}
+            {isContextMenuOpen && (
+                <ContextMenu
+                    items={contextMenuItems}
+                    selectedButtonPosition={selectedButtonPosition}
+                />
+            )}
+            {isAlertOpen && (
+                <DeleteAlert
+                    title={t("delete.alert_project_title", {
+                        project_name: project.name,
+                    })}
+                    onClose={() => {
+                        setIsAlertOpen(false)
+                    }}
+                    func={handleDelete}
+                />
+            )}
+            {isDrawerCreateOpen && (
+                <ModalPortal
+                    closeModal={() => {
+                        setIsDrawerCreateOpen(false)
+                    }}
+                >
+                    <DrawerCreate
+                        onClose={() => {
+                            setIsDrawerCreateOpen(false)
+                        }}
+                    />
+                </ModalPortal>
+            )}
+            <Outlet context={[id, project.color]} />
+        </>
     )
 }
 
@@ -189,18 +270,37 @@ const NoDrawerText = styled.div`
 `
 
 const makeSortMenuItems = (t) => [
-    {"display": t("sort.name"), "context": "name"},
-    {"display": t("sort.-name"), "context": "-name"},
-    {"display": t("sort.created_at"), "context": "created_at"},
-    {"display": t("sort.-created_at"), "context": "-created_at"},
-    {"display": t("sort.-uncompleted_task_count"), "context": "-uncompleted_task_count"},
-    {"display": t("sort.-completed_task_count"), "context": "-completed_task_count"},
-    {"display": t("sort.completed_task_count"), "context": "completed_task_count"},
+    { display: t("sort.name"), context: "name" },
+    { display: t("sort.-name"), context: "-name" },
+    { display: t("sort.created_at"), context: "created_at" },
+    { display: t("sort.-created_at"), context: "-created_at" },
+    {
+        display: t("sort.-uncompleted_task_count"),
+        context: "-uncompleted_task_count",
+    },
+    {
+        display: t("sort.-completed_task_count"),
+        context: "-completed_task_count",
+    },
+    {
+        display: t("sort.completed_task_count"),
+        context: "completed_task_count",
+    },
 ]
 
 const makeContextMenuItems = (t, theme, handleAlert) => [
-    {"icon": "edit", "display": t("edit.display"), "color": theme.textColor, "func": () => {}},
-    {"icon": "trash-2", "display": t("delete.display"), "color": theme.project.danger, "func": handleAlert}
+    {
+        icon: "edit",
+        display: t("edit.display"),
+        color: theme.textColor,
+        func: () => {},
+    },
+    {
+        icon: "trash-2",
+        display: t("delete.display"),
+        color: theme.project.danger,
+        func: handleAlert,
+    },
 ]
 
 export default ProjectPage
