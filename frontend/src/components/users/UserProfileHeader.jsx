@@ -188,6 +188,9 @@ const DisplayName = styled.h1`
     color: ${(p) => p.theme.white};
     text-shadow: 1px 1px 10px #000;
 
+    margin-left: -10px;
+    padding-left: 10px;
+
     font-weight: 700;
     font-size: 1.75em;
 
