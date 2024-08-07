@@ -1,15 +1,21 @@
 import { useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 
+import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
-import Form from "@components/sign/Form"
-import Input from "@components/sign/Input"
 import LoaderCircle from "@components/common/LoaderCircle"
 import Error from "@components/errors/ErrorLayout"
+import Form from "@components/sign/Form"
+import Input from "@components/sign/Input"
 
-import { resendVerificationEmail, signIn, signUp, verifyEmail } from "@api/users.api"
+import {
+    resendVerificationEmail,
+    signIn,
+    signUp,
+    verifyEmail,
+} from "@api/users.api"
 
 import sleep from "@utils/sleep"
 
@@ -23,11 +29,10 @@ import {
 } from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import { useQuery, useMutation } from "@tanstack/react-query"
 
 export const SignInForm = () => {
-    const { t } = useTranslation(null, {keyPrefix: "sign"})
-    
+    const { t } = useTranslation(null, { keyPrefix: "sign" })
+
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
@@ -62,33 +67,60 @@ export const SignInForm = () => {
         }
     }
 
-    return <Box>
-        <Title>{t("sign_in")}</Title>
-        <Form onSubmit={onSubmit}>
-            <Input icon={<Mail />} name="email" type="email" placeholder={t("email")} required />
-            <Input icon={<Key />} name="password" type="password" placeholder={t("password")} required />
-            <ButtonGroup $justifyContent="right" $margin="1em 0 0 0">
-                <Button type="submit" disabled={isLoading} $loading={isLoading}>
-                    {isLoading ? t("loading") : t("button_sign_in")}
-                </Button>
-            </ButtonGroup>
-        </Form>
-        <Links>
-            <Link to="/sign/up">
-                <LinkText><UserPlus />{t("button_create_account")}</LinkText>
-            </Link>
-            <Link to="/sign/password-recovery">
-                <LinkText><HelpCircle />{t("button_forgot_password")}</LinkText>
-            </Link>
-            <Link to="/sign/verification-resend">
-                <LinkText><Mail />{t("button_resend_verification")}</LinkText>
-            </Link>
-        </Links>
-    </Box>
+    return (
+        <Box>
+            <Title>{t("sign_in")}</Title>
+            <Form onSubmit={onSubmit}>
+                <Input
+                    icon={<Mail />}
+                    name="email"
+                    type="email"
+                    placeholder={t("email")}
+                    required
+                />
+                <Input
+                    icon={<Key />}
+                    name="password"
+                    type="password"
+                    placeholder={t("password")}
+                    required
+                />
+                <ButtonGroup $justifyContent="right" $margin="1em 0 0 0">
+                    <Button
+                        type="submit"
+                        disabled={isLoading}
+                        $loading={isLoading}
+                    >
+                        {isLoading ? t("loading") : t("button_sign_in")}
+                    </Button>
+                </ButtonGroup>
+            </Form>
+            <Links>
+                <Link to="/sign/up">
+                    <LinkText>
+                        <UserPlus />
+                        {t("button_create_account")}
+                    </LinkText>
+                </Link>
+                <Link to="/sign/password-recovery">
+                    <LinkText>
+                        <HelpCircle />
+                        {t("button_forgot_password")}
+                    </LinkText>
+                </Link>
+                <Link to="/sign/verification-resend">
+                    <LinkText>
+                        <Mail />
+                        {t("button_resend_verification")}
+                    </LinkText>
+                </Link>
+            </Links>
+        </Box>
+    )
 }
 
 export const SignUpForm = () => {
-    const { t } = useTranslation(null, {keyPrefix: "sign"})
+    const { t } = useTranslation(null, { keyPrefix: "sign" })
     const navigate = useNavigate()
 
     const [isLoading, setIsLoading] = useState(false)
@@ -112,86 +144,141 @@ export const SignUpForm = () => {
         }
     }
 
-    return <Box>
-        <Title>{t("sign_up")}</Title>
-        <Form onSubmit={onSubmit}>
-            <Input icon={<Mail />} name="email" type="email" placeholder={t("email")} required />
-            <Input icon={<Key />} name="password" type="password" placeholder={t("password")} minLength="8" required />
-            <Input icon={<AtSign />} name="username" type="text" 
-                placeholder={t("username")} pattern="^[a-z0-9_]{4,15}$" minLength="4" required />
-            <TosAgreement>
-                <Trans t={t} i18nKey="tos" components={{linkToTos: <a href="/tos" />}} />
-            </TosAgreement>
-            <ButtonGroup $justifyContent="right" $margin="1em 0">
-                <Button type="submit" disabled={isLoading} $loading={isLoading}>
-                    {isLoading ? t("loading") : t("button_sign_up")}
-                </Button>
-            </ButtonGroup>
-        </Form>
-        <Links>
-            <Link to="/sign/in">
-                <LinkText><LogIn />{t("button_already_have_account")}</LinkText>
-            </Link>
-        </Links>
-    </Box>
+    return (
+        <Box>
+            <Title>{t("sign_up")}</Title>
+            <Form onSubmit={onSubmit}>
+                <Input
+                    icon={<Mail />}
+                    name="email"
+                    type="email"
+                    placeholder={t("email")}
+                    required
+                />
+                <Input
+                    icon={<Key />}
+                    name="password"
+                    type="password"
+                    placeholder={t("password")}
+                    minLength="8"
+                    required
+                />
+                <Input
+                    icon={<AtSign />}
+                    name="username"
+                    type="text"
+                    placeholder={t("username")}
+                    pattern="^[a-z0-9_]{4,15}$"
+                    minLength="4"
+                    required
+                />
+                <TosAgreement>
+                    <Trans
+                        t={t}
+                        i18nKey="tos"
+                        components={{ linkToTos: <a href="/tos" /> }}
+                    />
+                </TosAgreement>
+                <ButtonGroup $justifyContent="right" $margin="1em 0">
+                    <Button
+                        type="submit"
+                        disabled={isLoading}
+                        $loading={isLoading}
+                    >
+                        {isLoading ? t("loading") : t("button_sign_up")}
+                    </Button>
+                </ButtonGroup>
+            </Form>
+            <Links>
+                <Link to="/sign/in">
+                    <LinkText>
+                        <LogIn />
+                        {t("button_already_have_account")}
+                    </LinkText>
+                </Link>
+            </Links>
+        </Box>
+    )
 }
 
 export const EmailVerificationResendForm = () => {
-    const { t } = useTranslation(null, {keyPrefix: "email_verification"})
+    const { t } = useTranslation(null, { keyPrefix: "email_verification" })
 
     const mutation = useMutation({
-        mutationFn: ({email}) => resendVerificationEmail(email),
+        mutationFn: ({ email }) => resendVerificationEmail(email),
         onSuccess: () => {
             toast.success(t("resend_success"))
         },
-        onError: e => {
+        onError: (e) => {
             if (e.response.status === 425) {
                 const seconds = e.response.data.seconds
                 const minutes = Math.floor(seconds / 60) + 1
 
-                return toast.error(t("resend_error_limit", {minutes}))
+                return toast.error(t("resend_error_limit", { minutes }))
             } else if (e.response.status === 400) {
                 return toast.error(t("resend_error_bad_request"))
             }
-            
+
             return toast.error(t("resend_error_any"))
-        }
+        },
     })
 
-    const onSubmit = e => {
+    const onSubmit = (e) => {
         e.preventDefault()
         const email = e.target.email.value
-        mutation.mutate({email})
+        mutation.mutate({ email })
     }
 
-    return <Box>
-        <Title>{t("resend_title")}</Title>
-        <Content>
-            <form onSubmit={onSubmit}>
-                <Input icon={<Mail />} name="email" placeholder={t("placeholder_email")} type="email" required disabled={mutation.isPending} />
-                <ButtonGroup $justifyContent="right" $margin="1em 0">
-                    <Button $loading={mutation.isPending} type="submit" disabled={mutation.isPending}>{t("button_submit")}</Button>
-                </ButtonGroup>
-            </form>
-            <Text>{t("resend_other_cases")}</Text>
-            <Text>{t("resend_known_issues")}</Text>
-            <Links>
-                <Link to="/sign/in">
-                    <LinkText><LogIn />{t("link_sign")}</LinkText>
-                </Link>
-            </Links>
-        </Content>
-    </Box>
+    return (
+        <Box>
+            <Title>{t("resend_title")}</Title>
+            <Content>
+                <form onSubmit={onSubmit}>
+                    <Input
+                        icon={<Mail />}
+                        name="email"
+                        placeholder={t("placeholder_email")}
+                        type="email"
+                        required
+                        disabled={mutation.isPending}
+                    />
+                    <ButtonGroup $justifyContent="right" $margin="1em 0">
+                        <Button
+                            $loading={mutation.isPending}
+                            type="submit"
+                            disabled={mutation.isPending}
+                        >
+                            {t("button_submit")}
+                        </Button>
+                    </ButtonGroup>
+                </form>
+                <Text>{t("resend_other_cases")}</Text>
+                <Text>{t("resend_known_issues")}</Text>
+                <Links>
+                    <Link to="/sign/in">
+                        <LinkText>
+                            <LogIn />
+                            {t("link_sign")}
+                        </LinkText>
+                    </Link>
+                </Links>
+            </Content>
+        </Box>
+    )
 }
 
 export const EmailVerificationForm = () => {
-    const { t } = useTranslation(null, {keyPrefix: "email_verification"})
+    const { t } = useTranslation(null, { keyPrefix: "email_verification" })
 
-    const [searchParams, ] = useSearchParams()
+    const [searchParams] = useSearchParams()
 
     const token = searchParams.get("token")
 
-    const { data: email, isPending, isError } = useQuery({
+    const {
+        data: email,
+        isPending,
+        isError,
+    } = useQuery({
         queryKey: ["email_verifications", token],
         queryFn: () => verifyEmail(token),
         enabled: !!token,
@@ -202,32 +289,41 @@ export const EmailVerificationForm = () => {
             }
 
             return count < 3
-        }
+        },
     })
 
     if (isPending) {
-        return <Box $verticalCenter>
-            <FullLoader />
-        </Box>
+        return (
+            <Box $verticalCenter>
+                <FullLoader />
+            </Box>
+        )
     }
 
     if (isError) {
-        return <Box>
-            <Error code="?_?" text={t("invalid_access")} />
-        </Box>
+        return (
+            <Box>
+                <Error code="?_?" text={t("invalid_access")} />
+            </Box>
+        )
     }
 
-    return <Box>
-        <Title>{t("verified_title")}</Title>
-        <Content>
-            <VerifiedMessage>{t("verified", {email})}</VerifiedMessage>
-            <Links>
-                <Link to="/sign/in">
-                    <LinkText><LogIn />{t("link_sign")}</LinkText>
-                </Link>
-            </Links>
-        </Content>
-    </Box>
+    return (
+        <Box>
+            <Title>{t("verified_title")}</Title>
+            <Content>
+                <VerifiedMessage>{t("verified", { email })}</VerifiedMessage>
+                <Links>
+                    <Link to="/sign/in">
+                        <LinkText>
+                            <LogIn />
+                            {t("link_sign")}
+                        </LinkText>
+                    </Link>
+                </Links>
+            </Content>
+        </Box>
+    )
 }
 
 const Box = styled.section`
@@ -251,9 +347,11 @@ const Box = styled.section`
         }
     }
 
-    ${p => p.$verticalCenter && css`
-        align-items: center;
-    `}
+    ${(p) =>
+        p.$verticalCenter &&
+        css`
+            align-items: center;
+        `}
 `
 
 const Title = styled.h2`
