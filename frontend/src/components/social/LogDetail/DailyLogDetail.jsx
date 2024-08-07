@@ -8,9 +8,6 @@ import LogDetailsTask from "@components/social/LogDetailsTask"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import { TaskList } from "@components/drawers/Drawer"
 
-import queryClient from "@queries/queryClient"
-import { toast } from "react-toastify"
-
 const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, day}) => {
     const [inputState, setInputState] = useState(false)
     const [content, setContent] = useState(dailyComment.content)
