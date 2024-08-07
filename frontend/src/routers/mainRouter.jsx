@@ -92,9 +92,8 @@ const routes = [
                     {
                         path: "request-password-recovery",
                         async lazy() {
-                            const { PasswordRecoveryRequestForm } = await import(
-                                "@components/sign/forms"
-                            )
+                            const { PasswordRecoveryRequestForm } =
+                                await import("@components/sign/forms")
                             return { Component: PasswordRecoveryRequestForm }
                         },
                     },

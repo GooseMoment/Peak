@@ -27,8 +27,8 @@ import {
     Key,
     LogIn,
     Mail,
-    UserPlus,
     RotateCw,
+    UserPlus,
 } from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -425,7 +425,8 @@ export const PasswordRecoveryForm = () => {
     const token = searchParams.get("token")
 
     const mutation = useMutation({
-        mutationFn: ({ token, password }) => patchPasswordWithPasswordRecoveryToken(token, password),
+        mutationFn: ({ token, password }) =>
+            patchPasswordWithPasswordRecoveryToken(token, password),
         onSuccess: () => {
             toast.success(t("recovery_success"))
             navigate("/sign/in")
