@@ -4,6 +4,7 @@ import SubSection from "@components/intro/SubSection"
 import RadioGroup from "@components/intro/RadioGroup"
 import Radio from "@components/intro/Radio"
 import DemoTask from "@components/intro/DemoTask"
+import { ifMobile } from "@utils/useScreenType"
 
 import {yesterday, today, tomorrow, nextWeek, twoWeeksLater} from "./todays"
 
@@ -81,6 +82,11 @@ const DemoPlan = () => {
 const HalfDivider = styled.div`
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+
+    ${ifMobile} {
+        gap: 1em;
+    }
 `
 
 const Selections = styled.div`
@@ -88,6 +94,13 @@ const Selections = styled.div`
     flex-direction: column;
     justify-content: space-between;
     gap: 1em;
+
+    ${ifMobile} {
+        flex-direction: row;
+        justify-content: center;
+        gap: 3em;
+        width: 100%;
+    }
 `
 
 const Selection = styled.div`
@@ -102,6 +115,10 @@ const Icon = styled.img`
 
 const Tasks = styled.div`
     width: 50%;
+
+    ${ifMobile} {
+        width: unset;
+    }
 `
 
 const BlurArea = styled.div`

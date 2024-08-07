@@ -1,3 +1,5 @@
+import { ifMobile } from "@utils/useScreenType"
+
 import styled from "styled-components"
 
 const SkeletonSidebar = () => {
@@ -29,6 +31,10 @@ const Frame = styled.div`
     padding: 1.25em;
 
     background-color: ${p => p.theme.sidebar.backgroundColor};
+
+    ${ifMobile} {
+        display: none;
+    }
 `
 
 const Items = styled.div`

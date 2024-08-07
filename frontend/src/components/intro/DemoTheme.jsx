@@ -7,6 +7,7 @@ import SkeletonDrawer from "./skeletons/SkeletonDrawer"
 
 import themes from "@assets/themes"
 import { cubicBeizer } from "@assets/keyframes"
+import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import { useTranslation } from "react-i18next"
 import styled, { ThemeProvider } from "styled-components"
@@ -54,6 +55,10 @@ const Wrapper = styled.div`
     & * {
         transition: background-color 0.25s ${cubicBeizer};
     }
+
+    ${ifTablet} {
+        width: unset;
+    }
 `
 
 const SkeletonFrame = styled.div`
@@ -69,6 +74,15 @@ const SkeletonFrame = styled.div`
     aspect-ratio: 16/9;
 
     background-color: ${p => p.theme.backgroundColor};
+
+    ${ifTablet} {
+        height: 16em;
+    }
+
+    ${ifMobile} {
+        height: 15em;
+        aspect-ratio: 4/3;
+    }
 `
 
 const SkeletonPage = styled.div`
@@ -78,6 +92,11 @@ const SkeletonPage = styled.div`
     width: 80%;
 
     padding: 1.5em 3em;
+
+    ${ifMobile} {
+        padding: 1.5em 1em;
+        width: 100%;
+    }
 `
 
 const SkeletonProjectName = styled.div`
