@@ -1,22 +1,36 @@
 import { useEffect, useState } from "react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { useRouteLoaderData } from "react-router-dom"
-
+import { toast } from "react-toastify"
 import { styled, css } from "styled-components"
-import moment from "moment";
 
 import SocialCalendar from "@components/social/SocialCalendar"
 import DailyLogPreview from "@components/social/DailyLogPreview"
 import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail"
 import SocialPageTitle from "@components/social/SocialPageTitle"
 
-import { getDailyComment, getDailyLogsPreview, postCommentToDailyComment } from "@api/social.api"
+import queryClient from "@queries/queryClient"
 
-const sortDailyLogs = (report) => {
-    return report.slice().sort((a, b) => {
-        if (a.is_read !== b.is_read)
-            return a.is_read - b.is_read
-        return new Date(a.completed_at) - new Date(b.completed_at)
-    })
+import { getDailyComment, getDailyLogDetails, getDailyLogsPreview, postDailyComment } from "@api/social.api"
+
+const compareDailyLogs = (a, b) => {
+    if(!a.recent_task === !b.recent_task) {
+        // (when there is no completed task) Show the user with the earliest username in alphabetical order first
+        if(!a.recent_task) return a.username > b.username ? 1:-1
+        if(a.recent_task.is_read !== b.recent_task.is_read)
+            return a.recent_task.is_read - b.recent_task.is_read
+        return a.recent_task.is_read ? (
+            // Show the earliest completed tasks first
+            new Date(a.recent_task.completed_at) - new Date(b.recent_task.completed_at)
+        ) : (
+            // Show more recently completed tasks first when not read yet
+            new Date(b.recent_task.completed_at) - new Date(a.recent_task.completed_at)
+        )
+
+    }
+    // Show user with recent work first
+    return !a.recent_task - !b.recent_task
 }
 
 const SocialFollowingPage = () => {
@@ -25,51 +39,40 @@ const SocialFollowingPage = () => {
 
     const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
     const [selectedUsername, setSelectedUsername] = useState(null)
-    const [dailyReport, setDailyReport] = useState([])
-    const [dailyComment, setDailyComment] = useState(null)
 
     const {user} = useRouteLoaderData("app")
 
-    const getPreview = async(date) => {
-        if(date) try {
-            const res = await getDailyLogsPreview(user.username, date)
-            setDailyReport(res)
-        } catch (e) {
-            throw alert(e)
+    const { data: dailyLogs, isError: dailyLogsError } = useQuery({
+        queryKey: ['daily', 'logs', user.username, selectedDate],
+        queryFn: () => getDailyLogsPreview(user.username, selectedDate),
+        enabled: !!selectedDate
+    })
+
+    const dailyLogDetailUsername = selectedUsername?selectedUsername:user.username
+
+    const { data: dailyComment, isError: dailyCommentError } = useQuery({
+        queryKey: ['daily', 'content', dailyLogDetailUsername, selectedDate],
+        queryFn: () => getDailyComment(dailyLogDetailUsername, selectedDate),
+        enabled: !!selectedDate
+    })
+
+    const dailyCommentMutation = useMutation({
+        mutationFn: ({day, content}) => {
+            return postDailyComment(day, content)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['daily', 'content', user.username, selectedDate]})
+        },
+        onError: () => {
+            toast.error(e)
         }
-    }
+    })
 
-    const getDetail = async(date, followee) => {      
-        const followeeUsername = followee?followee:user.username
-        if(!date) {
-            setDailyComment(null)
-            return
-        }
-
-        if(date && followeeUsername) try {
-            const res = await getDailyComment(followeeUsername, date)
-            setDailyComment(res)
-        } catch (e) {
-            throw alert(e)
-        }
-    }
-
-    const postDailyComment = async(date, comment) => {
-        if(date) try {
-            const res = await postCommentToDailyComment(date, comment)
-            setDailyComment(res)
-        } catch (e) {
-            throw alert(e)
-        }
-    }
-
-    useEffect(() => {
-        getPreview(selectedDate)
-    }, [selectedDate])
-
-    useEffect(() => {
-        getDetail(selectedDate, selectedUsername)
-    }, [selectedDate, selectedUsername])
+    const { data: dailyLogDetails, isError: dailyLogDetailsError } = useQuery({
+        queryKey: ['daily', 'log', 'details', dailyLogDetailUsername, selectedDate],
+        queryFn: () => getDailyLogDetails(dailyLogDetailUsername, selectedDate),
+        enabled: !!selectedDate
+    })
 
     return <>
         <SocialPageTitle active="following" />
@@ -84,13 +87,14 @@ const SocialFollowingPage = () => {
                     />
                 </CalendarContainer>
 
+                {/* DailyLogsPreview를 별도의 컴포넌트 파일로 구분할까 고민중 */}
                 <DailyLogsPreviewContainer>
-                    {sortDailyLogs(dailyReport).map((dailyFollowersLog) => (
+                    {dailyLogs?.sort(compareDailyLogs).map((dailyFollowerLog, index) => (
                         <DailyLogPreview
-                            key={dailyFollowersLog.username}
-                            userLogSimple={dailyFollowersLog}
-                            selectedIndex={selectedUsername}
-                            setSelectedIndex={setSelectedUsername} />
+                            key={index}
+                            dailyLog={dailyFollowerLog}
+                            selectedUsername={selectedUsername}
+                            setSelectedUsername={setSelectedUsername} />
                     ))}
                 </DailyLogsPreviewContainer>
             </Container>
@@ -98,13 +102,15 @@ const SocialFollowingPage = () => {
             <Container $isSticky={true}>
                 {dailyComment?<DailyLogDetail
                     dailyComment={dailyComment}
+                    userLogDetails={dailyLogDetails}
                     userLogsDetail={mockDailyFollowerLogsDetail[0]}
                     user={user}
-                    saveDailyComment={postDailyComment}
+                    saveDailyComment={dailyCommentMutation.mutate}
                     day={selectedDate}
                 />:null}
             </Container>
         </Wrapper>
+        {/* <ReactQueryDevtools initialIsOpen></ReactQueryDevtools> */}
     </>
 }
 

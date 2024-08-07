@@ -44,11 +44,11 @@ padding-bottom: 0.5em;
 `
 
 const Username = styled.div`
-font-size: 1em;
-text-align: center;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
+    text-align: center;
+    font-size: 1em;
+    white-space: nowrap;
+    overflow-x: clip;
+    text-overflow: ellipsis;
 `
 
 export default SimpleProfile

@@ -1,29 +1,18 @@
 from rest_framework import serializers
 
-from django.utils import timezone
 from django.core.cache import cache
 
-from datetime import datetime
-
 from .models import *
+from projects.models import Project
+
 from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
-from projects.serializers import ProjectSerializer
-
-from projects.models import *
+from drawers.serializers import DrawerSerializer
 
 class EmojiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Emoji
         fields = ["id", "name", "img_uri"]
-
-class PeckSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-    task = TaskSerializer()
-    
-    class Meta:
-        model = Peck
-        fields = ["id", "user", "task", "count"]
 
 class DailyLogsSerializer(UserSerializer):
     recent_task = serializers.SerializerMethodField()
@@ -71,17 +60,12 @@ class DailyLogsSerializer(UserSerializer):
     #         ret['recent_task'] = sorted(ret['recent_task'], key=lambda x: x['recent_task__completed_at'])
     #     return ret
 
-class DailyLogSerializer(serializers.Serializer):
-    class Meta:
-        pass
-    pass
-
 class DailyCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     
     class Meta:
         model = DailyComment
-        fields = ["id", "user", "comment", "date"]
+        fields = ["id", "user", "content", "date"]
     # def to_representation(self, instance):
     #     data = super().to_representation(instance)
         
@@ -89,6 +73,13 @@ class DailyCommentSerializer(serializers.ModelSerializer):
     #         return {'user': data['user']}
         
     #     return data
+
+class DailyLogDetailsSerializer(DrawerSerializer):
+    color = serializers.CharField(read_only=True)
+    tasks = TaskSerializer(many=True, read_only=True)
+    
+    class Meta(DrawerSerializer.Meta):
+        fields = DrawerSerializer.Meta.fields + ['color', 'tasks']
 
 class ReactionSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
@@ -100,14 +91,23 @@ class ReactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reaction
         fields = ["id", "user", "parent_type", "task", "daily_comment", "emoji"]
-        
-class CommentSerializer(serializers.ModelSerializer):
+
+class PeckSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     task = TaskSerializer()
     
     class Meta:
+        model = Peck
+        fields = ["id", "user", "task", "count"]
+ 
+class CommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False, read_only=True)
+    task = TaskSerializer()
+    daily_comment = DailyCommentSerializer()
+    
+    class Meta:
         model = Comment
-        fields = ["id", "user", "task", "comment"]
+        fields = ["id", "user", "parent_type", "task", "daily_comment", "created_at", "comment"]
 
 class FollowingSerializer(serializers.ModelSerializer):
     follower = UserSerializer(many=False, read_only=True)

@@ -1,23 +1,19 @@
-import { useState } from "react";
-import styled from "styled-components";
+import { useState, Fragment, useEffect } from "react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import styled from "styled-components"
 
-import ReactionEmoji from "@components/social/ReactionEmoji";
-import EmojiAddButton from "@components/social/EmojiAddButton";
+import SimpleProfile from "@components/social/SimpleProfile"
+import ReactionBox from "@components/social/ReactionBox"
+import LogDetailsTask from "@components/social/LogDetailsTask"
+import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
+import { TaskList } from "@components/drawers/Drawer"
 
-import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox";
-import { TaskList } from "@components/drawers/Drawer";
-import TaskFrame from "@components/tasks/TaskFrame";
-import { Fragment } from "react";
-import SimpleProfile from "../SimpleProfile";
-import { useEffect } from "react";
-
-const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment, day}) => {
+const DailyLogDetail = ({dailyComment, userLogDetails, user, saveDailyComment, day}) => {
     const [inputState, setInputState] = useState(false)
-    const [comment, setComment] = useState(dailyComment.comment)
-    // const [emojiClick, setEmojiClick] = useState(false)
-
+    const [content, setContent] = useState(dailyComment.content)
+    
     useEffect(() => {
-        setComment(dailyComment.comment)
+        setContent(dailyComment.content)
     }, [dailyComment, day])
 
     const handleInputState = () => {
@@ -26,19 +22,19 @@ const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment, d
     }
 
     const handleChange = (e) => {
-        setComment(e.target.value)
+        setContent(e.target.value)
     }
 
     const handleKeyDown = (e) => {
         if(e.key == 'Enter') {
             setInputState(false)
-            saveDailyComment(day, comment)
+            saveDailyComment({day, content})
         }
     }
 
     const handleBlur = () => {
         setInputState(false)
-        saveDailyComment(day, comment)
+        saveDailyComment({day, content})
     }
 
     return <>
@@ -49,15 +45,15 @@ const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment, d
                 {dailyComment.user.username === user.username && inputState ? (
                     <CommentInput
                         type="text"
-                        value={comment}
+                        value={content}
                         onChange={handleChange}
                         onKeyDown={handleKeyDown}
                         onBlur={handleBlur}
                         autoFocus
                     />
                 ):(
-                    dailyComment.comment ? (
-                        <Comment>{"\""+dailyComment.comment+"\""}</Comment>
+                    dailyComment.content ? (
+                        <Comment>{"\""+dailyComment.content+"\""}</Comment>
                     ) : (
                         dailyComment.user.username === user.username ? (
                             <Comment $color="#A4A4A4" $fontstyle="italic">{"Write your daily comments"}</Comment>
@@ -69,27 +65,21 @@ const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment, d
             </CommentBox>
         </CommentRow>
 
-        <ReactionBox>
-            {userLogsDetail.dailyComment.reaction.map((dailyCommentEmoji) => (
-                // <ReactionEmoji emojiClick={emojiClick} setEmojiClick={setEmojiClick} emoji={dailyCommentEmoji}/>
-                <ReactionEmoji key={dailyCommentEmoji.emoji} emoji={dailyCommentEmoji}/>
-            ))
-            }
-            <EmojiAddButton />
-        </ReactionBox>
+        {dailyComment.id && <ReactionBox parentType={'daily_comment'} parent={dailyComment} />}
+
         {/* TODO: who and what emoji */}
         </DetailHeader>
         
         <DetailBody>
         {
-            userLogsDetail.dailyProjects?.map((dailyProject) => (
-                <Fragment key={dailyProject.projectID}>
-                    <DrawerBox $color={dailyProject.projectColor}>
-                        <DrawerName $color={dailyProject.projectColor}>{dailyProject.projectID}</DrawerName>
+            userLogDetails && Object.values(userLogDetails).map((drawer) => (
+                (drawer.tasks.length !== 0) && <Fragment key={drawer.id}>
+                    <DrawerBox $color={drawer.color}>
+                        <DrawerName $color={drawer.color}>{drawer.name}</DrawerName>
                     </DrawerBox>
                     <TaskList>
-                        {dailyProject.dailytasks?.map((dailytask) => (
-                            <TaskFrame key={dailytask.id} task={dailytask} color={dailyProject.projectColor} />
+                        {drawer.tasks.map((task) => (
+                            <LogDetailsTask key={task.id} task={task} color={drawer.color}/>
                         ))}
                     </TaskList>
                 </Fragment>
@@ -100,49 +90,50 @@ const DailyLogDetail = ({dailyComment, userLogsDetail, user, saveDailyComment, d
 }
 
 const DetailHeader = styled.div`
-display: flex;
-flex-direction: column;
-gap: 1em;
+    padding: 1.2em 1em 0.2em;
 
-padding: 1.2em 1em 0.2em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 `
 
 const CommentRow = styled.div`
-display: flex;
-gap: 1em;
+    display: flex;
+    gap: 0.5em;
 `
 
 const CommentBox = styled.div`
-display: flex;
-background-color: #e6e6e6;
-border-radius: 10pt;
-width: 70%;
-padding: 1em;
-cursor: pointer;
+    width: 72%;
+    border-radius: 1em;
+    background-color: #e6e6e6;
+    padding: 1em;
 
-justify-content: center;
-align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
 `
 
 const Comment = styled.div`
-white-space: normal;
-color: ${props => props.$color};
-font-style: ${props => props.$fontstyle};
+    white-space: normal;
+    color: ${props => props.$color};
+    font-style: ${props => props.$fontstyle};
 `
 
 const CommentInput = styled.input`
-display: flex;
-height: 100%;
-width: 100%;
-text-align: center;
-font-size: 1em;
-background-color: inherit;
-border: 0;
-white-space: normal;
+    height: 100%;
+    width: 100%;
+    background-color: inherit;
+    text-align: center;
+    font-size: 1em;
+    white-space: normal;
 `
 
-const ReactionBox = styled.div`
+const ReactionBoxTemp = styled.div`
 margin-left: auto;
+
+display: flex;
 `
 
 const DetailBody = styled.div`

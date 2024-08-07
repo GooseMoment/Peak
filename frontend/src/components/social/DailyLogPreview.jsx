@@ -6,29 +6,28 @@ const putEllipsis = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength-3) + '...' : text
 }
 
-const DailyLogPreview = ({userLogSimple, selectedIndex: selectedUsername, setSelectedIndex: setSelectedUsername}) => {
+const DailyLogPreview = ({dailyLog, selectedUsername, setSelectedUsername}) => {
     
     const handleSelect = () => {
-    // ~Log.index can be replaced with ~Log.task.id
-        setSelectedUsername(userLogSimple.username === selectedUsername ? null : userLogSimple.username)
+        setSelectedUsername(dailyLog.username === selectedUsername ? null : dailyLog.username)
     }
 
     const setRingColor = () => {
-        if(userLogSimple.recent_task)
-            return userLogSimple.recent_task.is_read ? "A4A4A4" : userLogSimple.recent_task.project_color
-        return null
+        return dailyLog.recent_task ? (
+            dailyLog.recent_task.is_read ? "A4A4A4" : dailyLog.recent_task.project_color
+        ) : null
     }
 
     return <Frame onClick={handleSelect}
-            $bgcolor={userLogSimple.username === selectedUsername? "#ffd7c7" : "#FEFDFC"}
+            $bgcolor={"#" + (dailyLog.username === selectedUsername? "ffd7c7" : "FEFDFC")}
         >
 
-        <SimpleProfile user={userLogSimple} ringColor={setRingColor} />
+        <SimpleProfile user={dailyLog} ringColor={setRingColor} />
         <RecentTask>
-            {userLogSimple.recent_task && (
+            {dailyLog.recent_task && (
                 <>
-                    <TaskName>  {"\"" + putEllipsis(userLogSimple.recent_task.name, 32) + "\" 완료!"} </TaskName>
-                    <Ago> {DateTime.fromJSDate(userLogSimple.recent_task.completed_at).setLocale("en").toRelative()} </Ago>
+                    <TaskName>  {"\"" + putEllipsis(dailyLog.recent_task.name, 32) + "\" 완료!"} </TaskName>
+                    <Ago> {DateTime.fromJSDate(dailyLog.recent_task.completed_at).setLocale("en").toRelative()} </Ago>
                     {/* Ago: Left align? */}
                 </>
             )}
