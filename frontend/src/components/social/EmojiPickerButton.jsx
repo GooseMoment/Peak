@@ -17,6 +17,7 @@ const EmojiPickerButton = ({pickedEmoji, setPickedEmoji}) => {
     const { data: serverEmojis, isError: emojiError, isFetching } = useQuery({
         queryKey: ["emojis"],
         queryFn: () => getEmojis(),
+        staleTime: 60*60*5*1000,
     })
 
     const handleOpenModal = () => {
