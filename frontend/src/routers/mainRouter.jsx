@@ -72,6 +72,15 @@ const routes = [
                         },
                     },
                     {
+                        path: "up-complete",
+                        async lazy() {
+                            const { SignUpComplete } = await import(
+                                "@components/sign/forms"
+                            )
+                            return { Component: SignUpComplete }
+                        },
+                    },
+                    {
                         path: "verification",
                         async lazy() {
                             const { EmailVerificationForm } = await import(

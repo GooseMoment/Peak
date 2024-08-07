@@ -135,8 +135,7 @@ export const SignUpForm = () => {
 
         try {
             await signUp(email, password, username)
-            toast.success(t("sign_up_success"))
-            navigate("/sign/in")
+            navigate("/sign/up-complete")
         } catch (err) {
             toast.error(t("sign_up_errors." + err.message))
             setIsLoading(false)
@@ -194,6 +193,33 @@ export const SignUpForm = () => {
                     <LinkText>
                         <LogIn />
                         {t("button_already_have_account")}
+                    </LinkText>
+                </Link>
+            </Links>
+        </Box>
+    )
+}
+
+export const SignUpComplete = () => {
+    const { t } = useTranslation(null, { keyPrefix: "sign" })
+
+    return (
+        <Box>
+            <Title>{t("sign_up_completed")}</Title>
+            <Content>
+                <Text>{t("check_inbox")}</Text>
+            </Content>
+            <Links>
+                <Link to="/sign/in">
+                    <LinkText>
+                        <LogIn />
+                        {t("link_sign_in")}
+                    </LinkText>
+                </Link>
+                <Link to="/sign/verification-resend">
+                    <LinkText>
+                        <Mail />
+                        {t("button_resend_verification")}
                     </LinkText>
                 </Link>
             </Links>
