@@ -1,4 +1,4 @@
-import SimpleProfile from "@components/social/SimpleProfile"
+import { DateTime } from "luxon"
 import styled from "styled-components"
 
 const CommentBox = ({comment}) => {
@@ -8,9 +8,11 @@ const CommentBox = ({comment}) => {
         </ProfileImg>
         <Wrapper>
             <InfoBox>
-                @{comment.user.username}
-                {comment.created_at}
+                <Username>@{comment.user.username}</Username>
+                {/* TODO: Set locale */}
+                <Ago>{DateTime.fromISO(comment.created_at).toRelative({locale: 'ko'})}</Ago>
             </InfoBox>
+
             <Comment>
                 {comment.comment}
             </Comment>
@@ -20,8 +22,6 @@ const CommentBox = ({comment}) => {
 
 const Box = styled.div`
     min-height: 4em;
-
-    border: solid black;
 
     display: flex;
     gap: 0.5em;
@@ -45,7 +45,6 @@ const ProfileImg = styled.div`
 
 const Wrapper = styled.div`
     flex-grow: 1;
-    border: solid black;
 
     display: flex;
     flex-direction: column;
@@ -53,12 +52,18 @@ const Wrapper = styled.div`
 
 const InfoBox = styled.div`
     display: flex;
+    gap: 0.5em;
+`
+
+const Username = styled.div`
+`
+
+const Ago = styled.div`
+    font-size: 0.8em;
 `
 
 const Comment = styled.div`
-    border: solid black;
-
-    padding: 0.4em;
+    padding: 0.2em 0.4em 0.2em;
 
     display: flex;
     justify-content: left;
