@@ -20,9 +20,9 @@ from datetime import datetime, UTC
 
 import re
 
-from .models import User, EmailVerificationToken
+from .models import User, EmailVerificationToken, PasswordRecoveryToken
 from .serializers import UserSerializer
-from .utils import get_first_language, send_mail_verification_email, send_mail_already_verified, send_mail_no_account
+from .utils import get_first_language, send_mail_verification_email, send_mail_already_verified, send_mail_no_account, send_mail_password_recovery
 from social.views import get_blocks
 
 class UserDetail(mixins.RetrieveModelMixin,
@@ -193,7 +193,7 @@ class ResendEmailVerificationMail(GenericAPIView):
         email = request.data.get("email")
         if email is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        
+
         try:
             validate_email(email)
         except ValidationError:
@@ -239,6 +239,69 @@ class ResendEmailVerificationMail(GenericAPIView):
 def get_me(request: Request):
     serializer = UserSerializer(request.user, context={"is_me": True})
     return Response(serializer.data)
+
+class PasswordRecoveryAnonRateThrottle(AnonRateThrottle):
+    rate = "5/hour" # up to 5 times a hour
+
+class PasswordRecoveryView(GenericAPIView):
+    permission_classes = (AllowAny, )
+    throttle_classes = (PasswordRecoveryAnonRateThrottle, )
+
+    # generate a token
+    def post(self, request: Request):
+        email: str | None = request.data.get("email")
+        
+        if email is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            validate_email(email)
+        except ValidationError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        locale = get_first_language(request)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            send_mail_no_account(email, locale)
+            return Response(status=status.HTTP_200_OK)
+        
+        tokens = PasswordRecoveryToken.objects.filter(user=user)
+        
+        if len(tokens) != 0:
+            tokens.delete()
+
+        token = PasswordRecoveryToken.objects.create(user=user)
+        send_mail_password_recovery(user, token.link, locale)
+
+        return Response(status=status.HTTP_200_OK)
+
+    # use the token
+    def patch(self, request: Request):
+        token_hex = request.data.get("token")
+        if token_hex is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            token_uuid = uuid.UUID(hex=token_hex)
+        except ValueError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        
+        try:
+            token = PasswordRecoveryToken.objects.get(token=token_uuid)
+        except PasswordRecoveryToken.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        new_password = request.data.get("new_password")
+        if new_password is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        token.user.set_password(new_password)
+        token.user.save()
+
+        return Response(status=status.HTTP_200_OK)
 
 @api_view(["PATCH"])
 def patch_password(request: Request):

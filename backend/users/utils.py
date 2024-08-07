@@ -77,3 +77,22 @@ def send_mail_no_account(email: str, locale: str):
     )
 
     email.send()
+
+def send_mail_password_recovery(user: User, link: str, locale: str):
+    t = get_translations(locale)["mail_password_recovery"]
+
+    subject = t["subject"]
+
+    text_content = t["text_content"].format(
+        username=user.username,
+        link=link,
+    )
+    
+    email = EmailMultiAlternatives(
+        subject=subject,
+        body=text_content,
+        from_email=None,
+        to=(email, ),
+    )
+
+    email.send()

@@ -12,6 +12,7 @@ urlpatterns = [
     path("users/me/password/", views.patch_password),
     path("users/me/profile_img/", views.upload_profile_img),
     path("users/me/blocks/", views.get_my_blocks),
+    path("password_recovery/", views.PasswordRecoveryView.as_view()),
     path("sign_in/", views.SignInView.as_view(), name="knox_login"),
     path("sign_out/", knox_views.LogoutView.as_view(), name="knox_logout"),
     path("sign_out_all/", knox_views.LogoutAllView.as_view(), name="knox_logoutall"),

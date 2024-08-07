@@ -43,4 +43,21 @@ If you haven't done any action, you can ignore this mail.
 Please do not reply to this email, as we are unable to respond from this email address.
         """,
     },
+    "mail_password_recovery": {
+        "subject": "Password Recovery",
+        "text_content": """Hi, @{username}. 
+
+You requested password recovery.
+Click the link below to start password recovery.
+
+Link:
+{link}
+
+This link is your unique link. DO NOT TELL ANYONE.
+
+If you haven't done any action, you can ignore this mail.
+
+Please do not reply to this email, as we are unable to respond from this email address.
+        """,
+    }
 }
