@@ -4,8 +4,21 @@ import { Portal } from 'react-portal'
 
 import CommentBox from '@components/social/CommentBox'
 
-const CommentModal = ({ isOpen, onClose, position, parentComments}) => {
+const CommentModal = ({ isOpen, onClose, position, parentComments, saveComment}) => {
     if (!isOpen) return null
+
+    const [commentValue, setCommentValue] = useState('')
+
+    const handleChange = (e) => {
+        setCommentValue(e.target.value)
+    }
+
+    const handleKeyDown = (e) => {
+        if(e.key == 'Enter') {
+            saveComment({action: 'post', comment: commentValue})
+            setCommentValue('')
+        }
+    }
 
     return (
         <Portal>
@@ -15,12 +28,20 @@ const CommentModal = ({ isOpen, onClose, position, parentComments}) => {
                     <CommentContainer>
                         {parentComments?(
                             Object.values(parentComments).map((comment) => (
-                                <CommentBox comment={comment} />
+                                <CommentBox key={comment.id} comment={comment}/>
                             ))
                         ) : (
+                            // TODO: design no comments
                             "no comments"
                         )}
                     </CommentContainer>
+                    <CommentInput
+                        type='text'
+                        value={commentValue}
+                        onChange={handleChange}
+                        onKeyDown={handleKeyDown}
+                        autoFocus
+                    />
                 </Modal>
             </Wrapper>
         </Portal>
@@ -62,18 +83,33 @@ const Modal = styled.div`
     overflow-y: auto;
     z-index: 10;
     pointer-events: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
 `
 
 const CommentContainer = styled.div`
     height: 20em;
 
-    border: solid black;
-
     display: flex;
     flex-direction: column-reverse;
     justify-content: end;
 
+    overflow-y: scroll;
     gap: 0.3em;
+`
+
+const CommentInput = styled.input`
+    height: 3.5em;
+    width: 23em;
+
+    padding: 0.5em;
+    font-size: 1em;
+
+    border-radius: 0.5em;
+    
+    border: solid black;
 `
 
 export default CommentModal;
