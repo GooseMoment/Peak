@@ -1,12 +1,19 @@
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import styled, { css } from "styled-components"
 import { toast } from "react-toastify"
-
 import Button from "@components/common/Button"
 import { useClientSetting, useClientTimezone } from "@utils/clientSettings"
 
 const TimeDetail = ({ task, setFunc, closeComponent }) => {
+    const { t } = useTranslation(null, {keyPrefix: "task.due.time"})
+
+    const ampms = [
+        {name: "am", display: t("am")},
+        {name: "pm", display: t("pm")},
+    ]
+
     const [setting, ] = useClientSetting()
     const due_tz = useClientTimezone()
 
@@ -21,7 +28,7 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
         let converted_hour = !setting.time_as_24_hour && ampm === "pm" ? hour + 12 : hour
         const due_time = `${converted_hour}:${min}:00`
         setFunc({due_tz, due_date, due_time})
-        toast.success('시간이 변경되었습니다.')
+        toast.success(t("time_change_success"))
         closeComponent()
     }
 
@@ -29,14 +36,14 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
         let validInputValue = parseInt(e.target.value)
         if (setting.time_as_24_hour) {
             if (validInputValue > 23){
-                toast.error("입력 가능한 최대 숫자는 23입니다", {toastId: "handle_hour"})
+                toast.error(t("acceptable_numbers", {max: 23}), {toastId: "handle_hour"})
                 validInputValue = validInputValue % 24
             }
             setHour(validInputValue)
         }
         else {
             if (validInputValue > 12){
-                toast.error("입력 가능한 최대 숫자는 12입니다", {toastId: "handle_hour"})
+                toast.error(t("acceptable_numbers", {max: 12}), {toastId: "handle_hour"})
                 validInputValue = validInputValue % 12
             }
             setHour(validInputValue)
@@ -46,7 +53,7 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
     const handleMinute = (e) => {
         let validInputValue = parseInt(e.target.value)
         if (validInputValue > 59){
-            toast.error("입력 가능한 최대 숫자는 59입니다", {toastId: "handle_minute"})
+            toast.error(t("acceptable_numbers", {max: 59}), {toastId: "handle_minute"})
             validInputValue = 59
         }
         setMin(validInputValue)
@@ -78,7 +85,7 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
                 </InputBox>
             </FlexBox>
             <FlexCenterBox>
-                <Button onClick={changeTime}>추가하기</Button>
+                <Button onClick={changeTime}>{t("button_add")}</Button>
             </FlexCenterBox>
         </DetailBox>
     )
@@ -170,10 +177,5 @@ const TimeInput = styled.input`
         -webkit-appearance: none;
     }
 `
-
-const ampms = [
-    {name: "am", display: "오전"},
-    {name: "pm", display: "오후"},
-]
 
 export default TimeDetail

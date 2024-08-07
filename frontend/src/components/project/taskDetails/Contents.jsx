@@ -1,5 +1,5 @@
-import { useState, Fragment } from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useState, Fragment, useMemo } from "react"
+import { useNavigate } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
@@ -15,14 +15,19 @@ import Drawer from "./Drawer"
 import Memo from "./Memo"
 
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 import ToolTip from "@components/project/common/ToolTip"
 import ModalPortal from "@components/common/ModalPortal"
 import taskDate from "@components/tasks/utils/taskDate"
 
 const Contents = ({task, setFunc}) => {
+    const { t } = useTranslation(null, {keyPrefix: "task"})
     const navigate = useNavigate()
 
     const [isComponentOpen, setIsComponentOpen] = useState(false)
+
+    const priorities = useMemo(() => makePriorities(t), [t])
+    const displayReminder = useMemo(() => makeDisplayReminder(t), [t])
 
     // text클릭 시 알맞는 component 띄우기
     const [content, setContent] = useState(null)
@@ -45,14 +50,14 @@ const Contents = ({task, setFunc}) => {
             id: 1,
             name: "assigned_due",
             icon: <FeatherIcon icon="calendar" />,
-            display: task.assigned_at ? formatted_assigned_date : "없음",
+            display: task.assigned_at ? formatted_assigned_date : t("none"),
             component: <Assigned setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 2,
             name: "due",
             icon: <img src={hourglass} />,
-            display: task.due_date ? formatted_due_datetime : "없음",
+            display: task.due_date ? formatted_due_datetime : t("none"),
             component: <Due task={task} setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
@@ -61,10 +66,10 @@ const Contents = ({task, setFunc}) => {
             icon: <img src={alarmclock} />,
             display: task?.reminders && task.reminders?.length !== 0 ? 
                 <RemindersBox name="reminder">
-                    {task.reminders.map(reminder => <ReminderBlock key={reminder.id} name="reminder">{displayReminder[reminder.delta]}</ReminderBlock>)}
+                    {task.reminders.map(reminder => <ReminderBlock key={reminder.id} name="reminder">{displayReminder[0][reminder.delta]}</ReminderBlock>)}
                 </RemindersBox> 
                 : (task.due_date ? <EmptyReminderBox name="reminder">+</EmptyReminderBox>
-                : <EmptyReminderBox onClick={()=>{toast.error("알람 설정 전에 기한을 설정해주세요")}}>-</EmptyReminderBox>),
+                : <EmptyReminderBox name="none" onClick={()=>{toast.error(t("reminder.reminder_before_due_date"), {toastId: "reminder_before_due_date"})}}>-</EmptyReminderBox>),
             component: <Reminder task={task} closeComponent={closeComponent}/>
         },
         {
@@ -79,14 +84,14 @@ const Contents = ({task, setFunc}) => {
             name: "drawer",
             icon: <FeatherIcon icon="archive" />,
             display: task.project_name === 'Inbox' ? `${task.project_name}` : 
-                task.drawer_name ? `${task.project_name} / ${task.drawer_name}` : "없음",
+                task.drawer_name ? `${task.project_name} / ${task.drawer_name}` : t("none"),
             component: <Drawer setFunc={setFunc} closeComponent={closeComponent}/>
         },
         {
             id: 6,
             name: "memo",
             icon: <FeatherIcon icon="edit" />,
-            display: task.memo ? task.memo : "없음",
+            display: task.memo ? task.memo : t("none"),
             component: <Memo previousMemo={task.memo} setFunc={setFunc} closeComponent={closeComponent}/>
         },
     ]
@@ -200,20 +205,20 @@ const EmptyReminderBox = styled.div`
     align-items: center;
 `
 
-const priorities = [
-    '보통',
-    '중요',
-    '매우 중요'
+const makePriorities = (t) => [
+    t("priority.normal"),
+    t("priority.important"),
+    t("priority.critical"),
 ]
 
-const displayReminder = {
-    0: "그때",
-    5: "5분 전",
-    15: "15분 전",
-    30: "30분 전",
-    60: "1시간 전",
-    1440: "1일 전",
-    2880: "2일 전",
-}
+const makeDisplayReminder = (t) => [{
+    0: t("reminder.display_then"),
+    5: t("reminder.display_5_minutes_before"),
+    15: t("reminder.display_15_minutes_before"),
+    30: t("reminder.display_30_minutes_before"),
+    60: t("reminder.display_1_hour_before"),
+    1440: t("reminder.display_1_day_before"),
+    2880: t("reminder.display_2_days_before"),
+}]
 
 export default Contents

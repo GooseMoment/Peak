@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import TaskCircle from "../tasks/TaskCircle"
 import notify from "@utils/notify"
 
 import styled from "styled-components"
 
-const TaskNameInput = ({task, setFunc, newTaskName, setNewTaskName, color}) => {    
+const TaskNameInput = ({task, setFunc, newTaskName, setNewTaskName, color}) => {  
+    const { t } = useTranslation(null, {keyPrefix: "task"})
+
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
@@ -24,7 +27,7 @@ const TaskNameInput = ({task, setFunc, newTaskName, setNewTaskName, color}) => {
     const onEnter = async (e) => {
         if(e.key === 'Enter') {
             changeTaskName(newTaskName)
-            notify.success("이름이 변경되었습니다.")
+            notify.success(t("name_change_success"))
         }
     }
 
@@ -51,7 +54,7 @@ const TaskNameInput = ({task, setFunc, newTaskName, setNewTaskName, color}) => {
             onChange={onChange}
             onKeyDown={onEnter}
             value={newTaskName || ''}
-            placeholder="할 일의 이름을 입력해주세요."
+            placeholder={t("name_placeholder")}
         />
     </Box>  
 }

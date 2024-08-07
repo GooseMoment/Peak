@@ -1,5 +1,5 @@
 import { useNavigate, Outlet, useParams } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 
 import styled, { useTheme } from "styled-components"
 import FeatherIcon from "feather-icons-react"
@@ -14,6 +14,8 @@ import queryClient from "@queries/queryClient"
 import handleToggleContextMenu from "@utils/handleToggleContextMenu"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
+import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
+import { ErrorBox } from "@components/errors/ErrorProjectPage"
 
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
@@ -36,12 +38,12 @@ const ProjectPage = () => {
 
     const { t } = useTranslation(null, {keyPrefix: "project"})
     
-    const { isLoading: isProjectLoading, isError: isProjectError, data: project } = useQuery({
+    const { isLoading: isProjectLoading, isError: isProjectError, data: project, refetch: projectRefetch } = useQuery({
         queryKey: ['projects', id],
         queryFn: () => getProject(id),
     })
 
-    const { isLoading: isDrawersLoading, isError: isDrawersError, data: drawers } = useQuery({
+    const { isLoading: isDrawersLoading, isError: isDrawersError, data: drawers, refetch: drawersRefetch } = useQuery({
         queryKey: ['drawers', {projectID: id, ordering: ordering}],
         queryFn: () => getDrawersByProject(id, ordering),
     })
@@ -65,8 +67,12 @@ const ProjectPage = () => {
             return deleteProject(id)
         },
         onSuccess: () => {
+            toast.success(t("delete.project_delete_success", {project_name: project.name}))
             queryClient.invalidateQueries({queryKey: ['projects']})
         },
+        onError: () => {
+            toast.error(t("delete.project_delete_error", {project_name: project.name}))
+        }
     })
 
     const handleAlert = () => {
@@ -74,12 +80,12 @@ const ProjectPage = () => {
         setIsAlertOpen(true)
     }
 
-    const contextMenuItems = makeContextMenuItems(theme, handleAlert)
+    const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
+    const contextMenuItems = useMemo(() => makeContextMenuItems(t, theme, handleAlert), [t, theme])
 
     const handleDelete = () => {
         navigate(`/app/projects`)
         deleteMutation.mutate()
-        toast.success(`"${project.name}" 프로젝트가 삭제되었습니다`)
     }
 
     const openInboxTaskCreate = () => {
@@ -87,13 +93,20 @@ const ProjectPage = () => {
         {state: {project_name : project.name, drawer_id : project.drawers[0].id, drawer_name : project.drawers[0].name}})
     }
 
-    if (isProjectLoading) {
-        return <div>로딩중...</div>
-        // 민영아.. 스켈레톤 뭐시기 만들어..
+    const onClickProjectErrorBox = () => {
+        projectRefetch()
+        drawersRefetch()
     }
 
-    if (isDrawersLoading) {
-        return <div>로딩중...</div>
+    if (isProjectLoading || isDrawersLoading) {
+        return <SkeletonProjectPage/>
+    }
+
+    if (isProjectError || isDrawersError) {
+        return <ErrorBox $isTasks={false} onClick={onClickProjectErrorBox}>
+            <FeatherIcon icon="alert-triangle"/>
+            {t("error_load_project_and_drawer")}
+        </ErrorBox>
     }
 
     return (
@@ -101,20 +114,20 @@ const ProjectPage = () => {
         <TitleBox>
             <PageTitle $color={"#" + project.color}>{project.name}</PageTitle>
             <Icons>
-                <FeatherIcon icon="plus" onClick={project.type === 'inbox' ? openInboxTaskCreate : () => {setIsDrawerCreateOpen(true)}}/>
+                <FeatherIcon icon="plus" onClick={project?.type === 'inbox' ? openInboxTaskCreate : () => {setIsDrawerCreateOpen(true)}}/>
                 <SortIconBox onClick={handleToggleContextMenu(setSelectedSortMenuPosition, setIsSortMenuOpen, setIsContextMenuOpen)}>
                     <SortIcon color={theme.textColor}/>
                 </SortIconBox>
                 <FeatherIcon icon="more-horizontal" onClick={handleToggleContextMenu(setSelectedButtonPosition, setIsContextMenuOpen, setIsSortMenuOpen)}/>
             </Icons>
         </TitleBox>
-        {drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
+        {(drawers && (drawers.length === 0) ? <NoDrawerText>{t("no_drawer")}</NoDrawerText> 
         : drawers?.map((drawer) => (
             <Drawer key={drawer.id} project={project} drawer={drawer} color={project.color}/>
-        ))}
+        )))}
         {isSortMenuOpen &&
             <SortMenu
-                title="서랍"
+                title={t("sort.drawer_title")}
                 items={sortMenuItems}
                 selectedButtonPosition={selectedSortMenuPosition}
                 ordering={ordering}
@@ -128,7 +141,11 @@ const ProjectPage = () => {
             />
         }
         {isAlertOpen &&
-            <DeleteAlert title={`"${project.name}" 프로젝트를`} onClose={() => {setIsAlertOpen(false)}} func={handleDelete}/>
+            <DeleteAlert
+                title={t("delete.alert_project_title", {project_name: project.name})}
+                onClose={() => {setIsAlertOpen(false)}}
+                func={handleDelete}
+            />
         }
         {isDrawerCreateOpen &&
             <ModalPortal closeModal={() => {setIsDrawerCreateOpen(false)}}>
@@ -171,19 +188,19 @@ const NoDrawerText = styled.div`
     font-size: 1.4em;
 `
 
-const sortMenuItems = [
-    {"display": "이름 사전순", "context": "name"},
-    {"display": "이름 사전 역순", "context": "-name"},
-    {"display": "생성일자 최신순", "context": "created_at"},
-    {"display": "생성일자 오래된순", "context": "-created_at"},
-    {"display": "미완료 작업 많은순", "context": "-uncompleted_task_count"},
-    {"display": "완료 작업 많은순", "context": "-completed_task_count"},
-    {"display": "완료 작업 적은순", "context": "completed_task_count"},
+const makeSortMenuItems = (t) => [
+    {"display": t("sort.name"), "context": "name"},
+    {"display": t("sort.-name"), "context": "-name"},
+    {"display": t("sort.created_at"), "context": "created_at"},
+    {"display": t("sort.-created_at"), "context": "-created_at"},
+    {"display": t("sort.-uncompleted_task_count"), "context": "-uncompleted_task_count"},
+    {"display": t("sort.-completed_task_count"), "context": "-completed_task_count"},
+    {"display": t("sort.completed_task_count"), "context": "completed_task_count"},
 ]
 
-const makeContextMenuItems = (theme, handleAlert) => [
-    {"icon": "edit", "display": "수정", "color": theme.textColor, "func": () => {}},
-    {"icon": "trash-2", "display": "삭제", "color": theme.project.danger, "func": handleAlert}
+const makeContextMenuItems = (t, theme, handleAlert) => [
+    {"icon": "edit", "display": t("edit.display"), "color": theme.textColor, "func": () => {}},
+    {"icon": "trash-2", "display": t("delete.display"), "color": theme.project.danger, "func": handleAlert}
 ]
 
 export default ProjectPage

@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import FeatherIcon from "feather-icons-react"
 import styled, { css } from "styled-components"
@@ -12,6 +13,8 @@ import TimeDetail from "@components/project/due/TimeDetail"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 
 const Due = ({ task, setFunc, closeComponent }) => {
+    const { t } = useTranslation(null, {keyPrefix: "task.due"})
+
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
     const handleAdditionalComp = (name) => {
@@ -20,7 +23,7 @@ const Due = ({ task, setFunc, closeComponent }) => {
         else {
             if (name === "time") {
                 if (!task.due_date) {
-                toast.error("시간 설정 전에 기한을 설정해주세요", {toastId: "handle_time_open"})
+                toast.error(t("time.no_due_before_time"), {toastId: "handle_time_open"})
                 return
             }}
             setIsAdditionalComp(name)
@@ -42,14 +45,14 @@ const Due = ({ task, setFunc, closeComponent }) => {
     }
 
     const addComponent = [
-        {name: "quick", display: "빠른 지정", icon: "menu", component: <QuickDue changeDueDate={changeDueDate}/>},
-        {name: "calendar", display: "달력", icon: "calendar", component: <div>달력입니다</div>},
-        {name: "time", display: "시간 추가", icon: "clock", component: <TimeDetail task={task} setFunc={setFunc} closeComponent={closeComponent}/>},
-        {name: "repeat", display: "반복 설정", icon: "refresh-cw", component: <RepeatDetail/>},
+        {name: "quick", display: t("quick.title"), icon: "menu", component: <QuickDue changeDueDate={changeDueDate}/>},
+        {name: "calendar", display: t("calendar"), icon: "calendar", component: <div>달력입니다</div>},
+        {name: "time", display: t("time.title"), icon: "clock", component: <TimeDetail task={task} setFunc={setFunc} closeComponent={closeComponent}/>},
+        {name: "repeat", display: t("repeat.title"), icon: "refresh-cw", component: <RepeatDetail/>},
     ]
 
     return (
-        <Detail title="기한 지정" onClose={closeComponent} special={true}>
+        <Detail title={t("due_title")} onClose={closeComponent} special={true}>
             {addComponent.map((comp, i)=>(
                 <Fragment key={comp.name}>
                     <FlexCenterBox>
