@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const Title = ({ name, setName, setFunc, isCreate, icon, onClose }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.create" })
+    const { t } = useTranslation(null, { keyPrefix: "project" })
 
     const onchange = (e) => {
         const newName = e.target.value
@@ -14,7 +14,7 @@ const Title = ({ name, setName, setFunc, isCreate, icon, onClose }) => {
 
     const changeName = () => {
         setFunc({name})
-        toast.success(t("name_change_success"), {toastId: "name_change_success"})
+        toast.success(t("edit.name_change_success"), {toastId: "name_change_success"})
     }
 
     const onEnter = (e) => {
@@ -32,7 +32,7 @@ const Title = ({ name, setName, setFunc, isCreate, icon, onClose }) => {
                     value={name || ''}
                     onChange={onchange}
                     onKeyDown={isCreate ? ()=>{} : onEnter}
-                    placeholder={t("name_placeholder")}
+                    placeholder={t("create.name_placeholder")}
                 />
             </TitleBox>
             <Icons $isCreate={isCreate}>

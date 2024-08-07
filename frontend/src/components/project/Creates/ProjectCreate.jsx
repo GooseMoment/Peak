@@ -112,7 +112,7 @@ const ProjectCreate = ({ onClose }) => {
     }
 
     return (
-        <ProjectBox>
+        <ProjectCreateBox>
             <Title
                 name={name}
                 setName={setName}
@@ -128,11 +128,11 @@ const ProjectCreate = ({ onClose }) => {
                 isComponentOpen={isComponentOpen}
                 setIsComponentOpen={setIsComponentOpen}
             />
-        </ProjectBox>
+        </ProjectCreateBox>
     )
 }
 
-const ProjectBox = styled.div`
+const ProjectCreateBox = styled.div`
     width: 35em;
     background-color: ${(p) => p.theme.backgroundColor};
     border: solid 1px ${(p) => p.theme.project.borderColor};

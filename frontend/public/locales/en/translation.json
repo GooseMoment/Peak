@@ -76,7 +76,9 @@
             }
         },
         "edit": {
-            "display": "Edit"
+            "display": "Edit",
+            "name_change_success": "The name has changed.",
+            "project_change_error": "The project change failed."
         },
         "delete": {
             "display": "Delete",

@@ -76,7 +76,9 @@
             }
         },
         "edit": {
-            "display": "수정"
+            "display": "수정",
+            "name_change_success": "이름을 변경했습니다.",
+            "project_change_error": "프로젝트 변경에 실패했습니다."
         },
         "delete": {
             "display": "삭제",
