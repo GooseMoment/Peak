@@ -101,6 +101,7 @@ class PasswordRecoveryToken(models.Model):
         on_delete=models.CASCADE,
     )
 
+    locale = models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField(null=True, blank=True)
 
