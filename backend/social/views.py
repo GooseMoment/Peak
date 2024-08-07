@@ -22,6 +22,23 @@ from drawers.models import Drawer
 
 from users.serializers import UserSerializer
 
+@api_view(["GET"])
+def get_explore_feed(request: HttpRequest):
+    user = request.user
+    
+    followees = User.objects.filter(followers__follower=user)
+    
+    recommendUserFilter = Q(followers__follower=user) | Q(id=user.id)
+
+    secondFollowees = User.objects.filter(
+        followers__follower__in=followees
+    ).distinct().exclude(recommendUserFilter)
+    # TODO: exclude private user
+
+    serializer = UserSerializer(secondFollowees, many=True)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 ## Follow
 # social/follow/@follower/@followee/
 class FollowView(APIView):
@@ -136,7 +153,7 @@ def get_daily_logs(request: HttpRequest, username, day):
     
     serializer = DailyLogsSerializer(followingUsers, context={'day_min': day_min, 'day_max':day_max, 'user_id':user_id}, many=True)
     
-    return Response(serializer.data, status=status.HTTP_200_OK) 
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 # GET social/daily/comment/@followee/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["GET"])
@@ -226,12 +243,6 @@ def get_daily_log_details(request: Request, followee, day):
     return Response(serializer.data, status=status.HTTP_200_OK)
     
 def get_following_feed(request: HttpRequest, date):
-    pass
-
-def get_explore_feed(request: HttpRequest, user_id):
-    pass
-
-def get_emojis(request: HttpRequest):
     pass
 
 class ReactionView(APIView):
