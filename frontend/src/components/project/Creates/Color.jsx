@@ -2,27 +2,27 @@ import { useState } from "react"
 
 import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
+import { useTheme } from "styled-components"
 
 import Detail from "@components/project/common/Detail"
-import palettes from "./palettes"
+import { palettes, getProjectColor } from "@components/project/Creates/palettes"
 
-const Color = ({setColor, setDisplayColor, closeComponent}) => {
-    const [activeTab, setActiveTab] = useState('기본')
-    const [usePalettes, setUsePalettes] = useState(palettes[0])
+const Color = ({setColor, closeComponent}) => {
+    const theme = useTheme()
 
-    const clickTab = (id, themeName) => {
-        return async () => {
-            setUsePalettes(palettes[id])
-            setActiveTab(themeName)
-        }}
+    const [activeTab, setActiveTab] = useState("basic")
 
-    const changeColor = (color, displayColor) => {
-        return async () => {
-            await setColor(color)
-            await setDisplayColor(displayColor)
+    const changeColor = (color) => {
+        return () => {
+            setColor(color)
             closeComponent()
-        }
-    }
+    }}
+
+    
+    const themes = [
+        {id: "basic", themeName: '기본'},
+        {id: "summer", themeName: '여름'},
+    ]
 
     return (
         <Detail title="색깔 설정" onClose={closeComponent}>
@@ -30,16 +30,16 @@ const Color = ({setColor, setDisplayColor, closeComponent}) => {
             {themes.map(theme => (
                 <TabButton
                     key={theme.themeName}
-                    $isActive={activeTab === theme.themeName}
-                    onClick={clickTab(theme.id, theme.themeName)}
+                    $isActive={activeTab === theme.id}
+                    onClick={() => setActiveTab(theme.id)}
                 >
                     {theme.themeName}
                 </TabButton>
             ))}
             </TabBox>
-            {usePalettes.map(palette => (
-                <ItemBlock>
-                    <FeatherIcon icon="circle" fill={'#'+palette.color} onClick={changeColor(palette.color, palette.display)}/>
+            {palettes[activeTab]?.map(palette => (
+                <ItemBlock key={palette.display}>
+                    <FeatherIcon icon="circle" fill={getProjectColor(theme.type, palette.color)} onClick={changeColor(palette.color)}/>
                 </ItemBlock>
             ))}
         </Detail>
@@ -48,25 +48,25 @@ const Color = ({setColor, setDisplayColor, closeComponent}) => {
 
 const TabBox = styled.div`
     display: flex;
-    margin-left: 0.4em;
     margin-top: 1em;
+    margin-left: 1em;
+    gap: 0.8em;
 `
 
 const TabButton = styled.button`
-    font-weight: 400;
-    font-size: 0.9em;
-    padding: 0.3em;
-    margin-left: 1em;
     width: 3em;
-    border: 1px solid;
+    padding: 0.3em;
+    font-size: 0.9em;
+    font-weight: 500;
+    border: 1px solid ${p=>p.theme.project.borderColor};
     border-radius: 15px;
-    border-color: ${p => p.theme.project.lineColor};
-    background-color: ${p => p.theme.backgroundColor};
-    color: ${p => p.theme.textColor};
+    color: ${p=>p.theme.textColor};
+    background-color: ${p=>p.theme.backgroundColor};
     cursor: pointer;
 
     ${props => props.$isActive && css`
-        background-color: ${p => p.theme.goose};
+        background-color: ${p=>p.theme.goose};
+        color: ${p=>p.theme.white}
     `}
 `
 
@@ -83,10 +83,5 @@ const ItemBlock = styled.div`
         cursor: pointer;
     }
 `
-
-const themes = [
-    {id: 0, themeName: '기본'},
-    {id: 1, themeName: '여름'},
-]
 
 export default Color

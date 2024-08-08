@@ -1,21 +1,24 @@
 import { useState } from "react"
 
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import Title from "@components/project/common/Title"
 import Middle from "@components/project/common/Middle"
-import Color from "./Color"
-import Type from "./Type"
-import Privacy from "./Privacy"
+import Color from "@components/project/Creates/Color"
+import Type from "@components/project/Creates/Type"
+import Privacy from "@components/project/Creates/Privacy"
+
+import { getProjectColor, getColorDisplay } from "@components/project/Creates/palettes"
 
 import queryClient from "@queries/queryClient"
 import { postProject } from "@api/projects.api"
 import { toast } from "react-toastify"
 
 const ProjectCreate = ({onClose}) => {
+    const theme = useTheme()
+
     const [name, setName] = useState('')
-    const [color, setColor] = useState('DC2E2E')
-    const [displayColor, setDisplayColor] = useState('빨강')
+    const [color, setColor] = useState('pink')
     const [type, setType] = useState('regular')
     const [displayType, setDisplayType] = useState('상시 프로젝트')
     const [privacy, setPrivacy] = useState('public')
@@ -29,7 +32,7 @@ const ProjectCreate = ({onClose}) => {
     }
 
     const items = [
-        {id: 1, icon: "circle", color: color, display: displayColor, component: <Color setColor={setColor} setDisplayColor={setDisplayColor} closeComponent={closeComponent}/>},
+        {id: 1, icon: "circle", color: getProjectColor(theme.type, color), display: getColorDisplay(color), component: <Color setColor={setColor} closeComponent={closeComponent}/>},
         {id: 2, icon: "server", display: displayPrivacy, component: <Privacy setPrivacy={setPrivacy} setDisplayPrivacy={setDisplayPrivacy} closeComponent={closeComponent}/>},
         {id: 3, icon: "award", display: displayType, component: <Type setType={setType} setDisplayType={setDisplayType} closeComponent={closeComponent}/>},
     ]

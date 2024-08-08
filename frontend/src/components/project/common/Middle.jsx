@@ -7,7 +7,7 @@ import ModalPortal from "@components/common/ModalPortal"
 import Button from "@components/common/Button"
 import { Fragment } from "react"
 
-const Middle = ({items, submit, isComponentOpen, setIsComponentOpen}) => {
+const Middle = ({items, submit, isComponentOpen, setIsComponentOpen}) => {    
     const [content, setContent] = useState()
     
     const handleClickContent = (e) => {
@@ -22,7 +22,7 @@ const Middle = ({items, submit, isComponentOpen, setIsComponentOpen}) => {
             <Fragment key={item.icon}>
                 <ContentsBox>
                     {(item.icon === "circle") ? 
-                    <FeatherIcon icon={item.icon} fill={'#'+item.color} stroke="none"/> :
+                    <FeatherIcon icon={item.icon} fill={item.color} stroke="none"/> :
                     <FeatherIcon icon={item.icon} />}
                     <VLine $end={item.id === 1 || item.id === 3}/>
                     <ContentText id ={item.icon} onClick={handleClickContent}>
