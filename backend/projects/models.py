@@ -20,7 +20,7 @@ class Project(Base):
         on_delete=models.CASCADE,
     )
     order = models.IntegerField()
-    color = models.CharField(max_length=6)
+    color = models.CharField()
     type = models.CharField(choices=PROJECT_TYPE_CHOICES, max_length=128)
 
     def __str__(self) -> str:
