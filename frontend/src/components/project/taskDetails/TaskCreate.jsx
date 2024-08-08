@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom"
-import { useMutation } from "@tanstack/react-query"
 
+import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button from "@components/common/Button"
@@ -68,7 +68,7 @@ const TaskCreate = () => {
         onError: () => {
             if (newTask?.name) toast.error(t("task_create_error"))
             else toast.error(t("task_create_no_name"))
-        }
+        },
     })
 
     const makeTask = () => {

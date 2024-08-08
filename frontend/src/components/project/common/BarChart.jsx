@@ -11,7 +11,7 @@ const BarChart = ({ project, drawers }) => {
         for (let i = 0; i < drawers.length; i++) {
             totalUncompletedTaskCount += drawers[i].uncompleted_task_count
         }
-        
+
         if (totalUncompletedTaskCount) return false
         else return true
     }
@@ -42,30 +42,51 @@ const BarChart = ({ project, drawers }) => {
     return (
         <FlexBox>
             {projectTaskCount === 0 ? null : isCompleted() ? (
-                <BarChartBox $percent={100} $isCompleted={true} $color={project.color}>
+                <BarChartBox
+                    $percent={100}
+                    $isCompleted={true}
+                    $color={project.color}
+                >
                     <PercentText>100%</PercentText>
                 </BarChartBox>
-            ) : drawers?.map((drawer, i) =>
-                    (drawer.completed_task_count + drawer.uncompleted_task_count) === 0 || (
-                        <BarChartBox
-                            key={i}
-                            $start={i === 0}
-                            $end={i === calculateDisplayCount()}
-                            $color={project.color}
-                            $percent={calculatePercent((drawer.uncompleted_task_count + drawer.completed_task_count), projectTaskCount)}
-                        >
-                            <PercentText>
-                                {calculatePercent(drawer.completed_task_count, projectTaskCount)}%
-                            </PercentText>
-                            <BarData
+            ) : (
+                drawers?.map(
+                    (drawer, i) =>
+                        drawer.completed_task_count +
+                            drawer.uncompleted_task_count ===
+                            0 || (
+                            <BarChartBox
+                                key={i}
                                 $start={i === 0}
                                 $end={i === calculateDisplayCount()}
                                 $color={project.color}
-                                $percent={calculatePercent(drawer.completed_task_count, (drawer.uncompleted_task_count + drawer.completed_task_count))}
-                            />
-                            <ToolTipText>{drawer.name}</ToolTipText>
-                        </BarChartBox>
-                    ),
+                                $percent={calculatePercent(
+                                    drawer.uncompleted_task_count +
+                                        drawer.completed_task_count,
+                                    projectTaskCount,
+                                )}
+                            >
+                                <PercentText>
+                                    {calculatePercent(
+                                        drawer.completed_task_count,
+                                        projectTaskCount,
+                                    )}
+                                    %
+                                </PercentText>
+                                <BarData
+                                    $start={i === 0}
+                                    $end={i === calculateDisplayCount()}
+                                    $color={project.color}
+                                    $percent={calculatePercent(
+                                        drawer.completed_task_count,
+                                        drawer.uncompleted_task_count +
+                                            drawer.completed_task_count,
+                                    )}
+                                />
+                                <ToolTipText>{drawer.name}</ToolTipText>
+                            </BarChartBox>
+                        ),
+                )
             )}
         </FlexBox>
     )
@@ -99,7 +120,7 @@ const PercentText = styled.div`
 const BarChartBox = styled.div`
     position: relative;
     display: flex;
-    box-shadow: 0 0 0 3px #${props=>props.$color} inset;
+    box-shadow: 0 0 0 3px #${(props) => props.$color} inset;
     width: ${(props) => props.$percent}%;
     height: 3em;
     margin: 1em 0em;
@@ -109,7 +130,7 @@ const BarChartBox = styled.div`
     ${(props) =>
         props.$isCompleted &&
         css`
-            background-color: #${props=>props.$color};
+            background-color: #${(props) => props.$color};
             border-radius: 15px;
         `}
 
@@ -143,7 +164,10 @@ const BarChartBox = styled.div`
 const BarData = styled.div`
     display: ${(props) => (props.$percent === 0 ? "none" : "flex")};
     width: 100%;
-    background: linear-gradient(#${props=>props.$color}, #${props=>props.$color});
+    background: linear-gradient(
+        #${(props) => props.$color},
+        #${(props) => props.$color}
+    );
     background-size: ${(props) => props.$percent}%;
     background-repeat: no-repeat;
 
@@ -155,7 +179,8 @@ const BarData = styled.div`
         `}
 
     ${(props) =>
-        props.$end && props.$percent === 100 &&
+        props.$end &&
+        props.$percent === 100 &&
         css`
             border-top-right-radius: 15px;
             border-bottom-right-radius: 15px;
