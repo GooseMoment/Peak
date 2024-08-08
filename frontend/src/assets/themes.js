@@ -14,6 +14,7 @@ const white = "#FEFDFC"
 const goose = "#ff4a03"
 
 export const light = {
+    type: "light",
     primaryColors: {
         text: black,
         primary: goose,
@@ -87,6 +88,7 @@ export const lightSystemcolor = Object.assign({}, light, {
 })
 
 export const dark = {
+    type: "dark",
     primaryColors: {
         text: white,
         primary: "AccentColor",
