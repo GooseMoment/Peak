@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components"
 
-const Input = props => {
+const Input = (props) => {
     const icon = props.icon
-    const inputProps = (({icon, ...others}) => ({...others}))(props) // remove key "icon" from props and clone
+    const inputProps = (({ icon, ...others }) => ({ ...others }))(props) // remove key "icon" from props and clone
 
     return (
         <Box>
@@ -23,19 +23,22 @@ const Box = styled.p`
 const StyledInput = styled.input`
     width: 100%;
     padding: 0.75em 1.25em;
-    border: 1px solid ${p => p.theme.textColor};
+    border: 1px solid ${(p) => p.theme.textColor};
     border-radius: 16px;
-    
+
     box-sizing: border-box;
 
     font-size: inherit;
 
-    ${props => props.$hasIcon ? css`
-        padding-left: 2.5em;
-    ` : null}
+    ${(props) =>
+        props.$hasIcon
+            ? css`
+                  padding-left: 2.5em;
+              `
+            : null}
 
     &:focus {
-        border-color: ${p => p.theme.accentColor};
+        border-color: ${(p) => p.theme.accentColor};
     }
 `
 
@@ -49,7 +52,8 @@ const IconBox = styled.span`
     left: 1em;
     height: 100%;
 
-    & svg, & img {
+    & svg,
+    & img {
         height: 1em;
     }
 `

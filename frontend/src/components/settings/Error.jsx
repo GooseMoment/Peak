@@ -1,11 +1,14 @@
-import { Meh } from "feather-icons-react"
 import styled, { keyframes } from "styled-components"
 
+import { Meh } from "feather-icons-react"
+
 const Error = () => {
-    return <Container>
-        <StyledMeh />
-        <Message>Try again.</Message>
-    </Container>
+    return (
+        <Container>
+            <StyledMeh />
+            <Message>Try again.</Message>
+        </Container>
+    )
 }
 
 const Container = styled.div`
@@ -26,8 +29,6 @@ const StyledMeh = styled(Meh)`
     margin-right: 0 !important;
 `
 
-const Message = styled.p`
-
-`
+const Message = styled.p``
 
 export default Error

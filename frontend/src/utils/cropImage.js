@@ -3,25 +3,24 @@
 export const createImage = (url) =>
     new Promise((resolve, reject) => {
         const image = new Image()
-        image.addEventListener('load', () => resolve(image))
-        image.addEventListener('error', (error) => reject(error))
-        image.setAttribute('crossOrigin', 'anonymous') // needed to avoid cross-origin issues on CodeSandbox
+        image.addEventListener("load", () => resolve(image))
+        image.addEventListener("error", (error) => reject(error))
+        image.setAttribute("crossOrigin", "anonymous") // needed to avoid cross-origin issues on CodeSandbox
         image.src = url
-    }
-)
+    })
 
 /**
  * This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
  */
 export default async function getCroppedImg(
-  imageSrc,
-  pixelCrop,
-  type = "image/jpeg",
-  flip = { horizontal: false, vertical: false }
+    imageSrc,
+    pixelCrop,
+    type = "image/jpeg",
+    flip = { horizontal: false, vertical: false },
 ) {
     const image = await createImage(imageSrc)
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
+    const canvas = document.createElement("canvas")
+    const ctx = canvas.getContext("2d")
 
     if (!ctx) {
         return null
@@ -29,7 +28,7 @@ export default async function getCroppedImg(
 
     // set canvas size to match the bounding box
     canvas.width = image.width
-    canvas.height = image.height 
+    canvas.height = image.height
 
     // translate canvas context to a central location to allow rotating and flipping around the center
     ctx.translate(canvas.width / 2, canvas.height / 2)
@@ -39,9 +38,9 @@ export default async function getCroppedImg(
     // draw rotated image
     ctx.drawImage(image, 0, 0)
 
-    const croppedCanvas = document.createElement('canvas')
+    const croppedCanvas = document.createElement("canvas")
 
-    const croppedCtx = croppedCanvas.getContext('2d')
+    const croppedCtx = croppedCanvas.getContext("2d")
 
     if (!croppedCtx) {
         return null
@@ -61,7 +60,7 @@ export default async function getCroppedImg(
         0,
         0,
         pixelCrop.width,
-        pixelCrop.height
+        pixelCrop.height,
     )
 
     // As Base64 string

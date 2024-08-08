@@ -11,7 +11,7 @@ export const palettes = {
     ]
 }
 
-export const displayColor = {
+const displayColor = {
     orange: "오렌지",
     peach: "피치",
     pink: "핑크",

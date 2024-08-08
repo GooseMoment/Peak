@@ -1,13 +1,16 @@
 import { useState } from "react"
 
-import styled, { css } from "styled-components"
-import FeatherIcon from "feather-icons-react"
-import { useTheme } from "styled-components"
+import styled, { css, useTheme } from "styled-components"
 
 import Detail from "@components/project/common/Detail"
-import { palettes, getProjectColor } from "@components/project/Creates/palettes"
 
-const Color = ({setColor, closeComponent}) => {
+import palettes from "./palettes"
+
+import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
+
+const Color = ({ setColor, closeComponent }) => {
+    const { t } = useTranslation(null, { keyPrefix: "project.create.color" })
     const theme = useTheme()
 
     const [activeTab, setActiveTab] = useState("basic")
@@ -15,17 +18,16 @@ const Color = ({setColor, closeComponent}) => {
     const changeColor = (color) => {
         return () => {
             setColor(color)
-            closeComponent()
     }}
 
     
     const themes = [
-        {id: "basic", themeName: '기본'},
-        {id: "summer", themeName: '여름'},
+        {id: "basic", themeName: t("theme1")},
+        {id: "summer", themeName: t("theme2")},
     ]
 
     return (
-        <Detail title="색깔 설정" onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeComponent}>
             <TabBox>
             {themes.map(theme => (
                 <TabButton

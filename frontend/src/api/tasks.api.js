@@ -2,7 +2,9 @@ import client from "@api/client"
 
 export const getTasksByDrawer = async (drawerID, ordering, page) => {
     try {
-        const res = await client.get(`tasks?drawer=${drawerID}&ordering=${ordering}&page=${page}`)
+        const res = await client.get(
+            `tasks?drawer=${drawerID}&ordering=${ordering}&page=${page}`,
+        )
         return res.data
     } catch (e) {
         throw e
@@ -49,7 +51,7 @@ export const completeTask = async (id) => {
     try {
         const date = new Date()
         const edit = {
-            "completed_at": date.toISOString()
+            completed_at: date.toISOString(),
         }
         return await patchTask(id, edit)
     } catch (e) {
@@ -60,7 +62,7 @@ export const completeTask = async (id) => {
 export const uncompleteTask = async (id) => {
     try {
         const edit = {
-            "completed_at": null
+            completed_at: null,
         }
         return await patchTask(id, edit)
     } catch (e) {

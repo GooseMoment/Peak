@@ -1,18 +1,24 @@
-import styled from "styled-components"
 import { useState } from "react"
 
-import Detail from "@components/project/common/Detail"
+import styled from "styled-components"
+
 import Button from "@components/common/Button"
+import Detail from "@components/project/common/Detail"
+
 import notify from "@utils/notify"
 
-const Memo = ({previousMemo, setFunc, closeComponent}) => {
+import { useTranslation } from "react-i18next"
+
+const Memo = ({ previousMemo, setFunc, closeComponent }) => {
+    const { t } = useTranslation(null, { keyPrefix: "task.memo" })
+
     const [memo, setMemo] = useState(previousMemo)
 
     const changeMemo = () => {
         return async () => {
-            setFunc({memo})
+            setFunc({ memo })
             closeComponent()
-            notify.success("메모가 변경되었습니다.")
+            notify.success(t("memo_edit_success"))
         }
     }
 
@@ -22,17 +28,17 @@ const Memo = ({previousMemo, setFunc, closeComponent}) => {
     }
 
     return (
-        <Detail title="메모 설정" onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeComponent}>
             <FlexBox>
                 <Editor
-                    type='text'
+                    type="text"
                     onChange={onChange}
-                    value={memo || ''}
-                    placeholder="메모를 입력해주세요."
+                    value={memo || ""}
+                    placeholder={t("memo_placeholder")}
                 />
             </FlexBox>
             <FlexBox>
-                <Button onClick={changeMemo(memo)}>변경하기</Button>
+                <Button onClick={changeMemo(memo)}>{t("button_change")}</Button>
             </FlexBox>
         </Detail>
     )
@@ -51,13 +57,13 @@ const Editor = styled.textarea`
     font-weight: normal;
     resize: none;
     font-size: 0.95em;
-    color: ${p => p.theme.textColor};
-    border: 1px solid ${p => p.theme.project.borderColor};
+    color: ${(p) => p.theme.textColor};
+    border: 1px solid ${(p) => p.theme.project.borderColor};
     border-radius: 15px;
     margin-top: 0.7em;
     padding: 0.8em;
     white-space: pre-wrap;
-    
+
     &:focus {
         outline: none;
     }

@@ -1,33 +1,47 @@
 import { Link } from "react-router-dom"
 
 import styled from "styled-components"
+
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const ProjectName = ({project, demo=false}) => {
-    const { t } = useTranslation(null, {keyPrefix: "project_list"})
+const ProjectName = ({ project, demo = false }) => {
+    const { t } = useTranslation(null, { keyPrefix: "project_list" })
 
-    let nameParts = <Link to={`/app/projects/${project.id}`} style={{ textDecoration: 'none' }}>
-        <NameText>{project.name}</NameText>
-    </Link>
+    let nameParts = (
+        <Link
+            to={`/app/projects/${project.id}`}
+            style={{ textDecoration: "none" }}
+        >
+            <NameText>{project.name}</NameText>
+        </Link>
+    )
 
     if (demo) {
         nameParts = <NameText>{project.name}</NameText>
     }
 
-    return <Box>
-        <FlexBox>
-            <FeatherIcon icon="circle" fill={`#`+ project.color}/>
-            {nameParts}
-            <TypeText>
-                {project.type === 'regular' && t("type_regular")}
-                {project.type === 'goal' && t("type_goal")}
-            </TypeText>
-        </FlexBox>
-        {!demo && <FlexBox>
-            <Text>{t("completed_tasks")}: {project.completed_task_count} / {t("uncompleted_tasks")}: {project.uncompleted_task_count}</Text>
-        </FlexBox> }
-    </Box>
+    return (
+        <Box>
+            <FlexBox>
+                <FeatherIcon icon="circle" fill={`#` + project.color} />
+                {nameParts}
+                <TypeText>
+                    {project.type === "regular" && t("type_regular")}
+                    {project.type === "goal" && t("type_goal")}
+                </TypeText>
+            </FlexBox>
+            {!demo && (
+                <FlexBox>
+                    <Text>
+                        {t("completed_tasks")}: {project.completed_task_count} /{" "}
+                        {t("uncompleted_tasks")}:{" "}
+                        {project.uncompleted_task_count}
+                    </Text>
+                </FlexBox>
+            )}
+        </Box>
+    )
 }
 
 const Box = styled.div`
@@ -55,14 +69,14 @@ const NameText = styled.div`
     font-weight: normal;
     font-size: 1.25em;
     margin-left: 0.3em;
-    color: ${p => p.theme.textColor};
+    color: ${(p) => p.theme.textColor};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.3em;
 
     &:hover {
-        color: #FF4A03;
+        color: #ff4a03;
         cursor: pointer;
     }
 `
@@ -72,12 +86,12 @@ const TypeText = styled.div`
     font-size: 1em;
     margin-left: 0.6em;
     margin-top: 0.1em;
-    color: ${p => p.theme.grey};
+    color: ${(p) => p.theme.grey};
 `
 
 const Text = styled.div`
     font-size: 1em;
-    color: ${p => p.theme.textColor};
+    color: ${(p) => p.theme.textColor};
 `
 
 export default ProjectName

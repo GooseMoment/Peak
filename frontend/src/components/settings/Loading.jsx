@@ -1,11 +1,15 @@
 import styled, { keyframes } from "styled-components"
 
 const Loading = () => {
-    return <Container>
-        <DotSpinner>
-            {[...Array(8)].map((e, i) => <DotSpinnerDot key={i} />)}
-        </DotSpinner>
-    </Container>
+    return (
+        <Container>
+            <DotSpinner>
+                {[...Array(8)].map((e, i) => (
+                    <DotSpinnerDot key={i} />
+                ))}
+            </DotSpinner>
+        </Container>
+    )
 }
 
 const Container = styled.div`
@@ -39,7 +43,7 @@ const DotSpinner = styled.div`
     align-items: center;
     justify-content: flex-start;
     height: ${uibSize};
-    width: ${uibSize};  
+    width: ${uibSize};
 `
 
 const DotSpinnerDot = styled.div`
@@ -53,11 +57,11 @@ const DotSpinnerDot = styled.div`
     width: 100%;
 
     &::before {
-        content: '';
+        content: "";
         height: 20%;
         width: 20%;
         border-radius: 50%;
-        background-color: ${p => p.theme.accentColor};
+        background-color: ${(p) => p.theme.accentColor};
         transform: scale(0);
         opacity: 0.5;
         animation: ${pulse} calc(${uibSpeed} * 1.111) ease-in-out infinite;

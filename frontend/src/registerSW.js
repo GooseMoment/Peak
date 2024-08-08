@@ -1,5 +1,5 @@
 export default async function registerSW() {
-    if (!"serviceWorker" in navigator) {
+    if ((!"serviceWorker") in navigator) {
         console.log("Unsupported browser.")
         return
     }

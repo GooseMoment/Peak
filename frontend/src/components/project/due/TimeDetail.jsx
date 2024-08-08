@@ -1,16 +1,26 @@
 import { useState } from "react"
 
 import styled, { css } from "styled-components"
-import { toast } from "react-toastify"
 
 import Button from "@components/common/Button"
+
 import { useClientSetting, useClientTimezone } from "@utils/clientSettings"
 
+import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
+
 const TimeDetail = ({ task, setFunc, closeComponent }) => {
-    const [setting, ] = useClientSetting()
+    const { t } = useTranslation(null, { keyPrefix: "task.due.time" })
+
+    const ampms = [
+        { name: "am", display: t("am") },
+        { name: "pm", display: t("pm") },
+    ]
+
+    const [setting] = useClientSetting()
     const due_tz = useClientTimezone()
 
-    const due_time = task?.due_time || ''
+    const due_time = task?.due_time || ""
 
     const [ampm, setAmpm] = useState(ampms[0].name)
     const [hour, setHour] = useState(due_time && parseInt(due_time.slice(0, 2)))
@@ -18,25 +28,29 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
 
     const changeTime = () => {
         const due_date = task.due_date
-        let converted_hour = !setting.time_as_24_hour && ampm === "pm" ? hour + 12 : hour
+        let converted_hour =
+            !setting.time_as_24_hour && ampm === "pm" ? hour + 12 : hour
         const due_time = `${converted_hour}:${min}:00`
-        setFunc({due_tz, due_date, due_time})
-        toast.success('시간이 변경되었습니다.')
+        setFunc({ due_tz, due_date, due_time })
+        toast.success(t("time_change_success"))
         closeComponent()
     }
 
     const handleHour = (e) => {
         let validInputValue = parseInt(e.target.value)
         if (setting.time_as_24_hour) {
-            if (validInputValue > 23){
-                toast.error("입력 가능한 최대 숫자는 23입니다", {toastId: "handle_hour"})
+            if (validInputValue > 23) {
+                toast.error(t("acceptable_numbers", { max: 23 }), {
+                    toastId: "handle_hour",
+                })
                 validInputValue = validInputValue % 24
             }
             setHour(validInputValue)
-        }
-        else {
-            if (validInputValue > 12){
-                toast.error("입력 가능한 최대 숫자는 12입니다", {toastId: "handle_hour"})
+        } else {
+            if (validInputValue > 12) {
+                toast.error(t("acceptable_numbers", { max: 12 }), {
+                    toastId: "handle_hour",
+                })
                 validInputValue = validInputValue % 12
             }
             setHour(validInputValue)
@@ -45,8 +59,10 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
 
     const handleMinute = (e) => {
         let validInputValue = parseInt(e.target.value)
-        if (validInputValue > 59){
-            toast.error("입력 가능한 최대 숫자는 59입니다", {toastId: "handle_minute"})
+        if (validInputValue > 59) {
+            toast.error(t("acceptable_numbers", { max: 59 }), {
+                toastId: "handle_minute",
+            })
             validInputValue = 59
         }
         setMin(validInputValue)
@@ -55,30 +71,37 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
     return (
         <DetailBox>
             <FlexBox>
-                {setting.time_as_24_hour ||
+                {setting.time_as_24_hour || (
                     <ToggleBox>
-                        {ampms.map(t=>(
-                            <AmpmToggle key={t.name} $active={ampm == t.name} onClick={()=>{setAmpm(t.name)}}>
+                        {ampms.map((t) => (
+                            <AmpmToggle
+                                key={t.name}
+                                $active={ampm == t.name}
+                                onClick={() => {
+                                    setAmpm(t.name)
+                                }}
+                            >
                                 {t.display}
                             </AmpmToggle>
                         ))}
-                    </ToggleBox>}
+                    </ToggleBox>
+                )}
                 <InputBox>
                     <TimeInput
                         type="number"
-                        value={hour ? hour : hour === 0 ? 0 : ''}
+                        value={hour ? hour : hour === 0 ? 0 : ""}
                         onChange={handleHour}
                     />
                     <ColonContainer>:</ColonContainer>
                     <TimeInput
                         type="number"
-                        value={min ? min : min === 0 ? 0 : ''}
+                        value={min ? min : min === 0 ? 0 : ""}
                         onChange={handleMinute}
                     />
                 </InputBox>
             </FlexBox>
             <FlexCenterBox>
-                <Button onClick={changeTime}>추가하기</Button>
+                <Button onClick={changeTime}>{t("button_add")}</Button>
             </FlexCenterBox>
         </DetailBox>
     )
@@ -119,9 +142,9 @@ const AmpmToggle = styled.div`
     justify-content: center;
     width: 3.5em;
     height: 1.7em;
-    background-color: ${p => p.theme.backgroundColor};
-    border: solid 1px ${p => p.theme.project.lineColor};
-    color: ${p => p.theme.textColor};
+    background-color: ${(p) => p.theme.backgroundColor};
+    border: solid 1px ${(p) => p.theme.project.lineColor};
+    color: ${(p) => p.theme.textColor};
     border-radius: 15px;
     font-weight: 500;
 
@@ -130,12 +153,12 @@ const AmpmToggle = styled.div`
     }
 
     ${(props) =>
-        props.$active && css`
-            background-color: ${p => p.theme.goose};
-            border: solid 1px ${p => p.theme.project.borderColor};
-            color: ${p => p.theme.white};
-        `
-    }
+        props.$active &&
+        css`
+            background-color: ${(p) => p.theme.goose};
+            border: solid 1px ${(p) => p.theme.project.borderColor};
+            color: ${(p) => p.theme.white};
+        `}
 `
 
 const InputBox = styled.div`
@@ -148,7 +171,7 @@ const InputBox = styled.div`
 const ColonContainer = styled.div`
     font-size: 2em;
     margin: 0 0.3em;
-    color: ${p => p.theme.textColor};
+    color: ${(p) => p.theme.textColor};
 `
 
 const TimeInput = styled.input`
@@ -156,24 +179,19 @@ const TimeInput = styled.input`
     height: 1.7em;
     font-size: 2em;
     text-align: center;
-    background-color: ${p => p.theme.project.inputColor};
-    color: ${p => p.theme.textColor};
+    background-color: ${(p) => p.theme.project.inputColor};
+    color: ${(p) => p.theme.textColor};
     appearance: textfield;
     -moz-appearance: textfield;
 
     &:focus {
-        background-color: ${p => p.theme.goose};
-        color: ${p => p.theme.white};
+        background-color: ${(p) => p.theme.goose};
+        color: ${(p) => p.theme.white};
     }
 
     &::-webkit-inner-spin-button {
         -webkit-appearance: none;
     }
 `
-
-const ampms = [
-    {name: "am", display: "오전"},
-    {name: "pm", display: "오후"},
-]
 
 export default TimeDetail

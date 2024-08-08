@@ -1,22 +1,22 @@
-import { useState, useMemo } from "react"
-
-import SubSection from "@components/intro/SubSection"
-import RadioGroup from "@components/intro/RadioGroup"
-import Radio from "@components/intro/Radio"
-import DemoTask from "@components/intro/DemoTask"
-
-import {yesterday, today, tomorrow, nextWeek, twoWeeksLater} from "./todays"
+import { useMemo, useState } from "react"
 
 import styled from "styled-components"
-import { useTranslation } from "react-i18next"
 
-import normal from "@assets/project/priority/normal.svg"
-import important from "@assets/project/priority/important.svg"
-import critical from "@assets/project/priority/critical.svg"
+import DemoTask from "@components/intro/DemoTask"
+import Radio from "@components/intro/Radio"
+import RadioGroup from "@components/intro/RadioGroup"
+import SubSection from "@components/intro/SubSection"
 
+import { nextWeek, today, tomorrow, twoWeeksLater, yesterday } from "./todays"
+
+import next_weekIcon from "@assets/project/calendar/next_week.svg"
 import todayIcon from "@assets/project/calendar/today.svg"
 import tomorrowIcon from "@assets/project/calendar/tomorrow.svg"
-import next_weekIcon from "@assets/project/calendar/next_week.svg"
+import critical from "@assets/project/priority/critical.svg"
+import important from "@assets/project/priority/important.svg"
+import normal from "@assets/project/priority/normal.svg"
+
+import { useTranslation } from "react-i18next"
 
 const deadlineTable = {
     today,
@@ -25,15 +25,39 @@ const deadlineTable = {
     twoWeeksLater,
 }
 
-const makeSampleTasks = t => [
-    {id: 0, name: t("sample0"), completed_at: true, priority: 0, due_date: today},
-    {id: 2, name: t("sample2"), completed_at: true, priority: 1, due_date: yesterday},
-    {id: 3, name: t("sample3"), completed_at: true, priority: 2, due_date: tomorrow},
-    {id: 4, name: t("sample4"), completed_at: true, priority: 0, due_date: nextWeek},
+const makeSampleTasks = (t) => [
+    {
+        id: 0,
+        name: t("sample0"),
+        completed_at: true,
+        priority: 0,
+        due_date: today,
+    },
+    {
+        id: 2,
+        name: t("sample2"),
+        completed_at: true,
+        priority: 1,
+        due_date: yesterday,
+    },
+    {
+        id: 3,
+        name: t("sample3"),
+        completed_at: true,
+        priority: 2,
+        due_date: tomorrow,
+    },
+    {
+        id: 4,
+        name: t("sample4"),
+        completed_at: true,
+        priority: 0,
+        due_date: nextWeek,
+    },
 ]
 
 const DemoPlan = () => {
-    const { t } = useTranslation(null, {keyPrefix: "intro.section_plan.demo"})
+    const { t } = useTranslation(null, { keyPrefix: "intro.section_plan.demo" })
 
     const [priority, setPriority] = useState("1")
     const [deadline, setDeadline] = useState("today")
@@ -46,36 +70,64 @@ const DemoPlan = () => {
 
     const sampleTasks = useMemo(() => makeSampleTasks(t), [t])
 
-    return <SubSection>
-        <HalfDivider>
-            <Selections>
-                <Selection>
-                    <RadioGroup label={t("priority_selection")} value={priority} onChange={setPriority}>
-                        <Radio value="0"><Icon src={normal} /> Normal</Radio>
-                        <Radio value="1"><Icon src={important} /> Important</Radio>
-                        <Radio value="2"><Icon src={critical} /> Critical</Radio>
-                    </RadioGroup>
-                </Selection>
-                <Selection>
-                    <RadioGroup label={t("deadline_selection")} value={deadline} onChange={setDeadline}>
-                        <Radio value="today"><Icon src={todayIcon} /> Today</Radio>
-                        <Radio value="tomorrow"><Icon src={tomorrowIcon} /> Tomorrow</Radio>
-                        <Radio value="nextWeek"><Icon src={next_weekIcon} /> Next week</Radio>
-                        <Radio value="twoWeeksLater"><Icon src={next_weekIcon} /> Two weeks later</Radio>
-                    </RadioGroup>
-                </Selection>
-            </Selections>
-            <Tasks>
-                <BlurArea>
-                    {sampleTasks.slice(0, 1).map(task => <DemoTask task={task} key={task.id} />)}
-                </BlurArea>
-                <DemoTask id={2} task={task} />
-                <BlurArea>
-                    {sampleTasks.slice(1).map(task => <DemoTask task={task} key={task.id} />)}
-                </BlurArea>
-            </Tasks>
-        </HalfDivider>
-    </SubSection>
+    return (
+        <SubSection>
+            <HalfDivider>
+                <Selections>
+                    <Selection>
+                        <RadioGroup
+                            label={t("priority_selection")}
+                            value={priority}
+                            onChange={setPriority}
+                        >
+                            <Radio value="0">
+                                <Icon src={normal} /> Normal
+                            </Radio>
+                            <Radio value="1">
+                                <Icon src={important} /> Important
+                            </Radio>
+                            <Radio value="2">
+                                <Icon src={critical} /> Critical
+                            </Radio>
+                        </RadioGroup>
+                    </Selection>
+                    <Selection>
+                        <RadioGroup
+                            label={t("deadline_selection")}
+                            value={deadline}
+                            onChange={setDeadline}
+                        >
+                            <Radio value="today">
+                                <Icon src={todayIcon} /> Today
+                            </Radio>
+                            <Radio value="tomorrow">
+                                <Icon src={tomorrowIcon} /> Tomorrow
+                            </Radio>
+                            <Radio value="nextWeek">
+                                <Icon src={next_weekIcon} /> Next week
+                            </Radio>
+                            <Radio value="twoWeeksLater">
+                                <Icon src={next_weekIcon} /> Two weeks later
+                            </Radio>
+                        </RadioGroup>
+                    </Selection>
+                </Selections>
+                <Tasks>
+                    <BlurArea>
+                        {sampleTasks.slice(0, 1).map((task) => (
+                            <DemoTask task={task} key={task.id} />
+                        ))}
+                    </BlurArea>
+                    <DemoTask id={2} task={task} />
+                    <BlurArea>
+                        {sampleTasks.slice(1).map((task) => (
+                            <DemoTask task={task} key={task.id} />
+                        ))}
+                    </BlurArea>
+                </Tasks>
+            </HalfDivider>
+        </SubSection>
+    )
 }
 
 const HalfDivider = styled.div`
@@ -90,9 +142,7 @@ const Selections = styled.div`
     gap: 1em;
 `
 
-const Selection = styled.div`
-
-`
+const Selection = styled.div``
 
 const Icon = styled.img`
     aspect-ratio: 1/1;

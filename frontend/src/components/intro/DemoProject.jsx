@@ -1,28 +1,36 @@
 import { useMemo } from "react"
-
-import SubSection, { SubTitle } from "@components/intro/SubSection"
-import ProjectName from "@components/project/ProjectName"
-import Button, { ButtonGroup } from "@components/common/Button"
-
-import { useTranslation } from "react-i18next"
 import { useState } from "react"
 
+import Button, { ButtonGroup } from "@components/common/Button"
+import SubSection, { SubTitle } from "@components/intro/SubSection"
+import ProjectName from "@components/project/ProjectName"
+
+import { useTranslation } from "react-i18next"
+
 const DemoProject = () => {
-    const { t } = useTranslation(null, {keyPrefix: "intro.section_organize.demo_project"}) 
+    const { t } = useTranslation(null, {
+        keyPrefix: "intro.section_organize.demo_project",
+    })
     const [count, setCount] = useState(1)
     const projects = useMemo(() => makeProjects(t), [t])
 
-    return <SubSection>
-        <SubTitle>{t("title")}</SubTitle>
+    return (
+        <SubSection>
+            <SubTitle>{t("title")}</SubTitle>
 
-        {projects?.slice(0, count)?.map(project => <ProjectName key={project.id} project={project} demo />)}
+            {projects?.slice(0, count)?.map((project) => (
+                <ProjectName key={project.id} project={project} demo />
+            ))}
 
-        {count < projects.length && 
-            <ButtonGroup $justifyContent="right" $margin="1em 0">
-                <Button onClick={() => setCount(count + 1)}>{t("button_add")}</Button>
-            </ButtonGroup>
-        }
-    </SubSection>
+            {count < projects.length && (
+                <ButtonGroup $justifyContent="right" $margin="1em 0">
+                    <Button onClick={() => setCount(count + 1)}>
+                        {t("button_add")}
+                    </Button>
+                </ButtonGroup>
+            )}
+        </SubSection>
+    )
 }
 
 const makeProjects = (t) => [

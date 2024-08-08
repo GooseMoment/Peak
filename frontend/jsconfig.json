@@ -1,18 +1,19 @@
 {
     "compilerOptions": {
-       "baseUrl": ".",
-       "paths": {
-         "@/*": ["src/*"],
-         "@pages/*": ["src/pages/*"],
-         "@api/*": ["src/api/*"],
-         "@components/*": ["src/components/*"],
-         "@utils/*": ["src/utils/*"],
-         "@containers/*": ["src/containers/*"],
-         "@assets/*": ["src/assets/*"],
-         "@queries/*": ["src/queries/*"],
-         "@routers/*": ["src/routers/*"],
-       }
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"],
+            "@pages/*": ["src/pages/*"],
+            "@api/*": ["src/api/*"],
+            "@components/*": ["src/components/*"],
+            "@utils/*": ["src/utils/*"],
+            "@containers/*": ["src/containers/*"],
+            "@assets/*": ["src/assets/*"],
+            "@queries/*": ["src/queries/*"],
+            "@routers/*": ["src/routers/*"]
+        }
     }
 }
 
-// Reference: https://stackoverflow.com/questions/74768372/visual-studio-code-intellisense-and-autocomplete-vite-jsconfig-and-aliases 
+
+// Reference: https://stackoverflow.com/questions/74768372/visual-studio-code-intellisense-and-autocomplete-vite-jsconfig-and-aliases
