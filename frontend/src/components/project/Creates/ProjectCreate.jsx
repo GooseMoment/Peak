@@ -3,11 +3,12 @@ import { useState } from "react"
 import styled, { useTheme } from "styled-components"
 
 import Middle from "@components/project/common/Middle"
+import Title from "@components/project/common/Title"
 import Color from "@components/project/Creates/Color"
 import Type from "@components/project/Creates/Type"
 import Privacy from "@components/project/Creates/Privacy"
-
 import { getProjectColor, getColorDisplay } from "@components/project/Creates/palettes"
+import { postProject } from "@api/projects.api"
 
 import queryClient from "@queries/queryClient"
 
@@ -39,7 +40,6 @@ const ProjectCreate = ({ onClose }) => {
             component: (
                 <Color
                     setColor={setColor}
-                    setDisplayColor={setDisplayColor}
                     closeComponent={closeComponent}
                 />
             ),
@@ -66,7 +66,6 @@ const ProjectCreate = ({ onClose }) => {
     ]
 
     const makeProject = async (name, color, type) => {
-        /*privacy 추가해야함*/
         try {
             if (name === "Inbox" || name === "inbox") {
                 toast.error(t("project_create_cannot_use_inbox"))

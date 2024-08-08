@@ -4,7 +4,7 @@ import styled, { css, useTheme } from "styled-components"
 
 import Detail from "@components/project/common/Detail"
 
-import palettes from "./palettes"
+import { palettes, getProjectColor } from "./palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -18,7 +18,9 @@ const Color = ({ setColor, closeComponent }) => {
     const changeColor = (color) => {
         return () => {
             setColor(color)
-    }}
+            closeComponent()
+        }
+    }
 
     
     const themes = [
