@@ -8,7 +8,7 @@ translation = {
         },
         Notification.FOR_REACTION: {
             "title": ":{emoji}: @{username}",
-            "body": "RE: {content}",
+            "body": "RE: {parent}",
         },
         Notification.FOR_FOLLOW: {
             "title": "📩 @{username}",
@@ -24,11 +24,11 @@ translation = {
         },
         Notification.FOR_PECK: {
             "title": "👈 @{username}",
-            "body": "{task}\n↳ pecked {count} time(s)",
+            "body": "pecked {count} time(s).\n\nRE: {task}",
         },
         Notification.FOR_COMMENT: {
             "title": "💬 @{username}",
-            "body": "{comment}\n\nRE: {task}",
+            "body": "{comment}\n\nRE: {parent}",
         },
     },
 }

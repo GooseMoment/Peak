@@ -24,11 +24,11 @@ translation = {
         },
         Notification.FOR_PECK: {
             "title": "👈 @{username}",
-            "body": "{task}\n↳ {count}번 쪼았습니다.",
+            "body": "{count}번 쪼았습니다.\n\nRE: {task}",
         },
         Notification.FOR_COMMENT: {
             "title": "💬 @{username}",
-            "body": "{comment}\n\nRE: {task}",
+            "body": "{comment}\n\nRE: {parent}",
         },
     },
 }

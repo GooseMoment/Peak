@@ -52,17 +52,42 @@ const convertNotificationToContent = (
             }
             break
         case "comment":
-            // TODO: add a case for Quote
-            detail = (
-                <ContentDetailLink
-                    to={`/app/projects/${payload.task?.project_id}`}
-                >
-                    <Ellipsis>{payload.comment}</Ellipsis>
-                    <Parent>
-                        RE: <ParentContent>{payload.task.name}</ParentContent>
-                    </Parent>
-                </ContentDetailLink>
-            )
+            if (payload.parent_type === "task") {
+                detail = (
+                    <ContentDetailLink
+                        to={`/app/projects/${payload.task?.project_id}`}
+                    >
+                        <Ellipsis>{payload.comment}</Ellipsis>
+                        <Parent>
+                            RE:{" "}
+                            <ParentContent>{payload.task.name}</ParentContent>
+                        </Parent>
+                    </ContentDetailLink>
+                )
+            } else {
+                const date = DateTime.fromISO(payload.daily_comment?.date)
+                    .setLocale(locale)
+                    .setZone(tz)
+
+                const diffNow = date.diffNow(["days"])
+                const relativeDate = date.toRelative({ unit: "days" })
+                detail = (
+                    <ContentDetailLink
+                        to={`/app/social/following`}
+                    >
+                        <Ellipsis>{payload.comment}</Ellipsis>
+                        <Parent>
+                            RE:
+                            {t("content_comment_quote", {
+                                date:
+                                    Math.abs(diffNow.days) > 7
+                                        ? date.toLocaleString()
+                                        : relativeDate,
+                            })}
+                        </Parent>
+                    </ContentDetailLink>
+                )
+            }
             break
         case "reaction":
             if (payload.parent_type === "task") {
