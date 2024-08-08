@@ -74,6 +74,9 @@ const Drawer = ({ project, drawer, color }) => {
             queryClient.invalidateQueries({
                 queryKey: ["drawers", { projectID: project.id }],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["projects", project.id],
+            })
         },
         onError: () => {
             toast.success(

@@ -60,7 +60,7 @@ const TaskCreate = () => {
                 queryKey: ["drawers", { projectID: projectId }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["project", projectId],
+                queryKey: ["projects", projectId],
             })
             toast.success(t("task_create_success"))
             onClose()
