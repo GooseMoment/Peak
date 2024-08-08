@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 import styled from "styled-components"
 
-import { Trans } from "react-i18next"
+import { DateTime } from "luxon"
 
 const socialTypes = [
     "comment",
@@ -13,7 +13,14 @@ const socialTypes = [
     "peck",
 ]
 
-const convertNotificationToContent = (t, type, payload, actionUser) => {
+const convertNotificationToContent = (
+    t,
+    locale,
+    tz,
+    type,
+    payload,
+    actionUser,
+) => {
     let title = null
     let detail = null
 
@@ -45,19 +52,15 @@ const convertNotificationToContent = (t, type, payload, actionUser) => {
             }
             break
         case "comment":
+            // TODO: add a case for Quote
             detail = (
                 <ContentDetailLink
                     to={`/app/projects/${payload.task?.project_id}`}
                 >
-                    <Trans
-                        t={t}
-                        i18nKey="content_comment_task"
-                        values={{
-                            task_name: payload.task?.name,
-                            comment: payload.comment,
-                        }}
-                        components={{ ellipsis: <Ellipsis /> }}
-                    />
+                    <Ellipsis>{payload.comment}</Ellipsis>
+                    <Parent>
+                        RE: <ParentContent>{payload.task.name}</ParentContent>
+                    </Parent>
                 </ContentDetailLink>
             )
             break
@@ -67,43 +70,43 @@ const convertNotificationToContent = (t, type, payload, actionUser) => {
                     <ContentDetailLink
                         to={`/app/projects/${payload.task?.project_id}`}
                     >
-                        <Trans
-                            t={t}
-                            i18nKey="content_reaction_task"
-                            values={{ task_name: payload.task?.name }}
-                            components={{ ellipsis: <Ellipsis /> }}
-                        />
+                        <Parent>
+                            <ParentContent>{payload.task.name}</ParentContent>
+                        </Parent>
                     </ContentDetailLink>
                 )
-                break
-            }
+            } else {
+                // TODO: change to payload.quote?.date
+                const date = DateTime.fromISO(payload.daily_comment?.date)
+                    .setLocale(locale)
+                    .setZone(tz)
 
-            detail = (
-                <ContentDetailLink to={"/app/social/following/"}>
-                    <Trans
-                        t={t}
-                        i18nKey="content_reaction_quote"
-                        // TODO: change to payload.quote?.date
-                        values={{ date: payload.daily_comment?.date }}
-                        components={{ ellipsis: <Ellipsis /> }}
-                    />
-                </ContentDetailLink>
-            )
+                const diffNow = date.diffNow(["days"])
+                const relativeDate = date.toRelative({ unit: "days" })
+
+                detail = (
+                    <ContentDetailLink to={"/app/social/following/"}>
+                        <Parent>
+                            {t("content_reaction_quote", {
+                                date:
+                                    Math.abs(diffNow.days) > 7
+                                        ? date.toLocaleString()
+                                        : relativeDate,
+                            })}
+                        </Parent>
+                    </ContentDetailLink>
+                )
+            }
             break
         case "peck":
             detail = (
                 <ContentDetailLink
                     to={`/app/projects/${payload.task?.project_id}`}
                 >
-                    <Trans
-                        t={t}
-                        i18nKey="content_peck"
-                        values={{
-                            task_name: payload.task?.name,
-                            count: payload.count,
-                        }}
-                        components={{ ellipsis: <Ellipsis /> }}
-                    />
+                    {t("content_peck", { count: payload.count })}
+                    <Parent>
+                        RE: <ParentContent>{payload.task.name}</ParentContent>
+                    </Parent>
                 </ContentDetailLink>
             )
             break
@@ -111,9 +114,11 @@ const convertNotificationToContent = (t, type, payload, actionUser) => {
             detail = t("content_follow")
             break
         case "follow_request":
-            detail = <ContentDetailLink to={`/app/users/@${actionUser.username}`}>
-                {t("content_follow_request")}
-            </ContentDetailLink>
+            detail = (
+                <ContentDetailLink to={`/app/users/@${actionUser.username}`}>
+                    {t("content_follow_request")}
+                </ContentDetailLink>
+            )
             break
         case "follow_request_accepted":
             detail = t("content_follow_request_accepted")
@@ -135,18 +140,34 @@ const ContentTitleLink = styled(Link)`
 
 const ContentDetailLink = styled(Link)`
     color: inherit;
+
     display: flex;
-    gap: 0;
+    flex-direction: column;
+    gap: 1em;
 `
 
 const Ellipsis = styled.span`
     text-overflow: ellipsis;
-    overflow: hidden;
+    overflow-x: clip;
     white-space: nowrap;
 
     display: inline-block;
     box-sizing: border-box;
-    max-width: 10em;
+    max-width: 100%;
+`
+
+const Parent = styled.div``
+
+const ParentContent = styled.span`
+    color: ${(p) => p.theme.secondTextColor};
+    font-style: italic;
+
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow-x: clip;
+    white-space: nowrap;
+
+    max-width: 100%;
 `
 
 export default convertNotificationToContent

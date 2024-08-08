@@ -2,7 +2,6 @@ import { Suspense, forwardRef } from "react"
 
 import styled, { css, keyframes } from "styled-components"
 
-import Ago from "@components/notifications/Ago"
 import Content from "@components/notifications/Content"
 import Images from "@components/notifications/Images"
 
@@ -36,7 +35,6 @@ const Box = forwardRef(function BoxInternal(
         <>
             <Images skeleton />
             <Content skeleton />
-            <Ago skeleton />
         </>
     )
 
@@ -53,11 +51,8 @@ const Box = forwardRef(function BoxInternal(
                     skeleton={skeleton}
                     payload={payload}
                     type={notification?.type}
+                    createdAt={notification?.created_at}
                     actionUser={actionUser}
-                />
-                <Ago
-                    skeleton={skeleton}
-                    created_at={notification?.created_at}
                 />
             </Suspense>
         </Frame>
@@ -77,10 +72,12 @@ const blink = keyframes`
 `
 
 const Frame = styled.article`
+    position: relative;
     box-sizing: border-box;
 
     display: flex;
-    gap: 2.5em;
+    align-items: center;
+    gap: 1.5em;
 
     min-width: 400px;
     height: 7em;
@@ -97,6 +94,9 @@ const Frame = styled.article`
 
     ${ifMobile} {
         margin: 1em 0 1.5em 0;
+        min-height: 7.5em;
+        height: fit-content;
+        padding: 0.5em;
     }
 
     ${(p) =>

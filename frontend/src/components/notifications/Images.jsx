@@ -28,7 +28,8 @@ const Images = ({ profile_img, project_color, reaction, skeleton = false }) => {
 
 const Container = styled.div`
     position: relative;
-    width: calc(8em - 4em);
+    width: 4em;
+    aspect-ratio: 1/1;
 `
 
 const ProfileImg = styled.img`
