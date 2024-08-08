@@ -3,16 +3,15 @@ import styled, { css } from "styled-components"
 import { cubicBeizer } from "@assets/keyframes"
 
 const BarChart = ({ project, drawers }) => {
-    const projectTaskCount =
+    let projectTaskCount =
         project.completed_task_count + project.uncompleted_task_count
 
     const isCompleted = () => {
-        if (projectTaskCount === 0) return false
-
         let totalUncompletedTaskCount = 0
         for (let i = 0; i < drawers.length; i++) {
             totalUncompletedTaskCount += drawers[i].uncompleted_task_count
         }
+        
         if (totalUncompletedTaskCount) return false
         else return true
     }
@@ -31,10 +30,10 @@ const BarChart = ({ project, drawers }) => {
         return count && count - 1
     }
 
-    const calculatePercent = (ratio) => {
-        if (projectTaskCount === 0) return 0
+    const calculatePercent = (ratio, base) => {
+        if (base === 0) return 0
 
-        let calculated = Math.floor((ratio / projectTaskCount) * 100)
+        let calculated = Math.floor((ratio / base) * 100)
 
         if (isNaN(calculated)) return 0
         return calculated
@@ -42,49 +41,28 @@ const BarChart = ({ project, drawers }) => {
 
     return (
         <FlexBox>
-            {drawers?.map(
-                (drawer, i) =>
-                    drawer.completed_task_count +
-                        drawer.uncompleted_task_count ===
-                        0 || (
+            {projectTaskCount === 0 ? null : isCompleted() ? (
+                <BarChartBox $percent={100} $isCompleted={true} $color={project.color}>
+                    <PercentText>100%</PercentText>
+                </BarChartBox>
+            ) : drawers?.map((drawer, i) =>
+                    (drawer.completed_task_count + drawer.uncompleted_task_count) === 0 || (
                         <BarChartBox
                             key={i}
                             $start={i === 0}
                             $end={i === calculateDisplayCount()}
                             $color={project.color}
-                            $percent={calculatePercent(
-                                drawer.completed_task_count +
-                                    drawer.uncompleted_task_count,
-                            )}
-                            $background_percent={calculatePercent(
-                                drawer.completed_task_count,
-                            )}
+                            $percent={calculatePercent((drawer.uncompleted_task_count + drawer.completed_task_count), projectTaskCount)}
                         >
-                            {isCompleted() ? (
-                                <>
-                                    <PercentText>100%</PercentText>
-                                    <BarData
-                                        $percent={100}
-                                        $color={project.color}
-                                    />
-                                </>
-                            ) : (
-                                <>
-                                    <PercentText>
-                                        {calculatePercent(
-                                            drawer.completed_task_count,
-                                        )}
-                                        %
-                                    </PercentText>
-                                    <BarData
-                                        $start={i === 0}
-                                        $color={project.color}
-                                        $percent={calculatePercent(
-                                            drawer.completed_task_count,
-                                        )}
-                                    ></BarData>
-                                </>
-                            )}
+                            <PercentText>
+                                {calculatePercent(drawer.completed_task_count, projectTaskCount)}%
+                            </PercentText>
+                            <BarData
+                                $start={i === 0}
+                                $end={i === calculateDisplayCount()}
+                                $color={project.color}
+                                $percent={calculatePercent(drawer.completed_task_count, (drawer.uncompleted_task_count + drawer.completed_task_count))}
+                            />
                             <ToolTipText>{drawer.name}</ToolTipText>
                         </BarChartBox>
                     ),
@@ -101,12 +79,12 @@ const FlexBox = styled.div`
 const ToolTipText = styled.div`
     display: none;
     position: absolute;
-    border-radius: 10px;
+    white-space: nowrap;
     left: 50%;
     font-size: 0.9em;
     color: ${(p) => p.theme.textColor};
-    font-weight: bold;
-    transform: translate(-50%, 250%);
+    font-weight: 500;
+    transform: translate(-50%, 380%);
 `
 
 const PercentText = styled.div`
@@ -127,6 +105,13 @@ const BarChartBox = styled.div`
     margin: 1em 0em;
     transition: transform 0.4s ${cubicBeizer};
     cursor: pointer;
+
+    ${(props) =>
+        props.$isCompleted &&
+        css`
+            background-color: #${props=>props.$color};
+            border-radius: 15px;
+        `}
 
     ${(props) =>
         props.$start &&
@@ -157,11 +142,10 @@ const BarChartBox = styled.div`
 
 const BarData = styled.div`
     display: ${(props) => (props.$percent === 0 ? "none" : "flex")};
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: ${(props) => props.$percent}%;
-    background-color: #${(props) => props.$color};
+    width: 100%;
+    background: linear-gradient(#${props=>props.$color}, #${props=>props.$color});
+    background-size: ${(props) => props.$percent}%;
+    background-repeat: no-repeat;
 
     ${(props) =>
         props.$start &&
@@ -171,9 +155,10 @@ const BarData = styled.div`
         `}
 
     ${(props) =>
-        props.$percent === 100 &&
+        props.$end && props.$percent === 100 &&
         css`
-            border-radius: 15px;
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
         `}
 `
 
