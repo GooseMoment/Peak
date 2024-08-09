@@ -30,6 +30,14 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
         setImgLoaded(false)
     }, [user?.profile_img])
 
+    // TODO: Edit this and Banner style.
+    useEffect(() => {
+        document.body.style.overflowX = "clip"
+        return () => {
+            document.body.style.overflowX = "unset"
+        }
+    }, [])
+
     return (
         <>
             <Banner $headerColor={user?.header_color} />
