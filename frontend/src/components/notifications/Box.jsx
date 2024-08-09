@@ -79,7 +79,6 @@ const Frame = styled.article`
     align-items: center;
     gap: 1.5em;
 
-    min-width: 400px;
     height: 7em;
     padding: 1em;
     margin: 1em;

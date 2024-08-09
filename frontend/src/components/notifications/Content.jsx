@@ -1,15 +1,13 @@
-import { useMemo } from "react"
-
 import styled, { css } from "styled-components"
 
-import convertNotificationToContent from "@components/notifications/convertNotificationToContent"
+import ContentDetail from "@components/notifications/ContentDetail"
+import ContentTitle from "@components/notifications/ContentTitle"
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
 import { skeletonCSS } from "@assets/skeleton"
 
 import { DateTime } from "luxon"
-import { useTranslation } from "react-i18next"
 
 const Content = ({
     type,
@@ -18,34 +16,30 @@ const Content = ({
     createdAt,
     skeleton = false,
 }) => {
-    const { t } = useTranslation(null, { keyPrefix: "notifications" })
     const locale = useClientLocale()
     const tz = useClientTimezone()
-
-    const { title, detail } = useMemo(
-        () =>
-            convertNotificationToContent(
-                t,
-                locale,
-                tz,
-                type,
-                payload,
-                actionUser,
-            ),
-        [t, locale, tz, type, payload, actionUser],
-    )
 
     const datetime = DateTime.fromISO(createdAt).setLocale(locale).setZone(tz)
 
     return (
         <Container>
             <ContentTop>
-                <ContentTitle $skeleton={skeleton}>{title}</ContentTitle>
+                <ContentTitle
+                    $skeleton={skeleton}
+                    type={type}
+                    payload={payload}
+                    actionUser={actionUser}
+                />
                 <label title={datetime.toLocaleString(DateTime.DATETIME_MED)}>
                     <Time $skeleton={skeleton}>{datetime.toRelative()}</Time>
                 </label>
             </ContentTop>
-            <ContentDetail $skeleton={skeleton}>{detail}</ContentDetail>
+            <ContentDetail
+                $skeleton={skeleton}
+                type={type}
+                payload={payload}
+                actionUser={actionUser}
+            />
         </Container>
     )
 }
@@ -60,26 +54,12 @@ const Container = styled.div`
     flex-direction: column;
     gap: 1em;
     justify-content: center;
-
-    width: 80%;
 `
 
 const ContentTop = styled.div`
     display: flex;
     justify-content: space-between;
     width: 100%;
-`
-
-const ContentTitle = styled.h3`
-    font-weight: bold;
-
-    ${(props) =>
-        props.$skeleton &&
-        css`
-            width: 140px;
-            height: 1em;
-            ${skeletonCSS}
-        `}
 `
 
 const Time = styled.time`
@@ -94,20 +74,6 @@ const Time = styled.time`
         props.$skeleton &&
         css`
             width: 70px;
-            height: 1em;
-            ${skeletonCSS}
-        `}
-`
-
-const ContentDetail = styled.div`
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow-x: clip;
-
-    ${(props) =>
-        props.$skeleton &&
-        css`
-            width: 140px;
             height: 1em;
             ${skeletonCSS}
         `}

@@ -1,54 +1,25 @@
 import { Link } from "react-router-dom"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
+
+import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
+import { ifMobile } from "@utils/useScreenType"
+
+import { skeletonCSS } from "@assets/skeleton"
 
 import { DateTime } from "luxon"
+import { useTranslation } from "react-i18next"
 
-const socialTypes = [
-    "comment",
-    "reaction",
-    "follow",
-    "follow_request",
-    "follow_request_accepted",
-    "peck",
-]
+const ContentDetail = ({ type, payload, actionUser }) => {
+    const { t } = useTranslation(null, { keyPrefix: "notifications" })
+    const locale = useClientLocale()
+    const tz = useClientTimezone()
 
-const convertNotificationToContent = (
-    t,
-    locale,
-    tz,
-    type,
-    payload,
-    actionUser,
-) => {
-    let title = null
     let detail = null
-
-    if (socialTypes.includes(type)) {
-        const actionUserProfileURL = "/app/users/@" + actionUser?.username
-        title = (
-            <ContentTitleLink to={actionUserProfileURL}>
-                @{actionUser?.username}
-            </ContentTitleLink>
-        )
-    } else {
-        title = ""
-    }
 
     switch (type) {
         case "task_reminder":
             {
-                const taskURL =
-                    "/app/projects/" +
-                    payload?.project_id +
-                    "/?task_id=" +
-                    payload?.task
-                title = (
-                    <ContentTitleLink to={taskURL}>
-                        {payload?.task_name}
-                    </ContentTitleLink>
-                )
-
                 if (payload.delta === 0) {
                     detail = t("content_task_reminder_now")
                 } else {
@@ -157,15 +128,25 @@ const convertNotificationToContent = (
             detail = ""
     }
 
-    return {
-        title,
-        detail,
-    }
+    return <DetailBox>{detail}</DetailBox>
 }
 
-const ContentTitleLink = styled(Link)`
-    color: inherit;
-    text-decoration: none;
+const DetailBox = styled.div`
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: clip;
+
+    ${ifMobile} {
+        font-size: 0.9em;
+    }
+
+    ${(props) =>
+        props.$skeleton &&
+        css`
+            width: 140px;
+            height: 1em;
+            ${skeletonCSS}
+        `}
 `
 
 const ContentDetailLink = styled(Link)`
@@ -197,7 +178,10 @@ const ParentContent = styled.span`
     overflow-x: clip;
     white-space: nowrap;
 
+    padding-right: 10px;
+    margin-right: -10px;
+
     max-width: 100%;
 `
 
-export default convertNotificationToContent
+export default ContentDetail
