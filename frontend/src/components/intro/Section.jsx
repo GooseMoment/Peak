@@ -1,13 +1,19 @@
 import styled from "styled-components"
 
+import { ifTablet } from "@utils/useScreenType"
+
 const Section = styled.section`
     position: relative;
+
+    box-sizing: border-box;
+    width: 100%;
+    overflow-x: clip;
 
     color: ${(p) => p.theme.textColor};
     background-color: ${(p) => p.theme.backgroundColor};
     padding: 3em 10em;
 
-    @media screen and (max-width: 1000px) {
+    ${ifTablet} {
         padding: 3em 2em;
     }
 `
