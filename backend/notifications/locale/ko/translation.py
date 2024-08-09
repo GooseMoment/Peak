@@ -5,6 +5,7 @@ translation = {
         Notification.FOR_TASK_REMINDER: {
             "title": "⏰ {task}",
             "body": "{delta}분 남았습니다.",
+            "body_now": "작업할 시간입니다.",
         },
         Notification.FOR_REACTION: {
             "title": ":{emoji}: @{username}",

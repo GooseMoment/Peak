@@ -21,6 +21,7 @@
         "type_pecking": "Pecking",
         "type_follow": "Follow",
         "content_task_reminder": "Reminder before {{delta}} minute(s).",
+        "content_task_reminder_now": "Time to work!",
         "content_peck": "pecked {{count}} times.",
         "content_comment_quote": "Quote of {{date}}.",
         "content_reaction_quote": "Quote of {{date}}.",

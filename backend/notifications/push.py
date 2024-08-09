@@ -40,7 +40,12 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
         case Notification.FOR_TASK_REMINDER:
             t = t[Notification.FOR_TASK_REMINDER]
             data["title"] = t["title"].format(task=notification.task_reminder.task.name)
-            data["body"] = t["body"].format(delta=notification.task_reminder.delta)
+
+            if notification.task_reminder.delta == 0:
+                data["body"] = t["body_now"]
+            else:
+                data["body"] = t["body"].format(delta=notification.task_reminder.delta)
+
         case Notification.FOR_REACTION:
             parent: str = ""
 
