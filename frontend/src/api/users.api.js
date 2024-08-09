@@ -1,4 +1,8 @@
-import client, { setCurrentUsername, setToken } from "@api/client"
+import client, {
+    clearUserCredentials,
+    setCurrentUsername,
+    setToken,
+} from "@api/client"
 import { deleteSubscription } from "@api/notifications.api"
 
 import { getClientSettings } from "@utils/clientSettings"
@@ -69,23 +73,21 @@ export const signUp = async (email, password, username) => {
 }
 
 export const signOut = async () => {
-    setToken(null)
-    setCurrentUsername(null)
-
     const subscriptionID = getClientSettings()["push_notification_subscription"]
-
-    try {
-        await deleteSubscription(subscriptionID)
-
-        const res = await client.get("sign_out/")
-        if (res.status === 200) {
-            return true
-        }
-    } catch (e) {
-        return false
+    if (subscriptionID) {
+        deleteSubscription(subscriptionID) // intentionally not awaiting
     }
 
-    return false
+    try {
+        await client.post("sign_out/")
+    } catch (_) {
+        // ignore error
+    }
+
+    clearUserCredentials()
+    window.location = "/"
+
+    return null // this function is being used as 'loader'
 }
 
 export const patchPassword = async (current_password, new_password) => {

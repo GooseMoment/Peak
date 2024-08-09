@@ -57,7 +57,8 @@ const routes = [
         id: "app",
         loader: async () => {
             if (!getToken()) {
-                redirect("/")
+                window.location = "/"
+                // The function 'redirect' can't be used here; redirect("/") redirects to "/app/".
             }
 
             return {
@@ -149,10 +150,7 @@ const routes = [
             },
             {
                 path: "sign_out",
-                loader: () => {
-                    signOut()
-                    return redirect("/")
-                },
+                loader: signOut,
                 element: null,
             },
         ],
