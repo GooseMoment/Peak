@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError, CommandParser
+from django.core.management.base import BaseCommand, CommandParser
 from django.core.cache import cache
 
 from notifications.models import TaskReminder
@@ -17,7 +17,7 @@ class Command(BaseCommand):
 
         reminders: list[TaskReminder] = list()
         
-        query_set = TaskReminder.objects.filter(scheduled=next_minute).all()
+        query_set = TaskReminder.objects.filter(scheduled=next_minute, task__completed_at=None).all()
         for reminder in query_set:
             reminders.append(reminder)
         
