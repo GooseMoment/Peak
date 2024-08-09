@@ -41,22 +41,16 @@ const ContentDetail = ({ type, payload, actionUser }) => {
                     </ContentDetailLink>
                 )
             } else {
-                const date = DateTime.fromISO(payload.daily_comment?.date)
-                    .setLocale(locale)
-                    .setZone(tz)
+                // TODO: replace daily_comment to quote
+                const displayDate = getDisplayDateFromQuote(payload?.daily_comment, locale, tz)
 
-                const diffNow = date.diffNow(["days"])
-                const relativeDate = date.toRelative({ unit: "days" })
                 detail = (
                     <ContentDetailLink to={`/app/social/following`}>
                         <Ellipsis>{payload.comment}</Ellipsis>
                         <Parent>
                             RE:
                             {t("content_comment_quote", {
-                                date:
-                                    Math.abs(diffNow.days) > 7
-                                        ? date.toLocaleString()
-                                        : relativeDate,
+                                date: displayDate,
                             })}
                         </Parent>
                     </ContentDetailLink>
@@ -75,22 +69,14 @@ const ContentDetail = ({ type, payload, actionUser }) => {
                     </ContentDetailLink>
                 )
             } else {
-                // TODO: change to payload.quote?.date
-                const date = DateTime.fromISO(payload.daily_comment?.date)
-                    .setLocale(locale)
-                    .setZone(tz)
-
-                const diffNow = date.diffNow(["days"])
-                const relativeDate = date.toRelative({ unit: "days" })
+                // TODO: change to payload?.quote
+                const displayDate = getDisplayDateFromQuote(payload?.daily_comment, locale, tz)
 
                 detail = (
                     <ContentDetailLink to={"/app/social/following/"}>
                         <Parent>
                             {t("content_reaction_quote", {
-                                date:
-                                    Math.abs(diffNow.days) > 7
-                                        ? date.toLocaleString()
-                                        : relativeDate,
+                                date: displayDate,
                             })}
                         </Parent>
                     </ContentDetailLink>
@@ -127,6 +113,15 @@ const ContentDetail = ({ type, payload, actionUser }) => {
     }
 
     return <DetailBox>{detail}</DetailBox>
+}
+
+const getDisplayDateFromQuote = (quote, locale, tz) => {
+    const date = DateTime.fromISO(quote.date).setLocale(locale).setZone(tz)
+
+    const diffNow = date.diffNow(["days"])
+    const relativeDate = date.toRelative({ unit: "days" })
+
+    return Math.abs(diffNow.days) > 7 ? date.toLocaleString() : relativeDate
 }
 
 const DetailBox = styled.div`
