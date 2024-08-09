@@ -42,9 +42,7 @@ const Layout = () => {
                     </SidebarLink>
                 </FooterBox>
             </Sidebar>
-            <Main>
-                <Outlet />
-            </Main>
+            <Outlet />
         </>
     )
 }
@@ -97,23 +95,6 @@ const getMenuItems = (t) => [
     },
 ]
 
-const ModalFrame = styled.div`
-    display: flex;
-    overflow: hidden; // to make sidebar obey parent's radius
-
-    color: ${(p) => p.theme.textColor};
-    background-color: ${(p) => p.theme.backgroundColor};
-    height: 70vh;
-
-    @media screen and (max-width: 800px) {
-        width: 90vw;
-        height: 90vh;
-    }
-
-    border-radius: 10px;
-    box-sizing: border-box;
-`
-
 const Sidebar = styled(SidebarBox)`
     overflow-y: auto;
 
@@ -129,14 +110,6 @@ const Sidebar = styled(SidebarBox)`
 
 const FooterBox = styled(MiddleBox)`
     flex-grow: 1;
-`
-
-const Main = styled.main`
-    overflow-y: auto;
-
-    box-sizing: border-box;
-    padding: 2em;
-    width: 32rem;
 `
 
 export default Layout
