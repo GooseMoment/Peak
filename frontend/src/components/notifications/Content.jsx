@@ -48,6 +48,8 @@ const Container = styled.div`
     flex-grow: 20;
     position: relative;
 
+    min-width: 0; // for children's text-overflow: ellipsis
+
     box-sizing: border-box;
 
     display: flex;

@@ -79,6 +79,7 @@ const Frame = styled.article`
     align-items: center;
     gap: 1.5em;
 
+    min-width: 0; // for children's text-overflow: ellipsis
     height: 7em;
     padding: 1em;
     margin: 1em;
