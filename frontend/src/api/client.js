@@ -1,4 +1,5 @@
-import { setClientSettingsByName } from "@/utils/clientSettings"
+import { setClientSettingsByName } from "@utils/clientSettings"
+
 import axios from "axios"
 
 const baseURL = import.meta.env.VITE_API_BASEURL
