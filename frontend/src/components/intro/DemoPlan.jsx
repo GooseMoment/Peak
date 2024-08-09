@@ -156,12 +156,14 @@ const Selections = styled.div`
     }
 `
 
-const Selection = styled.div``
+const Selection = styled.div`
+    font-size: 0.9em;
+    white-space: nowrap;
+`
 
 const Icon = styled.img`
     aspect-ratio: 1/1;
     height: 1em;
-    vertical-align: bottom;
 `
 
 const Tasks = styled.div`
