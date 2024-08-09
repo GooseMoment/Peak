@@ -4,6 +4,7 @@ import ContentDetail from "@components/notifications/ContentDetail"
 import ContentTitle from "@components/notifications/ContentTitle"
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
+import { ifMobile } from "@utils/useScreenType"
 
 import { skeletonCSS } from "@assets/skeleton"
 
@@ -31,7 +32,9 @@ const Content = ({
                     actionUser={actionUser}
                 />
                 <label title={datetime.toLocaleString(DateTime.DATETIME_MED)}>
-                    <Time $skeleton={skeleton}>{datetime.toRelative()}</Time>
+                    <Time $skeleton={skeleton}>
+                        {datetime.toRelative({ style: "narrow" })}
+                    </Time>
                 </label>
             </ContentTop>
             <ContentDetail
@@ -71,6 +74,10 @@ const Time = styled.time`
     white-space: nowrap;
 
     cursor: help;
+
+    ${ifMobile} {
+        font-size: 0.65em;
+    }
 
     ${(props) =>
         props.$skeleton &&
