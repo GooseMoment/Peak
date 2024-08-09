@@ -19,14 +19,12 @@ const ContentDetail = ({ type, payload, actionUser }) => {
 
     switch (type) {
         case "task_reminder":
-            {
-                if (payload.delta === 0) {
-                    detail = t("content_task_reminder_now")
-                } else {
-                    detail = t("content_task_reminder", {
-                        delta: payload?.delta,
-                    })
-                }
+            if (payload.delta === 0) {
+                detail = t("content_task_reminder_now")
+            } else {
+                detail = t("content_task_reminder", {
+                    delta: payload?.delta,
+                })
             }
             break
         case "comment":
