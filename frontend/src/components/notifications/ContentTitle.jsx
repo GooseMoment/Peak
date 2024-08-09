@@ -51,6 +51,11 @@ const TitleBox = styled.h3`
         font-size: 0.9em;
     }
 
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow-x: clip;
+    min-width: 0;
+
     ${(props) =>
         props.$skeleton &&
         css`
