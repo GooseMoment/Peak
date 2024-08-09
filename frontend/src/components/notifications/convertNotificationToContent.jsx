@@ -52,7 +52,9 @@ const convertNotificationToContent = (
                 if (payload.delta === 0) {
                     detail = t("content_task_reminder_now")
                 } else {
-                    detail = t("content_task_reminder", { delta: payload?.delta })
+                    detail = t("content_task_reminder", {
+                        delta: payload?.delta,
+                    })
                 }
             }
             break
@@ -77,9 +79,7 @@ const convertNotificationToContent = (
                 const diffNow = date.diffNow(["days"])
                 const relativeDate = date.toRelative({ unit: "days" })
                 detail = (
-                    <ContentDetailLink
-                        to={`/app/social/following`}
-                    >
+                    <ContentDetailLink to={`/app/social/following`}>
                         <Ellipsis>{payload.comment}</Ellipsis>
                         <Parent>
                             RE:
