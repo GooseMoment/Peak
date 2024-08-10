@@ -115,29 +115,27 @@ const SocialFollowingPage = () => {
                     {isQuotePending || isDrawerPending ? (
                         <SkeletonProjectPage />
                     ) : (
-                        drawerPage?.pages?.map((group, index) => (
+                        drawerPage &&
                             <LogDetails
-                                key={index}
                                 user={quote?.user}
                                 quote={quote}
                                 saveQuote={saveQuote}
                                 selectedDate={selectedDate}
-                                logDetails={group?.results}
+                                logDetails={drawerPage}
                                 isFollowing={true}
                             />
-                        ))
                     )}
                     <ImpressionArea
                         onImpressionStart={() => fetchNextDrawerPage()}
                         timeThreshold={200}
                     >
-                        {hasNextPage && "next"}
+                        {drawerPage && "next"}
                         {!hasNextPage && !isNotificationEmpty && (
-                            <NoMore>{"no_more"}</NoMore>
+                            "no_more"
                         )}
                     </ImpressionArea>
                     
-                    {isNotificationEmpty && <NoMore>{"empty"}</NoMore>}
+                    {isNotificationEmpty && "empty"}
                 </StickyContainer>
             </Wrapper>
         </>
@@ -178,21 +176,6 @@ const CalendarWrapper = styled.div`
     max-width: 40rem;
     width: 80%;
     max-width: 40rem;
-`
-
-const NoMore = styled.div`
-    box-sizing: border-box;
-
-    border-radius: solid black;
-
-    height: 7em;
-    padding: 1em;
-    margin: 1em;
-    margin-bottom: 3em;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
 `
 
 const mockNewLogDates = [

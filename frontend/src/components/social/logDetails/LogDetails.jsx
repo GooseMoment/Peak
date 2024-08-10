@@ -30,19 +30,18 @@ const LogDetails = ({
 
             {/* TODO: When there are no task */}
             <DetailBody>
-                {logDetails &&
-                    logDetails.map(
-                        (drawer) =>
-                            // Only show when there are task
-                            drawer && (
-                                <DrawerBundle
-                                    key={drawer.id}
-                                    drawer={drawer}
-                                    selectedDate={selectedDate}
-                                    isFollowing={isFollowing}
-                                />
-                            ),
-                    )}
+                {logDetails?.pages.map((group) => (
+                    group?.results?.map((drawer) => (
+                        drawer && (
+                            <DrawerBundle
+                                key={drawer.id}
+                                drawer={drawer}
+                                selectedDate={selectedDate}
+                                isFollowing={isFollowing}
+                            />
+                        )
+                    ))
+                ))}
             </DetailBody>
         </>
     )
