@@ -8,7 +8,7 @@ import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
 import Middle from "@components/project/common/Middle"
 import Title from "@components/project/common/Title"
-import { getProjectColor, getColorDisplay } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/Creates/palettes"
 import { postProject } from "@api/projects.api"
 
 import queryClient from "@queries/queryClient"
@@ -31,7 +31,6 @@ const ProjectCreate = ({ onClose }) => {
 
     const editNewProject = (edit) => {
         setNewProject(Object.assign(newProject, edit))
-        console.log(newProject)
     }
 
     //Component
@@ -46,7 +45,7 @@ const ProjectCreate = ({ onClose }) => {
             id: 1,
             icon: "circle",
             color: getProjectColor(theme.type, newProject.color),
-            display: getColorDisplay(newProject.color),
+            display: t("color." + newProject.color),
             component: (
                 <Color
                     setColor={editNewProject}

@@ -8,7 +8,7 @@ import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
 import Middle from "@components/project/common/Middle"
 import Title from "@components/project/common/Title"
-import { getProjectColor, getColorDisplay } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/Creates/palettes"
 
 import { patchProject } from "@api/projects.api"
 
@@ -56,7 +56,7 @@ const ProjectEdit = ({ project, onClose }) => {
             id: 1,
             icon: "circle",
             color: getProjectColor(theme.type, project.color),
-            display: getColorDisplay(project.color),
+            display: t("color." + project.color),
             component: (
                 <Color
                     setColor={patchMutation.mutate}
