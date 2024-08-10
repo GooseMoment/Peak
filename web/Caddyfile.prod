@@ -10,10 +10,10 @@ alpha.peak.ooo {
 	}
 
 	# frontend
-	handle /* {
+	handle * {
 		root * /srv/frontend
+		try_files {path} /
 		file_server
-		try_files {path} /index.html
 	}
 	
 	handle_errors {
@@ -30,8 +30,6 @@ alpha.peak.ooo {
 			respond "another error"
 		}
 	}
-
-	tls cert.pem cert.key
 }
 
 alpha-api.peak.ooo {
@@ -59,6 +57,4 @@ alpha-api.peak.ooo {
 	handle * {
 		reverse_proxy api:8000
 	}
-
-	tls cert.pem cert.key
 }
