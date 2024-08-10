@@ -9,7 +9,11 @@ import Middle from "@components/sidebar/Middle"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 import useStopScroll from "@utils/useStopScroll"
 
-import { cubicBeizer, slideLeftToRight } from "@assets/keyframes"
+import {
+    cubicBeizer,
+    slideLeftToRight,
+    slideLeftToRightReverse,
+} from "@assets/keyframes"
 
 const Sidebar = ({ collapsed, setCollapsed, setSidebarHidden }) => {
     const { isMobile } = useScreenType()
@@ -22,7 +26,7 @@ const Sidebar = ({ collapsed, setCollapsed, setSidebarHidden }) => {
         setTimeout(() => {
             setSidebarHidden(true)
             setClosing(false)
-        }, 100)
+        }, 250)
     }
 
     return (
@@ -68,6 +72,13 @@ export const SidebarBox = styled.nav`
         padding-right: 0.75em;
 
         animation: ${slideLeftToRight} 0.25s ${cubicBeizer};
+
+        ${(p) =>
+            p.$closing &&
+            css`
+                animation: ${slideLeftToRightReverse} 0.5s ${cubicBeizer}
+                    forwards;
+            `}
     }
 
     ${(p) =>
