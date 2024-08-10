@@ -54,7 +54,7 @@ const FilterButtonGroup = ({ active, setActive, filters }) => {
 const FilterGroupWrapper = styled.div`
     display: block;
     overflow-y: visible;
-    overflow-x: scroll;
+    overflow-x: auto;
 `
 
 const FilterGroup = styled.div`
