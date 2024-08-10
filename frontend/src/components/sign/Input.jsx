@@ -2,7 +2,7 @@ import styled, { css } from "styled-components"
 
 const Input = (props) => {
     const icon = props.icon
-    const inputProps = (({ icon, ...others }) => ({ ...others }))(props) // remove key "icon" from props and clone
+    const inputProps = (({ icon: _, ...others }) => ({ ...others }))(props) // remove key "icon" from props and clone
 
     return (
         <Box>

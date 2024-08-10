@@ -29,7 +29,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Project
-        fields = ['id', 'name', 'user', 'order', 'color', 'type', 'created_at', 'updated_at', 'deleted_at', 'completed_task_count', 'uncompleted_task_count', 'drawers']
+        fields = ['id', 'name', 'user', 'order', 'privacy', 'color', 'type', 'created_at', 'updated_at', 'deleted_at', 'completed_task_count', 'uncompleted_task_count', 'drawers']
 
 class ProjectSerializerForUserProjectList(serializers.ModelSerializer):
     class Meta:

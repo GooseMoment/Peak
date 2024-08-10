@@ -1,6 +1,5 @@
 import { toast } from "react-toastify"
 
-const position = "bottom-left"
 const commonOption = {}
 
 class notify {
