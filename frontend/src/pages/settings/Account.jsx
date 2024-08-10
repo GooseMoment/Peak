@@ -19,9 +19,12 @@ import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import useScreenType from "@utils/useScreenType"
 
 const Account = () => {
     const { t } = useTranslation("settings", { keyPrefix: "account" })
+
+    const { isDesktop } = useScreenType()
 
     const {
         data: user,
@@ -98,6 +101,7 @@ const Account = () => {
                             maxLength="18"
                             defaultValue={user.display_name}
                             placeholder={t("display_name_placeholder")}
+                            $width={isDesktop ? "30em" : "100%"}
                         />
                     </Value>
                 </Section>
