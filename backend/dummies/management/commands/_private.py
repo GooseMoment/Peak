@@ -19,6 +19,17 @@ fake = Faker("ko_KR")
 
 PASSWORD_DEFAULT = "PASSWORD_DEFAULT"
 
+COLORS_DEFAULT = [
+    "orange",
+    "peach",
+    "pink",
+    "dark_yellow",
+    "yellow",
+    "green",
+    "turquoise",
+    "dark_blue",
+]
+
 def factory_user() -> User:
     email = fake.email()
     return User(
@@ -87,7 +98,8 @@ def factory_project(user: User, order: int) -> Project:
         name=fake.word(),
         user=user,
         order=order,
-        color=f"{random.randint(0, 0xFFFFFF):06x}",
+        privacy=random.choice(Project.PRIVACY_TYPES)[0],
+        color=random.choice(COLORS_DEFAULT),
         type=random.choice(Project.PROJECT_TYPE_CHOICES)[0],
     )
 
