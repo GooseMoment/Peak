@@ -24,17 +24,15 @@ from users.serializers import UserSerializer
 
 class ExploreFeedPagination(CursorPagination):
     page_size = 8
-    ordering = "order"
+    ordering = "-followings_count"
 
 class ExploreFeedView(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = UserSerializer
+    pagination_class = ExploreFeedPagination
     
-    pargination_class = ExploreFeedPagination
-    
-    def get(self, request):
-        user = request.user
-    
+    def get_queryset(self):
+        user = self.request.user
         followees = User.objects.filter(followers__follower=user)
-
         recommendUserFilter = Q(followers__follower=user) | Q(id=user.id)
 
         feeds_queryset = User.objects.filter(
@@ -42,32 +40,28 @@ class ExploreFeedView(mixins.ListModelMixin, generics.GenericAPIView):
         ).distinct().exclude(recommendUserFilter)
         # TODO: exclude private user
         
-        page = self.paginate_queryset(feeds_queryset)
+        return feeds_queryset
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+class ExploreSearchView(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = UserSerializer
+    pagination_class = ExploreFeedPagination
+    
+    def get_queryset(self):
+        keyword = self.request.GET.get('query')
+    
+        if keyword is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+        users_queryset = User.objects.filter(username__icontains=keyword)
         
-        if page is not None:
-            serializer = UserSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        
-        serializer = UserSerializer(feeds_queryset, many=True)
-    
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return users_queryset
 
-class ExploreSearchView():
-    pass
-
-
-@api_view(["GET"])
-def get_explore_search_results(request: Request):
-    keyword = request.GET.get('query')
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
     
-    if keyword is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    
-    users = User.objects.filter(username__icontains=keyword)
-    serializer = UserSerializer(users, many=True)
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 class FollowView(APIView):
     #request 확인 기능 넣기
