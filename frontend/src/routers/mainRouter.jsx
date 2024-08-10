@@ -17,8 +17,7 @@ import TaskCreateElement from "@components/project/taskDetails/TaskCreateElement
 import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement"
 
 import { getToken } from "@api/client"
-import { getProjectList } from "@api/projects.api"
-import { getMe, signOut } from "@api/users.api"
+import { signOut } from "@api/users.api"
 
 const redirectIfSignedIn = () => {
     if (getToken()) {
@@ -131,10 +130,7 @@ const routes = [
                 // The function 'redirect' can't be used here; redirect("/") redirects to "/app/".
             }
 
-            return {
-                projects: await getProjectList(),
-                user: await getMe(),
-            }
+            return null
         },
         errorElement: <ErrorPage />,
         children: [
