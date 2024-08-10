@@ -4,7 +4,7 @@ import Footer from "./Footer"
 import Header from "./Header"
 import Middle from "./Middle"
 
-import { ifMobile } from "@utils/useScreenType"
+import useScreenType, { ifMobile } from "@utils/useScreenType"
 import useStopScroll from "@utils/useStopScroll"
 
 import { cubicBeizer, slideLeftToRight } from "@assets/keyframes"
