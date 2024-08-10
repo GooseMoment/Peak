@@ -8,8 +8,6 @@ import Sidebar from "@components/sidebar/Sidebar"
 import { useClientSetting } from "@utils/clientSettings"
 import useScreenType, { ifMobile, ifTablet, WIDTH_TABLET } from "@utils/useScreenType"
 
-import { cubicBeizer, modalFadeIn } from "@assets/keyframes"
-
 const startUpWidth = window.innerWidth
 
 const Layout = ({ children }) => {
@@ -41,9 +39,6 @@ const Layout = ({ children }) => {
                     collapsed={sidebarCollapsed}
                     setCollapsed={setSidebarCollapsed}
                 />
-            )}
-            {isMobile && !sidebarHidden && (
-                <BackgroundWall onClick={() => setSidebarHidden(true)} />
             )}
             <Content
                 $sidebarCollapsed={sidebarCollapsed}
@@ -85,18 +80,6 @@ const Content = styled.main`
         padding-bottom: calc(2rem + 6rem);
         padding-left: max(env(safe-area-inset-left), 1.5rem);
     }
-`
-
-const BackgroundWall = styled.div`
-    z-index: 98;
-
-    position: fixed;
-    height: 100dvh;
-    width: 100dvw;
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
-
-    animation: ${modalFadeIn} 0.25s ${cubicBeizer} forwards;
 `
 
 // Reference: https://every-layout.dev/layouts/sidebar
