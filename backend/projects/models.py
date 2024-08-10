@@ -20,7 +20,7 @@ class Project(Base, PrivacyMixin):
         on_delete=models.CASCADE,
     )
     order = models.IntegerField()
-    color = models.CharField()
+    color = models.CharField(max_length=128)
     type = models.CharField(choices=PROJECT_TYPE_CHOICES, max_length=128)
 
     def __str__(self) -> str:
