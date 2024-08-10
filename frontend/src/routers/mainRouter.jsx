@@ -4,22 +4,24 @@ import { createBrowserRouter, redirect } from "react-router-dom"
 import settingsChildren from "@routers/settingsChildren"
 import signChildren from "@routers/signChildren"
 
-import AppLayout from "@containers/AppLayout"
-
 import ErrorPage from "@pages/ErrorPage"
 import HomePage from "@pages/HomePage"
 import NotificationsPage from "@pages/NotificationsPage"
 import ProjectListPage from "@pages/ProjectListPage"
 import ProjectPage from "@pages/ProjectPage"
+import SearchPage from "@pages/SearchPage"
 import SettingsPage from "@pages/SettingsPage"
 import StartPage from "@pages/StartPage"
 import TodayPage from "@pages/TodayPage"
 
-import TaskCreateElement from "@components/project/taskDetails/TaskCreateElement"
-import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement"
-
 import { getToken } from "@api/client"
 import { signOut } from "@api/users.api"
+
+import { lazily } from "react-lazily"
+
+const { TaskCreateElement, TaskDetailElement } = lazily(
+    () => import("@components/project/taskDetails/TaskElements"),
+)
 
 const UserPage = lazy(() => import("@pages/UserPage"))
 
@@ -37,7 +39,8 @@ const redirectIfSignedIn = () => {
  * 1. React Router의 lazy 함수: <RouterProvider>의 fallbackElement를 보여준다.
  *    현재 fallbackElement가 FullScreenLoader이므로, IntroPage나 SignPage에 적합.
  * 2. React.lazy(): .default가 필요하면 사용. (named exports 사용 불가) startTransition의 도움이 필요.
- * 3. lazily(): named exports가 필요하면 사용. (.default 사용 불가) 역시 startTransition 필요.
+ * 3. lazily(): named exports가 필요하면 사용. named exports를 한 번에 가져올 수 있음! 
+ *    (.default 사용 불가) 역시 startTransition 필요.
  *
  * 세 가지 다 특징이 있으니, 적합하게 사용하자
  */
@@ -91,7 +94,7 @@ const routes = [
             },
             {
                 path: "search",
-                element: <div>This is /search</div>,
+                element: <SearchPage />,
             },
             {
                 path: "notifications",
