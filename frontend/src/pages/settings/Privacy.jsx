@@ -2,8 +2,8 @@ import { useMemo } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 
+import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import Error from "@components/settings/Error"
-import Loading from "@components/settings/Loading"
 import Section, { Description, Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
@@ -42,7 +42,7 @@ const Privacy = () => {
     const privacyChoices = useMemo(() => makePrivacyChoices(t), [t])
 
     if (isPending) {
-        return <Loading />
+        return <LoaderCircleFull />
     }
 
     if (isError) {

@@ -4,10 +4,10 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
+import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import ModalPortal from "@components/common/ModalPortal"
 import Color from "@components/project/Creates/Color"
 import Error from "@components/settings/Error"
-import Loading from "@components/settings/Loading"
 import PasswordSection from "@components/settings/PasswordSection"
 import ProfileImg from "@components/settings/ProfileImg"
 import Section, { Name, Value } from "@components/settings/Section"
@@ -67,7 +67,7 @@ const Account = () => {
     }
 
     if (isPending) {
-        return <Loading />
+        return <LoaderCircleFull />
     }
 
     if (isError) {
