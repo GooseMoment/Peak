@@ -1,18 +1,20 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 import { useQuery } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
 
+import ConfirmationSignOut from "@components/sidebar/ConfirmationSignOut"
 import SidebarLink, { SidebarLinkLazy } from "@components/sidebar/SidebarLink"
 
 import { getMe } from "@api/users.api"
+
+import useScreenType from "@utils/useScreenType"
 
 import { skeletonCSS } from "@assets/skeleton"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import useScreenType from "@utils/useScreenType"
 
 const Footer = ({ collapsed, closeSidebar }) => {
     const {
@@ -42,6 +44,14 @@ const Footer = ({ collapsed, closeSidebar }) => {
         }
     }
 
+    const [isSignOutConfirmationOpen, setSignOutConfirmationOpen] =
+        useState(false)
+
+    const openSignOutConfirmation = (e) => {
+        e.preventDefault()
+        setSignOutConfirmationOpen(true)
+    }
+
     return (
         <FooterBox $collapsed={collapsed}>
             {isPending && (
@@ -54,7 +64,11 @@ const Footer = ({ collapsed, closeSidebar }) => {
             {isError && <MeProfile />}
 
             {user && (
-                <SidebarLink onClick={onClickLink} to={`users/@${user.username}`} draggable="false">
+                <SidebarLink
+                    onClick={onClickLink}
+                    to={`users/@${user.username}`}
+                    draggable="false"
+                >
                     <MeProfile>
                         <MeProfileImg src={user.profile_img} />
                         {!collapsed && <Username>{user.username}</Username>}
@@ -63,17 +77,37 @@ const Footer = ({ collapsed, closeSidebar }) => {
             )}
 
             {!collapsed && (
-                <SidebarLinkLazy
-                    navigateTo="/app/settings/account"
-                    to="/app/settings"
-                    draggable="false"
-                    end={false}
-                    onClick={onClickLink}
-                >
-                    <SettingIconContainer>
-                        <FeatherIcon icon="settings" />
-                    </SettingIconContainer>
-                </SidebarLinkLazy>
+                <SmallIcons>
+                    <SidebarLinkLazy
+                        navigateTo="/app/settings/account"
+                        to="/app/settings"
+                        draggable="false"
+                        end={false}
+                        onClick={onClickLink}
+                        key="settings"
+                    >
+                        <SmallIcon>
+                            <FeatherIcon icon="settings" />
+                        </SmallIcon>
+                    </SidebarLinkLazy>
+                    <SidebarLink
+                        to="/app/sign_out"
+                        draggable="false"
+                        onClick={openSignOutConfirmation}
+                        key="sign-out"
+                    >
+                        <SmallIcon>
+                            <FeatherIcon icon="log-out" />
+                        </SmallIcon>
+                        {isSignOutConfirmationOpen && (
+                            <ConfirmationSignOut
+                                onClose={() =>
+                                    setSignOutConfirmationOpen(false)
+                                }
+                            />
+                        )}
+                    </SidebarLink>
+                </SmallIcons>
             )}
         </FooterBox>
     )
@@ -125,7 +159,14 @@ const UsernameSkeleton = styled.div`
     ${skeletonCSS("-170px", "100px")}
 `
 
-const SettingIconContainer = styled.div`
+const SmallIcons = styled.div`
+    display: flex;
+    align-items: center;
+
+    gap: 0.25em;
+`
+
+const SmallIcon = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
