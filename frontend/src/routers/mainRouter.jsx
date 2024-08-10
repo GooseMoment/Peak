@@ -23,6 +23,8 @@ const { TaskCreateElement, TaskDetailElement } = lazily(
     () => import("@components/project/taskDetails/TaskElements"),
 )
 
+const { SocialRedirector, SocialFollowingPage, SocialExplorePage } = lazily(() => import("@pages/chunks/SocialPages"))
+
 const UserPage = lazy(() => import("@pages/UserPage"))
 
 const redirectIfSignedIn = () => {
@@ -113,30 +115,15 @@ const routes = [
                 children: [
                     {
                         index: true,
-                        async lazy() {
-                            const { SocialRedirector } = await import(
-                                "@pages/chunks/SocialPages"
-                            )
-                            return { Component: SocialRedirector }
-                        },
+                        element: <SocialRedirector />,
                     },
                     {
                         path: "following",
-                        async lazy() {
-                            const { SocialFollowingPage } = await import(
-                                "@pages/chunks/SocialPages"
-                            )
-                            return { Component: SocialFollowingPage }
-                        },
+                        element: <SocialFollowingPage />,
                     },
                     {
                         path: "explore",
-                        async lazy() {
-                            const { SocialExplorePage } = await import(
-                                "@pages/chunks/SocialPages"
-                            )
-                            return { Component: SocialExplorePage }
-                        },
+                        element: <SocialExplorePage />,
                     },
                 ],
             },
