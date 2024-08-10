@@ -1,1 +1,1 @@
-docker-compose -f docker-compose.prod.yml --env-file .env.prod $args
+docker-compose -f docker-compose.prod.yml $args
