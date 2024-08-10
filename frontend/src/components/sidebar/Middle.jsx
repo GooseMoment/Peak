@@ -86,6 +86,7 @@ const Middle = ({ collapsed, closeSidebar }) => {
                 draggable="false"
                 key="projects"
                 onClick={onClickLink}
+                end
             >
                 <ItemBox $collapsed={collapsed}>
                     <FeatherIcon icon="archive" />
