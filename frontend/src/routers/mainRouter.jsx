@@ -31,6 +31,17 @@ const redirectIfSignedIn = () => {
     return null
 }
 
+/***
+ * # Lazy 로드의 세 가지 방법
+ *
+ * 1. React Router의 lazy 함수: <RouterProvider>의 fallbackElement를 보여준다.
+ *    현재 fallbackElement가 FullScreenLoader이므로, IntroPage나 SignPage에 적합.
+ * 2. React.lazy(): .default가 필요하면 사용. (named exports 사용 불가) startTransition의 도움이 필요.
+ * 3. lazily(): named exports가 필요하면 사용. (.default 사용 불가) 역시 startTransition 필요.
+ *
+ * 세 가지 다 특징이 있으니, 적합하게 사용하자
+ */
+
 const routes = [
     {
         path: "/",
@@ -60,8 +71,10 @@ const routes = [
     },
     {
         path: "/app",
-        element: <AppLayout />,
-        id: "app",
+        async lazy() {
+            const { default: AppLayout } = await import("@containers/AppLayout")
+            return { element: <AppLayout /> }
+        },
         loader: async () => {
             if (!getToken()) {
                 window.location = "/"
