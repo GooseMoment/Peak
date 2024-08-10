@@ -23,6 +23,7 @@ const displayColor = {
 }
 
 const light = {
+    grey: "#CCCCCC",
     orange: "#F05A29",
     peach: "#F7786B",
     pink: "#FD99E1",
@@ -34,6 +35,7 @@ const light = {
 }
 
 const dark = {
+    grey: "#858585",
     orange: "#EB5321",
     peach: "#F8857A",
     pink: "#FB90C5",
