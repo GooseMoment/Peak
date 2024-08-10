@@ -5,9 +5,8 @@
     "type": "module",
     "scripts": {
         "preinstall": "npx only-allow pnpm",
-        "git-info": "node src/gitInfo.js",
-        "dev": "pnpm run git-info && vite",
-        "build": "pnpm run git-info && vite build",
+        "dev": "vite",
+        "build": "vite build",
         "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
         "generate-assets": "pwa-assets-generator"

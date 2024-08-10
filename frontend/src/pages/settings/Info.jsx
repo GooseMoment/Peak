@@ -1,8 +1,5 @@
-import styled from "styled-components"
+import Section, { Name } from "@components/settings/Section"
 
-import Section, { Name, Value } from "@components/settings/Section"
-
-import generatedGitInfo from "@/generatedGitInfo.json"
 import { useTranslation } from "react-i18next"
 
 const Info = () => {
@@ -11,26 +8,10 @@ const Info = () => {
     return (
         <>
             <Section>
-                <Name>{t("build.name")}</Name>
-                <Value>
-                    <ul>
-                        <li>
-                            {t("build.commit")}:{" "}
-                            <Code>{generatedGitInfo.gitCommitHash}</Code>
-                        </li>
-                        <li>
-                            {t("build.branch")}:{" "}
-                            <Code>{generatedGitInfo.gitBranch}</Code>
-                        </li>
-                    </ul>
-                </Value>
+                <Name>Work In Progress</Name>
             </Section>
         </>
     )
 }
-
-const Code = styled.code`
-    font-family: monospace;
-`
 
 export default Info
