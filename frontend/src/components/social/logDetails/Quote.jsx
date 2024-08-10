@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react"
 
-import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import SimpleProfile from "@components/social/common/SimpleProfile"
 
-import { getMe } from "@api/users.api"
-import { getCurrentUsername } from "@/api/client"
+import { getCurrentUsername } from "@api/client"
 
 const Quote = ({ user, quote, saveQuote }) => {
     const [inputState, setInputState] = useState(false)

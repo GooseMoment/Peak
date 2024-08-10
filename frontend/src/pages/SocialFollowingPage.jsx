@@ -89,7 +89,7 @@ const SocialFollowingPage = () => {
                     )}
                 </Container>
 
-                <Container $isSticky={true}>
+                <StickyContainer>
                     { quote ? (
                         <LogDetails
                             user={quote?.user}
@@ -100,7 +100,7 @@ const SocialFollowingPage = () => {
                         />
                     ) : null}
                     {/* TODO: 날짜가 선택되지 않았을 때 */}
-                </Container>
+                </StickyContainer>
             </Wrapper>
         </>
     )
@@ -114,24 +114,21 @@ const Wrapper = styled.div`
 const Container = styled.div`
     width: 50%;
     min-width: 27.5rem;
-    ${(props) =>
-        props.$isSticky
-            ? css`
-                  position: sticky;
-                  top: 2.5rem;
-                  gap: 0rem;
-              `
-            : css`
-                  gap: 1rem;
-              `}
     margin-bottom: auto;
 
     padding: 0 1rem 0;
+    overflow: hidden;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow: hidden;
+    gap: 1rem;
+`
+
+const StickyContainer = styled(Container)`
+    position: sticky;
+    top: 2.5rem;
+    gap: 0rem;
 `
 
 const CalendarWrapper = styled.div`

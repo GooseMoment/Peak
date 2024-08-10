@@ -78,7 +78,7 @@ const SocialExplorePage = () => {
                     </DailyLogsPreviewContainer>
                 </Container>
 
-                <Container $isSticky={true}>
+                <StickyContainer>
                     {quote && (
                         <LogDetails
                             user={quote?.user}
@@ -87,7 +87,7 @@ const SocialExplorePage = () => {
                             isFollowing={false}
                         />
                     )}
-                </Container>
+                </StickyContainer>
             </Wrapper>
         </>
     )
@@ -101,25 +101,22 @@ const Wrapper = styled.div`
 const Container = styled.div`
     width: 50%;
     min-width: 27.5rem;
-    ${(props) =>
-        props.$isSticky
-            ? css`
-                  /* align-self: flex-start; */
-                  position: sticky;
-                  top: 2.5rem;
-                  gap: 0rem;
-              `
-            : css`
-                  gap: 1rem;
-              `}
     margin-bottom: auto;
 
     padding: 0 1rem 0;
+    overflow: hidden;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow: hidden;
+    gap: 1rem;
+`
+
+const StickyContainer = styled(Container)`
+    /* align-self: flex-start; */
+    position: sticky;
+    top: 2.5rem;
+    gap: 0rem;
 `
 
 const DailyLogsPreviewContainer = styled.div``
