@@ -10,14 +10,14 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const Color = ({ setColor, closeComponent }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.create.color" })
+    const { t } = useTranslation(null, { keyPrefix: "project.color" })
     const theme = useTheme()
 
     const [activeTab, setActiveTab] = useState("basic")
 
     const changeColor = (color) => {
         return () => {
-            setColor(color)
+            setColor({ color })
             closeComponent()
         }
     }

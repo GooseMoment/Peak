@@ -30,7 +30,7 @@ const light = {
     yellow: "#F6CB52",
     green: "#7DF1AF",
     turquoise: "#76C8B1",
-    dark_blue: "#50B99B",
+    dark_blue: "#0E4A84",
 }
 
 const dark = {
