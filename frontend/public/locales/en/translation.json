@@ -201,6 +201,11 @@
         "online": {
             "sync_help": "The values of {{name}} are synced across all your devices."
         },
+        "error": {
+            "code": "!!!",
+            "text": "Something went wrong.",
+            "bottom_text": "Go to the front page"
+        },
         "menus": {
             "title": "Settings",
             "account": "Account",

@@ -202,6 +202,11 @@
         "online": {
             "sync_help": "{{name}} 설정 값은 모든 기기와 동기화 됩니다."
         },
+        "error": {
+            "code": "!!!",
+            "text": "설정에서 문제가 발생했습니다.",
+            "bottom_text": "초기 화면으로 돌아가기"
+        },
         "menus": {
             "title": "설정",
             "account": "계정",

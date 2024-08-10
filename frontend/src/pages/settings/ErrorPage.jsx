@@ -1,19 +1,10 @@
-import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-
-import { toast } from "react-toastify"
+import Error from "@components/errors/ErrorLayout"
+import { useTranslation } from "react-i18next"
 
 const ErrorPage = () => {
-    const navigate = useNavigate()
+    const { t } = useTranslation(null, {keyPrefix: "settings.error"})
 
-    useEffect(() => {
-        toast.error("Error on Settings. Please try again.", {
-            toastId: "errorSettings",
-        })
-        navigate("/")
-    }, [])
-
-    return null
+    return <Error code={t("code")} text={t("text")} bottomText={t("bottom_text")} bottomLinkTo="/app/" />
 }
 
 export default ErrorPage
