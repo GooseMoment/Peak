@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { Suspense, useEffect, useMemo, useState } from "react"
 import { Outlet, useNavigate, useParams } from "react-router-dom"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -6,6 +6,7 @@ import styled, { useTheme } from "styled-components"
 
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
+import ModalLoader from "@components/common/ModalLoader"
 import ModalPortal from "@components/common/ModalPortal"
 import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
@@ -168,7 +169,8 @@ const ProjectPage = () => {
                             setSelectedSortMenuPosition,
                             setIsSortMenuOpen,
                             setIsContextMenuOpen,
-                        )}>
+                        )}
+                    >
                         <SortIcon color={theme.textColor} />
                     </SortIconBox>
                     <FeatherIcon
@@ -226,7 +228,8 @@ const ProjectPage = () => {
                 <ModalPortal
                     closeModal={() => {
                         setIsDrawerCreateOpen(false)
-                    }}>
+                    }}
+                >
                     <DrawerCreate
                         onClose={() => {
                             setIsDrawerCreateOpen(false)
@@ -238,7 +241,8 @@ const ProjectPage = () => {
                 <ModalPortal
                     closeModal={() => {
                         setIsProjectEditOpen(false)
-                    }}>
+                    }}
+                >
                     <ProjectEdit
                         project={project}
                         onClose={() => {
@@ -247,7 +251,9 @@ const ProjectPage = () => {
                     />
                 </ModalPortal>
             )}
-            <Outlet context={[id, project.color]} />
+            <Suspense key="project-page" fallback={<ModalLoader />}>
+                <Outlet context={[id, project.color]} />
+            </Suspense>
         </>
     )
 }
