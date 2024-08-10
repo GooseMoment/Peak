@@ -9,6 +9,8 @@ import TaskBox from "@components/social/logDetails/TaskBox"
 
 import { getDailyLogTasks } from "@api/social.api"
 
+import FeatherIcon from "feather-icons-react"
+
 const getPageFromURL = (url) => {
     if (!url) return null
 
@@ -50,9 +52,24 @@ const DrawerBundle = ({ drawer, isFollowing, selectedDate }) => {
                         />
                     )),
                 )}
+                {hasNextPage && (
+                    <More onClick={() => fetchNextTaskPage()}>
+                        <FeatherIcon icon="chevron-down" />
+                    </More>
+                )}
             </TaskList>
         </Fragment>
     )
 }
+
+const More = styled.div`
+    height: 2em;
+    padding: 0.2em;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`
 
 export default DrawerBundle

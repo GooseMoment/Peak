@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import PageNumberPagination, CursorPagination
 from rest_framework.permissions import AllowAny
 
 from django.http import HttpRequest
@@ -223,9 +223,9 @@ def get_privacy_filter(follower, followee):
     
     return privacyFilter
 
-class DailyLogDrawerPagination(PageNumberPagination):
+class DailyLogDrawerPagination(CursorPagination):
     page_size = 5
-    max_page_size = 5
+    ordering = "order"
     # TODO: due date 찾을 수 있으면 줄이기
 
 class DailyLogDrawerView(generics.GenericAPIView):
@@ -240,6 +240,7 @@ class DailyLogDrawerView(generics.GenericAPIView):
         drawers_queryset = Drawer.objects.filter(privacyFilter).annotate(color=F('project__color')).order_by('order')
         
         page = self.paginate_queryset(drawers_queryset)
+        
         if page is not None:
             serializer = DailyLogDrawerSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)

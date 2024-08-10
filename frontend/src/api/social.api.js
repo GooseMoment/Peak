@@ -91,9 +91,9 @@ export const postQuote = async (date, quote) => {
     return res.data
 }
 
-export const getDailyLogDrawers = async (username, page) => {
+export const getDailyLogDrawers = async (username, cursor) => {
     const res = await client.get(
-        `social/daily/log/details/drawer/@${username}/?page=${page}`,
+        `social/daily/log/details/drawer/@${username}/?cursor=${cursor}`,
     )
 
     return res.data

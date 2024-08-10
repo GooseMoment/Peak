@@ -19,6 +19,7 @@ import {
 
 import queryClient from "@queries/queryClient"
 
+import { ImpressionArea } from "@toss/impression-area"
 import { toast } from "react-toastify"
 
 const getCursorFromURL = (url) => {
@@ -27,14 +28,6 @@ const getCursorFromURL = (url) => {
     const u = new URL(url)
     const cursor = u.searchParams.get("cursor")
     return cursor
-}
-
-const getPageFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const page = u.searchParams.get("page")
-    return page
 }
 
 const SocialFollowingPage = () => {
@@ -81,14 +74,15 @@ const SocialFollowingPage = () => {
         refetch: refetchDrawer,
     } = useInfiniteQuery({
         queryKey: ["daily", "log", "details", "drawer", targetUser],
-        queryFn: (pages) =>
-            getDailyLogDrawers(targetUser, pages.pageParam || 1),
-        initialPageParam: 1,
-        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
+        queryFn: (page) =>
+            getDailyLogDrawers(targetUser, page.pageParam),
+        initialPageParam: "",
+        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
     })
 
     const hasNextPage =
         drawerPage?.pages[drawerPage?.pages?.length - 1].next !== null
+    const isNotificationEmpty = drawerPage?.pages[0]?.results?.length === 0
 
     const saveQuote = (content) => {
         QuoteMutation.mutate({ day: selectedDate, content })
@@ -133,6 +127,17 @@ const SocialFollowingPage = () => {
                             />
                         ))
                     )}
+                    <ImpressionArea
+                        onImpressionStart={() => fetchNextDrawerPage()}
+                        timeThreshold={200}
+                    >
+                        {hasNextPage && "next"}
+                        {!hasNextPage && !isNotificationEmpty && (
+                            <NoMore>{"no_more"}</NoMore>
+                        )}
+                    </ImpressionArea>
+                    
+                    {isNotificationEmpty && <NoMore>{"empty"}</NoMore>}
                 </StickyContainer>
             </Wrapper>
         </>
@@ -173,6 +178,21 @@ const CalendarWrapper = styled.div`
     max-width: 40rem;
     width: 80%;
     max-width: 40rem;
+`
+
+const NoMore = styled.div`
+    box-sizing: border-box;
+
+    border-radius: solid black;
+
+    height: 7em;
+    padding: 1em;
+    margin: 1em;
+    margin-bottom: 3em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 
 const mockNewLogDates = [
