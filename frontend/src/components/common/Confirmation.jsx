@@ -19,7 +19,7 @@ const Confirmation = ({ question, buttons, onClose }) => {
     const [visible, setVisible] = useState(true)
     const [closing, setClosing] = useState(false)
 
-    useStopScroll()
+    useStopScroll(true)
 
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)

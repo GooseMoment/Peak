@@ -1,7 +1,11 @@
 import { useEffect } from "react"
 
-const useStopScroll = () => {
+const useStopScroll = (enabled) => {
     useEffect(() => {
+        if (!enabled) {
+            return
+        }
+
         if (document.body.style.overflow === "hidden") {
             return
         }
