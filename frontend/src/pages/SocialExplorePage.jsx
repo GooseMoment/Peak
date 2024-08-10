@@ -17,6 +17,7 @@ import {
 
 import queryClient from "@queries/queryClient"
 
+import { LoaderCircleFull } from "@/components/common/LoaderCircle"
 import { toast } from "react-toastify"
 
 const SocialExplorePage = () => {
@@ -25,7 +26,7 @@ const SocialExplorePage = () => {
 
     const [selectedUser, setSelectedUser] = useState(null)
 
-    const { data: recommendUsers } = useQuery({
+    const { data: recommendUsers, isPending: isRecommendPending } = useQuery({
         queryKey: ["explore", "recommend", "users"],
         queryFn: () => getExploreFeed(),
         staleTime: 3 * 60 * 60 * 1000,
@@ -64,7 +65,11 @@ const SocialExplorePage = () => {
                 <Container>
                     <SearchBar handleSearch={recommendUsersMutation.mutate} />
                     <DailyLogsPreviewContainer>
-                        {recommendUsers &&
+                        {isRecommendPending ? (
+                            <LoaderCircleWrapper>
+                                <LoaderCircleFull />
+                            </LoaderCircleWrapper>
+                        ) : (
                             Object.values(recommendUsers).map(
                                 (dailyFollowerLog) => (
                                     <LogPreviewBox
@@ -74,7 +79,8 @@ const SocialExplorePage = () => {
                                         setSelectedUser={setSelectedUser}
                                     />
                                 ),
-                            )}
+                            )
+                        )}
                     </DailyLogsPreviewContainer>
                 </Container>
 
@@ -120,5 +126,9 @@ const StickyContainer = styled(Container)`
 `
 
 const DailyLogsPreviewContainer = styled.div``
+
+const LoaderCircleWrapper = styled.div`
+    margin-top: 10em;
+`
 
 export default SocialExplorePage
