@@ -24,11 +24,11 @@ const InteractionBox = ({ parentType, parent }) => {
     })
 
     const parentReactionsMutation = useMutation({
-        mutationFn: ({ action, emojiID }) => {
+        mutationFn: ({ action, emoji }) => {
             if (action === "post") {
-                return postReaction(parentType, parent.id, emojiID)
+                return postReaction(parentType, parent.id, emoji)
             } else if (action === "delete") {
-                return deleteReaction(parentType, parent.id, emojiID)
+                return deleteReaction(parentType, parent.id, emoji)
             }
         },
         onSuccess: () => {
@@ -54,12 +54,12 @@ const InteractionBox = ({ parentType, parent }) => {
         if (pickedEmoji) {
             if (
                 !myReactions.some(
-                    (myReaction) => myReaction.id === pickedEmoji.id,
+                    (myReaction) => myReaction.name === pickedEmoji.name,
                 )
             ) {
                 parentReactionsMutation.mutate({
                     action: "post",
-                    emojiID: pickedEmoji.id,
+                    emoji: pickedEmoji.name,
                 })
             }
             setPickedEmoji(null)
@@ -79,7 +79,7 @@ const InteractionBox = ({ parentType, parent }) => {
                             emojiCount={reaction.counts}
                             isSelected={myReactions.some(
                                 (myReactionEmoji) =>
-                                    myReactionEmoji.id === reaction.emoji.id,
+                                    myReactionEmoji.name === reaction.emoji.name,
                             )}
                             saveReaction={parentReactionsMutation.mutate}
                         />

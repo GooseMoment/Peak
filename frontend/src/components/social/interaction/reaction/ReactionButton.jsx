@@ -2,9 +2,8 @@ import styled from "styled-components"
 
 const ReactionButton = ({ emoji, emojiCount, isSelected, saveReaction }) => {
     const handleReaction = () => {
-        const emojiID = emoji.id
         const action = isSelected ? "delete" : "post"
-        saveReaction({ action, emojiID })
+        saveReaction({ action, emoji:emoji.name })
     }
 
     return (

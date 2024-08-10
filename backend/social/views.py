@@ -282,8 +282,8 @@ class ReactionView(APIView):
     
     def post(self, request: Request, type, id):
         # TODO: Need to check block
-        emoji_id = request.data.get('emoji')
-        emoji = get_object_or_404(Emoji, id=emoji_id)
+        emoji_name = request.data.get('emoji')
+        emoji = get_object_or_404(Emoji, name=emoji_name)
         user = request.user
         
         if type == Reaction.FOR_TASK:
@@ -309,8 +309,8 @@ class ReactionView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def delete(self, request, type, id):
-        emoji_id = request.GET.get('emoji')
-        emoji = get_object_or_404(Emoji, id=emoji_id)
+        emoji_name = request.GET.get('emoji')
+        emoji = get_object_or_404(Emoji, name=emoji_name)
         
         # emoji = Emoji.objects.filter(id=emoji_id).first()
         
