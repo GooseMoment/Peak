@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 
@@ -52,7 +53,7 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = ["display_name", "password", "email"]
 
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     def get_full_name(self):
         return self.id + "|@" + self.username
@@ -67,3 +68,48 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
 
     class Meta:
         db_table = "users"
+
+class EmailVerificationToken(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
+    locale = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_sent_at = models.DateTimeField(null=True, blank=True)
+    verified_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f"EmailVerficationToken for {self.user}"
+    
+    @property
+    def link(self) -> str:
+        return f"{settings.SCHEME}{settings.WEB_HOSTNAME}/sign/verification/?token={self.token.hex}"
+
+    class Meta:
+        db_table = "email_verification_tokens"
+
+class PasswordRecoveryToken(models.Model):
+    token = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f"PasswordRecoveryToken for {self.user}"
+    
+    @property
+    def link(self) -> str:
+        return f"{settings.SCHEME}{settings.WEB_HOSTNAME}/sign/password-recovery/?token={self.token.hex}"
+
+    class Meta:
+        db_table = "password_recovery_tokens"

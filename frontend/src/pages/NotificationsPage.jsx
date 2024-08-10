@@ -49,7 +49,6 @@ const NotificationsPage = () => {
     const {
         data,
         isError,
-        error,
         fetchNextPage,
         isFetching,
         isFetchingNextPage,
@@ -57,7 +56,7 @@ const NotificationsPage = () => {
         queryKey: ["notifications", { types: filters[activeFilter] }],
         queryFn: getNotifications,
         initialPageParam: "",
-        getNextPageParam: (lastPage, pages) => getCursorFromURL(lastPage.next),
+        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
     })
 
     // useInfiniteQuery에서 제공하는 hasNextPage가 제대로 작동 안함. 어째서?

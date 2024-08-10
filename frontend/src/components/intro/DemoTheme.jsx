@@ -3,10 +3,11 @@ import { useMemo, useState } from "react"
 import styled, { ThemeProvider } from "styled-components"
 
 import FilterButtonGroup from "@components/common/FilterButtonGroup"
+import SubSection from "@components/intro/SubSection"
+import SkeletonDrawer from "@components/intro/skeletons/SkeletonDrawer"
+import SkeletonSidebar from "@components/intro/skeletons/SkeletonSidebar"
 
-import SubSection from "./SubSection"
-import SkeletonDrawer from "./skeletons/SkeletonDrawer"
-import SkeletonSidebar from "./skeletons/SkeletonSidebar"
+import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
 import themes from "@assets/themes"
@@ -64,6 +65,10 @@ const Wrapper = styled.div`
     & * {
         transition: background-color 0.25s ${cubicBeizer};
     }
+
+    ${ifTablet} {
+        width: unset;
+    }
 `
 
 const SkeletonFrame = styled.div`
@@ -79,6 +84,15 @@ const SkeletonFrame = styled.div`
     aspect-ratio: 16/9;
 
     background-color: ${(p) => p.theme.backgroundColor};
+
+    ${ifTablet} {
+        height: 16em;
+    }
+
+    ${ifMobile} {
+        height: 15em;
+        aspect-ratio: 4/3;
+    }
 `
 
 const SkeletonPage = styled.div`
@@ -88,6 +102,11 @@ const SkeletonPage = styled.div`
     width: 80%;
 
     padding: 1.5em 3em;
+
+    ${ifMobile} {
+        padding: 1.5em 1em;
+        width: 100%;
+    }
 `
 
 const SkeletonProjectName = styled.div`

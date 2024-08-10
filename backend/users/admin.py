@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User
+from .models import User, EmailVerificationToken
 from api.admin import fieldset_base, readonly_fields_base
 
 # https://docs.djangoproject.com/en/4.2/ref/contrib/admin/#django.contrib.admin.register
@@ -30,4 +30,18 @@ class UserAdmin(admin.ModelAdmin):
             },
         ),
         fieldset_base,
+    ]
+
+@admin.register(EmailVerificationToken)
+class EmailVerificationTokenAdmin(admin.ModelAdmin):
+    ordering = ("-created_at", )
+    search_fields = ("user__username", "user__email", )
+    readonly_fields = ("created_at", "token", )
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ("user", "token", "verified_at", "last_sent_at", "created_at", ),
+            },
+        ),
     ]

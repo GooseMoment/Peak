@@ -28,13 +28,19 @@ const Radio = ({ children, value, name, defaultChecked, disabled }) => {
 }
 
 const Label = styled.label`
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
     margin-top: 1em;
 
     color: ${(p) => (p.$checked ? p.theme.accentColor : p.theme.textColor)};
     font-weight: ${(p) => (p.$checked ? 800 : 400)};
 
     cursor: pointer;
+
+    &:hover {
+        color: ${(p) => p.theme.accentColor};
+    }
 `
 
 const RadioInput = styled.input`

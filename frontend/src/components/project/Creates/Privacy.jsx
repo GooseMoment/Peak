@@ -9,11 +9,11 @@ import publicsvg from "@assets/project/privacy/public.svg"
 import { useTranslation } from "react-i18next"
 
 const Privacy = ({ setPrivacy, closeComponent }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.create.privacy" })
+    const { t } = useTranslation(null, { keyPrefix: "project.privacy" })
 
     const changePrivacy = (privacy) => {
         return () => {
-            setPrivacy(privacy)
+            setPrivacy({ privacy })
             closeComponent()
         }
     }

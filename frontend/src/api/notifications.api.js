@@ -7,39 +7,23 @@ import {
 import getDeviceType from "@utils/getDeviceType"
 
 export const getReminder = async (id) => {
-    try {
-        const res = await client.get(`notifications/reminders/${id}`)
-        return res.data
-    } catch (e) {
-        throw e
-    }
+    const res = await client.get(`notifications/reminders/${id}`)
+    return res.data
 }
 
 export const postReminder = async (reminder) => {
-    try {
-        const res = await client.post(`notifications/reminders/`, reminder)
-        return res.status
-    } catch (e) {
-        throw e
-    }
+    const res = await client.post(`notifications/reminders/`, reminder)
+    return res.status
 }
 
 export const patchReminder = async (id, edit) => {
-    try {
-        const res = await client.patch(`notifications/reminders/${id}`, edit)
-        return res.data
-    } catch (e) {
-        throw e
-    }
+    const res = await client.patch(`notifications/reminders/${id}`, edit)
+    return res.data
 }
 
 export const deleteReminder = async (id) => {
-    try {
-        const res = await client.delete(`notifications/reminders/${id}`)
-        return res.data
-    } catch (e) {
-        throw e
-    }
+    const res = await client.delete(`notifications/reminders/${id}`)
+    return res.data
 }
 
 export const getNotifications = async (query) => {
@@ -47,23 +31,15 @@ export const getNotifications = async (query) => {
     const cursor = query.pageParam
     const types = params.types.types.join("|")
 
-    try {
-        const res = await client.get(
-            `notifications/?types=${types}&cursor=${cursor}`,
-        )
-        return res.data
-    } catch (e) {
-        throw e
-    }
+    const res = await client.get(
+        `notifications/?types=${types}&cursor=${cursor}`,
+    )
+    return res.data
 }
 
 export const getNotification = async (id) => {
-    try {
-        const res = await client.get(`notifications/${id}`)
-        return res.data
-    } catch (e) {
-        throw e
-    }
+    const res = await client.get(`notifications/${id}`)
+    return res.data
 }
 
 export const deleteNotification = async (id) => {
@@ -83,12 +59,8 @@ export const postSubscription = async (subscription) => {
         user_agent: navigator.userAgent,
     }
 
-    try {
-        const res = await client.post(`notifications/subscribe`, data)
-        return res.data
-    } catch (e) {
-        throw e
-    }
+    const res = await client.post(`notifications/subscribe`, data)
+    return res.data
 }
 
 export const deleteSubscription = async (id) => {
@@ -96,16 +68,12 @@ export const deleteSubscription = async (id) => {
         const registration = await navigator.serviceWorker.ready
         const subscription = await registration.pushManager.getSubscription()
         await subscription.unsubscribe()
-    } catch (e) {
+    } catch (_) {
         // ignore errors
     }
 
     setClientSettingsByName("push_notification_subscription", null)
 
-    try {
-        const res = await client.delete(`notifications/subscribe/${id}`)
-        return res.status
-    } catch (e) {
-        throw e
-    }
+    const res = await client.delete(`notifications/subscribe/${id}`)
+    return res.status
 }

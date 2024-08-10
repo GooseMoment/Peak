@@ -1,30 +1,32 @@
 import { useEffect, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
+import { Link, Outlet, useSearchParams } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Brand, { Box as BrandTitle } from "@components/sign/Brand"
 import Showcase from "@components/sign/Showcase"
-import SignForm from "@components/sign/SignForm"
 import generateActivities from "@components/sign/activities"
 
 import { getEmojis } from "@api/social.api"
 
+import { ifTablet } from "@utils/useScreenType"
+
+import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const SignPage = () => {
-    const [searchParams, setSearchParams] = useSearchParams()
+    const { t } = useTranslation(null, { keyPrefix: "sign" })
+    const [searchParams] = useSearchParams()
     const [activities, setActivities] = useState([])
 
     useEffect(() => {
         const flag = searchParams.get("flag")
         switch (flag) {
             case "401":
-                toast.error("Please sign in again.", { toastId: "flag401" })
+                toast.error(t("sign_in_again"), { toastId: "flag401" })
                 break
         }
-        setSearchParams({})
     }, [])
 
     const {
@@ -56,7 +58,7 @@ const SignPage = () => {
                 <Brand />
             </Link>
             <Showcase activities={activities} />
-            <SignForm />
+            <Outlet />
         </Root>
     )
 }
@@ -81,10 +83,8 @@ const Root = styled.div`
         left: 2rem;
     }
 
-    @media screen and (max-width: 800px) {
-        & {
-            display: flex;
-        }
+    ${ifTablet} {
+        display: flex;
 
         ${BrandTitle} {
             color: ${(p) => p.theme.textColor};

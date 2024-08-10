@@ -6,6 +6,8 @@ import Button from "@components/common/Button"
 import FollowButton from "@components/users/FollowButton"
 import FollowsCount from "@components/users/FollowsCount"
 
+import useScreenType, { ifMobile, ifTablet } from "@utils/useScreenType"
+
 import { cubicBeizer } from "@assets/keyframes"
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
@@ -14,17 +16,39 @@ import { useTranslation } from "react-i18next"
 const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
     const { t } = useTranslation(null, { keyPrefix: "users" })
     const [imgLoaded, setImgLoaded] = useState(false)
+    const { isDesktop } = useScreenType()
+
+    const followButton = isMine ? (
+        <a href="#/settings/account">
+            <Button>{t("button_edit_profile")}</Button>
+        </a>
+    ) : (
+        <FollowButton disabled={!user} user={user} />
+    )
 
     useEffect(() => {
         setImgLoaded(false)
     }, [user?.profile_img])
 
+    // TODO: Edit this and Banner style.
+    useEffect(() => {
+        document.body.style.overflowX = "clip"
+        return () => {
+            document.body.style.overflowX = "unset"
+        }
+    }, [])
+
     return (
         <>
             <Banner $headerColor={user?.header_color} />
-            {followingYou?.status === "accepted" && (
-                <FollowsYou>{t("follows_you")}</FollowsYou>
-            )}
+            <OverBanner>
+                {followingYou?.status === "accepted" ? (
+                    <FollowsYou>{t("follows_you")}</FollowsYou>
+                ) : (
+                    <div />
+                )}
+                {!isDesktop && followButton}
+            </OverBanner>
             <Profile>
                 <ProfileImg
                     $display={imgLoaded}
@@ -45,15 +69,7 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
                         <FollowsCount user={user} isPending={isPending} />
                     </Datas>
                 </ProfileTexts>
-                <ProfileButtons>
-                    {isMine ? (
-                        <a href="#/settings/account">
-                            <Button>{t("button_edit_profile")}</Button>
-                        </a>
-                    ) : (
-                        <FollowButton disabled={!user} user={user} />
-                    )}
-                </ProfileButtons>
+                {isDesktop && <ProfileButtons>{followButton}</ProfileButtons>}
             </Profile>
         </>
     )
@@ -70,18 +86,38 @@ const Banner = styled.div`
     transition: background-color 0.25s ${cubicBeizer};
 `
 
-const FollowsYou = styled.div`
+const OverBanner = styled.div`
     position: absolute;
     top: 2em;
 
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: space-between;
+
+    ${ifTablet} {
+        width: calc(100% - 10em);
+    }
+
+    ${ifMobile} {
+        width: calc(100% - 3em);
+    }
+`
+
+const FollowsYou = styled.div`
     font-size: 0.75em;
     font-weight: bold;
+    height: fit-content;
     width: fit-content;
 
     color: ${(p) => p.theme.white};
     background-color: ${(p) => p.theme.black};
     padding: 0.6em 0.75em;
     border-radius: 8px;
+
+    overflow-x: clip;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `
 
 const Profile = styled.div`
@@ -91,6 +127,14 @@ const Profile = styled.div`
 
     display: flex;
     gap: 2em;
+
+    ${ifTablet} {
+        gap: 1em;
+    }
+
+    ${ifMobile} {
+        flex-direction: column;
+    }
 `
 
 const ProfileImg = styled.img`
@@ -104,6 +148,11 @@ const ProfileImg = styled.img`
     opacity: ${(p) => (p.$display ? 1 : 0)};
 
     transition: opcity 0.5s ${cubicBeizer};
+
+    ${ifTablet} {
+        height: 8em;
+        width: 8em;
+    }
 `
 
 const ProfileImgEmpty = styled.div`
@@ -116,6 +165,11 @@ const ProfileImgEmpty = styled.div`
     display: ${(p) => (p.$display ? "unset" : "none")};
 
     ${skeletonBreathingCSS}
+
+    ${ifTablet} {
+        height: 8em;
+        width: 8em;
+    }
 `
 
 const ProfileTexts = styled.div`
@@ -132,7 +186,6 @@ const ProfileTexts = styled.div`
 
 const Names = styled.div`
     color: ${(p) => p.theme.white};
-    text-shadow: 1px 1px 20px #000;
 
     display: flex;
     flex-direction: column;
@@ -143,8 +196,26 @@ const DisplayName = styled.h1`
     color: ${(p) => p.theme.white};
     text-shadow: 1px 1px 10px #000;
 
+    margin-left: -10px;
+    padding-left: 10px;
+
     font-weight: 700;
-    font-size: 2em;
+    font-size: 1.75em;
+
+    max-width: 10em;
+    overflow-x: clip;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    ${ifTablet} {
+        max-width: 7em;
+    }
+
+    ${ifMobile} {
+        color: ${(p) => p.theme.textColor};
+        text-shadow: none;
+        max-width: unset;
+    }
 
     ${(p) =>
         p.$skeleton &&
@@ -155,6 +226,13 @@ const DisplayName = styled.h1`
 `
 
 const Username = styled.div`
+    text-shadow: 1px 1px 20px #000;
+
+    ${ifMobile} {
+        color: ${(p) => p.theme.textColor};
+        text-shadow: none;
+    }
+
     ${(p) =>
         p.$skeleton &&
         css`

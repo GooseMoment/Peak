@@ -1,9 +1,9 @@
 from django.db import models
 
-from api.models import Base
+from api.models import Base, PrivacyMixin
 from users.models import User
 
-class Project(Base):
+class Project(Base, PrivacyMixin):
     INBOX = "inbox"
     REGULAR = "regular"
     GOAL = "goal"

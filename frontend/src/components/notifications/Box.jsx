@@ -9,7 +9,7 @@ import Images from "./Images"
 import { cubicBeizer } from "@assets/keyframes"
 
 const Box = forwardRef(
-    ({ notification, highlight = false, skeleton = false }, ref) => {
+    function BoxInternal({ notification, highlight = false, skeleton = false }, ref) {
         const actionUser =
             notification?.reaction?.user ||
             notification?.peck?.user ||

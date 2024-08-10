@@ -44,6 +44,22 @@
         "loading": "로딩 중",
         "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요 😢",
         "error_load_task": "작업을 불러오지 못했어요 😢",
+        "color": {
+            "title": "색깔 설정",
+            "theme1": "기본",
+            "theme2": "여름"
+        },
+        "privacy": {
+            "title": "공개 범위 설정",
+            "public": "전체공개",
+            "protected": "팔로워공개",
+            "private": "비공개"
+        },
+        "type": {
+            "title": "프로젝트 종류 설정",
+            "regular": "상시 프로젝트",
+            "goal": "목표 프로젝트"
+        },
         "create": {
             "name_placeholder": "이름을 입력하세요",
             "button_add": "추가하기",
@@ -57,26 +73,13 @@
             "drawer_create_no_name": "서랍의 이름을 적어주세요.",
             "task_create_success": "작업 생성에 성공하였습니다.",
             "task_create_error": "작업 생성에 실패하였습니다.",
-            "task_create_no_name": "작업의 이름을 적어주세요.",
-            "color": {
-                "title": "색깔 설정",
-                "theme1": "기본",
-                "theme2": "여름"
-            },
-            "privacy": {
-                "title": "공개 범위 설정",
-                "public": "전체공개",
-                "protected": "팔로워공개",
-                "private": "비공개"
-            },
-            "type": {
-                "title": "프로젝트 종류 설정",
-                "regular": "상시 프로젝트",
-                "goal": "목표 프로젝트"
-            }
+            "task_create_no_name": "작업의 이름을 적어주세요."
         },
         "edit": {
-            "display": "수정"
+            "display": "수정",
+            "name_change_success": "이름을 변경했습니다.",
+            "project_change_error": "프로젝트 변경에 실패했습니다.",
+            "drawer_change_error": "서랍 변경에 실패했습니다."
         },
         "delete": {
             "display": "삭제",
@@ -483,24 +486,44 @@
         "404_error_text": "요청하신 페이지를 찾을 수 없습니다.",
         "404_error_bottom": "이전 화면으로 돌아가기"
     },
+    "email_verification": {
+        "invalid_access": "잘못된 접근입니다.",
+        "verified_title": "인증 완료",
+        "verified": "{{email}} 주소가 확인되었습니다. 이제 로그인할 수 있습니다.",
+        "link_sign": "로그인 하기",
+        "resend_title": "인증 메일 재요청",
+        "resend_other_cases": "만약 이미 인증되었거나, 등록되지 않은 이메일이라면 다른 메일이 전송됩니다.",
+        "resend_known_issues": "Outlook 등의 이메일 서비스에서는 스팸으로 간주되어 전송이 불가합니다. 해당 경우에는 다른 주소로 가입하여 주십시오.",
+        "resend_success": "메일을 전송했습니다. 메일함 또는 스팸함을 확인하세요.",
+        "resend_error_limit": "약 {{minutes}}분 후 다시 시도하세요.",
+        "resend_error_bad_request": "메일 형식이 올바르지 않습니다.",
+        "resend_error_any": "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        "placeholder_email": "이메일 주소 입력",
+        "button_submit": "제출"
+    },
     "sign": {
+        "sign_in_again": "로그아웃 되었습니다. 다시 로그인해주세요.",
         "sign_in": "로그인",
         "sign_in_success": "로그인 성공! 다시 만나서 기뻐요.",
         "sign_in_failed": "로그인 실패. 유저네임과 암호를 다시 확인하세요.",
         "network_error": "문제가 발생했습니다. 네트워크 상황을 확인하세요.",
         "internal_error": "문제가 발생했습니다. 다시 시도해 주세요.",
+        "email_verify_required": "이메일 인증이 아직 진행되지 않았습니다. 메일함 또는 스팸함을 확인해주세요.",
         "loading": "로딩 중",
         "button_sign_in": "로그인",
-        "button_forgot_password": "암호 찾기",
         "button_create_account": "계정 생성",
+        "button_resend_verification": "인증 메일 재전송",
+        "button_forgot_password": "암호 찾기",
         "sign_up": "회원가입",
-        "sign_up_success": "회원가입 완료! 이제 로그인 해주세요.",
         "email": "이메일 주소",
         "password": "암호",
         "username": "사용자 이름",
         "button_sign_up": "가입하기",
         "tos": "'가입하기' 버튼을 누름으로써 <linkToTos>이용약관</linkToTos>에 동의하게 됩니다.",
         "button_already_have_account": "로그인 하기",
+        "link_sign_in": "로그인",
+        "sign_up_completed": "메일 인증 필요",
+        "check_inbox": "이메일 인증 메일이 전송되었습니다. 메일함을 확인하세요.",
         "sign_up_errors": {
             "SIGNUP_NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
             "SIGNUP_SIGNED_IN_USER": "이미 로그인되어 있습니다.",
@@ -514,5 +537,25 @@
             "SIGNUP_INTERNAL_ERROR": "문제가 발생했습니다. 다시 시도해 주세요.",
             "SIGNUP_UNKNOWN_ERROR": "나중에 시도해 주세요."
         }
+    },
+    "password_recovery": {
+        "request_title": "암호를 잊었나요?",
+        "request_description": "암호를 잊은 경우, 암호 재설정 링크를 이메일로 받을 수 있습니다.",
+        "placeholder_email": "이메일 주소 입력",
+        "button_submit": "제출",
+        "request_success": "암호 재설정 메일이 전송되었습니다. 메일함을 확인하세요.",
+        "request_error_limit": "한 시간 후에 다시 시도해주세요.",
+        "request_error_bad_request": "잘못된 요청입니다. 페이지 새로고침 후 다시 시도하세요.",
+        "request_error_any": "오류가 발생했습니다. 네트워크 상황을 확인하세요.",
+        "link_sign_in": "로그인",
+        "recovery_title": "암호 재설정",
+        "recovery_description": "새 암호는 8자 이상이어야 합니다.",
+        "placeholder_password": "새 암호 입력",
+        "placeholder_password_again": "한 번 더 입력",
+        "button_set": "암호 변경",
+        "recovery_success": "암호를 변경했습니다. 새 암호로 로그인하세요.",
+        "recovery_error_password_length": "암호는 8자 이상이어야 합니다.",
+        "recovery_error_password_unmatch": "새 암호가 서로 다릅니다.",
+        "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다."
     }
 }

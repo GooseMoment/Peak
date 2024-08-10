@@ -9,6 +9,8 @@ import SubSection from "@components/intro/SubSection"
 
 import { nextWeek, today, tomorrow, twoWeeksLater, yesterday } from "./todays"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import next_weekIcon from "@assets/project/calendar/next_week.svg"
 import todayIcon from "@assets/project/calendar/today.svg"
 import tomorrowIcon from "@assets/project/calendar/tomorrow.svg"
@@ -58,6 +60,7 @@ const makeSampleTasks = (t) => [
 
 const DemoPlan = () => {
     const { t } = useTranslation(null, { keyPrefix: "intro.section_plan.demo" })
+    const { t: taskT } = useTranslation(null, {keyPrefix: "task"})
 
     const [priority, setPriority] = useState("1")
     const [deadline, setDeadline] = useState("today")
@@ -81,13 +84,13 @@ const DemoPlan = () => {
                             onChange={setPriority}
                         >
                             <Radio value="0">
-                                <Icon src={normal} /> Normal
+                                <Icon src={normal} /> {taskT("priority.normal")}
                             </Radio>
                             <Radio value="1">
-                                <Icon src={important} /> Important
+                                <Icon src={important} /> {taskT("priority.important")}
                             </Radio>
                             <Radio value="2">
-                                <Icon src={critical} /> Critical
+                                <Icon src={critical} /> {taskT("priority.critical")}
                             </Radio>
                         </RadioGroup>
                     </Selection>
@@ -98,16 +101,16 @@ const DemoPlan = () => {
                             onChange={setDeadline}
                         >
                             <Radio value="today">
-                                <Icon src={todayIcon} /> Today
+                                <Icon src={todayIcon} /> {taskT("due.quick.today")}
                             </Radio>
                             <Radio value="tomorrow">
-                                <Icon src={tomorrowIcon} /> Tomorrow
+                                <Icon src={tomorrowIcon} /> {taskT("due.quick.tomorrow")}
                             </Radio>
                             <Radio value="nextWeek">
-                                <Icon src={next_weekIcon} /> Next week
+                                <Icon src={next_weekIcon} /> {taskT("due.quick.next_week")}
                             </Radio>
                             <Radio value="twoWeeksLater">
-                                <Icon src={next_weekIcon} /> Two weeks later
+                                <Icon src={next_weekIcon} /> {taskT("due.quick.next_two_weeks")}
                             </Radio>
                         </RadioGroup>
                     </Selection>
@@ -133,6 +136,11 @@ const DemoPlan = () => {
 const HalfDivider = styled.div`
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+
+    ${ifMobile} {
+        gap: 1em;
+    }
 `
 
 const Selections = styled.div`
@@ -140,18 +148,31 @@ const Selections = styled.div`
     flex-direction: column;
     justify-content: space-between;
     gap: 1em;
+
+    ${ifMobile} {
+        flex-direction: row;
+        justify-content: center;
+        gap: 3em;
+        width: 100%;
+    }
 `
 
-const Selection = styled.div``
+const Selection = styled.div`
+    font-size: 0.9em;
+    white-space: nowrap;
+`
 
 const Icon = styled.img`
     aspect-ratio: 1/1;
     height: 1em;
-    vertical-align: bottom;
 `
 
 const Tasks = styled.div`
     width: 50%;
+
+    ${ifMobile} {
+        width: unset;
+    }
 `
 
 const BlurArea = styled.div`

@@ -1,13 +1,13 @@
 import { useState } from "react"
 
-import styled, { useTheme } from "styled-components"
+import { useMutation } from "@tanstack/react-query"
+import styled from "styled-components"
 
+import Color from "@components/project/Creates/Color"
+import Privacy from "@components/project/Creates/Privacy"
+import Type from "@components/project/Creates/Type"
 import Middle from "@components/project/common/Middle"
 import Title from "@components/project/common/Title"
-import Color from "@components/project/Creates/Color"
-import Type from "@components/project/Creates/Type"
-import Privacy from "@components/project/Creates/Privacy"
-import { getProjectColor, getColorDisplay } from "@components/project/Creates/palettes"
 import { postProject } from "@api/projects.api"
 
 import queryClient from "@queries/queryClient"
@@ -16,13 +16,21 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const ProjectCreate = ({ onClose }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.create" })
-    const theme = useTheme()
+    const { t } = useTranslation(null, { keyPrefix: "project" })
 
-    const [name, setName] = useState('')
-    const [color, setColor] = useState('pink')
-    const [type, setType] = useState("regular")
-    const [privacy, setPrivacy] = useState("public")
+    const [name, setName] = useState("")
+
+    const [newProject, setNewProject] = useState({
+        name: name,
+        color: "DC2E2E",
+        displayColor: "빨강",
+        privacy: "public",
+        type: "regular",
+    })
+
+    const editNewProject = (edit) => {
+        setNewProject(Object.assign(newProject, edit))
+    }
 
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
@@ -35,11 +43,12 @@ const ProjectCreate = ({ onClose }) => {
         {
             id: 1,
             icon: "circle",
-            color: getProjectColor(theme.type, color),
-            display: getColorDisplay(color),
+            color: newProject.color,
+            display: newProject.displayColor,
             component: (
                 <Color
-                    setColor={setColor}
+                    setColor={editNewProject}
+                    setDisplayColor={editNewProject}
                     closeComponent={closeComponent}
                 />
             ),
@@ -47,10 +56,10 @@ const ProjectCreate = ({ onClose }) => {
         {
             id: 2,
             icon: "server",
-            display: t("privacy." + privacy),
+            display: t("privacy." + newProject.privacy),
             component: (
                 <Privacy
-                    setPrivacy={setPrivacy}
+                    setPrivacy={editNewProject}
                     closeComponent={closeComponent}
                 />
             ),
@@ -58,64 +67,70 @@ const ProjectCreate = ({ onClose }) => {
         {
             id: 3,
             icon: "award",
-            display: t("type." + type),
+            display: t("type." + newProject.type),
             component: (
-                <Type setType={setType} closeComponent={closeComponent} />
+                <Type
+                    setType={editNewProject}
+                    closeComponent={closeComponent}
+                />
             ),
         },
     ]
 
-    const makeProject = async (name, color, type) => {
-        try {
-            if (name === "Inbox" || name === "inbox") {
-                toast.error(t("project_create_cannot_use_inbox"))
-                return
-            }
-
-            const edit = {
-                name: name,
-                color: color,
-                type: type,
-            }
-            await postProject(edit)
+    const postMutation = useMutation({
+        mutationFn: (data) => {
+            return postProject(data)
+        },
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["projects"] })
-            toast.success(t("project_create_success"))
+            toast.success(t("create.project_create_success"))
             onClose()
-        } catch (e) {
-            if (name)
-                toast.error(t("project_create_error"), {
+        },
+        onError: () => {
+            if (newProject.name)
+                toast.error(t("create.project_create_error"), {
                     toastId: "project_create_error",
                 })
             else
-                toast.error(t("project_create_no_name"), {
+                toast.error(t("create.project_create_no_name"), {
                     toastId: "project_create_no_name",
                 })
-        }
-    }
+        },
+    })
 
-    const submit = async () => {
-        await makeProject(name, color, type)
+    const submit = () => {
+        editNewProject({ name })
+
+        if (newProject.name === "Inbox" || newProject.name === "inbox") {
+            toast.error(t("create.project_create_cannot_use_inbox"))
+            return
+        }
+
+        postMutation.mutate(newProject)
     }
 
     return (
-        <ProjectBox>
+        <ProjectCreateBox>
             <Title
                 name={name}
                 setName={setName}
+                setFunc={editNewProject}
+                isCreate
                 icon="archive"
                 onClose={onClose}
             />
             <Middle
                 items={items}
+                isCreate
                 submit={submit}
                 isComponentOpen={isComponentOpen}
                 setIsComponentOpen={setIsComponentOpen}
             />
-        </ProjectBox>
+        </ProjectCreateBox>
     )
 }
 
-const ProjectBox = styled.div`
+const ProjectCreateBox = styled.div`
     width: 35em;
     background-color: ${(p) => p.theme.backgroundColor};
     border: solid 1px ${(p) => p.theme.project.borderColor};
