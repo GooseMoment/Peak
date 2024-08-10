@@ -113,8 +113,8 @@ export const getExploreRecommend = async (cursor) => {
     return res.data
 }
 
-export const getExploreSearchResults = async (query) => {
-    const params = new URLSearchParams({ query: query })
+export const getExploreFound = async (query, cursor) => {
+    const params = new URLSearchParams({ query: query, cursor: cursor })
     const res = await client.get(`social/explore/search/?${params.toString()}`)
     return res.data
 }

@@ -12,7 +12,7 @@ import LogDetails from "@components/social/logDetails/LogDetails"
 import {
     getDailyLogTasks,
     getExploreRecommend,
-    getExploreSearchResults,
+    getExploreFound,
     getQuote,
 } from "@api/social.api"
 
@@ -60,7 +60,7 @@ const SocialExplorePage = () => {
         refetch: refetchFound,
     } = useQuery({
         queryKey: ["explore", "found", "users"],
-        queryFn: () => getExploreSearchResults(searchTerm),
+        queryFn: () => getExploreFound(searchTerm),
         enabled: false,
     })
 
