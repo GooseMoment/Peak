@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
-import styled, { css } from "styled-components"
+import styled, { css, useTheme } from "styled-components"
 
 import Button from "@components/common/Button"
+import { getProjectColor } from "@components/project/Creates/palettes"
 import FollowButton from "@components/users/FollowButton"
 import FollowsCount from "@components/users/FollowsCount"
 
@@ -16,6 +17,7 @@ import { useTranslation } from "react-i18next"
 
 const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
     const { t } = useTranslation(null, { keyPrefix: "users" })
+    const theme = useTheme()
     const [imgLoaded, setImgLoaded] = useState(false)
     const { isDesktop } = useScreenType()
 
@@ -41,7 +43,9 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
 
     return (
         <>
-            <Banner $headerColor={user?.header_color} />
+            <Banner
+                $headerColor={getProjectColor(theme.type, user?.header_color)}
+            />
             <OverBanner>
                 {followingYou?.status === "accepted" ? (
                     <FollowsYou>{t("follows_you")}</FollowsYou>
@@ -78,7 +82,7 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
 
 const Banner = styled.div`
     background-color: ${(p) =>
-        p.$headerColor ? "#" + p.$headerColor : p.theme.skeleton.defaultColor};
+        p.$headerColor ? p.$headerColor : p.theme.skeleton.defaultColor};
     height: 15em;
     width: 100%;
 

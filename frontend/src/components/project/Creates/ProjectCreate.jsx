@@ -1,11 +1,12 @@
 import { useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import Color from "@components/project/Creates/Color"
 import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
+import { getProjectColor } from "@components/project/Creates/palettes"
 import Middle from "@components/project/common/Middle"
 import Title from "@components/project/common/Title"
 
@@ -18,13 +19,13 @@ import { toast } from "react-toastify"
 
 const ProjectCreate = ({ onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
+    const theme = useTheme()
 
     const [name, setName] = useState("")
 
     const [newProject, setNewProject] = useState({
         name: name,
-        color: "DC2E2E",
-        displayColor: "빨강",
+        color: "orange",
         privacy: "public",
         type: "regular",
     })
@@ -44,12 +45,11 @@ const ProjectCreate = ({ onClose }) => {
         {
             id: 1,
             icon: "circle",
-            color: newProject.color,
-            display: newProject.displayColor,
+            color: getProjectColor(theme.type, newProject.color),
+            display: t("color." + newProject.color),
             component: (
                 <Color
                     setColor={editNewProject}
-                    setDisplayColor={editNewProject}
                     closeComponent={closeComponent}
                 />
             ),
