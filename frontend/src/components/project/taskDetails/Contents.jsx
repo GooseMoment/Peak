@@ -38,7 +38,6 @@ const Contents = ({ task, setFunc }) => {
         setContent(name.value)
         setIsComponentOpen(true)
     }
-
     const closeComponent = () => {
         setIsComponentOpen(false)
         navigate(`.`)

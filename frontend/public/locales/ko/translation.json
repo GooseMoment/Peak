@@ -39,6 +39,7 @@
     },
     "project": {
         "no_drawer": "+ 버튼을 눌러서 서랍을 추가하세요.",
+        "progress": "진행 상황",
         "button_load_more": "더보기",
         "button_add_task": "새 작업 추가",
         "loading": "로딩 중",

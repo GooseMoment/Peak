@@ -4,22 +4,12 @@ const ToolTip = ({ message, children }) => {
     return (
         <Container>
             {children}
-            <Content className="tooltip">{message}</Content>
+            <ToolTipBox>{message}</ToolTipBox>
         </Container>
     )
 }
 
-const Container = styled.div`
-    position: relative;
-    width: fit-content;
-    height: fit-content;
-
-    &:hover > .tooltip {
-        display: block;
-    }
-`
-
-const Content = styled.div`
+const ToolTipBox = styled.div`
     display: none;
     z-index: 200;
     position: absolute;
@@ -43,6 +33,17 @@ const Content = styled.div`
         bottom: -0.3em;
         left: 50%;
         transform: translate(-50%) rotate(45deg);
+    }
+`
+const Container = styled.div`
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+
+    &:hover {
+        ${ToolTipBox} {
+            display: block;
+        }
     }
 `
 
