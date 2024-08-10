@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react"
 import { NavLink, Outlet } from "react-router-dom"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 import MildButton from "@components/common/MildButton"
 import PageTitle from "@components/common/PageTitle"
@@ -110,13 +110,18 @@ const MenuBox = styled.div`
     margin-bottom: 2em;
 `
 
-const Menu = styled(NavLink)`
-    width: fit-content;
-    border: 1px solid ${(p) => p.theme.textColor};
+const menuStyle = css`
+    border: 1.5px solid ${(p) => p.theme.textColor};
     border-radius: 16px;
     padding: 0.5em 0.75em;
 
+    font-weight: 500;
+
     transition: background-color 0.15s ${cubicBeizer};
+`
+
+const Menu = styled(NavLink)`
+    ${menuStyle}
 
     &:hover {
         background-color: ${(p) => p.theme.secondBackgroundColor};
@@ -129,12 +134,9 @@ const Menu = styled(NavLink)`
 `
 
 const MenuSignOut = styled(MildButton)`
-    width: fit-content;
-    border: 1px solid ${(p) => p.theme.textColor};
-    border-radius: 16px;
-    padding: 0.5em 0.75em;
+    ${menuStyle}
 
-    transition: background-color 0.15s ${cubicBeizer};
+    border-color: ${(p) => p.theme.primaryColors.danger};
 
     color: ${(p) => p.theme.primaryColors.danger};
 
