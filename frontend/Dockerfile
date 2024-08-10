@@ -6,9 +6,6 @@ RUN corepack enable
 ARG VITE_API_BASEURL
 ARG VITE_VAPID_PUBLIC_KEY
 
-ENV VITE_API_BASEURL=$VITE_API_BASEURL
-ENV VITE_VAPID_PUBLIC_KEY=$VITE_VAPID_PUBLIC_KEY
-
 COPY . /frontend
 WORKDIR /frontend
 
@@ -16,6 +13,9 @@ FROM base AS prod-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod 
 
 FROM base AS build
+ENV VITE_API_BASEURL=$VITE_API_BASEURL
+ENV VITE_VAPID_PUBLIC_KEY=$VITE_VAPID_PUBLIC_KEY
+
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 RUN pnpm run build
 
