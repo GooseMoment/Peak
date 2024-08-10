@@ -1,23 +1,18 @@
-import PageTitle from "@components/common/PageTitle"
 import Section, {
     Description,
     Name,
-    Sync,
     Value,
 } from "@components/settings/Section"
 
 import { useTranslation } from "react-i18next"
 
 const Reactions = () => {
-    const { t } = useTranslation(null, { keyPrefix: "settings.reactions" })
+    const { t } = useTranslation("settings", { keyPrefix: "reactions" })
 
     // TODO: use react-query to receive data
 
     return (
         <>
-            <PageTitle>
-                {t("title")} <Sync name={t("title")} />
-            </PageTitle>
             <Section>
                 <Name>{t("favorite_emojis.name")}</Name>
                 <Description>{t("favorite_emojis.description")}</Description>

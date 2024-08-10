@@ -2,7 +2,7 @@ import styled, { css } from "styled-components"
 
 const Input = (props) => {
     const icon = props.icon
-    const inputProps = (({ icon, ...others }) => ({ ...others }))(props) // remove key "icon" from props and clone
+    const inputProps = (({ icon: _, ...others }) => ({ ...others }))(props) // remove key "icon" from props and clone
 
     return (
         <Box>
@@ -21,7 +21,7 @@ const Box = styled.p`
 `
 
 const StyledInput = styled.input`
-    width: 100%;
+    width: ${p => p.$width || "100%"};
     padding: 0.75em 1.25em;
     border: 1px solid ${(p) => p.theme.textColor};
     border-radius: 16px;

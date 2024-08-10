@@ -6,7 +6,10 @@ import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
 
 import { states } from "@assets/themes"
 
+import { createPortal } from "react-dom"
 import Cropper from "react-easy-crop"
+
+const el = document.querySelector("#confirmation")
 
 const ImageCropper = ({
     file,
@@ -21,7 +24,7 @@ const ImageCropper = ({
         setCroppedAreaPixels(croppedAreaPixels)
     }
 
-    return (
+    return createPortal(
         <>
             <Cropper
                 image={file}
@@ -48,7 +51,8 @@ const ImageCropper = ({
                     Apply
                 </Button>
             </StyledButtonGroup>
-        </>
+        </>,
+        el,
     )
 }
 

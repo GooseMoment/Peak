@@ -1,12 +1,15 @@
-import styled, { keyframes } from "styled-components"
+import styled from "styled-components"
 
 import { Meh } from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
 const Error = () => {
+    const { t } = useTranslation("settings", { keyPrefix: "error" })
+
     return (
         <Container>
             <StyledMeh />
-            <Message>Try again.</Message>
+            <Message>{t("text")}</Message>
         </Container>
     )
 }

@@ -19,7 +19,6 @@ pnpm run dev
     -   `utils/`: 유틸성 함수
     -   `main.jsx`: 소스코드 시작 부분
     -   `router.jsx`: 메인 라우터
-    -   `hashRouter.jsx`: 해시 라우터 (현재 settings 관련만 존재)
 
 ## PWA
 

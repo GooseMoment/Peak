@@ -1,5 +1,7 @@
 import styled, { useTheme } from "styled-components"
 
+import { ifMobile } from "@utils/useScreenType"
+
 const RoadSign = ({ text, spacing = 10 }) => {
     const theme = useTheme()
 
@@ -9,7 +11,7 @@ const RoadSign = ({ text, spacing = 10 }) => {
     const shadow = "#68686A"
 
     return (
-        <svg
+        <Svg
             width="356"
             height="258"
             viewBox="0 0 356 258"
@@ -48,9 +50,15 @@ const RoadSign = ({ text, spacing = 10 }) => {
                     </tspan>
                 ))}
             </Text>
-        </svg>
+        </Svg>
     )
 }
+
+const Svg = styled.svg`
+    ${ifMobile} {
+        transform: scale(0.75);
+    }
+`
 
 const Text = styled.text`
     fill: ${(p) => p.theme.textColor};

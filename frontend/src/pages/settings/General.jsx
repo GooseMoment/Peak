@@ -1,6 +1,5 @@
 import { useMemo } from "react"
 
-import PageTitle from "@components/common/PageTitle"
 import Section, { Description, Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import SettingSwitch from "@components/settings/SettingSwitch"
@@ -8,13 +7,12 @@ import SettingSwitch from "@components/settings/SettingSwitch"
 import { useTranslation } from "react-i18next"
 
 const General = () => {
-    const { t } = useTranslation(null, { keyPrefix: "settings.general" })
+    const { t } = useTranslation("settings", { keyPrefix: "general" })
 
     const startpageChoices = useMemo(() => makeStartpageChoices(t), [t])
 
     return (
         <>
-            <PageTitle>{t("title")}</PageTitle>
             <Section>
                 <Name>{t("startpage.name")}</Name>
                 <Description>{t("startpage.description")}</Description>

@@ -19,7 +19,7 @@ const ErrorPage = () => {
     useEffect(() => {
         if (isRouteErrorResponse(error) && error.status === 401) {
             setToken(null)
-            navigate("/sign?flag=401")
+            navigate("/sign/in?flag=401")
         }
     }, [])
 
