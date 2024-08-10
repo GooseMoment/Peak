@@ -23,9 +23,9 @@ const compareDailyLogs = (a, b) => {
 const LogsPreview = ({ logs, selectedUser, setSelectedUser }) => {
     return (
         <LogsPreviewContainer>
-            {logs.sort(compareDailyLogs).map((log, index) => (
+            {logs.sort(compareDailyLogs).map((log) => (
                 <LogPreviewBox
-                    key={index}
+                    key={log.username}
                     log={log}
                     selectedUser={selectedUser}
                     setSelectedUser={setSelectedUser}

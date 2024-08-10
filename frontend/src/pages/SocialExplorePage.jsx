@@ -66,9 +66,9 @@ const SocialExplorePage = () => {
                     <DailyLogsPreviewContainer>
                         {recommendUsers &&
                             Object.values(recommendUsers).map(
-                                (dailyFollowerLog, index) => (
+                                (dailyFollowerLog) => (
                                     <LogPreviewBox
-                                        key={index}
+                                        key={dailyFollowerLog.username}
                                         log={dailyFollowerLog}
                                         selectedUser={selectedUser}
                                         setSelectedUser={setSelectedUser}
