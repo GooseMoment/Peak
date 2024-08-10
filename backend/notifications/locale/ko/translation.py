@@ -9,7 +9,7 @@ translation = {
         },
         Notification.FOR_REACTION: {
             "title": ":{emoji}: @{username}",
-            "body": "RE: {content}",
+            "body": "RE: {parent}",
         },
         Notification.FOR_FOLLOW: {
             "title": "📩 @{username}",
