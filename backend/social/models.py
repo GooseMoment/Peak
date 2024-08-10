@@ -31,7 +31,7 @@ class Peck(Base):
     class Meta:
         db_table = "pecks"
 
-class DailyComment(Base):
+class Quote(Base):
     user = models.ForeignKey(
         User, 
         on_delete=models.CASCADE,
@@ -40,18 +40,18 @@ class DailyComment(Base):
     date = models.DateTimeField(null=True, blank=True)
     
     def __str__(self) -> str:
-        return f"DailyComment of {self.date} by {self.user}"
+        return f"Quote of {self.date} by {self.user}"
     
     class Meta:
-        db_table = "daily_comments"
+        db_table = "quotes"
 
 class Reaction(Base):
     FOR_TASK = "task"
-    FOR_DAILY_COMMENT = "daily_comment"
+    FOR_QUOTE = "quote"
 
     REACTION_TYPE = [
         (FOR_TASK, "For task"),
-        (FOR_DAILY_COMMENT, "For daily comment"),
+        (FOR_QUOTE, "For quote"),
     ]
 
     user = models.ForeignKey(
@@ -65,8 +65,8 @@ class Reaction(Base):
         null=True,
         blank=True,
     )
-    daily_comment = models.ForeignKey(
-        DailyComment,
+    quote = models.ForeignKey(
+        Quote,
         on_delete=models.CASCADE,
         null=True,
         blank=True,
@@ -80,18 +80,18 @@ class Reaction(Base):
     )
 
     def __str__(self) -> str:
-        return f"{self.emoji} by {self.user} → {self.daily_comment or self.task}"
+        return f"{self.emoji} by {self.user} → {self.quote or self.task}"
     
     class Meta:
         db_table = "reactions"
 
 class Comment(Base):
     FOR_TASK = "task"
-    FOR_DAILY_COMMENT = "daily_comment"
+    FOR_QUOTE = "quote"
 
     COMMENT_TYPE = [
         (FOR_TASK, "For task"),
-        (FOR_DAILY_COMMENT, "For daily comment"),
+        (FOR_QUOTE, "For quote"),
     ]
     
     user = models.ForeignKey(
@@ -105,8 +105,8 @@ class Comment(Base):
         null=True,
         blank=True
     )
-    daily_comment = models.ForeignKey(
-        DailyComment,
+    quote = models.ForeignKey(
+        Quote,
         on_delete=models.CASCADE,
         null=True,
         blank=True,
@@ -114,7 +114,7 @@ class Comment(Base):
     comment = models.TextField()
 
     def __str__(self) -> str:
-        return f"Comment by {self.user} → {self.daily_comment or self.task}"
+        return f"Comment by {self.user} → {self.quote or self.task}"
     
     class Meta:
         db_table = "comments"

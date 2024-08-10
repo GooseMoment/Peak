@@ -65,6 +65,12 @@ const TaskDetail = () => {
             queryClient.invalidateQueries({
                 queryKey: ["tasks", { drawerID: task.drawer }],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["drawers", { projectID: projectID }],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["projects", projectID],
+            })
             toast.success(
                 t("delete.task_delete_success", { task_name: task.name }),
             )

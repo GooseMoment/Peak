@@ -1,28 +1,24 @@
 import { useRef, useState } from "react"
 
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import MildButton from "@components/common/MildButton"
-import EmojiModal from "@components/social/EmojiModal"
+import EmojiModal from "@components/social/interaction/reaction/EmojiModal"
 
 import { getEmojis } from "@api/social.api"
 
 import FeatherIcon from "feather-icons-react"
 
-const EmojiPickerButton = ({ pickedEmoji, setPickedEmoji }) => {
+const EmojiPickerButton = ({ setPickedEmoji }) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
     const buttonRef = useRef(null)
 
-    const {
-        data: serverEmojis,
-        isError: emojiError,
-        isFetching,
-    } = useQuery({
+    const { data: serverEmojis, isFetching } = useQuery({
         queryKey: ["emojis"],
         queryFn: () => getEmojis(),
-        staleTime: 60 * 60 * 5 * 1000,
+        staleTime: 5 * 60 * 60 * 1000,
     })
 
     const handleOpenModal = () => {

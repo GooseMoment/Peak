@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
@@ -66,11 +66,6 @@ const Drawer = ({ project, drawer, color }) => {
 
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
 
-    useEffect(() => {
-        setIsContextMenuOpen(false)
-        setIsSortMenuOpen(false)
-    }, [project])
-
     const deleteMutation = useMutation({
         mutationFn: () => {
             return deleteDrawer(drawer.id)
@@ -81,6 +76,9 @@ const Drawer = ({ project, drawer, color }) => {
             )
             queryClient.invalidateQueries({
                 queryKey: ["drawers", { projectID: project.id }],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["projects", project.id],
             })
         },
         onError: () => {

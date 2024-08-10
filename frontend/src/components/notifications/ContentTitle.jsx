@@ -6,7 +6,7 @@ import { ifMobile } from "@utils/useScreenType"
 
 import { skeletonCSS } from "@assets/skeleton"
 
-const ContentTitle = ({ type, actionUser, payload }) => {
+const ContentTitle = ({ type, actionUser, payload, skeleton }) => {
     let title = ""
 
     if (socialTypes.includes(type)) {
@@ -32,7 +32,7 @@ const ContentTitle = ({ type, actionUser, payload }) => {
         title = ""
     }
 
-    return <TitleBox>{title}</TitleBox>
+    return <TitleBox $skeleton={skeleton}>{title}</TitleBox>
 }
 
 const socialTypes = [

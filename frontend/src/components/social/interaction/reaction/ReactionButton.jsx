@@ -1,10 +1,9 @@
 import styled from "styled-components"
 
-const ReactionButton = ({ emoji, isSelected, saveReaction }) => {
+const ReactionButton = ({ emoji, emojiCount, isSelected, saveReaction }) => {
     const handleReaction = () => {
-        const emojiID = emoji[0].id
         const action = isSelected ? "delete" : "post"
-        saveReaction({ action, emojiID })
+        saveReaction({ action, emoji:emoji.name })
     }
 
     return (
@@ -12,8 +11,8 @@ const ReactionButton = ({ emoji, isSelected, saveReaction }) => {
             $bgcolor={isSelected ? "#FFD7C7" : "#F2F2F2"}
             onClick={handleReaction}
         >
-            <Emoji src={emoji[0].img_uri} />
-            <EmojiCounts>{emoji[1]}</EmojiCounts>
+            <Emoji src={emoji.img_uri} />
+            <EmojiCounts>{emojiCount}</EmojiCounts>
         </EmojiBox>
     )
 }
@@ -29,7 +28,7 @@ const EmojiBox = styled.div`
     justify-content: center;
     align-items: center;
 `
-
+// TODO: 여기도 프로필 이미지처험 svg 따로..?
 const Emoji = styled.img`
     margin-left: 0.4em;
     width: 1.3em;
