@@ -68,7 +68,6 @@ const Middle = ({
 }
 
 const ContentsBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -101,7 +100,7 @@ const VLine = styled.div`
 const ContentText = styled.div`
     font-size: 1em;
     color: ${(p) => p.theme.textColor};
-    margin-top: 1.1em;
+    margin-top: 1.3em;
     margin-left: 1.3em;
     text-decoration: none;
 
