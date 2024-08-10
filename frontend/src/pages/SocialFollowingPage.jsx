@@ -142,6 +142,7 @@ const SocialFollowingPage = () => {
 const Wrapper = styled.div`
     display: flex;
     gap: 2rem;
+    gap: 2rem;
 `
 
 const Container = styled.div`
@@ -150,6 +151,7 @@ const Container = styled.div`
     margin-bottom: auto;
 
     padding: 0 1rem 0;
+    overflow: hidden;
     overflow: hidden;
 
     display: flex;
@@ -167,6 +169,8 @@ const StickyContainer = styled(Container)`
 const CalendarWrapper = styled.div`
     margin-left: auto;
     margin-right: auto;
+    width: 80%;
+    max-width: 40rem;
     width: 80%;
     max-width: 40rem;
 `

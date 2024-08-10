@@ -1,11 +1,17 @@
 import styled from "styled-components"
 
 import InteractionBox from "@components/social/interaction/InteractionBox"
-import Quote from "@components/social/logDetails/Quote"
 import DrawerBundle from "@components/social/logDetails/DrawerBundle"
+import Quote from "@components/social/logDetails/Quote"
 
-const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing, selectedDate }) => {
-
+const LogDetails = ({
+    user,
+    quote,
+    logDetails,
+    saveQuote,
+    isFollowing,
+    selectedDate,
+}) => {
     return (
         <>
             <DetailHeader>
@@ -15,7 +21,7 @@ const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing, selectedD
                     saveQuote={saveQuote || null}
                 />
 
-                {(isFollowing && quote.id) && (
+                {isFollowing && quote.id && (
                     <InteractionBox parentType={"quote"} parent={quote} />
                 )}
 
@@ -29,8 +35,13 @@ const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing, selectedD
                         (drawer) =>
                             // Only show when there are task
                             drawer && (
-                                <DrawerBundle key={drawer.id} drawer={drawer} selectedDate={selectedDate} isFollowing={isFollowing}/>
-                            )
+                                <DrawerBundle
+                                    key={drawer.id}
+                                    drawer={drawer}
+                                    selectedDate={selectedDate}
+                                    isFollowing={isFollowing}
+                                />
+                            ),
                     )}
             </DetailBody>
         </>

@@ -25,6 +25,7 @@ const SidebarLink = styled(NavLink)`
 `
 
 export const SidebarLinkLazy = ({
+    onClick,
     to,
     draggable,
     end,
@@ -35,9 +36,10 @@ export const SidebarLinkLazy = ({
 
     const onClickLink = (e) => {
         e.preventDefault()
+        onClick()
 
         startTransition(() => {
-            navigate(navigateTo)
+            navigate(navigateTo || to)
         })
     }
 

@@ -1,8 +1,10 @@
 import { useMemo } from "react"
+import { useNavigate } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
-import styled, { css } from "styled-components"
+import styled, { css, useTheme } from "styled-components"
 
+import { getProjectColor } from "@components/project/Creates/palettes"
 import SidebarLink from "@components/sidebar/SidebarLink"
 
 import { getProjectList } from "@api/projects.api"
@@ -15,7 +17,7 @@ import { skeletonCSS } from "@assets/skeleton"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Middle = ({ collapsed, setSidebarHidden }) => {
+const Middle = ({ collapsed, closeSidebar }) => {
     const {
         data: projects,
         isPending,
@@ -27,13 +29,22 @@ const Middle = ({ collapsed, setSidebarHidden }) => {
     })
 
     const { t } = useTranslation("", { keyPrefix: "sidebar" })
+    const navigate = useNavigate()
+    const theme = useTheme()
     const { isMobile } = useScreenType()
     const items = useMemo(() => getItems(t), [t])
 
     const onClickLink = () => {
         if (isMobile) {
-            setSidebarHidden(true)
+            closeSidebar()
         }
+    }
+
+    const onClickSocial = (e) => {
+        e.preventDefault()
+
+        onClickLink()
+        navigate("/app/social/following")
     }
 
     const onClickErrorBox = () => {
@@ -50,12 +61,38 @@ const Middle = ({ collapsed, setSidebarHidden }) => {
                     end={item.end}
                     onClick={onClickLink}
                 >
-                    <ItemBox $collapsed={collapsed} key={item.name}>
+                    <ItemBox $collapsed={collapsed}>
                         <FeatherIcon icon={item.icon} />
                         {collapsed ? null : item.name}
                     </ItemBox>
                 </SidebarLink>
             ))}
+
+            <SidebarLink
+                to="social"
+                draggable="false"
+                key="social"
+                end={false}
+                onClick={onClickSocial}
+            >
+                <ItemBox $collapsed={collapsed}>
+                    <FeatherIcon icon="users" />
+                    {collapsed ? null : t("social")}
+                </ItemBox>
+            </SidebarLink>
+
+            <SidebarLink
+                to="projects"
+                draggable="false"
+                key="projects"
+                onClick={onClickLink}
+                end
+            >
+                <ItemBox $collapsed={collapsed}>
+                    <FeatherIcon icon="archive" />
+                    {collapsed ? null : t("projects")}
+                </ItemBox>
+            </SidebarLink>
 
             <ProjectItemsContainer
                 $collapsed={collapsed}
@@ -86,7 +123,10 @@ const Middle = ({ collapsed, setSidebarHidden }) => {
                         <ProjectItemBox $collapsed={collapsed}>
                             <FeatherIcon
                                 icon="circle"
-                                fill={`#` + project.color}
+                                fill={getProjectColor(
+                                    theme.type,
+                                    project.color,
+                                )}
                             />
                             {!collapsed && project.name}
                         </ProjectItemBox>
@@ -104,8 +144,6 @@ const getItems = (t) => [
     { icon: "home", name: t("home"), to: "home", end: true },
     { icon: "bell", name: t("notifications"), to: "notifications", end: false },
     { icon: "calendar", name: t("today"), to: "today", end: false },
-    { icon: "users", name: t("social"), to: "social", end: false },
-    { icon: "archive", name: t("projects"), to: "projects", end: true },
 ]
 
 export const MiddleBox = styled.div`

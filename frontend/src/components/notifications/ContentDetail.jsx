@@ -10,10 +10,14 @@ import { skeletonCSS } from "@assets/skeleton"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 
-const ContentDetail = ({ type, payload, actionUser }) => {
+const ContentDetail = ({ type, payload, actionUser, skeleton }) => {
     const { t } = useTranslation(null, { keyPrefix: "notifications" })
     const locale = useClientLocale()
     const tz = useClientTimezone()
+
+    if (skeleton) {
+        return <DetailBox $skeleton />
+    }
 
     switch (type) {
         case "task_reminder":

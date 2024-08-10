@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { Suspense, useEffect, useMemo, useState } from "react"
 import { Outlet, useNavigate, useParams } from "react-router-dom"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -6,11 +6,14 @@ import styled, { useTheme } from "styled-components"
 
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
+import ModalLoader from "@components/common/ModalLoader"
 import ModalPortal from "@components/common/ModalPortal"
 import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import DrawerCreate from "@components/project/Creates/DrawerCreate"
+import { getProjectColor } from "@components/project/Creates/palettes"
+import Progress from "@components/project/common/Progress"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
@@ -147,7 +150,7 @@ const ProjectPage = () => {
     return (
         <>
             <TitleBox>
-                <PageTitle $color={"#" + project.color}>
+                <PageTitle $color={getProjectColor(theme.type, project.color)}>
                     {project.name}
                 </PageTitle>
                 <Icons>
@@ -180,6 +183,9 @@ const ProjectPage = () => {
                     />
                 </Icons>
             </TitleBox>
+            {project.type === "goal" && (
+                <Progress project={project} drawers={drawers} />
+            )}
             {drawers && drawers.length === 0 ? (
                 <NoDrawerText>{t("no_drawer")}</NoDrawerText>
             ) : (
@@ -188,7 +194,7 @@ const ProjectPage = () => {
                         key={drawer.id}
                         project={project}
                         drawer={drawer}
-                        color={project.color}
+                        color={getProjectColor(theme.type, project.color)}
                     />
                 ))
             )}
@@ -245,7 +251,9 @@ const ProjectPage = () => {
                     />
                 </ModalPortal>
             )}
-            <Outlet context={[id, project.color]} />
+            <Suspense key="project-page" fallback={<ModalLoader />}>
+                <Outlet context={[id, project.color]} />
+            </Suspense>
         </>
     )
 }

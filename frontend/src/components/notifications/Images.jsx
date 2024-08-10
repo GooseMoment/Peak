@@ -6,14 +6,14 @@ import { skeletonCSS } from "@assets/skeleton"
 import FeatherIcon from "feather-icons-react"
 
 const Images = ({ profile_img, project_color, reaction, skeleton = false }) => {
-    const emojiURL = reaction?.emoji?.img_uri
+    const emojiURL = reaction?.emoji?.img
 
     return (
         <Container>
             {skeleton && <ProfileImgSkeleton />}
             {profile_img && <ProfileImg src={profile_img} />}
             {project_color && (
-                <TaskReminderIconBox $color={"#" + project_color}>
+                <TaskReminderIconBox $color={project_color}>
                     <FeatherIcon icon="clock" />
                 </TaskReminderIconBox>
             )}

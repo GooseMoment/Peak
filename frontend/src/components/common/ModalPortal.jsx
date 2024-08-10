@@ -26,7 +26,7 @@ const ModalPortal = ({
         ? useDelayUnmount(isOpen, 100, closeModal)
         : true
 
-    useStopScroll()
+    useStopScroll(true)
 
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)

@@ -18,6 +18,12 @@ const Task = ({ task, color }) => {
             queryClient.invalidateQueries({
                 queryKey: ["tasks", { drawerID: task.drawer }],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["drawers", { projectID: task.project_id }],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["project", task.project_id],
+            })
         },
     })
 

@@ -1,12 +1,10 @@
-import { Suspense, useMemo, useState } from "react"
+import { Suspense, useMemo } from "react"
 import { NavLink, Outlet } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
-import MildButton from "@components/common/MildButton"
 import PageTitle from "@components/common/PageTitle"
-import ConfirmationSignOut from "@components/settings/ConfirmationSignOut"
 
 import { cubicBeizer } from "@assets/keyframes"
 
@@ -20,13 +18,6 @@ const SettingsPage = () => {
 
     const menuItems = useMemo(() => getMenuItems(t), [t])
 
-    const [isSignOutConfirmationOpen, setSignOutConfirmationOpen] =
-        useState(false)
-
-    const openSignOutConfirmation = () => {
-        setSignOutConfirmationOpen(true)
-    }
-
     return (
         <>
             <PageTitle>{t("title")}</PageTitle>
@@ -39,19 +30,10 @@ const SettingsPage = () => {
                         </Menu>
                     )
                 })}
-                <MenuSignOut onClick={openSignOutConfirmation} key="sign-out">
-                    <FeatherIcon icon="log-out" />
-                    {t("sign_out")}
-                </MenuSignOut>
             </MenuBox>
-            <Suspense fallback={<LoaderCircleFull />}>
+            <Suspense key="settings-page" fallback={<LoaderCircleFull />}>
                 <Outlet />
             </Suspense>
-            {isSignOutConfirmationOpen && (
-                <ConfirmationSignOut
-                    onClose={() => setSignOutConfirmationOpen(false)}
-                />
-            )}
         </>
     )
 }
@@ -133,18 +115,6 @@ const Menu = styled(NavLink)`
     &.active {
         color: ${(p) => p.theme.black};
         background-color: ${(p) => p.theme.primaryColors.success};
-    }
-`
-
-const MenuSignOut = styled(MildButton)`
-    ${menuStyle}
-
-    border-color: ${(p) => p.theme.primaryColors.danger};
-
-    color: ${(p) => p.theme.primaryColors.danger};
-
-    &:hover {
-        background-color: ${(p) => p.theme.secondBackgroundColor};
     }
 `
 

@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom"
 
-import styled, { css } from "styled-components"
+import styled, { css, useTheme } from "styled-components"
 
+import { getProjectColor } from "@components/project/Creates/palettes"
 import { Section, SectionTitle } from "@components/users/Section"
 
 import { skeletonCSS } from "@assets/skeleton"
@@ -10,6 +11,7 @@ import { useTranslation } from "react-i18next"
 
 const ProjectList = ({ projects, isMine, isPending }) => {
     const { t } = useTranslation(null, { keyPrefix: "users" })
+    const theme = useTheme()
 
     return (
         <Section>
@@ -22,7 +24,12 @@ const ProjectList = ({ projects, isMine, isPending }) => {
                 {projects?.map((project) => {
                     const projectCompo = (
                         <Project key={project.id}>
-                            <Circle $color={"#" + project.color} />{" "}
+                            <Circle
+                                $color={getProjectColor(
+                                    theme.type,
+                                    project.color,
+                                )}
+                            />{" "}
                             <Name>{project.name}</Name>
                         </Project>
                     )
@@ -34,8 +41,7 @@ const ProjectList = ({ projects, isMine, isPending }) => {
                     return (
                         <Link
                             to={isMine && `/app/projects/${project.id}`}
-                            key={project.id}
-                        >
+                            key={project.id}>
                             {projectCompo}
                         </Link>
                     )
