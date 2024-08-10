@@ -15,7 +15,7 @@ const DrawerFolder = ({ project, changeDrawer }) => {
             <ItemBox
                 onClick={
                     project.type === "inbox"
-                        ? changeDrawer(project.drawers[0].id)
+                        ? changeDrawer(project.drawers[0].id, project.drawers[0].name, project.name)
                         : () => setCollapsed((prev) => !prev)
                 }>
                 <Circle $color={getProjectColor(theme.type, project.color)} />
@@ -29,7 +29,7 @@ const DrawerFolder = ({ project, changeDrawer }) => {
                     project.drawers.map((drawer) => (
                         <ItemBox
                             key={drawer.id}
-                            onClick={changeDrawer(drawer.id)}>
+                            onClick={changeDrawer(drawer.id, drawer.name, project.name)}>
                             <FeatherIcon icon="arrow-right" />
                             <ItemText $is_project={false}>
                                 {drawer.name}

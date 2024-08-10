@@ -21,9 +21,9 @@ const Drawer = ({ setFunc, closeComponent }) => {
         queryFn: () => getProjectList(),
     })
 
-    const changeDrawer = (drawerId) => {
+    const changeDrawer = (drawerId, drawerName, projectName) => {
         return async () => {
-            setFunc({ drawer: drawerId })
+            setFunc({ drawer: drawerId, drawer_name: drawerName, project_name: projectName })
             closeComponent()
         }
     }
