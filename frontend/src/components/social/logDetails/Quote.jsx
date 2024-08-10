@@ -6,6 +6,7 @@ import styled from "styled-components"
 import SimpleProfile from "@components/social/common/SimpleProfile"
 
 import { getMe } from "@api/users.api"
+import { getCurrentUsername } from "@/api/client"
 
 const Quote = ({ user, quote, saveQuote }) => {
     const [inputState, setInputState] = useState(false)
@@ -15,14 +16,11 @@ const Quote = ({ user, quote, saveQuote }) => {
         setContent(quote.content)
         setInputState(false)
     }, [quote])
-    
-    const { data: me } = useQuery({
-        queryKey: ["users", "me"],
-        queryFn: () => getMe(),
-    })
+
+    const me = getCurrentUsername()
 
     const handleInputState = () => {
-        if (quote.user === me) setInputState(true)
+        if (quote.user.username === me) setInputState(true)
         else setInputState(false)
     }
 
@@ -59,7 +57,7 @@ const Quote = ({ user, quote, saveQuote }) => {
                     />
                 ) : quote.content ? (
                     <Content>{'"' + quote.content + '"'}</Content>
-                ) : quote.user === me ? (
+                ) : quote.user.username === me ? (
                     <Content $color="#A4A4A4" $fontstyle="italic">
                         {"Write your daily comments"}
                     </Content>
