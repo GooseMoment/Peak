@@ -9,7 +9,8 @@ translations = {
 }
 
 def get_translations(locale: str):
-    if locale in translations:
-        return translations[locale]
-    
+    for code in translations.keys():
+        if locale.startswith(code):
+            return translations[code]
+
     return translations[settings.LANGUAGE_CODE]
