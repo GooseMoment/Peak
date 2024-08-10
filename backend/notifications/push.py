@@ -49,12 +49,14 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
         case Notification.FOR_REACTION:
             parent: str = ""
 
-            if notification.reaction.parent_type == Reaction.FOR_DAILY_COMMENT:
-                related_user = notification.reaction.daily_comment.user
-                parent = notification.reaction.daily_comment.content
+            if notification.reaction.parent_type == Reaction.FOR_QUOTE:
+                related_user = notification.reaction.quote.user
+                parent = notification.reaction.quote.content
             else:
                 related_user = notification.reaction.task.user
                 parent = notification.reaction.task.name
+            
+            print("parent:", parent)
 
             t = t[Notification.FOR_REACTION]
             data["title"] = t["title"].format(emoji=notification.reaction.emoji.name, username=related_user.username)
@@ -83,8 +85,8 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
             related_user = notification.comment.user
             parent: str = ""
 
-            if notification.comment.parent_type == Comment.FOR_DAILY_COMMENT:
-                parent = notification.comment.daily_comment.content
+            if notification.comment.parent_type == Comment.FOR_QUOTE:
+                parent = notification.comment.quote.content
             else:
                 parent = notification.comment.task.name
 

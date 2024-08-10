@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from ._private import (
     create_users, create_projects, create_drawers, create_tasks,
-    create_pecks, create_comments, create_daily_comments, create_emojis,
+    create_pecks, create_comments, create_quotes, create_emojis,
     create_reactions, create_followings, create_blocks,
 )
 
@@ -94,9 +94,9 @@ class Command(BaseCommand):
             "DailyComment를 생성합니다...", ending=" ",
         )
         stdout.flush()
-        daily_comments = create_daily_comments(users)
+        quotes = create_quotes(users)
         self.stdout.write(
-            self.style.SUCCESS(f"{len(daily_comments)}개 [OK]")
+            self.style.SUCCESS(f"{len(quotes)}개 [OK]")
         )
 
         self.stdout.write(
@@ -112,7 +112,7 @@ class Command(BaseCommand):
             "Reaction을 생성합니다...", ending=" ",
         )
         stdout.flush()
-        reactions = create_reactions(users, tasks, daily_comments, emojis)
+        reactions = create_reactions(users, tasks, quotes, emojis)
         self.stdout.write(
             self.style.SUCCESS(f"{len(reactions)}개 [OK]")
         )
