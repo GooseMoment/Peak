@@ -1,10 +1,10 @@
 import { NavLink } from "react-router-dom"
 
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 
 import { cubicBeizer } from "@assets/keyframes"
 
-const sidebarStyle = css`
+const SidebarLink = styled(NavLink)`
     text-decoration: none;
     color: inherit;
     border-radius: 10px;
@@ -21,14 +21,6 @@ const sidebarStyle = css`
         color: ${(p) => p.theme.sidebar.hoverColor};
         background-color: ${(p) => p.theme.sidebar.hoverBackgroundColor};
     }
-`
-
-export const SidebarA = styled.a`
-    ${sidebarStyle}
-`
-
-const SidebarLink = styled(NavLink)`
-    ${sidebarStyle}
 `
 
 export default SidebarLink
