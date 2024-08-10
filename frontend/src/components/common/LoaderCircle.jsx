@@ -22,4 +22,29 @@ const LoaderCircle = styled.div`
     animation: ${spin} 1s linear infinite;
 `
 
+export const LoaderCircleBold = styled(LoaderCircle)`
+    width: 2em;
+    opacity: 1;
+    border-width: 3px;
+`
+
+const FullContainer = styled.div`
+    width: 100%;
+    height: 100%;
+
+    box-sizing: content-box;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+export const LoaderCircleFull = () => {
+    return (
+        <FullContainer>
+            <LoaderCircleBold />
+        </FullContainer>
+    )
+}
+
 export default LoaderCircle
