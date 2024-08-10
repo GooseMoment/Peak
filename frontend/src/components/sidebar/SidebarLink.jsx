@@ -37,7 +37,7 @@ export const SidebarLinkLazy = ({
         e.preventDefault()
 
         startTransition(() => {
-            navigate(navigateTo)
+            navigate(navigateTo || to)
         })
     }
 

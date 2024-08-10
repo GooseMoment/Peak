@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
 
-import SidebarLink, { SidebarLinkLazy } from "@components/sidebar/SidebarLink"
+import { SidebarLinkLazy } from "@components/sidebar/SidebarLink"
 
 import { getMe } from "@api/users.api"
 
@@ -45,12 +45,12 @@ const Footer = ({ collapsed }) => {
             {isError && <MeProfile />}
 
             {user && (
-                <SidebarLink to={`users/@${user.username}`} draggable="false">
+                <SidebarLinkLazy to={`users/@${user.username}`} draggable="false">
                     <MeProfile>
                         <MeProfileImg src={user.profile_img} />
                         {!collapsed && <Username>{user.username}</Username>}
                     </MeProfile>
-                </SidebarLink>
+                </SidebarLinkLazy>
             )}
 
             {!collapsed && (

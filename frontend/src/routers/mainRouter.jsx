@@ -1,3 +1,4 @@
+import { lazy } from "react"
 import { createBrowserRouter, redirect } from "react-router-dom"
 
 import settingsChildren from "@routers/settingsChildren"
@@ -18,6 +19,8 @@ import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement
 
 import { getToken } from "@api/client"
 import { signOut } from "@api/users.api"
+
+const UserPage = lazy(() => import("@pages/UserPage"))
 
 const redirectIfSignedIn = () => {
     if (getToken()) {
@@ -207,12 +210,7 @@ const routes = [
             },
             {
                 path: "users/:username",
-                async lazy() {
-                    const { default: UserPage } = await import(
-                        "@pages/UserPage"
-                    )
-                    return { Component: UserPage }
-                },
+                element: <UserPage />,
             },
             {
                 path: "settings",
