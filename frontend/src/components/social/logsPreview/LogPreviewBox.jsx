@@ -1,6 +1,7 @@
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import SimpleProfile from "@components/social/common/SimpleProfile"
+import { getProjectColor } from "@components/project/Creates/palettes"
 
 import { DateTime } from "luxon"
 
@@ -11,6 +12,8 @@ const putEllipsis = (text, maxLength) => {
 }
 
 const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
+    const theme = useTheme()
+
     if(!log) return null
 
     const handleSelect = () => {
@@ -20,8 +23,8 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
     const setRingColor = () => {
         return log.recent_task
             ? log.recent_task.is_read
-                ? "A4A4A4"
-                : log.recent_task.project_color
+                ? "#A4A4A4"
+                : getProjectColor(theme.type, log.recent_task.project_color)
             : null
     }
 
