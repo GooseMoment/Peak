@@ -200,38 +200,47 @@ def post_quote(request: Request, day):
     
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-class DailyLogsDetailsPagination(PageNumberPagination):
+def get_privacy_filter(follower, followee):
+    if follower == followee:
+        privacyFilter = Q()
+    
+    else:
+        is_follower = Following.objects.filter(
+            follower=follower,
+            followee=followee,
+            status=Following.ACCEPTED
+        ).exists()
+        
+        if is_follower:
+            privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(privacy=PrivacyMixin.FOR_PROTECTED)
+        else:
+            privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
+    
+    privacyFilter &= Q(user=followee)
+    
+    return privacyFilter
+
+class DailyLogDrawerPagination(PageNumberPagination):
     page_size = 10
     max_page_size = 10
+    # TODO: due date 찾을 수 있으면 줄이기
 
-class DailyLogDetailsView(generics.GenericAPIView):
+class DailyLogDrawerView(generics.GenericAPIView):
     
-    pagination_class = DailyLogsDetailsPagination
+    pagination_class = DailyLogDrawerPagination
     
     def get(self, request, followee, day):
         followeeUser = get_object_or_404(User, username=followee)
 
-        is_follower = Following.objects.filter(
-            follower=request.user,
-            followee=followeeUser,
-            status=Following.ACCEPTED
-        ).exists()
-
-        if request.user.username == followee:   # is me
-            privacyFilter = Q()
-        elif is_follower:   # is follower
-            privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(privacy=PrivacyMixin.FOR_PROTECTED)
-        else:
-            privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
-        # TODO: need to check block
-
-        privacyFilter &= Q(user=followeeUser)
+        privacyFilter = get_privacy_filter(request.user, followeeUser)
 
         day_min = datetime.fromisoformat(day)
         day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+        day_range = (day_min, day_max)
 
-        tasksFilterForCompleted = Q(completed_at__range=(day_min, day_max))
-        tasksFilterForUncompleted = Q(completed_at=None)
+        tasksFilterForCompleted = Q(completed_at__range=day_range)
+        tasksFilterForUncompleted = Q(completed_at=None) & Q(assigned_at__range=day_range)
+        # TODO: ( | Q(due_datetime__range=day_range))
         tasksFilter = privacyFilter & (tasksFilterForCompleted | tasksFilterForUncompleted)
 
         # TODO: order of tasks
@@ -247,7 +256,10 @@ class DailyLogDetailsView(generics.GenericAPIView):
 
         serializer = DailyLogDetailsSerializer(drawers_queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
+class DailyLogTaskView():
+    pass
+
 def get_following_feed(request: HttpRequest, date):
     pass
 
