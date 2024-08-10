@@ -42,9 +42,8 @@ const ContentDetail = ({ type, payload, actionUser }) => {
                     </DetailBox>
                 )
             } else {
-                // TODO: replace daily_comment to quote
                 const displayDate = getDisplayDateFromQuote(
-                    payload?.daily_comment,
+                    payload?.quote,
                     locale,
                     tz,
                 )
@@ -75,7 +74,7 @@ const ContentDetail = ({ type, payload, actionUser }) => {
             } else {
                 // TODO: change to payload?.quote
                 const displayDate = getDisplayDateFromQuote(
-                    payload?.daily_comment,
+                    payload?.quote,
                     locale,
                     tz,
                 )
