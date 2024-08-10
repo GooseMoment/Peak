@@ -103,6 +103,8 @@ const BarChartBox = styled.div`
     transition: transform 0.4s ${cubicBeizer};
     cursor: pointer;
 
+    z-index: 1;
+
     ${(props) =>
         props.$isCompleted &&
         css`
@@ -128,6 +130,7 @@ const BarChartBox = styled.div`
 
     &:hover {
         transform: scale(1.05);
+        z-index: 2;
 
         ${PercentText} {
             visibility: visible;
