@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { startTransition, useEffect, useState } from "react"
 
 import { useQuery } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
@@ -49,7 +49,9 @@ const Footer = ({ collapsed, closeSidebar }) => {
 
     const openSignOutConfirmation = (e) => {
         e.preventDefault()
-        setSignOutConfirmationOpen(true)
+        startTransition(() => {
+            setSignOutConfirmationOpen(true)
+        })
     }
 
     return (
