@@ -40,11 +40,11 @@ const Color = ({ setColor, closeComponent }) => {
                 ))}
             </TabBox>
             {palettes[activeTab]?.map((palette) => (
-                <ItemBlock key={palette.display}>
+                <ItemBlock key={palette}>
                     <FeatherIcon
                         icon="circle"
-                        fill={getProjectColor(theme.type, palette.color)}
-                        onClick={changeColor(palette.color)}
+                        fill={getProjectColor(theme.type, palette)}
+                        onClick={changeColor(palette)}
                     />
                 </ItemBlock>
             ))}
