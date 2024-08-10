@@ -10,7 +10,7 @@ const Error = ({
     bottomText,
     bottomLinkTo,
     bottomA = false,
-    height = "100vh",
+    height = "100dvh",
 }) => {
     return (
         <Container $height={height}>

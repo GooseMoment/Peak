@@ -32,7 +32,7 @@ const IntroPage = () => {
         <>
             <Nav>
                 <Brand />
-                <Link to="sign">
+                <Link to="/sign/in">
                     <Button>{t("section_top.button_sign_in")}</Button>
                 </Link>
             </Nav>
@@ -42,7 +42,7 @@ const IntroPage = () => {
                     <br />
                     {t("section_top.title2")}
                 </TopTitle>
-                <Link to="sign">
+                <Link to="/sign/up">
                     <TopHeroButton>
                         {t("section_top.button_start")}
                     </TopHeroButton>

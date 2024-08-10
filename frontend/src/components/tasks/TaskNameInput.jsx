@@ -4,9 +4,8 @@ import styled from "styled-components"
 
 import TaskCircle from "../tasks/TaskCircle"
 
-import notify from "@utils/notify"
-
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const TaskNameInput = ({
     task,
@@ -28,14 +27,14 @@ const TaskNameInput = ({
         setNewTaskName(newName)
     }
 
-    const changeTaskName = async (name) => {
+    const changeTaskName = (name) => {
         setFunc({ name })
     }
 
-    const onEnter = async (e) => {
+    const onEnter = (e) => {
         if (e.key === "Enter") {
             changeTaskName(newTaskName)
-            notify.success(t("name_change_success"))
+            toast.success(t("name_change_success"))
         }
     }
 
