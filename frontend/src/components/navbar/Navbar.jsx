@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom"
 
 import styled from "styled-components"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import { Bell, Calendar, Menu, PlusCircle, Users } from "feather-icons-react"
 import { toast } from "react-toastify"
 
@@ -47,7 +49,6 @@ const Frame = styled.nav`
     right: 0;
     bottom: 0;
 
-    display: flex;
     justify-content: space-between;
     align-items: center;
 
@@ -62,6 +63,12 @@ const Frame = styled.nav`
     background-color: ${(p) => p.theme.navbar.backgroundColor};
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+
+    display: none;
+
+    ${ifMobile} {
+        display: flex;
+    }
 `
 
 const Item = styled.div`

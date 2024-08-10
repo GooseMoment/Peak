@@ -13,7 +13,7 @@ import FeatherIcon from "feather-icons-react"
 
 const autoCollapseWidth = WIDTH_TABLET
 
-const Header = ({ collapsed, setCollapsed, setSidebarHidden }) => {
+const Header = ({ collapsed, setCollapsed, closeSidebar }) => {
     const screenSize = useScreenSize()
     const { isMobile } = useScreenType()
     const previousScreenSize = useRef(screenSize)
@@ -61,7 +61,7 @@ const Header = ({ collapsed, setCollapsed, setSidebarHidden }) => {
         <header>
             <ButtonContainer $collapsed={collapsed}>
                 {isMobile ? (
-                    <CollapseButton onClick={() => setSidebarHidden(true)}>
+                    <CollapseButton onClick={closeSidebar}>
                         <FeatherIcon icon="x" />
                     </CollapseButton>
                 ) : (
