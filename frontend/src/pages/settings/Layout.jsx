@@ -1,11 +1,11 @@
 import { useMemo } from "react"
-import { Outlet } from "react-router-dom"
+import { NavLink, Outlet } from "react-router-dom"
 
 import styled from "styled-components"
 
-import { ItemBox, MiddleBox } from "@components/sidebar/Middle"
-import { SidebarBox } from "@components/sidebar/Sidebar"
-import SidebarLink from "@components/sidebar/SidebarLink"
+import PageTitle from "@components/common/PageTitle"
+
+import { cubicBeizer } from "@assets/keyframes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -19,29 +19,17 @@ const Layout = () => {
 
     return (
         <>
-            <Sidebar>
-                <MiddleBox>
-                    {menuItems.map((menuItem) => (
-                        <SidebarLink
-                            key={menuItem.to}
-                            to={pathRoot + menuItem.to}
-                        >
-                            <ItemBox>
-                                <FeatherIcon icon={menuItem.icon} />
-                                {menuItem.display}
-                            </ItemBox>
-                        </SidebarLink>
-                    ))}
-                </MiddleBox>
-                <FooterBox>
-                    <SidebarLink to="/app/sign_out">
-                        <ItemBox>
-                            <FeatherIcon icon="log-out" />
-                            {t("sign_out")}
-                        </ItemBox>
-                    </SidebarLink>
-                </FooterBox>
-            </Sidebar>
+            <PageTitle>설정</PageTitle>
+            <MenuBox>
+                {menuItems.map((menuItem) => {
+                    return (
+                        <Menu to={pathRoot + menuItem.to} key={menuItem.to}>
+                            <FeatherIcon icon={menuItem.icon} />
+                            {menuItem.display}
+                        </Menu>
+                    )
+                })}
+            </MenuBox>
             <Outlet />
         </>
     )
@@ -95,21 +83,31 @@ const getMenuItems = (t) => [
     },
 ]
 
-const Sidebar = styled(SidebarBox)`
-    overflow-y: auto;
+const MenuBox = styled.div`
+    display: flex;
+    flex-wrap: wrap;
 
-    position: sticky;
-    z-index: unset;
-    width: 14rem;
-    height: 100%;
-    padding-top: 1em;
-    padding-bottom: 1em;
+    gap: 0.5em;
 
-    box-sizing: border-box;
+    margin-bottom: 2em;
 `
 
-const FooterBox = styled(MiddleBox)`
-    flex-grow: 1;
+const Menu = styled(NavLink)`
+    width: fit-content;
+    border: 1px solid ${(p) => p.theme.textColor};
+    border-radius: 16px;
+    padding: 0.5em 0.75em;
+
+    transition: background-color 0.15s ${cubicBeizer};
+
+    &:hover {
+        background-color: ${(p) => p.theme.secondBackgroundColor};
+    }
+
+    &.active {
+        color: ${(p) => p.theme.black};
+        background-color: ${(p) => p.theme.primaryColors.success};
+    }
 `
 
 export default Layout
