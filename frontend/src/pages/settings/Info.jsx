@@ -6,7 +6,7 @@ import generatedGitInfo from "@/generatedGitInfo.json"
 import { useTranslation } from "react-i18next"
 
 const Info = () => {
-    const { t } = useTranslation(null, { keyPrefix: "settings.info" })
+    const { t } = useTranslation("settings", { keyPrefix: "info" })
 
     return (
         <>

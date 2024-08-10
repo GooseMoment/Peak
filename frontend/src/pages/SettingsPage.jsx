@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next"
 const pathRoot = "/app/settings/"
 
 const SettingsPage = () => {
-    const { t } = useTranslation("", { keyPrefix: "settings.menus" })
+    const { t } = useTranslation("settings", { keyPrefix: "menus" })
 
     const menuItems = useMemo(() => getMenuItems(t), [t])
 

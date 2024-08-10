@@ -38,7 +38,7 @@ const subscribePush = async () => {
 
 const Notifications = () => {
     const [setting, updateSetting] = useClientSetting()
-    const { t } = useTranslation(null, { keyPrefix: "settings.notifications" })
+    const { t } = useTranslation("settings", { keyPrefix: "notifications" })
 
     const enableMutation = useMutation({
         mutationFn: () => subscribePush(),

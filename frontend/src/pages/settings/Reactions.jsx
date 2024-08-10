@@ -7,7 +7,7 @@ import Section, {
 import { useTranslation } from "react-i18next"
 
 const Reactions = () => {
-    const { t } = useTranslation(null, { keyPrefix: "settings.reactions" })
+    const { t } = useTranslation("settings", { keyPrefix: "reactions" })
 
     // TODO: use react-query to receive data
 

@@ -7,7 +7,7 @@ import SettingSwitch from "@components/settings/SettingSwitch"
 import { useTranslation } from "react-i18next"
 
 const General = () => {
-    const { t } = useTranslation(null, { keyPrefix: "settings.general" })
+    const { t } = useTranslation("settings", { keyPrefix: "general" })
 
     const startpageChoices = useMemo(() => makeStartpageChoices(t), [t])
 

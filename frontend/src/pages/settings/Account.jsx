@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const Account = () => {
-    const { t } = useTranslation("", { keyPrefix: "settings.account" })
+    const { t } = useTranslation("settings", { keyPrefix: "account" })
 
     const {
         data: user,

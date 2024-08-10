@@ -9,7 +9,7 @@ import themes from "@assets/themes"
 import { useTranslation } from "react-i18next"
 
 const Appearance = () => {
-    const { t } = useTranslation(null, { keyPrefix: "settings.appearance" })
+    const { t } = useTranslation("settings", { keyPrefix: "appearance" })
 
     const themeChoices = useMemo(() => makeThemeChoices(t), [t])
     const widthChoices = useMemo(() => makeWidthChoices(t), [t])

@@ -11,8 +11,8 @@ import { useTranslation } from "react-i18next"
 const browserTz = Intl.DateTimeFormat().resolvedOptions().timeZone
 
 const LanguagesAndTime = () => {
-    const { t } = useTranslation(null, {
-        keyPrefix: "settings.languages_and_time",
+    const { t } = useTranslation("settings", {
+        keyPrefix: "languages_and_time",
     })
 
     const timezones = useMemo(

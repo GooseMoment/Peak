@@ -36,7 +36,7 @@ const Blocks = () => {
         },
     })
 
-    const { t } = useTranslation(null, { keyPrefix: "settings.blocks" })
+    const { t } = useTranslation("settings", { keyPrefix: "blocks" })
 
     const onClick = () => {
         toast.warn("Not implemented yet!")

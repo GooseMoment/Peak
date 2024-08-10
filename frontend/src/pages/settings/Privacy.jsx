@@ -25,7 +25,7 @@ const Privacy = () => {
         queryFn: () => getSettings(),
     })
 
-    const { t } = useTranslation(null, { keyPrefix: "settings.privacy" })
+    const { t } = useTranslation("settings", { keyPrefix: "privacy" })
 
     const mutation = useMutation({
         mutationFn: (data) => {
