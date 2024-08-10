@@ -27,7 +27,7 @@ const SocialExplorePage = () => {
     const { data: recommendUsers, isPending: isRecommendPending } = useQuery({
         queryKey: ["explore", "recommend", "users"],
         queryFn: () => getExploreFeed(),
-        staleTime: 1 * 60 * 60 * 1000,
+        staleTime: 2 * 60 * 60 * 1000,
     })
 
     const [searchTerm, setSearchTerm] = useState("")
@@ -37,7 +37,7 @@ const SocialExplorePage = () => {
         isFetching: isFoundFetching,
         refetch: refetchFound,
     } = useQuery({
-        queryKey: ["explore", "Found", "users"],
+        queryKey: ["explore", "found", "users"],
         queryFn: () => getExploreSearchResults(searchTerm),
         enabled: false,
     })
@@ -57,9 +57,12 @@ const SocialExplorePage = () => {
 
     const handleSearch = () => {
         setSearchTerm((prev) => prev.trim())
-        if (searchTerm) refetchFound()
-        else
-            queryClient.setQueriesData(["explore", "Found", "users"], undefined)
+        console.log(searchTerm.length)
+        if (searchTerm.length !== 0) {
+            refetchFound()
+        } else {
+            queryClient.setQueryData(["explore", "found", "users"], null)
+        }
     }
 
     return (
@@ -126,8 +129,6 @@ const StickyContainer = styled(Container)`
     top: 2.5rem;
     gap: 0rem;
 `
-
-const DailyLogsPreviewContainer = styled.div``
 
 const LoaderCircleWrapper = styled.div`
     margin-top: 10em;
