@@ -13,7 +13,7 @@ const Color = ({ setColor, closeComponent }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.color" })
     const theme = useTheme()
 
-    const [activeTab, setActiveTab] = useState("basic")
+    const [activeTab, setActiveTab] = useState("theme1")
 
     const changeColor = (color) => {
         return () => {
@@ -24,8 +24,8 @@ const Color = ({ setColor, closeComponent }) => {
 
     
     const themes = [
-        {id: "basic", themeName: t("theme1")},
-        {id: "summer", themeName: t("theme2")},
+        {id: "theme1", themeName: t("theme1")},
+        {id: "theme2", themeName: t("theme2")},
     ]
 
     return (
@@ -58,7 +58,7 @@ const TabBox = styled.div`
 `
 
 const TabButton = styled.button`
-    width: 3em;
+    width: 4em;
     padding: 0.3em;
     font-size: 0.9em;
     font-weight: 500;
