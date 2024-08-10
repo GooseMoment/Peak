@@ -113,19 +113,19 @@
             "name": "Theme preference",
             "values": {
                 "system": "Same as system",
-                "light": "light",
-                "light-systemcolor": "light (with system color)",
-                "dark": "dark",
-                "dark-systemcolor": "dark (with system color)"
+                "light": "Light",
+                "light-systemcolor": "Light (with system color)",
+                "dark": "Dark",
+                "dark-systemcolor": "Dark (with system color)"
             }
         },
         "main_width": {
             "name": "Content width",
             "description": "Only applied in long-width screens.",
             "values": {
-                "narrow": "narrow",
-                "normal": "normal",
-                "wide": "wide"
+                "narrow": "Narrow",
+                "normal": "Normal",
+                "wide": "Wide"
             }
         },
         "close_sidebar_on_startup": {
