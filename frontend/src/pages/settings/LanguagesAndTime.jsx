@@ -1,6 +1,5 @@
 import { useMemo } from "react"
 
-import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
@@ -31,7 +30,6 @@ const LanguagesAndTime = () => {
 
     return (
         <>
-            <PageTitle>{t("title")}</PageTitle>
             <Section>
                 <Name>{t("locale.name")}</Name>
                 <Value>

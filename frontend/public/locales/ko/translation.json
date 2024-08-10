@@ -215,7 +215,6 @@
             "sign_out": "로그아웃"
         },
         "account": {
-            "title": "계정",
             "display_name": "이름",
             "display_name_placeholder": "남에게 보일 이름",
             "bio": "바이오",
@@ -239,7 +238,6 @@
             "password_change_error": "암호 변경 중 문제가 발생했습니다."
         },
         "general": {
-            "title": "일반",
             "startpage": {
                 "name": "시작 페이지",
                 "description": "앱 실행 시 먼저 보일 페이지를 설정합니다.",
@@ -254,7 +252,6 @@
             }
         },
         "privacy": {
-            "title": "공개 범위",
             "follow_request_approval_manually": {
                 "name": "팔로우를 수동으로 승인",
                 "description": "팔로우 요청을 받을지 수동으로 결정합니다."
@@ -275,7 +272,6 @@
             "setting_submitted": "공개 범위 설정을 저장했습니다."
         },
         "languages_and_time": {
-            "title": "언어 및 시간",
             "locale": {
                 "name": "언어",
                 "system": "자동"
@@ -292,7 +288,6 @@
             }
         },
         "notifications": {
-            "title": "알림",
             "push_notification_subscription": {
                 "name": "앱에서 알림 받기",
                 "description": "이 기기에서 Peak의 알림을 받습니다.",
@@ -311,7 +306,6 @@
             }
         },
         "appearance": {
-            "title": "테마",
             "theme": {
                 "name": "테마",
                 "values": {
@@ -336,7 +330,6 @@
             }
         },
         "reactions": {
-            "title": "리액션",
             "favorite_emojis": {
                 "name": "즐겨찾는 에모지",
                 "description": "좋아하는 에모지를 즐겨찾기에 등록하면 빠르게 리액션을 달 수 있습니다."
@@ -347,7 +340,6 @@
             }
         },
         "blocks": {
-            "title": "차단",
             "blockees": {
                 "name": "내가 차단한 사용자",
                 "description": "이 사용자들과 마주치지 않습니다.",
@@ -357,7 +349,6 @@
             }
         },
         "info": {
-            "title": "정보",
             "build": {
                 "name": "빌드 정보",
                 "commit": "커밋",

@@ -5,13 +5,12 @@ import styled from "styled-components"
 
 import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
 import ModalPortal from "@components/common/ModalPortal"
-import PageTitle from "@components/common/PageTitle"
 import Color from "@components/project/Creates/Color"
 import Error from "@components/settings/Error"
 import Loading from "@components/settings/Loading"
 import PasswordSection from "@components/settings/PasswordSection"
 import ProfileImg from "@components/settings/ProfileImg"
-import Section, { Name, Sync, Value } from "@components/settings/Section"
+import Section, { Name, Value } from "@components/settings/Section"
 import Input from "@components/sign/Input"
 
 import { getMe, patchUser } from "@api/users.api"
@@ -77,9 +76,6 @@ const Account = () => {
 
     return (
         <>
-            <PageTitle>
-                {t("title")} <Sync name={t("title")} />
-            </PageTitle>
             <Section>
                 <ImgNameEmailContainer>
                     <ProfileImg

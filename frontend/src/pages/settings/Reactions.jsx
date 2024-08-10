@@ -1,8 +1,6 @@
-import PageTitle from "@components/common/PageTitle"
 import Section, {
     Description,
     Name,
-    Sync,
     Value,
 } from "@components/settings/Section"
 
@@ -15,9 +13,6 @@ const Reactions = () => {
 
     return (
         <>
-            <PageTitle>
-                {t("title")} <Sync name={t("title")} />
-            </PageTitle>
             <Section>
                 <Name>{t("favorite_emojis.name")}</Name>
                 <Description>{t("favorite_emojis.description")}</Description>

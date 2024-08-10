@@ -214,7 +214,6 @@
             "sign_out": "Sign out"
         },
         "account": {
-            "title": "Account",
             "display_name": "Display name",
             "display_name_placeholder": "Your awesome name",
             "bio": "Bio",
@@ -238,7 +237,6 @@
             "password_change_error": "Error occured while changing password."
         },
         "general": {
-            "title": "General",
             "startpage": {
                 "name": "Start Page",
                 "description": "Determines which page will show up on startup.",
@@ -253,7 +251,6 @@
             }
         },
         "privacy": {
-            "title": "Privacy",
             "follow_request_approval_manually": {
                 "name": "Accept follow manually",
                 "description": "Follow requests will be pending until you accept them."
@@ -274,7 +271,6 @@
             "setting_submitted": "Privacy settings were saved."
         },
         "languages_and_time": {
-            "title": "Languages & Time",
             "locale": {
                 "name": "Language",
                 "system": "Auto"
@@ -291,7 +287,6 @@
             }
         },
         "notifications": {
-            "title": "Notifications",
             "push_notification_subscription": {
                 "name": "Receive push notifications",
                 "description": "Get notifications on this device.",
@@ -310,7 +305,6 @@
             }
         },
         "appearance": {
-            "title": "Appearance",
             "theme": {
                 "name": "Theme preference",
                 "values": {
@@ -335,7 +329,6 @@
             }
         },
         "reactions": {
-            "title": "Reactions",
             "favorite_emojis": {
                 "name": "Favorite emojis",
                 "description": "Favorite these and react easily."
@@ -346,7 +339,6 @@
             }
         },
         "blocks": {
-            "title": "Blocks",
             "blockees": {
                 "name": "Users blocked by me",
                 "description": "These users don't appear to you.",
@@ -356,7 +348,6 @@
             }
         },
         "info": {
-            "title": "Info",
             "build": {
                 "name": "Build information",
                 "commit": "Commit",

@@ -2,12 +2,10 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button from "@components/common/Button"
-import PageTitle from "@components/common/PageTitle"
 import Error from "@components/settings/Error"
 import Section, {
     Description,
     Name,
-    Sync,
     Value,
 } from "@components/settings/Section"
 import ListUserProfile from "@components/users/ListUserProfile"
@@ -51,9 +49,6 @@ const Blocks = () => {
 
     return (
         <>
-            <PageTitle>
-                {t("title")} <Sync name={t("title")} />
-            </PageTitle>
             <Section>
                 <Name>{t("blockees.name")}</Name>
                 <Description>{t("blockees.description")}</Description>

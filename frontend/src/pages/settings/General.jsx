@@ -1,6 +1,5 @@
 import { useMemo } from "react"
 
-import PageTitle from "@components/common/PageTitle"
 import Section, { Description, Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import SettingSwitch from "@components/settings/SettingSwitch"
@@ -14,7 +13,6 @@ const General = () => {
 
     return (
         <>
-            <PageTitle>{t("title")}</PageTitle>
             <Section>
                 <Name>{t("startpage.name")}</Name>
                 <Description>{t("startpage.description")}</Description>

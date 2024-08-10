@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 
 import Button from "@components/common/Button"
-import PageTitle from "@components/common/PageTitle"
 import Section, { Description, Name, Value } from "@components/settings/Section"
 import Switch from "@components/settings/SettingSwitch"
 
@@ -102,7 +101,6 @@ const Notifications = () => {
 
     return (
         <>
-            <PageTitle>{t("title")}</PageTitle>
             <Section>
                 <Name>{t("push_notification_subscription.name")}</Name>
                 <Description>

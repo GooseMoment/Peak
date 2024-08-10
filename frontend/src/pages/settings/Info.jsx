@@ -1,6 +1,5 @@
 import styled from "styled-components"
 
-import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
 
 import generatedGitInfo from "@/generatedGitInfo.json"
@@ -11,7 +10,6 @@ const Info = () => {
 
     return (
         <>
-            <PageTitle>{t("title")}</PageTitle>
             <Section>
                 <Name>{t("build.name")}</Name>
                 <Value>

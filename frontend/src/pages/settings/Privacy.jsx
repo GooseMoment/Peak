@@ -2,15 +2,9 @@ import { useMemo } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 
-import PageTitle from "@components/common/PageTitle"
 import Error from "@components/settings/Error"
 import Loading from "@components/settings/Loading"
-import Section, {
-    Description,
-    Name,
-    Sync,
-    Value,
-} from "@components/settings/Section"
+import Section, { Description, Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
 
@@ -57,9 +51,6 @@ const Privacy = () => {
 
     return (
         <>
-            <PageTitle>
-                {t("title")} <Sync name={t("title")} />
-            </PageTitle>
             <Section>
                 <Name>{t("follow_request_approval_manually.name")}</Name>
                 <Description>

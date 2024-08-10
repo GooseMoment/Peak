@@ -1,6 +1,5 @@
 import { useMemo } from "react"
 
-import PageTitle from "@components/common/PageTitle"
 import Section, { Description, Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
@@ -17,7 +16,6 @@ const Appearance = () => {
 
     return (
         <>
-            <PageTitle>{t("title")}</PageTitle>
             <Section>
                 <Name>{t("theme.name")}</Name>
                 <Value>
