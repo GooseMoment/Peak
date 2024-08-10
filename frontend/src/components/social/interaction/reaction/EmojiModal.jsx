@@ -31,7 +31,7 @@ const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
                                 onClick={() => onSelect(emoji)}
                             >
                                 <EmojiCell
-                                    src={emoji.img_uri}
+                                    src={emoji.img}
                                     alt={emoji.name}
                                 />
                             </EmojiListCell>

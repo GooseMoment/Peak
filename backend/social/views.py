@@ -452,13 +452,13 @@ class EmojiListPagination(PageNumberPagination):
     page_size = 1000
 
 class EmojiList(mixins.ListModelMixin, generics.GenericAPIView):
-    queryset = Emoji.objects.all()
+    queryset = Emoji.objects.order_by("name").all()
     serializer_class = EmojiSerializer
     pagination_class = EmojiListPagination
 
     permission_classes = (AllowAny, )
 
-    @method_decorator(cache_page(60 * 60 * 5)) # caching for 5 hours 
+    @method_decorator(cache_page(60 * 30)) # caching for 30 minutes
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
