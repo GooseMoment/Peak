@@ -39,7 +39,7 @@ export const SidebarLinkLazy = ({
         onClick()
 
         startTransition(() => {
-            navigate(navigateTo)
+            navigate(navigateTo || to)
         })
     }
 

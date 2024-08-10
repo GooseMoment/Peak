@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { Link, Outlet, useSearchParams } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import Brand, { Box as BrandTitle } from "@components/sign/Brand"
 import Showcase from "@components/sign/Showcase"
 import generateActivities from "@components/sign/activities"
 
 import { getEmojis } from "@api/social.api"
 
-import { ifTablet } from "@utils/useScreenType"
+import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -58,7 +59,11 @@ const SignPage = () => {
                 <Brand />
             </Link>
             <Showcase activities={activities} />
-            <Outlet />
+            <ContentBox>
+                <Suspense key="sign-page" fallback={<LoaderCircleFull />}>
+                    <Outlet />
+                </Suspense>
+            </ContentBox>
         </Root>
     )
 }
@@ -90,6 +95,37 @@ const Root = styled.div`
             color: ${(p) => p.theme.textColor};
         }
     }
+`
+
+const ContentBox = styled.section`
+    display: flex;
+    overflow-y: scroll;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5rem;
+
+    padding: 2.25rem;
+    color: ${(p) => p.theme.textColor};
+    background-color: ${(p) => p.theme.backgroundColor};
+
+    grid-area: 1 / 2 / 2 / 3;
+
+    font-size: 1rem;
+
+    ${ifTablet} {
+        width: 100%;
+        padding: 2.25rem 5.5em;
+    }
+
+    ${ifMobile} {
+        padding: 2.25rem;
+    }
+
+    ${(p) =>
+        p.$verticalCenter &&
+        css`
+            align-items: center;
+        `}
 `
 
 export default SignPage

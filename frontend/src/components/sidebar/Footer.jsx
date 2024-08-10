@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { startTransition, useEffect, useState } from "react"
 
 import { useQuery } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
@@ -49,7 +49,9 @@ const Footer = ({ collapsed, closeSidebar }) => {
 
     const openSignOutConfirmation = (e) => {
         e.preventDefault()
-        setSignOutConfirmationOpen(true)
+        startTransition(() => {
+            setSignOutConfirmationOpen(true)
+        })
     }
 
     return (
@@ -64,16 +66,16 @@ const Footer = ({ collapsed, closeSidebar }) => {
             {isError && <MeProfile />}
 
             {user && (
-                <SidebarLink
-                    onClick={onClickLink}
+                <SidebarLinkLazy
                     to={`users/@${user.username}`}
+                    onClick={onClickLink}
                     draggable="false"
                 >
                     <MeProfile>
                         <MeProfileImg src={user.profile_img} />
                         {!collapsed && <Username>{user.username}</Username>}
                     </MeProfile>
-                </SidebarLink>
+                </SidebarLinkLazy>
             )}
 
             {!collapsed && (

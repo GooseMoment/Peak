@@ -72,7 +72,7 @@ export const SignInForm = () => {
     }
 
     return (
-        <Box>
+        <>
             <Title>{t("sign_in")}</Title>
             <Form onSubmit={onSubmit}>
                 <Input
@@ -119,7 +119,7 @@ export const SignInForm = () => {
                     </LinkText>
                 </Link>
             </Links>
-        </Box>
+        </>
     )
 }
 
@@ -148,7 +148,7 @@ export const SignUpForm = () => {
     }
 
     return (
-        <Box>
+        <>
             <Title>{t("sign_up")}</Title>
             <Form onSubmit={onSubmit}>
                 <Input
@@ -200,7 +200,7 @@ export const SignUpForm = () => {
                     </LinkText>
                 </Link>
             </Links>
-        </Box>
+        </>
     )
 }
 
@@ -208,7 +208,7 @@ export const SignUpComplete = () => {
     const { t } = useTranslation(null, { keyPrefix: "sign" })
 
     return (
-        <Box>
+        <>
             <Title>{t("sign_up_completed")}</Title>
             <Content>
                 <Text>{t("check_inbox")}</Text>
@@ -227,7 +227,7 @@ export const SignUpComplete = () => {
                     </LinkText>
                 </Link>
             </Links>
-        </Box>
+        </>
     )
 }
 
@@ -260,7 +260,7 @@ export const EmailVerificationResendForm = () => {
     }
 
     return (
-        <Box>
+        <>
             <Title>{t("resend_title")}</Title>
             <Content>
                 <form onSubmit={onSubmit}>
@@ -293,7 +293,7 @@ export const EmailVerificationResendForm = () => {
                     </Link>
                 </Links>
             </Content>
-        </Box>
+        </>
     )
 }
 
@@ -323,23 +323,15 @@ export const EmailVerificationForm = () => {
     })
 
     if (isPending) {
-        return (
-            <Box $verticalCenter>
-                <FullLoader />
-            </Box>
-        )
+        return <FullLoader />
     }
 
     if (isError) {
-        return (
-            <Box>
-                <Error code="?_?" text={t("invalid_access")} />
-            </Box>
-        )
+        return <Error code="?_?" text={t("invalid_access")} />
     }
 
     return (
-        <Box>
+        <>
             <Title>{t("verified_title")}</Title>
             <Content>
                 <VerifiedMessage>{t("verified", { email })}</VerifiedMessage>
@@ -352,7 +344,7 @@ export const EmailVerificationForm = () => {
                     </Link>
                 </Links>
             </Content>
-        </Box>
+        </>
     )
 }
 
@@ -382,7 +374,7 @@ export const PasswordRecoveryRequestForm = () => {
     }
 
     return (
-        <Box>
+        <>
             <Title>{t("request_title")}</Title>
             <Content>
                 <Text>{t("request_description")}</Text>
@@ -414,7 +406,7 @@ export const PasswordRecoveryRequestForm = () => {
                     </Link>
                 </Links>
             </Content>
-        </Box>
+        </>
     )
 }
 
@@ -454,7 +446,7 @@ export const PasswordRecoveryForm = () => {
     }
 
     return (
-        <Box>
+        <>
             <Title>{t("recovery_title")}</Title>
             <Form onSubmit={onSubmit}>
                 <Text>{t("recovery_description")}</Text>
@@ -485,40 +477,9 @@ export const PasswordRecoveryForm = () => {
                     </Button>
                 </ButtonGroup>
             </Form>
-        </Box>
+        </>
     )
 }
-
-const Box = styled.section`
-    display: flex;
-    overflow-y: scroll;
-    justify-content: center;
-    flex-direction: column;
-    gap: 5rem;
-
-    padding: 2.25rem;
-    color: ${(p) => p.theme.textColor};
-    background-color: ${(p) => p.theme.backgroundColor};
-
-    grid-area: 1 / 2 / 2 / 3;
-
-    font-size: 1rem;
-
-    ${ifTablet} {
-        width: 100%;
-        padding: 2.25rem 5.5em;
-    }
-
-    ${ifMobile} {
-        padding: 2.25rem;
-    }
-
-    ${(p) =>
-        p.$verticalCenter &&
-        css`
-            align-items: center;
-        `}
-`
 
 const Title = styled.h2`
     font-weight: bold;

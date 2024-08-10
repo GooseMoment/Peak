@@ -29,8 +29,8 @@ export const LoaderCircleBold = styled(LoaderCircle)`
 `
 
 const FullContainer = styled.div`
-    width: 100%;
-    height: 100%;
+    width: ${p => p.$width};
+    height: ${p => p.$height};
 
     box-sizing: content-box;
 
@@ -39,9 +39,9 @@ const FullContainer = styled.div`
     align-items: center;
 `
 
-export const LoaderCircleFull = () => {
+export const LoaderCircleFull = ({width="100%", height="100%"}) => {
     return (
-        <FullContainer>
+        <FullContainer $width={width} $height={height}>
             <LoaderCircleBold />
         </FullContainer>
     )
