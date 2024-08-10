@@ -31,7 +31,7 @@ const SettingsPage = () => {
                     )
                 })}
             </MenuBox>
-            <Suspense fallback={<LoaderCircleFull />}>
+            <Suspense key="settings-page" fallback={<LoaderCircleFull />}>
                 <Outlet />
             </Suspense>
         </>

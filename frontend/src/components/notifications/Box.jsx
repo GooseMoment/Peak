@@ -40,7 +40,7 @@ const Box = forwardRef(function BoxInternal(
 
     return (
         <Frame ref={ref} $highlight={highlight}>
-            <Suspense fallback={skeletons}>
+            <Suspense key="notification-box" fallback={skeletons}>
                 <Images
                     skeleton={skeleton}
                     project_color={payload?.project_color}
