@@ -26,7 +26,7 @@ const Content = ({
         <Container>
             <ContentTop>
                 <ContentTitle
-                    $skeleton={skeleton}
+                    skeleton={skeleton}
                     type={type}
                     payload={payload}
                     actionUser={actionUser}
@@ -38,7 +38,7 @@ const Content = ({
                 </label>
             </ContentTop>
             <ContentDetail
-                $skeleton={skeleton}
+                skeleton={skeleton}
                 type={type}
                 payload={payload}
                 actionUser={actionUser}

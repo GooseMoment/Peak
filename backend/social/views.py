@@ -22,8 +22,23 @@ from drawers.models import Drawer
 
 from users.serializers import UserSerializer
 
-## Follow
-# social/follow/@follower/@followee/
+@api_view(["GET"])
+def get_explore_feed(request: HttpRequest):
+    user = request.user
+    
+    followees = User.objects.filter(followers__follower=user)
+    
+    recommendUserFilter = Q(followers__follower=user) | Q(id=user.id)
+
+    secondFollowees = User.objects.filter(
+        followers__follower__in=followees
+    ).distinct().exclude(recommendUserFilter)
+    # TODO: exclude private user
+
+    serializer = UserSerializer(secondFollowees, many=True)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 class FollowView(APIView):
     #request 확인 기능 넣기
     #block 검사
@@ -120,7 +135,6 @@ def get_blocks(request: HttpRequest, username):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 ## Daily Logs
-# GET social/daily/logs/@username/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["GET"])
 def get_daily_logs(request: HttpRequest, username, day):
     followings = Following.objects.filter(
@@ -136,11 +150,10 @@ def get_daily_logs(request: HttpRequest, username, day):
     
     serializer = DailyLogsSerializer(followingUsers, context={'day_min': day_min, 'day_max':day_max, 'user_id':user_id}, many=True)
     
-    return Response(serializer.data, status=status.HTTP_200_OK) 
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-# GET social/daily/comment/@followee/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["GET"])
-def get_daily_comment(requset: HttpRequest, followee, day):    
+def get_quote(requset: HttpRequest, followee, day):    
     followeeUser = get_object_or_404(User, username=followee)
     
     followerUserID = str(requset.user.id)
@@ -160,31 +173,30 @@ def get_daily_comment(requset: HttpRequest, followee, day):
     
     day_min = datetime.fromisoformat(day)
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
-    daily_comment = DailyComment.objects.filter(user__id=followeeUserID, date__range=(day_min, day_max)).first()
+    quote = Quote.objects.filter(user__id=followeeUserID, date__range=(day_min, day_max)).first()
     
-    if not daily_comment:
-        daily_comment = DailyComment(id=None, user=followeeUser, content='', date=None)
-    serializer = DailyCommentSerializer(daily_comment)
+    if not quote:
+        quote = Quote(id=None, user=followeeUser, content='', date=None)
+    serializer = QuoteSerializer(quote)
     
     # Response(cache_data, status=status.HTTP_200_OK)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-# POST social/daily/logs/YYYY-MM-DDTHH:mm:ss+hh:mm/
 @api_view(["POST"])
-def post_daily_comment(request: Request, day):
+def post_quote(request: Request, day):
     day_min = datetime.fromisoformat(day)
     day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
     
-    daily_comment = DailyComment.objects.filter(user=request.user, date__range=(day_min, day_max)).first()
+    quote = Quote.objects.filter(user=request.user, date__range=(day_min, day_max)).first()
     content = request.data.get('content')
     
-    if daily_comment:
-        daily_comment.content = content
-        daily_comment.save()
+    if quote:
+        quote.content = content
+        quote.save()
     else:
-        daily_comment = DailyComment.objects.create(user=request.user, content=content, date=day)
+        quote = Quote.objects.create(user=request.user, content=content, date=day)
     
-    serializer = DailyCommentSerializer(daily_comment)
+    serializer = QuoteSerializer(quote)
     
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -228,12 +240,6 @@ def get_daily_log_details(request: Request, followee, day):
 def get_following_feed(request: HttpRequest, date):
     pass
 
-def get_explore_feed(request: HttpRequest, user_id):
-    pass
-
-def get_emojis(request: HttpRequest):
-    pass
-
 class ReactionView(APIView):
     def get(self, request, type, id):
         user = request.user
@@ -242,10 +248,10 @@ class ReactionView(APIView):
             task = get_object_or_404(Task, id=id)
             reactions = Reaction.objects.filter(parent_type=Reaction.FOR_TASK,
                                                 task=task).order_by("created_at")
-        elif type == Reaction.FOR_DAILY_COMMENT:
-            daily_comment = get_object_or_404(DailyComment, id=id)
-            reactions = Reaction.objects.filter(parent_type=Reaction.FOR_DAILY_COMMENT,
-                                                daily_comment=daily_comment).order_by("created_at")
+        elif type == Reaction.FOR_QUOTE:
+            quote = get_object_or_404(Quote, id=id)
+            reactions = Reaction.objects.filter(parent_type=Reaction.FOR_QUOTE,
+                                                quote=quote).order_by("created_at")
         else :
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
@@ -258,9 +264,9 @@ class ReactionView(APIView):
             emoji_id = str(reaction.emoji.id)
             reactionNum = reactionCountsDir.get(emoji_id)
             if reactionNum:
-                reactionCountsDir[emoji_id][1] = reactionNum[1] + 1
+                reactionCountsDir[emoji_id]["counts"] = reactionNum["counts"] + 1
             else:
-                reactionCountsDir[emoji_id] = [EmojiSerializer(reaction.emoji).data, 1]
+                reactionCountsDir[emoji_id] = {"emoji": EmojiSerializer(reaction.emoji).data, "counts": 1}
         
         serializer = ReactionSerializer(reactions, many=True)
         
@@ -274,8 +280,8 @@ class ReactionView(APIView):
     
     def post(self, request: Request, type, id):
         # TODO: Need to check block
-        emoji_id = request.data.get('emoji')
-        emoji = get_object_or_404(Emoji, id=emoji_id)
+        emoji_name = request.data.get('emoji')
+        emoji = get_object_or_404(Emoji, name=emoji_name)
         user = request.user
         
         if type == Reaction.FOR_TASK:
@@ -285,11 +291,11 @@ class ReactionView(APIView):
                                                                task=task,
                                                                emoji=emoji)
         
-        elif type == Reaction.FOR_DAILY_COMMENT:
-            daily_comment = get_object_or_404(DailyComment, id=id)
+        elif type == Reaction.FOR_QUOTE:
+            quote = get_object_or_404(Quote, id=id)
             reaction, created = Reaction.objects.get_or_create(user=user,
-                                                               parent_type=Reaction.FOR_DAILY_COMMENT,
-                                                               daily_comment=daily_comment,
+                                                               parent_type=Reaction.FOR_QUOTE,
+                                                               quote=quote,
                                                                emoji=emoji)
         else :
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -301,8 +307,8 @@ class ReactionView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def delete(self, request, type, id):
-        emoji_id = request.GET.get('emoji')
-        emoji = get_object_or_404(Emoji, id=emoji_id)
+        emoji_name = request.GET.get('emoji')
+        emoji = get_object_or_404(Emoji, name=emoji_name)
         
         # emoji = Emoji.objects.filter(id=emoji_id).first()
         
@@ -315,12 +321,12 @@ class ReactionView(APIView):
                                          parent_type=Reaction.FOR_TASK,
                                          task=task,
                                          emoji=emoji)
-        elif type == Reaction.FOR_DAILY_COMMENT:
-            daily_comment = get_object_or_404(DailyComment, id=id)
+        elif type == Reaction.FOR_QUOTE:
+            quote = get_object_or_404(Quote, id=id)
             reaction = get_object_or_404(Reaction,
                                          user=user,
-                                         parent_type=Reaction.FOR_DAILY_COMMENT,
-                                         daily_comment=daily_comment,
+                                         parent_type=Reaction.FOR_QUOTE,
+                                         quote=quote,
                                          emoji=emoji)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -379,10 +385,10 @@ class CommentView(APIView):
             task = get_object_or_404(Task, id=id)
             comments = Comment.objects.filter(parent_type=Reaction.FOR_TASK,
                                                 task=task).order_by("-created_at")
-        elif type == Comment.FOR_DAILY_COMMENT:
-            daily_comment = get_object_or_404(DailyComment, id=id)
-            comments = Comment.objects.filter(parent_type=Reaction.FOR_DAILY_COMMENT,
-                                                daily_comment=daily_comment).order_by("-created_at")
+        elif type == Comment.FOR_QUOTE:
+            quote = get_object_or_404(Quote, id=id)
+            comments = Comment.objects.filter(parent_type=Reaction.FOR_QUOTE,
+                                                quote=quote).order_by("-created_at")
         
         serializer = CommentSerializer(comments, many=True)
         
@@ -399,11 +405,11 @@ class CommentView(APIView):
                                              parent_type=Reaction.FOR_TASK,
                                              task=task,
                                              comment=comment)
-        elif type == Comment.FOR_DAILY_COMMENT:
-            daily_comment = get_object_or_404(DailyComment, id=id)
+        elif type == Comment.FOR_QUOTE:
+            quote = get_object_or_404(Quote, id=id)
             created = Comment.objects.create(user=user,
-                                             parent_type=Reaction.FOR_DAILY_COMMENT,
-                                             daily_comment=daily_comment,
+                                             parent_type=Reaction.FOR_QUOTE,
+                                             quote=quote,
                                              comment=comment)
         else :
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -455,3 +461,15 @@ class EmojiList(mixins.ListModelMixin, generics.GenericAPIView):
     @method_decorator(cache_page(60 * 60 * 5)) # caching for 5 hours 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+@api_view(["GET"])
+def get_explore_search_results(request: Request):
+    keyword = request.GET.get('query')
+    
+    if keyword is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    users = User.objects.filter(username__icontains=keyword)
+    serializer = UserSerializer(users, many=True)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)

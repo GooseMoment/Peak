@@ -3,7 +3,7 @@ import { useState } from "react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import CommentBox from "@components/social/CommentBox"
+import CommentBox from "@components/social/interaction/comment/CommentBox"
 
 import {
     deleteComment,
@@ -22,7 +22,6 @@ const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
 
     const {
         data: parentComments,
-        isError: parentCommentError,
         isFetching,
     } = useQuery({
         queryKey: ["comment", parentType, parent.id],
@@ -79,6 +78,7 @@ const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
                                   />
                               ))
                             : // TODO: design no comments
+                            // TODO: 로딩중
                               "no comments"}
                     </CommentContainer>
                     <CommentInput
