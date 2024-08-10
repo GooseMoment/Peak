@@ -1,8 +1,11 @@
 import styled, { css } from "styled-components"
 
 import { cubicBeizer } from "@assets/keyframes"
+import { useTranslation } from "react-i18next"
 
 const BarChart = ({ project, drawers }) => {
+    const { t } = useTranslation(null, { keyPrefix: "project" })
+
     let projectTaskCount =
         project.completed_task_count + project.uncompleted_task_count
 
@@ -12,11 +15,10 @@ const BarChart = ({ project, drawers }) => {
             totalUncompletedTaskCount += drawers[i].uncompleted_task_count
         }
 
-        if (totalUncompletedTaskCount) return false
-        else return true
+        return totalUncompletedTaskCount === 0
     }
 
-    const calculateDisplayCount = () => {
+    const getDisplayDrawersCount = () => {
         let count = 0
 
         for (let i = 0; i < drawers.length; i++) {
@@ -40,26 +42,28 @@ const BarChart = ({ project, drawers }) => {
     }
 
     return (
-        <FlexBox>
-            {projectTaskCount === 0 ? null : isCompleted() ? (
-                <BarChartBox
-                    $percent={100}
-                    $isCompleted={true}
-                    $color={project.color}
-                >
-                    <PercentText>100%</PercentText>
-                </BarChartBox>
-            ) : (
-                drawers?.map(
-                    (drawer, i) =>
-                        drawer.completed_task_count +
-                            drawer.uncompleted_task_count ===
-                            0 || (
+        <FlexColumnBox>
+            {projectTaskCount === 0 ? null : 
+            <>
+                <Text>{t("progress")}</Text>
+                <FlexBox>
+                    {isCompleted() ? (
+                        <BarChartBox
+                            $percent={100}
+                            $isCompleted={true}
+                            $color={project.color}
+                        >
+                            <PercentText>100%</PercentText>
+                        </BarChartBox>
+                    ) : (
+                    drawers?.map(
+                        (drawer, i) => drawer.completed_task_count + drawer.uncompleted_task_count === 0 ||
                             <BarChartBox
-                                key={i}
-                                $start={i === 0}
-                                $end={i === calculateDisplayCount()}
+                                key={drawer.id}
                                 $color={project.color}
+                                $start={i === 0}
+                                $end={i === getDisplayDrawersCount()}
+                                $isOne={getDisplayDrawersCount() === 0}
                                 $percent={calculatePercent(
                                     drawer.uncompleted_task_count +
                                         drawer.completed_task_count,
@@ -73,9 +77,9 @@ const BarChart = ({ project, drawers }) => {
                                     )}
                                     %
                                 </PercentText>
-                                <BarData
+                                <BarProgress
                                     $start={i === 0}
-                                    $end={i === calculateDisplayCount()}
+                                    $end={i === getDisplayDrawersCount()}
                                     $color={project.color}
                                     $percent={calculatePercent(
                                         drawer.completed_task_count,
@@ -85,16 +89,28 @@ const BarChart = ({ project, drawers }) => {
                                 />
                                 <ToolTipText>{drawer.name}</ToolTipText>
                             </BarChartBox>
-                        ),
-                )
-            )}
-        </FlexBox>
+                        ))}
+            </FlexBox>
+            </>} 
+        </FlexColumnBox>
     )
 }
+
+const FlexColumnBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin: 1em 0em;
+`
 
 const FlexBox = styled.div`
     display: flex;
     gap: 0.3em;
+`
+
+const Text = styled.div`
+    color: ${p=>p.theme.textColor};
+    font-size: 1.1em;
+    font-weight: 500;
 `
 
 const ToolTipText = styled.div`
@@ -122,6 +138,7 @@ const BarChartBox = styled.div`
     display: flex;
     box-shadow: 0 0 0 3px #${(props) => props.$color} inset;
     width: ${(props) => props.$percent}%;
+    background-color: ${p=>p.theme.backgroundColor};
     height: 3em;
     margin: 1em 0em;
     transition: transform 0.4s ${cubicBeizer};
@@ -148,6 +165,12 @@ const BarChartBox = styled.div`
             border-bottom-right-radius: 15px;
         `}
 
+    ${(props) =>
+        props.$isOne &&
+        css`
+            border-radius: 15px;
+        `}
+
     &:hover {
         transform: scale(1.05);
 
@@ -161,7 +184,7 @@ const BarChartBox = styled.div`
     }
 `
 
-const BarData = styled.div`
+const BarProgress = styled.div`
     display: ${(props) => (props.$percent === 0 ? "none" : "flex")};
     width: 100%;
     background: linear-gradient(

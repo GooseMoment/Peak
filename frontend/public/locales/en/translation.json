@@ -39,6 +39,7 @@
     },
     "project": {
         "no_drawer": "Press + to add drawers",
+        "progress": "Progress",
         "button_load_more": "Load more",
         "button_add_task": "Add new task",
         "loading": "Loading...",
