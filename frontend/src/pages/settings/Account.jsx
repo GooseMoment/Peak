@@ -114,7 +114,7 @@ const Account = () => {
                 <Section>
                     <Name>{t("header_color")}</Name>
                     <Value>
-                        <ColorCircle
+                        <ColorButton
                             onClick={onClickOpenPalette}
                             $color={"#" + headerColor}
                         />
@@ -125,7 +125,7 @@ const Account = () => {
                         />
                     </Value>
                     {paletteOpen && (
-                        <ModalPortal additional>
+                        <ModalPortal closeModal={() => setPaletteOpen(false)}>
                             <Color
                                 closeComponent={() => setPaletteOpen(false)}
                                 setColor={setHeaderColor}
@@ -189,10 +189,10 @@ const Bio = styled.textarea`
     }
 `
 
-const ColorCircle = styled.div`
-    border-radius: 50%;
+const ColorButton = styled.div`
+    border-radius: 64px;
     border: 1.5px solid ${(p) => p.theme.secondBackgroundColor};
-    aspect-ratio: 1/1;
+    aspect-ratio: 3/1;
 
     height: 2em;
 
