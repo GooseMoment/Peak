@@ -1,9 +1,9 @@
 import pluginJs from "@eslint/js"
 import airbnb from "eslint-config-airbnb"
-import pluginReact from "eslint-plugin-react"
 import eslintConfigPrettier from "eslint-config-prettier"
-import tseslint from "typescript-eslint"
+import pluginReact from "eslint-plugin-react"
 import globals from "globals"
+import tseslint from "typescript-eslint"
 
 // TODO: convert to flat config after airbnb updates its repo
 
@@ -32,9 +32,9 @@ export default [
             "@typescript-eslint/no-unused-vars": [
                 "warn",
                 {
-                    "argsIgnorePattern": "^_",
-                    "varsIgnorePattern": "^_",
-                    "caughtErrorsIgnorePattern": "^_",
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    caughtErrorsIgnorePattern: "^_",
                 },
             ],
         },
