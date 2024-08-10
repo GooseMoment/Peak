@@ -1,5 +1,4 @@
 import { Fragment, useMemo, useState } from "react"
-import { useNavigate } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 
@@ -23,7 +22,6 @@ import { toast } from "react-toastify"
 
 const Contents = ({ task, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
-    const navigate = useNavigate()
 
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
@@ -38,9 +36,9 @@ const Contents = ({ task, setFunc }) => {
         setContent(name.value)
         setIsComponentOpen(true)
     }
+    
     const closeComponent = () => {
         setIsComponentOpen(false)
-        navigate(`.`)
     }
 
     const { formatted_due_datetime, formatted_assigned_date } = taskDate(task)
@@ -144,7 +142,7 @@ const Contents = ({ task, setFunc }) => {
                         <ToolTip message={item.name}>{item.icon}</ToolTip>
                         <VLine $end={item.id === 1 || item.id === 6} />
                         <ContentText
-                            name={item.name}
+                            name={content === "reminder" ? "none" : item.name}
                             onClick={handleClickContent}
                         >
                             {item.display}
@@ -216,10 +214,7 @@ const ContentText = styled.div`
     white-space: nowrap;
     overflow-x: clip;
     text-overflow: ellipsis;
-
-    &:hover {
-        cursor: pointer;
-    }
+    cursor: pointer;
 `
 
 const RemindersBox = styled.div`
