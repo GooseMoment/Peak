@@ -95,6 +95,7 @@ const Account = () => {
                         <Input
                             name="display_name"
                             type="text"
+                            maxLength="18"
                             defaultValue={user.display_name}
                             placeholder={t("display_name_placeholder")}
                         />
@@ -106,6 +107,7 @@ const Account = () => {
                         <Bio
                             autoComplete="off"
                             name="bio"
+                            maxLength="150"
                             defaultValue={user.bio}
                             placeholder={t("bio_placeholder")}
                         />
