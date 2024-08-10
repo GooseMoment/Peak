@@ -151,10 +151,10 @@ const routes = [
                 path: "settings",
                 id: "settings",
                 async lazy() {
-                    const { SettingsPage, ErrorPage } = await import(
+                    const { SettingsPage } = await import(
                         "@pages/settings/settings"
                     )
-                    return { Component: SettingsPage, ErrorBoundary: ErrorPage }
+                    return { Component: SettingsPage }
                 },
                 children: [
                     {

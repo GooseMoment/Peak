@@ -2,7 +2,6 @@ import SettingsPage from "../SettingsPage"
 import Account from "./Account"
 import Appearance from "./Appearance"
 import Blocks from "./Blocks"
-import ErrorPage from "./ErrorPage"
 import General from "./General"
 import Info from "./Info"
 import LanguagesAndTime from "./LanguagesAndTime"
@@ -12,7 +11,6 @@ import Reactions from "./Reactions"
 
 export {
     SettingsPage,
-    ErrorPage,
     Account,
     General,
     Privacy,

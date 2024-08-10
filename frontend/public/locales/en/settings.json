@@ -1,8 +1,6 @@
 {
     "error": {
-        "code": "!!!",
-        "text": "Something went wrong.",
-        "bottom_text": "Go to the front page"
+        "text": "Something went wrong."
     },
     "menus": {
         "title": "Settings",
