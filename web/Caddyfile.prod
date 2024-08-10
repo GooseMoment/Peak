@@ -15,6 +15,23 @@ alpha.peak.ooo {
 		file_server
 		try_files {path} /index.html
 	}
+	
+	handle_errors {
+		root * /web
+
+		@5xx `{err.status_code} >= 500 && {err.status_code} < 600`
+		handle @5xx {
+			rewrite * /error.html
+			templates
+			file_server
+		}
+
+		handle {
+			respond "another error"
+		}
+	}
+
+	tls cert.pem cert.key
 }
 
 alpha-api.peak.ooo {
@@ -42,4 +59,6 @@ alpha-api.peak.ooo {
 	handle * {
 		reverse_proxy api:8000
 	}
+
+	tls cert.pem cert.key
 }
