@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 import useScreenType from "@utils/useScreenType"
 
-const Footer = ({ collapsed, setSidebarHidden }) => {
+const Footer = ({ collapsed, closeSidebar }) => {
     const {
         data: user,
         isPending,
@@ -38,7 +38,7 @@ const Footer = ({ collapsed, setSidebarHidden }) => {
 
     const onClickLink = () => {
         if (isMobile) {
-            setSidebarHidden(true)
+            closeSidebar()
         }
     }
 

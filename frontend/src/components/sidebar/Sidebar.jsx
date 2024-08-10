@@ -1,8 +1,10 @@
+import { useState } from "react"
+
 import styled, { css } from "styled-components"
 
-import Footer from "./Footer"
-import Header from "./Header"
-import Middle from "./Middle"
+import Footer from "@components/sidebar/Footer"
+import Header from "@components/sidebar/Header"
+import Middle from "@components/sidebar/Middle"
 
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 import useStopScroll from "@utils/useStopScroll"
@@ -13,15 +15,25 @@ const Sidebar = ({ collapsed, setCollapsed, setSidebarHidden }) => {
     const { isMobile } = useScreenType()
     useStopScroll(isMobile)
 
+    const [closing, setClosing] = useState(false)
+
+    const closeWithTransition = () => {
+        setClosing(true)
+        setTimeout(() => {
+            setSidebarHidden(true)
+            setClosing(false)
+        }, 100)
+    }
+
     return (
-        <SidebarBox $collapsed={collapsed}>
+        <SidebarBox $closing={closing} $collapsed={collapsed}>
             <Header
                 collapsed={collapsed}
                 setCollapsed={setCollapsed}
-                setSidebarHidden={setSidebarHidden}
+                closeSidebar={closeWithTransition}
             />
-            <Middle collapsed={collapsed} setSidebarHidden={setSidebarHidden} />
-            <Footer collapsed={collapsed} setSidebarHidden={setSidebarHidden} />
+            <Middle collapsed={collapsed} closeSidebar={closeWithTransition} />
+            <Footer collapsed={collapsed} closeSidebar={closeWithTransition} />
         </SidebarBox>
     )
 }

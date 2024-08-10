@@ -15,7 +15,7 @@ import { skeletonCSS } from "@assets/skeleton"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Middle = ({ collapsed, setSidebarHidden }) => {
+const Middle = ({ collapsed, closeSidebar }) => {
     const {
         data: projects,
         isPending,
@@ -32,7 +32,7 @@ const Middle = ({ collapsed, setSidebarHidden }) => {
 
     const onClickLink = () => {
         if (isMobile) {
-            setSidebarHidden(true)
+            closeSidebar()
         }
     }
 
