@@ -16,6 +16,7 @@ import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProje
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
 import { getProjectColor } from "@components/project/Creates/palettes"
+import Progress from "@components/project/common/Progress"
 
 import { getDrawersByProject } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
@@ -181,6 +182,9 @@ const ProjectPage = () => {
                     />
                 </Icons>
             </TitleBox>
+            {project.type === "goal" && (
+                <Progress project={project} drawers={drawers} />
+            )}
             {drawers && drawers.length === 0 ? (
                 <NoDrawerText>{t("no_drawer")}</NoDrawerText>
             ) : (

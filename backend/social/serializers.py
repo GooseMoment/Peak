@@ -12,7 +12,7 @@ from drawers.serializers import DrawerSerializer
 class EmojiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Emoji
-        fields = ["id", "name", "img_uri"]
+        fields = ["id", "name", "img"]
 
 class DailyLogsSerializer(UserSerializer):
     recent_task = serializers.SerializerMethodField()

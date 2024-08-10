@@ -11,7 +11,7 @@ const ReactionButton = ({ emoji, emojiCount, isSelected, saveReaction }) => {
             $bgcolor={isSelected ? "#FFD7C7" : "#F2F2F2"}
             onClick={handleReaction}
         >
-            <Emoji src={emoji.img_uri} />
+            <Emoji src={emoji.img} />
             <EmojiCounts>{emojiCount}</EmojiCounts>
         </EmojiBox>
     )

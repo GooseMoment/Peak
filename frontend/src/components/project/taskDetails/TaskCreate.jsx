@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom"
 
+import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button from "@components/common/Button"
@@ -47,19 +48,32 @@ const TaskCreate = () => {
         setNewTask(Object.assign(newTask, edit))
     }
 
-    const makeTask = async () => {
-        try {
-            editNewTask({ name: newTaskName })
-            await postTask(newTask)
-            toast.success(t("task_create_success"))
+    const postMutation = useMutation({
+        mutationFn: (data) => {
+            return postTask(data)
+        },
+        onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["tasks", { drawerID: state?.drawer_id }],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["drawers", { projectID: projectId }],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["projects", projectId],
+            })
+            toast.success(t("task_create_success"))
             onClose()
-        } catch (e) {
+        },
+        onError: () => {
             if (newTask?.name) toast.error(t("task_create_error"))
             else toast.error(t("task_create_no_name"))
-        }
+        },
+    })
+
+    const makeTask = () => {
+        editNewTask({ name: newTaskName })
+        postMutation.mutate(newTask)
     }
 
     return (

@@ -5,9 +5,8 @@ import styled from "styled-components"
 import Button from "@components/common/Button"
 import Detail from "@components/project/common/Detail"
 
-import notify from "@utils/notify"
-
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const Memo = ({ previousMemo, setFunc, closeComponent }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.memo" })
@@ -18,7 +17,7 @@ const Memo = ({ previousMemo, setFunc, closeComponent }) => {
         return async () => {
             setFunc({ memo })
             closeComponent()
-            notify.success(t("memo_edit_success"))
+            toast.success(t("memo_edit_success"))
         }
     }
 

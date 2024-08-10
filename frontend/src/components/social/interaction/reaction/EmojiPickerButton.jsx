@@ -15,10 +15,10 @@ const EmojiPickerButton = ({ setPickedEmoji }) => {
     const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
     const buttonRef = useRef(null)
 
-    const { data: serverEmojis, isFetching } = useQuery({
+    const { data: serverEmojis } = useQuery({
         queryKey: ["emojis"],
         queryFn: () => getEmojis(),
-        staleTime: 5 * 60 * 60 * 1000,
+        staleTime: 1000 * 60 * 30,
     })
 
     const handleOpenModal = () => {

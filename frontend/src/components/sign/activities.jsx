@@ -171,7 +171,7 @@ const generateActivities = (serverEmojis) => {
 
         let detail = pick(verbDetailMap[verb])
         if (detail?.name) {
-            detail = <Emoji src={detail.img_uri} />
+            detail = <Emoji src={detail.img} />
         }
 
         const timeUnit = pick(Object.keys(timeUnitsMap))
