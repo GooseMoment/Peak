@@ -200,42 +200,53 @@ def post_quote(request: Request, day):
     
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-@api_view(["GET"])
-def get_daily_log_details(request: Request, followee, day):
-    followeeUser = get_object_or_404(User, username=followee)
-    
-    is_follower = Following.objects.filter(
-        follower=request.user,
-        followee=followeeUser,
-        status=Following.ACCEPTED
-    ).exists()
+class DailyLogsDetailsPagination(PageNumberPagination):
+    page_size = 10
+    max_page_size = 10
 
-    if request.user.username == followee:   # is me
-        privacyFilter = Q()
-    elif is_follower:   # is follower
-        privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(privacy=PrivacyMixin.FOR_PROTECTED)
-    else:
-        privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
-    # TODO: need to check block
+class DailyLogDetailsView(generics.GenericAPIView):
+    
+    pagination_class = DailyLogsDetailsPagination
+    
+    def get(self, request, followee, day):
+        followeeUser = get_object_or_404(User, username=followee)
 
-    privacyFilter &= Q(user=followeeUser)
-    
-    day_min = datetime.fromisoformat(day)
-    day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
-    
-    tasksFilterForCompleted = Q(completed_at__range=(day_min, day_max))
-    tasksFilterForUncompleted = Q(completed_at=None)
-    tasksFilter = privacyFilter & (tasksFilterForCompleted | tasksFilterForUncompleted)
-    
-    # TODO: order of tasks
-    prefetch_tasks = Prefetch('tasks', queryset=Task.objects.filter(tasksFilter))
-    
-    # TODO: Do not process if there is no task in the drawer
-    drawers = Drawer.objects.filter(privacyFilter).prefetch_related(prefetch_tasks).annotate(color=F('project__color')).order_by('order')
-    
-    serializer = DailyLogDetailsSerializer(drawers, many=True)
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
+        is_follower = Following.objects.filter(
+            follower=request.user,
+            followee=followeeUser,
+            status=Following.ACCEPTED
+        ).exists()
+
+        if request.user.username == followee:   # is me
+            privacyFilter = Q()
+        elif is_follower:   # is follower
+            privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(privacy=PrivacyMixin.FOR_PROTECTED)
+        else:
+            privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
+        # TODO: need to check block
+
+        privacyFilter &= Q(user=followeeUser)
+
+        day_min = datetime.fromisoformat(day)
+        day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+
+        tasksFilterForCompleted = Q(completed_at__range=(day_min, day_max))
+        tasksFilterForUncompleted = Q(completed_at=None)
+        tasksFilter = privacyFilter & (tasksFilterForCompleted | tasksFilterForUncompleted)
+
+        # TODO: order of tasks
+        prefetch_tasks = Prefetch('tasks', queryset=Task.objects.filter(tasksFilter))
+
+        # TODO: Do not process if there is no task in the drawer
+        drawers_queryset = Drawer.objects.filter(privacyFilter).prefetch_related(prefetch_tasks).annotate(color=F('project__color')).order_by('order')
+        
+        page = self.paginate_queryset(drawers_queryset)
+        if page is not None:
+            serializer = DailyLogDetailsSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = DailyLogDetailsSerializer(drawers_queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
 def get_following_feed(request: HttpRequest, date):
     pass
