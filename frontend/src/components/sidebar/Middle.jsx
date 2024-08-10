@@ -1,9 +1,10 @@
 import { useMemo } from "react"
 
 import { useQuery } from "@tanstack/react-query"
-import styled, { css } from "styled-components"
+import styled, { css, useTheme } from "styled-components"
 
 import SidebarLink from "@components/sidebar/SidebarLink"
+import { getProjectColor } from "@components/project/Creates/palettes"
 
 import { getProjectList } from "@api/projects.api"
 
@@ -27,6 +28,7 @@ const Middle = ({ collapsed, closeSidebar }) => {
     })
 
     const { t } = useTranslation("", { keyPrefix: "sidebar" })
+    const theme = useTheme()
     const { isMobile } = useScreenType()
     const items = useMemo(() => getItems(t), [t])
 
@@ -86,7 +88,7 @@ const Middle = ({ collapsed, closeSidebar }) => {
                         <ProjectItemBox $collapsed={collapsed}>
                             <FeatherIcon
                                 icon="circle"
-                                fill={`#` + project.color}
+                                fill={getProjectColor(theme.type, project.color)}
                             />
                             {!collapsed && project.name}
                         </ProjectItemBox>

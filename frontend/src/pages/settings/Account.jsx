@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import ModalPortal from "@components/common/ModalPortal"
 import Color from "@components/project/Creates/Color"
+import { getProjectColor } from "@components/project/Creates/palettes"
 import Error from "@components/settings/Error"
 import PasswordSection from "@components/settings/PasswordSection"
 import ProfileImg from "@components/settings/ProfileImg"
@@ -15,14 +16,16 @@ import Input from "@components/sign/Input"
 
 import { getMe, patchUser } from "@api/users.api"
 
+import useScreenType from "@utils/useScreenType"
+
 import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import useScreenType from "@utils/useScreenType"
 
 const Account = () => {
     const { t } = useTranslation("settings", { keyPrefix: "account" })
+    const theme = useTheme()
 
     const { isDesktop } = useScreenType()
 
@@ -35,7 +38,9 @@ const Account = () => {
         queryFn: () => getMe(),
     })
 
-    const [headerColor, setHeaderColor] = useState(user?.header_color)
+    const [headerColor, setHeaderColor] = useState({
+        color: user?.header_color,
+    })
     const [paletteOpen, setPaletteOpen] = useState(false)
 
     const mutation = useMutation({
@@ -55,7 +60,7 @@ const Account = () => {
     })
 
     useEffect(() => {
-        setHeaderColor(user?.header_color)
+        setHeaderColor({ color: user?.header_color })
     }, [user])
 
     const onClickOpenPalette = (e) => {
@@ -122,12 +127,15 @@ const Account = () => {
                     <Value>
                         <ColorButton
                             onClick={onClickOpenPalette}
-                            $color={"#" + headerColor}
+                            $color={getProjectColor(
+                                theme.type,
+                                headerColor.color,
+                            )}
                         />
                         <input
                             name="header_color"
                             type="hidden"
-                            value={headerColor || ""}
+                            value={headerColor.color || ""}
                         />
                     </Value>
                     {paletteOpen && (
@@ -145,8 +153,7 @@ const Account = () => {
                             disabled={mutation.isPending}
                             $loading={mutation.isPending}
                             $form={buttonForms.filled}
-                            type="submit"
-                        >
+                            type="submit">
                             {t("button_submit")}
                         </Button>
                     </ButtonGroup>

@@ -1,6 +1,8 @@
 import { useState } from "react"
 
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
+
+import { getProjectColor } from "@components/project/Creates/palettes"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -14,9 +16,8 @@ const DrawerFolder = ({ project, changeDrawer }) => {
                     project.type === "inbox"
                         ? changeDrawer(project.drawers[0].id)
                         : () => setCollapsed((prev) => !prev)
-                }
-            >
-                <Circle $color={project.color} />
+                }>
+                <Circle $color={getProjectColor(theme.type, project.color)} />
                 <ItemText $is_project={true}>{project.name}</ItemText>
             </ItemBox>
             {project.type === "inbox"
@@ -27,8 +28,7 @@ const DrawerFolder = ({ project, changeDrawer }) => {
                     project.drawers.map((drawer) => (
                         <ItemBox
                             key={drawer.id}
-                            onClick={changeDrawer(drawer.id)}
-                        >
+                            onClick={changeDrawer(drawer.id)}>
                             <FeatherIcon icon="arrow-right" />
                             <ItemText $is_project={false}>
                                 {drawer.name}
@@ -43,7 +43,7 @@ const Circle = styled.div`
     position: relative;
     width: 1.1em;
     height: 1.1em;
-    background-color: #${(props) => props.$color};
+    background-color: ${(props) => props.$color};
     border-radius: 50%;
     margin-right: 0.6em;
 `

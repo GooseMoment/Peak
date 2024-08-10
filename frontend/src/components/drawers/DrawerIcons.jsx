@@ -31,7 +31,7 @@ const DrawerIcons = ({
                         setIsContextMenuOpen,
                     )}
                 >
-                    <SortIcon color={`#${color}`} />
+                    <SortIcon color={color} />
                 </div>
             ),
         },

@@ -1,17 +1,19 @@
 import { Link } from "react-router-dom"
 
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
+
+import { getProjectColor } from "@components/project/Creates/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const ProjectName = ({ project, demo = false }) => {
     const { t } = useTranslation(null, { keyPrefix: "project_list" })
+    const theme = useTheme()
 
     let nameParts = (
         <Link
             to={`/app/projects/${project.id}`}
-            style={{ textDecoration: "none" }}
         >
             <NameText>{project.name}</NameText>
         </Link>
@@ -24,7 +26,7 @@ const ProjectName = ({ project, demo = false }) => {
     return (
         <Box>
             <FlexBox>
-                <FeatherIcon icon="circle" fill={`#` + project.color} />
+                <FeatherIcon icon="circle" fill={getProjectColor(theme.type, project.color)} />
                 {nameParts}
                 <TypeText>
                     {project.type === "regular" && t("type_regular")}

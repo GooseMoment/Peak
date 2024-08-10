@@ -84,8 +84,8 @@ const BarProgress = styled.div`
     display: ${(props) => (props.$percent === 0 ? "none" : "flex")};
     width: 100%;
     background: linear-gradient(
-        #${(props) => props.$color},
-        #${(props) => props.$color}
+        ${(props) => props.$color},
+        ${(props) => props.$color}
     );
     background-size: ${(props) => props.$percent}%;
     background-repeat: no-repeat;
@@ -96,7 +96,7 @@ const BarChartBox = styled.div`
     display: flex;
     width: ${(props) => props.$percent}%;
     height: 3em;
-    box-shadow: 0 0 0 3px #${(props) => props.$color} inset;
+    box-shadow: 0 0 0 3px ${(props) => props.$color} inset;
     background-color: ${(p) => p.theme.backgroundColor};
     border-radius: ${(props) => props.$isOne && 15}px;
     margin: 1em 0em;
@@ -108,7 +108,7 @@ const BarChartBox = styled.div`
     ${(props) =>
         props.$isCompleted &&
         css`
-            background-color: #${(props) => props.$color};
+            background-color: ${(props) => props.$color};
             border-radius: 15px;
         `}
 

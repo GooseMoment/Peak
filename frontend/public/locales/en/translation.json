@@ -47,8 +47,24 @@
         "error_load_task": "Couldn't load tasks 😢",
         "color": {
             "title": "Color Settings",
-            "theme1": "Basics",
-            "theme2": "Summer"
+            "theme1": "Theme1",
+            "theme2": "Theme2",
+            "orange": "orange",
+            "peach": "peach",
+            "pink": "pink",
+            "dark_yellow": "dark yellow",
+            "yellow": "yellow",
+            "light_green": "light green",
+            "turquoise": "turquoise",
+            "dark_blue": "dark blue",
+            "red": "red",
+            "brown": "brown",
+            "green": "green",
+            "sky_blue": "sky blue",
+            "light_purple": "light purple",
+            "purple_blue": "purple blue",
+            "blue": "blue",
+            "purple": "purple"
         },
         "privacy": {
             "title": "Privacy Settings",

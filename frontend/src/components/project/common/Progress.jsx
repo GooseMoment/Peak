@@ -1,11 +1,13 @@
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
+import { getProjectColor } from "@components/project/Creates/palettes"
 import BarChart from "@components/project/common/BarChart"
 
 import { useTranslation } from "react-i18next"
 
 const Progress = ({ project, drawers }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
+    const theme = useTheme()
 
     let projectTaskCount =
         project.completed_task_count + project.uncompleted_task_count
@@ -29,7 +31,7 @@ const Progress = ({ project, drawers }) => {
             <FlexBox>
                 <BarChart
                     isCompleted={isCompleted()}
-                    color={project.color}
+                    color={getProjectColor(theme.type, project.color)}
                     drawers={drawers}
                     projectTaskCount={projectTaskCount}
                 />

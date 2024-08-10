@@ -17,7 +17,7 @@ import {
 
 import { useTranslation } from "react-i18next"
 
-const projectColor = "0E4A84"
+const projectColor = "#0E4A84"
 
 const DemoDrawer = () => {
     const { t } = useTranslation(null, {
@@ -30,9 +30,7 @@ const DemoDrawer = () => {
         <SubSection>
             <SubTitle>{t("title")}</SubTitle>
 
-            <PageTitle $color={"#" + projectColor}>
-                {t("project_name")}
-            </PageTitle>
+            <PageTitle $color={projectColor}>{t("project_name")}</PageTitle>
             {drawers?.slice(0, count)?.map((drawer, i) => (
                 <Fragment key={i}>
                     <DrawerBox $color={projectColor} $demo>
