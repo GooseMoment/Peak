@@ -20,11 +20,11 @@
         "type_reactions": "리액션",
         "type_pecking": "콕 쪼기",
         "type_follow": "팔로우",
-        "content_task_reminder": "{{delta}}분 전 알림입니다.",
-        "content_comment_task": "\"<ellipsis>{{task_name}}</ellipsis>\"에 댓글을 남겼습니다: \"<ellipsis>{{comment}}</ellipsis>\"",
-        "content_peck": "\"<ellipsis>{{task_name}}</ellipsis>\"을(를) {{count}}번 콕 쪼았습니다.",
-        "content_reaction_task": "\"<ellipsis>{{task_name}}</ellipsis>\"에 리액션 했습니다.",
-        "content_reaction_daily_comment": "{{date}}의 하루 코멘트에 리액션 했습니다.",
+        "content_task_reminder": "{{delta}}분 전 리마인더",
+        "content_task_reminder_now": "작업할 시간입니다.",
+        "content_peck": "{{count}}번 콕 쪼았습니다.",
+        "content_comment_quote": "{{date}}의 한마디",
+        "content_reaction_quote": "{{date}}의 한마디",
         "content_follow": "나를 팔로우 합니다.",
         "content_follow_request": "내게 팔로우 요청을 보냈습니다.",
         "content_follow_request_accepted": "내 팔로우 요청을 승인했습니다."
@@ -113,7 +113,6 @@
             "reminders": "리마인더 설정 우선"
         }
     },
-    "drawer": {},
     "task": {
         "missed": "놓침",
         "overdue": "기한 지남",
@@ -199,173 +198,6 @@
             "memo_placeholder": "메모를 입력해주세요.",
             "button_change": "변경하기",
             "memo_edit_success": "메모가 변경되었습니다."
-        }
-    },
-    "settings": {
-        "online": {
-            "sync_help": "{{name}} 설정 값은 모든 기기와 동기화 됩니다."
-        },
-        "sidebar": {
-            "account": "계정",
-            "general": "일반",
-            "privacy": "공개 범위",
-            "languages_and_time": "언어 및 시간",
-            "notifications": "알림",
-            "appearance": "테마",
-            "reactions": "리액션",
-            "blocks": "차단",
-            "info": "정보",
-            "sign_out": "로그아웃"
-        },
-        "account": {
-            "title": "계정",
-            "display_name": "이름",
-            "display_name_placeholder": "남에게 보일 이름",
-            "bio": "바이오",
-            "header_color": "헤더 색상",
-            "bio_placeholder": "자신을 소개하세요.",
-            "button_submit": "제출",
-            "change_password": "암호 변경",
-            "section_open": "열기",
-            "section_close": "닫기",
-            "current_password": "현재 암호",
-            "new_password": "새로운 암호",
-            "new_password_again": "새로운 암호 (다시 입력)",
-            "button_change": "변경",
-            "account_edited": "변경사항을 저장했습니다.",
-            "account_fail": "저장할 수 없습니다. 다시 시도하세요.",
-            "password_too_short": "암호는 8자 이상이어야 합니다.",
-            "password_is_same": "현재 암호와 새로운 암호가 동일합니다.",
-            "password_not_match": "새로운 암호가 서로 일치하지 않습니다.",
-            "password_wrong": "현재 암호가 틀렸습니다.",
-            "password_change_success": "암호를 변경했습니다.",
-            "password_change_error": "암호 변경 중 문제가 발생했습니다."
-        },
-        "general": {
-            "title": "일반",
-            "startpage": {
-                "name": "시작 페이지",
-                "description": "앱 실행 시 먼저 보일 페이지를 설정합니다.",
-                "values": {
-                    "home": "홈",
-                    "today": "오늘"
-                }
-            },
-            "delete_task_after_alert": {
-                "name": "작업 삭제 시 경고",
-                "description": "작업을 삭제할 때 되묻는 경고창을 띄웁니다."
-            }
-        },
-        "privacy": {
-            "title": "공개 범위",
-            "follow_request_approval_manually": {
-                "name": "팔로우를 수동으로 승인",
-                "description": "팔로우 요청을 받을지 수동으로 결정합니다."
-            },
-            "follow_request_approval_for_followings": {
-                "name": "내가 팔로우하는 사람이 보낸 팔로우를 자동으로 수락하기",
-                "description": "'팔로우를 수동으로 승인' 설정이 켜져있어도, 내가 팔로우하는 사람이 팔로우 요청을 보내면 자동으로 승인합니다."
-            },
-            "follow_list_privacy": {
-                "name": "내 팔로우 & 팔로워 목록 공개 범위",
-                "description": "내 인맥을 누구까지 보여줄지 정합니다.",
-                "values": {
-                    "public": "모두에게",
-                    "protected": "팔로워에게만",
-                    "private": "나에게만"
-                }
-            },
-            "setting_submitted": "공개 범위 설정을 저장했습니다."
-        },
-        "languages_and_time": {
-            "title": "언어 및 시간",
-            "locale": {
-                "name": "언어",
-                "system": "자동"
-            },
-            "timezone": {
-                "name": "시간대",
-                "system": "시스템 설정대로"
-            },
-            "start_of_the_week_monday": {
-                "name": "주의 시작은 월요일"
-            },
-            "time_as_24_hour": {
-                "name": "24시간제 사용"
-            }
-        },
-        "notifications": {
-            "title": "알림",
-            "push_notification_subscription": {
-                "name": "앱에서 알림 받기",
-                "description": "이 기기에서 Peak의 알림을 받습니다.",
-                "values": {
-                    "button_enable": "켜기",
-                    "button_disable": "끄기"
-                },
-                "disabled_push_notification": "알림을 비활성화 했습니다.",
-                "disabled_push_notification_error": "이 기기에서 알림을 비활성화 했습니다.",
-                "declined_push_notification": "알림 권한이 없습니다. 설정에서 권한을 허용해 주세요.",
-                "enabled_push_notification": "이제 Peak에서 보내는 알림을 받을 수 있습니다.",
-                "enabled_push_notification_error": "알림 활성화 중 오류가 발생했습니다."
-            },
-            "play_notification_sound": {
-                "name": "알림음 재생하기"
-            }
-        },
-        "appearance": {
-            "title": "테마",
-            "theme": {
-                "name": "테마",
-                "values": {
-                    "system": "시스템 설정대로",
-                    "light": "라이트",
-                    "light-systemcolor": "라이트 (시스템 컬러)",
-                    "dark": "다크",
-                    "dark-systemcolor": "다크 (시스템 컬러)"
-                }
-            },
-            "main_width": {
-                "name": "콘텐츠 너비",
-                "description": "좌우로 긴 화면에만 적용됩니다.",
-                "values": {
-                    "narrow": "좁게",
-                    "normal": "일반",
-                    "wide": "넓게"
-                }
-            },
-            "close_sidebar_on_startup": {
-                "name": "앱 시작 시 사이드바 닫기"
-            }
-        },
-        "reactions": {
-            "title": "리액션",
-            "favorite_emojis": {
-                "name": "즐겨찾는 에모지",
-                "description": "좋아하는 에모지를 즐겨찾기에 등록하면 빠르게 리액션을 달 수 있습니다."
-            },
-            "dislikable_emojis": {
-                "name": "피하고픈 에모지",
-                "description": "이 에모지는 내 앞에 나타나지 않습니다."
-            }
-        },
-        "blocks": {
-            "title": "차단",
-            "blockees": {
-                "name": "내가 차단한 사용자",
-                "description": "이 사용자들과 마주치지 않습니다.",
-                "button_unblock": "차단 해제",
-                "button_block": "다시 차단",
-                "empty": "아무도 없습니다."
-            }
-        },
-        "info": {
-            "title": "정보",
-            "build": {
-                "name": "빌드 정보",
-                "commit": "커밋",
-                "branch": "브랜치"
-            }
         }
     },
     "users": {

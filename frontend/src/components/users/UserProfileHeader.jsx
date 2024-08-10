@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 
@@ -19,9 +20,9 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
     const { isDesktop } = useScreenType()
 
     const followButton = isMine ? (
-        <a href="#/settings/account">
+        <Link to="/app/settings/account">
             <Button>{t("button_edit_profile")}</Button>
-        </a>
+        </Link>
     ) : (
         <FollowButton disabled={!user} user={user} />
     )

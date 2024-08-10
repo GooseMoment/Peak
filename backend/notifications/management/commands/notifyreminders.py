@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError, CommandParser
+from django.core.management.base import BaseCommand, CommandParser
 from django.core.cache import cache
 
 from notifications.models import Notification, TaskReminder
@@ -24,6 +24,9 @@ class Command(BaseCommand):
         print(f"[NOTIFY] Got {len(reminders)} TaskReminders.")
         
         for reminder in reminders:
+            if reminder.scheduled != now:
+                continue
+
             try:
                 user = reminder.task.user
 
