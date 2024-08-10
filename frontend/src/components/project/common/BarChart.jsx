@@ -7,7 +7,6 @@ const BarChart = ({
     color,
     drawers,
     projectTaskCount,
-    displayDrawersCount,
 }) => {
     if (isCompleted) {
         return (
@@ -26,7 +25,6 @@ const BarChart = ({
             <BarChartBox
                 key={drawer.id}
                 $color={color}
-                $isOne={displayDrawersCount === 0}
                 $percent={calculatePercent(
                     drawer.uncompleted_task_count + drawer.completed_task_count,
                     projectTaskCount,

@@ -23,23 +23,6 @@ const Progress = ({ project, drawers }) => {
         return totalUncompletedTaskCount === 0
     }
 
-    const getDisplayDrawersCount = () => {
-        let count = 0
-
-        for (let i = 0; i < drawers.length; i++) {
-            if (
-                drawers[i].completed_task_count +
-                    drawers[i].uncompleted_task_count !==
-                0
-            )
-                count += 1
-            else {
-                return count
-            }
-        }
-        return count !== 0 && count - 1
-    }
-
     return (
         <FlexColumnBox>
             <Text>{t("progress")}</Text>
@@ -49,7 +32,6 @@ const Progress = ({ project, drawers }) => {
                     color={project.color}
                     drawers={drawers}
                     projectTaskCount={projectTaskCount}
-                    displayDrawersCount={getDisplayDrawersCount()}
                 />
             </FlexBox>
         </FlexColumnBox>
