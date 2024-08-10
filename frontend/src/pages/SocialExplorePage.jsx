@@ -8,8 +8,6 @@ import SearchBar from "@components/social/explore/SearchBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
 import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
 
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-
 import {
     getDailyLogDetails,
     getExploreFeed,
@@ -62,7 +60,6 @@ const SocialExplorePage = () => {
     return (
         <>
             <SocialPageTitle active="explore" />
-            <ReactQueryDevtools initialIsOpen></ReactQueryDevtools>
             <Wrapper>
                 <Container>
                     <SearchBar handleSearch={recommendUsersMutation.mutate} />

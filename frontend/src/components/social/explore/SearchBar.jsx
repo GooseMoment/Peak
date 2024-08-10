@@ -20,10 +20,16 @@ const SearchBar = ({ handleSearch }) => {
         }, 1000)
     }
 
+    const handleKeyDown = (e) => {
+        if (e.key == "Enter") {
+            handleSearch({searchTerm})
+        }
+    }
+
     return (
         <Box>
             <FeatherIcon icon={"search"} />
-            <SearchInput value={searchTerm} onChange={handleChange} />
+            <SearchInput value={searchTerm} onChange={handleChange} onKeyDown={handleKeyDown} />
         </Box>
     )
 }
