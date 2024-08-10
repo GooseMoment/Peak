@@ -57,11 +57,11 @@ const Quote = ({ user, quote, saveQuote }) => {
                     <Content>{'"' + quote.content + '"'}</Content>
                 ) : quote.user.username === me ? (
                     <Content $color="#A4A4A4" $fontstyle="italic">
-                        {"Write your daily comments"}
+                        {"Write your today's quote"}
                     </Content>
                 ) : (
                     <Content $color="#A4A4A4" $fontstyle="italic">
-                        {"No daily comments yet"}
+                        {"No quote yet"}
                     </Content>
                 )}
             </Wrapper>

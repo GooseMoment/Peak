@@ -29,7 +29,7 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
         <Frame
             onClick={handleSelect}
             $bgcolor={
-                "#" + (log.username === selectedUser ? "ffd7c7" : "FEFDFC")
+                (log.username === selectedUser ? "#ffd7c7" : "#FEFDFC")
             }
         >
             <SimpleProfile user={log} ringColor={setRingColor} />
