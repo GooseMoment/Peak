@@ -1,6 +1,5 @@
 import { useMemo } from "react"
 
-import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
@@ -12,8 +11,8 @@ import { useTranslation } from "react-i18next"
 const browserTz = Intl.DateTimeFormat().resolvedOptions().timeZone
 
 const LanguagesAndTime = () => {
-    const { t } = useTranslation(null, {
-        keyPrefix: "settings.languages_and_time",
+    const { t } = useTranslation("settings", {
+        keyPrefix: "languages_and_time",
     })
 
     const timezones = useMemo(
@@ -31,7 +30,6 @@ const LanguagesAndTime = () => {
 
     return (
         <>
-            <PageTitle>{t("title")}</PageTitle>
             <Section>
                 <Name>{t("locale.name")}</Name>
                 <Value>

@@ -4,14 +4,13 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
+import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import ModalPortal from "@components/common/ModalPortal"
-import PageTitle from "@components/common/PageTitle"
 import Color from "@components/project/Creates/Color"
 import Error from "@components/settings/Error"
-import Loading from "@components/settings/Loading"
 import PasswordSection from "@components/settings/PasswordSection"
 import ProfileImg from "@components/settings/ProfileImg"
-import Section, { Name, Sync, Value } from "@components/settings/Section"
+import Section, { Name, Value } from "@components/settings/Section"
 import Input from "@components/sign/Input"
 
 import { getMe, patchUser } from "@api/users.api"
@@ -20,9 +19,12 @@ import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import useScreenType from "@utils/useScreenType"
 
 const Account = () => {
-    const { t } = useTranslation("", { keyPrefix: "settings.account" })
+    const { t } = useTranslation("settings", { keyPrefix: "account" })
+
+    const { isDesktop } = useScreenType()
 
     const {
         data: user,
@@ -68,7 +70,7 @@ const Account = () => {
     }
 
     if (isPending) {
-        return <Loading />
+        return <LoaderCircleFull />
     }
 
     if (isError) {
@@ -77,9 +79,6 @@ const Account = () => {
 
     return (
         <>
-            <PageTitle>
-                {t("title")} <Sync name={t("title")} />
-            </PageTitle>
             <Section>
                 <ImgNameEmailContainer>
                     <ProfileImg
@@ -99,8 +98,10 @@ const Account = () => {
                         <Input
                             name="display_name"
                             type="text"
+                            maxLength="18"
                             defaultValue={user.display_name}
                             placeholder={t("display_name_placeholder")}
+                            $width={isDesktop ? "30em" : "100%"}
                         />
                     </Value>
                 </Section>
@@ -110,6 +111,7 @@ const Account = () => {
                         <Bio
                             autoComplete="off"
                             name="bio"
+                            maxLength="150"
                             defaultValue={user.bio}
                             placeholder={t("bio_placeholder")}
                         />
@@ -118,7 +120,7 @@ const Account = () => {
                 <Section>
                     <Name>{t("header_color")}</Name>
                     <Value>
-                        <ColorCircle
+                        <ColorButton
                             onClick={onClickOpenPalette}
                             $color={"#" + headerColor}
                         />
@@ -129,7 +131,7 @@ const Account = () => {
                         />
                     </Value>
                     {paletteOpen && (
-                        <ModalPortal additional>
+                        <ModalPortal closeModal={() => setPaletteOpen(false)}>
                             <Color
                                 closeComponent={() => setPaletteOpen(false)}
                                 setColor={setHeaderColor}
@@ -158,7 +160,7 @@ const Account = () => {
 
 const ImgNameEmailContainer = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     gap: 2.5em;
 `
@@ -193,10 +195,10 @@ const Bio = styled.textarea`
     }
 `
 
-const ColorCircle = styled.div`
-    border-radius: 50%;
+const ColorButton = styled.div`
+    border-radius: 64px;
     border: 1.5px solid ${(p) => p.theme.secondBackgroundColor};
-    aspect-ratio: 1/1;
+    aspect-ratio: 3/1;
 
     height: 2em;
 

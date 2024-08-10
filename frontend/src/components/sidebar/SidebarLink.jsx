@@ -1,10 +1,11 @@
-import { NavLink } from "react-router-dom"
+import { startTransition } from "react"
+import { NavLink, useNavigate } from "react-router-dom"
 
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 
 import { cubicBeizer } from "@assets/keyframes"
 
-const sidebarStyle = css`
+const SidebarLink = styled(NavLink)`
     text-decoration: none;
     color: inherit;
     border-radius: 10px;
@@ -23,12 +24,33 @@ const sidebarStyle = css`
     }
 `
 
-export const SidebarA = styled.a`
-    ${sidebarStyle}
-`
+export const SidebarLinkLazy = ({
+    to,
+    draggable,
+    end,
+    navigateTo,
+    children,
+}) => {
+    const navigate = useNavigate()
 
-const SidebarLink = styled(NavLink)`
-    ${sidebarStyle}
-`
+    const onClickLink = (e) => {
+        e.preventDefault()
+
+        startTransition(() => {
+            navigate(navigateTo)
+        })
+    }
+
+    return (
+        <SidebarLink
+            onClick={onClickLink}
+            to={to}
+            draggable={draggable}
+            end={end}
+        >
+            {children}
+        </SidebarLink>
+    )
+}
 
 export default SidebarLink

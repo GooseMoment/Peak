@@ -1,5 +1,7 @@
 import styled from "styled-components"
 
+import { ifTablet } from "@utils/useScreenType"
+
 const Box = styled.h1`
     display: flex;
     align-items: center;
@@ -15,10 +17,8 @@ const Box = styled.h1`
 const By = styled.span`
     font-weight: 300;
 
-    @media screen and (max-width: 800px) {
-        & {
-            display: none;
-        }
+    ${ifTablet} {
+        display: none;
     }
 `
 

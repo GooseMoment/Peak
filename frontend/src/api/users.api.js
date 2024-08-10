@@ -8,48 +8,32 @@ import { deleteSubscription } from "@api/notifications.api"
 import { getClientSettings } from "@utils/clientSettings"
 
 export const getMe = async () => {
-    try {
-        const res = await client.get("users/me")
-        setCurrentUsername(res.data.username)
-        return res.data
-    } catch (e) {
-        throw e
-    }
+    const res = await client.get("users/me")
+    setCurrentUsername(res.data.username)
+    return res.data
 }
 
 export const getUserByUsername = async (username) => {
-    try {
-        const res = await client.get(`users/@${username}/`)
-        return res.data
-    } catch (e) {
-        throw e
-    }
+    const res = await client.get(`users/@${username}/`)
+    return res.data
 }
 
 export const patchUser = async (data) => {
-    try {
-        const me = await getMe()
-        const res = await client.patch(`users/@${me.username}/`, data)
-        return res.status
-    } catch (e) {
-        throw e
-    }
+    const me = await getMe()
+    const res = await client.patch(`users/@${me.username}/`, data)
+    return res.status
 }
 
 export const signIn = async (email, password) => {
-    try {
-        const res = await client.post("sign_in/", {
-            email: email,
-            password: password,
-        })
+    const res = await client.post("sign_in/", {
+        email: email,
+        password: password,
+    })
 
-        setToken(res.data.token)
-        setCurrentUsername(res.data.user.username)
+    setToken(res.data.token)
+    setCurrentUsername(res.data.user.username)
 
-        return true
-    } catch (e) {
-        throw e
-    }
+    return true
 }
 
 export const signUp = async (email, password, username) => {
@@ -72,6 +56,42 @@ export const signUp = async (email, password, username) => {
     }
 }
 
+export const verifyEmail = async (token) => {
+    try {
+        const res = await client.post(`sign_up/verification/`, {
+            token,
+        })
+
+        if (res.status === 200) {
+            return res.data.email
+        }
+    } catch (e) {
+        throw e
+    }
+}
+
+export const resendVerificationEmail = async (email) => {
+    return client.post(`sign_up/verification/resend/`, {
+        email,
+    })
+}
+
+export const requestPasswordRecoveryToken = async (email) => {
+    return client.post(`password_recovery/`, {
+        email,
+    })
+}
+
+export const patchPasswordWithPasswordRecoveryToken = async (
+    token,
+    newPassword,
+) => {
+    return client.patch(`password_recovery/`, {
+        token,
+        new_password: newPassword,
+    })
+}
+
 export const signOut = async () => {
     const subscriptionID = getClientSettings()["push_notification_subscription"]
     if (subscriptionID) {
@@ -91,35 +111,23 @@ export const signOut = async () => {
 }
 
 export const patchPassword = async (current_password, new_password) => {
-    try {
-        const res = await client.patch("users/me/password/", {
-            current_password,
-            new_password,
-        })
-        if (res.status === 200) {
-            return true
-        }
-
-        return res.data
-    } catch (e) {
-        throw e
+    const res = await client.patch("users/me/password/", {
+        current_password,
+        new_password,
+    })
+    if (res.status === 200) {
+        return true
     }
+
+    return res.data
 }
 
 export const uploadProfileImg = async (formData) => {
-    try {
-        const res = await client.post("users/me/profile_img/", formData)
-        return res.status
-    } catch (e) {
-        throw e
-    }
+    const res = await client.post("users/me/profile_img/", formData)
+    return res.status
 }
 
 export const getBlocks = async () => {
-    try {
-        const res = await client.get(`users/me/blocks/`)
-        return res.data
-    } catch (e) {
-        throw e
-    }
+    const res = await client.get(`users/me/blocks/`)
+    return res.data
 }

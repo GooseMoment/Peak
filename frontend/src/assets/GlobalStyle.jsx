@@ -67,6 +67,10 @@ html {
     z-index: 99;
 
     animation: ${modalFadeIn} 0.5s ${cubicBeizer} forwards !important;
+
+    ${ifMobile} {
+        padding: 0;
+    }
 }
 
 #confirmation {
