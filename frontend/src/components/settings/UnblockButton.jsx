@@ -27,8 +27,8 @@ const UnblockButton = ({ user }) => {
             setBlocked(!blocked)
         },
         onError: () => {
-            toast.error(t("error")
-        }
+            toast.error(t("error"))
+        },
     })
 
     return (
