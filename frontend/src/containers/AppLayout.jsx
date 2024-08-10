@@ -8,7 +8,7 @@ import { LoaderCircleFull } from "@components/common/LoaderCircle"
 const AppLayout = () => {
     return (
         <Layout>
-            <Suspense key="app-layout" fallback={<LoaderCircleFull />}>
+            <Suspense key="app-layout" fallback={<LoaderCircleFull height="100dvh" />}>
                 <Outlet />
             </Suspense>
         </Layout>
