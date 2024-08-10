@@ -31,7 +31,7 @@ const Brand = () => {
     return (
         <Box>
             <LogoBox src="/logo.svg" draggable="false" />
-            Peak <By>Alpha 0737</By>
+            Peak <By>Alpha 0805</By>
         </Box>
     )
 }
