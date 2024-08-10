@@ -81,7 +81,7 @@
         "delete": {
             "display": "Delete",
             "button_delete": "Delete",
-            "button_done": "Done",
+            "button_done": "Dismiss",
             "alert_project_title": "the \"{{project_name}}\" project",
             "alert_drawer_title": "the \"{{drawer_name}}\" drawer",
             "alert_task_title": "the \"{{task_name}}\" task",

@@ -157,5 +157,9 @@
             "commit": "Commit",
             "branch": "Branch"
         }
+    },
+    "sign_out": {
+        "question": "Would you like to sign out?",
+        "yes": "Sign out"
     }
 }

@@ -5,8 +5,11 @@ import Confirmation from "@components/common/Confirmation"
 
 import { states } from "@assets/themes"
 
+import { useTranslation } from "react-i18next"
+
 const ConfirmationSignOut = ({ onClose }) => {
     const navigate = useNavigate()
+    const { t } = useTranslation("settings", { keyPrefix: "sign_out" })
 
     const onClickSignOut = () => {
         navigate("/app/sign_out")
@@ -15,13 +18,13 @@ const ConfirmationSignOut = ({ onClose }) => {
     const buttons = [
         "close",
         <Button key="sign_out" $state={states.danger} onClick={onClickSignOut}>
-            로그아웃
+            {t("yes")}
         </Button>,
     ]
 
     return (
         <Confirmation
-            question="로그아웃 하시겠습니까?"
+            question={t("question")}
             buttons={buttons}
             onClose={onClose}
         />
