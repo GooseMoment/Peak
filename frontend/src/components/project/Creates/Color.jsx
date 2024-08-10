@@ -4,7 +4,7 @@ import styled, { css, useTheme } from "styled-components"
 
 import Detail from "@components/project/common/Detail"
 
-import { palettes, getProjectColor } from "./palettes"
+import { getProjectColor, palettes } from "./palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -22,28 +22,30 @@ const Color = ({ setColor, closeComponent }) => {
         }
     }
 
-    
     const themes = [
-        {id: "theme1", themeName: t("theme1")},
-        {id: "theme2", themeName: t("theme2")},
+        { id: "theme1", themeName: t("theme1") },
+        { id: "theme2", themeName: t("theme2") },
     ]
 
     return (
         <Detail title={t("title")} onClose={closeComponent}>
             <TabBox>
-            {themes.map(theme => (
-                <TabButton
-                    key={theme.themeName}
-                    $isActive={activeTab === theme.id}
-                    onClick={() => setActiveTab(theme.id)}
-                >
-                    {theme.themeName}
-                </TabButton>
-            ))}
+                {themes.map((theme) => (
+                    <TabButton
+                        key={theme.themeName}
+                        $isActive={activeTab === theme.id}
+                        onClick={() => setActiveTab(theme.id)}>
+                        {theme.themeName}
+                    </TabButton>
+                ))}
             </TabBox>
-            {palettes[activeTab]?.map(palette => (
+            {palettes[activeTab]?.map((palette) => (
                 <ItemBlock key={palette.display}>
-                    <FeatherIcon icon="circle" fill={getProjectColor(theme.type, palette.color)} onClick={changeColor(palette.color)}/>
+                    <FeatherIcon
+                        icon="circle"
+                        fill={getProjectColor(theme.type, palette.color)}
+                        onClick={changeColor(palette.color)}
+                    />
                 </ItemBlock>
             ))}
         </Detail>
@@ -62,16 +64,18 @@ const TabButton = styled.button`
     padding: 0.3em;
     font-size: 0.9em;
     font-weight: 500;
-    border: 1px solid ${p=>p.theme.project.borderColor};
+    border: 1px solid ${(p) => p.theme.project.borderColor};
     border-radius: 15px;
-    color: ${p=>p.theme.textColor};
-    background-color: ${p=>p.theme.backgroundColor};
+    color: ${(p) => p.theme.textColor};
+    background-color: ${(p) => p.theme.backgroundColor};
     cursor: pointer;
 
-    ${props => props.$isActive && css`
-        background-color: ${p=>p.theme.goose};
-        color: ${p=>p.theme.white}
-    `}
+    ${(props) =>
+        props.$isActive &&
+        css`
+            background-color: ${(p) => p.theme.goose};
+            color: ${(p) => p.theme.white};
+        `}
 `
 
 const ItemBlock = styled.div`

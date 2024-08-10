@@ -4,10 +4,10 @@ import styled, { useTheme } from "styled-components"
 
 import { TaskList } from "@components/drawers/Drawer"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
+import { getProjectColor } from "@components/project/Creates/palettes"
 import InteractionBox from "@components/social/interaction/InteractionBox"
 import Quote from "@components/social/logDetails/Quote"
 import TaskBox from "@components/social/logDetails/TaskBox"
-import { getProjectColor } from "@components/project/Creates/palettes"
 
 const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing }) => {
     const theme = useTheme()
@@ -21,7 +21,7 @@ const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing }) => {
                     saveQuote={saveQuote || null}
                 />
 
-                {(isFollowing && quote.id) && (
+                {isFollowing && quote.id && (
                     <InteractionBox parentType={"quote"} parent={quote} />
                 )}
 
@@ -36,8 +36,16 @@ const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing }) => {
                             // Only show when there are task
                             drawer.tasks.length !== 0 && (
                                 <Fragment key={drawer.id}>
-                                    <DrawerBox $color={getProjectColor(theme.type, drawer.color)}>
-                                        <DrawerName $color={getProjectColor(theme.type, drawer.color)}>
+                                    <DrawerBox
+                                        $color={getProjectColor(
+                                            theme.type,
+                                            drawer.color,
+                                        )}>
+                                        <DrawerName
+                                            $color={getProjectColor(
+                                                theme.type,
+                                                drawer.color,
+                                            )}>
                                             {drawer.name}
                                         </DrawerName>
                                     </DrawerBox>
@@ -46,7 +54,10 @@ const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing }) => {
                                             <TaskBox
                                                 key={task.id}
                                                 task={task}
-                                                color={getProjectColor(theme.type, drawer.color)}
+                                                color={getProjectColor(
+                                                    theme.type,
+                                                    drawer.color,
+                                                )}
                                                 isFollowing={isFollowing}
                                             />
                                         ))}

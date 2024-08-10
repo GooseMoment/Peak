@@ -14,14 +14,14 @@ import ProfileImg from "@components/settings/ProfileImg"
 import Section, { Name, Value } from "@components/settings/Section"
 import Input from "@components/sign/Input"
 
-
 import { getMe, patchUser } from "@api/users.api"
+
+import useScreenType from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import useScreenType from "@utils/useScreenType"
 
 const Account = () => {
     const { t } = useTranslation("settings", { keyPrefix: "account" })
@@ -38,7 +38,9 @@ const Account = () => {
         queryFn: () => getMe(),
     })
 
-    const [headerColor, setHeaderColor] = useState({color: user?.header_color})
+    const [headerColor, setHeaderColor] = useState({
+        color: user?.header_color,
+    })
     const [paletteOpen, setPaletteOpen] = useState(false)
 
     const mutation = useMutation({
@@ -58,7 +60,7 @@ const Account = () => {
     })
 
     useEffect(() => {
-        setHeaderColor({color: user?.header_color})
+        setHeaderColor({ color: user?.header_color })
     }, [user])
 
     const onClickOpenPalette = (e) => {
@@ -125,7 +127,10 @@ const Account = () => {
                     <Value>
                         <ColorButton
                             onClick={onClickOpenPalette}
-                            $color={getProjectColor(theme.type, headerColor.color)}
+                            $color={getProjectColor(
+                                theme.type,
+                                headerColor.color,
+                            )}
                         />
                         <input
                             name="header_color"
@@ -148,8 +153,7 @@ const Account = () => {
                             disabled={mutation.isPending}
                             $loading={mutation.isPending}
                             $form={buttonForms.filled}
-                            type="submit"
-                        >
+                            type="submit">
                             {t("button_submit")}
                         </Button>
                     </ButtonGroup>

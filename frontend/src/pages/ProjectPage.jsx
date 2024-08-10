@@ -11,12 +11,12 @@ import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import DrawerCreate from "@components/project/Creates/DrawerCreate"
+import { getProjectColor } from "@components/project/Creates/palettes"
+import Progress from "@components/project/common/Progress"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
-import { getProjectColor } from "@components/project/Creates/palettes"
-import Progress from "@components/project/common/Progress"
 
 import { getDrawersByProject } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
@@ -168,8 +168,7 @@ const ProjectPage = () => {
                             setSelectedSortMenuPosition,
                             setIsSortMenuOpen,
                             setIsContextMenuOpen,
-                        )}
-                    >
+                        )}>
                         <SortIcon color={theme.textColor} />
                     </SortIconBox>
                     <FeatherIcon
@@ -227,8 +226,7 @@ const ProjectPage = () => {
                 <ModalPortal
                     closeModal={() => {
                         setIsDrawerCreateOpen(false)
-                    }}
-                >
+                    }}>
                     <DrawerCreate
                         onClose={() => {
                             setIsDrawerCreateOpen(false)
@@ -240,8 +238,7 @@ const ProjectPage = () => {
                 <ModalPortal
                     closeModal={() => {
                         setIsProjectEditOpen(false)
-                    }}
-                >
+                    }}>
                     <ProjectEdit
                         project={project}
                         onClose={() => {

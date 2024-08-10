@@ -6,9 +6,10 @@ import styled, { useTheme } from "styled-components"
 import Color from "@components/project/Creates/Color"
 import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
+import { getProjectColor } from "@components/project/Creates/palettes"
 import Middle from "@components/project/common/Middle"
 import Title from "@components/project/common/Title"
-import { getProjectColor } from "@components/project/Creates/palettes"
+
 import { postProject } from "@api/projects.api"
 
 import queryClient from "@queries/queryClient"

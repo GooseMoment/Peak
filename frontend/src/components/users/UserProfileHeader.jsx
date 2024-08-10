@@ -4,9 +4,9 @@ import { Link } from "react-router-dom"
 import styled, { css, useTheme } from "styled-components"
 
 import Button from "@components/common/Button"
+import { getProjectColor } from "@components/project/Creates/palettes"
 import FollowButton from "@components/users/FollowButton"
 import FollowsCount from "@components/users/FollowsCount"
-import { getProjectColor } from "@components/project/Creates/palettes"
 
 import useScreenType, { ifMobile, ifTablet } from "@utils/useScreenType"
 
@@ -43,7 +43,9 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
 
     return (
         <>
-            <Banner $headerColor={getProjectColor(theme.type, user?.header_color)} />
+            <Banner
+                $headerColor={getProjectColor(theme.type, user?.header_color)}
+            />
             <OverBanner>
                 {followingYou?.status === "accepted" ? (
                     <FollowsYou>{t("follows_you")}</FollowsYou>

@@ -1,7 +1,7 @@
 import styled, { useTheme } from "styled-components"
 
-import SimpleProfile from "@components/social/common/SimpleProfile"
 import { getProjectColor } from "@components/project/Creates/palettes"
+import SimpleProfile from "@components/social/common/SimpleProfile"
 
 import { DateTime } from "luxon"
 
@@ -14,7 +14,7 @@ const putEllipsis = (text, maxLength) => {
 const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
     const theme = useTheme()
 
-    if(!log) return null
+    if (!log) return null
 
     const handleSelect = () => {
         setSelectedUser(log.username === selectedUser ? null : log.username)
@@ -31,10 +31,7 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
     return (
         <Frame
             onClick={handleSelect}
-            $bgcolor={
-                (log.username === selectedUser ? "#ffd7c7" : "#FEFDFC")
-            }
-        >
+            $bgcolor={log.username === selectedUser ? "#ffd7c7" : "#FEFDFC"}>
             <SimpleProfile user={log} ringColor={setRingColor} />
             <RecentTask>
                 {log.recent_task && (
@@ -73,7 +70,7 @@ const Frame = styled.div`
 const RecentTask = styled.div`
     min-width: 40%;
     flex-grow: 1;
-    
+
     padding-top: 0.7em;
     line-height: 1.3em;
 `

@@ -1,24 +1,24 @@
 export const palettes = {
-    "theme1": [
-        {color: "orange", display: "주황"},
-        {color: "peach", display: "피치"},
-        {color: "pink", display: "핑크"},
-        {color: "dark_yellow", display: "진노랑"},
-        {color: "yellow", display: "노랑"},
-        {color: "light_green", display: "연두"},
-        {color: "turquoise", display: "청록"},
-        {color: "dark_blue", display: "남색"},
+    theme1: [
+        { color: "orange", display: "주황" },
+        { color: "peach", display: "피치" },
+        { color: "pink", display: "핑크" },
+        { color: "dark_yellow", display: "진노랑" },
+        { color: "yellow", display: "노랑" },
+        { color: "light_green", display: "연두" },
+        { color: "turquoise", display: "청록" },
+        { color: "dark_blue", display: "남색" },
     ],
-    "theme2": [
-        {color: "red", display: "빨강"},
-        {color: "brown", display: "갈색"},
-        {color: "green", display: "녹색"},
-        {color: "sky_blue", display: "하늘"},
-        {color: "light_purple", display: "연보라"},
-        {color: "purple_blue", display: "보라파랑"},
-        {color: "blue", display: "파랑"},
-        {color: "purple", display: "보라"},
-    ]
+    theme2: [
+        { color: "red", display: "빨강" },
+        { color: "brown", display: "갈색" },
+        { color: "green", display: "녹색" },
+        { color: "sky_blue", display: "하늘" },
+        { color: "light_purple", display: "연보라" },
+        { color: "purple_blue", display: "보라파랑" },
+        { color: "blue", display: "파랑" },
+        { color: "purple", display: "보라" },
+    ],
 }
 
 const light = {
@@ -62,8 +62,8 @@ const dark = {
 }
 
 const themes = {
-    "light": light,
-    "dark": dark,
+    light: light,
+    dark: dark,
 }
 
 export const getProjectColor = (theme, color) => {

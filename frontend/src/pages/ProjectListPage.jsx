@@ -42,8 +42,7 @@ const ProjectListPage = () => {
                 <ProjectCreateButton
                     onClick={() => {
                         setIsCreateOpen(true)
-                    }}
-                >
+                    }}>
                     <FeatherIcon icon="plus-circle" />
                     <ProjectCreateText>
                         {t("button_add_project")}
@@ -54,8 +53,7 @@ const ProjectListPage = () => {
                 <ModalPortal
                     closeModal={() => {
                         setIsCreateOpen(false)
-                    }}
-                >
+                    }}>
                     <ProjectCreate
                         onClose={() => {
                             setIsCreateOpen(false)
