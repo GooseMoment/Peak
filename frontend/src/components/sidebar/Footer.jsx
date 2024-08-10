@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
 
-import SidebarLink from "@components/sidebar/SidebarLink"
+import SidebarLink, { SidebarLinkLazy } from "@components/sidebar/SidebarLink"
 
 import { getMe } from "@api/users.api"
 
@@ -54,11 +54,16 @@ const Footer = ({ collapsed }) => {
             )}
 
             {!collapsed && (
-                <SidebarLink to="/app/settings/account" draggable="false">
+                <SidebarLinkLazy
+                    navigateTo="/app/settings/account"
+                    to="/app/settings"
+                    draggable="false"
+                    end={false}
+                >
                     <SettingIconContainer>
                         <FeatherIcon icon="settings" />
                     </SettingIconContainer>
-                </SidebarLink>
+                </SidebarLinkLazy>
             )}
         </FooterBox>
     )

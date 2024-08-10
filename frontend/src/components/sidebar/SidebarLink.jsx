@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom"
+import { startTransition } from "react"
+import { NavLink, useNavigate } from "react-router-dom"
 
 import styled from "styled-components"
 
@@ -22,5 +23,34 @@ const SidebarLink = styled(NavLink)`
         background-color: ${(p) => p.theme.sidebar.hoverBackgroundColor};
     }
 `
+
+export const SidebarLinkLazy = ({
+    to,
+    draggable,
+    end,
+    navigateTo,
+    children,
+}) => {
+    const navigate = useNavigate()
+
+    const onClickLink = (e) => {
+        e.preventDefault()
+
+        startTransition(() => {
+            navigate(navigateTo)
+        })
+    }
+
+    return (
+        <SidebarLink
+            onClick={onClickLink}
+            to={to}
+            draggable={draggable}
+            end={end}
+        >
+            {children}
+        </SidebarLink>
+    )
+}
 
 export default SidebarLink

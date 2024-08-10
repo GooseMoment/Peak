@@ -1,4 +1,3 @@
-import { Suspense } from "react"
 import { RouterProvider } from "react-router-dom"
 
 import { useTheme } from "styled-components"
@@ -22,9 +21,10 @@ const Root = () => {
                 hideProgressBar
             />
 
-            <Suspense fallback={<FullscreenLoader />}>
-                <RouterProvider router={mainRouter} />
-            </Suspense>
+            <RouterProvider
+                router={mainRouter}
+                fallbackElement={<FullscreenLoader />}
+            />
         </>
     )
 }
