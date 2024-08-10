@@ -6,7 +6,7 @@ from . import views
 
 urlpatterns = [
     path('explore/search/', views.get_explore_search_results),
-    path('explore/', views.get_explore_feed),
+    path('explore/', views.ExploreFeedView.as_view()),
     path('follow/@<str:follower>/@<str:followee>/', views.FollowView.as_view()),
     path('block/@<str:blocker>/@<str:blockee>/', views.BlockView.as_view()),
     path('daily/logs/@<str:username>/<str:day>/', views.get_daily_logs),

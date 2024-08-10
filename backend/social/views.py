@@ -22,22 +22,52 @@ from drawers.models import Drawer
 
 from users.serializers import UserSerializer
 
+class ExploreFeedPagination(CursorPagination):
+    page_size = 8
+    ordering = "order"
+
+class ExploreFeedView(mixins.ListModelMixin, generics.GenericAPIView):
+    
+    pargination_class = ExploreFeedPagination
+    
+    def get(self, request):
+        user = request.user
+    
+        followees = User.objects.filter(followers__follower=user)
+
+        recommendUserFilter = Q(followers__follower=user) | Q(id=user.id)
+
+        feeds_queryset = User.objects.filter(
+            followers__follower__in=followees
+        ).distinct().exclude(recommendUserFilter)
+        # TODO: exclude private user
+        
+        page = self.paginate_queryset(feeds_queryset)
+        
+        if page is not None:
+            serializer = UserSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = UserSerializer(feeds_queryset, many=True)
+    
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ExploreSearchView():
+    pass
+
+
 @api_view(["GET"])
-def get_explore_feed(request: HttpRequest):
-    user = request.user
+def get_explore_search_results(request: Request):
+    keyword = request.GET.get('query')
     
-    followees = User.objects.filter(followers__follower=user)
+    if keyword is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
     
-    recommendUserFilter = Q(followers__follower=user) | Q(id=user.id)
-
-    secondFollowees = User.objects.filter(
-        followers__follower__in=followees
-    ).distinct().exclude(recommendUserFilter)
-    # TODO: exclude private user
-
-    serializer = UserSerializer(secondFollowees, many=True)
+    users = User.objects.filter(username__icontains=keyword)
+    serializer = UserSerializer(users, many=True)
     
     return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class FollowView(APIView):
     #request 확인 기능 넣기
@@ -509,15 +539,3 @@ class EmojiList(mixins.ListModelMixin, generics.GenericAPIView):
     @method_decorator(cache_page(60 * 30)) # caching for 30 minutes
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
-
-@api_view(["GET"])
-def get_explore_search_results(request: Request):
-    keyword = request.GET.get('query')
-    
-    if keyword is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    
-    users = User.objects.filter(username__icontains=keyword)
-    serializer = UserSerializer(users, many=True)
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)

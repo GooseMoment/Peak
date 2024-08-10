@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { styled } from "styled-components"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
@@ -10,7 +10,7 @@ import SearchBar from "@components/social/explore/SearchBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
 
 import {
-    getDailyLogDetails,
+    getDailyLogTasks,
     getExploreFeed,
     getExploreSearchResults,
     getQuote,
@@ -18,16 +18,38 @@ import {
 
 import queryClient from "@queries/queryClient"
 
+const getCursorFromURL = (url) => {
+    if (!url) return null
+
+    const u = new URL(url)
+    const cursor = u.searchParams.get("cursor")
+    return cursor
+}
+
 const SocialExplorePage = () => {
     const initial_date = new Date()
     initial_date.setHours(0, 0, 0, 0)
 
     const [selectedUser, setSelectedUser] = useState(null)
 
+    const {
+        data: recommendPage,
+        fetchNextPage: fetchNextRecommendPage,
+        // isPending: isRecommendPending,
+        refetch: refetchRecommend,
+    } = useInfiniteQuery({
+        queryKey: ["explore", "recommend", "users"],
+        queryFn: (page) =>
+            getExploreFeed(page.pageParam),
+        initialPageParam: "",
+        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
+        refetchOnWindowFocus: false
+    })
+
     const { data: recommendUsers, isPending: isRecommendPending } = useQuery({
         queryKey: ["explore", "recommend", "users"],
         queryFn: () => getExploreFeed(),
-        staleTime: 2 * 60 * 60 * 1000,
+        staleTime: 1 * 60 * 60 * 1000,
     })
 
     const [searchTerm, setSearchTerm] = useState("")
@@ -50,8 +72,8 @@ const SocialExplorePage = () => {
 
     const { data: exploreLogDetails } = useQuery({
         queryKey: ["explore", "log", "details", selectedUser],
-        queryFn: () =>
-            getDailyLogDetails(selectedUser, initial_date.toISOString()),
+        queryFn: () => 
+            getDailyLogTasks(selectedUser, initial_date.toISOString()),
         enabled: !!selectedUser,
     })
 
@@ -82,6 +104,7 @@ const SocialExplorePage = () => {
                     ) : (
                         <ExploreFeed
                             recommendUsers={recommendUsers}
+                            recommendPage={recommendPage}
                             foundUsers={foundUsers}
                             selectedUser={selectedUser}
                             setSelectedUser={setSelectedUser}

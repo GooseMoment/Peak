@@ -4,6 +4,7 @@ import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
 import { useRef } from "react"
 
 const ExploreFeed = ({
+    recommendPage,
     recommendUsers,
     foundUsers,
     selectedUser,
@@ -17,6 +18,12 @@ const ExploreFeed = ({
 
     return (
         <FeedContainer>
+            {recommendPage?.pages?.map((group) => (
+                group?.results?.map((user) => (
+                    console.log(user)
+                ))
+            ))}
+
             {(foundUsers && Object.values(foundUsers).length === 0) ? (
                 <NoResult>
                     No Result

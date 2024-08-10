@@ -107,8 +107,8 @@ export const getDailyLogTasks = async (drawerID, day, page) => {
     return res.data
 }
 
-export const getExploreFeed = async () => {
-    const res = await client.get(`social/explore/`)
+export const getExploreFeed = async (cursor) => {
+    const res = await client.get(`social/explore/?cursor=${cursor}`)
 
     return res.data
 }
