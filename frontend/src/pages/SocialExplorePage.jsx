@@ -11,7 +11,7 @@ import LogDetails from "@components/social/logDetails/LogDetails"
 
 import {
     getDailyLogTasks,
-    getExploreFeed,
+    getExploreRecommend,
     getExploreSearchResults,
     getQuote,
 } from "@api/social.api"
@@ -40,7 +40,7 @@ const SocialExplorePage = () => {
     } = useInfiniteQuery({
         queryKey: ["explore", "recommend", "users"],
         queryFn: (page) =>
-            getExploreFeed(page.pageParam),
+            getExploreRecommend(page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
         refetchOnWindowFocus: false
@@ -48,7 +48,7 @@ const SocialExplorePage = () => {
 
     const { data: recommendUsers, isPending: isRecommendPending } = useQuery({
         queryKey: ["explore", "recommend", "users"],
-        queryFn: () => getExploreFeed(),
+        queryFn: () => getExploreRecommend(),
         staleTime: 1 * 60 * 60 * 1000,
     })
 
