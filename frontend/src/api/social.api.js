@@ -63,11 +63,13 @@ export const getFollowingsByUser = async (username) => {
     return res.data
 }
 
-export const getBlocks = () => {}
+export const putBlock = (username) => {
+    return client.put(`social/block/@${getCurrentUsername()}/@${username}/`)
+}
 
-export const postBlock = (userID) => {}
-
-export const deleteBlock = (userID) => {}
+export const deleteBlock = (username) => {
+    return client.delete(`social/block/@${getCurrentUsername()}/@${username}/`)
+}
 
 export const getDailyLogsPreview = async (username, day) => {
     const res = await client.get(`social/daily/logs/@${username}/${day}/`)

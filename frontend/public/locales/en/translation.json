@@ -20,14 +20,14 @@
         "type_reactions": "Reactions",
         "type_pecking": "Pecking",
         "type_follow": "Follow",
-        "content_task_reminder": "This is a reminder before {{delta}} minute(s).",
-        "content_comment_task": "commented on \"<ellipsis>{{task_name}}</ellipsis>\": \"<ellipsis>{{comment}}</ellipsis>\"",
-        "content_peck": "pecked \"<ellipsis>{{task_name}}</ellipsis>\" {{count}} times",
-        "content_reaction_task": "Reacted to \"<ellipsis>{{task_name}}</ellipsis>\"",
-        "content_daily_comment": "Daily Comment of {{date}}",
-        "content_follow": "follows you",
-        "content_follow_request": "wants to follow you",
-        "content_follow_request_accepted": "accepted follow request"
+        "content_task_reminder": "Reminder before {{delta}} minute(s).",
+        "content_task_reminder_now": "Time to work!",
+        "content_peck": "pecked {{count}} times.",
+        "content_comment_quote": "Quote of {{date}}.",
+        "content_reaction_quote": "Quote of {{date}}.",
+        "content_follow": "follows you.",
+        "content_follow_request": "wants to follow you.",
+        "content_follow_request_accepted": "accepted follow request."
     },
     "project_list": {
         "title": "Projects",
@@ -44,6 +44,22 @@
         "loading": "Loading...",
         "error_load_project_and_drawer": "Couldn't load project and drawers 😢",
         "error_load_task": "Couldn't load tasks 😢",
+        "color": {
+            "title": "Color Settings",
+            "theme1": "Basics",
+            "theme2": "Summer"
+        },
+        "privacy": {
+            "title": "Privacy Settings",
+            "public": "Everyone",
+            "protected": "Limit to my followers",
+            "private": "Only me"
+        },
+        "type": {
+            "title": "Project Type Settings",
+            "regular": "a regular project",
+            "goal": "a goal project"
+        },
         "create": {
             "name_placeholder": "Enter a name",
             "button_add": "Add",
@@ -57,31 +73,18 @@
             "drawer_create_no_name": "Write a name for your drawer.",
             "task_create_success": "The task was successfully created.",
             "task_create_error": "The task creation failed.",
-            "task_create_no_name": "Write a name for your task.",
-            "color": {
-                "title": "Color Settings",
-                "theme1": "Basics",
-                "theme2": "Summer"
-            },
-            "privacy": {
-                "title": "Privacy Settings",
-                "public": "Everyone",
-                "protected": "Limit to my followers",
-                "private": "Only me"
-            },
-            "type": {
-                "title": "Project Type Settings",
-                "regular": "a regular project",
-                "goal": "a goal project"
-            }
+            "task_create_no_name": "Write a name for your task."
         },
         "edit": {
-            "display": "Edit"
+            "display": "Edit",
+            "name_change_success": "The name has changed.",
+            "project_change_error": "The project change failed.",
+            "drawer_change_error": "The drawer change failed."
         },
         "delete": {
             "display": "Delete",
             "button_delete": "Delete",
-            "button_done": "Done",
+            "button_done": "Dismiss",
             "alert_project_title": "the \"{{project_name}}\" project",
             "alert_drawer_title": "the \"{{drawer_name}}\" drawer",
             "alert_task_title": "the \"{{task_name}}\" task",
@@ -195,173 +198,6 @@
             "memo_placeholder": "Enter a memo.",
             "button_change": "Change",
             "memo_edit_success": "The memo was changed."
-        }
-    },
-    "settings": {
-        "online": {
-            "sync_help": "The values of {{name}} are synced across all your devices."
-        },
-        "sidebar": {
-            "account": "Account",
-            "general": "General",
-            "privacy": "Privacy",
-            "languages_and_time": "Languages & Time",
-            "notifications": "Notifications",
-            "appearance": "Appearance",
-            "reactions": "Reactions",
-            "blocks": "Blocks",
-            "info": "Info",
-            "sign_out": "Sign out"
-        },
-        "account": {
-            "title": "Account",
-            "display_name": "Display name",
-            "display_name_placeholder": "Your awesome name",
-            "bio": "Bio",
-            "header_color": "Header Color",
-            "bio_placeholder": "Tell me who you are",
-            "button_submit": "Submit",
-            "change_password": "Change password",
-            "section_open": "Open",
-            "section_close": "Close",
-            "current_password": "Current password",
-            "new_password": "New password",
-            "new_password_again": "New password (Type again)",
-            "button_change": "Change",
-            "account_edited": "Account was edited.",
-            "account_fail": "Couldn't save. Try again.",
-            "password_too_short": "Password should be more than 8 characters.",
-            "password_is_same": "New password should be different with current password.",
-            "password_not_match": "New password does not match.",
-            "password_wrong": "Current password is wrong.",
-            "password_change_success": "Password was changes.",
-            "password_change_error": "Error occured while changing password."
-        },
-        "general": {
-            "title": "General",
-            "startpage": {
-                "name": "Start Page",
-                "description": "Determines which page will show up on startup.",
-                "values": {
-                    "home": "Home",
-                    "today": "Today"
-                }
-            },
-            "delete_task_after_alert": {
-                "name": "Alert before task deletion",
-                "description": "Show an alert before deleting tasks."
-            }
-        },
-        "privacy": {
-            "title": "Privacy",
-            "follow_request_approval_manually": {
-                "name": "Accept follow manually",
-                "description": "Follow requests will be pending until you accept them."
-            },
-            "follow_request_approval_for_followings": {
-                "name": "Accept follows of your followings automatically",
-                "description": "If one of your followings sends you follow request, you accept it without your action."
-            },
-            "follow_list_privacy": {
-                "name": "Visibility of my followings & followers list",
-                "description": "You can set who can see your personal connections.",
-                "values": {
-                    "public": "Everyone",
-                    "protected": "Limit to my followers",
-                    "private": "Only me"
-                }
-            },
-            "setting_submitted": "Privacy settings were saved."
-        },
-        "languages_and_time": {
-            "title": "Languages & Time",
-            "locale": {
-                "name": "Language",
-                "system": "Auto"
-            },
-            "timezone": {
-                "name": "Timezone",
-                "system": "Same as system"
-            },
-            "start_of_the_week_monday": {
-                "name": "Display the start of the week as Monday"
-            },
-            "time_as_24_hour": {
-                "name": "Display time as a 24-hour"
-            }
-        },
-        "notifications": {
-            "title": "Notifications",
-            "push_notification_subscription": {
-                "name": "Receive push notifications",
-                "description": "Get notifications on this device.",
-                "values": {
-                    "button_enable": "Enable",
-                    "button_disable": "Disable"
-                },
-                "disabled_push_notification": "Disabled push notification.",
-                "disabled_push_notification_error": "Disabled push notification on this device.",
-                "declined_push_notification": "You declined notifications. Please allow permisssion.",
-                "enabled_push_notification": "Now you can receive notifications from Peak.",
-                "enabled_push_notification_error": "An error is occured while enabling a push notification."
-            },
-            "play_notification_sound": {
-                "name": "Play notification sound"
-            }
-        },
-        "appearance": {
-            "title": "Appearance",
-            "theme": {
-                "name": "Theme preference",
-                "values": {
-                    "system": "Same as system",
-                    "light": "light",
-                    "light-systemcolor": "light (with system color)",
-                    "dark": "dark",
-                    "dark-systemcolor": "dark (with system color)"
-                }
-            },
-            "main_width": {
-                "name": "Content width",
-                "description": "Only applied in long-width screens.",
-                "values": {
-                    "narrow": "narrow",
-                    "normal": "normal",
-                    "wide": "wide"
-                }
-            },
-            "close_sidebar_on_startup": {
-                "name": "Close sidebar on start up"
-            }
-        },
-        "reactions": {
-            "title": "Reactions",
-            "favorite_emojis": {
-                "name": "Favorite emojis",
-                "description": "Favorite these and react easily."
-            },
-            "dislikable_emojis": {
-                "name": "Emojis to avoid",
-                "description": "These emojis will not show up in front of you."
-            }
-        },
-        "blocks": {
-            "title": "Blocks",
-            "blockees": {
-                "name": "Users blocked by me",
-                "description": "These users don't appear to you.",
-                "button_unblock": "Unblock",
-                "button_block": "Re-block",
-                "empty": "Nobody is here."
-            }
-        },
-        "info": {
-            "title": "Info",
-            "build": {
-                "name": "Build information",
-                "commit": "Commit",
-                "branch": "Branch"
-            }
         }
     },
     "users": {
@@ -482,24 +318,44 @@
         "404_error_text": "The page you requested is not found.",
         "404_error_bottom": "Back to the previous page"
     },
+    "email_verification": {
+        "invalid_access": "Invalid access.",
+        "verified_title": "Email Verified",
+        "verified": "{{email}} was verified. Now you can sign in.",
+        "link_sign": "Click to Sign In",
+        "resend_title": "Resend Verification Mail",
+        "resend_other_cases": "In cases that the email entered is already verified or not registered, Other types of mail will be sent.",
+        "resend_known_issues": "It is reported that some mail services like Outlook do not accept emails from Peak. If your mail service does so, please sign up with another mail address.",
+        "resend_success": "A mail was sent. Please check your inbox or junk box.",
+        "resend_error_limit": "Try again in {{minutes}} minute(s).",
+        "resend_error_bad_request": "Invalid email address.",
+        "resend_error_any": "Unable to send a mail. Try again later.",
+        "placeholder_email": "Enter your email",
+        "button_submit": "Submit"
+    },
     "sign": {
+        "sign_in_again": "You're signed out. Please sign in again.",
         "sign_in": "Sign In",
         "sign_in_success": "Signed in successfully. Welcome back!",
         "sign_in_failed": "Signing in failed. Please check again your password.",
         "internal_error": "Problem occured. Please try again.",
+        "email_verify_required": "Your email address is not verified. Please check your inbox. (or spam)",
         "network_error": "Problem occured. Check your network.",
         "loading": "Loading...",
         "button_sign_in": "Sign In",
-        "button_forgot_password": "Forgot password",
         "button_create_account": "Create account",
+        "button_resend_verification": "Resend verification mail",
+        "button_forgot_password": "Forgot password",
         "sign_up": "Sign Up",
-        "sign_up_success": "You became our member! Please sign in.",
         "email": "Email",
         "password": "Password",
         "username": "Username",
         "button_sign_up": "Register",
         "tos": "By clicking 'Register', you agree to our <linkToTos>Terms of Service</linkToTos>.",
         "button_already_have_account": "Have Account",
+        "link_sign_in": "Sign In",
+        "sign_up_completed": "Verify your email",
+        "check_inbox": "An email verfication mail was sent. Please check your inbox.",
         "sign_up_errors": {
             "SIGNUP_NETWORK_ERROR": "Please check your network.",
             "SIGNUP_SIGNED_IN_USER": "You already signed in.",
@@ -513,5 +369,25 @@
             "SIGNUP_INTERNAL_ERROR": "Something's wrong with our service. Please try again.",
             "SIGNUP_UNKNOWN_ERROR": "Please try later."
         }
+    },
+    "password_recovery": {
+        "request_title": "Forgot Password?",
+        "request_description": "If you do not remember a password, then you can request a password recovery link.",
+        "placeholder_email": "Enter your email",
+        "button_submit": "Submit",
+        "request_success": "A password recovery mail was sent to your inbox.",
+        "request_error_limit": "Retry in an hour.",
+        "request_error_bad_request": "Invalid request. Retry after refresh.",
+        "request_error_any": "Something went wrong. Check your network.",
+        "link_sign_in": "Sign In",
+        "recovery_title": "Password Recovery",
+        "recovery_description": "A password should have more than 8 letters.",
+        "placeholder_password": "Enter a new password",
+        "placeholder_password_again": "Enter again",
+        "button_set": "Change Password",
+        "recovery_success": "Password has changed. Please sign in with your new password.",
+        "recovery_error_password_length": "Password should be more than 8 letters.",
+        "recovery_error_password_unmatch": "Two forms have different values.",
+        "recovery_error": "Oops. Perhaps this link is invalid or expired."
     }
 }

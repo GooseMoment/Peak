@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 
 import Button from "@components/common/Button"
-import PageTitle from "@components/common/PageTitle"
 import Section, { Description, Name, Value } from "@components/settings/Section"
 import Switch from "@components/settings/SettingSwitch"
 
@@ -19,7 +18,7 @@ const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
 const urlB64ToUint8Array = (base64String) => {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4)
     const base64 = (base64String + padding)
-        .replace(/\-/g, "+")
+        .replace(/-/g, "+")
         .replace(/_/g, "/")
     const rawData = atob(base64)
     const outputArray = new Uint8Array(rawData.length)
@@ -39,7 +38,7 @@ const subscribePush = async () => {
 
 const Notifications = () => {
     const [setting, updateSetting] = useClientSetting()
-    const { t } = useTranslation(null, { keyPrefix: "settings.notifications" })
+    const { t } = useTranslation("settings", { keyPrefix: "notifications" })
 
     const enableMutation = useMutation({
         mutationFn: () => subscribePush(),
@@ -102,7 +101,6 @@ const Notifications = () => {
 
     return (
         <>
-            <PageTitle>{t("title")}</PageTitle>
             <Section>
                 <Name>{t("push_notification_subscription.name")}</Name>
                 <Description>

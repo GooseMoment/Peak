@@ -1,6 +1,5 @@
 import { useMemo } from "react"
 
-import PageTitle from "@components/common/PageTitle"
 import Section, { Description, Name, Value } from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
@@ -10,14 +9,13 @@ import themes from "@assets/themes"
 import { useTranslation } from "react-i18next"
 
 const Appearance = () => {
-    const { t } = useTranslation(null, { keyPrefix: "settings.appearance" })
+    const { t } = useTranslation("settings", { keyPrefix: "appearance" })
 
     const themeChoices = useMemo(() => makeThemeChoices(t), [t])
     const widthChoices = useMemo(() => makeWidthChoices(t), [t])
 
     return (
         <>
-            <PageTitle>{t("title")}</PageTitle>
             <Section>
                 <Name>{t("theme.name")}</Name>
                 <Value>

@@ -1,17 +1,15 @@
 import styled from "styled-components"
 
-import PageTitle from "@components/common/PageTitle"
 import Section, { Name, Value } from "@components/settings/Section"
 
 import generatedGitInfo from "@/generatedGitInfo.json"
 import { useTranslation } from "react-i18next"
 
 const Info = () => {
-    const { t } = useTranslation(null, { keyPrefix: "settings.info" })
+    const { t } = useTranslation("settings", { keyPrefix: "info" })
 
     return (
         <>
-            <PageTitle>{t("title")}</PageTitle>
             <Section>
                 <Name>{t("build.name")}</Name>
                 <Value>

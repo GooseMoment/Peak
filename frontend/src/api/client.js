@@ -1,3 +1,5 @@
+import { setClientSettingsByName } from "@utils/clientSettings"
+
 import axios from "axios"
 
 const baseURL = import.meta.env.VITE_API_BASEURL
@@ -28,6 +30,12 @@ export const setCurrentUsername = (username) => {
     return localStorage.setItem("username", username)
 }
 
+export const clearUserCredentials = () => {
+    setToken(null)
+    setCurrentUsername(null)
+    setClientSettingsByName("push_notification_subscription", null)
+}
+
 const client = axios.create({
     baseURL: baseURL,
     withCredentials: true,
@@ -49,7 +57,9 @@ client.interceptors.response.use(
     },
     (err) => {
         if (err.response && err.response.status === 401) {
-            throw new Response("", { status: 401 })
+            clearUserCredentials()
+            window.location = "/sign/in?flag=401"
+            return
         }
         throw err
     },

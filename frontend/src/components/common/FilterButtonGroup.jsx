@@ -29,25 +29,33 @@ const FilterButtonGroup = ({ active, setActive, filters }) => {
     )
 
     return (
-        <FilterGroup>
-            <BackgroundButton
-                $top={selectedButtonPosition.top}
-                $left={selectedButtonPosition.left}
-                $width={selectedButtonPosition.width}
-            />
-            {Object.entries(filters).map(([name, filter]) => (
-                <FilterButton
-                    ref={active === name ? onRefChange : undefined}
-                    key={name}
-                    onClick={(e) => setActive(name)}
-                    $active={active === name}
-                >
-                    {filter.display}
-                </FilterButton>
-            ))}
-        </FilterGroup>
+        <FilterGroupWrapper>
+            <FilterGroup>
+                <BackgroundButton
+                    $top={selectedButtonPosition.top}
+                    $left={selectedButtonPosition.left}
+                    $width={selectedButtonPosition.width}
+                />
+                {Object.entries(filters).map(([name, filter]) => (
+                    <FilterButton
+                        ref={active === name ? onRefChange : undefined}
+                        key={name}
+                        onClick={() => setActive(name)}
+                        $active={active === name}
+                    >
+                        {filter.display}
+                    </FilterButton>
+                ))}
+            </FilterGroup>
+        </FilterGroupWrapper>
     )
 }
+
+const FilterGroupWrapper = styled.div`
+    display: block;
+    overflow-y: visible;
+    overflow-x: auto;
+`
 
 const FilterGroup = styled.div`
     display: inline-flex;
@@ -67,6 +75,7 @@ const FilterButton = styled(MildButton)`
     font-weight: 500;
     border-radius: 50px;
     padding: 0.5rem 0.75rem;
+    white-space: nowrap;
 
     cursor: pointer;
 
