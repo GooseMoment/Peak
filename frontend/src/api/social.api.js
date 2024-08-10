@@ -99,9 +99,9 @@ export const getDailyLogDrawers = async (username, page) => {
     return res.data
 }
 
-export const getDailyLogTasks = async (drawerID, day) => {
+export const getDailyLogTasks = async (drawerID, day, page) => {
     const res = await client.get(
-        `social/daily/log/details/task/${drawerID}/${day}/`,
+        `social/daily/log/details/task/${drawerID}/${day}/?page=${page}`,
     )
 
     return res.data
