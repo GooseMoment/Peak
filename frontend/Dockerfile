@@ -7,4 +7,7 @@ WORKDIR /frontend
 COPY ./package.json .
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
+
+COPY . .
+
 CMD ["pnpm", "run", "build"]
