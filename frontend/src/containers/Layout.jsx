@@ -6,16 +6,18 @@ import Navbar from "@components/navbar/Navbar"
 import Sidebar from "@components/sidebar/Sidebar"
 
 import { useClientSetting } from "@utils/clientSettings"
-import useScreenType, { ifMobile, ifTablet } from "@utils/useScreenType"
+import useScreenType, { ifMobile, ifTablet, WIDTH_TABLET } from "@utils/useScreenType"
 
 import { cubicBeizer, modalFadeIn } from "@assets/keyframes"
+
+const startUpWidth = window.innerWidth
 
 const Layout = ({ children }) => {
     const [clientSetting] = useClientSetting()
 
     const [sidebarHidden, setSidebarHidden] = useState(false)
     const [sidebarCollapsed, setSidebarCollapsed] = useState(
-        clientSetting["close_sidebar_on_startup"],
+        startUpWidth <= WIDTH_TABLET || clientSetting["close_sidebar_on_startup"],
     )
     const contentPadding = clientSetting["main_width"] || "5rem"
 
