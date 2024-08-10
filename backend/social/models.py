@@ -4,9 +4,20 @@ from api.models import Base
 from users.models import User
 from tasks.models import Task
 
+import os
+
+def get_file_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (instance.name, ext)
+    return os.path.join('emojis', filename)
+
 class Emoji(Base):
     name = models.CharField(max_length=128)
-    img_uri = models.URLField()
+    img = models.ImageField(
+        upload_to=get_file_path,
+        null=True,
+        blank=True,
+    )
 
     def __str__(self) -> str:
         return f":{self.name}:"

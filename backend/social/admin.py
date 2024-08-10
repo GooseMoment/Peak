@@ -11,7 +11,7 @@ class EmojiAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ["name", "img_uri"],
+                "fields": ["name", "img"],
             },
         ),
         fieldset_base,
