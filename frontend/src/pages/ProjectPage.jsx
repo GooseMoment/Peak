@@ -12,12 +12,13 @@ import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import DrawerCreate from "@components/project/Creates/DrawerCreate"
 import BarChart from "@components/project/common/BarChart"
+import ProjectEdit from "@components/project/edit/ProjectEdit"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
 
 import { getDrawersByProject } from "@api/drawers.api"
-import { deleteProject, getProject, patchProject } from "@api/projects.api"
+import { deleteProject, getProject } from "@api/projects.api"
 
 import handleToggleContextMenu from "@utils/handleToggleContextMenu"
 
@@ -45,6 +46,7 @@ const ProjectPage = () => {
         top: 0,
         left: 0,
     })
+    const [isProjectEditOpen, setIsProjectEditOpen] = useState(false)
 
     const { t } = useTranslation(null, { keyPrefix: "project" })
 
@@ -73,15 +75,6 @@ const ProjectPage = () => {
         setIsSortMenuOpen(false)
     }, [project])
 
-    const patchMutation = useMutation({
-        mutationFn: (data) => {
-            return patchProject(id, data)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["projects"] })
-        },
-    }) // 수정 만드셈
-
     const deleteMutation = useMutation({
         mutationFn: () => {
             return deleteProject(id)
@@ -103,6 +96,11 @@ const ProjectPage = () => {
         },
     })
 
+    const handleEdit = () => {
+        setIsContextMenuOpen(false)
+        setIsProjectEditOpen(true)
+    }
+
     const handleAlert = () => {
         setIsContextMenuOpen(false)
         setIsAlertOpen(true)
@@ -110,7 +108,7 @@ const ProjectPage = () => {
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
     const contextMenuItems = useMemo(
-        () => makeContextMenuItems(t, theme, handleAlert),
+        () => makeContextMenuItems(t, theme, handleEdit, handleAlert),
         [t, theme],
     )
 
@@ -237,6 +235,20 @@ const ProjectPage = () => {
                     />
                 </ModalPortal>
             )}
+            {isProjectEditOpen && (
+                <ModalPortal
+                    closeModal={() => {
+                        setIsProjectEditOpen(false)
+                    }}
+                >
+                    <ProjectEdit
+                        project={project}
+                        onClose={() => {
+                            setIsProjectEditOpen(false)
+                        }}
+                    />
+                </ModalPortal>
+            )}
             <Outlet context={[id, project.color]} />
         </>
     )
@@ -292,12 +304,12 @@ const makeSortMenuItems = (t) => [
     },
 ]
 
-const makeContextMenuItems = (t, theme, handleAlert) => [
+const makeContextMenuItems = (t, theme, handleEdit, handleAlert) => [
     {
         icon: "edit",
         display: t("edit.display"),
         color: theme.textColor,
-        func: () => {},
+        func: handleEdit,
     },
     {
         icon: "trash-2",

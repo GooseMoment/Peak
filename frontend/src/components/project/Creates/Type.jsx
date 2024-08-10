@@ -8,11 +8,11 @@ import regular from "@assets/project/type/regular.svg"
 import { useTranslation } from "react-i18next"
 
 const Type = ({ setType, closeComponent }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.create.type" })
+    const { t } = useTranslation(null, { keyPrefix: "project.type" })
 
     const changeType = (type) => {
         return () => {
-            setType(type)
+            setType({ type })
             closeComponent()
         }
     }

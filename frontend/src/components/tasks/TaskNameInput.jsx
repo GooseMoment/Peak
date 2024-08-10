@@ -27,11 +27,11 @@ const TaskNameInput = ({
         setNewTaskName(newName)
     }
 
-    const changeTaskName = async (name) => {
+    const changeTaskName = (name) => {
         setFunc({ name })
     }
 
-    const onEnter = async (e) => {
+    const onEnter = (e) => {
         if (e.key === "Enter") {
             changeTaskName(newTaskName)
             toast.success(t("name_change_success"))
