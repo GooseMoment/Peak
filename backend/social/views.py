@@ -203,7 +203,8 @@ def post_quote(request: Request, day):
 def get_privacy_filter(follower, followee):
     if follower == followee:
         privacyFilter = Q()
-    
+        privacy = PrivacyMixin.FOR_PROTECTED
+    # TODO: BLOCK
     else:
         is_follower = Following.objects.filter(
             follower=follower,
@@ -213,27 +214,57 @@ def get_privacy_filter(follower, followee):
         
         if is_follower:
             privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(privacy=PrivacyMixin.FOR_PROTECTED)
+            privacy = PrivacyMixin.FOR_PROTECTED
         else:
             privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
+            privacy = PrivacyMixin.FOR_PUBLIC
     
     privacyFilter &= Q(user=followee)
     
     return privacyFilter
 
 class DailyLogDrawerPagination(PageNumberPagination):
-    page_size = 10
-    max_page_size = 10
+    page_size = 5
+    max_page_size = 5
     # TODO: due date 찾을 수 있으면 줄이기
 
 class DailyLogDrawerView(generics.GenericAPIView):
     
     pagination_class = DailyLogDrawerPagination
     
-    def get(self, request, followee, day):
+    def get(self, request, followee):
         followeeUser = get_object_or_404(User, username=followee)
 
         privacyFilter = get_privacy_filter(request.user, followeeUser)
+        
+        drawers_queryset = Drawer.objects.filter(privacyFilter).annotate(color=F('project__color')).order_by('order')
+        
+        page = self.paginate_queryset(drawers_queryset)
+        if page is not None:
+            serializer = DailyLogDrawerSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = DailyLogDrawerSerializer(drawers_queryset, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
+class DailyLogTaskPagination(PageNumberPagination):
+    page_size = 5
+    max_page_size = 5
+    # TODO: due date 찾을 수 있으면 줄이기
+
+class DailyLogTaskView(generics.GenericAPIView):
+    
+    pagination_class = DailyLogTaskPagination
+    
+    def get(self, request, drawer, day):
+        drawer = get_object_or_404(Drawer, id=drawer)
+        followee = drawer.user
+        
+        # TODO: task Privacy 반영 이후 다시 고려
+        # privacyFilter = get_privacy_filter(request.user, followee)
+        privacyFilter = Q()
+        
         day_min = datetime.fromisoformat(day)
         day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
         day_range = (day_min, day_max)
@@ -241,24 +272,17 @@ class DailyLogDrawerView(generics.GenericAPIView):
         tasksFilterForCompleted = Q(completed_at__range=day_range)
         tasksFilterForUncompleted = Q(completed_at=None) & Q(assigned_at__range=day_range)
         # TODO: ( | Q(due_datetime__range=day_range))
-        tasksFilter = privacyFilter & (tasksFilterForCompleted | tasksFilterForUncompleted)
+        tasksFilter = Q(drawer=drawer) & privacyFilter & (tasksFilterForCompleted | tasksFilterForUncompleted)
 
-        # TODO: order of tasks
-        prefetch_tasks = Prefetch('tasks', queryset=Task.objects.filter(tasksFilter))
+        tasks_queryset = Task.objects.filter(tasksFilter)
 
-        # TODO: Do not process if there is no task in the drawer
-        drawers_queryset = Drawer.objects.filter(privacyFilter).prefetch_related(prefetch_tasks).annotate(color=F('project__color')).order_by('order')
-        
-        page = self.paginate_queryset(drawers_queryset)
+        page = self.paginate_queryset(tasks_queryset)
         if page is not None:
-            serializer = DailyLogDetailsSerializer(page, many=True)
+            serializer = TaskSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer = DailyLogDetailsSerializer(drawers_queryset, many=True)
+        serializer = TaskSerializer(tasks_queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-class DailyLogTaskView():
-    pass
 
 def get_following_feed(request: HttpRequest, date):
     pass
