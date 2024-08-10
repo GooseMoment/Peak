@@ -60,8 +60,8 @@ const TabBox = styled.div`
 `
 
 const TabButton = styled.button`
-    width: 4em;
-    padding: 0.3em;
+    width: fit-content;
+    padding: 0.4em 0.6em;
     font-size: 0.9em;
     font-weight: 500;
     border: 1px solid ${(p) => p.theme.project.borderColor};
