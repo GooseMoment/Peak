@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { css, styled } from "styled-components"
 
 import SocialPageTitle from "@components/social/SocialPageTitle"
+import SearchBar from "@components/social/explore/SearchBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
 import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
 
@@ -40,6 +41,7 @@ const SocialExplorePage = () => {
 
             <Wrapper>
                 <Container>
+                    <SearchBar />
                     <DailyLogsPreviewContainer>
                         {recommendUsers &&
                             Object.values(recommendUsers).map(
@@ -72,7 +74,7 @@ const SocialExplorePage = () => {
 
 const Wrapper = styled.div`
     display: flex;
-    gap: 5rem;
+    gap: 2rem;
 `
 
 const Container = styled.div`

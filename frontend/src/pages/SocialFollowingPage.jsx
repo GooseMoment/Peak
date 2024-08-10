@@ -108,7 +108,7 @@ const SocialFollowingPage = () => {
 
 const Wrapper = styled.div`
     display: flex;
-    gap: 5rem;
+    gap: 2rem;
 `
 
 const Container = styled.div`

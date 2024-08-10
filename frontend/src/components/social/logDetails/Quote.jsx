@@ -15,6 +15,7 @@ const Quote = ({ user, quote, saveQuote }) => {
         setContent(quote.content)
         setInputState(false)
     }, [quote])
+    
     const { data: me } = useQuery({
         queryKey: ["users", "me"],
         queryFn: () => getMe(),
@@ -47,7 +48,6 @@ const Quote = ({ user, quote, saveQuote }) => {
             <SimpleProfile user={user} />
 
             <Wrapper onClick={handleInputState}>
-                {/* TODO: username만 비교해도 되나..? 굳이 객체 자체를 비교하는 느낌인가 */}
                 {inputState ? (
                     <QuoteInput
                         type="text"
