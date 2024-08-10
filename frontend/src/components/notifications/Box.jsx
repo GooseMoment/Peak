@@ -1,35 +1,46 @@
-import { forwardRef } from "react"
+import { Suspense, forwardRef } from "react"
 
 import styled, { css, keyframes } from "styled-components"
 
-import Ago from "./Ago"
-import Content from "./Content"
-import Images from "./Images"
+import Content from "@components/notifications/Content"
+import Images from "@components/notifications/Images"
+
+import { ifMobile } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
 
-const Box = forwardRef(
-    function BoxInternal({ notification, highlight = false, skeleton = false }, ref) {
-        const actionUser =
-            notification?.reaction?.user ||
-            notification?.peck?.user ||
-            notification?.comment?.user ||
-            (notification?.type === "follow" &&
-                notification?.following?.follower) ||
-            (notification?.type === "follow_request" &&
-                notification?.following?.follower) ||
-            (notification?.type === "follow_request_accepted" &&
-                notification?.following?.followee)
+const Box = forwardRef(function BoxInternal(
+    { notification, highlight = false, skeleton = false },
+    ref,
+) {
+    const actionUser =
+        notification?.reaction?.user ||
+        notification?.peck?.user ||
+        notification?.comment?.user ||
+        (notification?.type === "follow" &&
+            notification?.following?.follower) ||
+        (notification?.type === "follow_request" &&
+            notification?.following?.follower) ||
+        (notification?.type === "follow_request_accepted" &&
+            notification?.following?.followee)
 
-        const payload =
-            notification?.task_reminder ||
-            notification?.reaction ||
-            notification?.peck ||
-            notification?.following ||
-            notification?.comment
+    const payload =
+        notification?.task_reminder ||
+        notification?.reaction ||
+        notification?.peck ||
+        notification?.following ||
+        notification?.comment
 
-        return (
-            <Frame ref={ref} $highlight={highlight}>
+    const skeletons = (
+        <>
+            <Images skeleton />
+            <Content skeleton />
+        </>
+    )
+
+    return (
+        <Frame ref={ref} $highlight={highlight}>
+            <Suspense fallback={skeletons}>
                 <Images
                     skeleton={skeleton}
                     project_color={payload?.project_color}
@@ -40,23 +51,20 @@ const Box = forwardRef(
                     skeleton={skeleton}
                     payload={payload}
                     type={notification?.type}
+                    createdAt={notification?.created_at}
                     actionUser={actionUser}
                 />
-                <Ago
-                    skeleton={skeleton}
-                    created_at={notification?.created_at}
-                />
-            </Frame>
-        )
-    },
-)
+            </Suspense>
+        </Frame>
+    )
+})
 
-const blink = (p) => keyframes`
+const blink = keyframes`
     0% {
         border-color: transparent;
     }
     20%, 80% {
-        border-color: ${p.theme.accentColor};
+        border-color: ${(p) => p.theme.accentColor};
     }
     100% {
         border-color: transparent;
@@ -64,12 +72,14 @@ const blink = (p) => keyframes`
 `
 
 const Frame = styled.article`
+    position: relative;
     box-sizing: border-box;
 
     display: flex;
-    gap: 2.5em;
+    align-items: center;
+    gap: 1.5em;
 
-    min-width: 400px;
+    min-width: 0; // for children's text-overflow: ellipsis
     height: 7em;
     padding: 1em;
     margin: 1em;
@@ -80,14 +90,21 @@ const Frame = styled.article`
     background-color: ${(p) => p.theme.backgroundColor};
     border: transparent 0.25em solid;
 
+    box-shadow: ${(p) => p.theme.notifications.boxShadowColor} 0px 8px 24px;
+
+    ${ifMobile} {
+        margin: 1em 0 1.5em 0;
+        min-height: 7.5em;
+        height: fit-content;
+        padding: 0.5em;
+    }
+
     ${(p) =>
         p.$highlight &&
         css`
-            animation: ${blink(p)} 1.5s ${cubicBeizer};
+            animation: ${blink} 1.5s ${cubicBeizer};
             animation-delay: 0.5s;
         `}
-
-    box-shadow: ${(p) => p.theme.notifications.boxShadowColor} 0px 8px 24px;
 `
 
 export default Box
