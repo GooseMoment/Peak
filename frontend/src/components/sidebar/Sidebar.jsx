@@ -17,7 +17,7 @@ const Sidebar = ({ collapsed, setCollapsed, setSidebarHidden }) => {
                 setSidebarHidden={setSidebarHidden}
             />
             <Middle collapsed={collapsed} setSidebarHidden={setSidebarHidden} />
-            <Footer collapsed={collapsed} />
+            <Footer collapsed={collapsed} setSidebarHidden={setSidebarHidden} />
         </SidebarBox>
     )
 }

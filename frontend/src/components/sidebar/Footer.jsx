@@ -12,8 +12,9 @@ import { skeletonCSS } from "@assets/skeleton"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import useScreenType from "@utils/useScreenType"
 
-const Footer = ({ collapsed }) => {
+const Footer = ({ collapsed, setSidebarHidden }) => {
     const {
         data: user,
         isPending,
@@ -25,6 +26,8 @@ const Footer = ({ collapsed }) => {
 
     const { t } = useTranslation(null, { keyPrefix: "sidebar" })
 
+    const { isMobile } = useScreenType()
+
     useEffect(() => {
         if (isError) {
             toast.error(t("user_error"), {
@@ -32,6 +35,12 @@ const Footer = ({ collapsed }) => {
             })
         }
     }, [isError])
+
+    const onClickLink = () => {
+        if (isMobile) {
+            setSidebarHidden(true)
+        }
+    }
 
     return (
         <FooterBox $collapsed={collapsed}>
@@ -45,7 +54,7 @@ const Footer = ({ collapsed }) => {
             {isError && <MeProfile />}
 
             {user && (
-                <SidebarLink to={`users/@${user.username}`} draggable="false">
+                <SidebarLink onClick={onClickLink} to={`users/@${user.username}`} draggable="false">
                     <MeProfile>
                         <MeProfileImg src={user.profile_img} />
                         {!collapsed && <Username>{user.username}</Username>}
@@ -59,6 +68,7 @@ const Footer = ({ collapsed }) => {
                     to="/app/settings"
                     draggable="false"
                     end={false}
+                    onClick={onClickLink}
                 >
                     <SettingIconContainer>
                         <FeatherIcon icon="settings" />
