@@ -1,5 +1,7 @@
 import { createBrowserRouter, redirect } from "react-router-dom"
 
+import settingsChildren from "@routers/settingsChildren"
+
 import AppLayout from "@containers/AppLayout"
 
 import ErrorPage from "@pages/ErrorPage"
@@ -7,6 +9,7 @@ import HomePage from "@pages/HomePage"
 import NotificationsPage from "@pages/NotificationsPage"
 import ProjectListPage from "@pages/ProjectListPage"
 import ProjectPage from "@pages/ProjectPage"
+import SettingsPage from "@pages/SettingsPage"
 import StartPage from "@pages/StartPage"
 import TodayPage from "@pages/TodayPage"
 
@@ -213,6 +216,11 @@ const routes = [
                     )
                     return { Component: UserPage }
                 },
+            },
+            {
+                path: "settings",
+                element: <SettingsPage />,
+                children: settingsChildren,
             },
             {
                 path: "sign_out",

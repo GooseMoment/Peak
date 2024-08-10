@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const PasswordSection = () => {
-    const { t } = useTranslation("", { keyPrefix: "settings.account" })
+    const { t } = useTranslation("settings", { keyPrefix: "account" })
 
     const [passwordFormOpened, setPasswordFormOpened] = useState(false)
     const [currentPassword, setCurrentPassword] = useState("")
