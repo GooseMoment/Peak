@@ -1,1 +1,1 @@
-docker-compose -f docker-compose.prod.yml $args
+docker compose -f docker-compose.prod.yml $args
