@@ -1,6 +1,6 @@
 FROM node:21-alpine3.19
 WORKDIR /frontend
 COPY ./package* .
-RUN npm install
+RUN pnpm install
 COPY . .
-CMD npm run build
+CMD pnpm run build
