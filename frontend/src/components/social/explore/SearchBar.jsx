@@ -2,9 +2,11 @@ import { useRef, useState } from "react"
 
 import styled from "styled-components"
 
+import { getExploreSearchResults } from "@api/social.api"
+
 import FeatherIcon from "feather-icons-react"
 
-const SearchBar = () => {
+const SearchBar = ({ handleSearch }) => {
     const [searchTerm, setSearchTerm] = useState("")
     const timer = useRef(null)
 
@@ -13,8 +15,8 @@ const SearchBar = () => {
 
         if (timer.current) clearTimeout(timer.current)
 
-        timer.current = setTimeout(() => {
-            window.alert(e.target.value)
+        timer.current = setTimeout(async () => {
+            handleSearch({searchTerm: e.target.value})
         }, 1000)
     }
 

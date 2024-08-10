@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { css, styled } from "styled-components"
 
 import SocialPageTitle from "@components/social/SocialPageTitle"
@@ -8,7 +8,18 @@ import SearchBar from "@components/social/explore/SearchBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
 import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
 
-import { getDailyLogDetails, getExploreFeed, getQuote } from "@api/social.api"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+
+import {
+    getDailyLogDetails,
+    getExploreFeed,
+    getExploreSearchResults,
+    getQuote,
+} from "@api/social.api"
+
+import queryClient from "@queries/queryClient"
+
+import { toast } from "react-toastify"
 
 const SocialExplorePage = () => {
     const initial_date = new Date()
@@ -20,6 +31,19 @@ const SocialExplorePage = () => {
         queryKey: ["explore", "recommend", "users"],
         queryFn: () => getExploreFeed(),
         staleTime: 3 * 60 * 60 * 1000,
+    })
+
+    const recommendUsersMutation = useMutation({
+        mutationFn: ({ searchTerm }) => {
+            if (searchTerm === "") return getExploreFeed()
+            return getExploreSearchResults(searchTerm)
+        },
+        onSuccess: (data) => {
+            queryClient.setQueryData(["explore", "recommend", "users"], data)
+        },
+        onError: (e) => {
+            toast.error(e)
+        },
     })
 
     const { data: quote } = useQuery({
@@ -38,10 +62,10 @@ const SocialExplorePage = () => {
     return (
         <>
             <SocialPageTitle active="explore" />
-
+            <ReactQueryDevtools initialIsOpen></ReactQueryDevtools>
             <Wrapper>
                 <Container>
-                    <SearchBar />
+                    <SearchBar handleSearch={recommendUsersMutation.mutate} />
                     <DailyLogsPreviewContainer>
                         {recommendUsers &&
                             Object.values(recommendUsers).map(
