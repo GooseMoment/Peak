@@ -86,8 +86,7 @@ class Reaction(Base):
         Emoji,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name="reactions"
+        on_delete=models.CASCADE,
     )
 
     def __str__(self) -> str:
