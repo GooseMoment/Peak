@@ -164,23 +164,26 @@ const ProjectPage = () => {
                                   }
                         }
                     />
-                    <SortIconBox
-                        onClick={handleToggleContextMenu(
-                            setSelectedSortMenuPosition,
-                            setIsSortMenuOpen,
-                            setIsContextMenuOpen,
-                        )}
-                    >
-                        <SortIcon color={theme.textColor} />
-                    </SortIconBox>
-                    <FeatherIcon
-                        icon="more-horizontal"
-                        onClick={handleToggleContextMenu(
-                            setSelectedButtonPosition,
-                            setIsContextMenuOpen,
-                            setIsSortMenuOpen,
-                        )}
-                    />
+                    {project?.type === "inbox" ||
+                    <>
+                        <SortIconBox
+                            onClick={handleToggleContextMenu(
+                                setSelectedSortMenuPosition,
+                                setIsSortMenuOpen,
+                                setIsContextMenuOpen,
+                            )}
+                        >
+                            <SortIcon color={theme.textColor} />
+                        </SortIconBox>
+                        <FeatherIcon
+                            icon="more-horizontal"
+                            onClick={handleToggleContextMenu(
+                                setSelectedButtonPosition,
+                                setIsContextMenuOpen,
+                                setIsSortMenuOpen,
+                            )}
+                        />
+                    </>}
                 </Icons>
             </TitleBox>
             {project.type === "goal" && (
