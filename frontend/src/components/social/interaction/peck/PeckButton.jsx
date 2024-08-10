@@ -8,6 +8,7 @@ import { getPeck, postPeck } from "@api/social.api"
 import queryClient from "@queries/queryClient"
 
 import FeatherIcon from "feather-icons-react"
+import { toast } from "react-toastify"
 
 const PeckButton = ({ taskID, isUncomplete }) => {
     const { data: peck, isError: peckError } = useQuery({
@@ -43,8 +44,7 @@ const PeckButton = ({ taskID, isUncomplete }) => {
     return (
         <Box>
             <PeckButtonBox onClick={handlePeck}>
-                {" "}
-                <FeatherIcon icon="send" />{" "}
+                <FeatherIcon icon="send" />
             </PeckButtonBox>
             {peck && <PeckCounts>{preprocess(peck.pecks_counts)}</PeckCounts>}
         </Box>

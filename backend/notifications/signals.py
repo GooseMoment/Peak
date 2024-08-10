@@ -18,8 +18,8 @@ def create_notification_for_reaction(sender, instance: Reaction=None, created=Fa
 
     if instance.parent_type == Reaction.FOR_TASK:
         target_user = instance.task.user
-    elif instance.parent_type == Reaction.FOR_DAILY_COMMENT:
-        target_user = instance.daily_comment.user
+    elif instance.parent_type == Reaction.FOR_QUOTE:
+        target_user = instance.quote.user
 
     if target_user == instance.user:
         return
@@ -72,7 +72,7 @@ def create_notification_for_comment(sender, instance: Comment=None, created=Fals
     if instance.parent_type == Comment.FOR_TASK:
         parent_owner = instance.task.user
     else:
-        parent_owner = instance.daily_comment.user
+        parent_owner = instance.quote.user
     
     if parent_owner == instance.user:
         return

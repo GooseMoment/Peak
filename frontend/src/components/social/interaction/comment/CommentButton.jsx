@@ -3,7 +3,7 @@ import { useRef, useState } from "react"
 import styled from "styled-components"
 
 import MildButton from "@components/common/MildButton"
-import CommentModal from "@components/social/CommentModal"
+import CommentModal from "@components/social/interaction/comment/CommentModal"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -34,7 +34,7 @@ const CommentButton = ({ parentType, parent }) => {
             {isModalOpen && (
                 <CommentModal
                     isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen((prev) => !prev)}
+                    onClose={() => setIsModalOpen(false)}
                     position={modalPosition}
                     parentType={parentType}
                     parent={parent}
