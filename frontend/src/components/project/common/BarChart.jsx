@@ -8,7 +8,6 @@ const BarChart = ({
     drawers,
     projectTaskCount,
     displayDrawersCount,
-    calculatePercent,
 }) => {
     if (isCompleted) {
         return (
@@ -18,7 +17,7 @@ const BarChart = ({
         )
     }
 
-    return drawers?.map((drawer, i) => {
+    return drawers?.map((drawer) => {
         if (drawer.completed_task_count + drawer.uncompleted_task_count == 0) {
             return null
         }
@@ -52,6 +51,15 @@ const BarChart = ({
             </BarChartBox>
         )
     })
+}
+
+const calculatePercent = (ratio, base) => {
+    if (base === 0) return 0
+
+    let calculated = Math.floor((ratio / base) * 100)
+
+    if (isNaN(calculated)) return 0
+    return calculated
 }
 
 const ToolTipText = styled.div`
