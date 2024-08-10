@@ -40,6 +40,9 @@ const ProjectEdit = ({ project, onClose }) => {
             queryClient.invalidateQueries({
                 queryKey: ["projects", project.id],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["projects"],
+            })
         },
         onError: () => {
             toast.error(t("edit.project_change_error"))
