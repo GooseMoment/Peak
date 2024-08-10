@@ -105,6 +105,14 @@ export const getExploreFeed = async () => {
     return res.data
 }
 
+export const getExploreSearchResults = async (query) => {
+    console.log(query)
+    const params = new URLSearchParams({ query: query })
+    const res = await client.get(`social/explore/search/?${params.toString()}`)
+    console.log(res.data)
+    return res.data
+}
+
 export const getEmojis = async () => {
     const res = await client.get(`social/emojis/`)
 
