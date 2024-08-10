@@ -1,12 +1,13 @@
 import { useState } from "react"
 
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { styled } from "styled-components"
 
+import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import SocialPageTitle from "@components/social/SocialPageTitle"
+import ExploreFeed from "@components/social/explore/ExploreFeed"
 import SearchBar from "@components/social/explore/SearchBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
-import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
 
 import {
     getDailyLogDetails,
@@ -16,9 +17,6 @@ import {
 } from "@api/social.api"
 
 import queryClient from "@queries/queryClient"
-
-import { LoaderCircleFull } from "@/components/common/LoaderCircle"
-import { toast } from "react-toastify"
 
 const SocialExplorePage = () => {
     const initial_date = new Date()
@@ -32,25 +30,16 @@ const SocialExplorePage = () => {
         staleTime: 1 * 60 * 60 * 1000,
     })
 
-    const recommendUsersMutation = useMutation({
-        mutationFn: ({ searchTerm }) => {
-            if (searchTerm === "") return getExploreFeed()
-            return getExploreSearchResults(searchTerm)
-        },
-        onSuccess: (data) => {
-            queryClient.setQueryData(["explore", "recommend", "users"], data)
-        },
-        onError: (e) => {
-            toast.error(e)
-        },
-    })
+    const [searchTerm, setSearchTerm] = useState("")
 
-    const [searchTerm, setSearchTerm] = useState('')
-
-    const { data: foundUsers, isFetching: isSearcFetching, refetch: refetchFound } = useQuery({
-        queryKey: ["explore", "searched", "users"],
+    const {
+        data: foundUsers,
+        isFetching: isFoundFetching,
+        refetch: refetchFound,
+    } = useQuery({
+        queryKey: ["explore", "Found", "users"],
         queryFn: () => getExploreSearchResults(searchTerm),
-        enabled: false
+        enabled: false,
     })
 
     const { data: quote } = useQuery({
@@ -66,42 +55,35 @@ const SocialExplorePage = () => {
         enabled: !!selectedUser,
     })
 
+    const handleSearch = () => {
+        setSearchTerm((prev) => prev.trim())
+        if (searchTerm) refetchFound()
+        else
+            queryClient.setQueriesData(["explore", "Found", "users"], undefined)
+    }
+
     return (
         <>
             <SocialPageTitle active="explore" />
             <Wrapper>
                 <Container>
-                    <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={refetchFound} />
-                    <DailyLogsPreviewContainer>
-                        {isRecommendPending || (searchTerm && isSearcFetching) ? (
-                            <LoaderCircleWrapper>
-                                <LoaderCircleFull />
-                            </LoaderCircleWrapper>
-                        ) : (
-                            foundUsers && Object.values(foundUsers)?
-                            Object.values(foundUsers).map(
-                                (dailyFollowerLog) => (
-                                    <LogPreviewBox
-                                        key={dailyFollowerLog.username}
-                                        log={dailyFollowerLog}
-                                        selectedUser={selectedUser}
-                                        setSelectedUser={setSelectedUser}
-                                    />
-                                ),
-                            )
-                            :
-                            Object.values(recommendUsers).map(
-                                (dailyFollowerLog) => (
-                                    <LogPreviewBox
-                                        key={dailyFollowerLog.username}
-                                        log={dailyFollowerLog}
-                                        selectedUser={selectedUser}
-                                        setSelectedUser={setSelectedUser}
-                                    />
-                                ),
-                            )
-                        )}
-                    </DailyLogsPreviewContainer>
+                    <SearchBar
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                        handleSearch={handleSearch}
+                    />
+                    {isRecommendPending || (searchTerm && isFoundFetching) ? (
+                        <LoaderCircleWrapper>
+                            <LoaderCircleFull />
+                        </LoaderCircleWrapper>
+                    ) : (
+                        <ExploreFeed
+                            recommendUsers={recommendUsers}
+                            foundUsers={foundUsers}
+                            selectedUser={selectedUser}
+                            setSelectedUser={setSelectedUser}
+                        />
+                    )}
                 </Container>
 
                 <StickyContainer>
