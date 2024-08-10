@@ -1,16 +1,37 @@
+import { useState } from "react"
+
 import { useQuery } from "@tanstack/react-query"
 import { css, styled } from "styled-components"
 
 import SocialPageTitle from "@components/social/SocialPageTitle"
+import LogDetails from "@components/social/logDetails/LogDetails"
 import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
 
-import { getExploreFeed } from "@api/social.api"
+import { getDailyLogDetails, getExploreFeed, getQuote } from "@api/social.api"
 
 const SocialExplorePage = () => {
+    const initial_date = new Date()
+    initial_date.setHours(0, 0, 0, 0)
+
+    const [selectedUser, setSelectedUser] = useState(null)
+
     const { data: recommendUsers } = useQuery({
         queryKey: ["explore", "recommend", "users"],
         queryFn: () => getExploreFeed(),
         staleTime: 3 * 60 * 60 * 1000,
+    })
+
+    const { data: quote } = useQuery({
+        queryKey: ["quote", selectedUser],
+        queryFn: () => getQuote(selectedUser, initial_date.toISOString()),
+        enabled: !!selectedUser,
+    })
+
+    const { data: exploreLogDetails } = useQuery({
+        queryKey: ["explore", "log", "details", selectedUser],
+        queryFn: () =>
+            getDailyLogDetails(selectedUser, initial_date.toISOString()),
+        enabled: !!selectedUser,
     })
 
     return (
@@ -26,6 +47,8 @@ const SocialExplorePage = () => {
                                     <LogPreviewBox
                                         key={index}
                                         log={dailyFollowerLog}
+                                        selectedUser={selectedUser}
+                                        setSelectedUser={setSelectedUser}
                                     />
                                 ),
                             )}
@@ -33,15 +56,14 @@ const SocialExplorePage = () => {
                 </Container>
 
                 <Container $isSticky={true}>
-                    TEMP
-                    {/* {dailyComment?<DailyLogDetail
-                    dailyComment={dailyComment}
-                    userLogDetails={dailyLogDetails}
-                    userLogsDetail={mockDailyFollowerLogsDetail[0]}
-                    user={user}
-                    saveDailyComment={dailyCommentMutation.mutate}
-                    day={selectedDate}
-                />:null} */}
+                    {quote && (
+                        <LogDetails
+                            user={quote?.user}
+                            quote={quote}
+                            logDetails={exploreLogDetails}
+                            isFollowing={false}
+                        />
+                    )}
                 </Container>
             </Wrapper>
         </>
