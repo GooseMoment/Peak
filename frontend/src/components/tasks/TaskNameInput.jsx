@@ -13,6 +13,7 @@ const TaskNameInput = ({
     newTaskName,
     setNewTaskName,
     color,
+    isCreate,
 }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
@@ -32,6 +33,8 @@ const TaskNameInput = ({
     }
 
     const onEnter = (e) => {
+        if (isCreate)
+            return
         if (e.key === "Enter") {
             changeTaskName(newTaskName)
             toast.success(t("name_change_success"))
@@ -71,12 +74,10 @@ const TaskNameInput = ({
 const Box = styled.div`
     display: flex;
     align-items: center;
-
-    margin-top: 0.8em;
 `
 
 const InputText = styled.input`
-    width: 36em;
+    width: 30em;
     height: auto;
     font-weight: normal;
     font-size: 1.1em;
