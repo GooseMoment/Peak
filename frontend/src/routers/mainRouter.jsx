@@ -1,5 +1,7 @@
 import { createBrowserRouter, redirect } from "react-router-dom"
 
+import settingsChildren from "@routers/settingsChildren"
+
 import AppLayout from "@containers/AppLayout"
 
 import ErrorPage from "@pages/ErrorPage"
@@ -7,6 +9,7 @@ import HomePage from "@pages/HomePage"
 import NotificationsPage from "@pages/NotificationsPage"
 import ProjectListPage from "@pages/ProjectListPage"
 import ProjectPage from "@pages/ProjectPage"
+import SettingsPage from "@pages/SettingsPage"
 import StartPage from "@pages/StartPage"
 import TodayPage from "@pages/TodayPage"
 
@@ -35,7 +38,7 @@ const routes = [
                 index: true,
                 async lazy() {
                     const { IntroPage } = await import(
-                        "@/pages/chunks/OutsidePages"
+                        "@pages/chunks/OutsidePages"
                     )
                     return { Component: IntroPage }
                 },
@@ -44,10 +47,77 @@ const routes = [
                 path: "sign",
                 async lazy() {
                     const { SignPage } = await import(
-                        "@/pages/chunks/OutsidePages"
+                        "@pages/chunks/OutsidePages"
                     )
-                    return { Component: SignPage }
+                    return { element: <SignPage /> }
                 },
+                children: [
+                    {
+                        index: true,
+                        loader: () => redirect("/sign/in"),
+                    },
+                    {
+                        path: "in",
+                        async lazy() {
+                            const { SignInForm } = await import(
+                                "@components/sign/forms"
+                            )
+                            return { Component: SignInForm }
+                        },
+                    },
+                    {
+                        path: "up",
+                        async lazy() {
+                            const { SignUpForm } = await import(
+                                "@components/sign/forms"
+                            )
+                            return { Component: SignUpForm }
+                        },
+                    },
+                    {
+                        path: "up-complete",
+                        async lazy() {
+                            const { SignUpComplete } = await import(
+                                "@components/sign/forms"
+                            )
+                            return { Component: SignUpComplete }
+                        },
+                    },
+                    {
+                        path: "password-recovery",
+                        async lazy() {
+                            const { PasswordRecoveryForm } = await import(
+                                "@components/sign/forms"
+                            )
+                            return { Component: PasswordRecoveryForm }
+                        },
+                    },
+                    {
+                        path: "request-password-recovery",
+                        async lazy() {
+                            const { PasswordRecoveryRequestForm } =
+                                await import("@components/sign/forms")
+                            return { Component: PasswordRecoveryRequestForm }
+                        },
+                    },
+                    {
+                        path: "verification",
+                        async lazy() {
+                            const { EmailVerificationForm } = await import(
+                                "@components/sign/forms"
+                            )
+                            return { Component: EmailVerificationForm }
+                        },
+                    },
+                    {
+                        path: "verification-resend",
+                        async lazy() {
+                            const { EmailVerificationResendForm } =
+                                await import("@components/sign/forms")
+                            return { Component: EmailVerificationResendForm }
+                        },
+                    },
+                ],
             },
         ],
     },
@@ -57,7 +127,8 @@ const routes = [
         id: "app",
         loader: async () => {
             if (!getToken()) {
-                redirect("/")
+                window.location = "/"
+                // The function 'redirect' can't be used here; redirect("/") redirects to "/app/".
             }
 
             return {
@@ -148,11 +219,13 @@ const routes = [
                 },
             },
             {
+                path: "settings",
+                element: <SettingsPage />,
+                children: settingsChildren,
+            },
+            {
                 path: "sign_out",
-                loader: () => {
-                    signOut()
-                    return redirect("/")
-                },
+                loader: signOut,
                 element: null,
             },
         ],

@@ -2,7 +2,7 @@ from django.conf import settings
 
 from users.models import User
 from .models import Notification, WebPushSubscription
-from social.models import Reaction
+from social.models import Reaction, Comment
 from .locale import get_translations
 
 from pywebpush import webpush, WebPushException
@@ -40,20 +40,27 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
         case Notification.FOR_TASK_REMINDER:
             t = t[Notification.FOR_TASK_REMINDER]
             data["title"] = t["title"].format(task=notification.task_reminder.task.name)
-            data["body"] = t["body"].format(delta=notification.task_reminder.delta)
-        case Notification.FOR_REACTION:
-            content: str = ""
 
-            if notification.reaction.parent_type == Reaction.FOR_DAILY_COMMENT:
-                related_user = notification.reaction.daily_comment.user
-                content = notification.reaction.daily_comment.comment
+            if notification.task_reminder.delta == 0:
+                data["body"] = t["body_now"]
+            else:
+                data["body"] = t["body"].format(delta=notification.task_reminder.delta)
+
+        case Notification.FOR_REACTION:
+            parent: str = ""
+
+            if notification.reaction.parent_type == Reaction.FOR_QUOTE:
+                related_user = notification.reaction.quote.user
+                parent = notification.reaction.quote.content
             else:
                 related_user = notification.reaction.task.user
-                content = notification.reaction.task.name
+                parent = notification.reaction.task.name
+            
+            print("parent:", parent)
 
             t = t[Notification.FOR_REACTION]
             data["title"] = t["title"].format(emoji=notification.reaction.emoji.name, username=related_user.username)
-            data["body"] = t["body"].format(content=content)
+            data["body"] = t["body"].format(parent=parent)
         case Notification.FOR_FOLLOW:
             related_user = notification.following.follower
             t = t[Notification.FOR_FOLLOW]
@@ -76,9 +83,16 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
             data["body"] = t["body"].format(task=notification.peck.task.name, count=notification.peck.count)
         case Notification.FOR_COMMENT:
             related_user = notification.comment.user
+            parent: str = ""
+
+            if notification.comment.parent_type == Comment.FOR_QUOTE:
+                parent = notification.comment.quote.content
+            else:
+                parent = notification.comment.task.name
+
             t = t[Notification.FOR_COMMENT]
             data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"].format(task=notification.comment.task.name, comment=notification.comment.comment)
+            data["body"] = t["body"].format(parent=parent, comment=notification.comment.comment)
         
     if related_user:
         if related_user.profile_img:

@@ -20,11 +20,11 @@
         "type_reactions": "리액션",
         "type_pecking": "콕 쪼기",
         "type_follow": "팔로우",
-        "content_task_reminder": "{{delta}}분 전 알림입니다.",
-        "content_comment_task": "\"<ellipsis>{{task_name}}</ellipsis>\"에 댓글을 남겼습니다: \"<ellipsis>{{comment}}</ellipsis>\"",
-        "content_peck": "\"<ellipsis>{{task_name}}</ellipsis>\"을(를) {{count}}번 콕 쪼았습니다.",
-        "content_reaction_task": "\"<ellipsis>{{task_name}}</ellipsis>\"에 리액션 했습니다.",
-        "content_reaction_daily_comment": "{{date}}의 하루 코멘트에 리액션 했습니다.",
+        "content_task_reminder": "{{delta}}분 전 리마인더",
+        "content_task_reminder_now": "작업할 시간입니다.",
+        "content_peck": "{{count}}번 콕 쪼았습니다.",
+        "content_comment_quote": "{{date}}의 한마디",
+        "content_reaction_quote": "{{date}}의 한마디",
         "content_follow": "나를 팔로우 합니다.",
         "content_follow_request": "내게 팔로우 요청을 보냈습니다.",
         "content_follow_request_accepted": "내 팔로우 요청을 승인했습니다."
@@ -114,7 +114,6 @@
             "reminders": "리마인더 설정 우선"
         }
     },
-    "drawer": {},
     "task": {
         "missed": "놓침",
         "overdue": "기한 지남",
@@ -200,173 +199,6 @@
             "memo_placeholder": "메모를 입력해주세요.",
             "button_change": "변경하기",
             "memo_edit_success": "메모가 변경되었습니다."
-        }
-    },
-    "settings": {
-        "online": {
-            "sync_help": "{{name}} 설정 값은 모든 기기와 동기화 됩니다."
-        },
-        "sidebar": {
-            "account": "계정",
-            "general": "일반",
-            "privacy": "공개 범위",
-            "languages_and_time": "언어 및 시간",
-            "notifications": "알림",
-            "appearance": "테마",
-            "reactions": "리액션",
-            "blocks": "차단",
-            "info": "정보",
-            "sign_out": "로그아웃"
-        },
-        "account": {
-            "title": "계정",
-            "display_name": "이름",
-            "display_name_placeholder": "남에게 보일 이름",
-            "bio": "바이오",
-            "header_color": "헤더 색상",
-            "bio_placeholder": "자신을 소개하세요.",
-            "button_submit": "제출",
-            "change_password": "암호 변경",
-            "section_open": "열기",
-            "section_close": "닫기",
-            "current_password": "현재 암호",
-            "new_password": "새로운 암호",
-            "new_password_again": "새로운 암호 (다시 입력)",
-            "button_change": "변경",
-            "account_edited": "변경사항을 저장했습니다.",
-            "account_fail": "저장할 수 없습니다. 다시 시도하세요.",
-            "password_too_short": "암호는 8자 이상이어야 합니다.",
-            "password_is_same": "현재 암호와 새로운 암호가 동일합니다.",
-            "password_not_match": "새로운 암호가 서로 일치하지 않습니다.",
-            "password_wrong": "현재 암호가 틀렸습니다.",
-            "password_change_success": "암호를 변경했습니다.",
-            "password_change_error": "암호 변경 중 문제가 발생했습니다."
-        },
-        "general": {
-            "title": "일반",
-            "startpage": {
-                "name": "시작 페이지",
-                "description": "앱 실행 시 먼저 보일 페이지를 설정합니다.",
-                "values": {
-                    "home": "홈",
-                    "today": "오늘"
-                }
-            },
-            "delete_task_after_alert": {
-                "name": "작업 삭제 시 경고",
-                "description": "작업을 삭제할 때 되묻는 경고창을 띄웁니다."
-            }
-        },
-        "privacy": {
-            "title": "공개 범위",
-            "follow_request_approval_manually": {
-                "name": "팔로우를 수동으로 승인",
-                "description": "팔로우 요청을 받을지 수동으로 결정합니다."
-            },
-            "follow_request_approval_for_followings": {
-                "name": "내가 팔로우하는 사람이 보낸 팔로우를 자동으로 수락하기",
-                "description": "'팔로우를 수동으로 승인' 설정이 켜져있어도, 내가 팔로우하는 사람이 팔로우 요청을 보내면 자동으로 승인합니다."
-            },
-            "follow_list_privacy": {
-                "name": "내 팔로우 & 팔로워 목록 공개 범위",
-                "description": "내 인맥을 누구까지 보여줄지 정합니다.",
-                "values": {
-                    "public": "모두에게",
-                    "protected": "팔로워에게만",
-                    "private": "나에게만"
-                }
-            },
-            "setting_submitted": "공개 범위 설정을 저장했습니다."
-        },
-        "languages_and_time": {
-            "title": "언어 및 시간",
-            "locale": {
-                "name": "언어",
-                "system": "자동"
-            },
-            "timezone": {
-                "name": "시간대",
-                "system": "시스템 설정대로"
-            },
-            "start_of_the_week_monday": {
-                "name": "주의 시작은 월요일"
-            },
-            "time_as_24_hour": {
-                "name": "24시간제 사용"
-            }
-        },
-        "notifications": {
-            "title": "알림",
-            "push_notification_subscription": {
-                "name": "앱에서 알림 받기",
-                "description": "이 기기에서 Peak의 알림을 받습니다.",
-                "values": {
-                    "button_enable": "켜기",
-                    "button_disable": "끄기"
-                },
-                "disabled_push_notification": "알림을 비활성화 했습니다.",
-                "disabled_push_notification_error": "이 기기에서 알림을 비활성화 했습니다.",
-                "declined_push_notification": "알림 권한이 없습니다. 설정에서 권한을 허용해 주세요.",
-                "enabled_push_notification": "이제 Peak에서 보내는 알림을 받을 수 있습니다.",
-                "enabled_push_notification_error": "알림 활성화 중 오류가 발생했습니다."
-            },
-            "play_notification_sound": {
-                "name": "알림음 재생하기"
-            }
-        },
-        "appearance": {
-            "title": "테마",
-            "theme": {
-                "name": "테마",
-                "values": {
-                    "system": "시스템 설정대로",
-                    "light": "라이트",
-                    "light-systemcolor": "라이트 (시스템 컬러)",
-                    "dark": "다크",
-                    "dark-systemcolor": "다크 (시스템 컬러)"
-                }
-            },
-            "main_width": {
-                "name": "콘텐츠 너비",
-                "description": "좌우로 긴 화면에만 적용됩니다.",
-                "values": {
-                    "narrow": "좁게",
-                    "normal": "일반",
-                    "wide": "넓게"
-                }
-            },
-            "close_sidebar_on_startup": {
-                "name": "앱 시작 시 사이드바 닫기"
-            }
-        },
-        "reactions": {
-            "title": "리액션",
-            "favorite_emojis": {
-                "name": "즐겨찾는 에모지",
-                "description": "좋아하는 에모지를 즐겨찾기에 등록하면 빠르게 리액션을 달 수 있습니다."
-            },
-            "dislikable_emojis": {
-                "name": "피하고픈 에모지",
-                "description": "이 에모지는 내 앞에 나타나지 않습니다."
-            }
-        },
-        "blocks": {
-            "title": "차단",
-            "blockees": {
-                "name": "내가 차단한 사용자",
-                "description": "이 사용자들과 마주치지 않습니다.",
-                "button_unblock": "차단 해제",
-                "button_block": "다시 차단",
-                "empty": "아무도 없습니다."
-            }
-        },
-        "info": {
-            "title": "정보",
-            "build": {
-                "name": "빌드 정보",
-                "commit": "커밋",
-                "branch": "브랜치"
-            }
         }
     },
     "users": {
@@ -487,24 +319,44 @@
         "404_error_text": "요청하신 페이지를 찾을 수 없습니다.",
         "404_error_bottom": "이전 화면으로 돌아가기"
     },
+    "email_verification": {
+        "invalid_access": "잘못된 접근입니다.",
+        "verified_title": "인증 완료",
+        "verified": "{{email}} 주소가 확인되었습니다. 이제 로그인할 수 있습니다.",
+        "link_sign": "로그인 하기",
+        "resend_title": "인증 메일 재요청",
+        "resend_other_cases": "만약 이미 인증되었거나, 등록되지 않은 이메일이라면 다른 메일이 전송됩니다.",
+        "resend_known_issues": "Outlook 등의 이메일 서비스에서는 스팸으로 간주되어 전송이 불가합니다. 해당 경우에는 다른 주소로 가입하여 주십시오.",
+        "resend_success": "메일을 전송했습니다. 메일함 또는 스팸함을 확인하세요.",
+        "resend_error_limit": "약 {{minutes}}분 후 다시 시도하세요.",
+        "resend_error_bad_request": "메일 형식이 올바르지 않습니다.",
+        "resend_error_any": "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        "placeholder_email": "이메일 주소 입력",
+        "button_submit": "제출"
+    },
     "sign": {
+        "sign_in_again": "로그아웃 되었습니다. 다시 로그인해주세요.",
         "sign_in": "로그인",
         "sign_in_success": "로그인 성공! 다시 만나서 기뻐요.",
         "sign_in_failed": "로그인 실패. 유저네임과 암호를 다시 확인하세요.",
         "network_error": "문제가 발생했습니다. 네트워크 상황을 확인하세요.",
         "internal_error": "문제가 발생했습니다. 다시 시도해 주세요.",
+        "email_verify_required": "이메일 인증이 아직 진행되지 않았습니다. 메일함 또는 스팸함을 확인해주세요.",
         "loading": "로딩 중",
         "button_sign_in": "로그인",
-        "button_forgot_password": "암호 찾기",
         "button_create_account": "계정 생성",
+        "button_resend_verification": "인증 메일 재전송",
+        "button_forgot_password": "암호 찾기",
         "sign_up": "회원가입",
-        "sign_up_success": "회원가입 완료! 이제 로그인 해주세요.",
         "email": "이메일 주소",
         "password": "암호",
         "username": "사용자 이름",
         "button_sign_up": "가입하기",
         "tos": "'가입하기' 버튼을 누름으로써 <linkToTos>이용약관</linkToTos>에 동의하게 됩니다.",
         "button_already_have_account": "로그인 하기",
+        "link_sign_in": "로그인",
+        "sign_up_completed": "메일 인증 필요",
+        "check_inbox": "이메일 인증 메일이 전송되었습니다. 메일함을 확인하세요.",
         "sign_up_errors": {
             "SIGNUP_NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
             "SIGNUP_SIGNED_IN_USER": "이미 로그인되어 있습니다.",
@@ -518,5 +370,25 @@
             "SIGNUP_INTERNAL_ERROR": "문제가 발생했습니다. 다시 시도해 주세요.",
             "SIGNUP_UNKNOWN_ERROR": "나중에 시도해 주세요."
         }
+    },
+    "password_recovery": {
+        "request_title": "암호를 잊었나요?",
+        "request_description": "암호를 잊은 경우, 암호 재설정 링크를 이메일로 받을 수 있습니다.",
+        "placeholder_email": "이메일 주소 입력",
+        "button_submit": "제출",
+        "request_success": "암호 재설정 메일이 전송되었습니다. 메일함을 확인하세요.",
+        "request_error_limit": "한 시간 후에 다시 시도해주세요.",
+        "request_error_bad_request": "잘못된 요청입니다. 페이지 새로고침 후 다시 시도하세요.",
+        "request_error_any": "오류가 발생했습니다. 네트워크 상황을 확인하세요.",
+        "link_sign_in": "로그인",
+        "recovery_title": "암호 재설정",
+        "recovery_description": "새 암호는 8자 이상이어야 합니다.",
+        "placeholder_password": "새 암호 입력",
+        "placeholder_password_again": "한 번 더 입력",
+        "button_set": "암호 변경",
+        "recovery_success": "암호를 변경했습니다. 새 암호로 로그인하세요.",
+        "recovery_error_password_length": "암호는 8자 이상이어야 합니다.",
+        "recovery_error_password_unmatch": "새 암호가 서로 다릅니다.",
+        "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다."
     }
 }

@@ -1,4 +1,8 @@
-import client, { setCurrentUsername, setToken } from "@api/client"
+import client, {
+    clearUserCredentials,
+    setCurrentUsername,
+    setToken,
+} from "@api/client"
 import { deleteSubscription } from "@api/notifications.api"
 
 import { getClientSettings } from "@utils/clientSettings"
@@ -52,24 +56,58 @@ export const signUp = async (email, password, username) => {
     }
 }
 
-export const signOut = async () => {
-    setToken(null)
-    setCurrentUsername(null)
-
-    const subscriptionID = getClientSettings()["push_notification_subscription"]
-
+export const verifyEmail = async (token) => {
     try {
-        await deleteSubscription(subscriptionID)
+        const res = await client.post(`sign_up/verification/`, {
+            token,
+        })
 
-        const res = await client.get("sign_out/")
         if (res.status === 200) {
-            return true
+            return res.data.email
         }
-    } catch (_) {
-        return false
+    } catch (e) {
+        throw e
+    }
+}
+
+export const resendVerificationEmail = async (email) => {
+    return client.post(`sign_up/verification/resend/`, {
+        email,
+    })
+}
+
+export const requestPasswordRecoveryToken = async (email) => {
+    return client.post(`password_recovery/`, {
+        email,
+    })
+}
+
+export const patchPasswordWithPasswordRecoveryToken = async (
+    token,
+    newPassword,
+) => {
+    return client.patch(`password_recovery/`, {
+        token,
+        new_password: newPassword,
+    })
+}
+
+export const signOut = async () => {
+    const subscriptionID = getClientSettings()["push_notification_subscription"]
+    if (subscriptionID) {
+        deleteSubscription(subscriptionID) // intentionally not awaiting
     }
 
-    return false
+    try {
+        await client.post("sign_out/")
+    } catch (_) {
+        // ignore error
+    }
+
+    clearUserCredentials()
+    window.location = "/"
+
+    return null // this function is being used as 'loader'
 }
 
 export const patchPassword = async (current_password, new_password) => {

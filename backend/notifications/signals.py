@@ -18,8 +18,8 @@ def create_notification_for_reaction(sender, instance: Reaction=None, created=Fa
 
     if instance.parent_type == Reaction.FOR_TASK:
         target_user = instance.task.user
-    elif instance.parent_type == Reaction.FOR_DAILY_COMMENT:
-        target_user = instance.daily_comment.user
+    elif instance.parent_type == Reaction.FOR_QUOTE:
+        target_user = instance.quote.user
 
     if target_user == instance.user:
         return
@@ -67,12 +67,18 @@ def create_notification_for_following(sender, instance: Following=None, created=
 def create_notification_for_comment(sender, instance: Comment=None, created=False, **kwargs):
     if not created:
         return
-
-    if instance.task.user == instance.user:
+    
+    parent_owner = None
+    if instance.parent_type == Comment.FOR_TASK:
+        parent_owner = instance.task.user
+    else:
+        parent_owner = instance.quote.user
+    
+    if parent_owner == instance.user:
         return
 
     return Notification.objects.create(
-        user=instance.task.user, type=Notification.FOR_COMMENT, comment=instance, created_at=instance.created_at,
+        user=parent_owner, type=Notification.FOR_COMMENT, comment=instance, created_at=instance.created_at,
     )
 
 @receiver(post_save, sender=Notification)

@@ -1,94 +1,71 @@
-import { useEffect, useState } from "react"
-import { useRouteLoaderData } from "react-router-dom"
+import { useState } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { css, styled } from "styled-components"
 
-import DailyLogPreview from "@components/social/DailyLogPreview"
-import DailyLogDetail from "@components/social/LogDetail/DailyLogDetail"
 import SocialCalendar from "@components/social/SocialCalendar"
 import SocialPageTitle from "@components/social/SocialPageTitle"
+import LogDetails from "@components/social/logDetails/LogDetails"
+import LogsPreview from "@components/social/logsPreview/LogsPreview"
 
+import { getCurrentUsername } from "@api/client"
 import {
-    getDailyComment,
     getDailyLogDetails,
     getDailyLogsPreview,
-    postDailyComment,
+    getQuote,
+    postQuote,
 } from "@api/social.api"
 
 import queryClient from "@queries/queryClient"
 
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { toast } from "react-toastify"
-
-const compareDailyLogs = (a, b) => {
-    if (!a.recent_task === !b.recent_task) {
-        // (when there is no completed task) Show the user with the earliest username in alphabetical order first
-        if (!a.recent_task) return a.username > b.username ? 1 : -1
-        if (a.recent_task.is_read !== b.recent_task.is_read)
-            return a.recent_task.is_read - b.recent_task.is_read
-        return a.recent_task.is_read
-            ? // Show the earliest completed tasks first
-              new Date(a.recent_task.completed_at) -
-                  new Date(b.recent_task.completed_at)
-            : // Show more recently completed tasks first when not read yet
-              new Date(b.recent_task.completed_at) -
-                  new Date(a.recent_task.completed_at)
-    }
-    // Show user with recent work first
-    return !a.recent_task - !b.recent_task
-}
 
 const SocialFollowingPage = () => {
     const initial_date = new Date()
     initial_date.setHours(0, 0, 0, 0)
 
     const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
-    const [selectedUsername, setSelectedUsername] = useState(null)
+    const [selectedUser, setSelectedUser] = useState(null)
 
-    const { user } = useRouteLoaderData("app")
+    const me = getCurrentUsername()
 
-    const { data: dailyLogs, isError: dailyLogsError } = useQuery({
-        queryKey: ["daily", "logs", user.username, selectedDate],
-        queryFn: () => getDailyLogsPreview(user.username, selectedDate),
-        enabled: !!selectedDate,
+    const targetUser = selectedUser ? selectedUser : me
+
+    const { data: dailyLogs } = useQuery({
+        queryKey: ["daily", "logs", me, selectedDate],
+        queryFn: () => getDailyLogsPreview(me, selectedDate),
+        enabled: !!selectedDate && !!me,
     })
 
-    const dailyLogDetailUsername = selectedUsername
-        ? selectedUsername
-        : user.username
-
-    const { data: dailyComment, isError: dailyCommentError } = useQuery({
-        queryKey: ["daily", "content", dailyLogDetailUsername, selectedDate],
-        queryFn: () => getDailyComment(dailyLogDetailUsername, selectedDate),
-        enabled: !!selectedDate,
+    const { data: quote } = useQuery({
+        queryKey: ["quote", targetUser, selectedDate],
+        queryFn: () => getQuote(targetUser, selectedDate),
+        enabled: !!selectedDate && !!me,
     })
 
-    const dailyCommentMutation = useMutation({
+    const QuoteMutation = useMutation({
         mutationFn: ({ day, content }) => {
-            return postDailyComment(day, content)
+            return postQuote(day, content)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["daily", "content", user.username, selectedDate],
+                queryKey: ["quote", me, selectedDate],
             })
         },
-        onError: () => {
+        onError: (e) => {
             toast.error(e)
         },
     })
 
-    const { data: dailyLogDetails, isError: dailyLogDetailsError } = useQuery({
-        queryKey: [
-            "daily",
-            "log",
-            "details",
-            dailyLogDetailUsername,
-            selectedDate,
-        ],
-        queryFn: () => getDailyLogDetails(dailyLogDetailUsername, selectedDate),
+    const { data: dailyLogDetails } = useQuery({
+        queryKey: ["daily", "log", "details", targetUser, selectedDate],
+        queryFn: () => getDailyLogDetails(targetUser, selectedDate),
         enabled: !!selectedDate,
     })
+
+    const saveQuote = (content) => {
+        QuoteMutation.mutate({ day: selectedDate, content })
+    }
 
     return (
         <>
@@ -96,141 +73,75 @@ const SocialFollowingPage = () => {
 
             <Wrapper>
                 <Container>
-                    <CalendarContainer>
+                    <CalendarWrapper>
                         <SocialCalendar
                             newLogDates={mockNewLogDates}
                             selectedDate={selectedDate}
                             setSelectedDate={setSelectedDate}
                         />
-                    </CalendarContainer>
-
-                    {/* DailyLogsPreview를 별도의 컴포넌트 파일로 구분할까 고민중 */}
-                    <DailyLogsPreviewContainer>
-                        {dailyLogs
-                            ?.sort(compareDailyLogs)
-                            .map((dailyFollowerLog, index) => (
-                                <DailyLogPreview
-                                    key={index}
-                                    dailyLog={dailyFollowerLog}
-                                    selectedUsername={selectedUsername}
-                                    setSelectedUsername={setSelectedUsername}
-                                />
-                            ))}
-                    </DailyLogsPreviewContainer>
+                    </CalendarWrapper>
+                    {dailyLogs && (
+                        <LogsPreview
+                            logs={dailyLogs}
+                            selectedUser={selectedUser}
+                            setSelectedUser={setSelectedUser}
+                        />
+                    )}
                 </Container>
 
-                <Container $isSticky={true}>
-                    {dailyComment ? (
-                        <DailyLogDetail
-                            dailyComment={dailyComment}
-                            userLogDetails={dailyLogDetails}
-                            userLogsDetail={mockDailyFollowerLogsDetail[0]}
-                            user={user}
-                            saveDailyComment={dailyCommentMutation.mutate}
-                            day={selectedDate}
+                <StickyContainer>
+                    { quote ? (
+                        <LogDetails
+                            user={quote?.user}
+                            quote={quote}
+                            saveQuote={saveQuote}
+                            logDetails={dailyLogDetails}
+                            isFollowing={true}
                         />
                     ) : null}
-                </Container>
+                    {/* TODO: 날짜가 선택되지 않았을 때 */}
+                </StickyContainer>
             </Wrapper>
-            {/* <ReactQueryDevtools initialIsOpen></ReactQueryDevtools> */}
         </>
     )
 }
 
 const Wrapper = styled.div`
     display: flex;
-    gap: 5rem;
+    gap: 2rem;
 `
 
 const Container = styled.div`
     width: 50%;
     min-width: 27.5rem;
-    ${(props) =>
-        props.$isSticky
-            ? css`
-                  /* align-self: flex-start; */
-                  position: sticky;
-                  top: 2.5rem;
-                  gap: 0rem;
-              `
-            : css`
-                  gap: 1rem;
-              `}
     margin-bottom: auto;
 
     padding: 0 1rem 0;
+    overflow: hidden;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow: hidden;
+    gap: 1rem;
 `
 
-const CalendarContainer = styled.div`
-    width: 80%;
-    max-width: 40rem;
+const StickyContainer = styled(Container)`
+    position: sticky;
+    top: 2.5rem;
+    gap: 0rem;
+`
+
+const CalendarWrapper = styled.div`
     margin-left: auto;
     margin-right: auto;
+    width: 80%;
+    max-width: 40rem;
 `
-
-const DailyLogsPreviewContainer = styled.div``
 
 const mockNewLogDates = [
     "2024-05-12T15:00:00.000Z",
     "2024-05-11T15:00:00.000Z",
     "2024-05-09T00:00:00.000Z",
-]
-
-const mockDailyFollowerLogsDetail = [
-    {
-        user: {
-            username: "minyoy",
-            profileImgURI:
-                "https://avatars.githubusercontent.com/u/65756020?v=4",
-        },
-        dailyComment: {
-            name: "오늘도 열시미 살아보았나 내가 보기엔 아닌 거 같은데 너가 보기엔 어떻니",
-            reaction: [
-                { emoji: "🥳", reactionNum: 2 },
-                { emoji: "😅", reactionNum: 3 },
-            ],
-        },
-        dailyProjects: [
-            {
-                projectID: "개발",
-                projectColor: "2E61DC",
-                dailytasks: [
-                    {
-                        id: "TEMP11",
-                        name: "빨래하기",
-                        completed_at: new Date(2024, 2, 2, 7, 4, 1),
-                        reaction: [{ emoji: "🥳", reactionNum: 2 }],
-                    },
-                    {
-                        id: "TEMP12",
-                        name: "총장하기",
-                        completed_at: null,
-                        reaction: [{ emoji: null, reactionNum: 4 }],
-                    },
-                ],
-            },
-            {
-                projectID: "수강신청",
-                projectColor: "ff0022",
-                dailytasks: [
-                    {
-                        id: "TEMP15",
-                        name: "빨래하기",
-                        completed_at: new Date(2024, 2, 2, 7, 4, 1),
-                        reaction: [
-                            { emoji: "🥳", reactionNum: 2 },
-                            { emoji: "😅", reactionNum: 3 },
-                        ],
-                    },
-                ],
-            },
-        ],
-    },
 ]
 
 export default SocialFollowingPage

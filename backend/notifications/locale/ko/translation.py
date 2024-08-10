@@ -5,10 +5,11 @@ translation = {
         Notification.FOR_TASK_REMINDER: {
             "title": "⏰ {task}",
             "body": "{delta}분 남았습니다.",
+            "body_now": "작업할 시간입니다.",
         },
         Notification.FOR_REACTION: {
             "title": ":{emoji}: @{username}",
-            "body": "RE: {content}",
+            "body": "RE: {parent}",
         },
         Notification.FOR_FOLLOW: {
             "title": "📩 @{username}",
@@ -24,11 +25,11 @@ translation = {
         },
         Notification.FOR_PECK: {
             "title": "👈 @{username}",
-            "body": "{task}\n↳ {count}번 쪼았습니다.",
+            "body": "{count}번 쪼았습니다.\n\nRE: {task}",
         },
         Notification.FOR_COMMENT: {
             "title": "💬 @{username}",
-            "body": "{comment}\n\nRE: {task}",
+            "body": "{comment}\n\nRE: {parent}",
         },
     },
 }
