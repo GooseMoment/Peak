@@ -100,7 +100,7 @@ const TaskCreate = () => {
                 </Icons>
             </TaskNameBox>
             <Contents task={newTask} setFunc={editNewTask} />
-            <AddButton onClick={makeTask}>{t("button_add")}</AddButton>
+            <AddButton disabled={postMutation.isPending} onClick={makeTask}>{t("button_add")}</AddButton>
         </TaskCreateBox>
     )
 }
@@ -144,6 +144,11 @@ const AddButton = styled(Button)`
     margin: 1em;
     margin-right: 2.5em;
     margin-bottom: 1.5em;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
 `
 
 export default TaskCreate

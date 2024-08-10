@@ -135,6 +135,7 @@ const ProjectCreate = ({ onClose }) => {
                 submit={submit}
                 isComponentOpen={isComponentOpen}
                 setIsComponentOpen={setIsComponentOpen}
+                disabled={postMutation.isPending}
             />
         </ProjectCreateBox>
     )

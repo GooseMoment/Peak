@@ -107,6 +107,7 @@ const DrawerCreate = ({ onClose }) => {
                 submit={submit}
                 isComponentOpen={isComponentOpen}
                 setIsComponentOpen={setIsComponentOpen}
+                disabled={postMutation.isPending}
             />
         </DrawerCreateBox>
     )
