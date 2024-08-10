@@ -3,12 +3,12 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import DeleteAlert from "@components/common/DeleteAlert"
 import TaskNameInput from "@components/tasks/TaskNameInput"
-
-import Contents from "./Contents"
+import Contents from "@components/project/taskDetails/Contents"
+import { getProjectColor } from "@components/project/Creates/palettes"
 
 import { deleteTask, getTask, patchTask } from "@api/tasks.api"
 
@@ -22,6 +22,7 @@ import { toast } from "react-toastify"
 
 const TaskDetail = () => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
+    const theme = useTheme()
 
     const [projectID, color] = useOutletContext()
     const { task_id } = useParams()
@@ -114,7 +115,7 @@ const TaskDetail = () => {
                     setFunc={patchMutation.mutate}
                     newTaskName={taskName}
                     setNewTaskName={setTaskName}
-                    color={color}
+                    color={getProjectColor(theme.type, color)}
                 />
                 <Icons>
                     <FeatherIcon icon="trash-2" onClick={handleAlert} />
@@ -150,18 +151,17 @@ const TaskNameBox = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 1em 1.8em;
+    margin: 1.8em 1.8em 1em;
 `
 
 const Icons = styled.div`
     display: flex;
     align-items: center;
+    gap: 1em;
 
     & svg {
-        top: 0.4em;
         cursor: pointer;
         stroke: ${(p) => p.theme.primaryColors.danger};
-        margin-left: 1em;
     }
 `
 

@@ -32,7 +32,7 @@ const Circle = styled.div`
 
     top: ${(props) => {
         if (props.$isInput) {
-            return 0.1 // optical center
+            return 0.05 // optical center
         }
 
         if (props.$hasDate) {

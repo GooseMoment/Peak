@@ -2,10 +2,11 @@ import { useState } from "react"
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import Button from "@components/common/Button"
 import TaskNameInput from "@components/tasks/TaskNameInput"
+import { getProjectColor } from "@components/project/Creates/palettes"
 
 import Contents from "./Contents"
 
@@ -19,6 +20,7 @@ import { toast } from "react-toastify"
 
 const TaskCreate = () => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
+    const theme = useTheme()
 
     const [projectId, color] = useOutletContext()
     const { state } = useLocation()
@@ -84,7 +86,8 @@ const TaskCreate = () => {
                     setFunc={editNewTask}
                     newTaskName={newTaskName}
                     setNewTaskName={setNewTaskName}
-                    color={color}
+                    color={getProjectColor(theme.type, color)}
+                    isCreate
                 />
                 <Icons>
                     <FeatherIcon icon="x" onClick={onClose} />
@@ -111,11 +114,10 @@ const TaskCreateBox = styled.div`
 `
 
 const TaskNameBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 1em 1.8em;
+    margin: 1.6em 1.8em 1em;
 `
 
 const Icons = styled.div`
@@ -123,7 +125,7 @@ const Icons = styled.div`
     align-items: center;
 
     & svg {
-        top: 0.4em;
+        top: 0.15em;
         cursor: pointer;
         stroke: ${(p) => p.theme.goose};
         margin-left: 1em;
