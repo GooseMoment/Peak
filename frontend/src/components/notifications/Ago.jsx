@@ -20,8 +20,8 @@ const Ago = ({ created_at, skeleton = false }) => {
             <Time
                 $skeleton={skeleton}
                 dateTime={created_at}
-                onMouseEnter={(e) => setIsHover(true)}
-                onMouseLeave={(e) => setIsHover(false)}
+                onMouseEnter={() => setIsHover(true)}
+                onMouseLeave={() => setIsHover(false)}
             >
                 {!skeleton && isHover
                     ? datetime.toLocaleString(DateTime.DATETIME_MED)
