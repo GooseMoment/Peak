@@ -8,6 +8,7 @@ import FeatherIcon from "feather-icons-react"
 
 const DrawerFolder = ({ project, changeDrawer }) => {
     const [collapsed, setCollapsed] = useState(false)
+    const theme = useTheme()
 
     return (
         <>
