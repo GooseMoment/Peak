@@ -32,7 +32,7 @@ const Layout = ({ children }) => {
 
     return (
         <App>
-            {isMobile && <Navbar openSidebar={openSidebarFromNavbar} />}
+            <Navbar openSidebar={openSidebarFromNavbar} />
             {!sidebarHidden && (
                 <Sidebar
                     setSidebarHidden={setSidebarHidden}
