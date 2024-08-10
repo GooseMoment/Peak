@@ -13,7 +13,7 @@ const Images = ({ profile_img, project_color, reaction, skeleton = false }) => {
             {skeleton && <ProfileImgSkeleton />}
             {profile_img && <ProfileImg src={profile_img} />}
             {project_color && (
-                <TaskReminderIconBox $color={"#" + project_color}>
+                <TaskReminderIconBox $color={project_color}>
                     <FeatherIcon icon="clock" />
                 </TaskReminderIconBox>
             )}

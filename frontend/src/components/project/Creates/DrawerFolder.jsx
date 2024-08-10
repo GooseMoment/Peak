@@ -1,8 +1,9 @@
 import { useState } from "react"
 
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import FeatherIcon from "feather-icons-react"
+import { getProjectColor } from "@components/project/Creates/palettes"
 
 const DrawerFolder = ({ project, changeDrawer }) => {
     const [collapsed, setCollapsed] = useState(false)
@@ -16,7 +17,7 @@ const DrawerFolder = ({ project, changeDrawer }) => {
                         : () => setCollapsed((prev) => !prev)
                 }
             >
-                <Circle $color={project.color} />
+                <Circle $color={getProjectColor(theme.type, project.color)} />
                 <ItemText $is_project={true}>{project.name}</ItemText>
             </ItemBox>
             {project.type === "inbox"
@@ -43,7 +44,7 @@ const Circle = styled.div`
     position: relative;
     width: 1.1em;
     height: 1.1em;
-    background-color: #${(props) => props.$color};
+    background-color: ${(props) => props.$color};
     border-radius: 50%;
     margin-right: 0.6em;
 `

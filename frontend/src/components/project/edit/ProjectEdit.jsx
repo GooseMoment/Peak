@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import Color from "@components/project/Creates/Color"
 import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
 import Middle from "@components/project/common/Middle"
 import Title from "@components/project/common/Title"
+import { getProjectColor, getColorDisplay } from "@components/project/Creates/palettes"
 
 import { patchProject } from "@api/projects.api"
 
@@ -18,7 +19,8 @@ import { toast } from "react-toastify"
 
 const ProjectEdit = ({ project, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
-
+    const theme = useTheme()
+    
     const [name, setName] = useState(project.name)
 
     useEffect(() => {
@@ -53,12 +55,11 @@ const ProjectEdit = ({ project, onClose }) => {
         {
             id: 1,
             icon: "circle",
-            color: project.color,
-            display: "빨강",
+            color: getProjectColor(theme.type, project.color),
+            display: getColorDisplay(project.color),
             component: (
                 <Color
                     setColor={patchMutation.mutate}
-                    setDisplayColor={() => {}}
                     closeComponent={closeComponent}
                 />
             ),

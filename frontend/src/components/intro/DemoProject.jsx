@@ -37,31 +37,31 @@ const makeProjects = (t) => [
     {
         id: "0",
         name: t("sample0"),
-        color: "0E4A84",
+        color: "dark_blue",
         type: "regular",
     },
     {
         id: "1",
         name: t("sample1"),
-        color: "ffbe0b",
+        color: "yellow",
         type: "regular",
     },
     {
         id: "2",
         name: t("sample2"),
-        color: "fb5607",
+        color: "orange",
         type: "goal",
     },
     {
         id: "3",
         name: t("sample3"),
-        color: "ff006e",
+        color: "peach",
         type: "goal",
     },
     {
         id: "4",
         name: t("sample4"),
-        color: "3a86ff",
+        color: "turquoise",
         type: "regular",
     },
 ]

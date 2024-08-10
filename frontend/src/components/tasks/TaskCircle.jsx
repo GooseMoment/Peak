@@ -46,7 +46,7 @@ const Circle = styled.div`
     aspect-ratio: 1;
     border-radius: 50%;
     border: 3px solid
-        ${(props) => (props.$completed ? props.theme.grey : `#${props.$color}`)};
+        ${(props) => (props.$completed ? props.theme.grey : props.$color)};
     position: relative;
     margin-right: 0.6em;
     font-size: 1em;
@@ -70,7 +70,7 @@ const Circle = styled.div`
                       ${(props) =>
                           props.$completed
                               ? props.theme.grey
-                              : `#${props.$color}`};
+                              : props.$color};
                   animation: ${rotateAnimation} 6s linear infinite;
 
                   & svg {

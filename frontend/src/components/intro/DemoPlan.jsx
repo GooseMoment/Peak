@@ -20,6 +20,8 @@ import normal from "@assets/project/priority/normal.svg"
 
 import { useTranslation } from "react-i18next"
 
+const projectColor = "#ff4a03"
+
 const deadlineTable = {
     today,
     tomorrow,
@@ -121,7 +123,7 @@ const DemoPlan = () => {
                             <DemoTask task={task} key={task.id} />
                         ))}
                     </BlurArea>
-                    <DemoTask id={2} task={task} />
+                    <DemoTask id={2} task={task} color={projectColor} />
                     <BlurArea>
                         {sampleTasks.slice(1).map((task) => (
                             <DemoTask task={task} key={task.id} />
