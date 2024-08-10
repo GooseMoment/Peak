@@ -1,27 +1,13 @@
 import { useEffect } from "react"
-import {
-    isRouteErrorResponse,
-    useNavigate,
-    useRouteError,
-} from "react-router-dom"
+import { isRouteErrorResponse, useRouteError } from "react-router-dom"
 
 import ErrorLayout from "@components/errors/ErrorLayout"
-
-import { setToken } from "@api/client"
 
 import { useTranslation } from "react-i18next"
 
 const ErrorPage = () => {
     const error = useRouteError()
-    const navigate = useNavigate()
     const { t } = useTranslation(null, { keyPrefix: "error-page" })
-
-    useEffect(() => {
-        if (isRouteErrorResponse(error) && error.status === 401) {
-            setToken(null)
-            navigate("/sign/in?flag=401")
-        }
-    }, [])
 
     useEffect(() => {
         if (import.meta.env.DEBUG == 1) {
