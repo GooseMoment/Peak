@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react"
-import { useMutation } from "@tanstack/react-query"
+import { useEffect, useState } from "react"
 
+import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import Privacy from "@components/project/Creates/Privacy"
 import Middle from "@components/project/common/Middle"
 import Title from "@components/project/common/Title"
-import Privacy from "@components/project/Creates/Privacy"
 
 import { patchDrawer } from "@api/drawers.api"
 
@@ -37,11 +37,13 @@ const DrawerEdit = ({ projectID, drawer, onClose }) => {
             return patchDrawer(drawer.id, data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["drawers", { projectID: projectID }] })
+            queryClient.invalidateQueries({
+                queryKey: ["drawers", { projectID: projectID }],
+            })
         },
         onError: () => {
             toast.error(t("edit.drawer_change_error"))
-        }
+        },
     })
 
     const items = [

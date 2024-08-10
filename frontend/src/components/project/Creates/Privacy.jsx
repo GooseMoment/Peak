@@ -13,7 +13,7 @@ const Privacy = ({ setPrivacy, closeComponent }) => {
 
     const changePrivacy = (privacy) => {
         return () => {
-            setPrivacy({privacy})
+            setPrivacy({ privacy })
             closeComponent()
         }
     }

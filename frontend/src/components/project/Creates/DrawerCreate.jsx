@@ -1,12 +1,12 @@
 import { useState } from "react"
 import { useParams } from "react-router-dom"
-import { useMutation } from "@tanstack/react-query"
 
+import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import Privacy from "@components/project/Creates/Privacy"
 import Middle from "@components/project/common/Middle"
 import Title from "@components/project/common/Title"
-import Privacy from "@components/project/Creates/Privacy"
 
 import { postDrawer } from "@api/drawers.api"
 
@@ -78,7 +78,7 @@ const DrawerCreate = ({ onClose }) => {
     })
 
     const submit = () => {
-        editNewDrawer({name})
+        editNewDrawer({ name })
         postMutation.mutate(newDrawer)
     }
 

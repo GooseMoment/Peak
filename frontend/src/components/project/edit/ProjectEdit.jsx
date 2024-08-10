@@ -1,14 +1,13 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
+
 import { useMutation } from "@tanstack/react-query"
-
 import styled from "styled-components"
-
-import Middle from "@components/project/common/Middle"
-import Title from "@components/project/common/Title"
 
 import Color from "@components/project/Creates/Color"
 import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
+import Middle from "@components/project/common/Middle"
+import Title from "@components/project/common/Title"
 
 import { patchProject } from "@api/projects.api"
 
@@ -38,11 +37,13 @@ const ProjectEdit = ({ project, onClose }) => {
             return patchProject(project.id, data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["projects", project.id] })
+            queryClient.invalidateQueries({
+                queryKey: ["projects", project.id],
+            })
         },
         onError: () => {
             toast.error(t("edit.project_change_error"))
-        }
+        },
     })
 
     const items = [
@@ -54,7 +55,7 @@ const ProjectEdit = ({ project, onClose }) => {
             component: (
                 <Color
                     setColor={patchMutation.mutate}
-                    setDisplayColor={()=>{}}
+                    setDisplayColor={() => {}}
                     closeComponent={closeComponent}
                 />
             ),

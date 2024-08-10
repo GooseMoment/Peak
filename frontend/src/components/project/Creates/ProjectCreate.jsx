@@ -1,14 +1,13 @@
 import { useState } from "react"
+
 import { useMutation } from "@tanstack/react-query"
-
 import styled from "styled-components"
-
-import Middle from "@components/project/common/Middle"
-import Title from "@components/project/common/Title"
 
 import Color from "@components/project/Creates/Color"
 import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
+import Middle from "@components/project/common/Middle"
+import Title from "@components/project/common/Title"
 
 import { postProject } from "@api/projects.api"
 
@@ -101,7 +100,7 @@ const ProjectCreate = ({ onClose }) => {
     })
 
     const submit = () => {
-        editNewProject({name})
+        editNewProject({ name })
 
         if (newProject.name === "Inbox" || newProject.name === "inbox") {
             toast.error(t("create.project_create_cannot_use_inbox"))

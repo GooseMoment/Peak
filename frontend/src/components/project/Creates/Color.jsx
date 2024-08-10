@@ -24,8 +24,8 @@ const Color = ({ setColor, setDisplayColor, closeComponent }) => {
 
     const changeColor = (color, displayColor) => {
         return () => {
-            setColor({color})
-            setDisplayColor({displayColor})
+            setColor({ color })
+            setDisplayColor({ displayColor })
             closeComponent()
         }
     }

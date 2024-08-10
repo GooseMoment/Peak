@@ -11,10 +11,10 @@ import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import DrawerCreate from "@components/project/Creates/DrawerCreate"
+import ProjectEdit from "@components/project/edit/ProjectEdit"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
-import ProjectEdit from "@components/project/edit/ProjectEdit"
 
 import { getDrawersByProject } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
@@ -235,7 +235,8 @@ const ProjectPage = () => {
                 <ModalPortal
                     closeModal={() => {
                         setIsProjectEditOpen(false)
-                    }}>
+                    }}
+                >
                     <ProjectEdit
                         project={project}
                         onClose={() => {
