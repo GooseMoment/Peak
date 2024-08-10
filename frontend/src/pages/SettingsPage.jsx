@@ -1,9 +1,11 @@
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { NavLink, Outlet } from "react-router-dom"
 
 import styled from "styled-components"
 
+import MildButton from "@components/common/MildButton"
 import PageTitle from "@components/common/PageTitle"
+import ConfirmationSignOut from "@components/settings/ConfirmationSignOut"
 
 import { cubicBeizer } from "@assets/keyframes"
 
@@ -17,6 +19,13 @@ const SettingsPage = () => {
 
     const menuItems = useMemo(() => getMenuItems(t), [t])
 
+    const [isSignOutConfirmationOpen, setSignOutConfirmationOpen] =
+        useState(false)
+
+    const openSignOutConfirmation = () => {
+        setSignOutConfirmationOpen(true)
+    }
+
     return (
         <>
             <PageTitle>설정</PageTitle>
@@ -29,8 +38,17 @@ const SettingsPage = () => {
                         </Menu>
                     )
                 })}
+                <MenuSignOut onClick={openSignOutConfirmation} key="sign-out">
+                    <FeatherIcon icon="log-out" />
+                    로그아웃
+                </MenuSignOut>
             </MenuBox>
             <Outlet />
+            {isSignOutConfirmationOpen && (
+                <ConfirmationSignOut
+                    onClose={() => setSignOutConfirmationOpen(false)}
+                />
+            )}
         </>
     )
 }
@@ -107,6 +125,21 @@ const Menu = styled(NavLink)`
     &.active {
         color: ${(p) => p.theme.black};
         background-color: ${(p) => p.theme.primaryColors.success};
+    }
+`
+
+const MenuSignOut = styled(MildButton)`
+    width: fit-content;
+    border: 1px solid ${(p) => p.theme.textColor};
+    border-radius: 16px;
+    padding: 0.5em 0.75em;
+
+    transition: background-color 0.15s ${cubicBeizer};
+
+    color: ${(p) => p.theme.primaryColors.danger};
+
+    &:hover {
+        background-color: ${(p) => p.theme.secondBackgroundColor};
     }
 `
 
