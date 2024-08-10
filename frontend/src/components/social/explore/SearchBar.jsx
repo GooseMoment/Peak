@@ -21,6 +21,7 @@ const SearchBar = ({ searchTerm, setSearchTerm, handleSearch }) => {
 
     const handleKeyDown = (e) => {
         if (e.key == "Enter") {
+            clearTimeout(timer.current)
             handleSearch()
         }
     }
