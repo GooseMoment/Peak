@@ -1,13 +1,13 @@
 import styled from "styled-components"
 
-import ReactionBox from "@components/social/ReactionBox"
+import InteractionBox from "@components/social/interaction/InteractionBox"
 import TaskFrame from "@components/tasks/TaskFrame"
 
-const LogDetailsTask = ({ task, color }) => {
+const TaskBox = ({ task, color, isFollowing }) => {
     return (
         <TaskContainer>
             <TaskFrame task={task} color={color} />
-            <ReactionBox parentType={"task"} parent={task} />
+            { isFollowing && <InteractionBox parentType={"task"} parent={task} />}
         </TaskContainer>
     )
 }
@@ -17,4 +17,4 @@ const TaskContainer = styled.div`
     flex-direction: column;
 `
 
-export default LogDetailsTask
+export default TaskBox

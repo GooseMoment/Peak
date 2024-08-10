@@ -1,5 +1,6 @@
 import styled from "styled-components"
-import DailyLogPreview from "@components/social/DailyLogPreview"
+
+import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
 
 const compareDailyLogs = (a, b) => {
     if (!a.recent_task === !b.recent_task) {
@@ -19,24 +20,21 @@ const compareDailyLogs = (a, b) => {
     return !a.recent_task - !b.recent_task
 }
 
-const LogsPreview = ({logs, selectedUser, setSelectedUser}) => {
+const LogsPreview = ({ logs, selectedUser, setSelectedUser }) => {
     return (
         <LogsPreviewContainer>
-            {logs.sort(compareDailyLogs)
-                .map((dailyFollowerLog, index) => (
-                    <DailyLogPreview
-                        key={index}
-                        dailyLog={dailyFollowerLog}
-                        selectedUsername={selectedUser}
-                        setSelectedUsername={setSelectedUser}
-                    />
-                ))}
+            {logs.sort(compareDailyLogs).map((log, index) => (
+                <LogPreviewBox
+                    key={index}
+                    log={log}
+                    selectedUser={selectedUser}
+                    setSelectedUser={setSelectedUser}
+                />
+            ))}
         </LogsPreviewContainer>
     )
 }
 
-const LogsPreviewContainer = styled.div`
-    
-`
+const LogsPreviewContainer = styled.div``
 
 export default LogsPreview

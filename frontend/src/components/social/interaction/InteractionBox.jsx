@@ -3,19 +3,21 @@ import { useEffect, useState } from "react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import CommentButton from "@components/social/CommentButton"
-import EmojiPickerButton from "@components/social/EmojiPickerButton"
-import PeckButton from "@components/social/PeckButton"
-import ReactionButton from "@components/social/ReactionButton"
+import CommentButton from "@components/social/interaction/comment/CommentButton"
+import PeckButton from "@components/social/interaction/peck/PeckButton"
+import EmojiPickerButton from "@components/social/interaction/reaction/EmojiPickerButton"
+import ReactionButton from "@components/social/interaction/reaction/ReactionButton"
 
 import { deleteReaction, getReactions, postReaction } from "@api/social.api"
 
 import queryClient from "@queries/queryClient"
 
-const ReactionBox = ({ parentType, parent }) => {
+import { toast } from "react-toastify"
+
+const InteractionBox = ({ parentType, parent }) => {
     const [pickedEmoji, setPickedEmoji] = useState(null)
 
-    const { data: parentReactions, isError: parentReactionsError } = useQuery({
+    const { data: parentReactions } = useQuery({
         queryKey: ["reaction", parentType, parent.id],
         queryFn: () => getReactions(parentType, parent.id),
         enabled: !!parent.id,
@@ -40,7 +42,7 @@ const ReactionBox = ({ parentType, parent }) => {
     })
 
     const needPickerButton = () => {
-        if (parentType === "daily_comment") return true
+        if (parentType === "quote") return true
         if (parentType === "task") return !!parent.completed_at
     }
 
@@ -73,10 +75,11 @@ const ReactionBox = ({ parentType, parent }) => {
                     (reaction, index) => (
                         <ReactionButton
                             key={index}
-                            emoji={reaction}
+                            emoji={reaction.emoji}
+                            emojiCount={reaction.counts}
                             isSelected={myReactions.some(
-                                (myReaction) =>
-                                    myReaction.id === reaction[0].id,
+                                (myReactionEmoji) =>
+                                    myReactionEmoji.id === reaction.emoji.id,
                             )}
                             saveReaction={parentReactionsMutation.mutate}
                         />
@@ -84,7 +87,6 @@ const ReactionBox = ({ parentType, parent }) => {
                 )}
             {needPickerButton() && (
                 <EmojiPickerButton
-                    pickedEmoji={pickedEmoji}
                     setPickedEmoji={setPickedEmoji}
                 />
             )}
@@ -106,4 +108,4 @@ const Box = styled.div`
     gap: 0.5em;
 `
 
-export default ReactionBox
+export default InteractionBox

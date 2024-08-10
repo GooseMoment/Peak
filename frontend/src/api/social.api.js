@@ -81,9 +81,9 @@ export const getQuote = async (username, day) => {
     return res.data
 }
 
-export const postQuote = async (date, dailycomment) => {
-    const res = await client.post(`social/daily/comment/${date}/`, {
-        content: dailycomment,
+export const postQuote = async (date, quote) => {
+    const res = await client.post(`social/daily/quote/${date}/`, {
+        content: quote,
     })
 
     return res.data

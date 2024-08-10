@@ -266,9 +266,9 @@ class ReactionView(APIView):
             emoji_id = str(reaction.emoji.id)
             reactionNum = reactionCountsDir.get(emoji_id)
             if reactionNum:
-                reactionCountsDir[emoji_id][1] = reactionNum[1] + 1
+                reactionCountsDir[emoji_id]["counts"] = reactionNum["counts"] + 1
             else:
-                reactionCountsDir[emoji_id] = [EmojiSerializer(reaction.emoji).data, 1]
+                reactionCountsDir[emoji_id] = {"emoji": EmojiSerializer(reaction.emoji).data, "counts": 1}
         
         serializer = ReactionSerializer(reactions, many=True)
         

@@ -86,11 +86,11 @@ class ReactionSerializer(serializers.ModelSerializer):
     emoji = EmojiSerializer(many=False, read_only=True)
 
     task = TaskSerializer()
-    daily_comment = QuoteSerializer()
+    quote = QuoteSerializer()
     
     class Meta:
         model = Reaction
-        fields = ["id", "user", "parent_type", "task", "daily_comment", "emoji"]
+        fields = ["id", "user", "parent_type", "task", "quote", "emoji"]
 
 class PeckSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
@@ -103,11 +103,11 @@ class PeckSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     task = TaskSerializer()
-    daily_comment = QuoteSerializer()
+    quote = QuoteSerializer()
     
     class Meta:
         model = Comment
-        fields = ["id", "user", "parent_type", "task", "daily_comment", "created_at", "comment"]
+        fields = ["id", "user", "parent_type", "task", "quote", "created_at", "comment"]
 
 class FollowingSerializer(serializers.ModelSerializer):
     follower = UserSerializer(many=False, read_only=True)
