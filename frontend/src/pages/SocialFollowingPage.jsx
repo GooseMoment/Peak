@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import { styled } from "styled-components"
 
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
@@ -11,7 +11,7 @@ import LogsPreview from "@components/social/logsPreview/LogsPreview"
 
 import { getCurrentUsername } from "@api/client"
 import {
-    getDailyLogDetails,
+    getDailyLogDrawers,
     getDailyLogsPreview,
     getQuote,
     postQuote,
@@ -20,6 +20,22 @@ import {
 import queryClient from "@queries/queryClient"
 
 import { toast } from "react-toastify"
+
+const getCursorFromURL = (url) => {
+    if (!url) return null
+
+    const u = new URL(url)
+    const cursor = u.searchParams.get("cursor")
+    return cursor
+}
+
+const getPageFromURL = (url) => {
+    if (!url) return null
+
+    const u = new URL(url)
+    const page = u.searchParams.get("page")
+    return page
+}
 
 const SocialFollowingPage = () => {
     const initial_date = new Date()
@@ -58,11 +74,21 @@ const SocialFollowingPage = () => {
         },
     })
 
-    const { data: dailyLogDetails, isPending: isLogDetailsPending } = useQuery({
-        queryKey: ["daily", "log", "details", targetUser, selectedDate],
-        queryFn: () => getDailyLogDetails(targetUser, selectedDate),
-        enabled: !!selectedDate,
+    const {
+        data: drawerPage,
+        fetchNextPage: fetchNextDrawerPage,
+        isPending: isDrawerPending,
+        refetch: refetchDrawer,
+    } = useInfiniteQuery({
+        queryKey: ["daily", "log", "details", "drawer", targetUser],
+        queryFn: (pages) =>
+            getDailyLogDrawers(targetUser, pages.pageParam || 1),
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
+
+    const hasNextPage =
+        drawerPage?.pages[drawerPage?.pages?.length - 1].next !== null
 
     const saveQuote = (content) => {
         QuoteMutation.mutate({ day: selectedDate, content })
@@ -90,19 +116,22 @@ const SocialFollowingPage = () => {
                     )}
                 </Container>
 
+                {/* TODO: 날짜가 선택되지 않았을 때 */}
                 <StickyContainer>
-                    {isQuotePending || isLogDetailsPending ? (
+                    {isQuotePending || isDrawerPending ? (
                         <SkeletonProjectPage />
                     ) : (
-                        <LogDetails
-                            user={quote?.user}
-                            quote={quote}
-                            saveQuote={saveQuote}
-                            logDetails={dailyLogDetails}
-                            isFollowing={true}
-                        />
+                        drawerPage?.pages?.map((group, index) => (
+                            <LogDetails
+                                key={index}
+                                user={quote?.user}
+                                quote={quote}
+                                saveQuote={saveQuote}
+                                logDetails={group?.results}
+                                isFollowing={true}
+                            />
+                        ))
                     )}
-                    {/* TODO: 날짜가 선택되지 않았을 때 */}
                 </StickyContainer>
             </Wrapper>
         </>

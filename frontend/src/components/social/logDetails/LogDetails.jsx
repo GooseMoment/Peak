@@ -7,6 +7,7 @@ import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import InteractionBox from "@components/social/interaction/InteractionBox"
 import Quote from "@components/social/logDetails/Quote"
 import TaskBox from "@components/social/logDetails/TaskBox"
+import DrawerBundle from "@components/social/logDetails/DrawerBundle"
 
 const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing }) => {
 
@@ -29,28 +30,12 @@ const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing }) => {
             {/* TODO: When there are no task */}
             <DetailBody>
                 {logDetails &&
-                    Object.values(logDetails).map(
+                    logDetails.map(
                         (drawer) =>
                             // Only show when there are task
-                            drawer.tasks.length !== 0 && (
-                                <Fragment key={drawer.id}>
-                                    <DrawerBox $color={drawer.color}>
-                                        <DrawerName $color={drawer.color}>
-                                            {drawer.name}
-                                        </DrawerName>
-                                    </DrawerBox>
-                                    <TaskList>
-                                        {drawer.tasks.map((task) => (
-                                            <TaskBox
-                                                key={task.id}
-                                                task={task}
-                                                color={drawer.color}
-                                                isFollowing={isFollowing}
-                                            />
-                                        ))}
-                                    </TaskList>
-                                </Fragment>
-                            ),
+                            drawer && (
+                                <DrawerBundle key={drawer.id} drawer={drawer} isFollowing={isFollowing}/>
+                            )
                     )}
             </DetailBody>
         </>
