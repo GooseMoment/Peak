@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react"
+import { Suspense, useMemo, useState } from "react"
 import { NavLink, Outlet } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 
+import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import MildButton from "@components/common/MildButton"
 import PageTitle from "@components/common/PageTitle"
 import ConfirmationSignOut from "@components/settings/ConfirmationSignOut"
@@ -43,7 +44,9 @@ const SettingsPage = () => {
                     {t("sign_out")}
                 </MenuSignOut>
             </MenuBox>
-            <Outlet />
+            <Suspense fallback={<LoaderCircleFull />}>
+                <Outlet />
+            </Suspense>
             {isSignOutConfirmationOpen && (
                 <ConfirmationSignOut
                     onClose={() => setSignOutConfirmationOpen(false)}

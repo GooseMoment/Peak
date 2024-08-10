@@ -1,4 +1,3 @@
-import SettingsPage from "../SettingsPage"
 import Account from "./Account"
 import Appearance from "./Appearance"
 import Blocks from "./Blocks"
@@ -10,7 +9,6 @@ import Privacy from "./Privacy"
 import Reactions from "./Reactions"
 
 export {
-    SettingsPage,
     Account,
     General,
     Privacy,
