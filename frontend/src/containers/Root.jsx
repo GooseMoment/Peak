@@ -24,8 +24,6 @@ const Root = () => {
             <RouterProvider
                 router={mainRouter}
                 fallbackElement={<FullscreenLoader />}
-                future={{ v7_startTransition: true }}
-                // TODO: Remove future and Add Link with useTransition
             />
         </>
     )
