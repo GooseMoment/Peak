@@ -154,7 +154,7 @@ const Account = () => {
 
 const ImgNameEmailContainer = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     gap: 2.5em;
 `
