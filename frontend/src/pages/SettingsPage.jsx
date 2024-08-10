@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next"
 const pathRoot = "/app/settings/"
 
 const SettingsPage = () => {
-    const { t } = useTranslation("", { keyPrefix: "settings.sidebar" })
+    const { t } = useTranslation("", { keyPrefix: "settings.menus" })
 
     const menuItems = useMemo(() => getMenuItems(t), [t])
 
@@ -28,7 +28,7 @@ const SettingsPage = () => {
 
     return (
         <>
-            <PageTitle>설정</PageTitle>
+            <PageTitle>{t("title")}</PageTitle>
             <MenuBox>
                 {menuItems.map((menuItem) => {
                     return (
@@ -40,7 +40,7 @@ const SettingsPage = () => {
                 })}
                 <MenuSignOut onClick={openSignOutConfirmation} key="sign-out">
                     <FeatherIcon icon="log-out" />
-                    로그아웃
+                    {t("sign_out")}
                 </MenuSignOut>
             </MenuBox>
             <Outlet />

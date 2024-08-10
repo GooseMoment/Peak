@@ -201,7 +201,8 @@
         "online": {
             "sync_help": "The values of {{name}} are synced across all your devices."
         },
-        "sidebar": {
+        "menus": {
+            "title": "Settings",
             "account": "Account",
             "general": "General",
             "privacy": "Privacy",

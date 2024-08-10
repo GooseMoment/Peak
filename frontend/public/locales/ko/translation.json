@@ -202,7 +202,8 @@
         "online": {
             "sync_help": "{{name}} 설정 값은 모든 기기와 동기화 됩니다."
         },
-        "sidebar": {
+        "menus": {
+            "title": "설정",
             "account": "계정",
             "general": "일반",
             "privacy": "공개 범위",
