@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { css, styled } from "styled-components"
+import { styled } from "styled-components"
 
 import SocialPageTitle from "@components/social/SocialPageTitle"
 import SearchBar from "@components/social/explore/SearchBar"
@@ -29,7 +29,7 @@ const SocialExplorePage = () => {
     const { data: recommendUsers, isPending: isRecommendPending } = useQuery({
         queryKey: ["explore", "recommend", "users"],
         queryFn: () => getExploreFeed(),
-        staleTime: 3 * 60 * 60 * 1000,
+        staleTime: 1 * 60 * 60 * 1000,
     })
 
     const recommendUsersMutation = useMutation({
@@ -43,6 +43,14 @@ const SocialExplorePage = () => {
         onError: (e) => {
             toast.error(e)
         },
+    })
+
+    const [searchTerm, setSearchTerm] = useState('')
+
+    const { data: foundUsers, isFetching: isSearcFetching, refetch: refetchFound } = useQuery({
+        queryKey: ["explore", "searched", "users"],
+        queryFn: () => getExploreSearchResults(searchTerm),
+        enabled: false
     })
 
     const { data: quote } = useQuery({
@@ -63,13 +71,25 @@ const SocialExplorePage = () => {
             <SocialPageTitle active="explore" />
             <Wrapper>
                 <Container>
-                    <SearchBar handleSearch={recommendUsersMutation.mutate} />
+                    <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={refetchFound} />
                     <DailyLogsPreviewContainer>
-                        {isRecommendPending ? (
+                        {isRecommendPending || (searchTerm && isSearcFetching) ? (
                             <LoaderCircleWrapper>
                                 <LoaderCircleFull />
                             </LoaderCircleWrapper>
                         ) : (
+                            foundUsers && Object.values(foundUsers)?
+                            Object.values(foundUsers).map(
+                                (dailyFollowerLog) => (
+                                    <LogPreviewBox
+                                        key={dailyFollowerLog.username}
+                                        log={dailyFollowerLog}
+                                        selectedUser={selectedUser}
+                                        setSelectedUser={setSelectedUser}
+                                    />
+                                ),
+                            )
+                            :
                             Object.values(recommendUsers).map(
                                 (dailyFollowerLog) => (
                                     <LogPreviewBox
