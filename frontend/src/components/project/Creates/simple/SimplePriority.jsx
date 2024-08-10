@@ -6,7 +6,7 @@ import { CreateSimpleBox, ContentBox } from "@components/project/Creates/simple/
 
 import { useTranslation } from "react-i18next"
 
-const SimplePriority = ({ editNewTask }) => {
+const SimplePriority = ({ editNewTask, color }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.priority" })
 
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -39,6 +39,7 @@ const SimplePriority = ({ editNewTask }) => {
             {items.map(item=>(
                 <ContentBox 
                     key={item.index} 
+                    $color={color}
                     $isActive={currentIndex === item.index} 
                     onClick={()=>setCurrentIndex(item.index)}
                     tabIndex="0"

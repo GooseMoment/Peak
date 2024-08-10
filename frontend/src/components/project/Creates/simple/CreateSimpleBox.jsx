@@ -55,7 +55,7 @@ export const ContentBox = styled.div`
 
     ${props=>props.$isActive && css`
         color: ${p=>p.theme.white};
-        background-color: ${p=>p.theme.goose};
+        background-color: ${props=>props.$color};
     `}
 
     & svg {

@@ -101,6 +101,7 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             icon: <FeatherIcon icon="calendar" />,
             component: <SimpleAssigned
                 editNewTask={editNewTask}
+                color={color}
             />,
         },
         {
@@ -109,6 +110,7 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             icon: <img src={hourglass} />,
             component: <SimpleDue
                 editNewTask={editNewTask}
+                color={color}
             />,
         },
         {
@@ -117,6 +119,7 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             icon: <FeatherIcon icon="alert-circle" />,
             component: <SimplePriority
                 editNewTask={editNewTask}
+                color={color}
             />,
         },
     ]
@@ -129,6 +132,7 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
                         key={item.id}
                         name={item.name}
                         onClick={handleClickContent}
+                        $color={color}
                         $isSelected={content === item.name}
                     >
                         {item.icon}
@@ -199,7 +203,7 @@ const IndexBox = styled.div`
     }
 
     ${props=>props.$isSelected && css`
-        background-color: ${p=>p.theme.goose};
+        background-color: ${props=>props.$color};
 
         & svg {
             stroke: ${p=>p.theme.white};

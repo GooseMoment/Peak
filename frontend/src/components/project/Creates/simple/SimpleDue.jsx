@@ -9,7 +9,7 @@ import hourglass from "@assets/project/hourglass.svg"
 
 import { useTranslation } from "react-i18next"
 
-const SimpleDue = ({ editNewTask }) => {
+const SimpleDue = ({ editNewTask, color }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
 
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -57,6 +57,7 @@ const SimpleDue = ({ editNewTask }) => {
             {items.map(item=>(
                 <ContentBox 
                     key={item.index} 
+                    $color={color}
                     $isActive={currentIndex === item.index} 
                     onClick={()=>setCurrentIndex(item.index)}
                     tabIndex="0"

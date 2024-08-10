@@ -7,7 +7,7 @@ import calculateDate from "@components/project/Creates/utils/calculateDate"
 
 import { useTranslation } from "react-i18next"
 
-const SimpleAssigned = ({ editNewTask }) => {
+const SimpleAssigned = ({ editNewTask, color }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
 
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -55,6 +55,7 @@ const SimpleAssigned = ({ editNewTask }) => {
             {items.map(item=>(
                 <ContentBox 
                     key={item.index} 
+                    $color={color}
                     $isActive={currentIndex === item.index} 
                     onClick={()=>setCurrentIndex(item.index)} 
                     tabIndex="0"
