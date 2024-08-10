@@ -146,7 +146,8 @@
             "description": "These users don't appear to you.",
             "button_unblock": "Unblock",
             "button_block": "Re-block",
-            "empty": "Nobody is here."
+            "empty": "Nobody is here.",
+            "error": "Something went wrong. Try again."
         }
     },
     "info": {
