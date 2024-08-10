@@ -39,8 +39,6 @@ def get_explore_feed(request: HttpRequest):
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-## Follow
-# social/follow/@follower/@followee/
 class FollowView(APIView):
     #request 확인 기능 넣기
     #block 검사
@@ -463,3 +461,15 @@ class EmojiList(mixins.ListModelMixin, generics.GenericAPIView):
     @method_decorator(cache_page(60 * 60 * 5)) # caching for 5 hours 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+@api_view(["GET"])
+def get_explore_search_results(request: Request):
+    keyword = request.GET.get('query')
+    
+    if keyword is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    users = User.objects.filter(username__icontains=keyword)
+    serializer = UserSerializer(users, many=True)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
