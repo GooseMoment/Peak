@@ -6,16 +6,16 @@ import Navbar from "@components/navbar/Navbar"
 import Sidebar from "@components/sidebar/Sidebar"
 
 import { useClientSetting } from "@utils/clientSettings"
-import useScreenType, { ifMobile, ifTablet } from "@utils/useScreenType"
+import useScreenType, { ifMobile, ifTablet, WIDTH_TABLET } from "@utils/useScreenType"
 
-import { cubicBeizer, modalFadeIn } from "@assets/keyframes"
+const startUpWidth = window.innerWidth
 
 const Layout = ({ children }) => {
     const [clientSetting] = useClientSetting()
 
     const [sidebarHidden, setSidebarHidden] = useState(false)
     const [sidebarCollapsed, setSidebarCollapsed] = useState(
-        clientSetting["close_sidebar_on_startup"],
+        startUpWidth <= WIDTH_TABLET || clientSetting["close_sidebar_on_startup"],
     )
     const contentPadding = clientSetting["main_width"] || "5rem"
 
@@ -32,16 +32,13 @@ const Layout = ({ children }) => {
 
     return (
         <App>
-            {isMobile && <Navbar openSidebar={openSidebarFromNavbar} />}
+            <Navbar openSidebar={openSidebarFromNavbar} />
             {!sidebarHidden && (
                 <Sidebar
                     setSidebarHidden={setSidebarHidden}
                     collapsed={sidebarCollapsed}
                     setCollapsed={setSidebarCollapsed}
                 />
-            )}
-            {isMobile && !sidebarHidden && (
-                <BackgroundWall onClick={() => setSidebarHidden(true)} />
             )}
             <Content
                 $sidebarCollapsed={sidebarCollapsed}
@@ -83,18 +80,6 @@ const Content = styled.main`
         padding-bottom: calc(2rem + 6rem);
         padding-left: max(env(safe-area-inset-left), 1.5rem);
     }
-`
-
-const BackgroundWall = styled.div`
-    z-index: 98;
-
-    position: fixed;
-    height: 100dvh;
-    width: 100dvw;
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
-
-    animation: ${modalFadeIn} 0.25s ${cubicBeizer} forwards;
 `
 
 // Reference: https://every-layout.dev/layouts/sidebar

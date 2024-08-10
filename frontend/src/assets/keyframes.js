@@ -120,6 +120,16 @@ export const slideLeftToRight = keyframes`
     }
 `
 
+export const slideLeftToRightReverse = keyframes`
+    0% {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(-200%);
+    }
+`
+
 export const dropdown = keyframes`
     0% {
         opacity: 60%;
