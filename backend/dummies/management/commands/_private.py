@@ -7,7 +7,7 @@ from projects.models import Project
 from drawers.models import Drawer
 from tasks.models import Task
 from social.models import (
-    Peck, Comment, DailyComment, Emoji, Reaction, Following, Block
+    Peck, Comment, Quote, Emoji, Reaction, Following, Block
 )
 
 import random
@@ -211,6 +211,7 @@ def create_pecks(users: list[User], tasks: list[Task]) -> list[Peck]:
 def factory_comment(user: User, task: Task) -> Comment:
     return Comment(
         user=user,
+        parent_type=Comment.FOR_TASK, # TODO: add a case for FOR_QUOTE
         task=task,
         comment=fake.sentence(),
         created_at=task.created_at + timedelta(hours=random.randint(1, 24))
@@ -229,16 +230,16 @@ def create_comments(users: list[User], tasks: list[Task]) -> list[Comment]:
 
     return comments
 
-def factory_daily_comment(user: User, date_at: date) -> DailyComment:
-    return DailyComment(
+def factory_quote(user: User, date_at: date) -> Quote:
+    return Quote(
         user=user,
-        comment=fake.sentence(),
+        content=fake.sentence(),
         date=date_at,
         created_at=datetime.combine(date_at, fake.time_object()),
     )
 
-def create_daily_comments(users: list[User]) -> list[DailyComment]:
-    daily_comments: list[DailyComment] = []
+def create_quotes(users: list[User]) -> list[Quote]:
+    quotes: list[Quote] = []
 
     for user in users:
         date_ats: set[date] = set()
@@ -254,11 +255,11 @@ def create_daily_comments(users: list[User]) -> list[DailyComment]:
             date_ats.add(date_at)
         
         for date_at in date_ats:
-            daily_comment = factory_daily_comment(user, date_at)
-            daily_comment.save()
-            daily_comments.append(daily_comment)
+            quote = factory_quote(user, date_at)
+            quote.save()
+            quotes.append(quote)
 
-    return daily_comments
+    return quotes
 
 def factory_emoji(name: str, img_uri: str):
     return Emoji(
@@ -266,7 +267,7 @@ def factory_emoji(name: str, img_uri: str):
         img_uri=img_uri,
     )
 
-def fetch_emojis_from_emojos(instance="planet.moe", limit=50, parser="lxml") -> dict[str, str]:
+def fetch_emojis_from_emojos(instance, limit=50, parser="lxml") -> dict[str, str]:
     res = requests.get("https://emojos.in/" + instance)
     if res.status_code != 200:
         print("Failed to fetch emojis:", res.status_code)
@@ -307,7 +308,7 @@ def create_emojis(limit=50) -> list[Emoji]:
 
     return emojis
 
-def factory_reaction(user: User, parent_type: str, payload: Task | DailyComment, emoji: Emoji) -> Reaction:
+def factory_reaction(user: User, parent_type: str, payload: Task | Quote, emoji: Emoji) -> Reaction:
     r = Reaction(
         user=user,
         emoji=emoji,
@@ -319,7 +320,7 @@ def factory_reaction(user: User, parent_type: str, payload: Task | DailyComment,
     return r
 
 def create_reactions(
-        users: list[User], tasks: list[Task], daily_comments: list[DailyComment], emojis: list[Emoji]
+        users: list[User], tasks: list[Task], quotes: list[Quote], emojis: list[Emoji]
     ) -> list[Reaction]:
     reactions: list[Reaction] = []
     
@@ -335,12 +336,12 @@ def create_reactions(
             reactions.append(reaction)
         
         # 이거 개노가다야
-        # reactions for daily_comments
-        n = random.randint(0, len(daily_comments)//5)
-        daily_comments_indexes = random.sample(range(len(daily_comments)), n)
-        for daily_comment_index in daily_comments_indexes:
+        # reactions for quotes
+        n = random.randint(0, len(quotes)//5)
+        quotes_indexes = random.sample(range(len(quotes)), n)
+        for quote_index in quotes_indexes:
             reaction = factory_reaction(
-                user, Reaction.FOR_DAILY_COMMENT, daily_comments[daily_comment_index], random.choice(emojis),
+                user, Reaction.FOR_quote, quotes[quote_index], random.choice(emojis),
             )
             reaction.save()
             reactions.append(reaction)
