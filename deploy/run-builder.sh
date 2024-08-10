@@ -1,3 +1,5 @@
+#!/bin/bash
+
 source .env
 docker build \
     --build-arg VITE_API_BASEURL=$VITE_API_BASEURL \
