@@ -1,15 +1,10 @@
-import { Fragment } from "react"
-
 import styled from "styled-components"
 
-import { TaskList } from "@components/drawers/Drawer"
-import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import InteractionBox from "@components/social/interaction/InteractionBox"
 import Quote from "@components/social/logDetails/Quote"
-import TaskBox from "@components/social/logDetails/TaskBox"
 import DrawerBundle from "@components/social/logDetails/DrawerBundle"
 
-const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing }) => {
+const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing, selectedDate }) => {
 
     return (
         <>
@@ -34,7 +29,7 @@ const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing }) => {
                         (drawer) =>
                             // Only show when there are task
                             drawer && (
-                                <DrawerBundle key={drawer.id} drawer={drawer} isFollowing={isFollowing}/>
+                                <DrawerBundle key={drawer.id} drawer={drawer} selectedDate={selectedDate} isFollowing={isFollowing}/>
                             )
                     )}
             </DetailBody>

@@ -127,6 +127,7 @@ const SocialFollowingPage = () => {
                                 user={quote?.user}
                                 quote={quote}
                                 saveQuote={saveQuote}
+                                selectedDate={selectedDate}
                                 logDetails={group?.results}
                                 isFollowing={true}
                             />
