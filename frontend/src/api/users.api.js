@@ -52,6 +52,42 @@ export const signUp = async (email, password, username) => {
     }
 }
 
+export const verifyEmail = async (token) => {
+    try {
+        const res = await client.post(`sign_up/verification/`, {
+            token,
+        })
+
+        if (res.status === 200) {
+            return res.data.email
+        }
+    } catch (e) {
+        throw e
+    }
+}
+
+export const resendVerificationEmail = async (email) => {
+    return client.post(`sign_up/verification/resend/`, {
+        email,
+    })
+}
+
+export const requestPasswordRecoveryToken = async (email) => {
+    return client.post(`password_recovery/`, {
+        email,
+    })
+}
+
+export const patchPasswordWithPasswordRecoveryToken = async (
+    token,
+    newPassword,
+) => {
+    return client.patch(`password_recovery/`, {
+        token,
+        new_password: newPassword,
+    })
+}
+
 export const signOut = async () => {
     setToken(null)
     setCurrentUsername(null)

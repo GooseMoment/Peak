@@ -1,5 +1,7 @@
 import styled, { keyframes } from "styled-components"
 
+import { ifTablet } from "@utils/useScreenType"
+
 const Showcase = ({ activities }) => {
     return (
         <Box>
@@ -28,10 +30,8 @@ const Box = styled.section`
 
     overflow-y: hidden;
 
-    @media screen and (max-width: 800px) {
-        & {
-            display: none;
-        }
+    ${ifTablet} {
+        display: none;
     }
 `
 
