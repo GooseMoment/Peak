@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useParams } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
@@ -21,6 +21,7 @@ const DrawerCreate = ({ onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const { id } = useParams()
 
+    const inputRef = useRef(null)
     const [name, setName] = useState("")
 
     const [newDrawer, setNewDrawer] = useState({
@@ -31,6 +32,7 @@ const DrawerCreate = ({ onClose }) => {
 
     const editNewDrawer = (edit) => {
         setNewDrawer(Object.assign(newDrawer, edit))
+        inputRef.current.focus()
     }
 
     //Component
@@ -82,12 +84,19 @@ const DrawerCreate = ({ onClose }) => {
         postMutation.mutate(newDrawer)
     }
 
+    const onEnter = (e) => {
+        if (e.key === "Enter") {
+            submit()
+        }
+    }
+
     return (
-        <DrawerCreateBox>
+        <DrawerCreateBox onKeyDown={onEnter}>
             <Title
                 name={name}
                 setName={setName}
                 setFunc={editNewDrawer}
+                inputRef={inputRef}
                 isCreate
                 icon="inbox"
                 onClose={onClose}

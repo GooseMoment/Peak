@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
@@ -19,6 +19,7 @@ import { toast } from "react-toastify"
 
 const TaskCreate = () => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
+    const inputRef = useRef(null)
 
     const [projectId, color] = useOutletContext()
     const { state } = useLocation()
@@ -46,6 +47,7 @@ const TaskCreate = () => {
 
     const editNewTask = (edit) => {
         setNewTask(Object.assign(newTask, edit))
+        inputRef.current.focus()
     }
 
     const postMutation = useMutation({
@@ -76,12 +78,19 @@ const TaskCreate = () => {
         postMutation.mutate(newTask)
     }
 
+    const onKeyDown = (e) => {
+        if (e.key === "Enter") {
+            makeTask()
+        }
+    }
+
     return (
-        <TaskCreateBox>
+        <TaskCreateBox onKeyDown={onKeyDown}>
             <TaskNameBox>
                 <TaskNameInput
                     task={newTask}
                     setFunc={editNewTask}
+                    inputRef={inputRef}
                     newTaskName={newTaskName}
                     setNewTaskName={setNewTaskName}
                     color={color}

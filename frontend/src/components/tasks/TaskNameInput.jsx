@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 import styled from "styled-components"
 
@@ -10,6 +10,7 @@ import { toast } from "react-toastify"
 const TaskNameInput = ({
     task,
     setFunc,
+    inputRef,
     newTaskName,
     setNewTaskName,
     color,
@@ -17,6 +18,12 @@ const TaskNameInput = ({
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
     const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(()=>{
+        if (inputRef.current) {
+            inputRef.current.focus()
+          }      
+    }, [])
 
     useEffect(() => {
         setIsLoading(false)
@@ -58,6 +65,7 @@ const TaskNameInput = ({
             />
             <InputText
                 $completed={task.completed_at}
+                ref={inputRef}
                 type="text"
                 onChange={onChange}
                 onKeyDown={onEnter}
