@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next"
 
 const pathRoot = "/app/settings/"
 
-const Layout = () => {
+const SettingsPage = () => {
     const { t } = useTranslation("", { keyPrefix: "settings.sidebar" })
 
     const menuItems = useMemo(() => getMenuItems(t), [t])
@@ -110,4 +110,4 @@ const Menu = styled(NavLink)`
     }
 `
 
-export default Layout
+export default SettingsPage
