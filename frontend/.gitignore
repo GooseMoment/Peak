@@ -28,3 +28,5 @@ dev-dist/
 
 # npm lockfile
 package-lock.json
+
+.env

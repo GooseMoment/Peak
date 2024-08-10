@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source .env
+cp .env ./"$1"/.env
 docker build \
     --build-arg VITE_API_BASEURL=$VITE_API_BASEURL \
     --build-arg VITE_VAPID_PUBLIC_KEY=$VITE_VAPID_PUBLIC_KEY \
