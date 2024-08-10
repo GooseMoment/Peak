@@ -1,7 +1,7 @@
 import pluginJs from "@eslint/js"
 import airbnb from "eslint-config-airbnb"
-import pluginReact from "eslint-plugin-react"
 import eslintConfigPrettier from "eslint-config-prettier"
+import pluginReact from "eslint-plugin-react"
 import globals from "globals"
 
 // TODO: convert to flat config after airbnb updates its repo
