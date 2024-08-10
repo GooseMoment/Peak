@@ -1,8 +1,9 @@
 import { useState } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { css, styled } from "styled-components"
+import { styled } from "styled-components"
 
+import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SocialCalendar from "@components/social/SocialCalendar"
 import SocialPageTitle from "@components/social/SocialPageTitle"
 import LogDetails from "@components/social/logDetails/LogDetails"
@@ -37,7 +38,7 @@ const SocialFollowingPage = () => {
         enabled: !!selectedDate && !!me,
     })
 
-    const { data: quote } = useQuery({
+    const { data: quote, isPending: isQuotePending } = useQuery({
         queryKey: ["quote", targetUser, selectedDate],
         queryFn: () => getQuote(targetUser, selectedDate),
         enabled: !!selectedDate && !!me,
@@ -57,7 +58,7 @@ const SocialFollowingPage = () => {
         },
     })
 
-    const { data: dailyLogDetails } = useQuery({
+    const { data: dailyLogDetails, isPending: isLogDetailsPending } = useQuery({
         queryKey: ["daily", "log", "details", targetUser, selectedDate],
         queryFn: () => getDailyLogDetails(targetUser, selectedDate),
         enabled: !!selectedDate,
@@ -90,7 +91,9 @@ const SocialFollowingPage = () => {
                 </Container>
 
                 <StickyContainer>
-                    { quote ? (
+                    {isQuotePending || isLogDetailsPending ? (
+                        <SkeletonProjectPage />
+                    ) : (
                         <LogDetails
                             user={quote?.user}
                             quote={quote}
@@ -98,7 +101,7 @@ const SocialFollowingPage = () => {
                             logDetails={dailyLogDetails}
                             isFollowing={true}
                         />
-                    ) : null}
+                    )}
                     {/* TODO: 날짜가 선택되지 않았을 때 */}
                 </StickyContainer>
             </Wrapper>
