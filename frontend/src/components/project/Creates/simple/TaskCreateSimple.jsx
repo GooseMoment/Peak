@@ -11,9 +11,9 @@ import { toast } from "react-toastify"
 
 import hourglass from "@assets/project/hourglass.svg"
 import TaskNameInput from "@components/tasks/TaskNameInput"
-import SimpleDue from "./SimpleDue"
-import SimpleAssigned from "./SimpleAssigned"
-import SimplePriority from "./SimplePriority"
+import SimpleAssigned from "@components/project/Creates/simple/SimpleAssigned"
+import SimpleDue from "@components/project/Creates/simple/SimpleDue"
+import SimplePriority from "@components/project/Creates/simple/SimplePriority"
 
 const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
@@ -72,9 +72,9 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             e.stopPropagation()
             e.preventDefault()
             const selectedNumber = Number(e.key)
-            if (selectedNumber)
+            if (selectedNumber) {
                 setContent(items[selectedNumber - 1].name)
-        }
+            }}
         if (e.key === "Enter") {
             editNewTask({ name: newTaskName })
             postMutation.mutate(newTask)
