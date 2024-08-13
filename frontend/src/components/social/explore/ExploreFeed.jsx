@@ -10,7 +10,7 @@ const ExploreFeed = ({
     fetchNextFoundPage,
 }) => {
     const isRecommedNeeded =
-        !foundPage || foundPage?.pages[0].results?.length <= 3
+        foundPage?.pages[0].results.length <= 3 || !foundPage
 
     return (
         <FeedContainer>
@@ -24,7 +24,13 @@ const ExploreFeed = ({
                     />
                 )),
             )}
-            
+
+            {(foundPage && foundPage.pages[0].results.length==0) && 
+                <NoResult>
+                    No Result
+                </NoResult>
+            }
+
             <div>border</div>
 
             {isRecommedNeeded &&
@@ -40,12 +46,6 @@ const ExploreFeed = ({
                 )}
 
             <button onClick={() => fetchNextFoundPage()}>test</button>
-
-            {/* {(foundUsers && Object.values(foundUsers).length === 0) ? (
-                <NoResult>
-                    No Result
-                </NoResult>
-            ):null} */}
         </FeedContainer>
     )
 }
