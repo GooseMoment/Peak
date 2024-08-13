@@ -96,7 +96,15 @@ class FollowView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get(self, request, follower, followee):
-        following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
+        follower = get_object_or_404(User, username=follower)
+        if follower != request.user:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        followee = get_object_or_404(User, username=followee)
+        
+        following = Following.objects.filter(follower=follower, followee=followee).first()
+        
+        if following is None:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         
         serializer = FollowingSerializer(following)
         
