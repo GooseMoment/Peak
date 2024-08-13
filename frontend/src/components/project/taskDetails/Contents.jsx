@@ -141,12 +141,13 @@ const Contents = ({ task, setFunc }) => {
                     <ContentsBox>
                         <ToolTip message={item.name}>{item.icon}</ToolTip>
                         <VLine $end={item.id === 1 || item.id === 6} />
-                        <ContentText
-                            name={content === "reminder" ? "none" : item.name}
-                            onClick={handleClickContent}
-                        >
-                            {item.display}
-                        </ContentText>
+                            <ContentText
+                                name={item.name === "reminder" || item.name}
+                                onClick={handleClickContent}
+                                $isReminder={item.name === "reminder"}
+                            >
+                                {item.display}
+                            </ContentText>
                         {content === item.name && isComponentOpen ? (
                             <ModalPortal closeModal={closeComponent} additional>
                                 {item.component}
@@ -214,7 +215,7 @@ const ContentText = styled.div`
     white-space: nowrap;
     overflow-x: clip;
     text-overflow: ellipsis;
-    cursor: pointer;
+    cursor: ${props=>props.$isReminder || "pointer"};
 `
 
 const RemindersBox = styled.div`
@@ -231,6 +232,7 @@ const ReminderBlock = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 `
 
 const EmptyReminderBox = styled.div`
@@ -243,6 +245,7 @@ const EmptyReminderBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 `
 
 const makePriorities = (t) => [
