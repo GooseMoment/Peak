@@ -10,8 +10,8 @@ const Info = () => {
     return (
         <>
             <Section>
-                <Name>{t("built.name")}</Name>
-                <Value>{t("built.built_at")}: {buildTimestamp}</Value>
+                <Name>{t("build.name")}</Name>
+                <Value>{t("build.built_at")}: {buildTimestamp}</Value>
             </Section>
         </>
     )
