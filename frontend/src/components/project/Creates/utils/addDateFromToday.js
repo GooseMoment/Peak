@@ -1,4 +1,4 @@
-const calculateDate = (set) => {
+const addDateFromToday = (set) => {
     let date = new Date()
     date.setDate(date.getDate() + set)
     
@@ -9,4 +9,4 @@ const calculateDate = (set) => {
     return calculatedDate
 }
 
-export default calculateDate
+export default addDateFromToday

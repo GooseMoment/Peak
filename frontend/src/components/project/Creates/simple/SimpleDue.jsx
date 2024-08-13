@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import FeatherIcon from "feather-icons-react"
 
 import { CreateSimpleBox, ContentBox } from "@components/project/Creates/simple/CreateSimpleBox"
-import calculateDate from "@components/project/Creates/utils/calculateDate"
+import addDateFromToday from "@components/project/Creates/utils/addDateFromToday"
 
 import hourglass from "@assets/project/hourglass.svg"
 
@@ -28,7 +28,7 @@ const SimpleDue = ({ editNewTask, color }) => {
     }
 
     useEffect(() => {
-        editNewTask({ due_date: calculateDate(items[currentIndex].set)})
+        editNewTask({ due_date: addDateFromToday(items[currentIndex].set)})
     }, [currentIndex])
 
     const items = [

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import FeatherIcon from "feather-icons-react"
 
 import { CreateSimpleBox, ContentBox } from "@components/project/Creates/simple/CreateSimpleBox"
-import calculateDate from "@components/project/Creates/utils/calculateDate"
+import addDateFromToday from "@components/project/Creates/utils/addDateFromToday"
 
 import { useTranslation } from "react-i18next"
 
@@ -26,7 +26,7 @@ const SimpleAssigned = ({ editNewTask, color }) => {
     }
 
     useEffect(() => {
-        editNewTask({ assigned_at: calculateDate(items[currentIndex].set)})
+        editNewTask({ assigned_at: addDateFromToday(items[currentIndex].set)})
     }, [currentIndex])
 
     const items = [
