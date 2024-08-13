@@ -121,11 +121,6 @@ class FollowView(APIView):
             if followee != request.user:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
             follower = get_object_or_404(User, username=follower)
-        elif new_status == Following.CANCELED:
-            follower = get_object_or_404(User, username=follower)
-            if followee != request.user:
-                return Response(status=status.HTTP_401_UNAUTHORIZED)
-            followee = get_object_or_404(User, username=followee)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
