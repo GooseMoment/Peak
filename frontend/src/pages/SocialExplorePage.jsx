@@ -116,7 +116,7 @@ const SocialExplorePage = () => {
                             user={quote?.user}
                             quote={quote}
                             logDetails={exploreLogDetails}
-                            isFollowing={false}
+                            isFollowingPage={false}
                         />
                     )}
                 </StickyContainer>

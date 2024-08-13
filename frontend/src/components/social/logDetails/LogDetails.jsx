@@ -9,7 +9,7 @@ const LogDetails = ({
     quote,
     logDetails,
     saveQuote,
-    isFollowing,
+    isFollowingPage,
     selectedDate,
 }) => {
     return (
@@ -21,7 +21,7 @@ const LogDetails = ({
                     saveQuote={saveQuote || null}
                 />
 
-                {isFollowing && quote.id && (
+                {isFollowingPage && quote.id && (
                     <InteractionBox parentType={"quote"} parent={quote} />
                 )}
 
@@ -37,7 +37,7 @@ const LogDetails = ({
                                 key={drawer.id}
                                 drawer={drawer}
                                 selectedDate={selectedDate}
-                                isFollowing={isFollowing}
+                                isFollowingPage={isFollowingPage}
                             />
                         )
                     ))

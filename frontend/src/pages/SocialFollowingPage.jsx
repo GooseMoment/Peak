@@ -122,7 +122,7 @@ const SocialFollowingPage = () => {
                                 saveQuote={saveQuote}
                                 selectedDate={selectedDate}
                                 logDetails={drawerPage}
-                                isFollowing={true}
+                                isFollowingPage={true}
                             />
                     )}
                     <ImpressionArea
