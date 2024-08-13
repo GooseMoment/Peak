@@ -20,8 +20,8 @@ import { useTranslation } from "react-i18next"
 const projectColor = "#0E4A84"
 
 const DemoDrawer = () => {
-    const { t } = useTranslation(null, {
-        keyPrefix: "intro.section_organize.demo_drawer",
+    const { t } = useTranslation("intro", {
+        keyPrefix: "section_organize.demo_drawer",
     })
     const drawers = useMemo(() => makeDrawers(t), [t])
     const [count, setCount] = useState(1)

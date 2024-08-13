@@ -26,7 +26,7 @@ const IntroPage = () => {
         staleTime: 1000 * 60 * 60 * 5,
     })
 
-    const { t } = useTranslation(null, { keyPrefix: "intro" })
+    const { t } = useTranslation("intro")
 
     return (
         <>
@@ -76,11 +76,7 @@ const IntroPage = () => {
                     {t("section_cheer.description")}
                 </SectionDescription>
                 <SubGroup>
-                    <SubSection>
-                        <SubTitle>
-                            *** Emoji Selector Box should be here ***
-                        </SubTitle>
-                    </SubSection>
+                    <SubSection></SubSection>
                 </SubGroup>
             </Section>
 

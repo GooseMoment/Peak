@@ -61,7 +61,7 @@ const makeSampleTasks = (t) => [
 ]
 
 const DemoPlan = () => {
-    const { t } = useTranslation(null, { keyPrefix: "intro.section_plan.demo" })
+    const { t } = useTranslation("intro", { keyPrefix: "section_plan.demo" })
     const { t: taskT } = useTranslation(null, { keyPrefix: "task" })
 
     const [priority, setPriority] = useState("1")
