@@ -10,4 +10,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 
 COPY . .
 
-CMD ["pnpm", "run", "build"]
+
+ARG BUILD_DATE
+ENV VITE_BUILD_TIMESTAMP=${BUILD_DATE}
+CMD VITE_BUILD_TIMESTAMP=${VITE_BUILD_TIMESTAMP} pnpm run build
