@@ -12,6 +12,7 @@ from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.db.models import Q, F, Prefetch
+from django.utils import timezone
 
 from datetime import datetime, timedelta
 
@@ -90,6 +91,7 @@ class FollowView(APIView):
                 return Response(status=status.HTTP_208_ALREADY_REPORTED)
             else:
                 following.status = Following.REQUESTED
+                following.deleted_at = None
                 following.save()
         
         serializer = FollowingSerializer(following)
@@ -141,17 +143,18 @@ class FollowView(APIView):
     
     def delete(self, request, follower, followee):
         follower = get_object_or_404(User, username=follower)
-        followee = get_object_or_404(User, username=followee)
         if follower != request.user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        
+        followee = get_object_or_404(User, username=followee)
         
         try:
             following = Following.objects.get(follower=follower, followee=followee)
         except Following.DoesNotExist:
             return Response(status=status.HTTP_204_NO_CONTENT)
         
-        following.delete()
+        following.status = Following.CANCELED
+        following.deleted_at = timezone.now()
+        following.save()
         
         return Response(status=status.HTTP_200_OK)
 
