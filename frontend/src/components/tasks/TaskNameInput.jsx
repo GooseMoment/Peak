@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 
 import styled from "styled-components"
 
-import TaskCircle from "../tasks/TaskCircle"
+import TaskCircle from "@components/tasks/TaskCircle"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -56,7 +56,7 @@ const TaskNameInput = ({
                 completed={task.completed_at}
                 color={color}
                 isLoading={isLoading}
-                onClick={toComplete}
+                onClick={isCreate ? null : toComplete}
                 isInput
             />
             <InputText
