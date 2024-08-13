@@ -1,5 +1,3 @@
-import { useRef, useState } from "react"
-
 import styled from "styled-components"
 
 import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
