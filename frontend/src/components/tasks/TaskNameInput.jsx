@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 
 import styled from "styled-components"
 
@@ -14,6 +14,7 @@ const TaskNameInput = ({
     newTaskName,
     setNewTaskName,
     color,
+    isCreate,
 }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
@@ -22,7 +23,7 @@ const TaskNameInput = ({
     useEffect(()=>{
         if (inputRef.current) {
             inputRef.current.focus()
-          }      
+          }
     }, [])
 
     useEffect(() => {
@@ -39,6 +40,8 @@ const TaskNameInput = ({
     }
 
     const onEnter = (e) => {
+        if (isCreate)
+            return
         if (e.key === "Enter") {
             changeTaskName(newTaskName)
             toast.success(t("name_change_success"))

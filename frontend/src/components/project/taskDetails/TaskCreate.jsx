@@ -94,6 +94,7 @@ const TaskCreate = () => {
                     newTaskName={newTaskName}
                     setNewTaskName={setNewTaskName}
                     color={color}
+                    isCreate
                 />
                 <Icons>
                     <FeatherIcon icon="x" onClick={onClose} />
