@@ -220,8 +220,13 @@ const Drawer = ({ project, drawer, color }) => {
                 </ModalPortal>
             )}
             <TaskCreateButton onClick={handleToggleSimpleCreate}>
-                <FeatherIcon icon="plus-circle" />
-                <TaskCreateText>{t("button_add_task")}</TaskCreateText>
+                {isSimpleOpen ? <>
+                    <FeatherIcon icon="x-circle" />
+                    <TaskCreateText>{t("button_close_add_task")}</TaskCreateText>
+                </> : <>
+                    <FeatherIcon icon="plus-circle" />
+                    <TaskCreateText>{t("button_add_task")}</TaskCreateText>
+                </>}
             </TaskCreateButton>
             <FlexBox>
                 {hasNextPage ? (
