@@ -151,9 +151,9 @@
         }
     },
     "info": {
-        "build": {
-            "name": "Build information",
-            "built_at": "Frontend was build at"
+        "built_at": {
+            "name": "Build At",
+            "for_dev": "This is not shown at DEV mode."
         }
     },
     "sign_out": {

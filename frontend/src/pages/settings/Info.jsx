@@ -3,6 +3,7 @@ import Section, { Name, Value } from "@components/settings/Section"
 import { useTranslation } from "react-i18next"
 
 const buildTimestamp = import.meta.env.VITE_BUILD_TIMESTAMP
+const isProd = import.meta.env.PROD
 
 const Info = () => {
     const { t } = useTranslation("settings", { keyPrefix: "info" })
@@ -10,8 +11,8 @@ const Info = () => {
     return (
         <>
             <Section>
-                <Name>{t("build.name")}</Name>
-                <Value>{t("build.built_at")}: {buildTimestamp}</Value>
+                <Name>{t("built_at.name")}</Name>
+                <Value>{isProd ? buildTimestamp : t("built_at.for_dev")}</Value>
             </Section>
         </>
     )
