@@ -38,9 +38,10 @@ const TaskCreate = () => {
         due_time: null,
         reminders: [],
         priority: 0,
+        project_id: state?.project_id,
+        project_name: state?.project_name,
         drawer: state?.drawer_id,
         drawer_name: state?.drawer_name,
-        project_name: state?.project_name,
         memo: "",
         privacy: "public",
     })
@@ -56,13 +57,13 @@ const TaskCreate = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: state?.drawer_id }],
+                queryKey: ["tasks", { drawerID: newTask.drawer }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["drawers", { projectID: projectId }],
+                queryKey: ["drawers", { projectID: newTask.project_id }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["projects", projectId],
+                queryKey: ["projects", newTask.project_id],
             })
             toast.success(t("task_create_success"))
             onClose()

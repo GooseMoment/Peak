@@ -120,6 +120,7 @@ const Drawer = ({ project, drawer, color }) => {
     const clickPlus = () => {
         navigate(`/app/projects/${project.id}/tasks/create/`, {
             state: {
+                project_id: project.id,
                 project_name: project.name,
                 drawer_id: drawer.id,
                 drawer_name: drawer.name,

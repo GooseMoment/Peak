@@ -15,21 +15,18 @@ const DrawerFolder = ({ project, changeDrawer }) => {
             <ItemBox
                 onClick={
                     project.type === "inbox"
-                        ? changeDrawer(project.drawers[0].id, project.drawers[0].name, project.name)
+                        ? changeDrawer(project.drawers[0].id, project.drawers[0].name, project.id, project.name)
                         : () => setCollapsed((prev) => !prev)
                 }>
                 <Circle $color={getProjectColor(theme.type, project.color)} />
                 <ItemText $is_project={true}>{project.name}</ItemText>
             </ItemBox>
-            {project.type === "inbox"
-                ? null
-                : collapsed
-                  ? null
-                  : project.drawers &&
+            {project.type === "inbox" || collapsed ? null
+                : project.drawers &&
                     project.drawers.map((drawer) => (
                         <ItemBox
                             key={drawer.id}
-                            onClick={changeDrawer(drawer.id, drawer.name, project.name)}>
+                            onClick={changeDrawer(drawer.id, drawer.name, project.id, project.name)}>
                             <FeatherIcon icon="arrow-right" />
                             <ItemText $is_project={false}>
                                 {drawer.name}
@@ -69,8 +66,8 @@ const ItemText = styled.div`
     font-size: 1em;
     color: ${(p) => p.theme.textColor};
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
+    overflow-x: clip;
 
     &:hover {
         font-weight: bolder;
