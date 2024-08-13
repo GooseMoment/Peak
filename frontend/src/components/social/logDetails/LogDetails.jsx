@@ -31,7 +31,7 @@ const LogDetails = ({
             {/* TODO: When there are no task */}
             <DetailBody>
                 {logDetails?.pages.map((group) => (
-                    group?.results?.map((drawer) => (
+                    group.results.map((drawer) => (
                         drawer && (
                             <DrawerBundle
                                 key={drawer.id}

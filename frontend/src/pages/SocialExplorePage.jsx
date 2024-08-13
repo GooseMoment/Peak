@@ -14,6 +14,7 @@ import {
     getExploreRecommend,
     getExploreFound,
     getQuote,
+    getDailyLogDrawers,
 } from "@api/social.api"
 
 import queryClient from "@queries/queryClient"
@@ -29,6 +30,7 @@ const getCursorFromURL = (url) => {
 const SocialExplorePage = () => {
     const initial_date = new Date()
     initial_date.setHours(0, 0, 0, 0)
+    const selectedDate = initial_date.toISOString()
 
     const [selectedUser, setSelectedUser] = useState(null)
 
@@ -71,16 +73,24 @@ const SocialExplorePage = () => {
 
     const { data: quote } = useQuery({
         queryKey: ["quote", selectedUser],
-        queryFn: () => getQuote(selectedUser, initial_date.toISOString()),
+        queryFn: () => getQuote(selectedUser, selectedDate),
         enabled: !!selectedUser,
     })
 
-    const { data: exploreLogDetails } = useQuery({
-        queryKey: ["explore", "log", "details", selectedUser],
-        queryFn: () => 
-            getDailyLogTasks(selectedUser, initial_date.toISOString()),
-        enabled: !!selectedUser,
+    const {
+        data: drawerPage,
+        fetchNextPage: fetchNextDrawerPage,
+        isPending: isDrawerPending,
+        refetch: refetchDrawer,
+    } = useInfiniteQuery({
+        queryKey: ["daily", "log", "details", "drawer", selectedUser],
+        queryFn: (page) =>
+            getDailyLogDrawers(selectedUser, page.pageParam),
+        initialPageParam: "",
+        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
+        enabled: !!selectedUser
     })
+    
 
     const handleSearch = (searchTerm) => {
         setSearchQuery(searchTerm.trim())
@@ -115,8 +125,9 @@ const SocialExplorePage = () => {
                         <LogDetails
                             user={quote?.user}
                             quote={quote}
-                            logDetails={exploreLogDetails}
+                            logDetails={drawerPage}
                             isFollowingPage={false}
+                            selectedDate={selectedDate}     //temp
                         />
                     )}
                 </StickyContainer>
