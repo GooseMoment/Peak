@@ -255,7 +255,7 @@ const ProjectPage = () => {
                 </ModalPortal>
             )}
             <Suspense key="project-page" fallback={<ModalLoader />}>
-                <Outlet context={[id, project.color]} />
+                <Outlet context={[id, getProjectColor(theme.type, project.color)]} />
             </Suspense>
         </>
     )
