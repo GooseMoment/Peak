@@ -6,7 +6,8 @@ import MildButton from "@components/common/MildButton"
 
 import FeatherIcon from "feather-icons-react"
 
-const SearchBar = ({ searchTerm, setSearchTerm, handleSearch }) => {
+const SearchBar = ({ handleSearch }) => {
+    const [searchTerm, setSearchTerm] = useState("")
     const timer = useRef(null)
 
     const handleChange = (e) => {
@@ -15,14 +16,14 @@ const SearchBar = ({ searchTerm, setSearchTerm, handleSearch }) => {
         if (timer.current) clearTimeout(timer.current)
 
         timer.current = setTimeout(async () => {
-            handleSearch()
+            handleSearch(e.target.value)
         }, 1500)
     }
 
     const handleKeyDown = (e) => {
         if (e.key == "Enter") {
             clearTimeout(timer.current)
-            handleSearch()
+            handleSearch(e.target.value)
         }
     }
 

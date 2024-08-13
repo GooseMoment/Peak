@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { styled } from "styled-components"
@@ -55,30 +55,19 @@ const SocialExplorePage = () => {
     } = useInfiniteQuery({
         queryKey: ["explore", "found", "users"],
         queryFn: (page) =>
-            getExploreFound(searchTerm, page.pageParam),
+            getExploreFound(searchQuery, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
         refetchOnWindowFocus: false,
         enabled: false,
     })
 
-    // const { data: recommendUsers, isPending: isRecommendPending } = useQuery({
-    //     queryKey: ["explore", "recommend", "users"],
-    //     queryFn: () => getExploreRecommend(),
-    //     staleTime: 1 * 60 * 60 * 1000,
-    // })
-
-    const [searchTerm, setSearchTerm] = useState("")
-
-    // const {
-    //     data: foundUsers,
-    //     isFetching: isFoundFetching,
-    //     refetch: refetchFound,
-    // } = useQuery({
-    //     queryKey: ["explore", "found", "users"],
-    //     queryFn: () => getExploreFound(searchTerm),
-    //     enabled: false,
-    // })
+    // useRef로 대체??
+    const [searchQuery, setSearchQuery] = useState("")
+    
+    useEffect(() => {
+        if(searchQuery.length !== 0) refetchFound()
+    }, [searchQuery])
 
     const { data: quote } = useQuery({
         queryKey: ["quote", selectedUser],
@@ -93,13 +82,9 @@ const SocialExplorePage = () => {
         enabled: !!selectedUser,
     })
 
-    const handleSearch = () => {
-        setSearchTerm((prev) => prev.trim())
+    const handleSearch = (searchTerm) => {
+        setSearchQuery(searchTerm.trim())
         queryClient.removeQueries(["explore", "found", "users"])
-        console.log(searchTerm)
-        if (searchTerm.length !== 0) {
-            refetchFound()
-        }
     }
 
     return (
@@ -108,11 +93,9 @@ const SocialExplorePage = () => {
             <Wrapper>
                 <Container>
                     <SearchBar
-                        searchTerm={searchTerm}
-                        setSearchTerm={setSearchTerm}
                         handleSearch={handleSearch}
                     />
-                    {isRecommendPending || (searchTerm && isFoundFetching) ? (
+                    {isRecommendPending || (searchQuery && isFoundFetching) ? (
                         <LoaderCircleWrapper>
                             <LoaderCircleFull />
                         </LoaderCircleWrapper>
