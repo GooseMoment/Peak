@@ -35,7 +35,7 @@ const SocialExplorePage = () => {
     const {
         data: recommendPage,
         fetchNextPage: fetchNextRecommendPage,
-        // isPending: isRecommendPending,
+        isPending: isRecommendPending,
         refetch: refetchRecommend,
     } = useInfiniteQuery({
         queryKey: ["explore", "recommend", "users"],
@@ -46,23 +46,39 @@ const SocialExplorePage = () => {
         refetchOnWindowFocus: false
     })
 
-    const { data: recommendUsers, isPending: isRecommendPending } = useQuery({
-        queryKey: ["explore", "recommend", "users"],
-        queryFn: () => getExploreRecommend(),
-        staleTime: 1 * 60 * 60 * 1000,
+    const {
+        data: foundPage,
+        fetchNextPage: fetchNextFoundPage,
+        isPending: isFoundPending,
+        isFetching: isFoundFetching,
+        refetch: refetchFound,
+    } = useInfiniteQuery({
+        queryKey: ["explore", "found", "users"],
+        queryFn: (page) =>
+            getExploreFound(searchTerm, page.pageParam),
+        initialPageParam: "",
+        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
+        refetchOnWindowFocus: false,
+        enabled: false,
     })
+
+    // const { data: recommendUsers, isPending: isRecommendPending } = useQuery({
+    //     queryKey: ["explore", "recommend", "users"],
+    //     queryFn: () => getExploreRecommend(),
+    //     staleTime: 1 * 60 * 60 * 1000,
+    // })
 
     const [searchTerm, setSearchTerm] = useState("")
 
-    const {
-        data: foundUsers,
-        isFetching: isFoundFetching,
-        refetch: refetchFound,
-    } = useQuery({
-        queryKey: ["explore", "found", "users"],
-        queryFn: () => getExploreFound(searchTerm),
-        enabled: false,
-    })
+    // const {
+    //     data: foundUsers,
+    //     isFetching: isFoundFetching,
+    //     refetch: refetchFound,
+    // } = useQuery({
+    //     queryKey: ["explore", "found", "users"],
+    //     queryFn: () => getExploreFound(searchTerm),
+    //     enabled: false,
+    // })
 
     const { data: quote } = useQuery({
         queryKey: ["quote", selectedUser],
@@ -79,11 +95,10 @@ const SocialExplorePage = () => {
 
     const handleSearch = () => {
         setSearchTerm((prev) => prev.trim())
-        console.log(searchTerm.length)
+        queryClient.removeQueries(["explore", "found", "users"])
+        console.log(searchTerm)
         if (searchTerm.length !== 0) {
             refetchFound()
-        } else {
-            queryClient.setQueryData(["explore", "found", "users"], null)
         }
     }
 
@@ -103,9 +118,9 @@ const SocialExplorePage = () => {
                         </LoaderCircleWrapper>
                     ) : (
                         <ExploreFeed
-                            recommendUsers={recommendUsers}
                             recommendPage={recommendPage}
-                            foundUsers={foundUsers}
+                            foundPage={foundPage}
+                            fetchNextFoundPage={fetchNextFoundPage}
                             selectedUser={selectedUser}
                             setSelectedUser={setSelectedUser}
                         />

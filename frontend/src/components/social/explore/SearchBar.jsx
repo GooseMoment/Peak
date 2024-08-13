@@ -16,7 +16,7 @@ const SearchBar = ({ searchTerm, setSearchTerm, handleSearch }) => {
 
         timer.current = setTimeout(async () => {
             handleSearch()
-        }, 1000)
+        }, 1500)
     }
 
     const handleKeyDown = (e) => {

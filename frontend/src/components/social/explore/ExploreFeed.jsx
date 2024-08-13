@@ -1,45 +1,53 @@
+import { useRef, useState } from "react"
+
 import styled from "styled-components"
 
 import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
-import { useRef } from "react"
 
 const ExploreFeed = ({
     recommendPage,
-    recommendUsers,
-    foundUsers,
+    foundPage,
     selectedUser,
     setSelectedUser,
+    fetchNextFoundPage,
 }) => {
-
-    const feedUsersList = () => {
-        if(foundUsers && Object.values(foundUsers).length !== 0) return Object.values(foundUsers)
-        return Object.values(recommendUsers)
-    }
+    const isRecommedNeeded =
+        !foundPage || foundPage?.pages[0].results?.length <= 3
 
     return (
         <FeedContainer>
-            {recommendPage?.pages?.map((group) => (
-                group?.results?.map((user) => (
-                    console.log(user)
-                ))
-            ))}
-
-            {(foundUsers && Object.values(foundUsers).length === 0) ? (
-                <NoResult>
-                    No Result
-                </NoResult>
-            ):null}
-
-            {
-                feedUsersList().map((feedUser) => (
+            {foundPage?.pages.map((group) =>
+                group.results.map((feedUser) => (
                     <LogPreviewBox
                         key={feedUser.username}
                         log={feedUser}
                         selectedUser={selectedUser}
                         setSelectedUser={setSelectedUser}
                     />
-                ))
-            }
+                )),
+            )}
+            
+            <div>border</div>
+
+            {isRecommedNeeded &&
+                recommendPage?.pages.map((group) =>
+                    group.results.map((feedUser) => (
+                        <LogPreviewBox
+                            key={feedUser.username}
+                            log={feedUser}
+                            selectedUser={selectedUser}
+                            setSelectedUser={setSelectedUser}
+                        />
+                    )),
+                )}
+
+            <button onClick={() => fetchNextFoundPage()}>test</button>
+
+            {/* {(foundUsers && Object.values(foundUsers).length === 0) ? (
+                <NoResult>
+                    No Result
+                </NoResult>
+            ):null} */}
         </FeedContainer>
     )
 }
