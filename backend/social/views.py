@@ -64,19 +64,35 @@ class ExploreSearchView(mixins.ListModelMixin, generics.GenericAPIView):
     
 
 class FollowView(APIView):
-    #request 확인 기능 넣기
-    #block 검사
     def put(self, request, follower, followee):
-        followerUser = get_object_or_404(User, username=follower)
-        followeeUser = get_object_or_404(User, username=followee)
-# requested -> 상황에 따라!
-        try:
-            created = Following.objects.create(follower=followerUser, followee=followeeUser, status=Following.REQUESTED)
-        except:
-            return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        follower = get_object_or_404(User, username=follower)
+        if follower != request.user:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        followee = get_object_or_404(User, username=followee)
         
-        serializer = FollowingSerializer(created)
+        following, created = Following.objects.get_or_create(follower=follower,
+                                                             followee=followee,
+                                                             defaults={
+                                                                 'status': Following.REQUESTED
+                                                                 })
         
+        is_blocking = Block.objects.filter(blocker=follower,
+                                           blockee=followee).exclude(deleted_at=None).exists()
+        if is_blocking:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        is_blocked = Block.objects.filter(blocker=followee,
+                                          blockee=follower).exclude(deleted_at=None).exists()
+        if is_blocked:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        if not created:
+            if following.status == Following.ACCEPTED or following.status == Following.REQUESTED:
+                return Response(status=status.HTTP_208_ALREADY_REPORTED)
+            else:
+                following.status = Following.REQUESTED
+                following.save()
+        
+        serializer = FollowingSerializer(following)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get(self, request, follower, followee):
