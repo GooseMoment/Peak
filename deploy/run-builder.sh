@@ -1,7 +1,9 @@
 #!/bin/bash
 
-cp .env ./frontend/.env
 docker build \
-    -f ./frontend/Dockerfile -t frontend-build ./frontend
-docker run -v frontend-dist:/frontend/dist -t frontend-build
-rm -f ./frontend/.env
+    -f ./frontend/Dockerfile \
+    -t frontend-build ./frontend
+docker run \
+    -v frontend-dist:/frontend/dist \
+    -v .env:/.env:ro \
+    -t frontend-build
