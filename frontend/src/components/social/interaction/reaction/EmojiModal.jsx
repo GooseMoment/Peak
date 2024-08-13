@@ -2,8 +2,6 @@ import { useState } from "react"
 
 import styled from "styled-components"
 
-import { Portal } from "react-portal"
-
 const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
     if (!isOpen || !emojis) return null
 
@@ -14,36 +12,32 @@ const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
     )
 
     return (
-        <Portal>
-            <Wrapper>
-                <EmojiModalOverlay onClick={onClose} />
-                <Modal $posY={position.top} $posX={position.left}>
-                    <EmojiSearchBox
-                        type="text"
-                        placeholder="Search emojis"
-                        value={emojiSearchQuery}
-                        onChange={(e) => setEmojiSearchQuery(e.target.value)}
-                    />
-                    <EmojiList>
-                        {filteredEmojis.map((emoji) => (
-                            <EmojiListCell
-                                key={emoji.id}
-                                onClick={() => onSelect(emoji)}
-                            >
-                                <EmojiCell
-                                    src={emoji.img}
-                                    alt={emoji.name}
-                                />
-                            </EmojiListCell>
-                        ))}
-                    </EmojiList>
-                </Modal>
-            </Wrapper>
-        </Portal>
+        <Wrapper>
+            <EmojiModalOverlay onClick={onClose} />
+            <Modal $posY={position.top} $posX={position.left}>
+                <EmojiSearchBox
+                    type="text"
+                    placeholder="Search emojis"
+                    value={emojiSearchQuery}
+                    onChange={(e) => setEmojiSearchQuery(e.target.value)}
+                />
+                <EmojiList>
+                    {filteredEmojis.map((emoji) => (
+                        <EmojiListCell
+                            key={emoji.id}
+                            onClick={() => onSelect(emoji)}>
+                            <EmojiCell src={emoji.img} alt={emoji.name} />
+                        </EmojiListCell>
+                    ))}
+                </EmojiList>
+            </Modal>
+        </Wrapper>
     )
 }
 
 const Wrapper = styled.div`
+    z-index: 100;
+
     position: fixed;
     top: 0;
     left: 0;
@@ -64,7 +58,7 @@ const EmojiModalOverlay = styled.div`
     pointer-events: auto;
 `
 
-const Modal = styled.div`
+export const Modal = styled.div`
     position: absolute;
     top: ${(props) => props.$posY}px;
     left: calc(${(props) => props.$posX}px - 33em); // 32 + 1(shadow)

@@ -14,16 +14,12 @@ import {
 
 import queryClient from "@queries/queryClient"
 
-import { Portal } from "react-portal"
 import { toast } from "react-toastify"
 
 const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
     const [commentValue, setCommentValue] = useState("")
 
-    const {
-        data: parentComments,
-        isFetching,
-    } = useQuery({
+    const { data: parentComments, isFetching } = useQuery({
         queryKey: ["comment", parentType, parent.id],
         queryFn: () => getComment(parentType, parent.id),
     })
@@ -65,32 +61,27 @@ const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
     }
 
     return (
-        <Portal>
-            <Wrapper>
-                <CommentModalOverlay onClick={onClose} />
-                <Modal $posY={position.top} $posX={position.left}>
-                    <CommentContainer>
-                        {parentComments
-                            ? Object.values(parentComments).map((comment) => (
-                                  <CommentBox
-                                      key={comment.id}
-                                      comment={comment}
-                                  />
-                              ))
-                            : // TODO: design no comments
-                            // TODO: 로딩중
-                              "no comments"}
-                    </CommentContainer>
-                    <CommentInput
-                        type="text"
-                        value={commentValue}
-                        onChange={handleChange}
-                        onKeyDown={handleKeyDown}
-                        autoFocus
-                    />
-                </Modal>
-            </Wrapper>
-        </Portal>
+        <Wrapper>
+            <CommentModalOverlay onClick={onClose} />
+            <Modal $posY={position.top} $posX={position.left}>
+                <CommentContainer>
+                    {parentComments
+                        ? Object.values(parentComments).map((comment) => (
+                              <CommentBox key={comment.id} comment={comment} />
+                          ))
+                        : // TODO: design no comments
+                          // TODO: 로딩중
+                          "no comments"}
+                </CommentContainer>
+                <CommentInput
+                    type="text"
+                    value={commentValue}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    autoFocus
+                />
+            </Modal>
+        </Wrapper>
     )
 }
 

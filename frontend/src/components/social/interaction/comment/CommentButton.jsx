@@ -18,7 +18,7 @@ const CommentButton = ({ parentType, parent }) => {
             if (buttonRef.current) {
                 const rect = buttonRef.current.getBoundingClientRect()
                 setModalPosition({
-                    top: rect.top,
+                    top: window.scrollY + rect.top,
                     left: rect.left,
                 })
             }
