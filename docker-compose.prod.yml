@@ -23,7 +23,7 @@ services:
       - ./web/:/web/
       - caddy_data:/data
       - caddy_config:/config
-      - frontend-dist:/srv/frontend
+      - frontend-dist:/srv/frontend:ro
   api:
     build: ./backend
     command: gunicorn django_peak.wsgi:application --bind 0.0.0.0:8000
