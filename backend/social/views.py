@@ -96,14 +96,15 @@ class FollowView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get(self, request, follower, followee):
+        # TODO: GET이 필요한가..?
         follower = get_object_or_404(User, username=follower)
         if follower != request.user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         followee = get_object_or_404(User, username=followee)
         
-        following = Following.objects.filter(follower=follower, followee=followee).first()
-        
-        if following is None:
+        try:
+            following = Following.objects.get(follower=follower, followee=followee)
+        except Following.DoesNotExist:
             return Response(status=status.HTTP_204_NO_CONTENT)
         
         serializer = FollowingSerializer(following)
@@ -111,20 +112,27 @@ class FollowView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, follower, followee):
-        follower = get_object_or_404(User, username=follower)
-        if follower != request.user:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
         followee = get_object_or_404(User, username=followee)
+        if followee != request.user:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        follower = get_object_or_404(User, username=follower)
         
-        following = Following.objects.filter(follower=follower, followee=followee).first()
-        
-        if following is None:
+        try:
+            following = Following.objects.get(follower=follower, followee=followee)
+        except Following.DoesNotExist:
             return Response(status=status.HTTP_204_NO_CONTENT)
         
-        following.status = Following.CANCELED
-        following.save()
+        new_status = request.data.get('status')
         
-        return Response(status=status.HTTP_202_ACCEPTED)
+        if new_status in {Following.CANCELED, Following.ACCEPTED}:
+            if following.status == Following.REQUESTED:
+                following.status = new_status
+                following.save()
+                return Response(status=status.HTTP_202_ACCEPTED)
+            elif following.status == new_status:
+                return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        
+        return Response(status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, follower, followee):
         follower = get_object_or_404(User, username=follower)
@@ -132,9 +140,9 @@ class FollowView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         followee = get_object_or_404(User, username=followee)
         
-        following = Following.objects.filter(follower=follower, followee=followee).first()
-        
-        if following is None:
+        try:
+            following = Following.objects.get(follower=follower, followee=followee)
+        except Following.DoesNotExist:
             return Response(status=status.HTTP_204_NO_CONTENT)
         
         following.delete()
