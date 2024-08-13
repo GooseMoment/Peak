@@ -153,8 +153,7 @@
     "info": {
         "build": {
             "name": "Build information",
-            "commit": "Commit",
-            "branch": "Branch"
+            "built_at": "Frontend was build at"
         }
     },
     "sign_out": {

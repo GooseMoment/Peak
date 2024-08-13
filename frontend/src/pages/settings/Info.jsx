@@ -1,6 +1,8 @@
-import Section, { Name } from "@components/settings/Section"
+import Section, { Name, Value } from "@components/settings/Section"
 
 import { useTranslation } from "react-i18next"
+
+const buildTimestamp = import.meta.env.VITE_BUILD_TIMESTAMP
 
 const Info = () => {
     const { t } = useTranslation("settings", { keyPrefix: "info" })
@@ -8,7 +10,8 @@ const Info = () => {
     return (
         <>
             <Section>
-                <Name>Work In Progress</Name>
+                <Name>{t("built_at")}</Name>
+                <Value>{buildTimestamp}</Value>
             </Section>
         </>
     )
