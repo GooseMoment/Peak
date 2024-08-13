@@ -53,12 +53,16 @@ export const ContentBox = styled.div`
     font-weight: 450;
     outline: none;
 
-    ${props=>props.$isActive && css`
-        color: ${p=>p.theme.white};
-        background-color: ${props=>props.$color};
-    `}
-
     & svg {
         margin-right: 0.3em;
     }
+
+    ${props=>props.$isActive && css`
+        color: ${p=>p.theme.white};
+        background-color: ${props=>props.$color};
+
+        & svg {
+            stroke: ${p=>p.theme.white};
+        }
+    `}
 `

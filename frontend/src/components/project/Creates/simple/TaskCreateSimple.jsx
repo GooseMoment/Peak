@@ -83,7 +83,6 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
     
     const items = [
         {
-            id: 1,
             name: "name",
             icon: <FeatherIcon icon="tag" />,
             component: <TaskNameInput
@@ -96,7 +95,6 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             />,
         },
         {
-            id: 2,
             name: "assigned",
             icon: <FeatherIcon icon="calendar" />,
             component: <SimpleAssigned
@@ -105,7 +103,6 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             />,
         },
         {
-            id: 3,
             name: "due",
             icon: <img src={hourglass} />,
             component: <SimpleDue
@@ -114,7 +111,6 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             />,
         },
         {
-            id: 4,
             name: "priority",
             icon: <FeatherIcon icon="alert-circle" />,
             component: <SimplePriority
@@ -125,11 +121,11 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
     ]
 
     return (
-        <FlexBox onKeyDown={onKeyDown}>
+        <TaskCreateSimpleBlock onKeyDown={onKeyDown}>
             <IndexBlock>
                 {items.map(item=>(
                     <IndexBox
-                        key={item.id}
+                        key={item.name}
                         name={item.name}
                         onClick={handleClickContent}
                         $color={color}
@@ -141,16 +137,16 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             </IndexBlock>
             <TaskCreateSimpleBox>
                 {items.map(item=>(
-                    <ComponentBox key={item.id} $isSelected={content === item.name}>
-                        {content === item.name ? item.component : null}
-                    </ComponentBox>
+                    content === item.name ? <ComponentBox key={item.name} $isSelected={content === item.name}>
+                        {item.component}
+                    </ComponentBox> : null
                 ))}
             </TaskCreateSimpleBox>
-        </FlexBox>
+        </TaskCreateSimpleBlock>
     )
 }
 
-const FlexBox = styled.div`
+const TaskCreateSimpleBlock = styled.div`
     margin: 1em 0em;
 `
 
