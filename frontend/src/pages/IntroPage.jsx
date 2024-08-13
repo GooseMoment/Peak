@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom"
 
-import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button from "@components/common/Button"
+import DemoCheer from "@components/intro/DemoCheer"
 import DemoDrawer from "@components/intro/DemoDrawer"
 import DemoPlan from "@components/intro/DemoPlan"
 import DemoProject from "@components/intro/DemoProject"
@@ -15,17 +15,9 @@ import Section, {
 import SubSection, { SubGroup, SubTitle } from "@components/intro/SubSection"
 import Brand from "@components/sign/Brand"
 
-import { getEmojis } from "@api/social.api"
-
 import { useTranslation } from "react-i18next"
 
 const IntroPage = () => {
-    useQuery({
-        queryKey: ["emojis"],
-        queryFn: () => getEmojis(),
-        staleTime: 1000 * 60 * 60 * 5,
-    })
-
     const { t } = useTranslation("intro")
 
     return (
@@ -76,7 +68,9 @@ const IntroPage = () => {
                     {t("section_cheer.description")}
                 </SectionDescription>
                 <SubGroup>
-                    <SubSection></SubSection>
+                    <SubSection>
+                        <DemoCheer />
+                    </SubSection>
                 </SubGroup>
             </Section>
 

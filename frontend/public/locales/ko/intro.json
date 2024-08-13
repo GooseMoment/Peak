@@ -56,7 +56,10 @@
     },
     "section_cheer": {
         "title": "응원하기",
-        "description": "멋진 에모지로 친구들의 작업을 응원하세요."
+        "description": "멋진 에모지로 친구들의 작업을 응원하세요.",
+        "demo_cheer": {
+            "task_name": "드디어 프로젝트 끝이야!!!"
+        }
     },
     "section_share": {
         "title": "공유하기",
