@@ -69,7 +69,7 @@ const TaskCreate = () => {
             onClose()
         },
         onError: () => {
-            if (newTask?.name) toast.error(t("task_create_error"))
+            if (newTask.name) toast.error(t("task_create_error"))
             else toast.error(t("task_create_no_name"))
         },
     })
