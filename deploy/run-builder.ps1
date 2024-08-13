@@ -7,4 +7,4 @@ $distDirectory = "/" + "$name" + "/dist"
 $volumeOption = $volumeName + ":" + $distDirectory
 
 docker build -f $Dockerfile -t $imageName $directory
-docker run -v $volumeOption -v ".env:/.env" -t $imageName
+docker run -v $volumeOption -v ".\.env:/.env" -t $imageName
