@@ -30,8 +30,7 @@ const DemoBlurb = ({ log }) => {
 }
 
 const Box = styled.div`
-    flex-grow: 1;
-    flex-basis: 50%;
+    flex: 1 1 50%;
 
     box-sizing: border-box;
     padding: 1em;

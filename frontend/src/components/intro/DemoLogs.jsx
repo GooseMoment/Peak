@@ -25,8 +25,7 @@ const DemoLogs = ({ logs, selected, setSelected }) => {
 }
 
 const LogGroup = styled.div`
-    flex-grow: 1;
-    flex-basis: 50%;
+    flex: 1 1 50%;
 
     display: flex;
     flex-direction: column;

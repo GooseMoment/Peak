@@ -7,6 +7,7 @@ import DemoLogs from "@components/intro/DemoLogs"
 import SubSection from "@components/intro/SubSection"
 
 import { useTranslation } from "react-i18next"
+import { ifMobile } from "@/utils/useScreenType"
 
 const DemoShare = () => {
     const { t } = useTranslation("intro", {
@@ -117,9 +118,13 @@ const makeLogs = (t) => [
 
 const SubSectionFlex = styled(SubSection)`
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: stretch;
     gap: 1.25em;
+
+    ${ifMobile} {
+        flex-wrap: wrap;
+    }
 `
 
 export default DemoShare
