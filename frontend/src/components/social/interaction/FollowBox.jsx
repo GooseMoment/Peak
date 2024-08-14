@@ -7,6 +7,7 @@ import { getCurrentUsername } from "@api/client"
 import {
     deleteFollowRequest,
     getFollow,
+    patchFollowRequest,
     putFollowRequest,
 } from "@api/social.api"
 
@@ -40,6 +41,25 @@ const FollowBox = ({ user }) => {
         },
     })
 
+    const { data: followed } = useQuery({
+        queryKey: ["followed", user.username],
+        queryFn: () => getFollow(user.username, me),
+        enabled: !!user,
+    })
+
+    const followedMutation = useMutation({
+        mutationFn: (action) => {
+            if (action === "accept") {
+                return patchFollowRequest(user.username, true)
+            } else if (action === "reject") {
+                return patchFollowRequest(user.username, false)
+            }
+        },
+        onError: (e) => {
+            toast.error(e)
+        },
+    })
+
     // 404 -> follow: False
 
     const handleFollow = () => {
@@ -50,8 +70,25 @@ const FollowBox = ({ user }) => {
         }
     }
 
+    const handleRequest = (action) => {
+        followedMutation.mutate(action)
+    }
+
     return (
         <Box>
+            {followed?.status === 200 &&
+                followed.data.status === "requested" && (
+                    <>
+                        <FollowAcceptButton
+                            onClick={() => handleRequest("reject")}>
+                            {"Reject"}
+                        </FollowAcceptButton>
+                        <FollowAcceptButton
+                            onClick={() => handleRequest("accept")}>
+                            {"Accept"}
+                        </FollowAcceptButton>
+                    </>
+                )}
             {follow && (
                 <FollowRequestButton onClick={handleFollow}>
                     {follow.status === 204
@@ -71,6 +108,16 @@ const Box = styled.div`
     display: flex;
     justify-content: right;
     align-items: center;
+`
+
+const FollowAcceptButton = styled(MildButton)`
+    width: 6em;
+    height: 2em;
+
+    border-radius: 0.5em;
+    background-color: #f0f0f0;
+
+    text-align: center;
 `
 
 const FollowRequestButton = styled(MildButton)`

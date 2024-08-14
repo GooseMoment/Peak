@@ -68,7 +68,7 @@ class FollowView(APIView):
     def put(self, request, follower, followee):
         follower = get_object_or_404(User, username=follower)
         if follower != request.user:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         followee = get_object_or_404(User, username=followee)
         
         following, created = Following.objects.get_or_create(follower=follower,
@@ -123,7 +123,7 @@ class FollowView(APIView):
         if new_status in {Following.ACCEPTED, Following.REJECTED}:
             followee = get_object_or_404(User, username=followee)
             if followee != request.user:
-                return Response(status=status.HTTP_401_UNAUTHORIZED)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
             follower = get_object_or_404(User, username=follower)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -143,7 +143,7 @@ class FollowView(APIView):
     def delete(self, request, follower, followee):
         follower = get_object_or_404(User, username=follower)
         if follower != request.user:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         followee = get_object_or_404(User, username=followee)
         
         try:
