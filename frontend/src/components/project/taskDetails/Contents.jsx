@@ -117,13 +117,7 @@ const Contents = ({ task, setFunc }) => {
             name: "memo",
             icon: <FeatherIcon icon="edit" />,
             display: task.memo ? task.memo : t("none"),
-            component: (
-                <Memo
-                    previousMemo={task.memo}
-                    setFunc={setFunc}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Memo previousMemo={task.memo} setFunc={setFunc} />,
         },
     ]
 
