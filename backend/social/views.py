@@ -197,10 +197,10 @@ def get_requesters(request: HttpRequest, username):
     if request.user.username != username:
         return Response(status=status.HTTP_403_FORBIDDEN)
     
-    requesters = Following.objects.filter(followee__username=username, status=Following.REQUESTED).all()
-    requesters_users = User.objects.filter(followings__in=requesters.all()).all()
+    requests = Following.objects.filter(followee__username=username, status=Following.REQUESTED).all()
+    requested_users = User.objects.filter(followings__in=requests.all()).all()
     
-    serializer = UserSerializer(requesters_users)
+    serializer = UserSerializer(requested_users, many=True)
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 
