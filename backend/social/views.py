@@ -101,9 +101,14 @@ class FollowView(APIView):
         follower = get_object_or_404(User, username=follower)
         followee = get_object_or_404(User, username=followee)
         
-        # 굳이 필요할까..? 이런 관계를 보려는 유저가 Block 된 유저인지만 확인하면 되나..?
-        # if request.user != follower and request.user != followee:
-            # return Response(status=status.HTTP_400_BAD_REQUEST)
+        is_follower_blocking = Block.objects.filter(blocker=follower,
+                                           blockee=request.user).exclude(deleted_at=None).exists()
+        if is_follower_blocking:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        is_followee_blocking = Block.objects.filter(blocker=followee,
+                                          blockee=request.user).exclude(deleted_at=None).exists()
+        if is_followee_blocking:
+            return Response(status=status.HTTP_403_FORBIDDEN)
         
         following_filter = Q(status=Following.REQUESTED) | Q(status=Following.ACCEPTED)
         following_filter &= Q(follower=follower, followee=followee)
