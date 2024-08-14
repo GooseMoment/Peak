@@ -66,12 +66,7 @@ const ProjectEdit = ({ project }) => {
             id: 2,
             icon: "server",
             display: t("privacy." + project.privacy),
-            component: (
-                <Privacy
-                    setPrivacy={patchMutation.mutate}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Privacy setPrivacy={patchMutation.mutate} />,
         },
         {
             id: 3,

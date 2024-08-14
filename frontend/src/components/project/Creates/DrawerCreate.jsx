@@ -39,21 +39,12 @@ const DrawerCreate = () => {
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
-    const closeComponent = () => {
-        setIsComponentOpen(false)
-    }
-
     const items = [
         {
             id: 1,
             icon: "server",
             display: t("privacy." + newDrawer.privacy),
-            component: (
-                <Privacy
-                    setPrivacy={editNewDrawer}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Privacy setPrivacy={editNewDrawer} />,
         },
     ]
 

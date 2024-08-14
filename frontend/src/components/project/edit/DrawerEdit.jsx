@@ -53,12 +53,7 @@ const DrawerEdit = ({ projectID, drawer }) => {
             id: 1,
             icon: "server",
             display: t("privacy." + drawer.privacy),
-            component: (
-                <Privacy
-                    setPrivacy={patchMutation.mutate}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Privacy setPrivacy={patchMutation.mutate} />,
         },
     ]
 

@@ -56,12 +56,7 @@ const ProjectCreate = () => {
             id: 2,
             icon: "server",
             display: t("privacy." + newProject.privacy),
-            component: (
-                <Privacy
-                    setPrivacy={editNewProject}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Privacy setPrivacy={editNewProject} />,
         },
         {
             id: 3,
