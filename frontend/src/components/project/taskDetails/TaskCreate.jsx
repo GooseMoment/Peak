@@ -1,10 +1,11 @@
 import { useState } from "react"
-import { useLocation, useNavigate, useOutletContext } from "react-router-dom"
+import { useLocation, useOutletContext } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button from "@components/common/Button"
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
 import Contents from "./Contents"
@@ -20,15 +21,12 @@ import { toast } from "react-toastify"
 const TaskCreate = () => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
 
+    const { closeModal } = useModalWindowCloseContext()
+
     const [projectId, color] = useOutletContext()
     const { state } = useLocation()
-    const navigate = useNavigate()
 
     const [newTaskName, setNewTaskName] = useState(null)
-
-    const onClose = () => {
-        navigate(`/app/projects/${projectId}`)
-    }
 
     const [newTask, setNewTask] = useState({
         name: newTaskName,
@@ -63,7 +61,7 @@ const TaskCreate = () => {
                 queryKey: ["projects", projectId],
             })
             toast.success(t("task_create_success"))
-            onClose()
+            closeModal()
         },
         onError: () => {
             if (newTask?.name) toast.error(t("task_create_error"))
@@ -87,7 +85,7 @@ const TaskCreate = () => {
                     color={color}
                 />
                 <Icons>
-                    <FeatherIcon icon="x" onClick={onClose} />
+                    <FeatherIcon icon="x" onClick={closeModal} />
                 </Icons>
             </TaskNameBox>
             <Contents task={newTask} setFunc={editNewTask} />
