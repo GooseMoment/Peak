@@ -58,13 +58,7 @@ const Contents = ({ task, setFunc }) => {
             name: "due",
             icon: <img src={hourglass} />,
             display: task.due_date ? formatted_due_datetime : t("none"),
-            component: (
-                <Due
-                    task={task}
-                    setFunc={setFunc}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Due task={task} setFunc={setFunc} />,
         },
         {
             id: 3,

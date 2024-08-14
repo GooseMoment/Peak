@@ -13,11 +13,14 @@ import { rotateToUnder, rotateToUp } from "@assets/keyframes"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 
-const Due = ({ task, setFunc, closeComponent }) => {
+const Due = ({ task, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due" })
 
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
+
+    const { closeModal } = useModalWindowCloseContext()
 
     const handleAdditionalComp = (name) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
@@ -44,7 +47,7 @@ const Due = ({ task, setFunc, closeComponent }) => {
                 due_date = date.toISOString().slice(0, 10)
             }
             setFunc({ due_date })
-            closeComponent()
+            closeModal()
         }
     }
 
@@ -69,7 +72,7 @@ const Due = ({ task, setFunc, closeComponent }) => {
                 <TimeDetail
                     task={task}
                     setFunc={setFunc}
-                    closeComponent={closeComponent}
+                    closeComponent={closeModal}
                 />
             ),
         },
@@ -82,7 +85,7 @@ const Due = ({ task, setFunc, closeComponent }) => {
     ]
 
     return (
-        <Detail title={t("due_title")} onClose={closeComponent} special={true}>
+        <Detail title={t("due_title")} onClose={closeModal} special={true}>
             {addComponent.map((comp, i) => (
                 <Fragment key={comp.name}>
                     <FlexCenterBox>
