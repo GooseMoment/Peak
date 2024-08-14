@@ -76,6 +76,9 @@ export const light = {
     notifications: {
         boxShadowColor: "rgba(149, 157, 165, 0.2)",
     },
+    social: {
+        activeBackgroundColor: "rgb(255 74 3 / 0.35)",
+    },
     toastTheme: "light",
 }
 
@@ -155,6 +158,9 @@ export const dark = {
     },
     notifications: {
         boxShadowColor: "rgba(0, 0, 0, 0.4)",
+    },
+    social: {
+        activeBackgroundColor: "rgb(255 74 3 / 0.35)",
     },
     toastTheme: "dark",
 }

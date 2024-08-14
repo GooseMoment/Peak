@@ -23,7 +23,7 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
     const setRingColor = () => {
         return log.recent_task
             ? log.recent_task.is_read
-                ? "#A4A4A4"
+                ? theme.grey
                 : getProjectColor(theme.type, log.recent_task.project_color)
             : null
     }
@@ -31,18 +31,18 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
     return (
         <Frame
             onClick={handleSelect}
-            $bgcolor={log.username === selectedUser ? "#ffd7c7" : "#FEFDFC"}>
+            $bgcolor={log.username === selectedUser ? theme.social.activeBackgroundColor : theme.backgroundColor}>
             <SimpleProfile user={log} ringColor={setRingColor} />
             <RecentTask>
                 {log.recent_task && (
                     <>
-                        <TaskName>
+                        <TaskName $color={theme.textColor}>
                             {' "' +
                                 putEllipsis(log.recent_task.name, 32) +
                                 '" 완료! '}
                         </TaskName>
                         {/* TODO: set locale */}
-                        <Ago>
+                        <Ago $color={theme.secondTextColor}>
                             {" " +
                                 DateTime.fromISO(
                                     log.recent_task.completed_at,
@@ -76,6 +76,8 @@ const RecentTask = styled.div`
 `
 
 const TaskName = styled.div`
+    color: ${(props) => props.$color};
+
     display: inline;
     font-size: 1.1em;
 `
@@ -86,7 +88,7 @@ const Ago = styled.span`
     display: inline;
 
     font-size: 0.9em;
-    color: #a4a4a4;
+    color: ${(props) => props.$color};
     white-space: nowrap;
 `
 
