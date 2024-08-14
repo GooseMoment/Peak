@@ -28,10 +28,12 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
             : null
     }
 
+    const backgroundColor = log.username === selectedUser ? theme.social.activeBackgroundColor : theme.backgroundColor
+
     return (
         <Frame
             onClick={handleSelect}
-            $bgcolor={log.username === selectedUser ? theme.social.activeBackgroundColor : theme.backgroundColor}>
+            $bgcolor={backgroundColor}>
             <SimpleProfile user={log} ringColor={setRingColor} />
             <RecentTask>
                 {log.recent_task && (
