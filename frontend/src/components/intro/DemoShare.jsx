@@ -130,7 +130,7 @@ const makeLogs = (t) => [
     {
         username: "@hamster",
         preview: t("logs.log4.preview"),
-        colors: ["#F68B1F", "#00AFCC", "#EA533A", "#F68B1F"],
+        colors: ["#01ADB9", "#A6126A", "#B5DF50", "#01ADB9"],
         profile_img: "https://alpha-media.peak.ooo/static/hamster.jpeg",
         blurb: t("logs.log4.blurb"),
         tasks: [
