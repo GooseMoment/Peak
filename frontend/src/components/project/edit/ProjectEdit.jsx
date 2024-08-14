@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Color from "@components/project/Creates/Color"
 import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
@@ -17,7 +18,7 @@ import queryClient from "@queries/queryClient"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const ProjectEdit = ({ project, onClose }) => {
+const ProjectEdit = ({ project }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const theme = useTheme()
 
@@ -26,6 +27,8 @@ const ProjectEdit = ({ project, onClose }) => {
     useEffect(() => {
         setName(project.name)
     }, [project])
+
+    const { closeModal } = useModalWindowCloseContext()
 
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
@@ -96,7 +99,7 @@ const ProjectEdit = ({ project, onClose }) => {
                 setFunc={patchMutation.mutate}
                 isCreate={false}
                 icon="archive"
-                onClose={onClose}
+                onClose={closeModal}
             />
             <Middle
                 items={items}

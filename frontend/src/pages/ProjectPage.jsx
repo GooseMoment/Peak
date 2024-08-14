@@ -236,12 +236,7 @@ const ProjectPage = () => {
                     afterClose={() => {
                         setIsProjectEditOpen(false)
                     }}>
-                    <ProjectEdit
-                        project={project}
-                        onClose={() => {
-                            setIsProjectEditOpen(false)
-                        }}
-                    />
+                    <ProjectEdit project={project} />
                 </ModalWindow>
             )}
             <Suspense key="project-page" fallback={<ModalLoader />}>
