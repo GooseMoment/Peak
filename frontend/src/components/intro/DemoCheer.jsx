@@ -10,9 +10,8 @@ import SubSection from "@components/intro/SubSection"
 import { today } from "@components/intro/todays"
 import { getProjectColor } from "@components/project/Creates/palettes"
 import { Modal as EmojiModalWindow } from "@components/social/interaction/reaction/EmojiModal"
+import EmojiPickerButton from "@components/social/interaction/reaction/EmojiPickerButton"
 import TaskFrame from "@components/tasks/TaskFrame"
-
-import EmojiPickerButton from "../social/interaction/reaction/EmojiPickerButton"
 
 import { getEmojis } from "@api/social.api"
 
