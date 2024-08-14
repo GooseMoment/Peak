@@ -30,10 +30,6 @@ const DrawerEdit = ({ projectID, drawer }) => {
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
-    const closeComponent = () => {
-        setIsComponentOpen(false)
-    }
-
     const patchMutation = useMutation({
         mutationFn: (data) => {
             return patchDrawer(drawer.id, data)
