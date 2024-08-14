@@ -1,16 +1,21 @@
 import { useState } from "react"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 
-import styled, { css } from "styled-components"
+import styled, { css, useTheme } from "styled-components"
 
 import PageTitle from "@components/common/PageTitle"
 import Task from "@components/tasks/Task"
 import Button from "@components/common/Button"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
-import { getOverdueTasks, getTodayTasks } from "@api/tasks.api"
+import { getProjectColor } from "@components/project/Creates/palettes"
+import { useClientTimezone } from "@utils/clientSettings"
+import { getOverdueTasks, getTodayTasks, patchTask } from "@api/tasks.api"
 
+import queryClient from "@queries/queryClient"
 import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const getPageFromURL = (url) => {
     if (!url) return null
@@ -21,6 +26,10 @@ const getPageFromURL = (url) => {
 }
 
 const TodayPage = () => {
+    const { t } = useTranslation(null, { keyPrefix: "today" })
+    const due_tz = useClientTimezone()
+    const theme = useTheme()
+    
     const [filter, setFilter] = useState("due_date")
 
     const { 
@@ -53,23 +62,64 @@ const TodayPage = () => {
 
     const todayHasNextPage = todayTasks?.pages[todayTasks?.pages?.length - 1].next !== null
 
-    const filterContents = [
-        "due_date",
-        "assigned_at",
-    ]
-
     const onClickErrorBox = () => {
         overdueRefetch()
         todayRefetch()
     }
 
+    const patchMutation = useMutation({
+        mutationFn: ({ task, data }) => {
+            return patchTask(task.id, data)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", "overdue"],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", "today"],
+            })
+        },
+        onError: () => {
+            toast.error(t("due_change_error"))
+        }
+    })
+
+    const clickArrowDown = (task) => {
+        const today = new Date()
+        const date = today.toISOString().slice(0, 10)
+        
+        let data = null
+        if (filter === "due_date")
+            data = { due_tz: due_tz, due_date: date }
+        if (filter === "assigned_at")
+            data = { due_tz: due_tz, assigned_at: date }
+
+        patchMutation.mutate({ task, data })
+        toast.success(t("due_change_today_success", {filter: t("filter_" + filter)}))
+    }
+
+    const clickArrowRight = (task) => {
+        let date = new Date()
+        date.setDate(date.getDate() + 1)
+        date = date.toISOString().slice(0, 10)
+
+        let data = null
+        if (filter === "due_date")
+            data = { due_tz: due_tz, due_date: date }
+        if (filter === "assigned_at")
+            data = { due_tz: due_tz, assigned_at: date }
+
+        patchMutation.mutate({ task, data })
+        toast.success(t("due_change_tomorrow_success", {filter: t("filter_" + filter)}))
+    }
+
     return (
         <>
-            <PageTitle>Today</PageTitle>
+            <PageTitle>{t("title")}</PageTitle>
             <OverdueTasksBlock>
                 <OverdueTitle>
                     <FeatherIcon icon="alert-circle"/>
-                    놓친 작업
+                    {t("overdue_title")}
                 </OverdueTitle>
                 <FilterButtonBox>
                     {filterContents.map(content=>(
@@ -77,23 +127,23 @@ const TodayPage = () => {
                             key={content}
                             $isActive={filter === content}
                             onClick={()=>setFilter(content)}>
-                            {content}
+                            {t("filter_" + content)}
                         </FilterButton>
                     ))}
                 </FilterButtonBox>
                 <TasksBox>
                     {(isOverdueError || isTodayError) &&
                         <ErrorBox onClick={onClickErrorBox}>
-                            불러오기를 실패했습니다
+                            {t("error_load_task")}
                         </ErrorBox>}
                     {isOverdueLoading && <SkeletonDueTasks taskCount={4} />}
                     {overdueTasks?.pages?.map((group) =>
                         group?.results?.map((task) => (
                             <OverdueTaskBox key={task.id}>
-                                <Task task={task} color={"pink"} />
+                                <Task task={task} color={getProjectColor(theme.type, task.project_color)} max_width={23} />
                                 <Icons>
-                                    <FeatherIcon icon="arrow-down"/>
-                                    <FeatherIcon icon="arrow-right"/>
+                                    <FeatherIcon icon="arrow-down" onClick={()=>clickArrowDown(task)}/>
+                                    <FeatherIcon icon="arrow-right" onClick={()=>clickArrowRight(task)}/>
                                 </Icons>
                             </OverdueTaskBox>
                         )),
@@ -101,7 +151,7 @@ const TodayPage = () => {
                 </TasksBox>
                 {overdueHasNextPage ? (
                     <MoreText onClick={() => overdueFetchNextPage()}>
-                        {"더보기 "}
+                        {t("button_load_more") + " "}
                         ({overdueTasks?.pages[0].count})
                     </MoreText>
                 ) : null}
@@ -110,14 +160,14 @@ const TodayPage = () => {
                 {isTodayLoading && <SkeletonDueTasks taskCount={10} />}
                 {todayTasks?.pages?.map((group) =>
                     group?.results?.map((task) => (
-                        <Task key={task.id} task={task} color={"pink"} />
+                        <Task key={task.id} task={task} color={getProjectColor(theme.type, task.project_color)} />
                     )),
                 )}
             </TasksBox>
             <FlexCenterBox>
                 {todayHasNextPage ? (
                     <MoreButton onClick={() => todayFetchNextPage()}>
-                        {"더보기"}
+                        {t("button_load_more")}
                     </MoreButton>
                 ) : null}
             </FlexCenterBox>
@@ -187,6 +237,7 @@ const TasksBox = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     margin-left: 1.2em;
+    overflow: hidden;
 `
 
 const MoreText = styled.div`
@@ -203,5 +254,10 @@ const MoreButton = styled(Button)`
     width: 25em;
     margin-top: 1.3em;
 `
+
+const filterContents = [
+    "due_date",
+    "assigned_at",
+]
 
 export default TodayPage
