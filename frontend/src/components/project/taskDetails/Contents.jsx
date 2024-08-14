@@ -38,6 +38,7 @@ const Contents = ({ task, setFunc }) => {
         setContent(name.value)
         setIsComponentOpen(true)
     }
+
     const closeComponent = () => {
         setIsComponentOpen(false)
         navigate(`.`)
@@ -87,7 +88,7 @@ const Contents = ({ task, setFunc }) => {
                         -
                     </EmptyReminderBox>
                 ),
-            component: <Reminder task={task} closeComponent={closeComponent} />,
+            component: <Reminder task={task} />,
         },
         {
             id: 4,

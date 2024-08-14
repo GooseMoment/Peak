@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import ReminderContents from "@components/project/Creates/ReminderContents"
 import Detail from "@components/project/common/Detail"
 
@@ -17,8 +18,10 @@ import before_D from "@assets/project/reminder/before_D.svg"
 
 import { useTranslation } from "react-i18next"
 
-const Reminder = ({ task, closeComponent }) => {
+const Reminder = ({ task }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.reminder" })
+
+    const { closeModal } = useModalWindowCloseContext()
 
     const postMutation = useMutation({
         mutationFn: (data) => {
@@ -110,7 +113,7 @@ const Reminder = ({ task, closeComponent }) => {
     ]
 
     return (
-        <Detail title={t("title")} onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeModal}>
             {items.map((item) => (
                 <ReminderContents
                     key={item.id}
