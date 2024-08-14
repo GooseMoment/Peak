@@ -63,7 +63,48 @@
     },
     "section_share": {
         "title": "Share",
-        "description": "Share your daily log with your friends."
+        "description": "Share your daily things with your friends.",
+        "demo_share": {
+            "logs": {
+                "log0": {
+                    "me": "Me",
+                    "preview": "Completed Vaccination.",
+                    "blurb": "Spent too much for vaccination imaooo",
+                    "tasks": {
+                        "task0": "Vaccination",
+                        "task1": "Submit docs to ISSS",
+                        "task2": "Register for the cource"
+                    }
+                },
+                "log1": {
+                    "preview": "Completed Duolingo.",
+                    "blurb": "Finally Emerald League",
+                    "tasks": {
+                        "task0": "Duolingo",
+                        "task1": "Linear Algebra Assignment",
+                        "task2": "Add courses"
+                    }
+                },
+                "log2": {
+                    "preview": "Completed Swimming Today.",
+                    "blurb": "Ate too much today",
+                    "tasks": {
+                        "task0": "Swimming Today",
+                        "task1": "Going Atlanta",
+                        "task2": "Noodles"
+                    }
+                },
+                "log3": {
+                    "preview": "Completed Checkup.",
+                    "blurb": "checkup results r so bad",
+                    "tasks": {
+                        "task0": "Checkup",
+                        "task1": "some excel things",
+                        "task2": "reply to Alex"
+                    }
+                }
+            }
+        }
     },
     "section_customize": {
         "title": "Customize",

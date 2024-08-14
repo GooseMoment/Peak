@@ -63,7 +63,48 @@
     },
     "section_share": {
         "title": "공유하기",
-        "description": "하루 코멘트를 친구와 공유하세요."
+        "description": "오늘의 업적을 친구와 공유하세요.",
+        "demo_share": {
+            "logs": {
+                "log0": {
+                    "me": "나",
+                    "preview": "예방접종 완료!",
+                    "blurb": "주사 맞은 곳이 아파",
+                    "tasks": {
+                        "task0": "예방접종",
+                        "task1": "국제처에 서류 제출하기",
+                        "task2": "의료보험 가입하기"
+                    }
+                },
+                "log1": {
+                    "preview": "영어 공부 완료!",
+                    "blurb": "영화 보고 싶당",
+                    "tasks": {
+                        "task0": "영어 공부",
+                        "task1": "선형대수학 1-1장",
+                        "task2": "빌넣..."
+                    }
+                },
+                "log2": {
+                    "preview": "오늘의수영 완료!",
+                    "blurb": "대전은 칼국수다",
+                    "tasks": {
+                        "task0": "오늘의수영",
+                        "task1": "대전 다녀오기",
+                        "task2": "칼국수!!"
+                    }
+                },
+                "log3": {
+                    "preview": "건강검진 완료!",
+                    "blurb": "결과가 좀...",
+                    "tasks": {
+                        "task0": "건강검진",
+                        "task1": "회계 서류 정리",
+                        "task2": "과외학생 답변하기"
+                    }
+                }
+            }
+        }
     },
     "section_customize": {
         "title": "꾸미기",

@@ -15,6 +15,11 @@ import reset from "styled-reset"
 const GlobalStyle = createGlobalStyle`
 ${reset}
 
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 html {
     height: 100dvh;
     width: 100vw;
@@ -22,9 +27,6 @@ html {
     accent-color: ${(p) => p.theme.accentColor};
     scrollbar-color: ${(p) => p.theme.scrollbarColor} transparent;
     scrollbar-width: thin;
-
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 #root > div > main {
