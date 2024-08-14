@@ -99,9 +99,11 @@ class FollowView(APIView):
 
     def get(self, request, follower, followee):
         follower = get_object_or_404(User, username=follower)
-        if follower != request.user:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
         followee = get_object_or_404(User, username=followee)
+        
+        # 굳이 필요할까..? 이런 관계를 보려는 유저가 Block 된 유저인지만 확인하면 되나..?
+        # if request.user != follower and request.user != followee:
+            # return Response(status=status.HTTP_400_BAD_REQUEST)
         
         following_filter = Q(status=Following.REQUESTED) | Q(status=Following.ACCEPTED)
         following_filter &= Q(follower=follower, followee=followee)
