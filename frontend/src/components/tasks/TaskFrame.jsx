@@ -11,7 +11,7 @@ import hourglass from "@assets/project/hourglass.svg"
 
 import FeatherIcon from "feather-icons-react"
 
-const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
+const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, max_width=60 }) => {
     const {
         due,
         assigned,
@@ -22,7 +22,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
     } = taskCalculation(task)
 
     const TaskName = (
-        <TaskNameBox $completed={task.completed_at}>{task?.name}</TaskNameBox>
+        <TaskNameBox $max_width={max_width} $completed={task.completed_at}>{task?.name}</TaskNameBox>
     )
 
     const hasDate = task.due_date || task.assigned_at
@@ -98,6 +98,7 @@ const TaskNameBox = styled.div`
     display: inline-block;
 
     width: inherit;
+    max-width: ${props=>props.$max_width}em;
     font-style: normal;
     font-size: 1.1em;
     color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};

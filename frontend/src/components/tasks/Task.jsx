@@ -6,7 +6,7 @@ import { patchTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
 
-const Task = ({ task, color }) => {
+const Task = ({ task, color, max_width }) => {
     const mutation = useMutation({
         mutationFn: (data) => {
             return patchTask(task.id, data)
@@ -23,6 +23,12 @@ const Task = ({ task, color }) => {
             })
             queryClient.invalidateQueries({
                 queryKey: ["project", task.project_id],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", "overdue"],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", "today"],
             })
         },
     })
@@ -44,6 +50,7 @@ const Task = ({ task, color }) => {
             isLoading={mutation.isPending}
             toComplete={toComplete}
             taskDetailPath={taskDetailPath}
+            max_width={max_width}
         />
     )
 }
