@@ -51,9 +51,7 @@ const Contents = ({ task, setFunc }) => {
             name: "assigned_due",
             icon: <FeatherIcon icon="calendar" />,
             display: task.assigned_at ? formatted_assigned_date : t("none"),
-            component: (
-                <Assigned setFunc={setFunc} closeComponent={closeComponent} />
-            ),
+            component: <Assigned setFunc={setFunc} />,
         },
         {
             id: 2,
@@ -91,8 +89,7 @@ const Contents = ({ task, setFunc }) => {
                                 t("reminder.reminder_before_due_date"),
                                 { toastId: "reminder_before_due_date" },
                             )
-                        }}
-                    >
+                        }}>
                         -
                     </EmptyReminderBox>
                 ),
@@ -145,8 +142,7 @@ const Contents = ({ task, setFunc }) => {
                         <VLine $end={item.id === 1 || item.id === 6} />
                         <ContentText
                             name={item.name}
-                            onClick={handleClickContent}
-                        >
+                            onClick={handleClickContent}>
                             {item.display}
                         </ContentText>
                         {content === item.name && isComponentOpen ? (
