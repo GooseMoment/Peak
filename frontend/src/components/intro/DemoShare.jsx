@@ -10,17 +10,28 @@ import { ifMobile } from "@utils/useScreenType"
 
 import { useTranslation } from "react-i18next"
 
+const randomIndexes = []
+while (randomIndexes.length !== 3) {
+    const rd = Math.floor(Math.random() * 5)
+    if (randomIndexes.some((i) => i == rd)) {
+        continue
+    }
+
+    randomIndexes.push(rd)
+}
+
 const DemoShare = () => {
     const { t } = useTranslation("intro", {
         keyPrefix: "section_share.demo_share",
     })
 
-    const [selected, setSelected] = useState(0)
+    const [selected, setSelected] = useState(randomIndexes[0])
     const logs = useMemo(() => makeLogs(t), [t])
 
     return (
         <SubSectionFlex>
             <DemoLogs
+                visibleLogIndexes={randomIndexes}
                 logs={logs}
                 selected={selected}
                 setSelected={setSelected}
@@ -113,6 +124,27 @@ const makeLogs = (t) => [
             {
                 id: 2,
                 name: t("logs.log3.tasks.task2"),
+            },
+        ],
+    },
+    {
+        username: "@hamster",
+        preview: t("logs.log4.preview"),
+        colors: ["#F68B1F", "#00AFCC", "#EA533A", "#F68B1F"],
+        profile_img: "https://alpha-media.peak.ooo/static/hamster.jpeg",
+        blurb: t("logs.log4.blurb"),
+        tasks: [
+            {
+                id: 0,
+                name: t("logs.log4.tasks.task0"),
+            },
+            {
+                id: 1,
+                name: t("logs.log4.tasks.task1"),
+            },
+            {
+                id: 2,
+                name: t("logs.log4.tasks.task2"),
             },
         ],
     },

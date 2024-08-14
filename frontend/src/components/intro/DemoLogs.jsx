@@ -4,20 +4,20 @@ import UserProfile from "@components/intro/UserProfile"
 
 import { cubicBeizer } from "@assets/keyframes"
 
-const DemoLogs = ({ logs, selected, setSelected }) => {
+const DemoLogs = ({ logs, visibleLogIndexes, selected, setSelected }) => {
     return (
         <LogGroup>
-            {logs.map((log, index) => (
+            {visibleLogIndexes.map((index) => (
                 <Log
-                    key={log.username}
+                    key={logs[index].username}
                     $selected={index === selected}
                     onClick={() => setSelected(index)}>
                     <UserProfile
-                        username={log.username}
-                        colors={log.colors}
-                        profileImg={log.profile_img}
+                        username={logs[index].username}
+                        colors={logs[index].colors}
+                        profileImg={logs[index].profile_img}
                     />
-                    <Preview>{log.preview}</Preview>
+                    <Preview>{logs[index].preview}</Preview>
                 </Log>
             ))}
         </LogGroup>

@@ -101,6 +101,15 @@
                         "task1": "some excel things",
                         "task2": "reply to Alex"
                     }
+                },
+                "log4": {
+                    "preview": "Completed Bookstore.",
+                    "blurb": "Satisfied by my choices",
+                    "tasks": {
+                        "task0": "Bookstore",
+                        "task1": "Drawings",
+                        "task2": "Design icons"
+                    }
                 }
             }
         }
