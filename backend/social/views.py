@@ -120,13 +120,13 @@ class FollowView(APIView):
     def patch(self, request, follower, followee):
         new_status = request.data.get('status')
         
-        if new_status in {Following.ACCEPTED, Following.REJECTED}:
-            followee = get_object_or_404(User, username=followee)
-            if followee != request.user:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-            follower = get_object_or_404(User, username=follower)
-        else:
+        if new_status not in {Following.ACCEPTED, Following.REJECTED}:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        followee = get_object_or_404(User, username=followee)
+        if followee != request.user:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        follower = get_object_or_404(User, username=follower)
         
         try:
             following = Following.objects.get(follower=follower, followee=followee, status=Following.REQUESTED)
