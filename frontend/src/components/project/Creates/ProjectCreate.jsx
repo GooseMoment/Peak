@@ -40,10 +40,6 @@ const ProjectCreate = () => {
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
-    const closeComponent = () => {
-        setIsComponentOpen(false)
-    }
-
     const items = [
         {
             id: 1,
@@ -62,12 +58,7 @@ const ProjectCreate = () => {
             id: 3,
             icon: "award",
             display: t("type." + newProject.type),
-            component: (
-                <Type
-                    setType={editNewProject}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Type setType={editNewProject} />,
         },
     ]
 

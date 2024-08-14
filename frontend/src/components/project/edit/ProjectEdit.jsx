@@ -33,10 +33,6 @@ const ProjectEdit = ({ project }) => {
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
-    const closeComponent = () => {
-        setIsComponentOpen(false)
-    }
-
     const patchMutation = useMutation({
         mutationFn: (data) => {
             return patchProject(project.id, data)
@@ -72,12 +68,7 @@ const ProjectEdit = ({ project }) => {
             id: 3,
             icon: "award",
             display: t("type." + project.type),
-            component: (
-                <Type
-                    setType={patchMutation.mutate}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Type setType={patchMutation.mutate} />,
         },
     ]
 
