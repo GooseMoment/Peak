@@ -42,12 +42,20 @@ const Log = styled.article`
             ? p.theme.introBackgroundColor
             : p.theme.thirdBackgroundColor};
 
-    transition: background-color 0.25s ${cubicBeizer};
+    transition:
+        background-color 0.25s ${cubicBeizer},
+        border-color 0.25s ${cubicBeizer};
 
     border-radius: 20px;
-    padding: 0.75em;
+    padding: 0.5em;
+
+    border: solid 3px transparent;
 
     cursor: pointer;
+
+    &:hover {
+        border-color: ${(p) => p.theme.introBackgroundColor};
+    }
 `
 
 const Preview = styled.div`
