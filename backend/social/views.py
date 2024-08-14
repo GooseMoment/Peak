@@ -98,14 +98,16 @@ class FollowView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get(self, request, follower, followee):
-        # TODO: 사실상 GET이 필요할까..?
         follower = get_object_or_404(User, username=follower)
         if follower != request.user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         followee = get_object_or_404(User, username=followee)
         
+        following_filter = Q(status=Following.REQUESTED) | Q(status=Following.ACCEPTED)
+        following_filter &= Q(follower=follower, followee=followee)
+        
         try:
-            following = Following.objects.get(follower=follower, followee=followee)
+            following = Following.objects.get(following_filter)
         except Following.DoesNotExist:
             return Response(status=status.HTTP_204_NO_CONTENT)
         
