@@ -6,6 +6,8 @@ import styled, { css } from "styled-components"
 import PageTitle from "@components/common/PageTitle"
 import Task from "@components/tasks/Task"
 import Button from "@components/common/Button"
+import { ErrorBox } from "@components/errors/ErrorProjectPage"
+import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
 import { getOverdueTasks, getTodayTasks } from "@api/tasks.api"
 
 import FeatherIcon from "feather-icons-react"
@@ -21,7 +23,13 @@ const getPageFromURL = (url) => {
 const TodayPage = () => {
     const [filter, setFilter] = useState("due_date")
 
-    const { data: overdueTasks, fetchNextPage: overdueFetchNextPage, isLoading, isError, refetch } = useInfiniteQuery({
+    const { 
+        data: overdueTasks, 
+        fetchNextPage: overdueFetchNextPage, 
+        isLoading: isOverdueLoading, 
+        isError: isOverdueError, 
+        refetch: overdueRefetch
+    } = useInfiniteQuery({
         queryKey: ["tasks", "overdue", { filter_field: filter }],
         queryFn: (pages) => getOverdueTasks(filter, pages.pageParam || 1),
         initialPageParam: 1,
@@ -30,7 +38,13 @@ const TodayPage = () => {
 
     const overdueHasNextPage = overdueTasks?.pages[overdueTasks?.pages?.length - 1].next !== null
 
-    const { data: todayTasks, fetchNextPage: todayFetchNextPage } = useInfiniteQuery({
+    const { 
+        data: todayTasks, 
+        fetchNextPage: todayFetchNextPage,
+        isLoading: isTodayLoading, 
+        isError: isTodayError, 
+        refetch: todayRefetch
+    } = useInfiniteQuery({
         queryKey: ["tasks", "today"],
         queryFn: (pages) => getTodayTasks(pages.pageParam || 1),
         initialPageParam: 1,
@@ -43,6 +57,11 @@ const TodayPage = () => {
         "due_date",
         "assigned_at",
     ]
+
+    const onClickErrorBox = () => {
+        overdueRefetch()
+        todayRefetch()
+    }
 
     return (
         <>
@@ -63,6 +82,11 @@ const TodayPage = () => {
                     ))}
                 </FilterButtonBox>
                 <TasksBox>
+                    {(isOverdueError || isTodayError) &&
+                        <ErrorBox onClick={onClickErrorBox}>
+                            불러오기를 실패했습니다
+                        </ErrorBox>}
+                    {isOverdueLoading && <SkeletonDueTasks taskCount={4} />}
                     {overdueTasks?.pages?.map((group) =>
                         group?.results?.map((task) => (
                             <OverdueTaskBox key={task.id}>
@@ -83,6 +107,7 @@ const TodayPage = () => {
                 ) : null}
             </OverdueTasksBlock>
             <TasksBox>
+                {isTodayLoading && <SkeletonDueTasks taskCount={10} />}
                 {todayTasks?.pages?.map((group) =>
                     group?.results?.map((task) => (
                         <Task key={task.id} task={task} color={"pink"} />
@@ -176,6 +201,7 @@ const MoreText = styled.div`
 
 const MoreButton = styled(Button)`
     width: 25em;
+    margin-top: 1.3em;
 `
 
 export default TodayPage
