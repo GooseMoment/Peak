@@ -73,7 +73,7 @@ const Root = styled.div`
     width: 100%;
     height: 100vh;
 
-    background-color: ${(p) => p.theme.frontSignPageBackgroundColor};
+    background-color: ${(p) => p.theme.introBackgroundColor};
 
     display: grid;
     grid-template-columns: 1.75fr 1fr;
