@@ -28,68 +28,6 @@ export const scaleDown = keyframes`
     }
 `
 
-export const scaleBack = keyframes`
-    0% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(.95);
-    }
-`
-
-export const scaleForward = keyframes`
-    0% {
-        transform: scale(.95);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-`
-
-export const modalFadeIn = keyframes`
-    0% {
-        opacity: 0%;
-        background-color: unset;
-    }
-
-    100% {
-        opacity: 100%;
-        background-color: rgba(0, 0, 0, 0.4);
-    }
-`
-
-export const modalFadeOut = keyframes`
-    0% {
-        opacity: 100%;
-        background-color: rgba(0, 0, 0, 0.4);
-
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        padding: 0.5em;
-
-        z-index: 99;
-    }
-
-    100% {
-        opacity: 0%;
-        background-color: unset;
-
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        padding: 0.5em;
-
-        z-index: 99;
-    }
-`
-
 export const rotateToUp = keyframes`
     0% {
         transform: rotate(-180deg);
