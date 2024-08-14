@@ -120,12 +120,6 @@ const ContentBox = styled.section`
     ${ifMobile} {
         padding: 2.25rem;
     }
-
-    ${(p) =>
-        p.$verticalCenter &&
-        css`
-            align-items: center;
-        `}
 `
 
 export default SignPage
