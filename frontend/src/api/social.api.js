@@ -64,7 +64,7 @@ export const getFollowingsByUser = async (username) => {
 }
 
 export const getRequestersByUser = async (username) => {
-    const res = await client.get(`user/@${username}/requesters/`)
+    const res = await client.get(`users/@${username}/requesters/`)
 
     return res.data
 }
