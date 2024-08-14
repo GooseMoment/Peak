@@ -94,9 +94,7 @@ const Contents = ({ task, setFunc }) => {
             name: "priority",
             icon: <FeatherIcon icon="alert-circle" />,
             display: priorities[task.priority],
-            component: (
-                <Priority setFunc={setFunc} closeComponent={closeComponent} />
-            ),
+            component: <Priority setFunc={setFunc} />,
         },
         {
             id: 5,
