@@ -39,10 +39,12 @@ const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
     const hasNextPage =
         taskPage?.pages[taskPage?.pages?.length - 1].next !== null
 
+    const color = getProjectColor(theme.type, drawer.color)
+
     return (
         <Fragment>
-            <DrawerBox $color={getProjectColor(theme.type, drawer.color)}>
-                <DrawerName $color={getProjectColor(theme.type, drawer.color)}>
+            <DrawerBox $color={color}>
+                <DrawerName $color={color}>
                     {" "}
                     {drawer.name}{" "}
                 </DrawerName>
@@ -53,7 +55,7 @@ const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
                         <TaskBox
                             key={task.id}
                             task={task}
-                            color={getProjectColor(theme.type, drawer.color)}
+                            color={color}
                             isFollowingPage={isFollowingPage}
                         />
                     )),
