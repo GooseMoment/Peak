@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 
-import ModalPortal from "@components/common/ModalPortal"
+import ModalWindow from "@components/common/ModalWindow"
 
 import TaskCreate from "./TaskCreate"
 
@@ -13,9 +13,9 @@ const TaskCreateElement = () => {
     }
 
     return (
-        <ModalPortal closeModal={closeCreate}>
+        <ModalWindow afterClose={closeCreate}>
             <TaskCreate />
-        </ModalPortal>
+        </ModalWindow>
     )
 }
 

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 
-import ModalPortal from "@components/common/ModalPortal"
+import ModalWindow from "@components/common/ModalWindow"
 import ToolTip from "@components/project/common/ToolTip"
 import taskDate from "@components/tasks/utils/taskDate"
 
@@ -150,9 +150,9 @@ const Contents = ({ task, setFunc }) => {
                             {item.display}
                         </ContentText>
                         {content === item.name && isComponentOpen ? (
-                            <ModalPortal closeModal={closeComponent} additional>
+                            <ModalWindow afterClose={closeComponent} additional>
                                 {item.component}
-                            </ModalPortal>
+                            </ModalWindow>
                         ) : null}
                     </ContentsBox>
                 </Fragment>

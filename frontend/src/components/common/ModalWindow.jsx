@@ -14,16 +14,16 @@ const root = document.getElementById("root")
 
 // see: https://github.com/remix-run/react-router/discussions/9864#discussioncomment-6350903
 
-const ModalPortal = ({
+const ModalWindow = ({
     children,
-    closeModal,
+    afterClose, 
     additional = false,
     closeESC = true,
 }) => {
     const [isOpen, setIsOpen] = useState(true)
 
     const shouldRender = !additional
-        ? useDelayUnmount(isOpen, 100, closeModal)
+        ? useDelayUnmount(isOpen, 100, afterClose)
         : true
 
     useStopScroll(true)
@@ -84,4 +84,4 @@ const AnimationProvider = styled.div`
               `}
 `
 
-export default ModalPortal
+export default ModalWindow

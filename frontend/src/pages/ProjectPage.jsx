@@ -7,7 +7,7 @@ import styled, { useTheme } from "styled-components"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
 import ModalLoader from "@components/common/ModalLoader"
-import ModalPortal from "@components/common/ModalPortal"
+import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
@@ -225,8 +225,8 @@ const ProjectPage = () => {
                 />
             )}
             {isDrawerCreateOpen && (
-                <ModalPortal
-                    closeModal={() => {
+                <ModalWindow
+                    afterClose={() => {
                         setIsDrawerCreateOpen(false)
                     }}
                 >
@@ -235,11 +235,11 @@ const ProjectPage = () => {
                             setIsDrawerCreateOpen(false)
                         }}
                     />
-                </ModalPortal>
+                </ModalWindow>
             )}
             {isProjectEditOpen && (
-                <ModalPortal
-                    closeModal={() => {
+                <ModalWindow
+                    afterClose={() => {
                         setIsProjectEditOpen(false)
                     }}
                 >
@@ -249,7 +249,7 @@ const ProjectPage = () => {
                             setIsProjectEditOpen(false)
                         }}
                     />
-                </ModalPortal>
+                </ModalWindow>
             )}
             <Suspense key="project-page" fallback={<ModalLoader />}>
                 <Outlet context={[id, project.color]} />

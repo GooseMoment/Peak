@@ -5,7 +5,7 @@ import styled, { useTheme } from "styled-components"
 
 import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
-import ModalPortal from "@components/common/ModalPortal"
+import ModalWindow from "@components/common/ModalWindow"
 import Color from "@components/project/Creates/Color"
 import { getProjectColor } from "@components/project/Creates/palettes"
 import Error from "@components/settings/Error"
@@ -139,12 +139,12 @@ const Account = () => {
                         />
                     </Value>
                     {paletteOpen && (
-                        <ModalPortal closeModal={() => setPaletteOpen(false)}>
+                        <ModalWindow afterClose={() => setPaletteOpen(false)}>
                             <Color
                                 closeComponent={() => setPaletteOpen(false)}
                                 setColor={setHeaderColor}
                             />
-                        </ModalPortal>
+                        </ModalWindow>
                     )}
                 </Section>
                 <Section>
