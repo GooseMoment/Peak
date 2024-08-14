@@ -24,9 +24,9 @@ const Drawer = ({ setFunc }) => {
         queryFn: () => getProjectList(),
     })
 
-    const changeDrawer = (drawerId) => {
+    const changeDrawer = (drawerID, drawerName, projectID, projectName) => {
         return () => {
-            setFunc({ drawer: drawerId })
+            setFunc({ drawer: drawerID, drawer_name: drawerName, project_id: projectID, project_name: projectName })
             closeModal()
         }
     }

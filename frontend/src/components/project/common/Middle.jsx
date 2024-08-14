@@ -15,6 +15,7 @@ const Middle = ({
     submit = () => {},
     isComponentOpen,
     setIsComponentOpen,
+    disabled,
 }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
 
@@ -59,7 +60,7 @@ const Middle = ({
                 </Fragment>
             ))}
             {isCreate ? (
-                <AddButton onClick={submit}>{t("button_add")}</AddButton>
+                <AddButton disabled={disabled} onClick={submit}>{t("button_add")}</AddButton>
             ) : (
                 <EmptyBox />
             )}
@@ -114,6 +115,11 @@ const AddButton = styled(Button)`
     margin: 1em;
     margin-right: 2.5em;
     margin-bottom: 2em;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
 `
 
 const EmptyBox = styled.div`

@@ -70,7 +70,7 @@ const Frame = styled.div`
 const RecentTask = styled.div`
     min-width: 40%;
     flex-grow: 1;
-
+    
     padding-top: 0.7em;
     line-height: 1.3em;
 `

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -21,6 +21,7 @@ import { toast } from "react-toastify"
 const ProjectCreate = () => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const theme = useTheme()
+    const inputRef = useRef(null)
 
     const [name, setName] = useState("")
 
@@ -35,6 +36,7 @@ const ProjectCreate = () => {
 
     const editNewProject = (edit) => {
         setNewProject(Object.assign(newProject, edit))
+        inputRef.current.focus()
     }
 
     //Component
@@ -94,12 +96,19 @@ const ProjectCreate = () => {
         postMutation.mutate(newProject)
     }
 
+    const onEnter = (e) => {
+        if (e.key === "Enter") {
+            submit()
+        }
+    }
+
     return (
-        <ProjectCreateBox>
+        <ProjectCreateBox onKeyDown={onEnter}>
             <Title
                 name={name}
                 setName={setName}
                 setFunc={editNewProject}
+                inputRef={inputRef}
                 isCreate
                 icon="archive"
                 onClose={closeModal}
@@ -110,6 +119,7 @@ const ProjectCreate = () => {
                 submit={submit}
                 isComponentOpen={isComponentOpen}
                 setIsComponentOpen={setIsComponentOpen}
+                disabled={postMutation.isPending}
             />
         </ProjectCreateBox>
     )

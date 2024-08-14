@@ -164,22 +164,26 @@ const ProjectPage = () => {
                                   }
                         }
                     />
-                    <SortIconBox
-                        onClick={handleToggleContextMenu(
-                            setSelectedSortMenuPosition,
-                            setIsSortMenuOpen,
-                            setIsContextMenuOpen,
-                        )}>
-                        <SortIcon color={theme.textColor} />
-                    </SortIconBox>
-                    <FeatherIcon
-                        icon="more-horizontal"
-                        onClick={handleToggleContextMenu(
-                            setSelectedButtonPosition,
-                            setIsContextMenuOpen,
-                            setIsSortMenuOpen,
-                        )}
-                    />
+                    {project?.type === "inbox" || (
+                        <>
+                            <SortIconBox
+                                onClick={handleToggleContextMenu(
+                                    setSelectedSortMenuPosition,
+                                    setIsSortMenuOpen,
+                                    setIsContextMenuOpen,
+                                )}>
+                                <SortIcon color={theme.textColor} />
+                            </SortIconBox>
+                            <FeatherIcon
+                                icon="more-horizontal"
+                                onClick={handleToggleContextMenu(
+                                    setSelectedButtonPosition,
+                                    setIsContextMenuOpen,
+                                    setIsSortMenuOpen,
+                                )}
+                            />
+                        </>
+                    )}
                 </Icons>
             </TitleBox>
             {project.type === "goal" && (
@@ -240,7 +244,9 @@ const ProjectPage = () => {
                 </ModalWindow>
             )}
             <Suspense key="project-page" fallback={<ModalLoader />}>
-                <Outlet context={[id, project.color]} />
+                <Outlet
+                    context={[id, getProjectColor(theme.type, project.color)]}
+                />
             </Suspense>
         </>
     )

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
@@ -23,6 +23,7 @@ import { toast } from "react-toastify"
 
 const TaskDetail = () => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
+    const inputRef = useRef(null)
 
     const [projectID, color] = useOutletContext()
     const { task_id } = useParams()
@@ -54,6 +55,7 @@ const TaskDetail = () => {
             queryClient.invalidateQueries({
                 queryKey: ["tasks", { drawerID: task.drawer }],
             })
+            inputRef.current.focus()
         },
     })
 
@@ -102,7 +104,6 @@ const TaskDetail = () => {
 
     if (isPending) {
         return <TaskDetailBox />
-        // 민영아.. 스켈레톤 뭐시기 만들어..
     }
 
     return (
@@ -111,6 +112,7 @@ const TaskDetail = () => {
                 <TaskNameInput
                     task={task}
                     setFunc={patchMutation.mutate}
+                    inputRef={inputRef}
                     newTaskName={taskName}
                     setNewTaskName={setTaskName}
                     color={color}

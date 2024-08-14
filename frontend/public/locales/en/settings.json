@@ -151,10 +151,9 @@
         }
     },
     "info": {
-        "build": {
-            "name": "Build information",
-            "commit": "Commit",
-            "branch": "Branch"
+        "built_at": {
+            "name": "Build At",
+            "for_dev": "This is not shown at DEV mode."
         }
     },
     "sign_out": {

@@ -74,12 +74,11 @@ class QuoteSerializer(serializers.ModelSerializer):
         
     #     return data
 
-class DailyLogDetailsSerializer(DrawerSerializer):
+class DailyLogDrawerSerializer(DrawerSerializer):
     color = serializers.CharField(read_only=True)
-    tasks = TaskSerializer(many=True, read_only=True)
     
     class Meta(DrawerSerializer.Meta):
-        fields = DrawerSerializer.Meta.fields + ['color', 'tasks']
+        fields = DrawerSerializer.Meta.fields + ['color']
 
 class ReactionSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)

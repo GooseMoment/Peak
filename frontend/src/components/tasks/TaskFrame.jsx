@@ -97,8 +97,6 @@ const Box = styled.div`
 
 const TaskNameBox = styled.div`
     display: inline-block;
-
-    width: 60em;
     font-style: normal;
     font-size: 1.1em;
     color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};

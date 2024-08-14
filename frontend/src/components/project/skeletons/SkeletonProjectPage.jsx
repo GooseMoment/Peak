@@ -13,10 +13,25 @@ export const SkeletonProjectPage = () => {
     )
 }
 
+export const SkeletonInboxPage = () => {
+    <>
+        <ProjectTitle />
+        <SkeletonInboxDrawer taskCount={15} />
+    </>
+}
+
 export const SkeletonDrawer = ({ taskCount }) => {
     return (
         <Frame>
             <DrawerName />
+            <SkeletonTasks taskCount={taskCount} />
+        </Frame>
+    )
+}
+
+export const SkeletonInboxDrawer = ({ taskCount }) => {
+    return (
+        <Frame>
             <SkeletonTasks taskCount={taskCount} />
         </Frame>
     )
