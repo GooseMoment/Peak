@@ -211,7 +211,7 @@ html {
 #confirmation:has(.closing) {
     z-index: 100;
 
-    transition-duration: 0.15s;
+    transition-duration: 0.1s;
 
     background-color: transparent;
     backdrop-filter: unset;

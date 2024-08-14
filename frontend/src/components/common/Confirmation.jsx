@@ -45,7 +45,7 @@ const Confirmation = ({ question, buttons, onClose }) => {
 
     const closeWithDelay = () => {
         setClosing(true)
-        setTimeout(close, 200)
+        setTimeout(close, 100)
     }
 
     return createPortal(
