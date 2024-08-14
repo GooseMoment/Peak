@@ -194,10 +194,7 @@ def get_followings(request: HttpRequest, username):
 
 @api_view(["GET"])
 def get_requesters(request: HttpRequest, username):
-    target_user = get_object_or_404(User, username=username)
-    
-    is_blocked = Block.objects.filter(blocker=target_user, blockee=request.user).exclude(deleted_at=None).exists()
-    if is_blocked:
+    if request.user.username != username:
         return Response(status=status.HTTP_403_FORBIDDEN)
     
     requesters = Following.objects.filter(followee__username=username, status=Following.REQUESTED).all()
