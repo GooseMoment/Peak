@@ -55,6 +55,11 @@ const FollowBox = ({ user }) => {
                 return patchFollowRequest(user.username, false)
             }
         },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["followed", user.username],
+            })
+        },
         onError: (e) => {
             toast.error(e)
         },
@@ -108,6 +113,8 @@ const Box = styled.div`
     display: flex;
     justify-content: right;
     align-items: center;
+
+    gap: 1em;
 `
 
 const FollowAcceptButton = styled(MildButton)`
