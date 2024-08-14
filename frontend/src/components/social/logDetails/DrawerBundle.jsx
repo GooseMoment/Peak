@@ -5,11 +5,11 @@ import styled, { useTheme } from "styled-components"
 
 import { TaskList } from "@components/drawers/Drawer"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
+import { getProjectColor } from "@components/project/Creates/palettes"
 import TaskBox from "@components/social/logDetails/TaskBox"
 
 import { getDailyLogTasks } from "@api/social.api"
 
-import { getProjectColor } from "@/components/project/Creates/palettes"
 import FeatherIcon from "feather-icons-react"
 
 const getPageFromURL = (url) => {
