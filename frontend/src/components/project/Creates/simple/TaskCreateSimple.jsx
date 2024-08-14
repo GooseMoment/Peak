@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useMutation } from "@tanstack/react-query"
 
 import styled, { css } from "styled-components"
@@ -17,9 +17,18 @@ import SimplePriority from "@components/project/Creates/simple/SimplePriority"
 
 const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
+    const inputRef = useRef(null)
 
     const [content, setContent] = useState("name")
     const [newTaskName, setNewTaskName] = useState(null)
+
+    useEffect(() => {
+        document.addEventListener("keydown", onKeyDown)
+
+        return () => {
+            document.removeEventListener("keydown", onKeyDown)
+        }
+    }, [])
 
     const handleClickContent = (e) => {
         const name = e.currentTarget.getAttribute("name")
@@ -30,11 +39,12 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
         name: newTaskName,
         assigned_at: null,
         due_date: null,
+        priority: 0,
         due_time: null,
         reminders: [],
-        priority: 0,
         drawer: drawerID,
         drawer_name: drawerName,
+        project_id: projectID,
         project_name: projectName,
         memo: "",
         privacy: "public",
@@ -50,13 +60,13 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: drawerID }],
+                queryKey: ["tasks", { drawerID: newTask.drawer }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["drawers", { projectID: projectID }],
+                queryKey: ["drawers", { projectID: newTask.project_id }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["project", projectID],
+                queryKey: ["project", newTask.project_id],
             })
             toast.success(t("task_create_success"))
             onClose()
@@ -71,11 +81,11 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
         if (e.altKey) {
             e.stopPropagation()
             e.preventDefault()
-            const selectedNumber = Number(e.key)
+            const selectedNumber = Number(e.code[5])
             if (selectedNumber) {
                 setContent(items[selectedNumber - 1].name)
             }}
-        if (e.key === "Enter") {
+        if (e.code === "Enter") {
             editNewTask({ name: newTaskName })
             postMutation.mutate(newTask)
         }
@@ -88,6 +98,7 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             component: <TaskNameInput
                 task={newTask}
                 setFunc={editNewTask}
+                inputRef={inputRef}
                 newTaskName={newTaskName}
                 setNewTaskName={setNewTaskName}
                 color={color}
@@ -121,7 +132,7 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
     ]
 
     return (
-        <TaskCreateSimpleBlock onKeyDown={onKeyDown}>
+        <TaskCreateSimpleBlock>
             <IndexBlock>
                 {items.map(item=>(
                     <IndexBox

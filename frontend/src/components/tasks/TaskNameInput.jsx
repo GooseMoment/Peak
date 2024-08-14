@@ -10,6 +10,7 @@ import { toast } from "react-toastify"
 const TaskNameInput = ({
     task,
     setFunc,
+    inputRef,
     newTaskName,
     setNewTaskName,
     color,
@@ -18,6 +19,12 @@ const TaskNameInput = ({
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
     const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(()=>{
+        if (inputRef?.current) {
+            inputRef.current.focus()
+          }
+    }, [])
 
     useEffect(() => {
         setIsLoading(false)
@@ -33,8 +40,9 @@ const TaskNameInput = ({
     }
 
     const onEnter = (e) => {
-        if (isCreate)
+        if (isCreate) {
             return
+        }
         if (e.key === "Enter") {
             changeTaskName(newTaskName)
             toast.success(t("name_change_success"))
@@ -61,6 +69,7 @@ const TaskNameInput = ({
             />
             <InputText
                 $completed={task.completed_at}
+                ref={inputRef}
                 type="text"
                 onChange={onChange}
                 onKeyDown={onEnter}

@@ -25,7 +25,15 @@ const SimplePriority = ({ editNewTask, color }) => {
     }
 
     useEffect(() => {
-        editNewTask({ priority: currentIndex});
+        document.addEventListener("keydown", onKeyDown)
+
+        return () => {
+            document.removeEventListener("keydown", onKeyDown)
+        }
+    }, [currentIndex])
+
+    useEffect(() => {
+        editNewTask({ priority: currentIndex });
     }, [currentIndex])
 
     const items = [
@@ -35,14 +43,13 @@ const SimplePriority = ({ editNewTask, color }) => {
     ]
 
     return (
-        <CreateSimpleBox onKeyDown={onKeyDown} icon={<FeatherIcon icon="alert-circle"/>}>
+        <CreateSimpleBox icon={<FeatherIcon icon="alert-circle"/>}>
             {items.map(item=>(
                 <ContentBox 
                     key={item.index} 
                     $color={color}
                     $isActive={currentIndex === item.index} 
                     onClick={()=>setCurrentIndex(item.index)}
-                    tabIndex="0"
                 >
                     {currentIndex === item.index && <FeatherIcon icon="check"/>}
                     {item.content}

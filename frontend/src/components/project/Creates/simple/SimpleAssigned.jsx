@@ -26,6 +26,14 @@ const SimpleAssigned = ({ editNewTask, color }) => {
     }
 
     useEffect(() => {
+        document.addEventListener("keydown", onKeyDown)
+
+        return () => {
+            document.removeEventListener("keydown", onKeyDown)
+        }
+    }, [currentIndex])
+
+    useEffect(() => {
         editNewTask({ assigned_at: addDateFromToday(items[currentIndex].set)})
     }, [currentIndex])
 
@@ -58,7 +66,6 @@ const SimpleAssigned = ({ editNewTask, color }) => {
                     $color={color}
                     $isActive={currentIndex === item.index} 
                     onClick={()=>setCurrentIndex(item.index)} 
-                    tabIndex="0"
                 >
                     {currentIndex === item.index && <FeatherIcon icon="check"/>}
                     {item.display}

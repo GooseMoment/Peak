@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components"
 
-export const CreateSimpleBox = ({ onKeyDown, icon, children }) => {
+export const CreateSimpleBox = ({ icon, children }) => {
     return (
-        <Box onKeyDown={onKeyDown}>
+        <Box>
             {icon}
             <VLine />
             <FlexBox>
@@ -52,6 +52,7 @@ export const ContentBox = styled.div`
     border-radius: 15px;
     font-weight: 450;
     outline: none;
+    white-space: nowrap;
 
     & svg {
         margin-right: 0.3em;
