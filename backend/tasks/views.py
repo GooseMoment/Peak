@@ -134,7 +134,7 @@ class OverdueTaskList(mixins.ListModelMixin, generics.GenericAPIView):
             user=self.request.user,
             **filter_condition,
             completed_at__isnull=True
-        ).order_by("created_at").all()
+        ).order_by(filter_field).all()
 
         return overdue_tasks
     
@@ -155,7 +155,7 @@ class TodayTaskList(mixins.ListModelMixin, generics.GenericAPIView):
             Q(due_date__gte=today_start, due_date__lte=today_end) |
             Q(assigned_at__gte=today_start, assigned_at__lte=today_end),
             Q(completed_at__isnull=True)
-        ).order_by("created_at").all()
+        ).order_by("assigned_at", "due_date").all()
 
         return today_tasks
     
