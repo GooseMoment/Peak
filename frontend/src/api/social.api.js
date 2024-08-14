@@ -3,7 +3,7 @@ import client, { getCurrentUsername } from "@api/client"
 export const getFollow = async (follower, followee) => {
     try {
         const res = await client.get(`social/follow/@${follower}/@${followee}/`)
-        return res.data
+        return res
     } catch (e) {
         if (e.response.status === 404) {
             return false
