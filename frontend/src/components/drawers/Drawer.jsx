@@ -203,9 +203,6 @@ const Drawer = ({ project, drawer, color }) => {
                     <DrawerEdit
                         projectID={project.id}
                         drawer={drawer}
-                        onClose={() => {
-                            setIsDrawerEditOpen(false)
-                        }}
                     />
                 </ModalWindow>
             )}

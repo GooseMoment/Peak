@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Privacy from "@components/project/Creates/Privacy"
 import Middle from "@components/project/common/Middle"
 import Title from "@components/project/common/Title"
@@ -16,8 +17,9 @@ import { cubicBeizer } from "@assets/keyframes"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const DrawerEdit = ({ projectID, drawer, onClose }) => {
+const DrawerEdit = ({ projectID, drawer }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { closeModal } = useModalWindowCloseContext()
 
     const [name, setName] = useState(drawer.name)
 
@@ -68,7 +70,7 @@ const DrawerEdit = ({ projectID, drawer, onClose }) => {
                 setFunc={patchMutation.mutate}
                 isCreate={false}
                 icon="inbox"
-                onClose={onClose}
+                onClose={closeModal}
             />
             <Middle
                 items={items}
