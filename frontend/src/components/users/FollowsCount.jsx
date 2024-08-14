@@ -45,10 +45,10 @@ const FollowsCount = ({ user, isPending }) => {
             {window !== "" && (
                 <ModalWindow afterClose={closeModal}>
                     {window === "followers" && (
-                        <FollowerList closeModal={closeModal} user={user} />
+                        <FollowerList user={user} />
                     )}
                     {window === "followings" && (
-                        <FollowingList closeModal={closeModal} user={user} />
+                        <FollowingList user={user} />
                     )}
                 </ModalWindow>
             )}
