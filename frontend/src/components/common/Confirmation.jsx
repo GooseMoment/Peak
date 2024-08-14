@@ -45,12 +45,12 @@ const Confirmation = ({ question, buttons, onClose }) => {
 
     const closeWithDelay = () => {
         setClosing(true)
-        setTimeout(close, 100)
+        setTimeout(close, 200)
     }
 
     return createPortal(
         visible && (
-            <Frame $closing={closing}>
+            <Frame $closing={closing} className={closing && "closing"}>
                 <Question>{question}</Question>
                 <ButtonGroup>
                     {buttons?.map((button) =>
