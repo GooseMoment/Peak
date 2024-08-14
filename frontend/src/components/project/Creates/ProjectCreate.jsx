@@ -16,8 +16,9 @@ import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 
-const ProjectCreate = ({ onClose }) => {
+const ProjectCreate = () => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const theme = useTheme()
 
@@ -29,6 +30,8 @@ const ProjectCreate = ({ onClose }) => {
         privacy: "public",
         type: "regular",
     })
+
+    const { closeModal } = useModalWindowCloseContext()
 
     const editNewProject = (edit) => {
         setNewProject(Object.assign(newProject, edit))
@@ -85,7 +88,7 @@ const ProjectCreate = ({ onClose }) => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["projects"] })
             toast.success(t("create.project_create_success"))
-            onClose()
+            closeModal()
         },
         onError: () => {
             if (newProject.name)
@@ -118,7 +121,7 @@ const ProjectCreate = ({ onClose }) => {
                 setFunc={editNewProject}
                 isCreate
                 icon="archive"
-                onClose={onClose}
+                onClose={closeModal}
             />
             <Middle
                 items={items}

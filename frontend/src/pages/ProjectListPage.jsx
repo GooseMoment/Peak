@@ -54,11 +54,7 @@ const ProjectListPage = () => {
                     afterClose={() => {
                         setIsCreateOpen(false)
                     }}>
-                    <ProjectCreate
-                        onClose={() => {
-                            setIsCreateOpen(false)
-                        }}
-                    />
+                    <ProjectCreate />
                 </ModalWindow>
             )}
         </>
