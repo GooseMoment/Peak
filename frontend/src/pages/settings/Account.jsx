@@ -140,10 +140,7 @@ const Account = () => {
                     </Value>
                     {paletteOpen && (
                         <ModalWindow afterClose={() => setPaletteOpen(false)}>
-                            <Color
-                                closeComponent={() => setPaletteOpen(false)}
-                                setColor={setHeaderColor}
-                            />
+                            <Color setColor={setHeaderColor} />
                         </ModalWindow>
                     )}
                 </Section>

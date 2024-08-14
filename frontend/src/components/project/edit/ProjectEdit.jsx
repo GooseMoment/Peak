@@ -60,12 +60,7 @@ const ProjectEdit = ({ project }) => {
             icon: "circle",
             color: getProjectColor(theme.type, project.color),
             display: t("color." + project.color),
-            component: (
-                <Color
-                    setColor={patchMutation.mutate}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Color setColor={patchMutation.mutate} />,
         },
         {
             id: 2,

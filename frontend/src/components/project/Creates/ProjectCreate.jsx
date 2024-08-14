@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Color from "@components/project/Creates/Color"
 import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
@@ -16,7 +17,6 @@ import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 
 const ProjectCreate = () => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
@@ -50,12 +50,7 @@ const ProjectCreate = () => {
             icon: "circle",
             color: getProjectColor(theme.type, newProject.color),
             display: t("color." + newProject.color),
-            component: (
-                <Color
-                    setColor={editNewProject}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Color setColor={editNewProject} />,
         },
         {
             id: 2,
