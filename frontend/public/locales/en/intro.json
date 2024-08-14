@@ -67,7 +67,6 @@
         "demo_share": {
             "logs": {
                 "log0": {
-                    "me": "Me",
                     "preview": "Completed Vaccination.",
                     "blurb": "Spent too much for vaccination imaooo",
                     "tasks": {

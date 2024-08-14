@@ -67,7 +67,6 @@
         "demo_share": {
             "logs": {
                 "log0": {
-                    "me": "나",
                     "preview": "예방접종 완료!",
                     "blurb": "주사 맞은 곳이 아파",
                     "tasks": {

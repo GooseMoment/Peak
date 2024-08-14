@@ -6,8 +6,9 @@ import DemoBlurb from "@components/intro/DemoBlurb"
 import DemoLogs from "@components/intro/DemoLogs"
 import SubSection from "@components/intro/SubSection"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import { useTranslation } from "react-i18next"
-import { ifMobile } from "@/utils/useScreenType"
 
 const DemoShare = () => {
     const { t } = useTranslation("intro", {
@@ -31,10 +32,10 @@ const DemoShare = () => {
 
 const makeLogs = (t) => [
     {
-        username: t("logs.log0.me"),
+        username: "@alpaca",
         preview: t("logs.log0.preview"),
         colors: ["#E30F25", "#0C7BBB", "#F8C112", "#E30F25"],
-        profile_img: "https://avatars.githubusercontent.com/u/20675630?v=4",
+        profile_img: "https://alpha-media.peak.ooo/static/alpaca.jpg",
         blurb: t("logs.log0.blurb"),
         tasks: [
             {
@@ -52,10 +53,10 @@ const makeLogs = (t) => [
         ],
     },
     {
-        username: "@aksae",
+        username: "@quokka",
         preview: t("logs.log1.preview"),
         colors: ["#7F1184", "#F6ADC6", "#7A99CF", "#7F1184"],
-        profile_img: "https://avatars.githubusercontent.com/u/39623851?v=4",
+        profile_img: "https://alpha-media.peak.ooo/static/quokka.jpeg",
         blurb: t("logs.log1.blurb"),
         tasks: [
             {
@@ -73,10 +74,10 @@ const makeLogs = (t) => [
         ],
     },
     {
-        username: "@minyoy",
+        username: "@sloth",
         preview: t("logs.log2.preview"),
         colors: ["#A0E7EF", "#7CFC00", "#F29C47", "#A0E7EF"],
-        profile_img: "https://avatars.githubusercontent.com/u/65756020?v=4",
+        profile_img: "https://alpha-media.peak.ooo/static/sloth.jpeg",
         blurb: t("logs.log2.blurb"),
         tasks: [
             {
@@ -94,10 +95,11 @@ const makeLogs = (t) => [
         ],
     },
     {
-        username: "@andless",
+        username: "@golden",
         preview: t("logs.log3.preview"),
         colors: ["#F68B1F", "#00AFCC", "#EA533A", "#F68B1F"],
-        profile_img: "https://avatars.githubusercontent.com/u/129763673?v=4",
+        profile_img:
+            "https://alpha-media.peak.ooo/static/golden-retriever.jpeg",
         blurb: t("logs.log3.blurb"),
         tasks: [
             {
