@@ -30,6 +30,10 @@ const Due = ({ task, setFunc, closeComponent }) => {
                     return
                 }
             }
+            if (name === "repeat") {
+                toast.error("coming soon...", {toastId: "coming_soon"})
+                return
+            }
             setIsAdditionalComp(name)
         }
     }
