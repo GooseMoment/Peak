@@ -22,7 +22,7 @@ ${reset}
 
 html {
     height: 100dvh;
-    width: 100vw;
+    width: 100dvw;
 
     accent-color: ${(p) => p.theme.accentColor};
     scrollbar-color: ${(p) => p.theme.scrollbarColor} transparent;

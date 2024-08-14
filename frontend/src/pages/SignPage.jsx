@@ -71,7 +71,7 @@ const SignPage = () => {
 const Root = styled.div`
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
 
     background-color: ${(p) => p.theme.introBackgroundColor};
 
