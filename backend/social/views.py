@@ -180,6 +180,21 @@ def get_followings(request: HttpRequest, username):
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+@api_view(["GET"])
+def get_requesters(request: HttpRequest, username):
+    target = get_object_or_404(User, username=username)
+    
+    is_blocked = Block.Block.objects.filter(blocker=target, blockee=request.user).exclude(deleted_at=None).exists()
+    if is_blocked:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    
+    requesters = Following.objects.filter(followee__username=username, status=Following.REQUESTED).all()
+    requesters_users = User.objects.filter(followings__in=requesters.all()).all()
+    
+    serializer = UserSerializer(requesters_users)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 ## Block
 class BlockView(APIView):
     # TODO 상대 볼 수 없게/
