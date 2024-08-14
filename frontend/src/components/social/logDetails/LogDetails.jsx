@@ -1,17 +1,18 @@
-import { Fragment } from "react"
+import styled from "styled-components"
 
-import styled, { useTheme } from "styled-components"
-
-import { TaskList } from "@components/drawers/Drawer"
-import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
-import { getProjectColor } from "@components/project/Creates/palettes"
 import InteractionBox from "@components/social/interaction/InteractionBox"
+import DrawerBundle from "@components/social/logDetails/DrawerBundle"
 import Quote from "@components/social/logDetails/Quote"
-import TaskBox from "@components/social/logDetails/TaskBox"
+import FollowButton from "@components/users/FollowButton"
 
-const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing }) => {
-    const theme = useTheme()
-
+const LogDetails = ({
+    user,
+    quote,
+    logDetails,
+    saveQuote,
+    isFollowingPage,
+    selectedDate,
+}) => {
     return (
         <>
             <DetailHeader>
@@ -21,8 +22,12 @@ const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing }) => {
                     saveQuote={saveQuote || null}
                 />
 
-                {isFollowing && quote.id && (
-                    <InteractionBox parentType={"quote"} parent={quote} />
+                {isFollowingPage ? (
+                    quote.id && (
+                        <InteractionBox parentType={"quote"} parent={quote} />
+                    )
+                ) : (
+                    <FollowButton user={user} />
                 )}
 
                 {/* TODO: who and what emoji */}
@@ -30,41 +35,19 @@ const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing }) => {
 
             {/* TODO: When there are no task */}
             <DetailBody>
-                {logDetails &&
-                    Object.values(logDetails).map(
+                {logDetails?.pages.map((group) =>
+                    group.results.map(
                         (drawer) =>
-                            // Only show when there are task
-                            drawer.tasks.length !== 0 && (
-                                <Fragment key={drawer.id}>
-                                    <DrawerBox
-                                        $color={getProjectColor(
-                                            theme.type,
-                                            drawer.color,
-                                        )}>
-                                        <DrawerName
-                                            $color={getProjectColor(
-                                                theme.type,
-                                                drawer.color,
-                                            )}>
-                                            {drawer.name}
-                                        </DrawerName>
-                                    </DrawerBox>
-                                    <TaskList>
-                                        {drawer.tasks.map((task) => (
-                                            <TaskBox
-                                                key={task.id}
-                                                task={task}
-                                                color={getProjectColor(
-                                                    theme.type,
-                                                    drawer.color,
-                                                )}
-                                                isFollowing={isFollowing}
-                                            />
-                                        ))}
-                                    </TaskList>
-                                </Fragment>
+                            drawer && (
+                                <DrawerBundle
+                                    key={drawer.id}
+                                    drawer={drawer}
+                                    selectedDate={selectedDate}
+                                    isFollowingPage={isFollowingPage}
+                                />
                             ),
-                    )}
+                    ),
+                )}
             </DetailBody>
         </>
     )
