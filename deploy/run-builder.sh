@@ -1,2 +1,13 @@
-docker build -f ./"$1"/Dockerfile -t "$1"-build ./"$1"
-docker run -v "$1"-dist:/"$1"/dist -t "$1"-build
+#!/bin/bash
+
+BUILD_DATE=$(date '+%Y-%m-%dT%H:%M:%S%z')
+
+docker build \
+    -f ./frontend/Dockerfile \
+    --build-arg "BUILD_DATE=${BUILD_DATE}" \
+    -t frontend-build ./frontend
+
+docker run \
+    -v frontend-dist:/frontend/dist \
+    -v ./.env:/.env:ro \
+    -t frontend-build
