@@ -3,8 +3,7 @@ import styled from "styled-components"
 import InteractionBox from "@components/social/interaction/InteractionBox"
 import DrawerBundle from "@components/social/logDetails/DrawerBundle"
 import Quote from "@components/social/logDetails/Quote"
-
-import FollowBox from "../interaction/FollowBox"
+import FollowButton from "@components/users/FollowButton"
 
 const LogDetails = ({
     user,
@@ -28,7 +27,7 @@ const LogDetails = ({
                         <InteractionBox parentType={"quote"} parent={quote} />
                     )
                 ) : (
-                    <FollowBox user={user} />
+                    <FollowButton user={user} />
                 )}
 
                 {/* TODO: who and what emoji */}
