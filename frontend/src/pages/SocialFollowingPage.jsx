@@ -122,14 +122,14 @@ const SocialFollowingPage = () => {
                                 saveQuote={saveQuote}
                                 selectedDate={selectedDate}
                                 logDetails={drawerPage}
-                                isFollowingPage={true}
+                                isFollowingPage
                             />
                     )}
                     <ImpressionArea
                         onImpressionStart={() => fetchNextDrawerPage()}
                         timeThreshold={200}
                     >
-                        {drawerPage && "next"}
+                        {hasNextPage && "next"}
                         {!hasNextPage && !isNotificationEmpty && (
                             "no_more"
                         )}
