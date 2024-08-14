@@ -151,10 +151,9 @@
         }
     },
     "info": {
-        "build": {
-            "name": "빌드 정보",
-            "commit": "커밋",
-            "branch": "브랜치"
+        "built_at": {
+            "name": "빌드 일시",
+            "for_dev": "개발 모드에서는 표시되지 않습니다."
         }
     },
     "sign_out": {

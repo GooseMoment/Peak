@@ -6,7 +6,7 @@ import LoaderCircle from "@components/common/LoaderCircle"
 
 import FeatherIcon from "feather-icons-react"
 
-const ReminderIcons = ({ item, reminders, handleReminder, ReminderID }) => {
+const ReminderContents = ({ item, reminders, handleReminder, ReminderID }) => {
     const [isLoading, setIsLoading] = useState(true)
     const [isHovering, setIsHovering] = useState(false)
 
@@ -77,4 +77,4 @@ const ItemText = styled.p`
     }
 `
 
-export default ReminderIcons
+export default ReminderContents

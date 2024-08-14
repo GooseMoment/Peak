@@ -1,9 +1,9 @@
-import styled from "styled-components"
-
 import Section, { Name, Value } from "@components/settings/Section"
 
-import generatedGitInfo from "@/generatedGitInfo.json"
 import { useTranslation } from "react-i18next"
+
+const buildTimestamp = import.meta.env.VITE_BUILD_TIMESTAMP
+const isProd = import.meta.env.PROD
 
 const Info = () => {
     const { t } = useTranslation("settings", { keyPrefix: "info" })
@@ -11,26 +11,11 @@ const Info = () => {
     return (
         <>
             <Section>
-                <Name>{t("build.name")}</Name>
-                <Value>
-                    <ul>
-                        <li>
-                            {t("build.commit")}:{" "}
-                            <Code>{generatedGitInfo.gitCommitHash}</Code>
-                        </li>
-                        <li>
-                            {t("build.branch")}:{" "}
-                            <Code>{generatedGitInfo.gitBranch}</Code>
-                        </li>
-                    </ul>
-                </Value>
+                <Name>{t("built_at.name")}</Name>
+                <Value>{isProd ? buildTimestamp : t("built_at.for_dev")}</Value>
             </Section>
         </>
     )
 }
-
-const Code = styled.code`
-    font-family: monospace;
-`
 
 export default Info

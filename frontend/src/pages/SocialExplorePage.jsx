@@ -1,81 +1,123 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { css, styled } from "styled-components"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { styled } from "styled-components"
 
+import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import SocialPageTitle from "@components/social/SocialPageTitle"
+import ExploreFeed from "@components/social/explore/ExploreFeed"
 import SearchBar from "@components/social/explore/SearchBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
-import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
 
 import {
-    getDailyLogDetails,
-    getExploreFeed,
-    getExploreSearchResults,
+    getDailyLogTasks,
+    getExploreRecommend,
+    getExploreFound,
     getQuote,
+    getDailyLogDrawers,
 } from "@api/social.api"
 
 import queryClient from "@queries/queryClient"
 
-import { toast } from "react-toastify"
+const getCursorFromURL = (url) => {
+    if (!url) return null
+
+    const u = new URL(url)
+    const cursor = u.searchParams.get("cursor")
+    return cursor
+}
 
 const SocialExplorePage = () => {
     const initial_date = new Date()
     initial_date.setHours(0, 0, 0, 0)
+    const selectedDate = initial_date.toISOString()
 
     const [selectedUser, setSelectedUser] = useState(null)
 
-    const { data: recommendUsers } = useQuery({
+    const {
+        data: recommendPage,
+        fetchNextPage: fetchNextRecommendPage,
+        isPending: isRecommendPending,
+        refetch: refetchRecommend,
+    } = useInfiniteQuery({
         queryKey: ["explore", "recommend", "users"],
-        queryFn: () => getExploreFeed(),
-        staleTime: 3 * 60 * 60 * 1000,
+        queryFn: (page) =>
+            getExploreRecommend(page.pageParam),
+        initialPageParam: "",
+        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
+        refetchOnWindowFocus: false
     })
 
-    const recommendUsersMutation = useMutation({
-        mutationFn: ({ searchTerm }) => {
-            if (searchTerm === "") return getExploreFeed()
-            return getExploreSearchResults(searchTerm)
-        },
-        onSuccess: (data) => {
-            queryClient.setQueryData(["explore", "recommend", "users"], data)
-        },
-        onError: (e) => {
-            toast.error(e)
-        },
+    const {
+        data: foundPage,
+        fetchNextPage: fetchNextFoundPage,
+        isPending: isFoundPending,
+        isFetching: isFoundFetching,
+        refetch: refetchFound,
+    } = useInfiniteQuery({
+        queryKey: ["explore", "found", "users"],
+        queryFn: (page) =>
+            getExploreFound(searchQuery, page.pageParam),
+        initialPageParam: "",
+        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
+        refetchOnWindowFocus: false,
+        enabled: false,
     })
+
+    // useRef로 대체??
+    const [searchQuery, setSearchQuery] = useState("")
+    
+    useEffect(() => {
+        if(searchQuery.length !== 0) refetchFound()
+    }, [searchQuery])
 
     const { data: quote } = useQuery({
         queryKey: ["quote", selectedUser],
-        queryFn: () => getQuote(selectedUser, initial_date.toISOString()),
+        queryFn: () => getQuote(selectedUser, selectedDate),
         enabled: !!selectedUser,
     })
 
-    const { data: exploreLogDetails } = useQuery({
-        queryKey: ["explore", "log", "details", selectedUser],
-        queryFn: () =>
-            getDailyLogDetails(selectedUser, initial_date.toISOString()),
-        enabled: !!selectedUser,
+    const {
+        data: drawerPage,
+        fetchNextPage: fetchNextDrawerPage,
+        isPending: isDrawerPending,
+        refetch: refetchDrawer,
+    } = useInfiniteQuery({
+        queryKey: ["daily", "log", "details", "drawer", selectedUser],
+        queryFn: (page) =>
+            getDailyLogDrawers(selectedUser, page.pageParam),
+        initialPageParam: "",
+        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
+        enabled: !!selectedUser
     })
+    
+
+    const handleSearch = (searchTerm) => {
+        setSearchQuery(searchTerm.trim())
+        queryClient.removeQueries(["explore", "found", "users"])
+    }
 
     return (
         <>
             <SocialPageTitle active="explore" />
             <Wrapper>
                 <Container>
-                    <SearchBar handleSearch={recommendUsersMutation.mutate} />
-                    <DailyLogsPreviewContainer>
-                        {recommendUsers &&
-                            Object.values(recommendUsers).map(
-                                (dailyFollowerLog) => (
-                                    <LogPreviewBox
-                                        key={dailyFollowerLog.username}
-                                        log={dailyFollowerLog}
-                                        selectedUser={selectedUser}
-                                        setSelectedUser={setSelectedUser}
-                                    />
-                                ),
-                            )}
-                    </DailyLogsPreviewContainer>
+                    <SearchBar
+                        handleSearch={handleSearch}
+                    />
+                    {isRecommendPending || (searchQuery && isFoundFetching) ? (
+                        <LoaderCircleWrapper>
+                            <LoaderCircleFull />
+                        </LoaderCircleWrapper>
+                    ) : (
+                        <ExploreFeed
+                            recommendPage={recommendPage}
+                            foundPage={foundPage}
+                            fetchNextFoundPage={fetchNextFoundPage}
+                            selectedUser={selectedUser}
+                            setSelectedUser={setSelectedUser}
+                        />
+                    )}
                 </Container>
 
                 <StickyContainer>
@@ -83,8 +125,9 @@ const SocialExplorePage = () => {
                         <LogDetails
                             user={quote?.user}
                             quote={quote}
-                            logDetails={exploreLogDetails}
-                            isFollowing={false}
+                            logDetails={drawerPage}
+                            isFollowingPage={false}
+                            selectedDate={selectedDate}     //temp
                         />
                     )}
                 </StickyContainer>
@@ -119,6 +162,8 @@ const StickyContainer = styled(Container)`
     gap: 0rem;
 `
 
-const DailyLogsPreviewContainer = styled.div``
+const LoaderCircleWrapper = styled.div`
+    margin-top: 10em;
+`
 
 export default SocialExplorePage

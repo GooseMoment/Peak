@@ -75,7 +75,7 @@ docker-compose down # 종료 및 컨테이너 내리기
 `frontend` 코드를 아래 명령어로 빌드합니다.
 
 ```bash
-./deploy/run-builder.sh frontend
+./deploy/run-builder.sh
 ```
 
 (이후 `frontend`에 변경사항이 있으면 `docker-compose` 실행할 필요없이 해당 부분만 스크립트 돌리면 됩니다)
