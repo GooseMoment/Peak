@@ -4,6 +4,8 @@ import InteractionBox from "@components/social/interaction/InteractionBox"
 import DrawerBundle from "@components/social/logDetails/DrawerBundle"
 import Quote from "@components/social/logDetails/Quote"
 
+import FollowBox from "../interaction/FollowBox"
+
 const LogDetails = ({
     user,
     quote,
@@ -21,8 +23,12 @@ const LogDetails = ({
                     saveQuote={saveQuote || null}
                 />
 
-                {isFollowingPage && quote.id && (
-                    <InteractionBox parentType={"quote"} parent={quote} />
+                {isFollowingPage ? (
+                    quote.id && (
+                        <InteractionBox parentType={"quote"} parent={quote} />
+                    )
+                ) : (
+                    <FollowBox user={user} />
                 )}
 
                 {/* TODO: who and what emoji */}
@@ -30,18 +36,19 @@ const LogDetails = ({
 
             {/* TODO: When there are no task */}
             <DetailBody>
-                {logDetails?.pages.map((group) => (
-                    group.results.map((drawer) => (
-                        drawer && (
-                            <DrawerBundle
-                                key={drawer.id}
-                                drawer={drawer}
-                                selectedDate={selectedDate}
-                                isFollowingPage={isFollowingPage}
-                            />
-                        )
-                    ))
-                ))}
+                {logDetails?.pages.map((group) =>
+                    group.results.map(
+                        (drawer) =>
+                            drawer && (
+                                <DrawerBundle
+                                    key={drawer.id}
+                                    drawer={drawer}
+                                    selectedDate={selectedDate}
+                                    isFollowingPage={isFollowingPage}
+                                />
+                            ),
+                    ),
+                )}
             </DetailBody>
         </>
     )
