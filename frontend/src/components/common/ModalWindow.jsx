@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 
 import styled, { css } from "styled-components"
 
-import useDelayUnmount from "@utils/useDelayUnmount"
 import useStopScroll from "@utils/useStopScroll"
 
 import { cubicBeizer, scaleDown, scaleUp } from "@assets/keyframes"
 
 import { createPortal } from "react-dom"
+
+const CloseContext = createContext(null)
+
+export const useModalWindowCloseContext = () => {
+    return useContext(CloseContext)
+}
 
 const el = document.getElementById("modal")
 const root = document.getElementById("root")
@@ -16,15 +21,16 @@ const root = document.getElementById("root")
 
 const ModalWindow = ({
     children,
-    afterClose, 
+    afterClose,
     additional = false,
     closeESC = true,
 }) => {
-    const [isOpen, setIsOpen] = useState(true)
+    const [closing, setClosing] = useState(false)
 
-    const shouldRender = !additional
-        ? useDelayUnmount(isOpen, 100, afterClose)
-        : true
+    const closeWithTransition = () => {
+        setClosing(true)
+        setTimeout(() => afterClose(), 100)
+    }
 
     useStopScroll(true)
 
@@ -55,32 +61,34 @@ const ModalWindow = ({
         }
 
         e.stopPropagation()
-        setIsOpen(false)
+        closeWithTransition()
     }
 
     const handleKeyDown = (e) => {
         if (closeESC && e.key === "Escape") {
             e.preventDefault()
-            setIsOpen(false)
+            closeWithTransition()
         }
     }
 
     return createPortal(
-        <AnimationProvider onKeyDown={handleKeyDown} $open={isOpen}>
-            {shouldRender ? children : null}
-        </AnimationProvider>,
+        <CloseContext.Provider value={{closeModal: closeWithTransition}}>
+            <AnimationProvider onKeyDown={handleKeyDown} $closing={closing}>
+                {children}
+            </AnimationProvider>
+        </CloseContext.Provider>,
         el,
     )
 }
 
 const AnimationProvider = styled.div`
     ${(props) =>
-        props.$open
+        props.$closing
             ? css`
-                  animation: ${scaleUp} 0.5s ${cubicBeizer};
+                  animation: ${scaleDown} 0.5s ${cubicBeizer} forwards;
               `
             : css`
-                  animation: ${scaleDown} 0.5s ${cubicBeizer} forwards;
+                  animation: ${scaleUp} 0.5s ${cubicBeizer};
               `}
 `
 
