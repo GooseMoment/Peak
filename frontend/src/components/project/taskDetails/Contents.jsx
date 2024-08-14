@@ -108,9 +108,7 @@ const Contents = ({ task, setFunc }) => {
                     : task.drawer_name
                       ? `${task.project_name} / ${task.drawer_name}`
                       : t("none"),
-            component: (
-                <Drawer setFunc={setFunc} closeComponent={closeComponent} />
-            ),
+            component: <Drawer setFunc={setFunc} />,
         },
         {
             id: 6,
