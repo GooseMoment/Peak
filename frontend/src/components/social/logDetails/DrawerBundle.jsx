@@ -1,7 +1,7 @@
 import { Fragment } from "react"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import { TaskList } from "@components/drawers/Drawer"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
@@ -9,6 +9,7 @@ import TaskBox from "@components/social/logDetails/TaskBox"
 
 import { getDailyLogTasks } from "@api/social.api"
 
+import { getProjectColor } from "@/components/project/Creates/palettes"
 import FeatherIcon from "feather-icons-react"
 
 const getPageFromURL = (url) => {
@@ -33,13 +34,18 @@ const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
+    const theme = useTheme()
+
     const hasNextPage =
         taskPage?.pages[taskPage?.pages?.length - 1].next !== null
 
     return (
         <Fragment>
-            <DrawerBox $color={drawer.color}>
-                <DrawerName $color={drawer.color}> {drawer.name} </DrawerName>
+            <DrawerBox $color={getProjectColor(theme.type, drawer.color)}>
+                <DrawerName $color={getProjectColor(theme.type, drawer.color)}>
+                    {" "}
+                    {drawer.name}{" "}
+                </DrawerName>
             </DrawerBox>
             <TaskList>
                 {taskPage?.pages?.map((group) =>
@@ -47,7 +53,7 @@ const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
                         <TaskBox
                             key={task.id}
                             task={task}
-                            color={drawer.color}
+                            color={getProjectColor(theme.type, drawer.color)}
                             isFollowingPage={isFollowingPage}
                         />
                     )),
