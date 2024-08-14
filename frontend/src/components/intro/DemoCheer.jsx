@@ -3,14 +3,12 @@ import { useMemo, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
-import ReactionButton, {
-    ReactionButtonGroup,
-} from "@components/intro/ReactionButton"
 import SubSection from "@components/intro/SubSection"
 import { today } from "@components/intro/todays"
 import { getProjectColor } from "@components/project/Creates/palettes"
 import { Modal as EmojiModalWindow } from "@components/social/interaction/reaction/EmojiModal"
 import EmojiPickerButton from "@components/social/interaction/reaction/EmojiPickerButton"
+import ReactionButton from "@components/social/interaction/reaction/ReactionButton"
 import TaskFrame from "@components/tasks/TaskFrame"
 
 import { getEmojis } from "@api/social.api"
@@ -39,7 +37,7 @@ const DemoCheer = () => {
 
     const task = useMemo(() => makeTask(t, theme), [t, theme])
 
-    const onClickEmoji = (emoji) => {
+    const onPickEmoji = (emoji) => {
         emoji.selected = true
 
         const found = selectedEmojis.find((e) => e.name === emoji.name)
@@ -59,6 +57,20 @@ const DemoCheer = () => {
         setSelectedEmojis([...selectedEmojis, emoji])
     }
 
+    const onClickEmoji = ({ emoji }) => {
+        // emoji: string (emoji.name)
+
+        setSelectedEmojis(
+            selectedEmojis.map((e) => {
+                if (e.name === emoji) {
+                    e.selected = !e.selected
+                }
+
+                return e
+            }),
+        )
+    }
+
     return (
         <SubSection>
             <TaskFrame task={task} color={task.color} />
@@ -67,12 +79,18 @@ const DemoCheer = () => {
                     <ReactionButton
                         key={emoji.name}
                         emoji={emoji}
-                        emojiCount={emoji.name.length}
+                        emojiCount={
+                            emoji.selected
+                                ? emoji.name.length + 1
+                                : emoji.name.length
+                        }
+                        isSelected={emoji.selected}
+                        saveReaction={onClickEmoji}
                     />
                 ))}
                 {isPending ||
                     (selectedEmojis.length < 7 && (
-                        <CustomizedPickerButton setPickedEmoji={onClickEmoji} />
+                        <CustomizedPickerButton setPickedEmoji={onPickEmoji} />
                     ))}
             </ReactionButtonGroup>
         </SubSection>
@@ -90,6 +108,12 @@ const CustomizedPickerButton = styled(EmojiPickerButton)`
         top: 30dvh !important;
         left: auto !important;
     }
+`
+
+export const ReactionButtonGroup = styled.div`
+    display: flex;
+    gap: 0.5em;
+    margin-top: 0.25em;
 `
 
 export default DemoCheer
