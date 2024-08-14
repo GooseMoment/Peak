@@ -169,8 +169,7 @@ const ProjectPage = () => {
                             setSelectedSortMenuPosition,
                             setIsSortMenuOpen,
                             setIsContextMenuOpen,
-                        )}
-                    >
+                        )}>
                         <SortIcon color={theme.textColor} />
                     </SortIconBox>
                     <FeatherIcon
@@ -228,21 +227,15 @@ const ProjectPage = () => {
                 <ModalWindow
                     afterClose={() => {
                         setIsDrawerCreateOpen(false)
-                    }}
-                >
-                    <DrawerCreate
-                        onClose={() => {
-                            setIsDrawerCreateOpen(false)
-                        }}
-                    />
+                    }}>
+                    <DrawerCreate />
                 </ModalWindow>
             )}
             {isProjectEditOpen && (
                 <ModalWindow
                     afterClose={() => {
                         setIsProjectEditOpen(false)
-                    }}
-                >
+                    }}>
                     <ProjectEdit
                         project={project}
                         onClose={() => {
