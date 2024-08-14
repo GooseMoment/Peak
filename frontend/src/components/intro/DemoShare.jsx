@@ -5,18 +5,24 @@ import styled from "styled-components"
 import DemoBlurb from "@components/intro/DemoBlurb"
 import DemoLogs from "@components/intro/DemoLogs"
 import SubSection from "@components/intro/SubSection"
+
 import { useTranslation } from "react-i18next"
 
 const DemoShare = () => {
-    const { t } = useTranslation("intro", {keyPrefix: "section_share.demo_share"})
+    const { t } = useTranslation("intro", {
+        keyPrefix: "section_share.demo_share",
+    })
 
     const [selected, setSelected] = useState(0)
     const logs = useMemo(() => makeLogs(t), [t])
 
-
     return (
         <SubSectionFlex>
-            <DemoLogs logs={logs} selected={selected} setSelected={setSelected} />
+            <DemoLogs
+                logs={logs}
+                selected={selected}
+                setSelected={setSelected}
+            />
             <DemoBlurb log={logs[selected]} selected={selected} />
         </SubSectionFlex>
     )
