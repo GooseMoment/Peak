@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import { useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -23,7 +23,7 @@ const DemoCheer = () => {
 
     const [selectedEmojis, setSelectedEmojis] = useState([])
 
-    const { isPending } = useQuery({
+    const { data: emojis, isPending } = useQuery({
         queryKey: ["emojis"],
         queryFn: async () => {
             const emojis = await getEmojis()
@@ -32,10 +32,17 @@ const DemoCheer = () => {
         },
         staleTime: 1000 * 60 * 60 * 5,
         refetchOnWindowFocus: false,
-        refetchOnMount: false,
     })
 
     const task = useMemo(() => makeTask(t, theme), [t, theme])
+
+    useEffect(() => {
+        // in case IntroPage was not initially loaded.
+        // e.g. Navigated from SignPage
+        if (emojis) {
+            setSelectedEmojis(emojis.slice(0, 2))
+        }
+    }, [])
 
     const onPickEmoji = (emoji) => {
         emoji.selected = true
