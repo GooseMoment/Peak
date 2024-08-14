@@ -49,10 +49,8 @@ const Blurb = styled.div`
     flex-grow: 1;
     flex-basis: 50%;
 
-    min-width: 5em;
-
     background-color: ${(p) => p.theme.thirdBackgroundColor};
-    padding: 1em;
+    padding: 0.75em;
     border-radius: 16px;
 
     display: flex;

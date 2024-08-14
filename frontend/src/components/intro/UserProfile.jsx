@@ -1,5 +1,7 @@
 import styled from "styled-components"
 
+import { ifMobile } from "@utils/useScreenType"
+
 const UserProfile = ({ username, colors, profileImg }) => {
     return (
         <Profile>
@@ -34,6 +36,11 @@ const ProfileImgBorder = styled.div`
     background: conic-gradient(${(p) => p.$colors.join(", ")});
     background-clip: padding-box;
     border-radius: 50%;
+
+    ${ifMobile} {
+        height: 4em;
+        width: 4em;
+    }
 `
 
 const ProfileImg = styled.img`
