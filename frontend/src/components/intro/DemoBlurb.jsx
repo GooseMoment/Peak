@@ -1,9 +1,8 @@
 import styled from "styled-components"
 
+import { TaskList } from "@components/drawers/Drawer"
 import UserProfile from "@components/intro/UserProfile"
-
-import { TaskList } from "../drawers/Drawer"
-import TaskFrame from "../tasks/TaskFrame"
+import TaskFrame from "@components/tasks/TaskFrame"
 
 const DemoBlurb = ({ log }) => {
     return (
