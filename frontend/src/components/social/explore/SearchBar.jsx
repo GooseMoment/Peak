@@ -33,6 +33,7 @@ const SearchBar = ({ handleSearch }) => {
                 value={searchTerm}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
+                placeholder="Search for usernames to follow"
             />
             <SearchButton onClick={() => handleSearch()}>
                 <FeatherIcon icon={"search"} />
