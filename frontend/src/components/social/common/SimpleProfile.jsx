@@ -21,7 +21,6 @@ const Profile = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.3em;
 `
 
 const ProfileImgWrapper = styled.div`
@@ -32,7 +31,7 @@ const ProfileImgWrapper = styled.div`
     ${(props) =>
         props.$color
             ? css`
-                  outline: solid 0.22em ${(props) => props.$color};
+                  outline: solid 0.2em ${(props) => props.$color};
               `
             : null}
 
@@ -53,6 +52,7 @@ const ProfileImgWrapper = styled.div`
 `
 
 const Username = styled.div`
+    margin-top: auto;
     width: 100%;
 
     overflow-x: clip;

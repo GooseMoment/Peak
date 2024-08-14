@@ -33,7 +33,8 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
     return (
         <Frame
             onClick={handleSelect}
-            $bgcolor={backgroundColor}>
+            $frameColor={theme.borderColor}
+            $bgColor={backgroundColor}>
             <SimpleProfile user={log} ringColor={setRingColor} />
             <RecentTask>
                 {log.recent_task && (
@@ -59,8 +60,8 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
 }
 
 const Frame = styled.div`
-    border-bottom: 0.05em solid black;
-    background-color: ${(props) => props.$bgcolor};
+    border-bottom: 0.05em solid ${(props) => props.$frameColor};
+    background-color: ${(props) => props.$bgColor};
 
     padding: 1.2em 1em 1.2em;
 

@@ -77,6 +77,7 @@ export const light = {
         boxShadowColor: "rgba(149, 157, 165, 0.2)",
     },
     social: {
+        borderColor: black,
         activeBackgroundColor: "rgb(255 74 3 / 0.35)",
     },
     toastTheme: "light",
@@ -160,6 +161,7 @@ export const dark = {
         boxShadowColor: "rgba(0, 0, 0, 0.4)",
     },
     social: {
+        borderColor: white,
         activeBackgroundColor: "rgb(255 74 3 / 0.35)",
     },
     toastTheme: "dark",
