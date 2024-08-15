@@ -14,7 +14,7 @@ export const useModalWindowCloseContext = () => {
     return useContext(CloseContext)
 }
 
-const el = document.getElementById("modal")
+const el = document.getElementById("window-container")
 const root = document.getElementById("root")
 
 // see: https://github.com/remix-run/react-router/discussions/9864#discussioncomment-6350903

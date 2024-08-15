@@ -103,7 +103,7 @@ html {
     animation: scaleBack 0.5s var(--cubic) forwards;
 }
 
-#modal {
+#window-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -124,12 +124,12 @@ html {
     transition: background-color 0.25s var(--cubic);
 }
 
-#modal:has(div) {
+#window-container:has(div) {
     background-color: rgba(0, 0, 0, 0.4);
     z-index: 99;
 }
 
-#modal:has(.closing) {
+#window-container:has(.closing) {
     background-color: transparent;
 }
 
