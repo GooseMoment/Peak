@@ -24,8 +24,6 @@ const LogDetails = ({ user, quote, logDetails, saveQuote, isFollowing }) => {
                 {isFollowing && quote.id && (
                     <InteractionBox parentType={"quote"} parent={quote} />
                 )}
-
-                {/* TODO: who and what emoji */}
             </DetailHeader>
 
             {/* TODO: When there are no task */}
