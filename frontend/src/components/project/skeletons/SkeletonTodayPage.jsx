@@ -19,16 +19,16 @@ export const SkeletonDueTasks = ({ taskCount }) => {
 }
 
 const SkeletonDueTasksBox = styled.div`
-    margin-top: 1em;
-    height: 4.08em;
+    margin-top: 1.5em;
+    height: 2.6em;
 `
 
 const TaskBox = styled.div`
     display: flex;
     align-items: center;
     margin-top: 0.5em;
-    margin-left: 0.8em;
-    gap: 0.8em;
+    margin-left: 0.6em;
+    gap: 0.7em;
     padding: 0 0.5em;
 `
 
@@ -51,7 +51,7 @@ const Bar = styled.div`
 const DueBar = styled.div`
     width: 13%;
     height: 0.8em;
-    margin-left: 3.6em;
+    margin-left: 3.3em;
     border-radius: 4px;
     ${skeletonCSS("-100px", "300px", "2s")}
 `
