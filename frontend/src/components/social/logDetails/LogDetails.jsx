@@ -73,7 +73,7 @@ const DetailHeader = styled.div`
 
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 0.7em;
 `
 
 const DetailBody = styled.div`
