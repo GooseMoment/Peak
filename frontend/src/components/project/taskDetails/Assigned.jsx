@@ -11,16 +11,22 @@ import { rotateToUnder, rotateToUp } from "@assets/keyframes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const Assigned = ({ setFunc, closeComponent }) => {
-    const { t } = useTranslation(null, { keyPrefix: "task.due" })
+    const { t } = useTranslation(null, { keyPrefix: "task" })
 
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
     const handleAdditionalComp = (name) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
-        else setIsAdditionalComp(name)
-    }
+        else {
+            if (name === "repeat") {
+                toast.error("coming soon...", {toastId: "coming_soon"})
+                return
+            }
+            setIsAdditionalComp(name)
+    }}
 
     let date = new Date()
 
@@ -39,19 +45,19 @@ const Assigned = ({ setFunc, closeComponent }) => {
     const addComponent = [
         {
             name: "quick",
-            display: t("quick.title"),
+            display: t("due.quick.title"),
             icon: "menu",
             component: <QuickDue changeDueDate={changeAssignedDate} />,
         },
         {
             name: "calendar",
-            display: t("calendar"),
+            display: t("due.calendar"),
             icon: "calendar",
             component: <div>달력입니다</div>,
         },
         {
             name: "repeat",
-            display: t("repeat.title"),
+            display: t("due.repeat.title"),
             icon: "refresh-cw",
             component: <RepeatDetail />,
         },
@@ -59,7 +65,7 @@ const Assigned = ({ setFunc, closeComponent }) => {
 
     return (
         <Detail
-            title={t("assigned_title")}
+            title={t("assigned.title")}
             onClose={closeComponent}
             special={true}
         >

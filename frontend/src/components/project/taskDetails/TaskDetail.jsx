@@ -116,7 +116,7 @@ const TaskDetail = () => {
         return (
             <TaskDetailBox>
                 <ErrorBox onClick={refetch}>
-                    작업을 불러오지 못했습니다
+                    {t("error_load_task")}
                 </ErrorBox>
             </TaskDetailBox>
         )
