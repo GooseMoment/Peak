@@ -5,10 +5,11 @@ import { useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import DeleteAlert from "@components/common/DeleteAlert"
 import TaskNameInput from "@components/tasks/TaskNameInput"
-
-import Contents from "./Contents"
+import DeleteAlert from "@components/common/DeleteAlert"
+import { ErrorBox } from "@components/errors/ErrorProjectPage"
+import SkeletonTaskDetail from "@components/project/skeletons/SkeletonTaskDetail"
+import Contents from "@components/project/taskDetails/Contents"
 
 import { deleteTask, getTask, patchTask } from "@api/tasks.api"
 
@@ -33,9 +34,10 @@ const TaskDetail = () => {
     const [isAlertOpen, setIsAlertOpen] = useState(false)
 
     const {
-        isPending,
-        isError,
         data: task,
+        isLoading,
+        isError,
+        refetch,
     } = useQuery({
         queryKey: ["task", { taskID: task_id }],
         queryFn: () => getTask(task_id),
@@ -103,8 +105,21 @@ const TaskDetail = () => {
         deleteMutation.mutate()
     }
 
-    if (isPending) {
-        return <TaskDetailBox />
+    if (isLoading) {
+        return (
+            <TaskDetailBox>
+                <SkeletonTaskDetail/>
+            </TaskDetailBox>
+    )}
+
+    if (isError) {
+        return (
+            <TaskDetailBox>
+                <ErrorBox onClick={refetch}>
+                    작업을 불러오지 못했습니다
+                </ErrorBox>
+            </TaskDetailBox>
+        )
     }
 
     return (
@@ -148,7 +163,6 @@ const TaskDetailBox = styled.div`
 `
 
 const TaskNameBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;

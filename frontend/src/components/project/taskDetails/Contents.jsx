@@ -161,7 +161,6 @@ const Contents = ({ task, setFunc }) => {
 }
 
 const ContentsBlock = styled.div`
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -169,7 +168,6 @@ const ContentsBlock = styled.div`
 `
 
 const ContentsBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: flex-start;
