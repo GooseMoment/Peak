@@ -54,30 +54,6 @@ table {
 }
 
 /*
-* KEYFRAMES
-*/
-
-@keyframes scaleForward {
-    0% {
-        transform: scale(0.95);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-@keyframes scaleBack {
-    0% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(0.95);
-    }
-}
-
-/*
 * GLOBALS
 */
 
@@ -95,12 +71,11 @@ html {
 
 #root > div > main {
     transform: scale(1);
-    animation: scaleForward 0.5s var(--cubic) forwards;
+    transition: transform 0.25s var(--cubic);
 }
 
 #root.has-modal > div > main {
     transform: scale(0.95);
-    animation: scaleBack 0.5s var(--cubic) forwards;
 }
 
 #window-container {
