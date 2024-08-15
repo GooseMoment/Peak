@@ -6,7 +6,7 @@ export const cubicBeizer = "cubic-bezier(0.165, 0.840, 0.440, 1.000)"
 
 export const scaleUp = keyframes`
     0% {
-        transform: scale(0.8) translateY(1000px);
+        transform: scale(0.8) translateY(500px);
         opacity: 0;
     }
 
@@ -23,7 +23,7 @@ export const scaleDown = keyframes`
     }
 
     100% {
-        transform: scale(0.8) translateY(1000px);
+        transform: scale(0.8) translateY(500px);
         opacity: 0;
     }
 `
