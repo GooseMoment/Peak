@@ -39,8 +39,6 @@ const ModalWindow = ({
         document.addEventListener("keydown", handleKeyDown)
 
         if (!additional) {
-            el.classList.add("with-animation")
-            el.classList.add("has-modal")
             root.classList.add("has-modal")
         }
 
@@ -49,7 +47,6 @@ const ModalWindow = ({
             document.removeEventListener("keydown", handleKeyDown)
 
             if (!additional) {
-                el.classList.remove("has-modal")
                 root.classList.remove("has-modal")
             }
         }
@@ -72,8 +69,11 @@ const ModalWindow = ({
     }
 
     return createPortal(
-        <CloseContext.Provider value={{closeModal: closeWithTransition}}>
-            <AnimationProvider onKeyDown={handleKeyDown} $closing={closing}>
+        <CloseContext.Provider value={{ closeModal: closeWithTransition }}>
+            <AnimationProvider
+                onKeyDown={handleKeyDown}
+                $closing={closing}
+                className={!additional && closing && "closing"}>
                 {children}
             </AnimationProvider>
         </CloseContext.Provider>,
