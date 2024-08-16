@@ -14,7 +14,7 @@ const ReactionButton = ({ emoji, emojiCount, isSelected, saveReaction }) => {
             onClick={handleReaction}
         >
             <Emoji src={emoji.img} />
-            <EmojiCounts>{emojiCount}</EmojiCounts>
+            <EmojiCounts color={theme.secondTextColor}>{emojiCount}</EmojiCounts>
         </EmojiBox>
     )
 }
