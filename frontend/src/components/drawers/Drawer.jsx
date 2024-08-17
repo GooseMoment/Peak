@@ -7,7 +7,7 @@ import styled, { useTheme } from "styled-components"
 import Button from "@components/common/Button"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
-import ModalPortal from "@components/common/ModalPortal"
+import ModalWindow from "@components/common/ModalWindow"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
@@ -198,19 +198,16 @@ const Drawer = ({ project, drawer, color }) => {
                 />
             )}
             {isDrawerEditOpen && (
-                <ModalPortal
-                    closeModal={() => {
+                <ModalWindow
+                    afterClose={() => {
                         setIsDrawerEditOpen(false)
                     }}
                 >
                     <DrawerEdit
                         projectID={project.id}
                         drawer={drawer}
-                        onClose={() => {
-                            setIsDrawerEditOpen(false)
-                        }}
                     />
-                </ModalPortal>
+                </ModalWindow>
             )}
             {/*isSimpleOpen &&
                 <TaskCreateSimple 

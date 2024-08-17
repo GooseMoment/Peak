@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import DeleteAlert from "@components/common/DeleteAlert"
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
 import Contents from "./Contents"
@@ -31,6 +32,8 @@ const TaskDetail = () => {
 
     const [taskName, setTaskName] = useState("")
     const [isAlertOpen, setIsAlertOpen] = useState(false)
+
+    const { closeModal } = useModalWindowCloseContext()
 
     const {
         isPending,
@@ -86,10 +89,6 @@ const TaskDetail = () => {
         setTaskName(task?.name)
     }, [task])
 
-    const onClose = () => {
-        navigate(`/app/projects/${projectID}`)
-    }
-
     const handleAlert = () => {
         if (setting.delete_task_after_alert) {
             setIsAlertOpen(true)
@@ -120,7 +119,7 @@ const TaskDetail = () => {
                 />
                 <Icons>
                     <FeatherIcon icon="trash-2" onClick={handleAlert} />
-                    <FeatherIcon icon="x" onClick={onClose} />
+                    <FeatherIcon icon="x" onClick={closeModal} />
                 </Icons>
             </TaskNameBox>
             <Contents task={task} setFunc={patchMutation.mutate} />

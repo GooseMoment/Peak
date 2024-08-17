@@ -1,5 +1,6 @@
 import styled from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
 import privatesvg from "@assets/project/privacy/private.svg"
@@ -8,13 +9,15 @@ import publicsvg from "@assets/project/privacy/public.svg"
 
 import { useTranslation } from "react-i18next"
 
-const Privacy = ({ setPrivacy, closeComponent }) => {
+const Privacy = ({ setPrivacy }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.privacy" })
+
+    const { closeModal } = useModalWindowCloseContext()
 
     const changePrivacy = (privacy) => {
         return () => {
             setPrivacy({ privacy })
-            closeComponent()
+            closeModal()
         }
     }
 
@@ -25,7 +28,7 @@ const Privacy = ({ setPrivacy, closeComponent }) => {
     ]
 
     return (
-        <Detail title={t("title")} onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeModal}>
             {items.map((item) => (
                 <ItemBlock key={item.privacy}>
                     {item.icon}

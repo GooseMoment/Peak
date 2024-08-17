@@ -2,7 +2,7 @@ import { Fragment, useMemo, useState } from "react"
 
 import styled, { css } from "styled-components"
 
-import ModalPortal from "@components/common/ModalPortal"
+import ModalWindow from "@components/common/ModalWindow"
 import ToolTip from "@components/project/common/ToolTip"
 import taskDate from "@components/tasks/utils/taskDate"
 
@@ -36,7 +36,7 @@ const Contents = ({ task, setFunc }) => {
         setContent(name.value)
         setIsComponentOpen(true)
     }
-    
+
     const closeComponent = () => {
         setIsComponentOpen(false)
     }
@@ -49,22 +49,14 @@ const Contents = ({ task, setFunc }) => {
             name: "assigned_due",
             icon: <FeatherIcon icon="calendar" />,
             display: task.assigned_at ? formatted_assigned_date : t("none"),
-            component: (
-                <Assigned setFunc={setFunc} closeComponent={closeComponent} />
-            ),
+            component: <Assigned setFunc={setFunc} />,
         },
         {
             id: 2,
             name: "due",
             icon: <img src={hourglass} />,
             display: task.due_date ? formatted_due_datetime : t("none"),
-            component: (
-                <Due
-                    task={task}
-                    setFunc={setFunc}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Due task={task} setFunc={setFunc} />,
         },
         {
             id: 3,
@@ -89,21 +81,18 @@ const Contents = ({ task, setFunc }) => {
                                 t("reminder.reminder_before_due_date"),
                                 { toastId: "reminder_before_due_date" },
                             )
-                        }}
-                    >
+                        }}>
                         -
                     </EmptyReminderBox>
                 ),
-            component: <Reminder task={task} closeComponent={closeComponent} />,
+            component: <Reminder task={task} />,
         },
         {
             id: 4,
             name: "priority",
             icon: <FeatherIcon icon="alert-circle" />,
             display: priorities[task.priority],
-            component: (
-                <Priority setFunc={setFunc} closeComponent={closeComponent} />
-            ),
+            component: <Priority setFunc={setFunc} />,
         },
         {
             id: 5,
@@ -115,22 +104,14 @@ const Contents = ({ task, setFunc }) => {
                     : task.drawer_name
                       ? `${task.project_name} / ${task.drawer_name}`
                       : t("none"),
-            component: (
-                <Drawer setFunc={setFunc} closeComponent={closeComponent} />
-            ),
+            component: <Drawer setFunc={setFunc} />,
         },
         {
             id: 6,
             name: "memo",
             icon: <FeatherIcon icon="edit" />,
             display: task.memo ? task.memo : t("none"),
-            component: (
-                <Memo
-                    previousMemo={task.memo}
-                    setFunc={setFunc}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Memo previousMemo={task.memo} setFunc={setFunc} />,
         },
     ]
 
@@ -141,17 +122,16 @@ const Contents = ({ task, setFunc }) => {
                     <ContentsBox>
                         <ToolTip message={item.name}>{item.icon}</ToolTip>
                         <VLine $end={item.id === 1 || item.id === 6} />
-                            <ContentText
-                                name={item.name === "reminder" || item.name}
-                                onClick={handleClickContent}
-                                $isReminder={item.name === "reminder"}
-                            >
-                                {item.display}
-                            </ContentText>
+                        <ContentText
+                            name={item.name === "reminder" || item.name}
+                            onClick={handleClickContent}
+                            $isReminder={item.name === "reminder"}>
+                            {item.display}
+                        </ContentText>
                         {content === item.name && isComponentOpen ? (
-                            <ModalPortal closeModal={closeComponent} additional>
+                            <ModalWindow afterClose={closeComponent} additional>
                                 {item.component}
-                            </ModalPortal>
+                            </ModalWindow>
                         ) : null}
                     </ContentsBox>
                 </Fragment>
@@ -215,7 +195,7 @@ const ContentText = styled.div`
     white-space: nowrap;
     overflow-x: clip;
     text-overflow: ellipsis;
-    cursor: ${props=>props.$isReminder || "pointer"};
+    cursor: ${(props) => props.$isReminder || "pointer"};
 `
 
 const RemindersBox = styled.div`

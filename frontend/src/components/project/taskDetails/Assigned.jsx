@@ -2,6 +2,7 @@ import { Fragment, useState } from "react"
 
 import styled, { css } from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
@@ -12,10 +13,12 @@ import { rotateToUnder, rotateToUp } from "@assets/keyframes"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Assigned = ({ setFunc, closeComponent }) => {
+const Assigned = ({ setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due" })
 
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
+
+    const { closeModal } = useModalWindowCloseContext()
 
     const handleAdditionalComp = (name) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
@@ -32,7 +35,7 @@ const Assigned = ({ setFunc, closeComponent }) => {
                 assigned_at = date.toISOString().slice(0, 10)
             }
             setFunc({ assigned_at })
-            closeComponent()
+            closeModal()
         }
     }
 
@@ -58,27 +61,21 @@ const Assigned = ({ setFunc, closeComponent }) => {
     ]
 
     return (
-        <Detail
-            title={t("assigned_title")}
-            onClose={closeComponent}
-            special={true}
-        >
+        <Detail title={t("assigned_title")} onClose={closeModal} special={true}>
             {addComponent.map((comp, i) => (
                 <Fragment key={comp.name}>
                     <FlexCenterBox>
                         <IndexBox
                             $start={i === 0}
                             $end={i === 2}
-                            onClick={() => handleAdditionalComp(comp.name)}
-                        >
+                            onClick={() => handleAdditionalComp(comp.name)}>
                             <EmptyBlock />
                             <Box>
                                 <FeatherIcon icon={comp.icon} />
                                 {comp.display}
                             </Box>
                             <CollapseButton
-                                $collapsed={isAdditionalComp === comp.name}
-                            >
+                                $collapsed={isAdditionalComp === comp.name}>
                                 <FeatherIcon icon="chevron-down" />
                             </CollapseButton>
                         </IndexBox>
