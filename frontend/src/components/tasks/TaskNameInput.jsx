@@ -40,9 +40,8 @@ const TaskNameInput = ({
     }
 
     const onEnter = (e) => {
-        if (isCreate) {
+        if (isCreate)
             return
-        }
         if (e.key === "Enter") {
             changeTaskName(newTaskName)
             toast.success(t("name_change_success"))

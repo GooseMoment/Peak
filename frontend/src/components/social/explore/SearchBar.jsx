@@ -16,13 +16,14 @@ const SearchBar = ({ handleSearch }) => {
         if (timer.current) clearTimeout(timer.current)
 
         timer.current = setTimeout(async () => {
-            handleSearch({ searchTerm: e.target.value })
-        }, 1000)
+            handleSearch(e.target.value)
+        }, 1500)
     }
 
     const handleKeyDown = (e) => {
         if (e.key == "Enter") {
-            handleSearch({ searchTerm })
+            clearTimeout(timer.current)
+            handleSearch(e.target.value)
         }
     }
 
@@ -32,8 +33,9 @@ const SearchBar = ({ handleSearch }) => {
                 value={searchTerm}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
+                placeholder="Search for usernames to follow"
             />
-            <SearchButton onClick={() => handleSearch({ searchTerm })}>
+            <SearchButton onClick={() => handleSearch()}>
                 <FeatherIcon icon={"search"} />
             </SearchButton>
         </Box>

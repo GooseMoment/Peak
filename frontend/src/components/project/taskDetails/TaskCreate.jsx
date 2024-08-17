@@ -1,10 +1,11 @@
-import { useState } from "react"
-import { useLocation, useNavigate, useOutletContext } from "react-router-dom"
+import { useState, useRef } from "react"
+import { useLocation, useOutletContext } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
 import Button from "@components/common/Button"
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 import { getProjectColor } from "@components/project/Creates/palettes"
 
@@ -21,16 +22,14 @@ import { toast } from "react-toastify"
 const TaskCreate = () => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
     const theme = useTheme()
+    const inputRef = useRef(null)
 
-    const [projectId, color] = useOutletContext()
+    const { closeModal } = useModalWindowCloseContext()
+
+    const [_, color] = useOutletContext()
     const { state } = useLocation()
-    const navigate = useNavigate()
 
     const [newTaskName, setNewTaskName] = useState(null)
-
-    const onClose = () => {
-        navigate(`/app/projects/${projectId}`)
-    }
 
     const [newTask, setNewTask] = useState({
         name: newTaskName,
@@ -39,15 +38,17 @@ const TaskCreate = () => {
         due_time: null,
         reminders: [],
         priority: 0,
+        project_id: state?.project_id,
+        project_name: state?.project_name,
         drawer: state?.drawer_id,
         drawer_name: state?.drawer_name,
-        project_name: state?.project_name,
         memo: "",
         privacy: "public",
     })
 
     const editNewTask = (edit) => {
         setNewTask(Object.assign(newTask, edit))
+        inputRef.current.focus()
     }
 
     const postMutation = useMutation({
@@ -56,19 +57,19 @@ const TaskCreate = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: state?.drawer_id }],
+                queryKey: ["tasks", { drawerID: newTask.drawer }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["drawers", { projectID: projectId }],
+                queryKey: ["drawers", { projectID: newTask.project_id }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["projects", projectId],
+                queryKey: ["projects", newTask.project_id],
             })
             toast.success(t("task_create_success"))
-            onClose()
+            closeModal()
         },
         onError: () => {
-            if (newTask?.name) toast.error(t("task_create_error"))
+            if (newTask.name) toast.error(t("task_create_error"))
             else toast.error(t("task_create_no_name"))
         },
     })
@@ -78,23 +79,30 @@ const TaskCreate = () => {
         postMutation.mutate(newTask)
     }
 
+    const onKeyDown = (e) => {
+        if (e.key === "Enter") {
+            makeTask()
+        }
+    }
+
     return (
-        <TaskCreateBox>
+        <TaskCreateBox onKeyDown={onKeyDown}>
             <TaskNameBox>
                 <TaskNameInput
                     task={newTask}
                     setFunc={editNewTask}
+                    inputRef={inputRef}
                     newTaskName={newTaskName}
                     setNewTaskName={setNewTaskName}
                     color={getProjectColor(theme.type, color)}
                     isCreate
                 />
                 <Icons>
-                    <FeatherIcon icon="x" onClick={onClose} />
+                    <FeatherIcon icon="x" onClick={closeModal} />
                 </Icons>
             </TaskNameBox>
             <Contents task={newTask} setFunc={editNewTask} />
-            <AddButton onClick={makeTask}>{t("button_add")}</AddButton>
+            <AddButton disabled={postMutation.isPending} onClick={makeTask}>{t("button_add")}</AddButton>
         </TaskCreateBox>
     )
 }
@@ -137,6 +145,11 @@ const AddButton = styled(Button)`
     margin: 1em;
     margin-right: 2.5em;
     margin-bottom: 1.5em;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
 `
 
 export default TaskCreate

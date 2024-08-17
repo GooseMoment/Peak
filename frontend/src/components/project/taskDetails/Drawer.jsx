@@ -8,9 +8,12 @@ import { getProjectList } from "@api/projects.api"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 
-const Drawer = ({ setFunc, closeComponent }) => {
+const Drawer = ({ setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.drawer" })
+
+    const { closeModal } = useModalWindowCloseContext()
 
     const {
         isPending,
@@ -21,19 +24,19 @@ const Drawer = ({ setFunc, closeComponent }) => {
         queryFn: () => getProjectList(),
     })
 
-    const changeDrawer = (drawerId) => {
-        return async () => {
-            setFunc({ drawer: drawerId })
-            closeComponent()
+    const changeDrawer = (drawerID, drawerName, projectID, projectName) => {
+        return () => {
+            setFunc({ drawer: drawerID, drawer_name: drawerName, project_id: projectID, project_name: projectName })
+            closeModal()
         }
     }
 
     if (isPending) {
-        return <Detail title={t("title")} onClose={closeComponent} />
+        return <Detail title={t("title")} onClose={closeModal} />
     }
 
     return (
-        <Detail title={t("title")} onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeModal}>
             {isError && (
                 <DrawerSettingLoadErrorBox>
                     <FeatherIcon icon="alert-triangle" />

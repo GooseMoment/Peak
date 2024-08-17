@@ -7,12 +7,12 @@ import styled, { useTheme } from "styled-components"
 import Button from "@components/common/Button"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
-import ModalPortal from "@components/common/ModalPortal"
+import ModalWindow from "@components/common/ModalWindow"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
-import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
+import { SkeletonDrawer, SkeletonInboxDrawer } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenu from "@components/project/sorts/SortMenu"
 import TaskCreateSimple from "@components/project/Creates/simple/TaskCreateSimple"
 import Task from "@components/tasks/Task"
@@ -120,6 +120,7 @@ const Drawer = ({ project, drawer, color }) => {
     const clickPlus = () => {
         navigate(`/app/projects/${project.id}/tasks/create/`, {
             state: {
+                project_id: project.id,
                 project_name: project.name,
                 drawer_id: drawer.id,
                 drawer_name: drawer.name,
@@ -128,7 +129,9 @@ const Drawer = ({ project, drawer, color }) => {
     }
 
     if (isLoading) {
-        return <SkeletonDrawer taskCount={taskCount} />
+        if (project.type === "inbox")
+            return <SkeletonInboxDrawer taskCount={taskCount}/>
+        return <SkeletonDrawer taskCount={taskCount}/>
     }
 
     if (isError) {
@@ -205,19 +208,16 @@ const Drawer = ({ project, drawer, color }) => {
                 />
             )}
             {isDrawerEditOpen && (
-                <ModalPortal
-                    closeModal={() => {
+                <ModalWindow
+                    afterClose={() => {
                         setIsDrawerEditOpen(false)
                     }}
                 >
                     <DrawerEdit
                         projectID={project.id}
                         drawer={drawer}
-                        onClose={() => {
-                            setIsDrawerEditOpen(false)
-                        }}
                     />
-                </ModalPortal>
+                </ModalWindow>
             )}
             <TaskCreateButton onClick={handleToggleSimpleCreate}>
                 {isSimpleOpen ? <>

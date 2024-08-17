@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import PageNumberPagination, CursorPagination
 from rest_framework.permissions import AllowAny
 
 from django.http import HttpRequest
@@ -12,6 +12,7 @@ from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.db.models import Q, F, Prefetch
+from django.utils import timezone
 
 from datetime import datetime, timedelta
 
@@ -22,64 +23,148 @@ from drawers.models import Drawer
 
 from users.serializers import UserSerializer
 
-@api_view(["GET"])
-def get_explore_feed(request: HttpRequest):
-    user = request.user
-    
-    followees = User.objects.filter(followers__follower=user)
-    
-    recommendUserFilter = Q(followers__follower=user) | Q(id=user.id)
+class ExploreFeedPagination(CursorPagination):
+    page_size = 8
+    ordering = "-followings_count"
 
-    secondFollowees = User.objects.filter(
-        followers__follower__in=followees
-    ).distinct().exclude(recommendUserFilter)
-    # TODO: exclude private user
-
-    serializer = UserSerializer(secondFollowees, many=True)
+class ExploreFeedView(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = UserSerializer
+    pagination_class = ExploreFeedPagination
     
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        user = self.request.user
+        followees = User.objects.filter(followers__follower=user)
+        recommendUserFilter = Q(followers__follower=user) | Q(id=user.id)
+
+        feeds_queryset = User.objects.filter(
+            followers__follower__in=followees
+        ).distinct().exclude(recommendUserFilter)
+        # TODO: exclude private user
+        
+        return feeds_queryset
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+class ExploreSearchView(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = UserSerializer
+    pagination_class = ExploreFeedPagination
+    
+    def get_queryset(self):
+        keyword = self.request.GET.get('query')
+    
+        if keyword is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+        users_queryset = User.objects.filter(username__icontains=keyword)
+        
+        return users_queryset
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
 
 class FollowView(APIView):
-    #request 확인 기능 넣기
-    #block 검사
     def put(self, request, follower, followee):
-        followerUser = get_object_or_404(User, username=follower)
-        followeeUser = get_object_or_404(User, username=followee)
-# requested -> 상황에 따라!
-        try:
-            created = Following.objects.create(follower=followerUser, followee=followeeUser, status=Following.REQUESTED)
-        except:
-            return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        follower = get_object_or_404(User, username=follower)
+        if follower != request.user:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        followee = get_object_or_404(User, username=followee)
         
-        serializer = FollowingSerializer(created)
+        following, created = Following.objects.get_or_create(follower=follower,
+                                                             followee=followee,
+                                                             defaults={
+                                                                 'status': Following.REQUESTED
+                                                                 })
         
+        is_blocking = Block.objects.filter(blocker=follower,
+                                           blockee=followee).exclude(deleted_at=None).exists()
+        if is_blocking:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        is_blocked = Block.objects.filter(blocker=followee,
+                                          blockee=follower).exclude(deleted_at=None).exists()
+        if is_blocked:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        if not created:
+            if following.status == Following.ACCEPTED or following.status == Following.REQUESTED:
+                return Response(status=status.HTTP_208_ALREADY_REPORTED)
+            else:
+                following.status = Following.REQUESTED
+                following.deleted_at = None
+                following.save()
+        
+        serializer = FollowingSerializer(following)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get(self, request, follower, followee):
-        following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
+        follower = get_object_or_404(User, username=follower)
+        followee = get_object_or_404(User, username=followee)
+        
+        is_follower_blocking = Block.objects.filter(blocker=follower,
+                                           blockee=request.user).exclude(deleted_at=None).exists()
+        if is_follower_blocking:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        is_followee_blocking = Block.objects.filter(blocker=followee,
+                                          blockee=request.user).exclude(deleted_at=None).exists()
+        if is_followee_blocking:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        
+        following_filter = Q(status=Following.REQUESTED) | Q(status=Following.ACCEPTED)
+        following_filter &= Q(follower=follower, followee=followee)
+        
+        try:
+            following = Following.objects.get(following_filter)
+        except Following.DoesNotExist:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         
         serializer = FollowingSerializer(following)
         
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, follower, followee):
-        following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
+        new_status = request.data.get('status')
         
-        following.status = Following.CANCELED
+        if new_status not in {Following.ACCEPTED, Following.REJECTED}:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        followee = get_object_or_404(User, username=followee)
+        if followee != request.user:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        follower = get_object_or_404(User, username=follower)
+        
+        try:
+            following = Following.objects.get(follower=follower, followee=followee, status=Following.REQUESTED)
+        except Following.DoesNotExist:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
+        following.status = new_status
         following.save()
         
-        return Response(status=status.HTTP_202_ACCEPTED)
+        serializer = FollowingSerializer(following)
+        
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
     
     def delete(self, request, follower, followee):
-        following = get_object_or_404(Following, follower__username=follower, followee__username=followee)
-        #TODO: soft delete
-        following.delete()
+        follower = get_object_or_404(User, username=follower)
+        if follower != request.user:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        followee = get_object_or_404(User, username=followee)
+        
+        try:
+            following = Following.objects.get(follower=follower, followee=followee)
+        except Following.DoesNotExist:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
+        following.status = Following.CANCELED
+        following.deleted_at = timezone.now()
+        following.save()
         
         return Response(status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 def get_followers(request: HttpRequest, username):
-    followers = Following.objects.filter(followee__username=username).all()
+    followers = Following.objects.filter(followee__username=username, status=Following.ACCEPTED).all()
     followerUsers = User.objects.filter(followings__in=followers.all()).all()
     
     serializer = UserSerializer(followerUsers, many=True)    
@@ -88,7 +173,7 @@ def get_followers(request: HttpRequest, username):
 
 @api_view(["GET"])
 def get_followings(request: HttpRequest, username):
-    followings = Following.objects.filter(follower__username=username).all()
+    followings = Following.objects.filter(follower__username=username, status=Following.ACCEPTED).all()
     followingUsers = User.objects.filter(followers__in=followings.all()).all()
     
     serializer = UserSerializer(followingUsers, many=True)    
@@ -200,43 +285,91 @@ def post_quote(request: Request, day):
     
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-@api_view(["GET"])
-def get_daily_log_details(request: Request, followee, day):
-    followeeUser = get_object_or_404(User, username=followee)
-    
-    is_follower = Following.objects.filter(
-        follower=request.user,
-        followee=followeeUser,
-        status=Following.ACCEPTED
-    ).exists()
-
-    if request.user.username == followee:   # is me
+def get_privacy_filter(follower, followee):
+    if follower == followee:
         privacyFilter = Q()
-    elif is_follower:   # is follower
-        privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(privacy=PrivacyMixin.FOR_PROTECTED)
+        privacy = PrivacyMixin.FOR_PROTECTED
+    # TODO: BLOCK
     else:
-        privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
-    # TODO: need to check block
+        is_follower = Following.objects.filter(
+            follower=follower,
+            followee=followee,
+            status=Following.ACCEPTED
+        ).exists()
+        
+        if is_follower:
+            privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(privacy=PrivacyMixin.FOR_PROTECTED)
+            privacy = PrivacyMixin.FOR_PROTECTED
+        else:
+            privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
+            privacy = PrivacyMixin.FOR_PUBLIC
+    
+    privacyFilter &= Q(user=followee)
+    
+    return privacyFilter
 
-    privacyFilter &= Q(user=followeeUser)
+class DailyLogDrawerPagination(CursorPagination):
+    page_size = 5
+    ordering = "order"
+    # TODO: due date 찾을 수 있으면 줄이기
+
+class DailyLogDrawerView(generics.GenericAPIView):
     
-    day_min = datetime.fromisoformat(day)
-    day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+    pagination_class = DailyLogDrawerPagination
     
-    tasksFilterForCompleted = Q(completed_at__range=(day_min, day_max))
-    tasksFilterForUncompleted = Q(completed_at=None)
-    tasksFilter = privacyFilter & (tasksFilterForCompleted | tasksFilterForUncompleted)
+    def get(self, request, followee):
+        followeeUser = get_object_or_404(User, username=followee)
+
+        privacyFilter = get_privacy_filter(request.user, followeeUser)
+        
+        drawers_queryset = Drawer.objects.filter(privacyFilter).annotate(color=F('project__color')).order_by('order')
+        
+        page = self.paginate_queryset(drawers_queryset)
+        
+        if page is not None:
+            serializer = DailyLogDrawerSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = DailyLogDrawerSerializer(drawers_queryset, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class DailyLogTaskPagination(PageNumberPagination):
+    page_size = 5
+    max_page_size = 5
+    # TODO: due date 찾을 수 있으면 줄이기
+
+class DailyLogTaskView(generics.GenericAPIView):
     
-    # TODO: order of tasks
-    prefetch_tasks = Prefetch('tasks', queryset=Task.objects.filter(tasksFilter))
+    pagination_class = DailyLogTaskPagination
     
-    # TODO: Do not process if there is no task in the drawer
-    drawers = Drawer.objects.filter(privacyFilter).prefetch_related(prefetch_tasks).annotate(color=F('project__color')).order_by('order')
-    
-    serializer = DailyLogDetailsSerializer(drawers, many=True)
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
-    
+    def get(self, request, drawer, day):
+        drawer = get_object_or_404(Drawer, id=drawer)
+        followee = drawer.user
+        
+        # TODO: task Privacy 반영 이후 다시 고려
+        # privacyFilter = get_privacy_filter(request.user, followee)
+        privacyFilter = Q()
+        
+        day_min = datetime.fromisoformat(day)
+        day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+        day_range = (day_min, day_max)
+
+        tasksFilterForCompleted = Q(completed_at__range=day_range)
+        tasksFilterForUncompleted = Q(completed_at=None) & Q(assigned_at__range=day_range)
+        # TODO: ( | Q(due_datetime__range=day_range))
+        tasksFilter = Q(drawer=drawer) & privacyFilter & (tasksFilterForCompleted | tasksFilterForUncompleted)
+
+        tasks_queryset = Task.objects.filter(tasksFilter)
+
+        page = self.paginate_queryset(tasks_queryset)
+        if page is not None:
+            serializer = TaskSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = TaskSerializer(tasks_queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 def get_following_feed(request: HttpRequest, date):
     pass
 
@@ -461,15 +594,3 @@ class EmojiList(mixins.ListModelMixin, generics.GenericAPIView):
     @method_decorator(cache_page(60 * 30)) # caching for 30 minutes
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
-
-@api_view(["GET"])
-def get_explore_search_results(request: Request):
-    keyword = request.GET.get('query')
-    
-    if keyword is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    
-    users = User.objects.filter(username__icontains=keyword)
-    serializer = UserSerializer(users, many=True)
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)

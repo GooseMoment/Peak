@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Color from "@components/project/Creates/Color"
 import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
@@ -17,7 +18,7 @@ import queryClient from "@queries/queryClient"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const ProjectEdit = ({ project, onClose }) => {
+const ProjectEdit = ({ project }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const theme = useTheme()
 
@@ -27,12 +28,10 @@ const ProjectEdit = ({ project, onClose }) => {
         setName(project.name)
     }, [project])
 
+    const { closeModal } = useModalWindowCloseContext()
+
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
-
-    const closeComponent = () => {
-        setIsComponentOpen(false)
-    }
 
     const patchMutation = useMutation({
         mutationFn: (data) => {
@@ -57,34 +56,19 @@ const ProjectEdit = ({ project, onClose }) => {
             icon: "circle",
             color: getProjectColor(theme.type, project.color),
             display: t("color." + project.color),
-            component: (
-                <Color
-                    setColor={patchMutation.mutate}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Color setColor={patchMutation.mutate} />,
         },
         {
             id: 2,
             icon: "server",
             display: t("privacy." + project.privacy),
-            component: (
-                <Privacy
-                    setPrivacy={patchMutation.mutate}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Privacy setPrivacy={patchMutation.mutate} />,
         },
         {
             id: 3,
             icon: "award",
             display: t("type." + project.type),
-            component: (
-                <Type
-                    setType={patchMutation.mutate}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Type setType={patchMutation.mutate} />,
         },
     ]
 
@@ -96,7 +80,7 @@ const ProjectEdit = ({ project, onClose }) => {
                 setFunc={patchMutation.mutate}
                 isCreate={false}
                 icon="archive"
-                onClose={onClose}
+                onClose={closeModal}
             />
             <Middle
                 items={items}

@@ -1,6 +1,6 @@
 # https://caddyserver.com/docs/caddyfile
 
-peak.ooo {
+{$WEB_HOSTNAME} {
 	# https://stackoverflow.com/a/71815382
 	encode zstd gzip
 
@@ -10,14 +10,29 @@ peak.ooo {
 	}
 
 	# frontend
-	handle /* {
+	handle * {
 		root * /srv/frontend
+		try_files {path} /
 		file_server
-		try_files {path} /index.html
+	}
+	
+	handle_errors {
+		root * /web
+
+		@5xx `{err.status_code} >= 500 && {err.status_code} < 600`
+		handle @5xx {
+			rewrite * /error.html
+			templates
+			file_server
+		}
+
+		handle {
+			respond "another error"
+		}
 	}
 }
 
-api.peak.ooo {
+{$API_HOSTNAME} {
 	# static files that django admin and rest_framework uses
 	handle_path /static/* {
 		root * /srv/django_static/static

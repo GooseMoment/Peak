@@ -4,7 +4,7 @@ import { defineConfig } from "vite"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    base: "./", // https://github.com/vitejs/vite/discussions/5081#discussioncomment-1525248
+    base: "/",
     envDir: "..",
     server: {
         port: 3000,

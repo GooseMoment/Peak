@@ -212,9 +212,9 @@ STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
-            "bucket_name": "peak-ooo-dev",
+            "bucket_name": os.environ.get("AWS_S3_BUCKET_NAME", "peak-ooo-dev"),
             "region_name": "auto",
-            "custom_domain": "assets-dev.peak.ooo",
+            "custom_domain": os.environ.get("AWS_S3_CUSTOM_DOMAIN", "assets-dev.peak.ooo"),
             "access_key": os.environ.get("AWS_S3_ACCESS_KEY_ID"),
             "secret_key": os.environ.get("AWS_S3_SECRET_ACCESS_KEY"),
             "endpoint_url": os.environ.get("AWS_S3_ENDPOINT_URL"),

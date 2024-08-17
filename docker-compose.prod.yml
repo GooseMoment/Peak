@@ -12,8 +12,6 @@ services:
     cap_add:
       - NET_ADMIN
     ports:
-      - 8080:8080
-      - 8888:8888
       - 80:80
       - 443:443
       - 443:443/udp
@@ -23,7 +21,10 @@ services:
       - ./web/:/web/
       - caddy_data:/data
       - caddy_config:/config
-      - frontend-dist:/srv/frontend
+      - frontend-dist:/srv/frontend:ro
+    env_file:
+      - path: ./.env
+        required: true
   api:
     build: ./backend
     command: gunicorn django_peak.wsgi:application --bind 0.0.0.0:8000
