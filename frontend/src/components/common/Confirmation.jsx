@@ -50,7 +50,7 @@ const Confirmation = ({ question, buttons, onClose }) => {
 
     return createPortal(
         visible && (
-            <Frame $closing={closing}>
+            <Frame $closing={closing} className={closing && "closing"}>
                 <Question>{question}</Question>
                 <ButtonGroup>
                     {buttons?.map((button) =>

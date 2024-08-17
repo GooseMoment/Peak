@@ -13,7 +13,7 @@ const startUpWidth = window.innerWidth
 const Layout = ({ children }) => {
     const [clientSetting] = useClientSetting()
 
-    const [sidebarHidden, setSidebarHidden] = useState(false)
+    const [sidebarHidden, setSidebarHidden] = useState(true)
     const [sidebarCollapsed, setSidebarCollapsed] = useState(
         startUpWidth <= WIDTH_TABLET || clientSetting["close_sidebar_on_startup"],
     )

@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Privacy from "@components/project/Creates/Privacy"
 import Middle from "@components/project/common/Middle"
 import Title from "@components/project/common/Title"
@@ -17,7 +18,7 @@ import { cubicBeizer } from "@assets/keyframes"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const DrawerCreate = ({ onClose }) => {
+const DrawerCreate = () => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const { id } = useParams()
 
@@ -30,6 +31,8 @@ const DrawerCreate = ({ onClose }) => {
         project: id,
     })
 
+    const { closeModal } = useModalWindowCloseContext()
+
     const editNewDrawer = (edit) => {
         setNewDrawer(Object.assign(newDrawer, edit))
         inputRef.current.focus()
@@ -38,21 +41,12 @@ const DrawerCreate = ({ onClose }) => {
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
-    const closeComponent = () => {
-        setIsComponentOpen(false)
-    }
-
     const items = [
         {
             id: 1,
             icon: "server",
             display: t("privacy." + newDrawer.privacy),
-            component: (
-                <Privacy
-                    setPrivacy={editNewDrawer}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Privacy setPrivacy={editNewDrawer} />,
         },
     ]
 
@@ -65,7 +59,7 @@ const DrawerCreate = ({ onClose }) => {
                 queryKey: ["drawers", { projectID: id }],
             })
             toast.success(t("create.drawer_create_success"))
-            onClose()
+            closeModal()
         },
         onError: () => {
             if (newDrawer.name)
@@ -99,7 +93,7 @@ const DrawerCreate = ({ onClose }) => {
                 inputRef={inputRef}
                 isCreate
                 icon="inbox"
-                onClose={onClose}
+                onClose={closeModal}
             />
             <Middle
                 items={items}
