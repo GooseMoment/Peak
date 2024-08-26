@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+
+import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import styled, { css } from "styled-components"
 
@@ -97,13 +98,22 @@ const Box = styled.div`
 
 const TaskNameBox = styled.div`
     display: inline-block;
-    font-style: normal;
     font-size: 1.1em;
+    font-style: normal;
     color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
+    overflow: hidden;
     line-height: 1.3em;
+
+    ${ifTablet} {
+        width: 65vw;
+    }
+
+    ${ifMobile} {
+        white-space: normal;
+        word-wrap: normal;
+    }
 `
 
 const CircleName = styled.div`
