@@ -23,7 +23,7 @@ const TaskNameInput = ({
     useEffect(()=>{
         if (inputRef?.current) {
             inputRef.current.focus()
-          }
+        }
     }, [])
 
     useEffect(() => {
@@ -35,15 +35,12 @@ const TaskNameInput = ({
         setNewTaskName(newName)
     }
 
-    const changeTaskName = (name) => {
-        setFunc({ name })
-    }
-
     const onEnter = (e) => {
-        if (isCreate)
+        if (isCreate) {
             return
-        if (e.key === "Enter") {
-            changeTaskName(newTaskName)
+        }
+        if (e.code === "Enter") {
+            setFunc({ name: newTaskName })
             toast.success(t("name_change_success"))
         }
     }

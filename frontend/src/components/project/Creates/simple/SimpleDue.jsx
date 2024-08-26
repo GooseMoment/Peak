@@ -1,29 +1,29 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import FeatherIcon from "feather-icons-react"
 
 import { CreateSimpleBox, ContentBox } from "@components/project/Creates/simple/CreateSimpleBox"
 import addDateFromToday from "@components/project/Creates/utils/addDateFromToday"
+import { useClientTimezone } from "@utils/clientSettings"
 
 import hourglass from "@assets/project/hourglass.svg"
 
 import { useTranslation } from "react-i18next"
 
-const SimpleDue = ({ editNewTask, color }) => {
+const SimpleDue = ({ dueIndex, setDueIndex, editNewTask, color }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
-
-    const [currentIndex, setCurrentIndex] = useState(0)
+    const due_tz = useClientTimezone()
 
     const onKeyDown = (e) => {
         if (e.key === "ArrowRight") {
-            if (currentIndex === 5)
+            if (dueIndex === 5)
                 return
-            setCurrentIndex(currentIndex + 1)
+            setDueIndex(dueIndex + 1)
         }
         if (e.key === "ArrowLeft") {
-            if (currentIndex === 0)
+            if (dueIndex === 0)
                 return
-            setCurrentIndex(currentIndex - 1)
+            setDueIndex(dueIndex - 1)
         }
     }
 
@@ -33,11 +33,11 @@ const SimpleDue = ({ editNewTask, color }) => {
         return () => {
             document.removeEventListener("keydown", onKeyDown)
         }
-    }, [currentIndex])
+    }, [dueIndex])
 
     useEffect(() => {
-        editNewTask({ due_date: addDateFromToday(items[currentIndex].set)})
-    }, [currentIndex])
+        editNewTask({ due_tz: due_tz, due_date: addDateFromToday(items[dueIndex].set)})
+    }, [dueIndex])
 
     const items = [
         { index: 0, display: t("no_date"), set: null },
@@ -66,10 +66,10 @@ const SimpleDue = ({ editNewTask, color }) => {
                 <ContentBox 
                     key={item.index} 
                     $color={color}
-                    $isActive={currentIndex === item.index} 
-                    onClick={()=>setCurrentIndex(item.index)}
+                    $isActive={dueIndex === item.index} 
+                    onClick={()=>setDueIndex(item.index)}
                 >
-                    {currentIndex === item.index && <FeatherIcon icon="check"/>}
+                    {dueIndex === item.index && <FeatherIcon icon="check"/>}
                     {item.display}
                 </ContentBox>
             ))}

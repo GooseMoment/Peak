@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -6,21 +6,19 @@ import { CreateSimpleBox, ContentBox } from "@components/project/Creates/simple/
 
 import { useTranslation } from "react-i18next"
 
-const SimplePriority = ({ editNewTask, color }) => {
+const SimplePriority = ({ priorityIndex, setPriorityIndex, editNewTask, color }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.priority" })
-
-    const [currentIndex, setCurrentIndex] = useState(0)
 
     const onKeyDown = (e) => {
         if (e.key === "ArrowRight") {
-            if (currentIndex === 2)
+            if (priorityIndex === 2)
                 return
-            setCurrentIndex(currentIndex + 1)
+            setPriorityIndex(priorityIndex + 1)
         }
         if (e.key === "ArrowLeft") {
-            if (currentIndex === 0)
+            if (priorityIndex === 0)
                 return
-            setCurrentIndex(currentIndex - 1)
+            setPriorityIndex(priorityIndex - 1)
         }
     }
 
@@ -30,11 +28,11 @@ const SimplePriority = ({ editNewTask, color }) => {
         return () => {
             document.removeEventListener("keydown", onKeyDown)
         }
-    }, [currentIndex])
+    }, [priorityIndex])
 
     useEffect(() => {
-        editNewTask({ priority: currentIndex });
-    }, [currentIndex])
+        editNewTask({ priority: priorityIndex })
+    }, [priorityIndex])
 
     const items = [
         { index: 0, content: t("normal") },
@@ -46,12 +44,12 @@ const SimplePriority = ({ editNewTask, color }) => {
         <CreateSimpleBox icon={<FeatherIcon icon="alert-circle"/>}>
             {items.map(item=>(
                 <ContentBox 
-                    key={item.index} 
+                    key={item.index}
                     $color={color}
-                    $isActive={currentIndex === item.index} 
-                    onClick={()=>setCurrentIndex(item.index)}
+                    $isActive={priorityIndex === item.index} 
+                    onClick={()=>setPriorityIndex(item.index)}
                 >
-                    {currentIndex === item.index && <FeatherIcon icon="check"/>}
+                    {priorityIndex === item.index && <FeatherIcon icon="check"/>}
                     {item.content}
                 </ContentBox>
             ))}

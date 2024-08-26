@@ -1,27 +1,27 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import FeatherIcon from "feather-icons-react"
 
 import { CreateSimpleBox, ContentBox } from "@components/project/Creates/simple/CreateSimpleBox"
 import addDateFromToday from "@components/project/Creates/utils/addDateFromToday"
+import { useClientTimezone } from "@utils/clientSettings"
 
 import { useTranslation } from "react-i18next"
 
-const SimpleAssigned = ({ editNewTask, color }) => {
+const SimpleAssigned = ({ assignedIndex, setAssignedIndex, editNewTask, color }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
-
-    const [currentIndex, setCurrentIndex] = useState(0)
+    const due_tz = useClientTimezone()
 
     const onKeyDown = (e) => {
         if (e.key === "ArrowRight") {
-            if (currentIndex === 5)
+            if (assignedIndex === 5)
                 return
-            setCurrentIndex(currentIndex + 1)
+            setAssignedIndex(assignedIndex + 1)
         }
         if (e.key === "ArrowLeft") {
-            if (currentIndex === 0)
+            if (assignedIndex === 0)
                 return
-            setCurrentIndex(currentIndex - 1)
+            setAssignedIndex(assignedIndex - 1)
         }
     }
 
@@ -31,11 +31,11 @@ const SimpleAssigned = ({ editNewTask, color }) => {
         return () => {
             document.removeEventListener("keydown", onKeyDown)
         }
-    }, [currentIndex])
+    }, [assignedIndex])
 
     useEffect(() => {
-        editNewTask({ assigned_at: addDateFromToday(items[currentIndex].set)})
-    }, [currentIndex])
+        editNewTask({ due_tz: due_tz, assigned_at: addDateFromToday(items[assignedIndex].set)})
+    }, [assignedIndex])
 
     const items = [
         { index: 0, display: t("no_date"), set: null },
@@ -64,10 +64,10 @@ const SimpleAssigned = ({ editNewTask, color }) => {
                 <ContentBox 
                     key={item.index} 
                     $color={color}
-                    $isActive={currentIndex === item.index} 
-                    onClick={()=>setCurrentIndex(item.index)} 
+                    $isActive={assignedIndex === item.index} 
+                    onClick={()=>setAssignedIndex(item.index)} 
                 >
-                    {currentIndex === item.index && <FeatherIcon icon="check"/>}
+                    {assignedIndex === item.index && <FeatherIcon icon="check"/>}
                     {item.display}
                 </ContentBox>
             ))}

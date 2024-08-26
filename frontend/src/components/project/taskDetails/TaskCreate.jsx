@@ -2,12 +2,11 @@ import { useState, useRef } from "react"
 import { useLocation, useOutletContext } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
-import styled, { useTheme } from "styled-components"
+import styled from "styled-components"
 
 import Button from "@components/common/Button"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import TaskNameInput from "@components/tasks/TaskNameInput"
-import { getProjectColor } from "@components/project/Creates/palettes"
 
 import Contents from "./Contents"
 
@@ -21,7 +20,6 @@ import { toast } from "react-toastify"
 
 const TaskCreate = () => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
-    const theme = useTheme()
     const inputRef = useRef(null)
 
     const { closeModal } = useModalWindowCloseContext()
@@ -94,7 +92,7 @@ const TaskCreate = () => {
                     inputRef={inputRef}
                     newTaskName={newTaskName}
                     setNewTaskName={setNewTaskName}
-                    color={getProjectColor(theme.type, color)}
+                    color={color}
                     isCreate
                 />
                 <Icons>

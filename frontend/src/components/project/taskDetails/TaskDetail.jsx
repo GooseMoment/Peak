@@ -3,13 +3,12 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
-import styled, { useTheme } from "styled-components"
+import styled from "styled-components"
 
 import DeleteAlert from "@components/common/DeleteAlert"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 import Contents from "@components/project/taskDetails/Contents"
-import { getProjectColor } from "@components/project/Creates/palettes"
 
 import { deleteTask, getTask, patchTask } from "@api/tasks.api"
 
@@ -23,7 +22,6 @@ import { toast } from "react-toastify"
 
 const TaskDetail = () => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
-    const theme = useTheme()
     const inputRef = useRef(null)
 
     const [projectID, color] = useOutletContext()
@@ -116,7 +114,7 @@ const TaskDetail = () => {
                     inputRef={inputRef}
                     newTaskName={taskName}
                     setNewTaskName={setTaskName}
-                    color={getProjectColor(theme.type, color)}
+                    color={color}
                 />
                 <Icons>
                     <FeatherIcon icon="trash-2" onClick={handleAlert} />

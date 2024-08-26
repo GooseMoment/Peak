@@ -20,7 +20,10 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
     const inputRef = useRef(null)
 
     const [content, setContent] = useState("name")
-    const [newTaskName, setNewTaskName] = useState(null)
+    const [newTaskName, setNewTaskName] = useState("")
+    const [assignedIndex, setAssignedIndex] = useState(0)
+    const [dueIndex, setDueIndex] = useState(0)
+    const [priorityIndex, setPriorityIndex] = useState(0)
 
     useEffect(() => {
         document.addEventListener("keydown", onKeyDown)
@@ -28,7 +31,7 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
         return () => {
             document.removeEventListener("keydown", onKeyDown)
         }
-    }, [])
+    }, [newTaskName])
 
     const handleClickContent = (e) => {
         const name = e.currentTarget.getAttribute("name")
@@ -76,18 +79,20 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             else toast.error(t("task_create_no_name"))
         }
     })
-
+    
     const onKeyDown = (e) => {
-        if (e.altKey) {
-            e.stopPropagation()
-            e.preventDefault()
-            const selectedNumber = Number(e.code[5])
-            if (selectedNumber) {
-                setContent(items[selectedNumber - 1].name)
+        if (!postMutation.isPending) {
+            if (e.altKey) {
+                e.preventDefault()
+                const selectedNumber = Number(e.code[5])
+                if (selectedNumber) {
+                    setContent(items[selectedNumber - 1].name)
             }}
-        if (e.code === "Enter") {
-            editNewTask({ name: newTaskName })
-            postMutation.mutate(newTask)
+            if (e.code === "Enter") {
+                e.preventDefault()
+                editNewTask({ name: newTaskName })
+                postMutation.mutate(newTask)
+            }
         }
     }
     
@@ -109,6 +114,8 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             name: "assigned",
             icon: <FeatherIcon icon="calendar" />,
             component: <SimpleAssigned
+                assignedIndex={assignedIndex}
+                setAssignedIndex={setAssignedIndex}
                 editNewTask={editNewTask}
                 color={color}
             />,
@@ -117,6 +124,8 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             name: "due",
             icon: <img src={hourglass} />,
             component: <SimpleDue
+                dueIndex={dueIndex}
+                setDueIndex={setDueIndex}
                 editNewTask={editNewTask}
                 color={color}
             />,
@@ -125,6 +134,8 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             name: "priority",
             icon: <FeatherIcon icon="alert-circle" />,
             component: <SimplePriority
+                priorityIndex={priorityIndex}
+                setPriorityIndex={setPriorityIndex}
                 editNewTask={editNewTask}
                 color={color}
             />,
