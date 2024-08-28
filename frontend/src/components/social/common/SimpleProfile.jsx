@@ -42,11 +42,7 @@ const ProfileImgWrapper = styled.div`
         ${(props) =>
             props.$color
                 ? css`
-                      /* border: solid 0.2em #fefdfc; */
-                      /* 0 0 0 0.2em #fefdfc, */
-                      box-shadow:
-                          0 0 0 0.2em #fefdfc,
-                          0 0 0 0.4em ${(props) => props.$color};
+                      box-shadow: 0 0 0 0.2em fefdfc, 0 0 0 0.4em #${(props) => props.$color};
                   `
                 : null}
     }

@@ -4,7 +4,7 @@ import { Fragment } from "react"
 import styled, { css } from "styled-components"
 
 import Button from "@components/common/Button"
-import ModalPortal from "@components/common/ModalPortal"
+import ModalWindow from "@components/common/ModalWindow"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -15,6 +15,7 @@ const Middle = ({
     submit = () => {},
     isComponentOpen,
     setIsComponentOpen,
+    disabled,
 }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
 
@@ -49,17 +50,17 @@ const Middle = ({
                         </ContentText>
                     </ContentsBox>
                     {content === item.icon && isComponentOpen ? (
-                        <ModalPortal
-                            closeModal={() => setIsComponentOpen(false)}
+                        <ModalWindow
+                            afterClose={() => setIsComponentOpen(false)}
                             additional
                         >
                             {item.component}
-                        </ModalPortal>
+                        </ModalWindow>
                     ) : null}
                 </Fragment>
             ))}
             {isCreate ? (
-                <AddButton onClick={submit}>{t("button_add")}</AddButton>
+                <AddButton disabled={disabled} onClick={submit}>{t("button_add")}</AddButton>
             ) : (
                 <EmptyBox />
             )}
@@ -114,6 +115,11 @@ const AddButton = styled(Button)`
     margin: 1em;
     margin-right: 2.5em;
     margin-bottom: 2em;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
 `
 
 const EmptyBox = styled.div`

@@ -7,16 +7,19 @@ import Detail from "@components/project/common/Detail"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 
-const Memo = ({ previousMemo, setFunc, closeComponent }) => {
+const Memo = ({ previousMemo, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.memo" })
 
     const [memo, setMemo] = useState(previousMemo)
 
+    const { closeModal } = useModalWindowCloseContext()
+
     const changeMemo = () => {
         return async () => {
             setFunc({ memo })
-            closeComponent()
+            closeModal()
             toast.success(t("memo_edit_success"))
         }
     }
@@ -27,7 +30,7 @@ const Memo = ({ previousMemo, setFunc, closeComponent }) => {
     }
 
     return (
-        <Detail title={t("title")} onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeModal}>
             <FlexBox>
                 <Editor
                     type="text"

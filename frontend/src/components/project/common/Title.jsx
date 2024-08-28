@@ -1,11 +1,19 @@
+import { useEffect } from "react"
+
 import { css, styled } from "styled-components"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const Title = ({ name, setName, setFunc, isCreate, icon, onClose }) => {
+const Title = ({ name, setName, setFunc, inputRef, isCreate, icon, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
+
+    useEffect(()=>{
+        if (inputRef.current) {
+            inputRef.current.focus()
+        } 
+    }, [])
 
     const onchange = (e) => {
         const newName = e.target.value
@@ -20,6 +28,8 @@ const Title = ({ name, setName, setFunc, isCreate, icon, onClose }) => {
     }
 
     const onEnter = (e) => {
+        if (isCreate)
+            return
         if (e.key === "Enter") {
             changeName()
         }
@@ -30,10 +40,11 @@ const Title = ({ name, setName, setFunc, isCreate, icon, onClose }) => {
             <TitleBox>
                 <FeatherIcon icon={icon} />
                 <InputText
+                    ref={inputRef}
                     type="text"
                     value={name || ""}
                     onChange={onchange}
-                    onKeyDown={isCreate ? () => {} : onEnter}
+                    onKeyDown={onEnter}
                     placeholder={t("create.name_placeholder")}
                 />
             </TitleBox>
