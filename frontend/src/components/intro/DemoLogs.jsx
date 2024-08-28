@@ -46,7 +46,7 @@ const Log = styled.article`
         border-color 0.25s ${cubicBeizer};
 
     border-radius: 20px;
-    padding: 0.5em;
+    padding: 0.5em 1em;
 
     border: solid 3px transparent;
 
