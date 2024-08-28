@@ -59,6 +59,7 @@ table {
 
 :root {
     --cubic: cubic-bezier(0.165, 0.84, 0.44, 1);
+    --toastify-font-family: inherit !important;
 }
 
 html {
@@ -202,10 +203,6 @@ body {
     margin-right: 0.5em;
     display: inline-block;
     vertical-align: auto;
-}
-
-:root {
-    --toastify-font-family: inherit;
 }
 
 .reactEasyCrop_Container {
