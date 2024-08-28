@@ -139,9 +139,13 @@
         "name_placeholder": "Enter a name for the task.",
         "name_change_success": "The name has changed.",
         "none": "none",
+        "assigned": {
+            "name": "Assignment Date",
+            "title": "Assignment date Settings"
+        },
         "due": {
-            "assigned_title": "Assignment date Settings",
-            "due_title": "Due date Settings",
+            "name": "Due",
+            "title": "Due date Settings",
             "quick": {
                 "title": "Quick Assignments",
                 "today": "Today",
@@ -183,6 +187,7 @@
             }
         },
         "reminder": {
+            "name": "Reminder",
             "title": "Reminder Settings",
             "reminder_before_due_date": "Set a due date before setting a reminder.",
             "then": "then",
@@ -201,16 +206,19 @@
             "display_2_days_before": "2 days"
         },
         "priority": {
+            "name": "Priority",
             "title": "Importance Settings",
             "normal": "Normal",
             "important": "Important",
             "critical": "Critical"
         },
         "drawer": {
+            "name": "Drawer",
             "title": "Select a drawer",
             "fetching_error": "An error occurred while fetching data."
         },
         "memo": {
+            "name": "Memo",
             "title": "Memo settings",
             "memo_placeholder": "Enter a memo.",
             "button_change": "Change",

@@ -24,7 +24,7 @@ const DetailBox = styled.div`
     background-color: ${(p) => p.theme.backgroundColor};
     border: solid 1px ${(p) => p.theme.project.borderColor};
     border-radius: 15px;
-    padding-bottom: ${(props) => (props.$special ? "0" : "3")}em;
+    padding-bottom: ${(props) => (props.$special ? "0" : "1")}em;
 `
 
 const TitleBox = styled.div`

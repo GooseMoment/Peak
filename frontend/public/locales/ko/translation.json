@@ -139,9 +139,13 @@
         "name_placeholder": "작업의 이름을 입력하세요.",
         "name_change_success": "이름을 변경했습니다.",
         "none": "없음",
+        "assigned": {
+            "name": "할당 날짜",
+            "title": "할당 날짜 설정"
+        },
         "due": {
-            "assigned_title": "할당 날짜 설정",
-            "due_title": "기한 지정",
+            "name": "기한",
+            "title": "기한 설정",
             "quick": {
                 "title": "빠른 지정",
                 "today": "오늘",
@@ -183,6 +187,7 @@
             }
         },
         "reminder": {
+            "name": "리마인더",
             "title": "리마인더 설정",
             "reminder_before_due_date": "리마인더 설정 전에 기한을 설정해주세요.",
             "then": "그때",
@@ -201,16 +206,19 @@
             "display_2_days_before": "2일 전"
         },
         "priority": {
+            "name": "중요도",
             "title": "중요도 설정",
             "normal": "보통",
             "important": "중요",
             "critical": "매우 중요"
         },
         "drawer": {
+            "name": "서랍",
             "title": "서랍 선택",
             "fetching_error": "데이터를 불러오는 중 오류가 발생했습니다."
         },
         "memo": {
+            "name": "메모",
             "title": "메모 설정",
             "memo_placeholder": "메모를 입력해주세요.",
             "button_change": "변경하기",

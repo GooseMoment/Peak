@@ -89,7 +89,7 @@ const Due = ({ task, setFunc }) => {
     ]
 
     return (
-        <Detail title={t("due_title")} onClose={closeModal} special={true}>
+        <Detail title={t("title")} onClose={closeModal} special={true}>
             {addComponent.map((comp, i) => (
                 <Fragment key={comp.name}>
                     <FlexCenterBox>
