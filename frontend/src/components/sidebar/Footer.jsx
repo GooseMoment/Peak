@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
 
 import ConfirmationSignOut from "@components/sidebar/ConfirmationSignOut"
-import SidebarLink, { SidebarLinkLazy } from "@components/sidebar/SidebarLink"
+import SidebarLink from "@components/sidebar/SidebarLink"
 
 import { getMe } from "@api/users.api"
 
@@ -66,24 +66,22 @@ const Footer = ({ collapsed, closeSidebar }) => {
             {isError && <MeProfile />}
 
             {user && (
-                <SidebarLinkLazy
+                <SidebarLink
                     to={`users/@${user.username}`}
                     onClick={onClickLink}
-                    draggable="false"
                 >
                     <MeProfile>
                         <MeProfileImg src={user.profile_img} />
                         {!collapsed && <Username>{user.username}</Username>}
                     </MeProfile>
-                </SidebarLinkLazy>
+                </SidebarLink>
             )}
 
             {!collapsed && (
                 <SmallIcons>
-                    <SidebarLinkLazy
-                        navigateTo="/app/settings/account"
-                        to="/app/settings"
-                        draggable="false"
+                    <SidebarLink
+                        to="/app/settings/account"
+                        activePath="/app/settings"
                         end={false}
                         onClick={onClickLink}
                         key="settings"
@@ -91,11 +89,11 @@ const Footer = ({ collapsed, closeSidebar }) => {
                         <SmallIcon>
                             <FeatherIcon icon="settings" />
                         </SmallIcon>
-                    </SidebarLinkLazy>
+                    </SidebarLink>
                     <SidebarLink
                         to="/app/sign_out"
-                        draggable="false"
                         onClick={openSignOutConfirmation}
+                        noNavigate
                         key="sign-out"
                     >
                         <SmallIcon>

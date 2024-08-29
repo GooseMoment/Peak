@@ -1,5 +1,4 @@
 import { useMemo } from "react"
-import { useNavigate } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
 import styled, { css, useTheme } from "styled-components"
@@ -29,7 +28,6 @@ const Middle = ({ collapsed, closeSidebar }) => {
     })
 
     const { t } = useTranslation("", { keyPrefix: "sidebar" })
-    const navigate = useNavigate()
     const theme = useTheme()
     const { isMobile } = useScreenType()
     const items = useMemo(() => getItems(t), [t])
@@ -38,13 +36,6 @@ const Middle = ({ collapsed, closeSidebar }) => {
         if (isMobile) {
             closeSidebar()
         }
-    }
-
-    const onClickSocial = (e) => {
-        e.preventDefault()
-
-        onClickLink()
-        navigate("/app/social/following")
     }
 
     const onClickErrorBox = () => {
@@ -56,11 +47,9 @@ const Middle = ({ collapsed, closeSidebar }) => {
             {items.map((item) => (
                 <SidebarLink
                     to={item.to}
-                    draggable="false"
                     key={item.to}
                     end={item.end}
-                    onClick={onClickLink}
-                >
+                    onClick={onClickLink}>
                     <ItemBox $collapsed={collapsed}>
                         <FeatherIcon icon={item.icon} />
                         {collapsed ? null : item.name}
@@ -69,25 +58,18 @@ const Middle = ({ collapsed, closeSidebar }) => {
             ))}
 
             <SidebarLink
-                to="social"
-                draggable="false"
+                to="social/following"
+                activePath="social"
                 key="social"
-                end={false}
-                onClick={onClickSocial}
-            >
+                onClick={onClickLink}
+                end={false}>
                 <ItemBox $collapsed={collapsed}>
                     <FeatherIcon icon="users" />
                     {collapsed ? null : t("social")}
                 </ItemBox>
             </SidebarLink>
 
-            <SidebarLink
-                to="projects"
-                draggable="false"
-                key="projects"
-                onClick={onClickLink}
-                end
-            >
+            <SidebarLink to="projects" key="projects" onClick={onClickLink} end>
                 <ItemBox $collapsed={collapsed}>
                     <FeatherIcon icon="archive" />
                     {collapsed ? null : t("projects")}
@@ -96,8 +78,7 @@ const Middle = ({ collapsed, closeSidebar }) => {
 
             <ProjectItemsContainer
                 $collapsed={collapsed}
-                $noScrollbar={isPending}
-            >
+                $noScrollbar={isPending}>
                 {isPending &&
                     [...Array(10)].map((e, i) => (
                         <ProjectItemBox key={i} $skeleton />
@@ -106,8 +87,7 @@ const Middle = ({ collapsed, closeSidebar }) => {
                 {isError && (
                     <ProjectLoadErrorBox
                         $collapsed={collapsed}
-                        onClick={onClickErrorBox}
-                    >
+                        onClick={onClickErrorBox}>
                         <FeatherIcon icon="alert-triangle" />
                         {!collapsed && t("projects_list_refetch")}
                     </ProjectLoadErrorBox>
@@ -116,10 +96,8 @@ const Middle = ({ collapsed, closeSidebar }) => {
                 {projects?.map((project) => (
                     <SidebarLink
                         to={`projects/` + project.id}
-                        draggable="false"
                         key={project.id}
-                        onClick={onClickLink}
-                    >
+                        onClick={onClickLink}>
                         <ProjectItemBox $collapsed={collapsed}>
                             <FeatherIcon
                                 icon="circle"
