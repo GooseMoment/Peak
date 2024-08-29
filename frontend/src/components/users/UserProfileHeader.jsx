@@ -18,7 +18,6 @@ import { useTranslation } from "react-i18next"
 const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
     const { t } = useTranslation(null, { keyPrefix: "users" })
     const theme = useTheme()
-    const [imgLoaded, setImgLoaded] = useState(false)
     const { isDesktop } = useScreenType()
 
     const followButton = isMine ? (
@@ -28,10 +27,6 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
     ) : (
         <FollowButton disabled={!user} user={user} />
     )
-
-    useEffect(() => {
-        setImgLoaded(false)
-    }, [user?.profile_img])
 
     // TODO: Edit this and Banner style.
     useEffect(() => {
@@ -56,11 +51,10 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
             </ButtonContainer>
             <Profile>
                 <ProfileImg
-                    $display={imgLoaded}
+                    $display={!isPending}
                     src={user?.profile_img}
-                    onLoad={() => setImgLoaded(true)}
                 />
-                <ProfileImgEmpty $display={!imgLoaded} />
+                <ProfileImgEmpty $display={isPending} />
                 <ProfileTexts>
                     <Names>
                         <DisplayName $skeleton={isPending}>
