@@ -46,14 +46,14 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
             <Banner
                 $headerColor={getProjectColor(theme.type, user?.header_color)}
             />
-            <OverBanner>
+            <ButtonContainer>
                 {followingYou?.status === "accepted" ? (
                     <FollowsYou>{t("follows_you")}</FollowsYou>
                 ) : (
                     <div />
                 )}
                 {!isDesktop && followButton}
-            </OverBanner>
+            </ButtonContainer>
             <Profile>
                 <ProfileImg
                     $display={imgLoaded}
@@ -91,7 +91,7 @@ const Banner = styled.div`
     transition: background-color 0.25s ${cubicBeizer};
 `
 
-const OverBanner = styled.div`
+const ButtonContainer = styled.div`
     position: absolute;
     top: 2em;
 
