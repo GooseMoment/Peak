@@ -6,7 +6,11 @@ import Navbar from "@components/navbar/Navbar"
 import Sidebar from "@components/sidebar/Sidebar"
 
 import { useClientSetting } from "@utils/clientSettings"
-import useScreenType, { ifMobile, ifTablet, WIDTH_TABLET } from "@utils/useScreenType"
+import useScreenType, {
+    WIDTH_TABLET,
+    ifMobile,
+    ifTablet,
+} from "@utils/useScreenType"
 
 const startUpWidth = window.innerWidth
 
@@ -15,7 +19,8 @@ const Layout = ({ children }) => {
 
     const [sidebarHidden, setSidebarHidden] = useState(true)
     const [sidebarCollapsed, setSidebarCollapsed] = useState(
-        startUpWidth <= WIDTH_TABLET || clientSetting["close_sidebar_on_startup"],
+        startUpWidth <= WIDTH_TABLET ||
+            clientSetting["close_sidebar_on_startup"],
     )
     const contentPadding = clientSetting["main_width"] || "5rem"
 
@@ -42,8 +47,7 @@ const Layout = ({ children }) => {
             )}
             <Content
                 $sidebarCollapsed={sidebarCollapsed}
-                $sidePadding={contentPadding}
-            >
+                $sidePadding={contentPadding}>
                 {children}
             </Content>
         </App>
@@ -59,19 +63,20 @@ const Content = styled.main`
     padding-left: calc(${(props) => props.$sidePadding} + 18rem);
 
     ${(p) =>
-        p.$sidebarCollapsed
-            ? css`
-                  padding: 3rem calc(${p.$sidePadding} + 7rem);
-              `
-            : null}
+        p.$sidebarCollapsed &&
+        css`
+            padding-left: calc(${p.$sidePadding} + 7rem);
+        `}
 
     min-height: 100dvh;
     box-sizing: border-box;
     color: ${(p) => p.theme.textColor};
 
     ${ifTablet} {
-        padding: 2rem 1.75rem;
-        padding-left: calc(6rem + 1.75rem);
+        padding-top: max(env(safe-area-inset-top), 2rem);
+        padding-right: max(env(safe-area-inset-right), 1.75rem);
+        padding-bottom: calc(2rem);
+        padding-left: calc(max(env(safe-area-inset-left), 1.75rem) + 6rem);
     }
 
     ${ifMobile} {
