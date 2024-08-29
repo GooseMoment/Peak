@@ -93,7 +93,7 @@ MIDDLEWARE = [
 ]
 
 AUTH_USER_MODEL = "users.User"
-USER_DEFAULT_PROFILE_IMG = "https://assets-dev.peak.ooo/user_profile_imgs%2Fdefault.jpg"
+USER_DEFAULT_PROFILE_IMG = os.environ.get("USER_DEFAULT_PROFILE_IMG")
 
 ROOT_URLCONF = 'django_peak.urls'
 
