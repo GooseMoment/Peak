@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Link } from "react-router-dom"
 
 import styled, { css, useTheme } from "styled-components"
@@ -36,11 +36,13 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
         }
     }, [])
 
+    const bannerColor =
+        getProjectColor(theme.type, user?.header_color) ||
+        theme.skeleton.defaultColor
+
     return (
         <>
-            <Banner
-                $headerColor={getProjectColor(theme.type, user?.header_color)}
-            />
+            <Banner $bannerColor={bannerColor} />
             <ButtonContainer>
                 {followingYou?.status === "accepted" ? (
                     <FollowsYou>{t("follows_you")}</FollowsYou>
@@ -50,10 +52,7 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
                 {!isDesktop && followButton}
             </ButtonContainer>
             <Profile>
-                <ProfileImg
-                    $display={!isPending}
-                    src={user?.profile_img}
-                />
+                <ProfileImg $display={!isPending} src={user?.profile_img} />
                 <ProfileImgEmpty $display={isPending} />
                 <ProfileTexts>
                     <Names>
@@ -75,14 +74,20 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
 }
 
 const Banner = styled.div`
-    background-color: ${(p) =>
-        p.$headerColor ? p.$headerColor : p.theme.skeleton.defaultColor};
+    position: absolute;
+
+    background-color: ${(p) => p.$bannerColor};
     height: 15em;
     width: 100%;
 
     transform: scale(10, 1) translateY(-5em);
 
     transition: background-color 0.25s ${cubicBeizer};
+
+    ${ifMobile} {
+        width: 100dvw;
+        transform: translateX(calc(max(env(safe-area-inset-left), 1.5rem) * -1)) translateY(-5em);
+    }
 `
 
 const ButtonContainer = styled.div`
@@ -122,7 +127,7 @@ const FollowsYou = styled.div`
 const Profile = styled.div`
     position: relative;
     box-sizing: border-box;
-    margin-top: -10em;
+    margin-top: 5.5em;
 
     display: flex;
     gap: 2em;
