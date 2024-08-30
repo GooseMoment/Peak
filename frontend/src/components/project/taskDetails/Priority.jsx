@@ -1,5 +1,6 @@
 import styled from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
 import critical from "@assets/project/priority/critical.svg"
@@ -8,13 +9,15 @@ import normal from "@assets/project/priority/normal.svg"
 
 import { useTranslation } from "react-i18next"
 
-const Priority = ({ setFunc, closeComponent }) => {
+const Priority = ({ setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.priority" })
+
+    const { closeModal } = useModalWindowCloseContext()
 
     const changePriority = (priority) => {
         return async () => {
             setFunc({ priority })
-            closeComponent()
+            closeModal()
         }
     }
 
@@ -25,7 +28,7 @@ const Priority = ({ setFunc, closeComponent }) => {
     ]
 
     return (
-        <Detail title={t("title")} onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeModal}>
             {items.map((item) => (
                 <ItemBlock key={item.id}>
                     {item.icon}

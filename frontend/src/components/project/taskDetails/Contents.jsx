@@ -1,9 +1,8 @@
 import { Fragment, useMemo, useState } from "react"
-import { useNavigate } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 
-import ModalPortal from "@components/common/ModalPortal"
+import ModalWindow from "@components/common/ModalWindow"
 import ToolTip from "@components/project/common/ToolTip"
 import taskDate from "@components/tasks/utils/taskDate"
 
@@ -23,7 +22,6 @@ import { toast } from "react-toastify"
 
 const Contents = ({ task, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
-    const navigate = useNavigate()
 
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
@@ -38,9 +36,9 @@ const Contents = ({ task, setFunc }) => {
         setContent(name.value)
         setIsComponentOpen(true)
     }
+
     const closeComponent = () => {
         setIsComponentOpen(false)
-        navigate(`.`)
     }
 
     const { formatted_due_datetime, formatted_assigned_date } = taskDate(task)
@@ -48,25 +46,17 @@ const Contents = ({ task, setFunc }) => {
     const items = [
         {
             id: 1,
-            name: "assigned_due",
+            name: "assigned",
             icon: <FeatherIcon icon="calendar" />,
             display: task.assigned_at ? formatted_assigned_date : t("none"),
-            component: (
-                <Assigned setFunc={setFunc} closeComponent={closeComponent} />
-            ),
+            component: <Assigned setFunc={setFunc} />,
         },
         {
             id: 2,
             name: "due",
             icon: <img src={hourglass} />,
             display: task.due_date ? formatted_due_datetime : t("none"),
-            component: (
-                <Due
-                    task={task}
-                    setFunc={setFunc}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Due task={task} setFunc={setFunc} />,
         },
         {
             id: 3,
@@ -91,21 +81,18 @@ const Contents = ({ task, setFunc }) => {
                                 t("reminder.reminder_before_due_date"),
                                 { toastId: "reminder_before_due_date" },
                             )
-                        }}
-                    >
+                        }}>
                         -
                     </EmptyReminderBox>
                 ),
-            component: <Reminder task={task} closeComponent={closeComponent} />,
+            component: <Reminder task={task} />,
         },
         {
             id: 4,
             name: "priority",
             icon: <FeatherIcon icon="alert-circle" />,
             display: priorities[task.priority],
-            component: (
-                <Priority setFunc={setFunc} closeComponent={closeComponent} />
-            ),
+            component: <Priority setFunc={setFunc} />,
         },
         {
             id: 5,
@@ -117,22 +104,14 @@ const Contents = ({ task, setFunc }) => {
                     : task.drawer_name
                       ? `${task.project_name} / ${task.drawer_name}`
                       : t("none"),
-            component: (
-                <Drawer setFunc={setFunc} closeComponent={closeComponent} />
-            ),
+            component: <Drawer setFunc={setFunc} />,
         },
         {
             id: 6,
             name: "memo",
             icon: <FeatherIcon icon="edit" />,
             display: task.memo ? task.memo : t("none"),
-            component: (
-                <Memo
-                    previousMemo={task.memo}
-                    setFunc={setFunc}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Memo previousMemo={task.memo} setFunc={setFunc} />,
         },
     ]
 
@@ -141,18 +120,18 @@ const Contents = ({ task, setFunc }) => {
             {items.map((item) => (
                 <Fragment key={item.id}>
                     <ContentsBox>
-                        <ToolTip message={item.name}>{item.icon}</ToolTip>
+                        <ToolTip message={t((item.name)+".name")}>{item.icon}</ToolTip>
                         <VLine $end={item.id === 1 || item.id === 6} />
                         <ContentText
-                            name={item.name}
+                            name={item.name === "reminder" || item.name}
                             onClick={handleClickContent}
-                        >
+                            $isReminder={item.name === "reminder"}>
                             {item.display}
                         </ContentText>
                         {content === item.name && isComponentOpen ? (
-                            <ModalPortal closeModal={closeComponent} additional>
+                            <ModalWindow afterClose={closeComponent} additional>
                                 {item.component}
-                            </ModalPortal>
+                            </ModalWindow>
                         ) : null}
                     </ContentsBox>
                 </Fragment>
@@ -162,7 +141,6 @@ const Contents = ({ task, setFunc }) => {
 }
 
 const ContentsBlock = styled.div`
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -170,7 +148,6 @@ const ContentsBlock = styled.div`
 `
 
 const ContentsBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -216,10 +193,7 @@ const ContentText = styled.div`
     white-space: nowrap;
     overflow-x: clip;
     text-overflow: ellipsis;
-
-    &:hover {
-        cursor: pointer;
-    }
+    cursor: ${(props) => props.$isReminder || "pointer"};
 `
 
 const RemindersBox = styled.div`
@@ -236,6 +210,7 @@ const ReminderBlock = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 `
 
 const EmptyReminderBox = styled.div`
@@ -248,6 +223,7 @@ const EmptyReminderBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 `
 
 const makePriorities = (t) => [

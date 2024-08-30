@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import ListUserProfile from "@components/users/ListUserProfile"
 
 import { getFollowersByUser, getFollowingsByUser } from "@api/social.api"
@@ -10,8 +11,10 @@ import { ifMobile } from "@utils/useScreenType"
 import FeatherIcon from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 
-export const FollowerList = ({ user, closeModal }) => {
+export const FollowerList = ({ user }) => {
     const { t } = useTranslation(null, { keyPrefix: "users" })
+
+    const { closeModal } = useModalWindowCloseContext()
 
     const {
         data: followers,
@@ -53,8 +56,10 @@ export const FollowerList = ({ user, closeModal }) => {
     )
 }
 
-export const FollowingList = ({ user, closeModal }) => {
+export const FollowingList = ({ user }) => {
     const { t } = useTranslation(null, { keyPrefix: "users" })
+
+    const { closeModal } = useModalWindowCloseContext()
 
     const {
         data: followings,

@@ -18,10 +18,9 @@ const Detail = ({ title, children, onClose, special = false }) => {
 const DetailBox = styled.div`
     z-index: 999;
     width: ${(props) => (props.$special ? 18 : 15)}em;
-    height: auto;
+    height: fit-content;
     max-height: 35em;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    overflow: hidden;
     background-color: ${(p) => p.theme.backgroundColor};
     border: solid 1px ${(p) => p.theme.project.borderColor};
     border-radius: 15px;

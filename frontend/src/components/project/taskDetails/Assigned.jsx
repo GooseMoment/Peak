@@ -2,6 +2,7 @@ import { Fragment, useState } from "react"
 
 import styled, { css } from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
@@ -11,16 +12,24 @@ import { rotateToUnder, rotateToUp } from "@assets/keyframes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
-const Assigned = ({ setFunc, closeComponent }) => {
-    const { t } = useTranslation(null, { keyPrefix: "task.due" })
+const Assigned = ({ setFunc }) => {
+    const { t } = useTranslation(null, { keyPrefix: "task" })
 
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
+    const { closeModal } = useModalWindowCloseContext()
+
     const handleAdditionalComp = (name) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
-        else setIsAdditionalComp(name)
-    }
+        else {
+            if (name === "repeat") {
+                toast.error("coming soon...", {toastId: "coming_soon"})
+                return
+            }
+            setIsAdditionalComp(name)
+    }}
 
     let date = new Date()
 
@@ -32,53 +41,47 @@ const Assigned = ({ setFunc, closeComponent }) => {
                 assigned_at = date.toISOString().slice(0, 10)
             }
             setFunc({ assigned_at })
-            closeComponent()
+            closeModal()
         }
     }
 
     const addComponent = [
         {
             name: "quick",
-            display: t("quick.title"),
+            display: t("due.quick.title"),
             icon: "menu",
             component: <QuickDue changeDueDate={changeAssignedDate} />,
         },
         {
             name: "calendar",
-            display: t("calendar"),
+            display: t("due.calendar"),
             icon: "calendar",
             component: <div>달력입니다</div>,
         },
         {
             name: "repeat",
-            display: t("repeat.title"),
+            display: t("due.repeat.title"),
             icon: "refresh-cw",
             component: <RepeatDetail />,
         },
     ]
 
     return (
-        <Detail
-            title={t("assigned_title")}
-            onClose={closeComponent}
-            special={true}
-        >
+        <Detail title={t("assigned.title")} onClose={closeModal} special={true}>
             {addComponent.map((comp, i) => (
                 <Fragment key={comp.name}>
                     <FlexCenterBox>
                         <IndexBox
                             $start={i === 0}
                             $end={i === 2}
-                            onClick={() => handleAdditionalComp(comp.name)}
-                        >
+                            onClick={() => handleAdditionalComp(comp.name)}>
                             <EmptyBlock />
                             <Box>
                                 <FeatherIcon icon={comp.icon} />
                                 {comp.display}
                             </Box>
                             <CollapseButton
-                                $collapsed={isAdditionalComp === comp.name}
-                            >
+                                $collapsed={isAdditionalComp === comp.name}>
                                 <FeatherIcon icon="chevron-down" />
                             </CollapseButton>
                         </IndexBox>
