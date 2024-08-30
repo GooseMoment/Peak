@@ -3,7 +3,7 @@ from django.urls import path
 from . import views
 from user_setting.views import UserSettingDetail
 from projects.views import UserProjectList
-from social.views import get_followers, get_followings, get_blocks
+from social.views import get_followers, get_followings, get_blocks, get_requesters
 from knox import views as knox_views
 
 urlpatterns = [
@@ -22,6 +22,7 @@ urlpatterns = [
     path("users/@<str:username>/", views.UserDetail.as_view()),
     path("users/@<str:username>/followers/", get_followers),
     path("users/@<str:username>/followings/", get_followings),
+    path("users/@<str:username>/requesters/", get_requesters),
     path("users/@<str:username>/blocks/", get_blocks),
     path("users/@<str:username>/projects/", UserProjectList.as_view()),
 ]
