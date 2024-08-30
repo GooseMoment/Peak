@@ -1,11 +1,13 @@
-import { lazy } from "react"
-import { createBrowserRouter, redirect } from "react-router-dom"
+import { Suspense, lazy } from "react"
+import { Outlet, createBrowserRouter, redirect } from "react-router-dom"
 
 import settingsChildren from "@routers/settingsChildren"
 import signChildren from "@routers/signChildren"
 
 import ErrorPage from "@pages/ErrorPage"
 import StartPage from "@pages/StartPage"
+
+import { LoaderCircleFull } from "@components/common/LoaderCircle"
 
 import { getToken } from "@api/client"
 import { signOut } from "@api/users.api"
@@ -23,7 +25,9 @@ const { TaskCreateElement, TaskDetailElement } = lazily(
     () => import("@components/project/taskDetails/TaskElements"),
 )
 
-const { SocialRedirector, SocialFollowingPage, SocialExplorePage } = lazily(() => import("@pages/chunks/SocialPages"))
+const { SocialRedirector, SocialFollowingPage, SocialExplorePage } = lazily(
+    () => import("@pages/chunks/SocialPages"),
+)
 
 const UserPage = lazy(() => import("@pages/UserPage"))
 
@@ -52,6 +56,13 @@ const routes = [
         path: "/",
         errorElement: <ErrorPage />,
         loader: redirectIfSignedIn,
+        element: (
+            <Suspense
+                key="root"
+                fallback={<LoaderCircleFull height="100dvh" />}>
+                <Outlet />
+            </Suspense>
+        ),
         children: [
             {
                 index: true,

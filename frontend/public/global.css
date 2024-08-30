@@ -61,6 +61,11 @@ table {
     --cubic: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 html {
     height: 100dvh;
     width: 100vw;

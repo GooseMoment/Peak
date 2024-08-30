@@ -18,8 +18,8 @@ const FullscreenLoader = () => {
 
 const Container = styled.div`
     box-sizing: border-box;
-    width: 100vw;
-    height: 100vh;
+    width: 100dvw;
+    height: 100dvh;
 
     display: flex;
     justify-content: center;

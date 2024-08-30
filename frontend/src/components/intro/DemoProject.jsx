@@ -8,8 +8,8 @@ import ProjectName from "@components/project/ProjectName"
 import { useTranslation } from "react-i18next"
 
 const DemoProject = () => {
-    const { t } = useTranslation(null, {
-        keyPrefix: "intro.section_organize.demo_project",
+    const { t } = useTranslation("intro", {
+        keyPrefix: "section_organize.demo_project",
     })
     const [count, setCount] = useState(1)
     const projects = useMemo(() => makeProjects(t), [t])
