@@ -19,7 +19,7 @@ const ReactionButton = ({ emoji, emojiCount, isSelected, saveReaction }) => {
     )
 }
 
-// common Button을 상속받는게 더 복잡해질 것 같아 디자인만 유지하겠습니다.
+// common Button을 상속받는게 더 복잡해질 것 같아 이모지가 고민이네
 const EmojiBox = styled.div`
     height: 2em;
     width: 4em;

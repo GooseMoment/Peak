@@ -33,7 +33,7 @@ export const light = {
     secondTextColor: "#9c9c9c",
     backgroundColor: white,
     secondBackgroundColor: "#F3F3F3",
-    thirdBackgroundColor: "#F3F3F3",
+    thirdBackgroundColor: "#F3F3F3",    // 원래 second랑 똑같은 건 의도된건가...?
     accentColor: goose,
     scrollbarColor: "#FFC6C6",
     frontSignPageTextColor: goose,
@@ -79,6 +79,8 @@ export const light = {
     social: {
         borderColor: black,
         activeBackgroundColor: "rgb(255 74 3 / 0.35)",
+        modalShadowColor: "rgba(123, 123, 123, 0.1)",
+        modalCellHoverColor: "#f0f0f0",
     },
     toastTheme: "light",
 }
@@ -163,6 +165,8 @@ export const dark = {
     social: {
         borderColor: white,
         activeBackgroundColor: "rgb(255 74 3 / 0.35)",
+        modalShadowColor: "rgba(210, 210, 210, 0.1)",
+        modalCellHoverColor: "#383838",
     },
     toastTheme: "dark",
 }
