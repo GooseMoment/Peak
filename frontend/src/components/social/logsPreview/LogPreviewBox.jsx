@@ -28,24 +28,24 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
             : null
     }
 
-    const backgroundColor = log.username === selectedUser ? theme.social.activeBackgroundColor : theme.backgroundColor
+    const backgroundColor =
+        log.username === selectedUser
+            ? theme.social.activeBackgroundColor
+            : theme.backgroundColor
 
     return (
-        <Frame
-            onClick={handleSelect}
-            $frameColor={theme.borderColor}
-            $bgColor={backgroundColor}>
+        <Frame onClick={handleSelect} $bgColor={backgroundColor}>
             <SimpleProfile user={log} ringColor={setRingColor} />
             <RecentTask>
                 {log.recent_task && (
                     <>
-                        <TaskName $color={theme.textColor}>
+                        <TaskName>
                             {' "' +
                                 putEllipsis(log.recent_task.name, 32) +
                                 '" 완료! '}
                         </TaskName>
                         {/* TODO: set locale */}
-                        <Ago $color={theme.secondTextColor}>
+                        <Ago>
                             {" " +
                                 DateTime.fromISO(
                                     log.recent_task.completed_at,
@@ -60,8 +60,8 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
 }
 
 const Frame = styled.div`
-    border-bottom: 0.05em solid ${(props) => props.$frameColor};
-    background-color: ${(props) => props.$bgColor};
+    border-bottom: 0.05em solid ${(p) => p.theme.social.borderColor};
+    background-color: ${(p) => p.$bgColor};
 
     padding: 1.2em 1em 1.2em;
 
@@ -79,8 +79,7 @@ const RecentTask = styled.div`
 `
 
 const TaskName = styled.div`
-    color: ${(props) => props.$color};
-
+    color: ${(p) => p.theme.textColor};
     display: inline;
     font-size: 1.1em;
 `
@@ -91,7 +90,7 @@ const Ago = styled.span`
     display: inline;
 
     font-size: 0.9em;
-    color: ${(props) => props.$color};
+    color: ${(p) => p.theme.secondTextColor};
     white-space: nowrap;
 `
 

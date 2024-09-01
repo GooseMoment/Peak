@@ -1,14 +1,12 @@
-import { css, styled, useTheme } from "styled-components"
+import { css, styled } from "styled-components"
 
 const SimpleProfile = ({ user, ringColor }) => {
-    const theme = useTheme()
-
     return (
         <Profile>
             <ProfileImgWrapper $color={ringColor}>
                 <img src={user.profile_img} />
             </ProfileImgWrapper>
-            <Username $color={theme.textColor}>@{user.username}</Username>
+            <Username>@{user.username}</Username>
         </Profile>
     )
 }
@@ -47,7 +45,7 @@ const ProfileImgWrapper = styled.div`
     & svg {
         border-radius: 100%;
         aspect-ratio: 1;
-        width: ${(props) => props.$color ? 3.3 : 3.5}em;
+        width: ${(props) => (props.$color ? 3.3 : 3.5)}em;
     }
 `
 
@@ -61,7 +59,7 @@ const Username = styled.div`
     text-align: center;
     white-space: nowrap;
 
-    color: ${(props) => props.$color}
+    color: ${(p) => p.theme.textColor};
 `
 
 export default SimpleProfile

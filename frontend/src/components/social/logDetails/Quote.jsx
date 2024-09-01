@@ -45,9 +45,7 @@ const Quote = ({ user, quote, saveQuote }) => {
         <Box>
             <SimpleProfile user={user} />
 
-            <Wrapper
-                onClick={handleInputState}
-                $bgColor={theme.secondBackgroundColor}>
+            <Wrapper onClick={handleInputState}>
                 {inputState ? (
                     <QuoteInput
                         type="text"
@@ -56,7 +54,6 @@ const Quote = ({ user, quote, saveQuote }) => {
                         onKeyDown={handleKeyDown}
                         onBlur={handleBlur}
                         autoFocus
-                        color={theme.textColor}
                     />
                 ) : quote.content ? (
                     <Content $color={theme.textColor}>
@@ -84,7 +81,7 @@ const Box = styled.div`
 const Wrapper = styled.div`
     width: 72%;
     border-radius: 1em;
-    background-color: ${(prop) => prop.$bgColor};
+    background-color: ${(p) => p.theme.secondBackgroundColor};
     padding: 1em;
 
     display: flex;
@@ -107,6 +104,8 @@ const QuoteInput = styled.input`
     text-align: center;
     font-size: 1em;
     white-space: normal;
+
+    color: ${(props) => props.theme.textColor};
 `
 
 export default Quote

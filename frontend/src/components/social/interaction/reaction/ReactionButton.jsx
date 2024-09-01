@@ -17,9 +17,7 @@ const ReactionButton = ({ emoji, emojiCount, isSelected, saveReaction }) => {
             }
             onClick={handleReaction}>
             <Emoji src={emoji.img} />
-            <EmojiCounts color={theme.secondTextColor}>
-                {emojiCount}
-            </EmojiCounts>
+            <EmojiCounts>{emojiCount}</EmojiCounts>
         </EmojiBox>
     )
 }
@@ -46,11 +44,13 @@ const Emoji = styled.img`
 const EmojiCounts = styled.div`
     flex-grow: 1;
     margin-right: 0.1em;
-    font-size: 0.9em;
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    font-size: 0.9em;
+    color: ${(props) => props.theme.textColor};
 `
 
 export default ReactionButton

@@ -1,13 +1,11 @@
 import { useState } from "react"
 
-import styled, { useTheme } from "styled-components"
+import styled from "styled-components"
 
 import { Portal } from "react-portal"
 
 const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
     if (!isOpen || !emojis) return null
-
-    const theme = useTheme()
 
     const [emojiSearchQuery, setEmojiSearchQuery] = useState("")
 
@@ -19,25 +17,18 @@ const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
         <Portal>
             <Wrapper>
                 <EmojiModalOverlay onClick={onClose} />
-                <Modal
-                    $posY={position.top}
-                    $posX={position.left}
-                    $bgColor={theme.backgroundColor}
-                    $shadowColor={theme.social.modalShadowColor}>
+                <Modal $posY={position.top} $posX={position.left}>
                     <EmojiSearchBox
                         type="text"
                         placeholder="Search emojis"
                         value={emojiSearchQuery}
                         onChange={(e) => setEmojiSearchQuery(e.target.value)}
-                        $bgColor={theme.secondBackgroundColor}
-                        color={theme.secondTextColor}
                     />
                     <EmojiList>
                         {filteredEmojis.map((emoji) => (
                             <EmojiListCell
                                 key={emoji.id}
-                                onClick={() => onSelect(emoji)}
-                                $hoverColor={theme.social.modalCellHoverColor}>
+                                onClick={() => onSelect(emoji)}>
                                 <EmojiCell src={emoji.img} alt={emoji.name} />
                             </EmojiListCell>
                         ))}
@@ -78,10 +69,11 @@ const Modal = styled.div`
     width: 30em;
     height: 24em;
 
-    box-shadow: 0.2em 0.3em 0.5em ${(props) => props.$shadowColor};
-    border: 0.1em solid ${(props) => props.$shadowColor};
+    box-shadow: 0.2em 0.3em 0.5em
+        ${(props) => props.theme.social.modalShadowColor};
+    border: 0.1em solid ${(props) => props.theme.social.modalShadowColor};
     border-radius: 1em;
-    background: ${(props) => props.$bgColor};
+    background: ${(props) => props.theme.backgroundColor};
     padding: 1em;
 
     overflow-y: auto;
@@ -95,11 +87,12 @@ const EmojiSearchBox = styled.input`
     height: 2em;
 
     border-radius: 0.4em;
-    background-color: ${(props) => props.$bgColor};
+    background-color: ${(props) => props.theme.secondBackgroundColor};
     padding: 0 0.8em 0;
 
     font-size: inherit;
     line-height: 1.3em;
+    color: ${(props) => props.theme.secondTextColor};
 `
 
 const EmojiList = styled.div`
@@ -120,7 +113,7 @@ const EmojiListCell = styled.li`
 
     cursor: pointer;
     &:hover {
-        background-color: ${(props) => props.$hoverColor};
+        background-color: ${(props) => props.theme.social.modalCellHoverColor};
     }
 `
 
