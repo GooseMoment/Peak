@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { css, styled } from "styled-components"
+import { styled } from "styled-components"
 
 import SocialPageTitle from "@components/social/SocialPageTitle"
 import SearchBar from "@components/social/explore/SearchBar"
