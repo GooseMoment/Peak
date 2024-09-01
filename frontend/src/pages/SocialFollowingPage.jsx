@@ -141,7 +141,7 @@ const CalendarWrapper = styled.div`
 const mockNewLogDates = [
     "2024-05-12T15:00:00.000Z",
     "2024-05-11T15:00:00.000Z",
-    "2024-05-09T00:00:00.000Z",
+    "2024-09-01T15:00:00.000Z",
 ]
 
 export default SocialFollowingPage

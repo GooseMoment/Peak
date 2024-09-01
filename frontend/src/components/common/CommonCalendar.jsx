@@ -2,7 +2,8 @@ import { useState } from "react"
 
 import styled from "styled-components"
 
-import { useClientLocale } from "@/utils/clientSettings"
+import { useClientLocale } from "@utils/clientSettings"
+
 import moment from "moment"
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
@@ -85,7 +86,7 @@ const StyledContentDot = styled.div`
 
     background-color: ${(p) => p.theme.accentColor};
     border-radius: 0.4em;
-    outline: solid 0.125em #fefdfc;
+    outline: solid 0.125em ${(p) => p.theme.backgroundColor};
     width: 0.4em;
     height: 0.4em;
     transition-property: all;
@@ -103,7 +104,7 @@ const CalendarWrapper = styled.div`
         max-width: 100%;
 
         border: 0;
-        background: inherit;
+        background-color: ${(p) => p.theme.backgroundColor};
 
         font-family:
             Pretendard,
@@ -146,11 +147,12 @@ const CalendarWrapper = styled.div`
         position: relative;
         font-weight: 800;
         font-size: 1.2em;
+        color: ${(p) => p.theme.textColor};
     }
 
     /* 네비게이션 버튼 컬러 */
     .react-calendar__navigation button:focus {
-        background-color: white;
+        background-color: ${(p) => p.theme.backgroundColor};
     }
 
     /* 요일 밑줄 제거 */
@@ -159,7 +161,7 @@ const CalendarWrapper = styled.div`
         font-weight: 800;
     }
 
-    /* 요일 주말 폰트 */
+    /* 요일 주말 폰트 */ /* TODO: 작동 안 하고 있음 */
     .react-calendar__month-view__weekdays__weekday--weekend
         abbr[title="Sunday"] {
         color: red;
@@ -183,7 +185,7 @@ const CalendarWrapper = styled.div`
         transition-timing-function: ease;
 
         overflow: visible !important;
-        background-color: #d9d9d9 !important;
+        background-color: ${(p) => p.theme.calendar.backgroundColor} !important;
 
         &:hover > ${StyledContentDot} {
             top: -0.3em;
@@ -199,15 +201,16 @@ const CalendarWrapper = styled.div`
         overflow: hidden;
         /* 폰트 */
         abbr {
-            color: #000000 !important;
+            color: ${(p) => p.theme.textColor} !important;
         }
     }
     /* 인접 월 */
     .react-calendar__month-view__days__day--neighboringMonth {
-        background-color: #e6e6e6 !important;
+        background-color: ${(p) =>
+            p.theme.calendar.secondBackgroundColor} !important;
         /* 폰트 */
         abbr {
-            color: #a4a4a4 !important;
+            color: ${(p) => p.theme.secondTextColor} !important;
         }
     }
 
@@ -215,11 +218,12 @@ const CalendarWrapper = styled.div`
     .react-calendar__tile--now {
         background: ${(p) => p.theme.accentColor} !important;
         abbr {
-            color: #ffffff !important;
+            color: ${(p) => p.theme.calendar.todayColor} !important;
         }
 
         &.react-calendar__month-view__days__day--neighboringMonth {
-            background-color: #ffd7c7 !important;
+            background-color: ${(p) =>
+                p.theme.primaryColors.secondary} !important;
         }
     }
 
@@ -228,24 +232,24 @@ const CalendarWrapper = styled.div`
     .react-calendar__tile--rangeStart.react-calendar__tile--rangeEnd,
     .react-calendar__tile--active:not(.react-calendar__tile--range) {
         box-shadow:
-            0 0 0 0.15em #fefdfc,
-            0 0 0 0.3em #d9d9d9;
+            0 0 0 0.15em ${(p) => p.theme.backgroundColor},
+            0 0 0 0.3em ${(p) => p.theme.calendar.backgroundColor};
 
         &.react-calendar__tile--now {
             box-shadow:
-                0 0 0 0.15em #fefdfc,
+                0 0 0 0.15em ${(p) => p.theme.backgroundColor},
                 0 0 0 0.3em ${(p) => p.theme.accentColor};
         }
 
         &.react-calendar__month-view__days__day--neighboringMonth {
             box-shadow:
-                0 0 0 0.15em #fefdfc,
-                0 0 0 0.3em #e6e6e6;
+                0 0 0 0.15em ${(p) => p.theme.backgroundColor},
+                0 0 0 0.3em ${(p) => p.theme.calendar.secondBackgroundColor};
 
             &.react-calendar__tile--now {
                 box-shadow:
-                    0 0 0 0.15em #fefdfc,
-                    0 0 0 0.3em #ffd7c7;
+                    0 0 0 0.15em ${(p) => p.theme.backgroundColor},
+                    0 0 0 0.3em ${(p) => p.theme.primaryColors.secondary};
             }
         }
     }
@@ -254,8 +258,8 @@ const CalendarWrapper = styled.div`
     .react-calendar__month-view__days__day:hover,
     .react-calendar__month-view__days__day:focus-visible {
         box-shadow:
-            0 0 0 0.15em #fefdfc,
-            0 0 0 0.3em #ffc6c6;
+            0 0 0 0.15em ${(p) => p.theme.backgroundColor},
+            0 0 0 0.3em ${(p) => p.theme.calendar.hoverColor};
     }
 
     .react-calendar__tile--range:not(.react-calendar__tile--rangeStart):not(
@@ -271,8 +275,10 @@ const CalendarWrapper = styled.div`
 
             height: 3.15em;
             width: 6em;
-            border-top: solid #d9d9d9 0.15em;
-            border-bottom: solid #d9d9d9 0.15em;
+            border-top: solid 0 0 0 0.3em
+                ${(p) => p.theme.calendar.backgroundColor} 0.15em;
+            border-bottom: solid ${(p) => p.theme.calendar.backgroundColor}
+                0.15em;
         }
     }
 
@@ -286,9 +292,10 @@ const CalendarWrapper = styled.div`
 
             height: 3.15em;
             width: 4.5em;
-            border-top: solid #d9d9d9 0.15em;
-            border-bottom: solid #d9d9d9 0.15em;
-            border-left: solid #d9d9d9 0.15em;
+            border-top: solid ${(p) => p.theme.calendar.backgroundColor} 0.15em;
+            border-bottom: solid ${(p) => p.theme.calendar.backgroundColor}
+                0.15em;
+            border-left: solid ${(p) => p.theme.calendar.backgroundColor} 0.15em;
             border-top-left-radius: 5em;
             border-bottom-left-radius: 5em;
         }
@@ -304,9 +311,11 @@ const CalendarWrapper = styled.div`
 
             height: 3.15em;
             width: 4.5em;
-            border-top: solid #d9d9d9 0.15em;
-            border-bottom: solid #d9d9d9 0.15em;
-            border-right: solid #d9d9d9 0.15em;
+            border-top: solid ${(p) => p.theme.calendar.backgroundColor} 0.15em;
+            border-bottom: solid ${(p) => p.theme.calendar.backgroundColor}
+                0.15em;
+            border-right: solid ${(p) => p.theme.calendar.backgroundColor}
+                0.15em;
             border-top-right-radius: 5em;
             border-bottom-right-radius: 5em;
         }
@@ -322,23 +331,24 @@ const CalendarWrapper = styled.div`
     .react-calendar__tile--hasActive {
         background-color: ${(p) => p.theme.accentColor};
         abbr {
-            color: white;
+            color: ${(p) => p.theme.calendar.todayColor};
         }
     }
 
     /* 네비게이션 월 스타일 적용 */
     .react-calendar__year-view__months__month {
-        flex: 0 0 calc(33.3333% - 1em) !important;
+        flex: 0 0 calc(25% - 1em) !important;
         margin-inline-start: 0.5em !important;
         margin-inline-end: 0.5em !important;
         margin-block-end: 1em;
         font-size: 1em;
         font-weight: 600;
+        color: ${(p) => p.theme.textColor};
     }
 
     .react-calendar__navigation__label:disabled {
-        background-color: #fefdfc;
-        color: black;
+        background-color: ${(p) => p.theme.backgroundColor};
+        color: ${(p) => p.theme.textColor};
     }
 `
 
@@ -352,7 +362,7 @@ const TodayButton = styled.button`
     border: 0;
     border-radius: 0.5em;
     background-color: ${(p) => p.theme.accentColor};
-    color: #ffffff;
+    color: ${(p) => p.theme.calendar.todayColor};
     font-weight: bolder;
 
     display: flex;
