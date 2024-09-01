@@ -19,7 +19,11 @@ const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
         <Portal>
             <Wrapper>
                 <EmojiModalOverlay onClick={onClose} />
-                <Modal $posY={position.top} $posX={position.left} $bgColor={theme.backgroundColor} $shadowColor={theme.social.modalShadowColor}>
+                <Modal
+                    $posY={position.top}
+                    $posX={position.left}
+                    $bgColor={theme.backgroundColor}
+                    $shadowColor={theme.social.modalShadowColor}>
                     <EmojiSearchBox
                         type="text"
                         placeholder="Search emojis"
@@ -33,12 +37,8 @@ const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
                             <EmojiListCell
                                 key={emoji.id}
                                 onClick={() => onSelect(emoji)}
-                                $hoverColor={theme.social.modalCellHoverColor}
-                            >
-                                <EmojiCell
-                                    src={emoji.img}
-                                    alt={emoji.name}
-                                />
+                                $hoverColor={theme.social.modalCellHoverColor}>
+                                <EmojiCell src={emoji.img} alt={emoji.name} />
                             </EmojiListCell>
                         ))}
                     </EmojiList>
@@ -77,7 +77,7 @@ const Modal = styled.div`
     left: calc(${(props) => props.$posX}px - 33em); // 32 + 1(shadow)
     width: 30em;
     height: 24em;
-    
+
     box-shadow: 0.2em 0.3em 0.5em ${(props) => props.$shadowColor};
     border: 0.1em solid ${(props) => props.$shadowColor};
     border-radius: 1em;
@@ -127,7 +127,7 @@ const EmojiListCell = styled.li`
 const EmojiCell = styled.img`
     width: 2.4em;
     height: 2.4em;
-    
+
     padding: 0.2em;
 `
 

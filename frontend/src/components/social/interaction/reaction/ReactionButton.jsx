@@ -5,16 +5,21 @@ const ReactionButton = ({ emoji, emojiCount, isSelected, saveReaction }) => {
 
     const handleReaction = () => {
         const action = isSelected ? "delete" : "post"
-        saveReaction({ action, emoji:emoji.name })
+        saveReaction({ action, emoji: emoji.name })
     }
 
     return (
         <EmojiBox
-            $bgcolor={isSelected ? theme.social.activeBackgroundColor : theme.thirdBackgroundColor}
-            onClick={handleReaction}
-        >
+            $bgcolor={
+                isSelected
+                    ? theme.social.activeBackgroundColor
+                    : theme.thirdBackgroundColor
+            }
+            onClick={handleReaction}>
             <Emoji src={emoji.img} />
-            <EmojiCounts color={theme.secondTextColor}>{emojiCount}</EmojiCounts>
+            <EmojiCounts color={theme.secondTextColor}>
+                {emojiCount}
+            </EmojiCounts>
         </EmojiBox>
     )
 }
