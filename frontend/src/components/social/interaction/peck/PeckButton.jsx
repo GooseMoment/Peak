@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import MildButton from "@components/common/MildButton"
 
@@ -11,6 +11,8 @@ import FeatherIcon from "feather-icons-react"
 import { toast } from "react-toastify"
 
 const PeckButton = ({ taskID, isUncomplete }) => {
+    const theme = useTheme()
+
     const { data: peck, isError: peckError } = useQuery({
         queryKey: ["peck", taskID],
         queryFn: () => getPeck(taskID),
@@ -42,7 +44,7 @@ const PeckButton = ({ taskID, isUncomplete }) => {
     }
 
     return (
-        <Box>
+        <Box $color={theme.textColor}>
             <PeckButtonBox onClick={handlePeck}>
                 <FeatherIcon icon="send" />
             </PeckButtonBox>
@@ -58,6 +60,8 @@ const Box = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    color: ${(props) => props.$color};
 `
 
 const PeckButtonBox = styled(MildButton)`
