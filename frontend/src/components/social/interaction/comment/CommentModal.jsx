@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
-import styled, { useTheme } from "styled-components"
+import styled from "styled-components"
 
 import CommentBox from "@components/social/interaction/comment/CommentBox"
 
@@ -14,12 +14,9 @@ import {
 
 import queryClient from "@queries/queryClient"
 
-import { Portal } from "react-portal"
 import { toast } from "react-toastify"
 
 const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
-    const theme = useTheme()
-
     const [commentValue, setCommentValue] = useState("")
 
     const { data: parentComments, isFetching } = useQuery({
@@ -64,38 +61,27 @@ const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
     }
 
     return (
-        <Portal>
-            <Wrapper>
-                <CommentModalOverlay onClick={onClose} />
-                <Modal
-                    $posY={position.top}
-                    $posX={position.left}
-                    $bgColor={theme.backgroundColor}
-                    $shadowColor={theme.social.modalShadowColor}>
-                    <CommentContainer>
-                        {parentComments
-                            ? Object.values(parentComments).map((comment) => (
-                                  <CommentBox
-                                      key={comment.id}
-                                      comment={comment}
-                                  />
-                              ))
-                            : // TODO: design no comments
-                              // TODO: 로딩중
-                              "no comments"}
-                    </CommentContainer>
-                    <CommentInput
-                        type="text"
-                        value={commentValue}
-                        onChange={handleChange}
-                        onKeyDown={handleKeyDown}
-                        $borderColor={theme.social.borderColor}
-                        $color={theme.textColor}
-                        autoFocus
-                    />
-                </Modal>
-            </Wrapper>
-        </Portal>
+        <Wrapper>
+            <CommentModalOverlay onClick={onClose} />
+            <Modal $posY={position.top} $posX={position.left}>
+                <CommentContainer>
+                    {parentComments
+                        ? Object.values(parentComments).map((comment) => (
+                              <CommentBox key={comment.id} comment={comment} />
+                          ))
+                        : // TODO: design no comments
+                          // TODO: 로딩중
+                          "no comments"}
+                </CommentContainer>
+                <CommentInput
+                    type="text"
+                    value={commentValue}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    autoFocus
+                />
+            </Modal>
+        </Wrapper>
     )
 }
 
@@ -127,10 +113,11 @@ const Modal = styled.div`
     width: 25em;
     height: 24em;
 
-    box-shadow: 0.2em 0.3em 0.5em ${(props) => props.$shadowColor};
-    border: 0.1em solid ${(props) => props.$shadowColor};
+    box-shadow: 0.2em 0.3em 0.5em
+        ${(props) => props.theme.social.modalShadowColor};
+    border: 0.1em solid ${(props) => props.theme.social.modalShadowColor};
     border-radius: 1em;
-    background: ${(props) => props.$bgColor};
+    background: ${(props) => props.theme.backgroundColor};
     padding: 1em;
 
     overflow-y: auto;
@@ -170,10 +157,10 @@ const CommentInput = styled.input`
 
     padding: 0.5em;
     border-radius: 0.5em;
-    border: solid 1.4px ${(props) => props.$borderColor};
+    border: solid 1.4px ${(props) => props.theme.social.borderColor};
 
     font-size: 1em;
-    color: ${(props) => props.$color};
+    color: ${(props) => props.theme.textColor};
 `
 
 export default CommentModal

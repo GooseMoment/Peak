@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
@@ -6,9 +6,11 @@ import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import DeleteAlert from "@components/common/DeleteAlert"
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import TaskNameInput from "@components/tasks/TaskNameInput"
-
-import Contents from "./Contents"
+import { ErrorBox } from "@components/errors/ErrorProjectPage"
+import SkeletonTaskDetail from "@components/project/skeletons/SkeletonTaskDetail"
+import Contents from "@components/project/taskDetails/Contents"
 
 import { deleteTask, getTask, patchTask } from "@api/tasks.api"
 
@@ -22,6 +24,7 @@ import { toast } from "react-toastify"
 
 const TaskDetail = () => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
+    const inputRef = useRef(null)
 
     const [projectID, color] = useOutletContext()
     const { task_id } = useParams()
@@ -31,10 +34,13 @@ const TaskDetail = () => {
     const [taskName, setTaskName] = useState("")
     const [isAlertOpen, setIsAlertOpen] = useState(false)
 
+    const { closeModal } = useModalWindowCloseContext()
+
     const {
-        isPending,
-        isError,
         data: task,
+        isLoading,
+        isError,
+        refetch,
     } = useQuery({
         queryKey: ["task", { taskID: task_id }],
         queryFn: () => getTask(task_id),
@@ -51,6 +57,7 @@ const TaskDetail = () => {
             queryClient.invalidateQueries({
                 queryKey: ["tasks", { drawerID: task.drawer }],
             })
+            inputRef.current.focus()
         },
     })
 
@@ -84,10 +91,6 @@ const TaskDetail = () => {
         setTaskName(task?.name)
     }, [task])
 
-    const onClose = () => {
-        navigate(`/app/projects/${projectID}`)
-    }
-
     const handleAlert = () => {
         if (setting.delete_task_after_alert) {
             setIsAlertOpen(true)
@@ -101,9 +104,21 @@ const TaskDetail = () => {
         deleteMutation.mutate()
     }
 
-    if (isPending) {
-        return <TaskDetailBox />
-        // 민영아.. 스켈레톤 뭐시기 만들어..
+    if (isLoading) {
+        return (
+            <TaskDetailBox>
+                <SkeletonTaskDetail/>
+            </TaskDetailBox>
+    )}
+
+    if (isError) {
+        return (
+            <TaskDetailBox>
+                <ErrorBox onClick={refetch}>
+                    {t("error_load_task")}
+                </ErrorBox>
+            </TaskDetailBox>
+        )
     }
 
     return (
@@ -112,13 +127,14 @@ const TaskDetail = () => {
                 <TaskNameInput
                     task={task}
                     setFunc={patchMutation.mutate}
+                    inputRef={inputRef}
                     newTaskName={taskName}
                     setNewTaskName={setTaskName}
                     color={color}
                 />
                 <Icons>
                     <FeatherIcon icon="trash-2" onClick={handleAlert} />
-                    <FeatherIcon icon="x" onClick={onClose} />
+                    <FeatherIcon icon="x" onClick={closeModal} />
                 </Icons>
             </TaskNameBox>
             <Contents task={task} setFunc={patchMutation.mutate} />
@@ -146,7 +162,6 @@ const TaskDetailBox = styled.div`
 `
 
 const TaskNameBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;

@@ -1,8 +1,9 @@
 import { useState } from "react"
 
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import { styled } from "styled-components"
 
+import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SocialCalendar from "@components/social/SocialCalendar"
 import SocialPageTitle from "@components/social/SocialPageTitle"
 import LogDetails from "@components/social/logDetails/LogDetails"
@@ -10,7 +11,7 @@ import LogsPreview from "@components/social/logsPreview/LogsPreview"
 
 import { getCurrentUsername } from "@api/client"
 import {
-    getDailyLogDetails,
+    getDailyLogDrawers,
     getDailyLogsPreview,
     getQuote,
     postQuote,
@@ -18,7 +19,16 @@ import {
 
 import queryClient from "@queries/queryClient"
 
+import { ImpressionArea } from "@toss/impression-area"
 import { toast } from "react-toastify"
+
+const getCursorFromURL = (url) => {
+    if (!url) return null
+
+    const u = new URL(url)
+    const cursor = u.searchParams.get("cursor")
+    return cursor
+}
 
 const SocialFollowingPage = () => {
     const initial_date = new Date()
@@ -37,7 +47,7 @@ const SocialFollowingPage = () => {
         enabled: !!selectedDate && !!me,
     })
 
-    const { data: quote } = useQuery({
+    const { data: quote, isPending: isQuotePending } = useQuery({
         queryKey: ["quote", targetUser, selectedDate],
         queryFn: () => getQuote(targetUser, selectedDate),
         enabled: !!selectedDate && !!me,
@@ -57,11 +67,22 @@ const SocialFollowingPage = () => {
         },
     })
 
-    const { data: dailyLogDetails } = useQuery({
-        queryKey: ["daily", "log", "details", targetUser, selectedDate],
-        queryFn: () => getDailyLogDetails(targetUser, selectedDate),
-        enabled: !!selectedDate,
+    const {
+        data: drawerPage,
+        fetchNextPage: fetchNextDrawerPage,
+        isPending: isDrawerPending,
+        refetch: refetchDrawer,
+    } = useInfiniteQuery({
+        queryKey: ["daily", "log", "details", "drawer", targetUser],
+        queryFn: (page) =>
+            getDailyLogDrawers(targetUser, page.pageParam),
+        initialPageParam: "",
+        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
     })
+
+    const hasNextPage =
+        drawerPage?.pages[drawerPage?.pages?.length - 1].next !== null
+    const isNotificationEmpty = drawerPage?.pages[0]?.results?.length === 0
 
     const saveQuote = (content) => {
         QuoteMutation.mutate({ day: selectedDate, content })
@@ -89,17 +110,32 @@ const SocialFollowingPage = () => {
                     )}
                 </Container>
 
+                {/* TODO: 날짜가 선택되지 않았을 때 */}
                 <StickyContainer>
-                    { quote ? (
-                        <LogDetails
-                            user={quote?.user}
-                            quote={quote}
-                            saveQuote={saveQuote}
-                            logDetails={dailyLogDetails}
-                            isFollowing={true}
-                        />
-                    ) : null}
-                    {/* TODO: 날짜가 선택되지 않았을 때 */}
+                    {isQuotePending || isDrawerPending ? (
+                        <SkeletonProjectPage />
+                    ) : (
+                        drawerPage &&
+                            <LogDetails
+                                user={quote?.user}
+                                quote={quote}
+                                saveQuote={saveQuote}
+                                selectedDate={selectedDate}
+                                logDetails={drawerPage}
+                                isFollowingPage
+                            />
+                    )}
+                    <ImpressionArea
+                        onImpressionStart={() => fetchNextDrawerPage()}
+                        timeThreshold={200}
+                    >
+                        {hasNextPage && "next"}
+                        {!hasNextPage && !isNotificationEmpty && (
+                            "no_more"
+                        )}
+                    </ImpressionArea>
+                    
+                    {isNotificationEmpty && "empty"}
                 </StickyContainer>
             </Wrapper>
         </>
@@ -109,6 +145,7 @@ const SocialFollowingPage = () => {
 const Wrapper = styled.div`
     display: flex;
     gap: 2rem;
+    gap: 2rem;
 `
 
 const Container = styled.div`
@@ -117,6 +154,7 @@ const Container = styled.div`
     margin-bottom: auto;
 
     padding: 0 1rem 0;
+    overflow: hidden;
     overflow: hidden;
 
     display: flex;
@@ -134,6 +172,8 @@ const StickyContainer = styled(Container)`
 const CalendarWrapper = styled.div`
     margin-left: auto;
     margin-right: auto;
+    width: 80%;
+    max-width: 40rem;
     width: 80%;
     max-width: 40rem;
 `

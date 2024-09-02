@@ -36,8 +36,8 @@ export const light = {
     thirdBackgroundColor: "#F3F3F3", // 원래 second랑 똑같은 건 의도된건가...?
     accentColor: goose,
     scrollbarColor: "#FFC6C6",
-    frontSignPageTextColor: goose,
-    frontSignPageBackgroundColor: "#FFD7C7",
+    introTextColor: goose,
+    introBackgroundColor: "#FFD7C7",
     imgIconFilter: "invert(0%)",
     sidebar: {
         activeColor: black,
@@ -128,8 +128,8 @@ export const dark = {
     thirdBackgroundColor: "#2A2A2A",
     accentColor: goose,
     scrollbarColor: "#4A4A4A",
-    frontSignPageTextColor: goose,
-    frontSignPageBackgroundColor: "#FFD7C7",
+    introTextColor: "#FFD7C7",
+    introBackgroundColor: "#77371F",
     imgIconFilter: "invert(100%)",
     sidebar: {
         activeColor: white,

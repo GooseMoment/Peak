@@ -15,8 +15,8 @@ import themes from "@assets/themes"
 import { useTranslation } from "react-i18next"
 
 const DemoTheme = () => {
-    const { t } = useTranslation(null, {
-        keyPrefix: "intro.section_customize.demo",
+    const { t } = useTranslation("intro", {
+        keyPrefix: "section_customize.demo",
     })
     const [activeTheme, setActiveTheme] = useState("light")
     const filters = useMemo(() => makeFilters(t), [t])

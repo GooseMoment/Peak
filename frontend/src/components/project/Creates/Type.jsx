@@ -1,5 +1,6 @@
 import styled from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
 import goal from "@assets/project/type/goal.svg"
@@ -7,13 +8,15 @@ import regular from "@assets/project/type/regular.svg"
 
 import { useTranslation } from "react-i18next"
 
-const Type = ({ setType, closeComponent }) => {
+const Type = ({ setType }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.type" })
+
+    const { closeModal } = useModalWindowCloseContext()
 
     const changeType = (type) => {
         return () => {
             setType({ type })
-            closeComponent()
+            closeModal()
         }
     }
 
@@ -23,7 +26,7 @@ const Type = ({ setType, closeComponent }) => {
     ]
 
     return (
-        <Detail title={t("title")} onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeModal}>
             {items.map((item) => (
                 <ItemBlock key={item.type}>
                     {item.icon}

@@ -63,6 +63,12 @@ export const getFollowingsByUser = async (username) => {
     return res.data
 }
 
+export const getRequestersByUser = async (username) => {
+    const res = await client.get(`users/@${username}/requesters/`)
+
+    return res.data
+}
+
 export const putBlock = (username) => {
     return client.put(`social/block/@${getCurrentUsername()}/@${username}/`)
 }
@@ -91,22 +97,30 @@ export const postQuote = async (date, quote) => {
     return res.data
 }
 
-export const getDailyLogDetails = async (username, day) => {
+export const getDailyLogDrawers = async (username, cursor) => {
     const res = await client.get(
-        `social/daily/log/details/@${username}/${day}/`,
+        `social/daily/log/details/drawer/@${username}/?cursor=${cursor}`,
     )
 
     return res.data
 }
 
-export const getExploreFeed = async () => {
-    const res = await client.get(`social/explore/`)
+export const getDailyLogTasks = async (drawerID, day, page) => {
+    const res = await client.get(
+        `social/daily/log/details/task/${drawerID}/${day}/?page=${page}`,
+    )
 
     return res.data
 }
 
-export const getExploreSearchResults = async (query) => {
-    const params = new URLSearchParams({ query: query })
+export const getExploreRecommend = async (cursor) => {
+    const res = await client.get(`social/explore/?cursor=${cursor}`)
+
+    return res.data
+}
+
+export const getExploreFound = async (query, cursor) => {
+    const params = new URLSearchParams({ query: query, cursor: cursor })
     const res = await client.get(`social/explore/search/?${params.toString()}`)
     return res.data
 }

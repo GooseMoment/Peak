@@ -8,7 +8,7 @@ const Box = styled.h1`
     gap: 0.25em;
 
     z-index: 999;
-    color: ${(p) => p.theme.frontSignPageTextColor};
+    color: ${(p) => p.theme.introTextColor};
 
     font-size: 2em;
     font-weight: bold;

@@ -7,7 +7,7 @@ import styled, { useTheme } from "styled-components"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
 import ModalLoader from "@components/common/ModalLoader"
-import ModalPortal from "@components/common/ModalPortal"
+import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
@@ -164,23 +164,26 @@ const ProjectPage = () => {
                                   }
                         }
                     />
-                    <SortIconBox
-                        onClick={handleToggleContextMenu(
-                            setSelectedSortMenuPosition,
-                            setIsSortMenuOpen,
-                            setIsContextMenuOpen,
-                        )}
-                    >
-                        <SortIcon color={theme.textColor} />
-                    </SortIconBox>
-                    <FeatherIcon
-                        icon="more-horizontal"
-                        onClick={handleToggleContextMenu(
-                            setSelectedButtonPosition,
-                            setIsContextMenuOpen,
-                            setIsSortMenuOpen,
-                        )}
-                    />
+                    {project?.type === "inbox" || (
+                        <>
+                            <SortIconBox
+                                onClick={handleToggleContextMenu(
+                                    setSelectedSortMenuPosition,
+                                    setIsSortMenuOpen,
+                                    setIsContextMenuOpen,
+                                )}>
+                                <SortIcon color={theme.textColor} />
+                            </SortIconBox>
+                            <FeatherIcon
+                                icon="more-horizontal"
+                                onClick={handleToggleContextMenu(
+                                    setSelectedButtonPosition,
+                                    setIsContextMenuOpen,
+                                    setIsSortMenuOpen,
+                                )}
+                            />
+                        </>
+                    )}
                 </Icons>
             </TitleBox>
             {project.type === "goal" && (
@@ -225,34 +228,25 @@ const ProjectPage = () => {
                 />
             )}
             {isDrawerCreateOpen && (
-                <ModalPortal
-                    closeModal={() => {
+                <ModalWindow
+                    afterClose={() => {
                         setIsDrawerCreateOpen(false)
-                    }}
-                >
-                    <DrawerCreate
-                        onClose={() => {
-                            setIsDrawerCreateOpen(false)
-                        }}
-                    />
-                </ModalPortal>
+                    }}>
+                    <DrawerCreate />
+                </ModalWindow>
             )}
             {isProjectEditOpen && (
-                <ModalPortal
-                    closeModal={() => {
+                <ModalWindow
+                    afterClose={() => {
                         setIsProjectEditOpen(false)
-                    }}
-                >
-                    <ProjectEdit
-                        project={project}
-                        onClose={() => {
-                            setIsProjectEditOpen(false)
-                        }}
-                    />
-                </ModalPortal>
+                    }}>
+                    <ProjectEdit project={project} />
+                </ModalWindow>
             )}
             <Suspense key="project-page" fallback={<ModalLoader />}>
-                <Outlet context={[id, project.color]} />
+                <Outlet
+                    context={[id, getProjectColor(theme.type, project.color)]}
+                />
             </Suspense>
         </>
     )
