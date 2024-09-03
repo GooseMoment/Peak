@@ -258,10 +258,13 @@
         "success_follow": "@{{username}} 님을 팔로우 합니다.",
         "success_requested": "@{{username}} 님에게 팔로우 요청을 보냈습니다.",
         "error_follow": "@{{username}} 님에게 팔로우 요청을 보내지 못했습니다.",
-        "success_unfollow": "이제 @{{username}} 님을 팔로우하지 않습니다.",
+        "success_unfollow": "이제 @{{username}} 님을 언팔로우 했습니다.",
         "success_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소했습니다.",
-        "error_unfollow": "@{{username}} 님의 내 팔로우를 취소하지 못했습니다.",
-        "error_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소하지 못했습니다."
+        "error_unfollow": "@{{username}} 님을 언팔로우 하지 못했습니다.",
+        "error_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소하지 못했습니다.",
+        "cancel_requested": "팔로우 요청을 취소할까요?",
+        "cancel_accepted": "@{{username}} 님을 언팔로우 할까요?",
+        "button_sure": "네"
     },
     "error-page": {
         "unknown_error_code": "ㅠ_ㅠ",
