@@ -112,9 +112,7 @@
             "values": {
                 "system": "시스템 설정대로",
                 "light": "라이트",
-                "light-systemcolor": "라이트 (시스템 컬러)",
-                "dark": "다크",
-                "dark-systemcolor": "다크 (시스템 컬러)"
+                "dark": "다크"
             }
         },
         "main_width": {
