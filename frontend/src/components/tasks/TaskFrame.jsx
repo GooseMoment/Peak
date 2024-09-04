@@ -55,7 +55,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                     )}
                 </CircleName>
 
-                <Dates>
+                {hasDate && <Dates>
                     {task.assigned_at && (
                         <AssignedDate
                             $completed={task.completed_at}
@@ -74,7 +74,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                             {task.completed_at ? due : calculate_due}
                         </DueDate>
                     )}
-                    {task?.reminders
+                    {task.reminders
                         ? task.reminders?.length !== 0 && (
                               <Reminder $completed={task.completed_at}>
                                   <img src={alarmclock} />
@@ -82,7 +82,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                               </Reminder>
                           )
                         : null}
-                </Dates>
+                </Dates>}
             </div>
         </Box>
     )
@@ -91,7 +91,8 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
 const Box = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 1.5em;
+    margin-top: 0.9em;
+    margin-bottom: 0.9em;
 `
 
 const TaskNameBox = styled.div`
