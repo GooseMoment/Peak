@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
@@ -15,15 +15,18 @@ import DrawerEdit from "@components/project/edit/DrawerEdit"
 import { SkeletonDrawer, SkeletonInboxDrawer } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenu from "@components/project/sorts/SortMenu"
 import Task from "@components/tasks/Task"
+import DragAndDownBox from "@components/project/dragAndDown/DragAndDownBox"
 
 import { deleteDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
+import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { patchDrawer } from "@api/drawers.api"
 
 const getPageFromURL = (url) => {
     if (!url) return null
@@ -38,7 +41,7 @@ const Drawer = ({ project, drawer, color }) => {
     const navigate = useNavigate()
 
     const [collapsed, setCollapsed] = useState(false)
-    const [ordering, setOrdering] = useState("created_at")
+    const [ordering, setOrdering] = useState("order")
     const [isSortMenuOpen, setIsSortMenuOpen] = useState(false)
     const [selectedSortMenuPosition, setSelectedSortMenuPosition] = useState({
         top: 0,
@@ -65,6 +68,34 @@ const Drawer = ({ project, drawer, color }) => {
         })
 
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
+
+    const patchMutation = useMutation({
+        mutationFn: (data) => {
+            return patchDrawer(drawer.id, data)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", { drawerID: drawer.id }],
+            })
+        },
+    })
+
+    useEffect(()=>{
+        const cleanupMonitor = monitorForElements({
+            onDrop({ location, source }) {
+                const targetOrder = location.current.dropTargets[0]?.data.order
+                const draggedOrder = source.data.order
+                
+                if (typeof targetOrder === "number" && draggedOrder !== targetOrder) {
+                    patchMutation.mutate({ dragged_order: draggedOrder, target_order: targetOrder })
+                }
+            }
+        })
+
+        return () => {
+            cleanupMonitor()
+        }
+    }, [])
 
     const deleteMutation = useMutation({
         mutationFn: () => {
@@ -112,9 +143,8 @@ const Drawer = ({ project, drawer, color }) => {
         drawer.uncompleted_task_count + drawer.completed_task_count
 
     const handleCollapsed = () => {
-        {
-            taskCount !== 0 && setCollapsed((prev) => !prev)
-        }
+        if (taskCount !== 0)
+            setCollapsed((prev) => !prev)
     }
 
     const clickPlus = () => {
@@ -163,13 +193,13 @@ const Drawer = ({ project, drawer, color }) => {
                 </DrawerBox>
             )}
             {collapsed ? null : (
-                <TaskList>
-                    {data?.pages?.map((group) =>
-                        group?.results?.map((task) => (
-                            <Task key={task.id} task={task} color={color} />
-                        )),
-                    )}
-                </TaskList>
+                data?.pages?.map((group) =>
+                    group?.results?.map((task) => (
+                        <DragAndDownBox key={task.id} task={task}>
+                            <Task task={task} color={color} />
+                        </DragAndDownBox>
+                    )),
+                )
             )}
             {isSortMenuOpen && (
                 <SortMenu
@@ -232,13 +262,7 @@ const Drawer = ({ project, drawer, color }) => {
     )
 }
 
-export const TaskList = styled.div`
-    flex: 1;
-    margin-left: 0.5em;
-`
-
 const TaskCreateButton = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     margin-left: 1.9em;
