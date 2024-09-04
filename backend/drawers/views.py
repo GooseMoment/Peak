@@ -24,12 +24,13 @@ class DrawerDetail(mixins.RetrieveModelMixin,
         try:
             dragged_order = int(request.data["dragged_order"])
             target_order = int(request.data["target_order"])
-        except (ValueError, TypeError):
+            closest_edge = request.data["closest_edge"]
+        except (ValueError, TypeError, KeyError):
             pass
         else:
             if (dragged_order is not None) or (target_order is not None):
                 drawer: Drawer = self.get_object()
-                reorder_tasks(drawer.tasks, dragged_order, target_order)
+                reorder_tasks(drawer.tasks, dragged_order, target_order, closest_edge)
                 normalize_drawer_order(drawer.tasks)
 
         return self.partial_update(request, *args, **kwargs)

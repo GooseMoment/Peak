@@ -3,9 +3,8 @@ import { useState, useEffect, useRef } from "react"
 import styled, { css } from "styled-components"
 
 import { draggable, dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
-import { attachClosestEdge, extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge"
+import { attachClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge"
 import { DragHandleButton } from "@atlaskit/pragmatic-drag-and-drop-react-accessibility/drag-handle-button"
-import { DropIndicator } from "@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/box"
 
 const DragAndDownBox = ({ task, children }) => {
     const ref = useRef(null)
@@ -34,7 +33,7 @@ const DragAndDownBox = ({ task, children }) => {
                     allowedEdges: ['top', 'bottom'],
                 })
             },
-            onDrag({ self, source }) {
+            onDrag({ location, source }) {
                 const isSource = source.element === element
 
                 if (isSource) {
@@ -42,13 +41,17 @@ const DragAndDownBox = ({ task, children }) => {
                     return
                 }
 
-                const closestEdge = extractClosestEdge(self.data)
-
                 const sourceOrder = source.data.order
                 if (typeof(sourceOrder) !== 'number')
                     return
 
-                setClosestEdge(closestEdge)
+                const targetData = location.current.dropTargets[0]?.data
+
+                if (targetData) {
+                    const symbolProperties = Object.getOwnPropertySymbols(targetData)
+                    const closestEdge = targetData[symbolProperties[0]]
+                    setClosestEdge(closestEdge)
+                }
             },
             onDragLeave() {
                 setClosestEdge(null)
@@ -65,23 +68,20 @@ const DragAndDownBox = ({ task, children }) => {
     }, [task.order, task.id])
 
     return (
-        <>
-            <DragAndDownBlock $edge={closestEdge}>
-                <DragHandleButtonBox>
-                    <DragHandleButton ref={dragHandleRef}/>
-                </DragHandleButtonBox>
-                <div ref={ref}>
-                    {children}
-                </div>
-            </DragAndDownBlock>
-            {closestEdge && <DropIndicator edge={closestEdge} gap="1px" />}
-        </>
+        <DragAndDownBlock $edge={closestEdge}>
+            <DragHandleButtonBox>
+                <DragHandleButton ref={dragHandleRef}/>
+            </DragHandleButtonBox>
+            <div ref={ref}>
+                {children}
+            </div>
+        </DragAndDownBlock>
     )
 }
 
 const DragHandleButtonBox = styled.div`
     visibility: hidden;
-    margin-top: 1.2em;
+    margin-bottom: 0.26em;
     margin-right: 0.2em;
 
     & button {
@@ -96,10 +96,13 @@ const DragHandleButtonBox = styled.div`
 const DragAndDownBlock = styled.div`
     display: flex;
     align-items: center;
-    border-top: 1px solid transparent;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
 
-    ${props => props.$edge && props.$edge === "top" && css`
-        border-top: 2px dotted ${p=>p.theme.goose};
+    ${props => props.$edge && props.$edge === "top" ? css`
+        border-top: 2px dashed ${p=>p.theme.goose};
+    ` : props.$edge === "bottom" && css`
+        border-bottom: 2px dashed ${p=>p.theme.goose};
     `}
 
     &:hover {

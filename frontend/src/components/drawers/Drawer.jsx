@@ -83,12 +83,17 @@ const Drawer = ({ project, drawer, color }) => {
     useEffect(()=>{
         const cleanupMonitor = monitorForElements({
             onDrop({ location, source }) {
-                const targetOrder = location.current.dropTargets[0]?.data.order
-                const draggedOrder = source.data.order
-                
-                if (typeof targetOrder === "number" && draggedOrder !== targetOrder) {
-                    patchMutation.mutate({ dragged_order: draggedOrder, target_order: targetOrder })
-                }
+                const targetData = location.current.dropTargets[0]?.data
+                const draggedOrder = source?.data.order
+
+                if (targetData !== undefined && draggedOrder !== undefined) {
+                    const targetOrder = targetData?.order
+                    const symbolProperties = Object.getOwnPropertySymbols(targetData)
+                    const closestEdge = targetData[symbolProperties[0]]
+
+                    if (typeof targetOrder === "number" && draggedOrder !== targetOrder) {
+                        patchMutation.mutate({ dragged_order: draggedOrder, target_order: targetOrder, closest_edge: closestEdge })
+                }}
             }
         })
 
@@ -193,13 +198,15 @@ const Drawer = ({ project, drawer, color }) => {
                 </DrawerBox>
             )}
             {collapsed ? null : (
-                data?.pages?.map((group) =>
-                    group?.results?.map((task) => (
-                        <DragAndDownBox key={task.id} task={task}>
-                            <Task task={task} color={color} />
-                        </DragAndDownBox>
-                    )),
-                )
+                <TaskList>
+                    {data?.pages?.map((group) =>
+                        group?.results?.map((task) => (
+                            <DragAndDownBox key={task.id} task={task}>
+                                <Task task={task} color={color} />
+                            </DragAndDownBox>
+                        ))
+                    )}
+                </TaskList>
             )}
             {isSortMenuOpen && (
                 <SortMenu
@@ -278,6 +285,10 @@ const TaskCreateButton = styled.div`
         height: 1.1em;
         top: 0;
     }
+`
+
+const TaskList = styled.div`
+    margin-top: 1em;
 `
 
 const TaskCreateText = styled.div`
