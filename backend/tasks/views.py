@@ -34,7 +34,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
             due_tz = request.data["due_tz"]
             new_due_date = request.data["due_date"]
             new_due_time = request.data["due_time"]
-        except KeyError as e:
+        except KeyError:
             pass
         else:
             task: Task = self.get_object()
@@ -68,7 +68,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
     
         try:
             new_completed = request.data["completed_at"]
-        except KeyError as e:
+        except KeyError:
             pass
         else:
             task: Task = self.get_object()
@@ -94,11 +94,11 @@ class TaskList(CreateMixin,
     serializer_class = TaskSerializer
     permission_classes = [IsUserMatch]
     filter_backends = [OrderingFilter]
-    ordering_fields = ['name', 'assigned_at', 'due_date', 'due_time', 'priority', 'created_at', 'reminders']
-    ordering = ['created_at']
+    ordering_fields = ['order', 'name', 'assigned_at', 'due_date', 'due_time', 'priority', 'created_at', 'reminders']
+    ordering = ['order']
 
     def get_queryset(self):
-        queryset = Task.objects.filter(user=self.request.user).order_by("created_at").all()
+        queryset = Task.objects.filter(user=self.request.user).order_by("order").all()
         drawer_id = self.request.query_params.get("drawer", None)
         if drawer_id is not None:
             queryset = queryset.filter(drawer__id=drawer_id)
