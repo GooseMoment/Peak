@@ -3,6 +3,8 @@ import { NavLink, useNavigate } from "react-router-dom"
 
 import styled from "styled-components"
 
+import { useSidebarContext } from "@components/sidebar/SidebarContext"
+
 import { cubicBeizer } from "@assets/keyframes"
 
 const StyledNavLink = styled(NavLink)`
@@ -30,10 +32,11 @@ const SidebarLink = ({
     activePath, // use if navigated path and active path are different. If empty, then 'to' is used.
     end,
     children,
-    lazy=false, // if true, then navigate() is called inside startTransition().
-    noNavigate=false, // if true, then navigate() isn't called.
+    lazy = false, // if true, then navigate() is called inside startTransition().
+    noNavigate = false, // if true, then navigate() isn't called.
 }) => {
     const navigate = useNavigate()
+    const { isMobile, startClosing } = useSidebarContext()
 
     const onClickThis = (e) => {
         e.preventDefault()
@@ -50,10 +53,13 @@ const SidebarLink = ({
             startTransition(() => {
                 navigate(to)
             })
-            return
+        } else {
+            navigate(to)
         }
 
-        navigate(to)
+        if (isMobile) {
+            startClosing()
+        }
     }
 
     return (
