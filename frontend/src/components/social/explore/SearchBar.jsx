@@ -68,7 +68,7 @@ const SearchButton = styled(MildButton)`
         margin-right: unset;
         height: 100%;
 
-        color: #a9a9a9;
+        color: ${(props) => props.theme.social.buttonColor};
         stroke-width: 0.15em;
     }
 `

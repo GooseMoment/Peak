@@ -81,6 +81,7 @@ export const light = {
         activeBackgroundColor: "rgb(255 74 3 / 0.35)",
         modalShadowColor: "rgba(123, 123, 123, 0.1)",
         modalCellHoverColor: "#F0F0F0",
+        buttonColor: "#A9A9A9",
     },
     calendar: {
         backgroundColor: "#D9D9D9",
@@ -173,6 +174,7 @@ export const dark = {
         activeBackgroundColor: "rgb(255 74 3 / 0.35)",
         modalShadowColor: "rgba(210, 210, 210, 0.1)",
         modalCellHoverColor: "#383838",
+        buttonColor: "#A9A9A9",
     },
     calendar: {
         backgroundColor: "#323232",
