@@ -344,11 +344,21 @@ const CalendarWrapper = styled.div`
         font-size: 1em;
         font-weight: 600;
         color: ${(p) => p.theme.textColor};
+
+        &:hover {
+            background-color: ${(p) => p.theme.calendar.backgroundColor} !important;
+        }
     }
 
-    .react-calendar__navigation__label:disabled {
-        background-color: ${(p) => p.theme.backgroundColor};
-        color: ${(p) => p.theme.textColor};
+    .react-calendar__navigation__label{
+        &:hover {
+            background-color: ${(p) => p.theme.calendar.backgroundColor} !important;
+        }
+
+        &:disabled {
+            background-color: ${(p) => p.theme.backgroundColor};
+            color: ${(p) => p.theme.textColor};
+        }
     }
 `
 
