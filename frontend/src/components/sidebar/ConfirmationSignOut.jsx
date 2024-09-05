@@ -17,7 +17,7 @@ const ConfirmationSignOut = ({ onClose }) => {
 
     const buttons = [
         "close",
-        <Button key="sign_out" $state={states.danger} onClick={onClickSignOut}>
+        <Button key="sign_out" state={states.danger} onClick={onClickSignOut}>
             {t("yes")}
         </Button>,
     ]

@@ -109,9 +109,9 @@ const Notifications = () => {
                 <Value>
                     <Button
                         onClick={toggleWebPush}
-                        $loading={isPending}
+                        loading={isPending}
                         disabled={isPending}
-                        $state={
+                        state={
                             setting.push_notification_subscription
                                 ? states.danger
                                 : states.text
