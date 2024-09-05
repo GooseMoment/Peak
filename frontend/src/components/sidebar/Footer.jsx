@@ -4,11 +4,10 @@ import { useQuery } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
 
 import ConfirmationSignOut from "@components/sidebar/ConfirmationSignOut"
+import { useSidebarContext } from "@components/sidebar/SidebarContext"
 import SidebarLink from "@components/sidebar/SidebarLink"
 
 import { getMe } from "@api/users.api"
-
-import useScreenType from "@utils/useScreenType"
 
 import { skeletonCSS } from "@assets/skeleton"
 
@@ -16,7 +15,7 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const Footer = ({ collapsed, closeSidebar }) => {
+const Footer = () => {
     const {
         data: user,
         isPending,
@@ -28,8 +27,6 @@ const Footer = ({ collapsed, closeSidebar }) => {
 
     const { t } = useTranslation(null, { keyPrefix: "sidebar" })
 
-    const { isMobile } = useScreenType()
-
     useEffect(() => {
         if (isError) {
             toast.error(t("user_error"), {
@@ -37,12 +34,6 @@ const Footer = ({ collapsed, closeSidebar }) => {
             })
         }
     }, [isError])
-
-    const onClickLink = () => {
-        if (isMobile) {
-            closeSidebar()
-        }
-    }
 
     const [isSignOutConfirmationOpen, setSignOutConfirmationOpen] =
         useState(false)
@@ -54,38 +45,35 @@ const Footer = ({ collapsed, closeSidebar }) => {
         })
     }
 
+    const { isCollapsed } = useSidebarContext()
+
     return (
-        <FooterBox $collapsed={collapsed}>
+        <FooterBox $collapsed={isCollapsed}>
             {isPending && (
                 <MeProfile>
                     <MeProfileImgSkeleton />
-                    {!collapsed && <UsernameSkeleton />}
+                    {!isCollapsed && <UsernameSkeleton />}
                 </MeProfile>
             )}
 
             {isError && <MeProfile />}
 
             {user && (
-                <SidebarLink
-                    to={`users/@${user.username}`}
-                    onClick={onClickLink}
-                >
+                <SidebarLink to={`users/@${user.username}`}>
                     <MeProfile>
                         <MeProfileImg src={user.profile_img} />
-                        {!collapsed && <Username>{user.username}</Username>}
+                        {!isCollapsed && <Username>{user.username}</Username>}
                     </MeProfile>
                 </SidebarLink>
             )}
 
-            {!collapsed && (
+            {!isCollapsed && (
                 <SmallIcons>
                     <SidebarLink
                         to="/app/settings/account"
                         activePath="/app/settings"
                         end={false}
-                        onClick={onClickLink}
-                        key="settings"
-                    >
+                        key="settings">
                         <SmallIcon>
                             <FeatherIcon icon="settings" />
                         </SmallIcon>
@@ -94,8 +82,7 @@ const Footer = ({ collapsed, closeSidebar }) => {
                         to="/app/sign_out"
                         onClick={openSignOutConfirmation}
                         noNavigate
-                        key="sign-out"
-                    >
+                        key="sign-out">
                         <SmallIcon>
                             <FeatherIcon icon="log-out" />
                         </SmallIcon>
