@@ -58,6 +58,8 @@ const Box = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    color: ${(props) => props.theme.textColor};
 `
 
 const PeckButtonBox = styled(MildButton)`

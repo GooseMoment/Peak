@@ -43,6 +43,7 @@ const Wrapper = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -55,6 +56,7 @@ const EmojiModalOverlay = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
+
     pointer-events: auto;
 `
 
@@ -62,26 +64,33 @@ export const Modal = styled.div`
     position: absolute;
     top: ${(props) => props.$posY}px;
     left: calc(${(props) => props.$posX}px - 33em); // 32 + 1(shadow)
-    background: white;
-    padding: 1em;
-    border-radius: 1em;
-    border: 0.2em solid rgba(123, 123, 123, 0.1);
-    box-shadow: 0.2em 0.2em 0.4em rgba(0, 0, 0, 0.1);
     width: 30em;
     height: 24em;
+
+    box-shadow: 0.2em 0.3em 0.5em
+        ${(props) => props.theme.social.modalShadowColor};
+    border: 0.1em solid ${(props) => props.theme.social.modalShadowColor};
+    border-radius: 1em;
+    background: ${(props) => props.theme.backgroundColor};
+    padding: 1em;
+
     overflow-y: auto;
     z-index: 10;
     pointer-events: auto;
 `
 
 const EmojiSearchBox = styled.input`
-    font-size: inherit;
+    margin-bottom: 1em;
     width: 27em;
     height: 2em;
-    line-height: 1.3em;
-    padding: 0 0.8em 0;
+
     border-radius: 0.4em;
-    background-color: #f2f2f2;
+    background-color: ${(props) => props.theme.secondBackgroundColor};
+    padding: 0 0.8em 0;
+
+    font-size: inherit;
+    line-height: 1.3em;
+    color: ${(props) => props.theme.secondTextColor};
 `
 
 const EmojiList = styled.div`
@@ -102,14 +111,15 @@ const EmojiListCell = styled.li`
 
     cursor: pointer;
     &:hover {
-        background-color: #f0f0f0;
+        background-color: ${(props) => props.theme.social.modalCellHoverColor};
     }
 `
 
 const EmojiCell = styled.img`
-    padding: 0.2em;
     width: 2.4em;
     height: 2.4em;
+
+    padding: 0.2em;
 `
 
 export default EmojiModal

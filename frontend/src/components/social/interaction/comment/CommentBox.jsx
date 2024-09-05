@@ -1,14 +1,16 @@
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import { DateTime } from "luxon"
 
 const CommentBox = ({ comment }) => {
+    const theme = useTheme()
+
     return (
         <Box>
             <ProfileImgWrapper>
                 <img src={comment.user.profile_img} />
             </ProfileImgWrapper>
-            <Wrapper>
+            <Wrapper $color={theme.textColor}>
                 <InfoBox>
                     <Username>@{comment.user.username}</Username>
                     {/* TODO: Set locale */}
@@ -54,6 +56,8 @@ const Wrapper = styled.div`
 
     display: flex;
     flex-direction: column;
+
+    color: ${(props) => props.$color};
 `
 
 const InfoBox = styled.div`
