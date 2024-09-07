@@ -75,24 +75,35 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             onClose()
         },
         onError: () => {
-            if (newTask?.name) toast.error(t("task_create_error"))
-            else toast.error(t("task_create_no_name"))
+            toast.error(t("task_create_error"), {
+                toastId: "task_create_error",
+            })
         }
     })
     
     const onKeyDown = (e) => {
-        if (!postMutation.isPending) {
-            if (e.altKey) {
+        if (postMutation.isPending) {
+            return
+        }
+
+        if (e.altKey) {
+            const selectedNumber = Number(e.code[5])
+            if (selectedNumber) {
                 e.preventDefault()
-                const selectedNumber = Number(e.code[5])
-                if (selectedNumber) {
-                    setContent(items[selectedNumber - 1].name)
-            }}
-            if (e.code === "Enter") {
-                e.preventDefault()
-                editNewTask({ name: newTaskName })
-                postMutation.mutate(newTask)
+                setContent(items[selectedNumber - 1].name)
+        }}
+        if (e.code === "Enter") {
+            e.preventDefault()
+
+            editNewTask({ name: newTaskName })
+            if (!newTask.name) {
+                toast.error(t("task_create_no_name"), {
+                    toastId: "task_create_no_name",
+                })
+                return
             }
+
+            postMutation.mutate(newTask)
         }
     }
     
