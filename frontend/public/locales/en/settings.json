@@ -112,9 +112,7 @@
             "values": {
                 "system": "Same as system",
                 "light": "Light",
-                "light-systemcolor": "Light (with system color)",
-                "dark": "Dark",
-                "dark-systemcolor": "Dark (with system color)"
+                "dark": "Dark"
             }
         },
         "main_width": {

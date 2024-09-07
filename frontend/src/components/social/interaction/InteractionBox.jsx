@@ -79,16 +79,15 @@ const InteractionBox = ({ parentType, parent }) => {
                             emojiCount={reaction.counts}
                             isSelected={myReactions.some(
                                 (myReactionEmoji) =>
-                                    myReactionEmoji.name === reaction.emoji.name,
+                                    myReactionEmoji.name ===
+                                    reaction.emoji.name,
                             )}
                             saveReaction={parentReactionsMutation.mutate}
                         />
                     ),
                 )}
             {needPickerButton() && (
-                <EmojiPickerButton
-                    setPickedEmoji={setPickedEmoji}
-                />
+                <EmojiPickerButton setPickedEmoji={setPickedEmoji} />
             )}
             <CommentButton parentType={parentType} parent={parent} />
             {parentType === "task" && (

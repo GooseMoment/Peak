@@ -1,13 +1,13 @@
 import { redirect } from "react-router-dom"
 
 import { lazily } from "react-lazily"
-import { PasswordRecoveryRequestForm } from "@/components/sign/forms"
 
 const {
     SignInForm,
     SignUpForm,
     SignUpComplete,
     PasswordRecoveryForm,
+    PasswordRecoveryRequestForm,
     EmailVerificationForm,
     EmailVerificationResendForm,
 } = lazily(() => import("@components/sign/forms"))

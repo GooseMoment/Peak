@@ -16,7 +16,8 @@ const ToolTipBox = styled.div`
     top: -10%;
     left: 50%;
     transform: translateX(-55%);
-
+    text-align: center;
+    white-space: nowrap;
     background: #333333;
     opacity: 70%;
     padding: 0.3em 0.6em;

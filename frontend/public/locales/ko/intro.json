@@ -1,0 +1,125 @@
+{
+    "section_top": {
+        "title1": "계획, 분류, 응원.",
+        "title2": "전부 Peak에서 한 번에.",
+        "button_start": "시작하기",
+        "button_sign_in": "로그인"
+    },
+    "section_plan": {
+        "title": "계획하기",
+        "description": "작업의 우선순위와 기한을 추적하세요.",
+        "demo": {
+            "priority_selection": "우선순위를 선택하세요",
+            "deadline_selection": "기한을 선택하세요",
+            "sample0": "토플 공부하기",
+            "sample1": "생수 주문하기",
+            "sample2": "건강검진 받기",
+            "sample3": "썬크림 사기",
+            "sample4": "여행 계획 짜기"
+        }
+    },
+    "section_organize": {
+        "title": "분류하기",
+        "description": "프로젝트와 서랍으로 작업을 분류하세요.",
+        "demo_project": {
+            "title": "프로젝트에는 서랍을 담을 수 있습니다.",
+            "button_add": "프로젝트 추가",
+            "sample0": "대학생활",
+            "sample1": "집안일",
+            "sample2": "교환학생",
+            "sample3": "8월 제주도 여행",
+            "sample4": "건강해지기"
+        },
+        "demo_drawer": {
+            "title": "서랍 안에 작업을 넣을 수 있습니다.",
+            "button_add": "서랍 추가",
+            "project_name": "대학생활",
+            "drawer0": {
+                "drawer_name": "🖋️ 과제",
+                "sample0": "11주차 과제",
+                "sample1": "온라인 강의 꼭꼭 보기",
+                "sample2": "안전교육 이수하기"
+            },
+            "drawer1": {
+                "drawer_name": "📖 책 읽기",
+                "sample0": "우리 마음은 늘 우리 저 너머로 쓸려 간다",
+                "sample1": "밤은 짧아, 걸어 아가씨야",
+                "sample2": "위그드라실의 여신들"
+            },
+            "drawer2": {
+                "drawer_name": "🎈 공모전",
+                "sample0": "컨퍼런스 참가 신청서",
+                "sample1": "같이 나갈 부원들 연락하기",
+                "sample2": "참가 작품 아이디어 회의"
+            }
+        }
+    },
+    "section_cheer": {
+        "title": "응원하기",
+        "description": "멋진 에모지로 친구들의 작업을 응원하세요.",
+        "demo_cheer": {
+            "task_name": "드디어 프로젝트 끝이야!!!"
+        }
+    },
+    "section_share": {
+        "title": "공유하기",
+        "description": "오늘의 업적을 친구와 공유하세요.",
+        "demo_share": {
+            "logs": {
+                "log0": {
+                    "preview": "예방접종 완료!",
+                    "blurb": "주사 맞은 곳이 아파",
+                    "tasks": {
+                        "task0": "예방접종",
+                        "task1": "국제처에 서류 제출하기",
+                        "task2": "의료보험 가입하기"
+                    }
+                },
+                "log1": {
+                    "preview": "영어 공부 완료!",
+                    "blurb": "영화 보고 싶당",
+                    "tasks": {
+                        "task0": "영어 공부",
+                        "task1": "선형대수학 1-1장",
+                        "task2": "빌넣..."
+                    }
+                },
+                "log2": {
+                    "preview": "오늘의수영 완료!",
+                    "blurb": "대전은 칼국수다",
+                    "tasks": {
+                        "task0": "오늘의수영",
+                        "task1": "대전 다녀오기",
+                        "task2": "칼국수!!"
+                    }
+                },
+                "log3": {
+                    "preview": "건강검진 완료!",
+                    "blurb": "결과가 좀...",
+                    "tasks": {
+                        "task0": "건강검진",
+                        "task1": "회계 서류 정리",
+                        "task2": "과외학생 답변하기"
+                    }
+                },
+                "log4": {
+                    "preview": "서점 가기 완료!",
+                    "blurb": "윗 세상 올라가고 나서 더 재밌네",
+                    "tasks": {
+                        "task0": "서점 가기",
+                        "task1": "학원",
+                        "task2": "아이콘 만들기"
+                    }
+                }
+            }
+        }
+    },
+    "section_customize": {
+        "title": "꾸미기",
+        "description": "앱의 모습을 근사한 테마로 꾸며보세요.",
+        "demo": {
+            "theme_light": "라이트",
+            "theme_dark": "다크"
+        }
+    }
+}
