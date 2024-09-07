@@ -5,9 +5,9 @@ export const CreateSimpleBox = ({ icon, children }) => {
         <Box>
             {icon}
             <VLine />
-            <FlexBox>
+            <ContentBlock>
                 {children}
-            </FlexBox>
+            </ContentBlock>
         </Box>
     )
 }
@@ -36,7 +36,7 @@ const VLine = styled.div`
     margin-right: 1em;
 `
 
-const FlexBox = styled.div`
+const ContentBlock = styled.div`
     display: flex;
     gap: 0.5em;
 `
