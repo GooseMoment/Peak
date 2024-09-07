@@ -19,36 +19,38 @@ const Profile = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.3em;
 `
 
 const ProfileImgWrapper = styled.div`
-    height: 3.7em;
+    aspect-ratio: 1;
+    width: 3.7em;
 
-    & img {
-    }
+    border-radius: 100%;
+    ${(props) =>
+        props.$color
+            ? css`
+                  outline: solid 0.2em ${(props) => props.$color};
+              `
+            : null}
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     & svg {
-        stroke: 1em;
+        stroke: 0.5em;
     }
 
     & img,
     & svg {
         border-radius: 100%;
-
-        width: 3.4em;
-        height: 3.4em;
-
-        ${(props) =>
-            props.$color
-                ? css`
-                      box-shadow: 0 0 0 0.2em fefdfc, 0 0 0 0.4em #${(props) => props.$color};
-                  `
-                : null}
+        aspect-ratio: 1;
+        width: ${(props) => (props.$color ? 3.3 : 3.5)}em;
     }
 `
 
 const Username = styled.div`
+    margin-top: auto;
     width: 100%;
 
     overflow-x: clip;
@@ -56,6 +58,8 @@ const Username = styled.div`
 
     text-align: center;
     white-space: nowrap;
+
+    color: ${(p) => p.theme.textColor};
 `
 
 export default SimpleProfile

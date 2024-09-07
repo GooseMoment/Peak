@@ -164,6 +164,12 @@ class FollowView(APIView):
 
 @api_view(["GET"])
 def get_followers(request: HttpRequest, username):
+    target_user = get_object_or_404(User, username=username)
+    
+    is_blocked = Block.objects.filter(blocker=target_user, blockee=request.user).exclude(deleted_at=None).exists()
+    if is_blocked:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    
     followers = Following.objects.filter(followee__username=username, status=Following.ACCEPTED).all()
     followerUsers = User.objects.filter(followings__in=followers.all()).all()
     
@@ -173,10 +179,28 @@ def get_followers(request: HttpRequest, username):
 
 @api_view(["GET"])
 def get_followings(request: HttpRequest, username):
+    target_user = get_object_or_404(User, username=username)
+    
+    is_blocked = Block.objects.filter(blocker=target_user, blockee=request.user).exclude(deleted_at=None).exists()
+    if is_blocked:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    
     followings = Following.objects.filter(follower__username=username, status=Following.ACCEPTED).all()
     followingUsers = User.objects.filter(followers__in=followings.all()).all()
     
     serializer = UserSerializer(followingUsers, many=True)    
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(["GET"])
+def get_requesters(request: HttpRequest, username):
+    if request.user.username != username:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    
+    requests = Following.objects.filter(followee__username=username, status=Following.REQUESTED).all()
+    requested_users = User.objects.filter(followings__in=requests.all()).all()
+    
+    serializer = UserSerializer(requested_users, many=True)
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 

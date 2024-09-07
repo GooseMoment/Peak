@@ -140,9 +140,13 @@
         "name_placeholder": "작업의 이름을 입력하세요.",
         "name_change_success": "이름을 변경했습니다.",
         "none": "없음",
+        "assigned": {
+            "name": "할당 날짜",
+            "title": "할당 날짜 설정"
+        },
         "due": {
-            "assigned_title": "할당 날짜 설정",
-            "due_title": "기한 지정",
+            "name": "기한",
+            "title": "기한 설정",
             "quick": {
                 "title": "빠른 지정",
                 "today": "오늘",
@@ -184,6 +188,7 @@
             }
         },
         "reminder": {
+            "name": "리마인더",
             "title": "리마인더 설정",
             "reminder_before_due_date": "리마인더 설정 전에 기한을 설정해주세요.",
             "then": "그때",
@@ -202,16 +207,19 @@
             "display_2_days_before": "2일 전"
         },
         "priority": {
+            "name": "중요도",
             "title": "중요도 설정",
             "normal": "보통",
             "important": "중요",
             "critical": "매우 중요"
         },
         "drawer": {
+            "name": "서랍",
             "title": "서랍 선택",
             "fetching_error": "데이터를 불러오는 중 오류가 발생했습니다."
         },
         "memo": {
+            "name": "메모",
             "title": "메모 설정",
             "memo_placeholder": "메모를 입력해주세요.",
             "button_change": "변경하기",
@@ -243,79 +251,6 @@
         "follower_list_title": "@{{username}} 님의 팔로워 목록",
         "follower_list_empty": "아무 것도 없습니다.",
         "follower_list_error": "팔로워 목록을 불러올 수 없습니다."
-    },
-    "intro": {
-        "section_top": {
-            "title1": "계획, 분류, 응원.",
-            "title2": "전부 Peak에서 한 번에.",
-            "button_start": "시작하기",
-            "button_sign_in": "로그인"
-        },
-        "section_plan": {
-            "title": "계획하기",
-            "description": "작업의 우선순위와 기한을 추적하세요.",
-            "demo": {
-                "priority_selection": "우선순위를 선택하세요",
-                "deadline_selection": "기한을 선택하세요",
-                "sample0": "토플 공부하기",
-                "sample1": "생수 주문하기",
-                "sample2": "건강검진 받기",
-                "sample3": "썬크림 사기",
-                "sample4": "여행 계획 짜기"
-            }
-        },
-        "section_organize": {
-            "title": "분류하기",
-            "description": "프로젝트와 서랍으로 작업을 분류하세요.",
-            "demo_project": {
-                "title": "프로젝트에는 서랍을 담을 수 있습니다.",
-                "button_add": "프로젝트 추가",
-                "sample0": "대학생활",
-                "sample1": "집안일",
-                "sample2": "교환학생",
-                "sample3": "8월 제주도 여행",
-                "sample4": "건강해지기"
-            },
-            "demo_drawer": {
-                "title": "서랍 안에 작업을 넣을 수 있습니다.",
-                "button_add": "서랍 추가",
-                "project_name": "대학생활",
-                "drawer0": {
-                    "drawer_name": "🖋️ 과제",
-                    "sample0": "11주차 과제",
-                    "sample1": "온라인 강의 꼭꼭 보기",
-                    "sample2": "안전교육 이수하기"
-                },
-                "drawer1": {
-                    "drawer_name": "📖 책 읽기",
-                    "sample0": "우리 마음은 늘 우리 저 너머로 쓸려 간다",
-                    "sample1": "밤은 짧아, 걸어 아가씨야",
-                    "sample2": "위그드라실의 여신들"
-                },
-                "drawer2": {
-                    "drawer_name": "🎈 공모전",
-                    "sample0": "컨퍼런스 참가 신청서",
-                    "sample1": "같이 나갈 부원들 연락하기",
-                    "sample2": "참가 작품 아이디어 회의"
-                }
-            }
-        },
-        "section_cheer": {
-            "title": "응원하기",
-            "description": "멋진 에모지로 친구들의 작업을 응원하세요."
-        },
-        "section_share": {
-            "title": "공유하기",
-            "description": "하루 코멘트를 친구와 공유하세요."
-        },
-        "section_customize": {
-            "title": "꾸미기",
-            "description": "앱의 모습을 근사한 테마로 꾸며보세요.",
-            "demo": {
-                "theme_light": "라이트",
-                "theme_dark": "다크"
-            }
-        }
     },
     "follow_button": {
         "button_follow": "팔로우",

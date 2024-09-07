@@ -46,7 +46,7 @@ const Contents = ({ task, setFunc }) => {
     const items = [
         {
             id: 1,
-            name: "assigned_due",
+            name: "assigned",
             icon: <FeatherIcon icon="calendar" />,
             display: task.assigned_at ? formatted_assigned_date : t("none"),
             component: <Assigned setFunc={setFunc} />,
@@ -120,7 +120,7 @@ const Contents = ({ task, setFunc }) => {
             {items.map((item) => (
                 <Fragment key={item.id}>
                     <ContentsBox>
-                        <ToolTip message={item.name}>{item.icon}</ToolTip>
+                        <ToolTip message={t((item.name)+".name")}>{item.icon}</ToolTip>
                         <VLine $end={item.id === 1 || item.id === 6} />
                         <ContentText
                             name={item.name === "reminder" || item.name}
@@ -141,7 +141,6 @@ const Contents = ({ task, setFunc }) => {
 }
 
 const ContentsBlock = styled.div`
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -149,7 +148,6 @@ const ContentsBlock = styled.div`
 `
 
 const ContentsBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: flex-start;
