@@ -85,11 +85,11 @@ const DragHandleButtonBox = styled.div`
     margin-right: 0.2em;
 
     & button {
-        background-color: white;
+        background-color: ${p=>p.theme.backgroundColor};
     }
 
     & span {
-        color: black;
+        color: ${p=>p.theme.textColor};
     }
 `
 
