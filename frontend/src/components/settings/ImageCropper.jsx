@@ -8,6 +8,7 @@ import { states } from "@assets/themes"
 
 import { createPortal } from "react-dom"
 import Cropper from "react-easy-crop"
+import { useTranslation } from "react-i18next"
 
 const el = document.querySelector("#confirmation")
 
@@ -19,6 +20,8 @@ const ImageCropper = ({
 }) => {
     const [crop, setCrop] = useState({ x: 0, y: 0 })
     const [zoom, setZoom] = useState(1)
+
+    const { t } = useTranslation("settings", { keyPrefix: "account" })
 
     const onCropComplete = (croppedArea, croppedAreaPixels) => {
         setCroppedAreaPixels(croppedAreaPixels)
@@ -39,16 +42,14 @@ const ImageCropper = ({
                 <Button
                     $form={buttonForms.outlined}
                     $state={states.danger}
-                    onClick={onClickCancel}
-                >
-                    Cancel
+                    onClick={onClickCancel}>
+                    {t("button_cancel")}
                 </Button>
                 <Button
                     $form={buttonForms.filled}
                     $state={states.success}
-                    onClick={onClickOk}
-                >
-                    Apply
+                    onClick={onClickOk}>
+                    {t("button_apply")}
                 </Button>
             </StyledButtonGroup>
         </>,
