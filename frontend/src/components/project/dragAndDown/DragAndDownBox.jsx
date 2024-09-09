@@ -10,6 +10,7 @@ const DragAndDownBox = ({ task, children }) => {
     const ref = useRef(null)
     const dragHandleRef = useRef(null)
 
+    const [isDragging, setIsDragging] = useState(false)
     const [closestEdge, setClosestEdge] = useState(null)
 
     useEffect(() => {
@@ -19,6 +20,12 @@ const DragAndDownBox = ({ task, children }) => {
         const cleanupDraggable = draggable({
             element: dragHandle,
             getInitialData: () => ({ order: task.order, id: task.id }),
+            onDragStart() {
+                setIsDragging(true)
+            },
+            onDrop() {
+                setIsDragging(false)
+            }
         })
 
         const cleanupDropTarget = dropTargetForElements({
@@ -58,7 +65,7 @@ const DragAndDownBox = ({ task, children }) => {
             },
             onDrop() {
                 setClosestEdge(null)
-            },
+            }
         })
 
         return () => {
@@ -72,7 +79,7 @@ const DragAndDownBox = ({ task, children }) => {
             <DragHandleButtonBox>
                 <DragHandleButton ref={dragHandleRef}/>
             </DragHandleButtonBox>
-            <div ref={ref}>
+            <div ref={ref} style={{ opacity: isDragging ? 0.5 : 1 }} >
                 {children}
             </div>
         </DragAndDownBlock>
