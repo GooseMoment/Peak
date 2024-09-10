@@ -5,7 +5,8 @@ const SearchPage = () => {
     return (
         <>
             <PageTitle>Search</PageTitle>
-            <SearchBar></SearchBar>
+            <SearchBar handleSearch={console.log}/>
+
         </>
     )
 }

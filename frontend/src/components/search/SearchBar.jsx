@@ -3,12 +3,37 @@ import styled from "styled-components"
 import MildButton from "@components/common/MildButton"
 
 import FeatherIcon from "feather-icons-react"
+import { useRef, useState } from "react"
 
-const SearchBar = () => {
+const SearchBar = ({ handleSearch }) => {
+    const [searchTerm, setSearchTerm] = useState("")
+    const timer = useRef(null)
+
+    const handleChange = (e) => {
+        setSearchTerm(e.target.value)
+
+        if (timer.current) clearTimeout(timer.current)
+
+        timer.current = setTimeout(async () => {
+            handleSearch(e.target.value)
+        }, 1500)
+    }
+
+    const handleKeyDown = (e) => {
+        if (e.key == "Enter") {
+            clearTimeout(timer.current)
+            handleSearch(e.target.value)
+        }
+    }
+
     return (
         <Wrapper>
             <Box>
-                <SearchInput />
+                <SearchInput 
+                    value={searchTerm}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                />
                 <SaerchButton>
                     <FeatherIcon icon={"search"} />
                 </SaerchButton>
