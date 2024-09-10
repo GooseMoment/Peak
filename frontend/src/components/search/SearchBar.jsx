@@ -8,10 +8,10 @@ const SearchBar = () => {
     return (
         <Wrapper>
             <Box>
+                <SearchInput />
                 <SaerchButton>
                     <FeatherIcon icon={"search"} />
                 </SaerchButton>
-                <SearchInput />
             </Box>
         </Wrapper>
     )
@@ -22,7 +22,8 @@ const Wrapper = styled.div`
 `
 
 const Box = styled.div`
-    width: 80%;
+    margin-top: 0.5em;
+    width: 70%;
     height: 2.5em;
 
     border-radius: 1.5em;
@@ -30,6 +31,14 @@ const Box = styled.div`
     background-color: ${props => props.theme.secondBackgroundColor};
 
     display: flex;
+`
+
+const SearchInput = styled.input`
+    flex-grow: 1;
+
+    padding: 0 0 0 1em;
+
+    font-size: 1em;
 `
 
 const SaerchButton = styled(MildButton)`
@@ -50,14 +59,6 @@ const SaerchButton = styled(MildButton)`
         color: ${(props) => props.theme.search.buttonColor};
         stroke-width: 0.15em;
     }
-`
-
-const SearchInput = styled.input`
-    flex-grow: 1;
-
-    padding: 0 0.5em 0;
-
-    font-size: 1em;
 `
 
 export default SearchBar
