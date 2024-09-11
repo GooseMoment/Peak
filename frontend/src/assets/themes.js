@@ -90,6 +90,7 @@ export const light = {
         hoverColor: "#FFC6C6",
     },
     search: {
+        borderColor: black,
         buttonColor: black,
     },
     toastTheme: "light",
@@ -172,6 +173,7 @@ export const dark = {
         hoverColor: "#804A30",
     },
     search: {
+        borderColor: white,
         buttonColor: white,
     },
     toastTheme: "dark",
