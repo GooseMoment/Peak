@@ -20,7 +20,6 @@ const initialFilterGroup = {
     completedAt: {
         name: "Completed",
         value: null,
-
     },
     privacy: {
         name: "Privacy",
@@ -33,13 +32,13 @@ const initialFilterGroup = {
 }
 
 const SearchPage = () => {
-    const [filterGroup, setFilterGroup] = useState(initialFilterGroup)
+    const [filters, setFilters] = useState(initialFilterGroup)
 
     return (
         <>
             <PageTitle>Search</PageTitle>
             <SearchBar handleSearch={console.log} />
-            <FilterGroup filters={filterGroup} />
+            <FilterGroup filters={filters} setFilters={setFilters} />
         </>
     )
 }

@@ -1,12 +1,35 @@
+import { useState } from "react"
+
 import styled from "styled-components"
+
 import FilterButton from "@components/search/FilterButton"
 
-const FilterGroup = ({ filters }) => {
-    return <FilterGroupWrapper>
-        {Object.entries(filters).map(([name, filter]) => (
-            <FilterButton key={name} filter={filter} />
-        ))}
-    </FilterGroupWrapper>
+const FilterGroup = ({ filters, setFilters }) => {
+    const [inputState, setInputState] = useState(false)
+
+    const handleFilter = (filterName) => (filterValue) => {
+        setFilters((prev) => ({
+            ...prev,
+            [filterName]: {
+                ...prev[filterName],
+                value: filterValue ? filterValue : null,
+            },
+        }))
+    }
+
+    return (
+        <FilterGroupWrapper>
+            {Object.entries(filters).map(([type, filter]) => (
+                <FilterButton
+                    key={type}
+                    filter={filter}
+                    handleFilter={handleFilter(type)}
+                    inputState={inputState}
+                    setInputState={setInputState}
+                />
+            ))}
+        </FilterGroupWrapper>
+    )
 }
 
 const FilterGroupWrapper = styled.div`
@@ -15,6 +38,7 @@ const FilterGroupWrapper = styled.div`
     border: solid white 1px;
 
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5em;
 `
 
