@@ -75,13 +75,13 @@ const DragAndDownBox = ({ task, children }) => {
     }, [task.order, task.id])
 
     return (
-        <DragAndDownBlock $edge={closestEdge}>
+        <DragAndDownBlock ref={dragHandleRef} $edge={closestEdge}>
             <DragHandleButtonBox>
-                <DragHandleButton ref={dragHandleRef}/>
+                <DragHandleButton/>
             </DragHandleButtonBox>
-            <div ref={ref} style={{ opacity: isDragging ? 0.5 : 1 }} >
+            <ChildrenBox ref={ref} $isDragging={isDragging}>
                 {children}
-            </div>
+            </ChildrenBox>
         </DragAndDownBlock>
     )
 }
@@ -98,6 +98,10 @@ const DragHandleButtonBox = styled.div`
     & span {
         color: ${p=>p.theme.textColor};
     }
+`
+
+const ChildrenBox = styled.div`
+    opacity: ${props=> props.$isDragging ? 0.5 : 1 };
 `
 
 const DragAndDownBlock = styled.div`
