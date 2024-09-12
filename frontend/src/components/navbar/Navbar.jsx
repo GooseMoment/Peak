@@ -53,7 +53,7 @@ const Frame = styled.nav`
     align-items: center;
 
     box-sizing: border-box;
-    width: 100vw;
+    width: 100dvw;
     padding: 1em 1.25em;
     padding-bottom: max(env(safe-area-inset-bottom, 1em), 1em);
 

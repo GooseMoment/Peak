@@ -3,6 +3,7 @@ import { useState, useRef } from "react"
 import { useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Color from "@components/project/Creates/Color"
 import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
@@ -17,7 +18,7 @@ import queryClient from "@queries/queryClient"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const ProjectCreate = ({ onClose }) => {
+const ProjectCreate = () => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const theme = useTheme()
     const inputRef = useRef(null)
@@ -31,6 +32,8 @@ const ProjectCreate = ({ onClose }) => {
         type: "regular",
     })
 
+    const { closeModal } = useModalWindowCloseContext()
+
     const editNewProject = (edit) => {
         setNewProject(Object.assign(newProject, edit))
         inputRef.current.focus()
@@ -39,44 +42,25 @@ const ProjectCreate = ({ onClose }) => {
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
-    const closeComponent = () => {
-        setIsComponentOpen(false)
-    }
-
     const items = [
         {
             id: 1,
             icon: "circle",
             color: getProjectColor(theme.type, newProject.color),
             display: t("color." + newProject.color),
-            component: (
-                <Color
-                    setColor={editNewProject}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Color setColor={editNewProject} />,
         },
         {
             id: 2,
             icon: "server",
             display: t("privacy." + newProject.privacy),
-            component: (
-                <Privacy
-                    setPrivacy={editNewProject}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Privacy setPrivacy={editNewProject} />,
         },
         {
             id: 3,
             icon: "award",
             display: t("type." + newProject.type),
-            component: (
-                <Type
-                    setType={editNewProject}
-                    closeComponent={closeComponent}
-                />
-            ),
+            component: <Type setType={editNewProject} />,
         },
     ]
 
@@ -87,7 +71,7 @@ const ProjectCreate = ({ onClose }) => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["projects"] })
             toast.success(t("create.project_create_success"))
-            onClose()
+            closeModal()
         },
         onError: () => {
             if (newProject.name)
@@ -127,7 +111,7 @@ const ProjectCreate = ({ onClose }) => {
                 inputRef={inputRef}
                 isCreate
                 icon="archive"
-                onClose={onClose}
+                onClose={closeModal}
             />
             <Middle
                 items={items}

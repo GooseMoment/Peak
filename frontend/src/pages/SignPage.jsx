@@ -71,9 +71,9 @@ const SignPage = () => {
 const Root = styled.div`
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
 
-    background-color: ${(p) => p.theme.frontSignPageBackgroundColor};
+    background-color: ${(p) => p.theme.introBackgroundColor};
 
     display: grid;
     grid-template-columns: 1.75fr 1fr;
@@ -120,12 +120,6 @@ const ContentBox = styled.section`
     ${ifMobile} {
         padding: 2.25rem;
     }
-
-    ${(p) =>
-        p.$verticalCenter &&
-        css`
-            align-items: center;
-        `}
 `
 
 export default SignPage

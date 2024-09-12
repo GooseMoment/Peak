@@ -3,7 +3,7 @@ import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import ModalPortal from "@components/common/ModalPortal"
+import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import ProjectCreate from "@components/project/Creates/ProjectCreate"
 import ProjectName from "@components/project/ProjectName"
@@ -50,16 +50,12 @@ const ProjectListPage = () => {
                 </ProjectCreateButton>
             )}
             {isCreateOpen && (
-                <ModalPortal
-                    closeModal={() => {
+                <ModalWindow
+                    afterClose={() => {
                         setIsCreateOpen(false)
                     }}>
-                    <ProjectCreate
-                        onClose={() => {
-                            setIsCreateOpen(false)
-                        }}
-                    />
-                </ModalPortal>
+                    <ProjectCreate />
+                </ModalWindow>
             )}
         </>
     )

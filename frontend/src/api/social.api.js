@@ -63,6 +63,12 @@ export const getFollowingsByUser = async (username) => {
     return res.data
 }
 
+export const getRequestersByUser = async (username) => {
+    const res = await client.get(`users/@${username}/requesters/`)
+
+    return res.data
+}
+
 export const putBlock = (username) => {
     return client.put(`social/block/@${getCurrentUsername()}/@${username}/`)
 }

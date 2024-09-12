@@ -1,15 +1,17 @@
 import { useNavigate } from "react-router-dom"
 
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import PageTitle from "@components/common/PageTitle"
 
 const SocialPageTitle = ({ active }) => {
+    const theme = useTheme()
+
     if (active === "following")
         return (
             <PageTitleGroup>
                 <PageTitleButton to="../following">Following</PageTitleButton>
-                <PageTitleButton to="../explore" $color="#A4A4A4">
+                <PageTitleButton to="../explore" $color={theme.secondTextColor}>
                     Explore
                 </PageTitleButton>
             </PageTitleGroup>
@@ -18,7 +20,7 @@ const SocialPageTitle = ({ active }) => {
     return (
         <PageTitleGroup>
             <PageTitleButton to="../explore">Explore</PageTitleButton>
-            <PageTitleButton to="../following" $color="#A4A4A4">
+            <PageTitleButton to="../following" $color={theme.secondTextColor}>
                 Following
             </PageTitleButton>
         </PageTitleGroup>

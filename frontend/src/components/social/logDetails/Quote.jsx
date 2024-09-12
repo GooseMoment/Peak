@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import SimpleProfile from "@components/social/common/SimpleProfile"
 
@@ -14,6 +14,8 @@ const Quote = ({ user, quote, saveQuote }) => {
         setContent(quote.content)
         setInputState(false)
     }, [quote])
+
+    const theme = useTheme()
 
     const me = getCurrentUsername()
 
@@ -54,13 +56,15 @@ const Quote = ({ user, quote, saveQuote }) => {
                         autoFocus
                     />
                 ) : quote.content ? (
-                    <Content>{'"' + quote.content + '"'}</Content>
+                    <Content $color={theme.textColor}>
+                        {'"' + quote.content + '"'}
+                    </Content>
                 ) : quote.user.username === me ? (
-                    <Content $color="#A4A4A4" $fontstyle="italic">
+                    <Content $color={theme.secondTextColor} $fontstyle="italic">
                         {"Write your today's quote"}
                     </Content>
                 ) : (
-                    <Content $color="#A4A4A4" $fontstyle="italic">
+                    <Content $color={theme.secondTextColor} $fontstyle="italic">
                         {"No quote yet"}
                     </Content>
                 )}
@@ -77,7 +81,7 @@ const Box = styled.div`
 const Wrapper = styled.div`
     width: 72%;
     border-radius: 1em;
-    background-color: #e6e6e6;
+    background-color: ${(p) => p.theme.secondBackgroundColor};
     padding: 1em;
 
     display: flex;
@@ -96,10 +100,12 @@ const Content = styled.div`
 const QuoteInput = styled.input`
     height: 100%;
     width: 100%;
-    background-color: inherit;
+
     text-align: center;
     font-size: 1em;
     white-space: normal;
+
+    color: ${(props) => props.theme.textColor};
 `
 
 export default Quote

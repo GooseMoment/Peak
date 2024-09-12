@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 
 import styled, { css } from "styled-components"
 
-import ModalPortal from "@components/common/ModalPortal"
+import ModalWindow from "@components/common/ModalWindow"
 import { FollowerList, FollowingList } from "@components/users/FollowList"
 
 import { skeletonCSS } from "@assets/skeleton"
@@ -43,14 +43,14 @@ const FollowsCount = ({ user, isPending }) => {
                 {t("followings")} <Count>{user.followings_count}</Count>
             </Item>
             {window !== "" && (
-                <ModalPortal closeModal={closeModal}>
+                <ModalWindow afterClose={closeModal}>
                     {window === "followers" && (
-                        <FollowerList closeModal={closeModal} user={user} />
+                        <FollowerList user={user} />
                     )}
                     {window === "followings" && (
-                        <FollowingList closeModal={closeModal} user={user} />
+                        <FollowingList user={user} />
                     )}
-                </ModalPortal>
+                </ModalWindow>
             )}
         </Items>
     )

@@ -2,6 +2,7 @@ import { useState } from "react"
 
 import styled, { css, useTheme } from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
 import { getProjectColor, palettes } from "./palettes"
@@ -9,16 +10,18 @@ import { getProjectColor, palettes } from "./palettes"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Color = ({ setColor, closeComponent }) => {
+const Color = ({ setColor }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.color" })
     const theme = useTheme()
 
     const [activeTab, setActiveTab] = useState("theme1")
 
+    const { closeModal } = useModalWindowCloseContext()
+
     const changeColor = (color) => {
         return () => {
             setColor({ color })
-            closeComponent()
+            closeModal()
         }
     }
 
@@ -28,7 +31,7 @@ const Color = ({ setColor, closeComponent }) => {
     ]
 
     return (
-        <Detail title={t("title")} onClose={closeComponent}>
+        <Detail title={t("title")} onClose={closeModal}>
             <TabBox>
                 {themes.map((theme) => (
                     <TabButton
