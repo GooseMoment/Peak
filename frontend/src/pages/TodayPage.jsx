@@ -4,8 +4,9 @@ import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled, { css, useTheme } from "styled-components"
 
 import PageTitle from "@components/common/PageTitle"
-import Task from "@components/tasks/Task"
 import Button from "@components/common/Button"
+import CollapseButton from "@components/common/CollapseButton"
+import Task from "@components/tasks/Task"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
 import { getProjectColor } from "@components/project/Creates/palettes"
@@ -31,6 +32,7 @@ const TodayPage = () => {
     const theme = useTheme()
     
     const [filter, setFilter] = useState("due_date")
+    const [collapsed, setCollapsed] = useState(false)
 
     const { 
         data: overdueTasks, 
@@ -120,41 +122,46 @@ const TodayPage = () => {
                 <OverdueTitle>
                     <FeatherIcon icon="alert-circle"/>
                     {t("overdue_title")}
+                    <CollapseButtonBlock>
+                        <CollapseButton collapsed={collapsed} handleCollapsed={() => setCollapsed((prev) => !prev)}/>
+                    </CollapseButtonBlock>
                 </OverdueTitle>
-                <FilterButtonBox>
-                    {filterContents.map(content=>(
-                        <FilterButton 
-                            key={content}
-                            $isActive={filter === content}
-                            onClick={()=>setFilter(content)}>
-                            {t("filter_" + content)}
-                        </FilterButton>
-                    ))}
-                </FilterButtonBox>
-                <TasksBox>
-                    {(isOverdueError || isTodayError) &&
-                        <ErrorBox onClick={onClickErrorBox}>
-                            {t("error_load_task")}
-                        </ErrorBox>}
-                    {isOverdueLoading && <SkeletonDueTasks taskCount={4} />}
-                    {overdueTasks?.pages?.map((group) =>
-                        group?.results?.map((task) => (
-                            <OverdueTaskBox key={task.id}>
-                                <Task task={task} color={getProjectColor(theme.type, task.project_color)} max_width={23} />
-                                <Icons>
-                                    <FeatherIcon icon="arrow-down" onClick={()=>clickArrowDown(task)}/>
-                                    <FeatherIcon icon="arrow-right" onClick={()=>clickArrowRight(task)}/>
-                                </Icons>
-                            </OverdueTaskBox>
-                        )),
-                    )}
-                </TasksBox>
-                {overdueHasNextPage ? (
-                    <MoreText onClick={() => overdueFetchNextPage()}>
-                        {t("button_load_more") + " "}
-                        ({overdueTasks?.pages[0].count})
-                    </MoreText>
-                ) : null}
+                {collapsed ? null : <>
+                    <FilterButtonBox>
+                        {filterContents.map(content=>(
+                            <FilterButton 
+                                key={content}
+                                $isActive={filter === content}
+                                onClick={()=>setFilter(content)}>
+                                {t("filter_" + content)}
+                            </FilterButton>
+                        ))}
+                    </FilterButtonBox>
+                    <TasksBox>
+                        {(isOverdueError || isTodayError) &&
+                            <ErrorBox onClick={onClickErrorBox}>
+                                {t("error_load_task")}
+                            </ErrorBox>}
+                        {isOverdueLoading && <SkeletonDueTasks taskCount={4} />}
+                        {overdueTasks?.pages?.map((group) =>
+                            group?.results?.map((task) => (
+                                <OverdueTaskBox key={task.id}>
+                                    <Task task={task} color={getProjectColor(theme.type, task.project_color)} max_width={23} />
+                                    <Icons>
+                                        <FeatherIcon icon="arrow-down" onClick={()=>clickArrowDown(task)}/>
+                                        <FeatherIcon icon="arrow-right" onClick={()=>clickArrowRight(task)}/>
+                                    </Icons>
+                                </OverdueTaskBox>
+                            )),
+                        )}
+                    </TasksBox>
+                    {overdueHasNextPage ? (
+                        <MoreText onClick={() => overdueFetchNextPage()}>
+                            {t("button_load_more") + " "}
+                            ({overdueTasks?.pages[0].count})
+                        </MoreText>
+                    ) : null}
+                </>}
             </OverdueTasksBlock>
             <TasksBox>
                 {isTodayLoading && <SkeletonDueTasks taskCount={10} />}
@@ -191,6 +198,13 @@ const OverdueTasksBlock = styled.div`
 const OverdueTitle = styled.div`
     font-size: 1.2em;
     font-weight: bold;
+`
+
+const CollapseButtonBlock = styled.div`
+    float: right;
+    cursor: pointer;
+    margin-top: 0.1em;
+    margin-right: 0.5em;
 `
 
 const OverdueTaskBox = styled.div`
