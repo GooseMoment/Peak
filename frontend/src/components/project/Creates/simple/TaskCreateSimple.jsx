@@ -204,6 +204,8 @@ const TaskCreateSimpleBox = styled.div`
     background-color: ${p=>p.theme.backgroundColor};
     border: solid 1.5px ${p=>p.theme.grey};
     border-radius: 15px;
+    overflow-y: hidden;
+    overflow-x: auto;
 `
 
 const IndexBox = styled.div`
