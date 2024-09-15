@@ -150,9 +150,15 @@ const ProjectPage = () => {
     return (
         <>
             <TitleBox>
-                <PageTitle $color={getProjectColor(theme.type, project.color)}>
-                    {project.name}
-                </PageTitle>
+                <PageTitleBox>
+                    <PageTitle $color={getProjectColor(theme.type, project.color)}>
+                        {project.name}
+                    </PageTitle>
+                    {project?.privacy === "public" || 
+                    <PrivacyBox $color={getProjectColor(theme.type, project.color)}>
+                        {project?.privacy === "protected" ? <FeatherIcon icon="users"/> : <FeatherIcon icon="lock"/>}
+                    </PrivacyBox>}
+                </PageTitleBox>
                 <Icons>
                     <FeatherIcon
                         icon="plus"
@@ -253,10 +259,25 @@ const ProjectPage = () => {
 }
 
 const TitleBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
+`
+
+const PageTitleBox = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+const PrivacyBox = styled.div`
+    margin-left: 0.8em;
+    padding-bottom: 0.8em;
+
+    & svg {
+        width: 20px;
+        height: 20px;
+        stroke: ${props=>props.$color};
+    }
 `
 
 const Icons = styled.div`

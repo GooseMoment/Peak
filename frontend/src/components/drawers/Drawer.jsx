@@ -147,7 +147,13 @@ const Drawer = ({ project, drawer, color }) => {
         <>
             {project.type === "inbox" ? null : (
                 <DrawerBox $color={color}>
-                    <DrawerName $color={color}>{drawer.name}</DrawerName>
+                    <DrawerTitleBox>
+                        <DrawerName $color={color}>{drawer.name}</DrawerName>
+                        {drawer?.privacy === "public" || 
+                        <PrivacyBox $color={color}>
+                            {drawer?.privacy === "protected" ? <FeatherIcon icon="users"/> : <FeatherIcon icon="lock"/>}
+                        </PrivacyBox>}
+                    </DrawerTitleBox>
                     <DrawerIcons
                         color={color}
                         collapsed={collapsed}
@@ -235,6 +241,19 @@ const Drawer = ({ project, drawer, color }) => {
 export const TaskList = styled.div`
     flex: 1;
     margin-left: 0.5em;
+`
+
+const DrawerTitleBox = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+const PrivacyBox = styled.div`
+    margin-left: 0.8em;
+
+    & svg {
+        stroke: ${props=>props.$color};
+    }
 `
 
 const TaskCreateButton = styled.div`
