@@ -92,6 +92,8 @@ export const light = {
     search: {
         borderColor: black,
         buttonColor: black,
+        activatedColor: "#white",
+        activatedBackgroundColor: "#F78457",
     },
     toastTheme: "light",
 }
@@ -175,6 +177,7 @@ export const dark = {
     search: {
         borderColor: white,
         buttonColor: white,
+        activatedBackgroundColor: "#F78457",
     },
     toastTheme: "dark",
 }

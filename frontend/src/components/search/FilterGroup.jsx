@@ -7,7 +7,8 @@ import FilterButton from "@components/search/FilterButton"
 const FilterGroup = ({ filters, setFilters }) => {
     const [inputState, setInputState] = useState(false)
 
-    const handleFilter = (filterName) => (filterValue) => {
+    const updateFilterValue = (filterName) => (filterValue) => {
+        console.log(filterValue)
         setFilters((prev) => ({
             ...prev,
             [filterName]: {
@@ -23,7 +24,7 @@ const FilterGroup = ({ filters, setFilters }) => {
                 <FilterButton
                     key={type}
                     filter={filter}
-                    handleFilter={handleFilter(type)}
+                    updateFilterValue={updateFilterValue(type)}
                     inputState={inputState}
                     setInputState={setInputState}
                 />

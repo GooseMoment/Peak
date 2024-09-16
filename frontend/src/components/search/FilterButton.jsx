@@ -3,93 +3,77 @@ import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 
 import MildButton from "@components/common/MildButton"
+import FilterInput from "@components/search/FilterInput"
 
-const FilterButton = ({ filter, handleFilter, inputState, setInputState }) => {
-    const [inputText, setInputText] = useState("")
-    const ghostSpanRef = useRef(null)
-    const [inputWidth, setInputWidth] = useState(0)
-
-    useEffect(() => {
-        if (ghostSpanRef.current) {
-            const width = ghostSpanRef.current.getBoundingClientRect().width
-            setInputWidth(width)
-        }
-    }, [inputText])
+const FilterButton = ({
+    filter,
+    updateFilterValue,
+    inputState,
+    setInputState,
+}) => {
+    const [inputPosition, setInputPosition] = useState({ top: 0, left: 0 })
 
     const handleInputState = () => {
         setInputState(filter.name)
-    }
 
-    const handleChange = (e) => {
-        setInputText(e.target.value)
-    }
-
-    const handleKeyDown = (e) => {
-        if (e.key == "Enter") {
-            setInputState(false)
-            handleFilter(inputText)
+        if (buttonRef.current) {
+            const rect = buttonRef.current.getBoundingClientRect()
+            setInputPosition({
+                top: window.scrollY + rect.top + rect.height,
+                left: rect.left,
+            })
         }
     }
 
-    const handleBlur = () => {
-        setInputState(false)
-        handleFilter(inputText)
-    }
+    const buttonRef = useRef(null)
 
     return (
-        <ButtonBox onClick={handleInputState}>
-            <GhostSpan ref={ghostSpanRef}>{inputText}</GhostSpan>
+        <>
+            <ButtonBox
+                ref={buttonRef}
+                onClick={handleInputState}
+                $isActive={filter.value !== null || inputState === filter.name}>
+                {filter.value !== null || inputState === filter.name
+                    ? filter.name + " : "
+                    : filter.name}
 
-            {filter.value !== null || inputState === filter.name
-                ? filter.name + " : "
-                : filter.name}
-
-            {inputState === filter.name ? (
-                <FilterInput
-                    type="text"
-                    value={inputText}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    onBlur={handleBlur}
-                    $length={inputWidth}
-                    autoFocus
-                />
-            ) : (
-                filter.value !== null && filter.value
-            )}
-        </ButtonBox>
+                {inputState === filter.name ? (
+                    <FilterInput
+                        type={filter.type}
+                        setInputState={setInputState}
+                        filter={filter}
+                        updateFilterValue={updateFilterValue}
+                        position={inputPosition}
+                    />
+                ) : // position 고민해볼 필요...
+                filter.type === "date" ? (
+                    filter.value && (filter.value.startDate + filter.value.endDate)
+                ) : (
+                    filter.value
+                )}
+            </ButtonBox>
+        </>
     )
 }
 
-const GhostSpan = styled.span`
-    position: absolute;
-
-    opacity: 0%;
-    font-size: 1em;
-`
-
 const ButtonBox = styled(MildButton)`
+    max-width: 100%;
+
     border: solid ${(p) => p.theme.search.borderColor} 1px;
     border-radius: 0.8em;
     padding: 0.5em 0.8em 0.5em;
+    background-color: ${(props) =>
+        props.$isActive
+            ? props.theme.search.activatedBackgroundColor
+            : props.theme.backgroundColor};
 
+    font-weight: ${(props) => (props.$isActive ? 700 : 400)};
     font-size: 1em;
     line-height: 1.1em;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-`
-
-const FilterInput = styled.input`
-    margin-left: 0.25em;
-    width: ${(props) => props.$length}px;
-
-    padding: 0;
-    overflow-y: visible;
-
-    font-size: 1em;
-    line-height: 1.1em;
 `
 
 export default FilterButton
