@@ -11,7 +11,7 @@ import hourglass from "@assets/project/hourglass.svg"
 
 import FeatherIcon from "feather-icons-react"
 
-const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, max_width=60 }) => {
+const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
     const {
         due,
         assigned,
@@ -22,7 +22,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, max_wid
     } = taskCalculation(task)
 
     const TaskName = (
-        <TaskNameBox $max_width={max_width} $completed={task.completed_at}>{task?.name}</TaskNameBox>
+        <TaskNameBox $completed={task.completed_at}>{task?.name}</TaskNameBox>
     )
 
     const hasDate = task.due_date || task.assigned_at
@@ -34,7 +34,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, max_wid
                 priority={task.priority}
                 completed={task.completed_at}
             />
-            <div>
+            <Content>
                 <CircleName>
                     <TaskCircle
                         completed={task.completed_at}
@@ -44,12 +44,9 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, max_wid
                         onClick={toComplete}
                     />
                     {taskDetailPath ? (
-                        <Link
-                            to={taskDetailPath}
-                            style={{ textDecoration: "none" }}
-                        >
+                        <NameLink to={taskDetailPath}>
                             {TaskName}
-                        </Link>
+                        </NameLink>
                     ) : (
                         TaskName
                     )}
@@ -59,8 +56,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, max_wid
                     {task.assigned_at && (
                         <AssignedDate
                             $completed={task.completed_at}
-                            $isOutOfDue={isOutOfAssigned}
-                        >
+                            $isOutOfDue={isOutOfAssigned}>
                             <FeatherIcon icon="calendar" />
                             {task.completed_at ? assigned : calculate_assigned}
                         </AssignedDate>
@@ -68,8 +64,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, max_wid
                     {task.due_date && (
                         <DueDate
                             $completed={task.completed_at}
-                            $isOutOfDue={isOutOfDue}
-                        >
+                            $isOutOfDue={isOutOfDue}>
                             <img src={hourglass} />
                             {task.completed_at ? due : calculate_due}
                         </DueDate>
@@ -83,7 +78,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, max_wid
                           )
                         : null}
                 </Dates>
-            </div>
+            </Content>
         </Box>
     )
 }
@@ -92,13 +87,22 @@ const Box = styled.div`
     display: flex;
     align-items: center;
     margin-top: 1.5em;
+
+    min-width: 0;
+`
+
+const Content = styled.div`
+    min-width: 0;
+`
+
+const NameLink = styled(Link)`
+    display: flex;
+    min-width: 0;
 `
 
 const TaskNameBox = styled.div`
     display: inline-block;
 
-    width: inherit;
-    max-width: ${props=>props.$max_width}em;
     font-style: normal;
     font-size: 1.1em;
     color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};
@@ -106,6 +110,8 @@ const TaskNameBox = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.3em;
+
+    min-width: 0;
 `
 
 const CircleName = styled.div`

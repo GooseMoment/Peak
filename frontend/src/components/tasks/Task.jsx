@@ -6,7 +6,7 @@ import { patchTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
 
-const Task = ({ task, color, max_width }) => {
+const Task = ({ task, color }) => {
     const mutation = useMutation({
         mutationFn: (data) => {
             return patchTask(task.id, data)
@@ -50,7 +50,6 @@ const Task = ({ task, color, max_width }) => {
             isLoading={mutation.isPending}
             toComplete={toComplete}
             taskDetailPath={taskDetailPath}
-            max_width={max_width}
         />
     )
 }

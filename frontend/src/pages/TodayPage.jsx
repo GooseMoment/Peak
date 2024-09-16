@@ -146,7 +146,7 @@ const TodayPage = () => {
                         {overdueTasks?.pages?.map((group) =>
                             group?.results?.map((task) => (
                                 <OverdueTaskBox key={task.id}>
-                                    <Task task={task} color={getProjectColor(theme.type, task.project_color)} max_width={23} />
+                                    <Task task={task} color={getProjectColor(theme.type, task.project_color)} />
                                     <Icons>
                                         <FeatherIcon icon="arrow-down" onClick={()=>clickArrowDown(task)}/>
                                         <FeatherIcon icon="arrow-right" onClick={()=>clickArrowRight(task)}/>
@@ -211,7 +211,6 @@ const OverdueTaskBox = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-right: 1.5em;
 `
 
 const Icons = styled(FlexCenterBox)`
@@ -250,7 +249,7 @@ const TasksBox = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    margin-left: 1.2em;
+    padding: 0 1.2em;
     overflow: hidden;
 `
 
