@@ -35,6 +35,7 @@ export const light = {
     secondBackgroundColor: "#F3F3F3",
     thirdBackgroundColor: "#F3F3F3", // 원래 second랑 똑같은 건 의도된건가...?
     accentColor: goose,
+    accentBackgroundColor: "#E8EEFF",
     scrollbarColor: "#FFC6C6",
     introTextColor: goose,
     introBackgroundColor: "#FFD7C7",
@@ -114,6 +115,7 @@ export const dark = {
     secondBackgroundColor: "#323232",
     thirdBackgroundColor: "#2A2A2A",
     accentColor: goose,
+    accentBackgroundColor: "#0c4a6e",
     scrollbarColor: "#4A4A4A",
     introTextColor: "#FFD7C7",
     introBackgroundColor: "#77371F",
