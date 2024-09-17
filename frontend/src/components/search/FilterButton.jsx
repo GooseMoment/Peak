@@ -13,6 +13,8 @@ const FilterButton = ({
 }) => {
     const [inputPosition, setInputPosition] = useState({ top: 0, left: 0 })
 
+    const buttonRef = useRef(null)
+
     const handleInputState = () => {
         setInputState(filter.name)
 
@@ -25,7 +27,25 @@ const FilterButton = ({
         }
     }
 
-    const buttonRef = useRef(null)
+    const displayFilterValue = () => {
+        if(!filter.value) return null
+
+        if(filter.type === "text") {
+            return filter.value
+        } else if(filter.type === "date") {
+            const options = {
+                month: 'short',
+                day: 'numeric'
+            }
+
+            const startDate = new Date(filter.value.startDate).toLocaleString(navigator.language, options)
+            const endDate = new Date(filter.value.endDate).toLocaleString(navigator.language, options)
+
+            if (startDate === endDate) return startDate
+
+            return startDate + " - " + endDate
+        }
+    }
 
     return (
         <>
@@ -46,11 +66,13 @@ const FilterButton = ({
                         position={inputPosition}
                     />
                 ) : // position 고민해볼 필요...
-                filter.type === "date" ? (
-                    filter.value && (filter.value.startDate + filter.value.endDate)
-                ) : (
-                    filter.value
-                )}
+                displayFilterValue()
+                // filter.type === "date" ? (
+                //     filter.value && 
+                // ) : (
+                //     filter.value
+                // )
+                }
             </ButtonBox>
         </>
     )

@@ -8,7 +8,6 @@ const FilterGroup = ({ filters, setFilters }) => {
     const [inputState, setInputState] = useState(false)
 
     const updateFilterValue = (filterName) => (filterValue) => {
-        console.log(filterValue)
         setFilters((prev) => ({
             ...prev,
             [filterName]: {
