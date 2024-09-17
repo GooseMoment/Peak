@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import styled, { StyleSheetManager } from "styled-components"
+import styled from "styled-components"
 
 import CommonCalendar from "@components/common/CommonCalendar"
 
@@ -20,7 +20,7 @@ const CalendarModal = ({
             startDate: startDate,
             endDate: endDate,
         })
-    }, [endDate])
+    }, [startDate, endDate])
 
     if (!isOpen) return null
 
@@ -34,6 +34,8 @@ const CalendarModal = ({
                     setSelectedStartDate={setStartDate}
                     selectedEndDate={endDate}
                     setSelectedEndDate={setEndDate}
+                    isModal={true}
+                    handleClose={handleClose}
                 />
             </Modal>
         </Wrapper>
@@ -67,20 +69,20 @@ const Modal = styled.div`
     top: calc(${(props) => props.$posY}px + 0.5em);
     left: ${(props) => props.$posX}px;
     width: 25em;
-    height: 24em;
 
     border: 0.1em solid ${(props) => props.theme.social.modalShadowColor};
     border-radius: 1em;
     background: ${(props) => props.theme.backgroundColor};
     padding: 1em;
 
+    font-size: 0.8em;
     overflow-y: auto;
     z-index: 10;
     pointer-events: auto;
 
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: center;
 `
 
 export default CalendarModal

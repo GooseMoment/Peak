@@ -15,12 +15,16 @@ const CommonCalendar = ({
     selectedEndDate,
     setSelectedEndDate,
     contentedDates = [],
+    isModal = false,
+    handleClose,
 }) => {
     const [activeStartDate, setActiveStartDate] = useState(new Date())
 
     const locale = useClientLocale()
 
     const changeDate = (e) => {
+        if(isModal) handleClose()
+
         if (isRangeSelectMode) {
             const startDate = moment(e[0]).toISOString()
             const endDate = moment(e[1]).toISOString()
