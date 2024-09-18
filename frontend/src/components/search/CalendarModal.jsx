@@ -11,9 +11,11 @@ const CalendarModal = ({
     filter,
     updateFilterValue,
 }) => {
+    const initial_date = new Date()
+    initial_date.setHours(0, 0, 0, 0)
 
-    const [startDate, setStartDate] = useState(filter.value ? filter.value.startDate : new Date())
-    const [endDate, setEndDate] = useState(filter.value ? filter.value.endDate : new Date())
+    const [startDate, setStartDate] = useState(filter.value ? filter.value.startDate : initial_date.toISOString())
+    const [endDate, setEndDate] = useState(filter.value ? filter.value.endDate : initial_date.toISOString())
 
     useEffect(() => {
         updateFilterValue({

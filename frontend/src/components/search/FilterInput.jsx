@@ -2,15 +2,15 @@ import { useEffect, useRef, useState } from "react"
 
 import styled from "styled-components"
 
-import CalendarModal from "./CalendarModal"
+import CalendarModal from "@components/search/CalendarModal"
 
 const FilterInput = ({
-    type,
     setInputState,
     filter,
     updateFilterValue,
     position,
 }) => {
+    // text type
     const [inputText, setInputText] = useState(filter.value || "")
     const ghostSpanRef = useRef(null)
     const [inputWidth, setInputWidth] = useState(0)
@@ -20,14 +20,6 @@ const FilterInput = ({
             setInputWidth(width)
         }
     }, [inputText])
-
-
-    const [isModalOpen, setIsModalOpen] = useState(true)
-    useEffect(() => {
-        if(!isModalOpen)
-            setInputState(null)
-    }, [isModalOpen])
-
 
     const handleChange = (e) => {
         setInputText(e.target.value)
@@ -48,6 +40,12 @@ const FilterInput = ({
         setInputText(trimmedText)
         updateFilterValue(trimmedText)
     }
+
+    // date type
+    const [isModalOpen, setIsModalOpen] = useState(true)
+    useEffect(() => {
+        if (!isModalOpen) setInputState(null)
+    }, [isModalOpen])
 
     if (filter.type === "text")
         return (

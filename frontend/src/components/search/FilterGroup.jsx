@@ -4,17 +4,23 @@ import styled from "styled-components"
 
 import FilterButton from "@components/search/FilterButton"
 
-const FilterGroup = ({ filters, setFilters }) => {
+const FilterGroup = ({ filters, setFilters, handleSearch }) => {
     const [inputState, setInputState] = useState(false)
 
     const updateFilterValue = (filterName) => (filterValue) => {
-        setFilters((prev) => ({
-            ...prev,
-            [filterName]: {
-                ...prev[filterName],
-                value: filterValue ? filterValue : null,
-            },
-        }))
+        setFilters((prev) => {
+            const newFilters = {
+                ...prev,
+                [filterName]: {
+                    ...prev[filterName],
+                    value: filterValue ? filterValue : null,
+                },
+            }
+
+            handleSearch(newFilters)
+
+            return newFilters
+        })
     }
 
     return (

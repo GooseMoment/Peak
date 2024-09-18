@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useSearchParams } from "react-router-dom"
 
 import PageTitle from "@components/common/PageTitle"
 import FilterGroup from "@components/search/FilterGroup"
@@ -30,7 +31,7 @@ const initialFilterGroup = {
         type: "text",
         value: null,
     },
-    enableMemoSearch: {
+    memo: {
         name: "Memo",
         type: "text",
         value: null,
@@ -40,11 +41,38 @@ const initialFilterGroup = {
 const SearchPage = () => {
     const [filters, setFilters] = useState(initialFilterGroup)
 
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    const updateSearchParams = (isEditSearchQuery) => (searchQuery) => {
+        const recentFilters = isEditSearchQuery ? filters : searchQuery
+
+        const newParams = new URLSearchParams(searchParams)
+
+        if (isEditSearchQuery) newParams.set("searchTerm", searchQuery)
+
+        Object.entries(recentFilters).forEach(([key, body]) => {
+            if (body.value && body.type === "date") {
+                newParams.set(
+                    key,
+                    body.value.startDate + "to" + body.value.endDate,
+                )
+            } else {
+                newParams.set(key, body.value)
+            }
+        })
+
+        setSearchParams(newParams)
+    }
+
     return (
         <>
             <PageTitle>Search</PageTitle>
-            <SearchBar handleSearch={console.log} />
-            <FilterGroup filters={filters} setFilters={setFilters} />
+            <SearchBar handleSearch={updateSearchParams(true)} />
+            <FilterGroup
+                filters={filters}
+                setFilters={setFilters}
+                handleSearch={updateSearchParams(false)}
+            />
         </>
     )
 }

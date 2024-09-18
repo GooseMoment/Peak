@@ -1,9 +1,10 @@
+import { useRef, useState } from "react"
+
 import styled from "styled-components"
 
 import MildButton from "@components/common/MildButton"
 
 import FeatherIcon from "feather-icons-react"
-import { useRef, useState } from "react"
 
 const SearchBar = ({ handleSearch }) => {
     const [searchTerm, setSearchTerm] = useState("")
@@ -15,21 +16,23 @@ const SearchBar = ({ handleSearch }) => {
         if (timer.current) clearTimeout(timer.current)
 
         timer.current = setTimeout(async () => {
-            handleSearch(e.target.value)
+            setSearchTerm(e.target.value.trim())
+            handleSearch(e.target.value.trim())
         }, 1500)
     }
 
     const handleKeyDown = (e) => {
         if (e.key == "Enter") {
             clearTimeout(timer.current)
-            handleSearch(e.target.value)
+            setSearchTerm(e.target.value.trim())
+            handleSearch(e.target.value.trim())
         }
     }
 
     return (
         <Wrapper>
             <Box>
-                <SearchInput 
+                <SearchInput
                     value={searchTerm}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
@@ -53,7 +56,7 @@ const Box = styled.div`
 
     border-radius: 1.5em;
     overflow: hidden;
-    background-color: ${props => props.theme.secondBackgroundColor};
+    background-color: ${(props) => props.theme.secondBackgroundColor};
 
     display: flex;
 `
@@ -72,7 +75,7 @@ const SaerchButton = styled(MildButton)`
 
     border-radius: 1.5em;
     padding: 0.25em;
-    background-color: ${p => p.theme.primaryColors.secondary};
+    background-color: ${(p) => p.theme.primaryColors.secondary};
     justify-content: center;
     align-items: center;
 
