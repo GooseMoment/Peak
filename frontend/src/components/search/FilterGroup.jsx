@@ -41,8 +41,6 @@ const FilterGroup = ({ filters, setFilters, handleSearch }) => {
 const FilterGroupWrapper = styled.div`
     margin: 1em 0 1em;
 
-    border: solid white 1px;
-
     display: flex;
     flex-wrap: wrap;
     gap: 0.5em;

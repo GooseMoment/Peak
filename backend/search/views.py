@@ -10,10 +10,11 @@ from django.http import HttpRequest
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.db.models import Q
+from django.db.models import Q, F
 
 from datetime import datetime
 
+from .serializers import *
 from api.models import PrivacyMixin
 from tasks.models import Task
 
@@ -79,7 +80,9 @@ class SearchView(APIView):
             
             filters_query &= query(value)
             
-        tasks_queryset = Task.objects.filter(filters_query).all()
+        tasks_queryset = Task.objects.filter(filters_query).annotate(
+            color=F('drawer__project__color'),
+        )
 
-        serializer = TaskSerializer(tasks_queryset, many=True)
+        serializer = SearchResultsSerializer(tasks_queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
