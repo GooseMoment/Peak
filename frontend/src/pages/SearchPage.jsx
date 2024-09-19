@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 
 import PageTitle from "@components/common/PageTitle"
 import FilterGroup from "@components/search/FilterGroup"
@@ -46,6 +46,14 @@ const initialFilterGroup = {
     },
 }
 
+const getCursorFromURL = (url) => {
+    if (!url) return null
+
+    const u = new URL(url)
+    const cursor = u.searchParams.get("cursor")
+    return cursor
+}
+
 const SearchPage = () => {
     const [filters, setFilters] = useState(initialFilterGroup)
 
@@ -70,16 +78,23 @@ const SearchPage = () => {
         })
 
         setSearchParams(newParams)
+        queryClient.removeQueries(["search"])
     }
 
     useEffect(() => {
-        searchResultsQuery.refetch()
+        refetchResult()
     }, [searchParams])
 
-    const searchResultsQuery = useQuery({
+    const {
+        data: resultPage,
+        fetchNextPage: fetchNextResultPage,
+        refetch: refetchResult,
+    } = useInfiniteQuery({
         queryKey: ["search"],
-        queryFn: () => getSearchResults(searchParams),
-        enabled: false,
+        queryFn: (page) => getSearchResults(searchParams, page.pageParam),
+        initialPageParam: "",
+        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
+        enabled: !!searchParams,
     })
 
     return (
@@ -91,7 +106,12 @@ const SearchPage = () => {
                 setFilters={setFilters}
                 handleSearch={updateSearchParams(false)}
             />
-            <SearchResults searchResults={searchResultsQuery.data} />
+            {resultPage && (
+                <SearchResults
+                    resultPage={resultPage}
+                    fetchNextResultPage={fetchNextResultPage}
+                />
+            )}
         </>
     )
 }

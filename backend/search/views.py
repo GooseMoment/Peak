@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.pagination import PageNumberPagination, CursorPagination
+from rest_framework.pagination import CursorPagination
 from rest_framework.permissions import AllowAny
 
 from django.http import HttpRequest
@@ -68,21 +68,30 @@ FILTERS = {
 }
 ###############
 
-class SearchView(APIView):
-    def get(self, request):        
-        filters_query = Q(user=request.user)
+class SearchPagination(CursorPagination):
+    page_size = 10
+    ordering = "-created_at"
+
+class SearchView(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = SearchResultsSerializer
+    pagination_class = SearchPagination
+    
+    def get_queryset(self):
+        query_filter = Q(user=self.request.user)
         
         for param, query in FILTERS.items():
-            value = request.GET.get(param, '')
+            value = self.request.GET.get(param, '')
             
             if not value or value == 'null':
                 continue
             
-            filters_query &= query(value)
+            query_filter &= query(value)
             
-        tasks_queryset = Task.objects.filter(filters_query).annotate(
+        tasks_queryset = Task.objects.filter(query_filter).annotate(
             color=F('drawer__project__color'),
         )
 
-        serializer = SearchResultsSerializer(tasks_queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return tasks_queryset
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
