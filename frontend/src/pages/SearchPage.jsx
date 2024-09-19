@@ -1,9 +1,17 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
+
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 import PageTitle from "@components/common/PageTitle"
 import FilterGroup from "@components/search/FilterGroup"
 import SearchBar from "@components/search/SearchBar"
+
+import queryClient from "@queries/queryClient"
+
+import { getSearchResults } from "@/api/search.api"
+import SearchResults from "@/components/search/SearchResults"
+import { toast } from "react-toastify"
 
 const initialFilterGroup = {
     project: {
@@ -48,7 +56,7 @@ const SearchPage = () => {
 
         const newParams = new URLSearchParams(searchParams)
 
-        if (isEditSearchQuery) newParams.set("searchTerm", searchQuery)
+        if (isEditSearchQuery) newParams.set("searchTerms", searchQuery)
 
         Object.entries(recentFilters).forEach(([key, body]) => {
             if (body.value && body.type === "date") {
@@ -64,6 +72,16 @@ const SearchPage = () => {
         setSearchParams(newParams)
     }
 
+    useEffect(() => {
+        searchResultsQuery.refetch()
+    }, [searchParams])
+
+    const searchResultsQuery = useQuery({
+        queryKey: ["search"],
+        queryFn: () => getSearchResults(searchParams),
+        enabled: false,
+    })
+
     return (
         <>
             <PageTitle>Search</PageTitle>
@@ -73,6 +91,7 @@ const SearchPage = () => {
                 setFilters={setFilters}
                 handleSearch={updateSearchParams(false)}
             />
+            <SearchResults searchResults={searchResultsQuery.data} />
         </>
     )
 }
