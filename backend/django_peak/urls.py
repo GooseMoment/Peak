@@ -27,4 +27,5 @@ urlpatterns = [
     path("drawers/", include("drawers.urls")),
     path("tasks/", include("tasks.urls")),
     path("social/", include("social.urls")),
+    path("search/", include("search.urls")),
 ] + users_urls.urlpatterns
