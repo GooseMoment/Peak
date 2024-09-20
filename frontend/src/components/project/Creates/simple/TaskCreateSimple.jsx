@@ -1,21 +1,31 @@
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
+
 import { useMutation } from "@tanstack/react-query"
-
 import styled, { css } from "styled-components"
-import FeatherIcon from "feather-icons-react"
 
-import { postTask } from "@api/tasks.api"
-import queryClient from "@queries/queryClient"
-import { useTranslation } from "react-i18next"
-import { toast } from "react-toastify"
-
-import hourglass from "@assets/project/hourglass.svg"
-import TaskNameInput from "@components/tasks/TaskNameInput"
 import SimpleAssigned from "@components/project/Creates/simple/SimpleAssigned"
 import SimpleDue from "@components/project/Creates/simple/SimpleDue"
 import SimplePriority from "@components/project/Creates/simple/SimplePriority"
+import TaskNameInput from "@components/tasks/TaskNameInput"
 
-const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color, onClose }) => {
+import { postTask } from "@api/tasks.api"
+
+import queryClient from "@queries/queryClient"
+
+import hourglass from "@assets/project/hourglass.svg"
+
+import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
+
+const TaskCreateSimple = ({
+    projectID,
+    projectName,
+    drawerID,
+    drawerName,
+    color,
+    onClose,
+}) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
     const inputRef = useRef(null)
 
@@ -78,9 +88,9 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             toast.error(t("task_create_error"), {
                 toastId: "task_create_error",
             })
-        }
+        },
     })
-    
+
     const onKeyDown = (e) => {
         if (postMutation.isPending) {
             return
@@ -91,7 +101,8 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             if (selectedNumber) {
                 e.preventDefault()
                 setContent(items[selectedNumber - 1].name)
-        }}
+            }
+        }
         if (e.code === "Enter") {
             e.preventDefault()
 
@@ -106,74 +117,85 @@ const TaskCreateSimple = ({ projectID, projectName, drawerID, drawerName, color,
             postMutation.mutate(newTask)
         }
     }
-    
+
     const items = [
         {
             name: "name",
             icon: <FeatherIcon icon="tag" />,
-            component: <TaskNameInput
-                task={newTask}
-                setFunc={editNewTask}
-                inputRef={inputRef}
-                newTaskName={newTaskName}
-                setNewTaskName={setNewTaskName}
-                color={color}
-                isCreate
-            />,
+            component: (
+                <TaskNameInput
+                    task={newTask}
+                    setFunc={editNewTask}
+                    inputRef={inputRef}
+                    newTaskName={newTaskName}
+                    setNewTaskName={setNewTaskName}
+                    color={color}
+                    isCreate
+                />
+            ),
         },
         {
             name: "assigned",
             icon: <FeatherIcon icon="calendar" />,
-            component: <SimpleAssigned
-                assignedIndex={assignedIndex}
-                setAssignedIndex={setAssignedIndex}
-                editNewTask={editNewTask}
-                color={color}
-            />,
+            component: (
+                <SimpleAssigned
+                    assignedIndex={assignedIndex}
+                    setAssignedIndex={setAssignedIndex}
+                    editNewTask={editNewTask}
+                    color={color}
+                />
+            ),
         },
         {
             name: "due",
             icon: <img src={hourglass} />,
-            component: <SimpleDue
-                dueIndex={dueIndex}
-                setDueIndex={setDueIndex}
-                editNewTask={editNewTask}
-                color={color}
-            />,
+            component: (
+                <SimpleDue
+                    dueIndex={dueIndex}
+                    setDueIndex={setDueIndex}
+                    editNewTask={editNewTask}
+                    color={color}
+                />
+            ),
         },
         {
             name: "priority",
             icon: <FeatherIcon icon="alert-circle" />,
-            component: <SimplePriority
-                priorityIndex={priorityIndex}
-                setPriorityIndex={setPriorityIndex}
-                editNewTask={editNewTask}
-                color={color}
-            />,
+            component: (
+                <SimplePriority
+                    priorityIndex={priorityIndex}
+                    setPriorityIndex={setPriorityIndex}
+                    editNewTask={editNewTask}
+                    color={color}
+                />
+            ),
         },
     ]
 
     return (
         <TaskCreateSimpleBlock>
             <IndexBlock>
-                {items.map(item=>(
+                {items.map((item) => (
                     <IndexBox
                         key={item.name}
                         name={item.name}
                         onClick={handleClickContent}
                         $color={color}
-                        $isSelected={content === item.name}
-                    >
+                        $isSelected={content === item.name}>
                         {item.icon}
                     </IndexBox>
                 ))}
             </IndexBlock>
             <TaskCreateSimpleBox>
-                {items.map(item=>(
-                    content === item.name ? <ComponentBox key={item.name} $isSelected={content === item.name}>
-                        {item.component}
-                    </ComponentBox> : null
-                ))}
+                {items.map((item) =>
+                    content === item.name ? (
+                        <ComponentBox
+                            key={item.name}
+                            $isSelected={content === item.name}>
+                            {item.component}
+                        </ComponentBox>
+                    ) : null,
+                )}
             </TaskCreateSimpleBox>
         </TaskCreateSimpleBlock>
     )
@@ -200,9 +222,9 @@ const TaskCreateSimpleBox = styled.div`
     width: 94%;
     height: 3.8em;
     margin-left: 1.7em;
-    color: ${p=>p.theme.textColor};
-    background-color: ${p=>p.theme.backgroundColor};
-    border: solid 1.5px ${p=>p.theme.grey};
+    color: ${(p) => p.theme.textColor};
+    background-color: ${(p) => p.theme.backgroundColor};
+    border: solid 1.5px ${(p) => p.theme.grey};
     border-radius: 15px;
     overflow-y: hidden;
     overflow-x: auto;
@@ -214,7 +236,7 @@ const IndexBox = styled.div`
     justify-content: center;
     width: 2.2em;
     height: 2.2em;
-    border: 1px solid ${p=>p.theme.grey};
+    border: 1px solid ${(p) => p.theme.grey};
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     cursor: pointer;
@@ -224,7 +246,7 @@ const IndexBox = styled.div`
         height: 19px;
         top: 0;
         margin-right: 0;
-        stroke: ${p=>p.theme.textColor};
+        stroke: ${(p) => p.theme.textColor};
     }
 
     & img {
@@ -233,25 +255,30 @@ const IndexBox = styled.div`
         filter: ${(p) => p.theme.project.imgColor};
     }
 
-    ${props=>props.$isSelected && css`
-        background-color: ${props=>props.$color};
+    ${(props) =>
+        props.$isSelected &&
+        css`
+            background-color: ${(props) => props.$color};
 
-        & svg {
-            stroke: ${p=>p.theme.white};
-        }
+            & svg {
+                stroke: ${(p) => p.theme.white};
+            }
 
-        & img {
-            filter: invert(98%) sepia(99%) saturate(191%) hue-rotate(32deg) brightness(115%) contrast(99%);
-        }
-    `}
+            & img {
+                filter: invert(98%) sepia(99%) saturate(191%) hue-rotate(32deg)
+                    brightness(115%) contrast(99%);
+            }
+        `}
 `
 
 const ComponentBox = styled.div`
     width: 100%;
 
-    ${props=>props.$isSelected && css`
-        padding: 0em 1.1em;
-    `}
+    ${(props) =>
+        props.$isSelected &&
+        css`
+            padding: 0em 1.1em;
+        `}
 `
 
 export default TaskCreateSimple

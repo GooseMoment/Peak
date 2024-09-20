@@ -5,33 +5,31 @@ export const CreateSimpleBox = ({ icon, children }) => {
         <Box>
             {icon}
             <VLine />
-            <ContentBlock>
-                {children}
-            </ContentBlock>
+            <ContentBlock>{children}</ContentBlock>
         </Box>
     )
 }
-
 
 const Box = styled.div`
     display: flex;
     align-items: center;
 
-    & svg, img {
+    & svg,
+    img {
         top: 0;
         width: 1.3em;
         height: 1.3em;
         margin-right: 1em;
-        stroke: ${p=>p.theme.textColor};
+        stroke: ${(p) => p.theme.textColor};
     }
 
     & img {
-        filter: ${p=>p.theme.project.imgColor};
+        filter: ${(p) => p.theme.project.imgColor};
     }
 `
 
 const VLine = styled.div`
-    border-left: thin solid ${p=>p.theme.grey};
+    border-left: thin solid ${(p) => p.theme.grey};
     height: 1.3em;
     margin-right: 1em;
 `
@@ -58,12 +56,14 @@ export const ContentBox = styled.div`
         margin-right: 0.3em;
     }
 
-    ${props=>props.$isActive && css`
-        color: ${p=>p.theme.white};
-        background-color: ${props=>props.$color};
+    ${(props) =>
+        props.$isActive &&
+        css`
+            color: ${(p) => p.theme.white};
+            background-color: ${(props) => props.$color};
 
-        & svg {
-            stroke: ${p=>p.theme.white};
-        }
-    `}
+            & svg {
+                stroke: ${(p) => p.theme.white};
+            }
+        `}
 `

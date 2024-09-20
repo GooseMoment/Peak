@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useRef, useState } from "react"
 import { useLocation, useOutletContext } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
@@ -100,7 +100,9 @@ const TaskCreate = () => {
                 </Icons>
             </TaskNameBox>
             <Contents task={newTask} setFunc={editNewTask} />
-            <AddButton disabled={postMutation.isPending} onClick={makeTask}>{t("button_add")}</AddButton>
+            <AddButton disabled={postMutation.isPending} onClick={makeTask}>
+                {t("button_add")}
+            </AddButton>
         </TaskCreateBox>
     )
 }

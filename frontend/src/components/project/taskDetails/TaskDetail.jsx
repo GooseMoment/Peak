@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
@@ -7,10 +7,10 @@ import styled from "styled-components"
 
 import DeleteAlert from "@components/common/DeleteAlert"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import TaskNameInput from "@components/tasks/TaskNameInput"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import SkeletonTaskDetail from "@components/project/skeletons/SkeletonTaskDetail"
 import Contents from "@components/project/taskDetails/Contents"
+import TaskNameInput from "@components/tasks/TaskNameInput"
 
 import { deleteTask, getTask, patchTask } from "@api/tasks.api"
 
@@ -107,16 +107,15 @@ const TaskDetail = () => {
     if (isLoading) {
         return (
             <TaskDetailBox>
-                <SkeletonTaskDetail/>
+                <SkeletonTaskDetail />
             </TaskDetailBox>
-    )}
+        )
+    }
 
     if (isError) {
         return (
             <TaskDetailBox>
-                <ErrorBox onClick={refetch}>
-                    {t("error_load_task")}
-                </ErrorBox>
+                <ErrorBox onClick={refetch}>{t("error_load_task")}</ErrorBox>
             </TaskDetailBox>
         )
     }

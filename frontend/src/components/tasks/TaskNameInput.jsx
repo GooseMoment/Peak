@@ -20,7 +20,7 @@ const TaskNameInput = ({
 
     const [isLoading, setIsLoading] = useState(false)
 
-    useEffect(()=>{
+    useEffect(() => {
         if (inputRef?.current) {
             inputRef.current.focus()
         }
