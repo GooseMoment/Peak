@@ -6,14 +6,18 @@ import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import PageTitle from "@components/common/PageTitle"
 import FilterGroup from "@components/search/FilterGroup"
 import SearchBar from "@components/search/SearchBar"
+import SearchResults from "@components/search/SearchResults"
 
 import queryClient from "@queries/queryClient"
 
 import { getSearchResults } from "@/api/search.api"
-import SearchResults from "@/components/search/SearchResults"
 import { toast } from "react-toastify"
 
 const initialFilterGroup = {
+    searchTerms: {
+        type: "text",
+        value: null,
+    },
     project: {
         name: "Project",
         type: "text",
@@ -57,33 +61,49 @@ const getCursorFromURL = (url) => {
 const SearchPage = () => {
     const [filters, setFilters] = useState(initialFilterGroup)
 
-    const [searchParams, setSearchParams] = useSearchParams()
+    const initialParams = new URLSearchParams()
+    Object.entries(filters).forEach(([filterName, body]) => {
+        initialParams.set(filterName, body.value)
+    })
 
-    const updateSearchParams = (isEditSearchQuery) => (searchQuery) => {
-        const recentFilters = isEditSearchQuery ? filters : searchQuery
+    // useState로 하면 아주 잘 돌아감 아니 왜?
+    const [searchParams, setSearchParams] = useSearchParams(initialParams)
 
-        const newParams = new URLSearchParams(searchParams)
-
-        if (isEditSearchQuery) newParams.set("searchTerms", searchQuery)
-
-        Object.entries(recentFilters).forEach(([key, body]) => {
-            if (body.value && body.type === "date") {
-                newParams.set(
-                    key,
-                    body.value.startDate + "to" + body.value.endDate,
-                )
-            } else {
-                newParams.set(key, body.value)
-            }
-        })
-
-        setSearchParams(newParams)
-        queryClient.removeQueries(["search"])
+    const updateFilterValue = (filterName, filterValue) => {
+        setFilters((prev) => ({
+            ...prev,
+            [filterName]: {
+                ...prev[filterName],
+                value: filterValue ? filterValue : null,
+            },
+        }))
     }
 
-    useEffect(() => {
-        refetchResult()
-    }, [searchParams])
+    const updateSearchParam = (filterName, filterValue) => {
+        const newParams = new URLSearchParams(searchParams)
+
+        if (filterValue && filters[filterName].type === "date") {
+            newParams.set(
+                filterName,
+                filterValue.startDate + "to" + filterValue.endDate,
+            )
+        } else {
+            newParams.set(filterName, filterValue)
+        }
+
+        setSearchParams(newParams)
+    }
+
+    const updateSearchQuery = (filterName) => (filterValue) => {
+        updateSearchParam(filterName, filterValue)
+        updateFilterValue(filterName, filterValue)
+        
+        queryClient.invalidateQueries(["search"])
+            
+        setTimeout(() => {
+            refetchResult()
+        }, 0)
+    }
 
     const {
         data: resultPage,
@@ -91,21 +111,17 @@ const SearchPage = () => {
         refetch: refetchResult,
     } = useInfiniteQuery({
         queryKey: ["search"],
-        queryFn: (page) => getSearchResults(searchParams, page.pageParam),
+        queryFn: (page) => getSearchResults(searchParams, page.pageParam, filters),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
-        enabled: !!searchParams,
+        enabled: false,
     })
 
     return (
         <>
             <PageTitle>Search</PageTitle>
-            <SearchBar handleSearch={updateSearchParams(true)} />
-            <FilterGroup
-                filters={filters}
-                setFilters={setFilters}
-                handleSearch={updateSearchParams(false)}
-            />
+            <SearchBar handleSearch={updateSearchQuery("searchTerms2")} />
+            <FilterGroup filters={filters} handleSearch={updateSearchQuery} />
             {resultPage && (
                 <SearchResults
                     resultPage={resultPage}
