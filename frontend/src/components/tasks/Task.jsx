@@ -24,6 +24,12 @@ const Task = ({ task, color }) => {
             queryClient.invalidateQueries({
                 queryKey: ["project", task.project_id],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", "overdue"],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", "today"],
+            })
         },
     })
 
