@@ -79,12 +79,11 @@ const TaskNameInput = ({
 const Box = styled.div`
     display: flex;
     align-items: center;
+    width: 100%;
 `
 
 const InputText = styled.input`
-    width: 30em;
-    height: auto;
-    font-weight: normal;
+    flex-grow: 1;
     font-size: 1.1em;
     color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};
     margin-top: 0.1em;

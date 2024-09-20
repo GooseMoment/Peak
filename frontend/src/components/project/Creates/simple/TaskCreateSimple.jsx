@@ -247,8 +247,10 @@ const IndexBox = styled.div`
 `
 
 const ComponentBox = styled.div`
+    width: 100%;
+
     ${props=>props.$isSelected && css`
-        margin-left: 1.1em;
+        padding: 0em 1.1em;
     `}
 `
 
