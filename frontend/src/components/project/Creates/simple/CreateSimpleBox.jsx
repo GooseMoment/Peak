@@ -17,9 +17,10 @@ const Box = styled.div`
     & svg,
     img {
         top: 0;
-        width: 1.3em;
-        height: 1.3em;
+        width: 22px;
+        height: 22px;
         margin-right: 1em;
+        flex-shrink: 0;
         stroke: ${(p) => p.theme.textColor};
     }
 
