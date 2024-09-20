@@ -21,7 +21,7 @@
         "bio": "바이오",
         "header_color": "헤더 색상",
         "bio_placeholder": "자신을 소개하세요.",
-        "button_submit": "제출",
+        "button_submit": "저장",
         "change_password": "암호 변경",
         "section_open": "열기",
         "section_close": "닫기",
@@ -36,7 +36,9 @@
         "password_not_match": "새로운 암호가 서로 일치하지 않습니다.",
         "password_wrong": "현재 암호가 틀렸습니다.",
         "password_change_success": "암호를 변경했습니다.",
-        "password_change_error": "암호 변경 중 문제가 발생했습니다."
+        "password_change_error": "암호 변경 중 문제가 발생했습니다.",
+        "button_apply": "자르기",
+        "button_cancel": "취소"
     },
     "general": {
         "startpage": {

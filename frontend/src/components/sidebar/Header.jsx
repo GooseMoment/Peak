@@ -5,19 +5,21 @@ import styled, { css, keyframes } from "styled-components"
 import MildButton from "@components/common/MildButton"
 
 import useScreenSize from "@utils/useScreenSize"
-import useScreenType, { WIDTH_TABLET } from "@utils/useScreenType"
+import { WIDTH_TABLET } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
 
 import FeatherIcon from "feather-icons-react"
+import { useSidebarContext } from "@components/sidebar/SidebarContext"
 
 const autoCollapseWidth = WIDTH_TABLET
 
-const Header = ({ collapsed, setCollapsed, closeSidebar }) => {
+const Header = () => {
     const screenSize = useScreenSize()
-    const { isMobile } = useScreenType()
     const previousScreenSize = useRef(screenSize)
     const autoControlled = useRef(true)
+
+    const { isMobile, startClosing, isCollapsed, setCollapsed } = useSidebarContext()
 
     useEffect(() => {
         if (isMobile) {
@@ -59,15 +61,15 @@ const Header = ({ collapsed, setCollapsed, closeSidebar }) => {
 
     return (
         <header>
-            <ButtonContainer $collapsed={collapsed}>
+            <ButtonContainer $collapsed={isCollapsed}>
                 {isMobile ? (
-                    <CollapseButton onClick={closeSidebar}>
+                    <CollapseButton onClick={startClosing}>
                         <FeatherIcon icon="x" />
                     </CollapseButton>
                 ) : (
                     <CollapseButton
                         onClick={onClickCollapseButton}
-                        $collapsed={collapsed}
+                        $collapsed={isCollapsed}
                     >
                         <FeatherIcon icon="chevrons-left" />
                     </CollapseButton>

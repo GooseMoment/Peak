@@ -34,7 +34,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                 priority={task.priority}
                 completed={task.completed_at}
             />
-            <div>
+            <Content>
                 <CircleName>
                     <TaskCircle
                         completed={task.completed_at}
@@ -44,12 +44,9 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                         onClick={toComplete}
                     />
                     {taskDetailPath ? (
-                        <Link
-                            to={taskDetailPath}
-                            style={{ textDecoration: "none" }}
-                        >
+                        <NameLink to={taskDetailPath}>
                             {TaskName}
-                        </Link>
+                        </NameLink>
                     ) : (
                         TaskName
                     )}
@@ -59,8 +56,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                     {task.assigned_at && (
                         <AssignedDate
                             $completed={task.completed_at}
-                            $isOutOfDue={isOutOfAssigned}
-                        >
+                            $isOutOfDue={isOutOfAssigned}>
                             <FeatherIcon icon="calendar" />
                             {task.completed_at ? assigned : calculate_assigned}
                         </AssignedDate>
@@ -68,8 +64,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                     {task.due_date && (
                         <DueDate
                             $completed={task.completed_at}
-                            $isOutOfDue={isOutOfDue}
-                        >
+                            $isOutOfDue={isOutOfDue}>
                             <img src={hourglass} />
                             {task.completed_at ? due : calculate_due}
                         </DueDate>
@@ -83,7 +78,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                           )
                         : null}
                 </Dates>}
-            </div>
+            </Content>
         </Box>
     )
 }
@@ -91,12 +86,23 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
 const Box = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 0.9em;
-    margin-bottom: 0.9em;
+    margin-top: 1.5em;
+
+    min-width: 0;
+`
+
+const Content = styled.div`
+    min-width: 0;
+`
+
+const NameLink = styled(Link)`
+    display: flex;
+    min-width: 0;
 `
 
 const TaskNameBox = styled.div`
     display: inline-block;
+
     font-style: normal;
     font-size: 1.1em;
     color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};
@@ -104,6 +110,8 @@ const TaskNameBox = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.3em;
+
+    min-width: 0;
 `
 
 const CircleName = styled.div`
