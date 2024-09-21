@@ -42,7 +42,7 @@ const Drawer = ({ project, drawer, color }) => {
     const navigate = useNavigate()
 
     const [collapsed, setCollapsed] = useState(false)
-    const [ordering, setOrdering] = useState("order")
+    const [ordering, setOrdering] = useState(null)
     const [isSortMenuOpen, setIsSortMenuOpen] = useState(false)
     const [selectedSortMenuPosition, setSelectedSortMenuPosition] = useState({
         top: 0,
@@ -94,6 +94,7 @@ const Drawer = ({ project, drawer, color }) => {
 
                     if (typeof targetOrder === "number" && draggedOrder !== targetOrder) {
                         patchMutation.mutate({ dragged_order: draggedOrder, target_order: targetOrder, closest_edge: closestEdge })
+                        setOrdering(null)
                 }}
             }
         })
@@ -319,10 +320,10 @@ const MoreButton = styled(Button)`
 
 const makeSortMenuItems = (t) => [
     { display: t("sort.-priority"), context: "-priority" },
-    { display: t("sort.due_date"), context: "assigned_at,due_date,due_time" },
+    { display: t("sort.due_date"), context: "due_date" },
     {
         display: t("sort.-due_date"),
-        context: "-assigned_at,-due_date,-due_time",
+        context: "-due_date",
     },
     { display: t("sort.name"), context: "name" },
     { display: t("sort.-name"), context: "-name" },

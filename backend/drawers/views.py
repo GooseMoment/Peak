@@ -31,7 +31,7 @@ class DrawerDetail(mixins.RetrieveModelMixin,
             if (dragged_order is not None) or (target_order is not None):
                 drawer: Drawer = self.get_object()
                 reorder_tasks(drawer.tasks, dragged_order, target_order, closest_edge)
-                normalize_drawer_order(drawer.tasks)
+                normalize_drawer_order(drawer.tasks, "order")
 
         return self.partial_update(request, *args, **kwargs)
     

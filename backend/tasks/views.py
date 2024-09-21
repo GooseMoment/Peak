@@ -1,6 +1,5 @@
 from rest_framework import mixins, generics
 from rest_framework.response import Response
-from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 
 from api.views import CreateMixin
@@ -14,6 +13,7 @@ from notifications.models import TaskReminder
 from notifications.serializers import TaskReminderSerializer
 from notifications.utils import caculateScheduled
 from .utils import combine_due_datetime
+from drawers.utils import normalize_drawer_order
 
 class TaskDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -96,15 +96,19 @@ class TaskList(CreateMixin,
                   generics.GenericAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsUserMatch]
-    filter_backends = [OrderingFilter]
-    ordering_fields = ['order', 'name', 'assigned_at', 'due_date', 'due_time', 'priority', 'created_at', 'reminders']
-    ordering = ['order']
 
     def get_queryset(self):
         queryset = Task.objects.filter(user=self.request.user).order_by("order").all()
         drawer_id = self.request.query_params.get("drawer", None)
         if drawer_id is not None:
             queryset = queryset.filter(drawer__id=drawer_id)
+
+        ordering_fields = ['name', 'assigned_at', 'due_date', 'due_time', 'priority', 'created_at', 'reminders']
+        ordering = self.request.GET.get("ordering", None)
+
+        if ordering.lstrip('-') in ordering_fields:
+            normalize_drawer_order(queryset, ordering)
+
         return queryset
 
     def get(self, request, *args, **kwargs):
