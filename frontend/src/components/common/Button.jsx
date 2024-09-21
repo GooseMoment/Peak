@@ -12,23 +12,19 @@ export const buttonForms = {
     outlined: "outlined",
 }
 
-/**
- * 공용 버튼 컴포넌트
- * @param {Object} props - button의 모든 props
- * @param {?string} $form - buttonForms 목록 중 사용 (기본: outlined)
- * @param {?string} $state - assets/themes/states 목록 중 사용 (기본: states.TEXT)
- */
-const Button = (props) => {
-    const {
-        $form = buttonForms.outlined,
-        $state = states.text,
-        $loading,
-    } = props
-    const SelectedButton = buttons[$form]
+const Button = ({
+    form = buttonForms.outlined,
+    state = states.text,
+    loading = false,
+    className,
+    children,
+    ...others
+}) => {
+    const SelectedButton = buttons[form]
 
     return (
-        <SelectedButton {...props} $state={$state}>
-            {$loading && <ButtonLoader />} {props.children}
+        <SelectedButton {...others} $state={state} className={className}>
+            {loading && <ButtonLoader />} {children}
         </SelectedButton>
     )
 }

@@ -8,7 +8,7 @@ const DeleteAlert = ({ title, onClose, func }) => {
 
     const buttons = [
         "close",
-        <Button key="delete" $form="filled" $state="danger" onClick={func}>
+        <Button key="delete" form="filled" state="danger" onClick={func}>
             {t("button_delete")}
         </Button>,
     ]
