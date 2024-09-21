@@ -86,7 +86,8 @@ class SearchView(mixins.ListModelMixin, generics.GenericAPIView):
                 continue
             
             query_filter &= query(value)
-            
+        
+        # 우선순위 유사도 검색 이슈 TrigramSimilarity..
         tasks_queryset = Task.objects.filter(query_filter).annotate(
             color=F('drawer__project__color'),
         )

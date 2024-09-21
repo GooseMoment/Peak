@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 
 import PageTitle from "@components/common/PageTitle"
 import FilterGroup from "@components/search/FilterGroup"
@@ -11,7 +11,6 @@ import SearchResults from "@components/search/SearchResults"
 import queryClient from "@queries/queryClient"
 
 import { getSearchResults } from "@/api/search.api"
-import { toast } from "react-toastify"
 
 const initialFilterGroup = {
     searchTerms: {

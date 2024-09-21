@@ -9,18 +9,19 @@ const FilterGroup = ({ filters, handleSearch }) => {
 
     return (
         <FilterGroupWrapper>
-            { filters && Object.entries(filters).map(
-                ([name, filter]) =>
-                    name !== "searchTerms" && (
-                        <FilterButton
-                            key={name}
-                            filter={filter}
-                            updateFilterValue={handleSearch(name)}
-                            inputState={inputState}
-                            setInputState={setInputState}
-                        />
-                    ),
-            )}
+            {filters &&
+                Object.entries(filters).map(
+                    ([name, filter]) =>
+                        name !== "searchTerms" && (
+                            <FilterButton
+                                key={name}
+                                filter={filter}
+                                updateFilterValue={handleSearch(name)}
+                                inputState={inputState}
+                                setInputState={setInputState}
+                            />
+                        ),
+                )}
         </FilterGroupWrapper>
     )
 }
