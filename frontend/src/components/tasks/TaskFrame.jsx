@@ -86,7 +86,8 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
 const Box = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 1.5em;
+    margin-top: 0.9em;
+    margin-bottom: 0.9em;
 
     min-width: 0;
 `
