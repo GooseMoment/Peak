@@ -33,7 +33,7 @@ const UnblockButton = ({ user }) => {
 
     return (
         <Button
-            $loading={mutation.isPending}
+            loading={mutation.isPending}
             disabled={mutation.isPending}
             onClick={() => mutation.mutate({ prev: blocked })}
         >
