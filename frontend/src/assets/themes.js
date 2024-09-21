@@ -92,20 +92,6 @@ export const light = {
     toastTheme: "light",
 }
 
-export const lightSystemcolor = Object.assign({}, light, {
-    primaryColors: Object.assign({}, light.primaryColors, {
-        primary: "AccentColor",
-    }),
-    accentColor: "AccentColor",
-    sidebar: Object.assign({}, light.sidebar, {
-        activeColor: "HighlightText",
-        activeBackgroundColor: "Highlight",
-        hoverColor: black,
-        hoverBackgroundColor: "#D9D9D9",
-        backgroundColor: "#F9F7F6",
-    }),
-})
-
 export const dark = {
     type: "dark",
     primaryColors: {
@@ -185,26 +171,10 @@ export const dark = {
     toastTheme: "dark",
 }
 
-export const darkSystemcolor = Object.assign({}, dark, {
-    primaryColors: Object.assign({}, dark.primaryColors, {
-        primary: "AccentColor",
-    }),
-    accentColor: "AccentColor",
-    sidebar: Object.assign({}, dark.sidebar, {
-        activeColor: "HighlightText",
-        activeBackgroundColor: "Highlight",
-        hoverColor: white,
-        hoverBackgroundColor: black,
-        backgroundColor: "#2F2F2F",
-    }),
-})
-
 const themes = {
     system: null,
     light: light,
-    "light-systemcolor": lightSystemcolor,
     dark: dark,
-    "dark-systemcolor": darkSystemcolor,
 }
 
 export default themes

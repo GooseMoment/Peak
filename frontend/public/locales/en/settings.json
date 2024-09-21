@@ -21,7 +21,7 @@
         "bio": "Bio",
         "header_color": "Header Color",
         "bio_placeholder": "Tell me who you are",
-        "button_submit": "Submit",
+        "button_submit": "Save",
         "change_password": "Change password",
         "section_open": "Open",
         "section_close": "Close",
@@ -36,7 +36,9 @@
         "password_not_match": "New password does not match.",
         "password_wrong": "Current password is wrong.",
         "password_change_success": "Password was changes.",
-        "password_change_error": "Error occured while changing password."
+        "password_change_error": "Error occured while changing password.",
+        "button_apply": "Crop",
+        "button_cancel": "Cancel"
     },
     "general": {
         "startpage": {
@@ -112,9 +114,7 @@
             "values": {
                 "system": "Same as system",
                 "light": "Light",
-                "light-systemcolor": "Light (with system color)",
-                "dark": "Dark",
-                "dark-systemcolor": "Dark (with system color)"
+                "dark": "Dark"
             }
         },
         "main_width": {
