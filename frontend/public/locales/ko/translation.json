@@ -53,6 +53,7 @@
         "progress": "진행 상황",
         "button_load_more": "더보기",
         "button_add_task": "새 작업 추가",
+        "button_close_add_task": "닫힘",
         "loading": "로딩 중",
         "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요 😢",
         "error_load_task": "작업을 불러오지 못했어요 😢",
