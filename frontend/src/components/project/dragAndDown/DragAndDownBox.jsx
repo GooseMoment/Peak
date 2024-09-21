@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from "react"
 
-import styled, { css } from "styled-components"
+import styled, { css, useTheme } from "styled-components"
+
+import { getProjectColor } from "@components/project/Creates/palettes"
 
 import { draggable, dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 import { attachClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge"
 import { DragHandleButton } from "@atlaskit/pragmatic-drag-and-drop-react-accessibility/drag-handle-button"
 
 const DragAndDownBox = ({ task, children }) => {
+    const theme = useTheme()
     const ref = useRef(null)
     const dragHandleRef = useRef(null)
 
@@ -75,7 +78,7 @@ const DragAndDownBox = ({ task, children }) => {
     }, [task.order, task.id])
 
     return (
-        <DragAndDownBlock ref={dragHandleRef} $edge={closestEdge}>
+        <DragAndDownBlock ref={dragHandleRef} $edge={closestEdge} $color={getProjectColor(theme.type, task.project_color)}>
             <DragHandleButtonBox>
                 <DragHandleButton/>
             </DragHandleButtonBox>
@@ -111,9 +114,9 @@ const DragAndDownBlock = styled.div`
     border-bottom: 2px solid transparent;
 
     ${props => props.$edge && props.$edge === "top" ? css`
-        border-top: 2px dashed ${p=>p.theme.goose};
+        border-top: 2px dashed ${p => p.$color};
     ` : props.$edge === "bottom" && css`
-        border-bottom: 2px dashed ${p=>p.theme.goose};
+        border-bottom: 2px dashed ${p => p.$color};
     `}
 
     &:hover {
