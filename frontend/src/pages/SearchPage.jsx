@@ -8,9 +8,9 @@ import FilterGroup from "@components/search/FilterGroup"
 import SearchBar from "@components/search/SearchBar"
 import SearchResults from "@components/search/SearchResults"
 
-import queryClient from "@queries/queryClient"
+import { getSearchResults } from "@api/search.api"
 
-import { getSearchResults } from "@/api/search.api"
+import queryClient from "@queries/queryClient"
 
 const initialFilterGroup = {
     searchTerms: {
