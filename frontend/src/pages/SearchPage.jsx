@@ -15,6 +15,7 @@ import { toast } from "react-toastify"
 
 const initialFilterGroup = {
     searchTerms: {
+        name: "Terms",
         type: "text",
         value: null,
     },
@@ -59,15 +60,18 @@ const getCursorFromURL = (url) => {
 }
 
 const SearchPage = () => {
-    const [filters, setFilters] = useState(initialFilterGroup)
-
-    const initialParams = new URLSearchParams()
-    Object.entries(filters).forEach(([filterName, body]) => {
-        initialParams.set(filterName, body.value)
-    })
+    const [filters, setFilters] = useState()
 
     // useState로 하면 아주 잘 돌아감 아니 왜?
-    const [searchParams, setSearchParams] = useSearchParams(initialParams)
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    useEffect(() => {
+        searchParams?.forEach((value, key) => {
+            initialFilterGroup[key].value = value === "null" ? null : value
+        })
+        setFilters(initialFilterGroup)
+    }, [searchParams])
+    // 이러면 굳이 updateFilterValue가 필요 없을 거긴 한데 나중에 기능 추가하면서 수정 고려
 
     const updateFilterValue = (filterName, filterValue) => {
         setFilters((prev) => ({
@@ -97,9 +101,9 @@ const SearchPage = () => {
     const updateSearchQuery = (filterName) => (filterValue) => {
         updateSearchParam(filterName, filterValue)
         updateFilterValue(filterName, filterValue)
-        
+
         queryClient.invalidateQueries(["search"])
-            
+
         setTimeout(() => {
             refetchResult()
         }, 0)
@@ -111,7 +115,7 @@ const SearchPage = () => {
         refetch: refetchResult,
     } = useInfiniteQuery({
         queryKey: ["search"],
-        queryFn: (page) => getSearchResults(searchParams, page.pageParam, filters),
+        queryFn: (page) => getSearchResults(searchParams, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
         enabled: false,
@@ -120,7 +124,7 @@ const SearchPage = () => {
     return (
         <>
             <PageTitle>Search</PageTitle>
-            <SearchBar handleSearch={updateSearchQuery("searchTerms2")} />
+            <SearchBar handleSearch={updateSearchQuery("searchTerms")} />
             <FilterGroup filters={filters} handleSearch={updateSearchQuery} />
             {resultPage && (
                 <SearchResults

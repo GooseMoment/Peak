@@ -30,6 +30,8 @@ const FilterButton = ({
     }
 
     const displayFilterValue = () => {
+        console.log(filter.value, typeof(filter.value), !!filter.value)
+
         if (!filter.value) return null
 
         if (filter.type === "text") {

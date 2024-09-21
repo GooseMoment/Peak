@@ -9,7 +9,7 @@ const FilterGroup = ({ filters, handleSearch }) => {
 
     return (
         <FilterGroupWrapper>
-            {Object.entries(filters).map(
+            { filters && Object.entries(filters).map(
                 ([name, filter]) =>
                     name !== "searchTerms" && (
                         <FilterButton
