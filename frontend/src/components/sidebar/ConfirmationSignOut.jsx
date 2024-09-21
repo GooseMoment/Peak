@@ -22,10 +22,10 @@ const ConfirmationSignOut = ({ onClose }) => {
         "close",
         <Button
             key="sign_out"
-            $state={states.danger}
+            state={states.danger}
             onClick={onClickSignOut}
             disabled={loading}
-            $loading={loading}>
+            loading={loading}>
             {t("yes")}
         </Button>,
     ]

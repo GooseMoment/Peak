@@ -1,60 +1,66 @@
-import { useState } from "react"
+import { useEffect } from "react"
 
-import styled from "styled-components"
+import {
+    ContentBox,
+    CreateSimpleBox,
+} from "@components/project/Creates/simple/CreateSimpleBox"
 
 import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
-const SimplePriority = ({ inputRef }) => {
-    const [priority, setPriority] = useState("보통")
+const SimplePriority = ({
+    priorityIndex,
+    setPriorityIndex,
+    editNewTask,
+    color,
+}) => {
+    const { t } = useTranslation(null, { keyPrefix: "task.priority" })
 
-    const onChange = (e) => {
-        setPriority(e.target.value)
+    const onKeyDown = (e) => {
+        if (e.key === "ArrowRight") {
+            if (priorityIndex === 2) return
+            setPriorityIndex(priorityIndex + 1)
+        }
+        if (e.key === "ArrowLeft") {
+            if (priorityIndex === 0) return
+            setPriorityIndex(priorityIndex - 1)
+        }
     }
+
+    useEffect(() => {
+        document.addEventListener("keydown", onKeyDown)
+
+        return () => {
+            document.removeEventListener("keydown", onKeyDown)
+        }
+    }, [priorityIndex])
+
+    useEffect(() => {
+        editNewTask({ priority: priorityIndex })
+    }, [priorityIndex])
+
+    const items = [
+        { index: 0, content: t("normal") },
+        { index: 1, content: t("important") },
+        { index: 2, content: t("critical") },
+    ]
 
     return (
-        <Box>
-            <FeatherIcon icon="alert-circle" />
-            <VLine />
-            <InputText
-                type="text"
-                onChange={onChange}
-                value={priority}
-                ref={inputRef}
-                placeholder="우선순위를 설정해주세요."
-            />
-        </Box>
+        <CreateSimpleBox icon={<FeatherIcon icon="alert-circle" />}>
+            {items.map((item) => (
+                <ContentBox
+                    key={item.index}
+                    $color={color}
+                    $isActive={priorityIndex === item.index}
+                    onClick={() => setPriorityIndex(item.index)}>
+                    {priorityIndex === item.index && (
+                        <FeatherIcon icon="check" />
+                    )}
+                    {item.content}
+                </ContentBox>
+            ))}
+        </CreateSimpleBox>
     )
 }
-
-const Box = styled.div`
-    display: flex;
-    align-items: center;
-
-    & svg {
-        top: 0;
-        width: 1.1em;
-        height: 1.1em;
-        margin-right: 0.8em;
-    }
-`
-
-const VLine = styled.div`
-    border-left: thin solid #d9d9d9;
-    height: 1.3em;
-    margin-right: 0.8em;
-`
-
-const InputText = styled.input`
-    width: 36em;
-    font-weight: normal;
-    font-size: 1.1em;
-    color: ${(props) => (props.$completed ? "#A4A4A4" : "#000000")};
-    border: none;
-    margin-top: 0.1em;
-
-    &:focus {
-        outline: none;
-    }
-`
 
 export default SimplePriority
