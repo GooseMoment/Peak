@@ -22,7 +22,7 @@ import { deleteDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
-import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
+import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
