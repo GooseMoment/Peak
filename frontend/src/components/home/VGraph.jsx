@@ -1,21 +1,25 @@
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
-const VGraph = ({ items }) => {
+import { getProjectColor } from "@components/project/Creates/palettes"
+
+const VGraph = ({ items, countAll }) => {
+    const theme = useTheme()
+
     return (
         <Frame>
             <Graph>
                 {items?.map((item) => (
                     <Item
                         key={item.name}
-                        $width={item.width}
-                        $color={item.color}
+                        $width={item.count / countAll * 100}
+                        $color={getProjectColor(theme.type, item.color)}
                     />
                 ))}
             </Graph>
             <Categories>
                 {items?.map((item) => (
                     <Category key={item.name}>
-                        <CategoryCircle $color={item.color} /> {item.name}
+                        <CategoryCircle $color={getProjectColor(theme.type, item.color)} /> {item.name}
                     </Category>
                 ))}
             </Categories>
