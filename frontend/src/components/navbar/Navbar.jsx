@@ -1,34 +1,79 @@
-import { useNavigate } from "react-router-dom"
+import { useCallback, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 
 import styled from "styled-components"
 
 import { ifMobile } from "@utils/useScreenType"
 
-import { Archive, Calendar, Home, Search, Users } from "feather-icons-react"
+import FeatherIcon from "feather-icons-react"
+
+const items = [
+    {
+        to: "search",
+        match: "search",
+        icon: "search",
+    },
+    {
+        to: "today",
+        match: "today",
+        icon: "calendar",
+    },
+    {
+        to: "home",
+        match: "home",
+        icon: "home",
+    },
+    {
+        to: "projects",
+        match: "projects",
+        icon: "archive",
+    },
+    {
+        to: "social/following",
+        match: "social",
+        icon: "users",
+    },
+]
 
 const Navbar = () => {
     const navigate = useNavigate()
+    const location = useLocation()
+
+    const [activeItemLeft, setActiveItemLeft] = useState(0)
+    const [activeItemVisible, setActiveItemVisible] = useState(false)
+
+    const onRefChange = useCallback(
+        (node) => {
+            if (!node) {
+                setActiveItemVisible(false)
+                return
+            }
+
+            setActiveItemVisible(true)
+            setActiveItemLeft(node.offsetLeft)
+        },
+        [location.pathname],
+    )
 
     return (
         <Frame>
             <Box>
-                <Item key="search" onClick={() => navigate("/app/search")}>
-                    <Search />
-                </Item>
-                <Item key="today" onClick={() => navigate("/app/today")}>
-                    <Calendar />
-                </Item>
-                <Item key="home" onClick={() => navigate("/app/home")}>
-                    <Home />
-                </Item>
-                <Item key="projects" onClick={() => navigate("/app/projects")}>
-                    <Archive />
-                </Item>
-                <Item
-                    key="social"
-                    onClick={() => navigate("/app/social/following")}>
-                    <Users />
-                </Item>
+                <ActiveItemBackground
+                    $left={activeItemLeft}
+                    $visible={activeItemVisible}
+                />
+                {items.map((item) => (
+                    <Item
+                        key={item.match}
+                        onClick={() => navigate("/app/" + item.to)}
+                        ref={
+                            location.pathname.startsWith("/app/" + item.match)
+                                ? onRefChange
+                                : null
+                        }>
+                        <FeatherIcon icon={item.icon} />
+                    </Item>
+                ))}
             </Box>
         </Frame>
     )
@@ -63,14 +108,14 @@ const Frame = styled.nav`
 
 const Box = styled.div`
     display: flex;
-    
+
     justify-content: center;
     align-items: center;
     gap: 0.5em;
 
     pointer-events: all;
 
-    padding: 0.5em;
+    padding: 0.25em;
 
     border-radius: 32px;
 
@@ -84,7 +129,8 @@ const Item = styled.div`
 
     box-sizing: border-box;
     aspect-ratio: 1/1;
-    height: 2.5em;
+    height: 3em;
+    padding: 0.5em;
 
     border-radius: 50%;
 
@@ -95,12 +141,31 @@ const Item = styled.div`
     cursor: pointer;
 
     & svg {
-        font-size: 1.75em;
-        stroke-width: 0.075em;
+        font-size: 1.5em;
+        stroke-width: 2.5px;
 
         top: 0;
         margin-right: unset;
     }
+`
+
+const ActiveItemBackground = styled.div`
+    position: absolute;
+
+    background-color: ${(p) => p.theme.navbar.activeBackgroundColor};
+
+    top: 0.25em;
+    left: ${(props) => props.$left}px;
+    width: 3em;
+    height: 3em;
+
+    opacity: ${(p) => (p.$visible ? 1 : 0)};
+
+    transition:
+        left 0.25s var(--cubic),
+        opacity 0.25s var(--cubic);
+
+    border-radius: 50px;
 `
 
 export default Navbar
