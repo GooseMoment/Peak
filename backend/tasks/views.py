@@ -1,19 +1,20 @@
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 
-from api.views import CreateMixin
-from api.permissions import IsUserMatch
 from datetime import datetime
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, F, Count
+
 from .models import Task
-from .serializers import TaskSerializer
+from .serializers import TaskSerializer, TaskGroupedSerializer
+from .utils import combine_due_datetime
+from api.views import CreateMixin
+from api.permissions import IsUserMatch
 from notifications.models import TaskReminder
 from notifications.serializers import TaskReminderSerializer
 from notifications.utils import caculateScheduled
-from .utils import combine_due_datetime
 
 class TaskDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -161,3 +162,28 @@ class TodayTaskList(mixins.ListModelMixin, generics.GenericAPIView):
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+class TodayTaskGroupByProject(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        now = timezone.now()
+        today_start = timezone.datetime.combine(now.date(), timezone.datetime.min.time(), tzinfo=timezone.get_current_timezone())
+        today_end = timezone.datetime.combine(now.date(), timezone.datetime.max.time(), tzinfo=timezone.get_current_timezone())
+
+        grouped = Task.objects.filter(
+            Q(due_date__gte=today_start, due_date__lte=today_end) |
+            Q(assigned_at__gte=today_start, assigned_at__lte=today_end),
+            completed_at__isnull=True,
+            user=request.user,
+        ).values(
+            "drawer__project", "drawer__project__color", "drawer__project__name",
+        ).annotate(
+            id=F("drawer__project"),
+            color=F("drawer__project__color"),
+            name=F("drawer__project__name"),
+            count=Count("drawer__project"),
+        ).order_by()
+
+        s = TaskGroupedSerializer(data=grouped, many=True)
+        s.is_valid()
+
+        return Response(s.data, status=status.HTTP_200_OK)
