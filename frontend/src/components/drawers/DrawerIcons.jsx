@@ -1,12 +1,11 @@
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 
+import CollapseButton from "@components/common/CollapseButton"
 import SortIcon from "@components/project/sorts/SortIcon"
 
 import { DrawerIcon } from "./DrawerBox"
 
 import handleToggleContextMenu from "@utils/handleToggleContextMenu"
-
-import { cubicBeizer, rotateToUnder, rotateToUp } from "@assets/keyframes"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -37,12 +36,7 @@ const DrawerIcons = ({
         },
         {
             icon: (
-                <CollapseButton $collapsed={collapsed}>
-                    <FeatherIcon
-                        icon="chevron-down"
-                        onClick={handleCollapsed}
-                    />
-                </CollapseButton>
+                <CollapseButton collapsed={collapsed} handleCollapsed={handleCollapsed}/>
             ),
         },
         {
@@ -67,20 +61,6 @@ const DrawerIcons = ({
         </DrawerIcon>
     )
 }
-
-const CollapseButton = styled.div`
-    & svg {
-        animation: ${rotateToUp} 0.5s ${cubicBeizer} forwards;
-    }
-
-    ${(props) =>
-        props.$collapsed &&
-        css`
-            & svg {
-                animation: ${rotateToUnder} 0.5s ${cubicBeizer} forwards;
-            }
-        `}
-`
 
 const Button = styled.button`
     border: 0;

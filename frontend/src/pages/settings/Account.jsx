@@ -148,8 +148,8 @@ const Account = () => {
                     <ButtonGroup $justifyContent="right">
                         <Button
                             disabled={mutation.isPending}
-                            $loading={mutation.isPending}
-                            $form={buttonForms.filled}
+                            loading={mutation.isPending}
+                            form={buttonForms.filled}
                             type="submit">
                             {t("button_submit")}
                         </Button>

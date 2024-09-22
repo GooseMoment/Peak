@@ -1,15 +1,15 @@
 import { useMemo } from "react"
-import { useNavigate } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
 import styled, { css, useTheme } from "styled-components"
 
 import { getProjectColor } from "@components/project/Creates/palettes"
+import { useSidebarContext } from "@components/sidebar/SidebarContext"
 import SidebarLink from "@components/sidebar/SidebarLink"
 
 import { getProjectList } from "@api/projects.api"
 
-import useScreenType, { ifMobile } from "@utils/useScreenType"
+import { ifMobile } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
 import { skeletonCSS } from "@assets/skeleton"
@@ -17,7 +17,7 @@ import { skeletonCSS } from "@assets/skeleton"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Middle = ({ collapsed, closeSidebar }) => {
+const Middle = () => {
     const {
         data: projects,
         isPending,
@@ -29,23 +29,10 @@ const Middle = ({ collapsed, closeSidebar }) => {
     })
 
     const { t } = useTranslation("", { keyPrefix: "sidebar" })
-    const navigate = useNavigate()
     const theme = useTheme()
-    const { isMobile } = useScreenType()
     const items = useMemo(() => getItems(t), [t])
 
-    const onClickLink = () => {
-        if (isMobile) {
-            closeSidebar()
-        }
-    }
-
-    const onClickSocial = (e) => {
-        e.preventDefault()
-
-        onClickLink()
-        navigate("/app/social/following")
-    }
+    const { isCollapsed } = useSidebarContext()
 
     const onClickErrorBox = () => {
         refetch()
@@ -54,50 +41,35 @@ const Middle = ({ collapsed, closeSidebar }) => {
     return (
         <MiddleBox>
             {items.map((item) => (
-                <SidebarLink
-                    to={item.to}
-                    draggable="false"
-                    key={item.to}
-                    end={item.end}
-                    onClick={onClickLink}
-                >
-                    <ItemBox $collapsed={collapsed}>
+                <SidebarLink to={item.to} key={item.to} end={item.end}>
+                    <ItemBox $collapsed={isCollapsed}>
                         <FeatherIcon icon={item.icon} />
-                        {collapsed ? null : item.name}
+                        {isCollapsed ? null : item.name}
                     </ItemBox>
                 </SidebarLink>
             ))}
 
             <SidebarLink
-                to="social"
-                draggable="false"
+                to="social/following"
+                activePath="social"
                 key="social"
-                end={false}
-                onClick={onClickSocial}
-            >
-                <ItemBox $collapsed={collapsed}>
+                end={false}>
+                <ItemBox $collapsed={isCollapsed}>
                     <FeatherIcon icon="users" />
-                    {collapsed ? null : t("social")}
+                    {isCollapsed ? null : t("social")}
                 </ItemBox>
             </SidebarLink>
 
-            <SidebarLink
-                to="projects"
-                draggable="false"
-                key="projects"
-                onClick={onClickLink}
-                end
-            >
-                <ItemBox $collapsed={collapsed}>
+            <SidebarLink to="projects" key="projects" end>
+                <ItemBox $collapsed={isCollapsed}>
                     <FeatherIcon icon="archive" />
-                    {collapsed ? null : t("projects")}
+                    {isCollapsed ? null : t("projects")}
                 </ItemBox>
             </SidebarLink>
 
             <ProjectItemsContainer
-                $collapsed={collapsed}
-                $noScrollbar={isPending}
-            >
+                $collapsed={isCollapsed}
+                $noScrollbar={isPending}>
                 {isPending &&
                     [...Array(10)].map((e, i) => (
                         <ProjectItemBox key={i} $skeleton />
@@ -105,22 +77,16 @@ const Middle = ({ collapsed, closeSidebar }) => {
 
                 {isError && (
                     <ProjectLoadErrorBox
-                        $collapsed={collapsed}
-                        onClick={onClickErrorBox}
-                    >
+                        $collapsed={isCollapsed}
+                        onClick={onClickErrorBox}>
                         <FeatherIcon icon="alert-triangle" />
-                        {!collapsed && t("projects_list_refetch")}
+                        {!isCollapsed && t("projects_list_refetch")}
                     </ProjectLoadErrorBox>
                 )}
 
                 {projects?.map((project) => (
-                    <SidebarLink
-                        to={`projects/` + project.id}
-                        draggable="false"
-                        key={project.id}
-                        onClick={onClickLink}
-                    >
-                        <ProjectItemBox $collapsed={collapsed}>
+                    <SidebarLink to={`projects/` + project.id} key={project.id}>
+                        <ProjectItemBox $collapsed={isCollapsed}>
                             <FeatherIcon
                                 icon="circle"
                                 fill={getProjectColor(
@@ -128,7 +94,7 @@ const Middle = ({ collapsed, closeSidebar }) => {
                                     project.color,
                                 )}
                             />
-                            {!collapsed && project.name}
+                            {!isCollapsed && project.name}
                         </ProjectItemBox>
                     </SidebarLink>
                 ))}
