@@ -110,14 +110,14 @@ const FollowButton = ({ user, disabled = false }) => {
         <>
             <Button
                 onClick={handleFollow}
-                $loading={followButtonLoading}
+                loading={followButtonLoading}
                 disabled={followButtonLoading || disabled}
-                $state={
+                state={
                     (following?.status === "accepted" && states.success) ||
                     (following?.status === "requested" && states.link) ||
                     states.text
                 }
-                $form={
+                form={
                     isHover && followAccpetedOrRequested
                         ? buttonForms.filled
                         : buttonForms.outlined

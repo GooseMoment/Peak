@@ -40,14 +40,14 @@ const ImageCropper = ({
             />
             <StyledButtonGroup>
                 <Button
-                    $form={buttonForms.outlined}
-                    $state={states.danger}
+                    form={buttonForms.outlined}
+                    state={states.danger}
                     onClick={onClickCancel}>
                     {t("button_cancel")}
                 </Button>
                 <Button
-                    $form={buttonForms.filled}
-                    $state={states.success}
+                    form={buttonForms.filled}
+                    state={states.success}
                     onClick={onClickOk}>
                     {t("button_apply")}
                 </Button>

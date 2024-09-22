@@ -63,17 +63,17 @@ const Requests = ({ user }) => {
                     {t("follow_request_sent_to_me")}
                     <ButtonGroup $justifyContent="right">
                         <Button
-                            $state={states.danger}
+                            state={states.danger}
                             onClick={rejection.mutate}
-                            $loading={rejection.isPending}
+                            loading={rejection.isPending}
                             disabled={isPending}
                         >
                             {t("button_follow_request_reject")}
                         </Button>
                         <Button
-                            $state={states.success}
+                            state={states.success}
                             onClick={acceptance.mutate}
-                            $loading={acceptance.isPending}
+                            loading={acceptance.isPending}
                             disabled={isPending}
                         >
                             {t("button_follow_request_accept")}
