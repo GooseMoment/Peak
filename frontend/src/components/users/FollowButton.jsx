@@ -93,7 +93,12 @@ const FollowButton = ({ user, disabled = false }) => {
             return
         }
 
-        setConfirmationVisible(true)
+        if (following?.status === "accepted") {
+            setConfirmationVisible(true)
+            return
+        }
+
+        deleteMutation.mutate()
     }
 
     const handleConfirmation = () => {

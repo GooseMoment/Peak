@@ -274,7 +274,6 @@
         "success_cancel": "Canceled your follow request to {{username}}.",
         "error_unfollow": "Failed to unfollow @{{username}}.",
         "error_cancel": "Failed to cancel a follow request to @{{username}}.",
-        "cancel_requested": "Cancel this follow request?",
         "cancel_accepted": "Unfollow @{{username}}?",
         "button_sure": "Sure"
     },

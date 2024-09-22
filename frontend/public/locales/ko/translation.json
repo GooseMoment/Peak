@@ -274,7 +274,6 @@
         "success_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소했습니다.",
         "error_unfollow": "@{{username}} 님을 언팔로우 하지 못했습니다.",
         "error_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소하지 못했습니다.",
-        "cancel_requested": "팔로우 요청을 취소할까요?",
         "cancel_accepted": "@{{username}} 님을 언팔로우 할까요?",
         "button_sure": "네"
     },
