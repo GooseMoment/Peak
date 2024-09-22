@@ -34,14 +34,26 @@
         "type_regular": "상시",
         "type_goal": "목표",
         "button_add_project": "새 프로젝트 추가",
-        "completed_tasks": "완수",
+        "completed_tasks": "완료",
         "uncompleted_tasks": "미완"
+    },
+    "today": {
+        "title": "오늘",
+        "overdue_title": "놓친 작업",
+        "filter_due_date": "지난 기한",
+        "filter_assigned_at": "지난 할당",
+        "error_load_task": "작업을 불러오지 못했어요 😢",
+        "button_load_more": "더보기",
+        "due_change_today_success": "{{filter}}을 오늘로 변경했습니다.",
+        "due_change_tomorrow_success": "{{filter}}을 내일로 변경했습니다.",
+        "due_change_error": "기한 변경에 실패했습니다."
     },
     "project": {
         "no_drawer": "+ 버튼을 눌러서 서랍을 추가하세요.",
         "progress": "진행 상황",
         "button_load_more": "더보기",
         "button_add_task": "새 작업 추가",
+        "button_close_add_task": "닫힘",
         "loading": "로딩 중",
         "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요 😢",
         "error_load_task": "작업을 불러오지 못했어요 😢",
@@ -81,14 +93,14 @@
             "name_placeholder": "이름을 입력하세요",
             "button_add": "추가하기",
             "none": "없음",
-            "project_create_success": "프로젝트 생성에 성공하였습니다.",
+            "project_create_success": "새 프로젝트를 생성했습니다.",
             "project_create_error": "프로젝트 생성에 실패했습니다.",
             "project_create_no_name": "프로젝트의 이름을 적어주세요.",
             "project_create_cannot_use_inbox": "프로젝트 이름은 Inbox로 설정할 수 없습니다.",
-            "drawer_create_success": "서랍 생성에 성공하였습니다.",
+            "drawer_create_success": "새 서랍을 생성했습니다.",
             "drawer_create_error": "서랍 생성에 실패했습니다.",
             "drawer_create_no_name": "서랍의 이름을 적어주세요.",
-            "task_create_success": "작업 생성에 성공하였습니다.",
+            "task_create_success": "새 작업을 생성했습니다.",
             "task_create_error": "작업 생성에 실패하였습니다.",
             "task_create_no_name": "작업의 이름을 적어주세요."
         },
@@ -106,11 +118,11 @@
             "alert_drawer_title": "\"{{drawer_name}}\" 서랍을",
             "alert_task_title": "\"{{task_name}}\" 작업을",
             "alert_question": "{{title}} 삭제하시겠습니까?",
-            "project_delete_success": "\"{{project_name}}\" 프로젝트가 삭제되었습니다.",
+            "project_delete_success": "\"{{project_name}}\" 프로젝트를 삭제했습니다.",
             "project_delete_error": "\"{{project_name}}\" 프로젝트 삭제에 실패했습니다.",
-            "drawer_delete_success": "\"{{drawer_name}}\" 서랍이 삭제되었습니다.",
+            "drawer_delete_success": "\"{{drawer_name}}\" 서랍을 삭제했습니다.",
             "drawer_delete_error": "\"{{drawer_name}}\" 서랍 삭제에 실패했습니다.",
-            "task_delete_success": "\"{{task_name}}\" 작업이 삭제되었습니다.",
+            "task_delete_success": "\"{{task_name}}\" 작업을 삭제했습니다.",
             "task_delete_error": "\"{{task_name}}\" 작업 삭제에 실패했습니다."
         },
         "sort": {
@@ -163,7 +175,7 @@
                 "button_add": "추가하기",
                 "no_due_before_time": "시간 설정 전에 기한을 설정해주세요.",
                 "acceptable_numbers": "입력 가능한 최대 숫자는 {{max}}입니다.",
-                "time_change_success": "시간이 변경되었습니다."
+                "time_change_success": "시간을 변경했습니다."
             },
             "repeat": {
                 "title": "반복 설정",
@@ -222,7 +234,7 @@
             "title": "메모 설정",
             "memo_placeholder": "메모를 입력해주세요.",
             "button_change": "변경하기",
-            "memo_edit_success": "메모가 변경되었습니다."
+            "memo_edit_success": "메모를 변경했습니다."
         }
     },
     "users": {
@@ -276,11 +288,11 @@
     "email_verification": {
         "invalid_access": "잘못된 접근입니다.",
         "verified_title": "인증 완료",
-        "verified": "{{email}} 주소가 확인되었습니다. 이제 로그인할 수 있습니다.",
+        "verified": "이제 {{email}} 주소로 로그인할 수 있습니다.",
         "link_sign": "로그인 하기",
         "resend_title": "인증 메일 재요청",
         "resend_other_cases": "만약 이미 인증되었거나, 등록되지 않은 이메일이라면 다른 메일이 전송됩니다.",
-        "resend_known_issues": "Outlook 등의 이메일 서비스에서는 스팸으로 간주되어 전송이 불가합니다. 해당 경우에는 다른 주소로 가입하여 주십시오.",
+        "resend_known_issues": "Outlook 등의 이메일 서비스에서는 스팸으로 간주되어 전송이 불가합니다. 해당 경우에는 다른 주소로 가입하여 주세요.",
         "resend_success": "메일을 전송했습니다. 메일함 또는 스팸함을 확인하세요.",
         "resend_error_limit": "약 {{minutes}}분 후 다시 시도하세요.",
         "resend_error_bad_request": "메일 형식이 올바르지 않습니다.",
@@ -289,7 +301,7 @@
         "button_submit": "제출"
     },
     "sign": {
-        "sign_in_again": "로그아웃 되었습니다. 다시 로그인해주세요.",
+        "sign_in_again": "로그아웃 되었습니다. 다시 로그인하세요.",
         "sign_in": "로그인",
         "sign_in_success": "로그인 성공! 다시 만나서 기뻐요.",
         "sign_in_failed": "로그인 실패. 유저네임과 암호를 다시 확인하세요.",

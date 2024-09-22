@@ -32,6 +32,7 @@ class TaskSerializer(serializers.ModelSerializer):
     project_id = serializers.SerializerMethodField(read_only=True)
     reminders = TaskReminderSerializer(many=True, read_only=True)
     due_datetime = serializers.SerializerMethodField(read_only=True)
+    project_color = serializers.SerializerMethodField(read_only=True)
 
     def get_project_id(self, obj):
         return obj.drawer.project.id
@@ -45,9 +46,12 @@ class TaskSerializer(serializers.ModelSerializer):
     def get_due_datetime(self, obj):
         return obj.due_datetime()
     
+    def get_project_color(self, obj):
+        return obj.drawer.project.color
+    
     class Meta:
         model = Task
         fields = [
             'id', 'name', 'privacy', 'completed_at', 'drawer', 'drawer_name', 'due_date', 'due_datetime', 'due_time', 'due_tz', 'assigned_at',
-            'priority', 'memo', 'reminders', 'user', 'repeat', 'created_at', 'updated_at', 'deleted_at', 'project_name', 'project_id',
+            'priority', 'memo', 'reminders', 'user', 'repeat', 'created_at', 'updated_at', 'deleted_at', 'project_name', 'project_id', 'project_color'
         ]

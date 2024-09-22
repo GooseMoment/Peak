@@ -4,14 +4,19 @@ import { Outlet } from "react-router-dom"
 import Layout from "@containers/Layout"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
+import { SidebarContextProvider } from "@components/sidebar/SidebarContext"
 
 const AppLayout = () => {
     return (
-        <Layout>
-            <Suspense key="app-layout" fallback={<LoaderCircleFull height="100dvh" />}>
-                <Outlet />
-            </Suspense>
-        </Layout>
+        <SidebarContextProvider>
+            <Layout>
+                <Suspense
+                    key="app-layout"
+                    fallback={<LoaderCircleFull height="100dvh" />}>
+                    <Outlet />
+                </Suspense>
+            </Layout>
+        </SidebarContextProvider>
     )
 }
 

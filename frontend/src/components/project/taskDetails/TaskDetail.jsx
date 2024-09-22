@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
@@ -7,10 +7,10 @@ import styled from "styled-components"
 
 import DeleteAlert from "@components/common/DeleteAlert"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import TaskNameInput from "@components/tasks/TaskNameInput"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import SkeletonTaskDetail from "@components/project/skeletons/SkeletonTaskDetail"
 import Contents from "@components/project/taskDetails/Contents"
+import TaskNameInput from "@components/tasks/TaskNameInput"
 
 import { deleteTask, getTask, patchTask } from "@api/tasks.api"
 
@@ -107,16 +107,15 @@ const TaskDetail = () => {
     if (isLoading) {
         return (
             <TaskDetailBox>
-                <SkeletonTaskDetail/>
+                <SkeletonTaskDetail />
             </TaskDetailBox>
-    )}
+        )
+    }
 
     if (isError) {
         return (
             <TaskDetailBox>
-                <ErrorBox onClick={refetch}>
-                    {t("error_load_task")}
-                </ErrorBox>
+                <ErrorBox onClick={refetch}>{t("error_load_task")}</ErrorBox>
             </TaskDetailBox>
         )
     }
@@ -165,18 +164,17 @@ const TaskNameBox = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 1em 1.8em;
+    margin: 1.8em 1.8em 1em;
 `
 
 const Icons = styled.div`
     display: flex;
     align-items: center;
+    gap: 1em;
 
     & svg {
-        top: 0.4em;
         cursor: pointer;
         stroke: ${(p) => p.theme.primaryColors.danger};
-        margin-left: 1em;
     }
 `
 

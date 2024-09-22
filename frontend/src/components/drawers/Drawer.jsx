@@ -14,6 +14,7 @@ import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
 import { SkeletonDrawer, SkeletonInboxDrawer } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenu from "@components/project/sorts/SortMenu"
+import TaskCreateSimple from "@components/project/Creates/simple/TaskCreateSimple"
 import Task from "@components/tasks/Task"
 
 import { deleteDrawer } from "@api/drawers.api"
@@ -112,9 +113,8 @@ const Drawer = ({ project, drawer, color }) => {
         drawer.uncompleted_task_count + drawer.completed_task_count
 
     const handleCollapsed = () => {
-        {
-            taskCount !== 0 && setCollapsed((prev) => !prev)
-        }
+        if (taskCount !== 0)
+            setCollapsed((prev) => !prev)
     }
 
     const clickPlus = () => {
@@ -171,6 +171,16 @@ const Drawer = ({ project, drawer, color }) => {
                     )}
                 </TaskList>
             )}
+            {isSimpleOpen &&
+                <TaskCreateSimple
+                    projectID={project.id}
+                    projectName={project.name}
+                    drawerID={drawer.id}
+                    drawerName={drawer.name}
+                    color={color}
+                    onClose={()=>setIsSimpleOpen(false)}
+                />
+            }
             {isSortMenuOpen && (
                 <SortMenu
                     title={t("sort.task_title")}
@@ -209,17 +219,14 @@ const Drawer = ({ project, drawer, color }) => {
                     />
                 </ModalWindow>
             )}
-            {/*isSimpleOpen &&
-                <TaskCreateSimple 
-                    color={color}
-                    drawer_id={drawer.id}
-                    drawer_name={drawer.name}
-                    project_name={project.name}
-                />
-            */}
             <TaskCreateButton onClick={handleToggleSimpleCreate}>
-                <FeatherIcon icon="plus-circle" />
-                <TaskCreateText>{t("button_add_task")}</TaskCreateText>
+                {isSimpleOpen ? <>
+                    <FeatherIcon icon="x-circle" />
+                    <TaskCreateText>{t("button_close_add_task")}</TaskCreateText>
+                </> : <>
+                    <FeatherIcon icon="plus-circle" />
+                    <TaskCreateText>{t("button_add_task")}</TaskCreateText>
+                </>}
             </TaskCreateButton>
             <FlexBox>
                 {hasNextPage ? (

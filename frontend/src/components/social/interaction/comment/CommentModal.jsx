@@ -110,13 +110,16 @@ const Modal = styled.div`
     position: absolute;
     top: ${(props) => props.$posY}px;
     left: calc(${(props) => props.$posX}px - 28em); // 27 + 1(shadow)
-    background: white;
-    padding: 1em;
-    border-radius: 1em;
-    border: 0.2em solid rgba(123, 123, 123, 0.1);
-    box-shadow: 0.2em 0.2em 0.4em rgba(0, 0, 0, 0.1);
     width: 25em;
     height: 24em;
+
+    box-shadow: 0.2em 0.3em 0.5em
+        ${(props) => props.theme.social.modalShadowColor};
+    border: 0.1em solid ${(props) => props.theme.social.modalShadowColor};
+    border-radius: 1em;
+    background: ${(props) => props.theme.backgroundColor};
+    padding: 1em;
+
     overflow-y: auto;
     z-index: 10;
     pointer-events: auto;
@@ -133,20 +136,31 @@ const CommentContainer = styled.div`
     flex-direction: column-reverse;
     justify-content: end;
 
+    /* TODO: Need to check availability */
     overflow-y: scroll;
+    scrollbar-width: none;
+    &:hover {
+        scrollbar-width: thin;
+    }
+    &::-webkit-scrollbar {
+        width: 0;
+    }
+    &:hover::-webkit-scrollbar {
+        width: auto;
+    }
     gap: 0.3em;
 `
 
 const CommentInput = styled.input`
     height: 3.5em;
-    width: 23em;
+    flex-grow: 1;
 
     padding: 0.5em;
-    font-size: 1em;
-
     border-radius: 0.5em;
+    border: solid 1.4px ${(props) => props.theme.social.borderColor};
 
-    border: solid black;
+    font-size: 1em;
+    color: ${(props) => props.theme.textColor};
 `
 
 export default CommentModal

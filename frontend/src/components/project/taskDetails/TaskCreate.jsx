@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useRef, useState } from "react"
 import { useLocation, useOutletContext } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
@@ -100,7 +100,9 @@ const TaskCreate = () => {
                 </Icons>
             </TaskNameBox>
             <Contents task={newTask} setFunc={editNewTask} />
-            <AddButton disabled={postMutation.isPending} onClick={makeTask}>{t("button_add")}</AddButton>
+            <AddButton disabled={postMutation.isPending} onClick={makeTask}>
+                {t("button_add")}
+            </AddButton>
         </TaskCreateBox>
     )
 }
@@ -120,11 +122,10 @@ const TaskCreateBox = styled.div`
 `
 
 const TaskNameBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 1em 1.8em;
+    margin: 1.6em 1.8em 1em;
 `
 
 const Icons = styled.div`
@@ -132,7 +133,7 @@ const Icons = styled.div`
     align-items: center;
 
     & svg {
-        top: 0.4em;
+        top: 0.15em;
         cursor: pointer;
         stroke: ${(p) => p.theme.goose};
         margin-left: 1em;

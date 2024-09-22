@@ -37,11 +37,23 @@
         "completed_tasks": "Completed",
         "uncompleted_tasks": "Uncompleted"
     },
+    "today": {
+        "title": "Today",
+        "overdue_title": "Missed Tasks",
+        "filter_due_date": "Overdue",
+        "filter_assigned_at": "Missed",
+        "error_load_task": "Couldn't load tasks 😢",
+        "button_load_more": "Load more",
+        "due_change_today_success": "Changed {{filter}} to today.",
+        "due_change_tomorrow_success": "Changed {{filter}} to tomorrow.",
+        "due_change_error": "The due date change failed."
+    },
     "project": {
         "no_drawer": "Press + to add drawers",
         "progress": "Progress",
         "button_load_more": "Load more",
         "button_add_task": "Add new task",
+        "button_close_add_task": "Close",
         "loading": "Loading...",
         "error_load_project_and_drawer": "Couldn't load project and drawers 😢",
         "error_load_task": "Couldn't load tasks 😢",
@@ -81,22 +93,22 @@
             "name_placeholder": "Enter a name",
             "button_add": "Add",
             "none": "none",
-            "project_create_success": "The project was successfully created.",
-            "project_create_error": "The project creation failed.",
-            "project_create_no_name": "Write a name for your project.",
+            "project_create_success": "Created a new project.",
+            "project_create_error": "Failed to create a new project.",
+            "project_create_no_name": "Write a name of a project.",
             "project_create_cannot_use_inbox": "Can't name a new project as an inbox.",
-            "drawer_create_success": "The drawer was successfully created.",
-            "drawer_create_error": "The drawer creation failed.",
-            "drawer_create_no_name": "Write a name for your drawer.",
-            "task_create_success": "The task was successfully created.",
-            "task_create_error": "The task creation failed.",
-            "task_create_no_name": "Write a name for your task."
+            "drawer_create_success": "Created a new drawer.",
+            "drawer_create_error": "Failed to create a new drawer.",
+            "drawer_create_no_name": "Write a name of a drawer.",
+            "task_create_success": "Created a new task.",
+            "task_create_error": "Failed to create a new task.",
+            "task_create_no_name": "Write a name of a task."
         },
         "edit": {
             "display": "Edit",
             "name_change_success": "The name has changed.",
-            "project_change_error": "The project change failed.",
-            "drawer_change_error": "The drawer change failed."
+            "project_change_error": "Failed to edit the project.",
+            "drawer_change_error": "Failed to edit the drawer."
         },
         "delete": {
             "display": "Delete",
@@ -106,12 +118,12 @@
             "alert_drawer_title": "the \"{{drawer_name}}\" drawer",
             "alert_task_title": "the \"{{task_name}}\" task",
             "alert_question": "Delete {{title}}?",
-            "project_delete_success": "The \"{{project_name}}\" project was deleted.",
-            "project_delete_error": "Deleting the \"{{project_name}}\" project failed.",
-            "drawer_delete_success": "The \"{{drawer_name}}\" drawer was deleted.",
-            "drawer_delete_error": "Deleting the \"{{drawer_name}}\" drawer failed.",
-            "task_delete_success": "The \"{{task_name}}\" task was deleted.",
-            "task_delete_error": "Deleting the \"{{task_name}}\" task failed."
+            "project_delete_success": "Deleted the \"{{project_name}}\" project.",
+            "project_delete_error": "Failed to delete the \"{{project_name}}\" project.",
+            "drawer_delete_success": "Delted \"{{drawer_name}}\" drawer.",
+            "drawer_delete_error": "Failed to delete the \"{{drawer_name}}\" drawer.",
+            "task_delete_success": "Deleted the \"{{task_name}}\" task.",
+            "task_delete_error": "Failed to delete \"{{task_name}}\" task."
         },
         "sort": {
             "title": "{{title}} Sort by",
@@ -127,7 +139,7 @@
             "-priority": "Order of importance",
             "due_date": "Early due date order",
             "-due_date": "Late due date order",
-            "reminders": "Reminders first"
+            "reminders": "With reminders first"
         }
     },
     "task": {
@@ -222,7 +234,7 @@
             "title": "Memo settings",
             "memo_placeholder": "Enter a memo.",
             "button_change": "Change",
-            "memo_edit_success": "The memo was changed."
+            "memo_edit_success": "The memo has changed."
         }
     },
     "users": {
@@ -276,7 +288,7 @@
     "email_verification": {
         "invalid_access": "Invalid access.",
         "verified_title": "Email Verified",
-        "verified": "{{email}} was verified. Now you can sign in.",
+        "verified": "Now you can sign in using {{email}}.",
         "link_sign": "Click to Sign In",
         "resend_title": "Resend Verification Mail",
         "resend_other_cases": "In cases that the email entered is already verified or not registered, Other types of mail will be sent.",
