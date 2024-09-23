@@ -11,7 +11,8 @@ import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
 import { getProjectColor } from "@components/project/Creates/palettes"
 import { useClientTimezone } from "@utils/clientSettings"
-import { getOverdueTasks, getTodayTasks, patchTask } from "@api/tasks.api"
+import { patchTask } from "@api/tasks.api"
+import { getTodayAssignmentTasks, getTodayDueTasks, getOverdueTasks } from "@api/today.api"
 
 import queryClient from "@queries/queryClient"
 import FeatherIcon from "feather-icons-react"
@@ -50,23 +51,23 @@ const TodayPage = () => {
     const overdueHasNextPage = overdueTasks?.pages[overdueTasks?.pages?.length - 1].next !== null
 
     const { 
-        data: todayTasks, 
-        fetchNextPage: todayFetchNextPage,
-        isLoading: isTodayLoading, 
-        isError: isTodayError, 
-        refetch: todayRefetch
+        data: todayAssignmentTasks, 
+        fetchNextPage: todayAssignmentFetchNextPage,
+        isLoading: isTodayAssignmentLoading, 
+        isError: isTodayAssignmentError, 
+        refetch: todayAssignmentRefetch
     } = useInfiniteQuery({
-        queryKey: ["tasks", "today"],
-        queryFn: (pages) => getTodayTasks(pages.pageParam || 1),
+        queryKey: ["today", "assignment"],
+        queryFn: (pages) => getTodayAssignmentTasks(pages.pageParam || 1),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
-    const todayHasNextPage = todayTasks?.pages[todayTasks?.pages?.length - 1].next !== null
+    const todayHasNextPage = todayAssignmentTasks?.pages[todayAssignmentTasks?.pages?.length - 1].next !== null
 
     const onClickErrorBox = () => {
         overdueRefetch()
-        todayRefetch()
+        todayAssignmentRefetch()
     }
 
     const patchMutation = useMutation({
@@ -138,7 +139,7 @@ const TodayPage = () => {
                         ))}
                     </FilterButtonBox>
                     <TasksBox>
-                        {(isOverdueError || isTodayError) &&
+                        {(isOverdueError || isTodayAssignmentError) &&
                             <ErrorBox onClick={onClickErrorBox}>
                                 {t("error_load_task")}
                             </ErrorBox>}
@@ -164,8 +165,8 @@ const TodayPage = () => {
                 </>}
             </OverdueTasksBlock>
             <TasksBox>
-                {isTodayLoading && <SkeletonDueTasks taskCount={10} />}
-                {todayTasks?.pages?.map((group) =>
+                {isTodayAssignmentLoading && <SkeletonDueTasks taskCount={10} />}
+                {todayAssignmentTasks?.pages?.map((group) =>
                     group?.results?.map((task) => (
                         <Task key={task.id} task={task} color={getProjectColor(theme.type, task.project_color)} />
                     )),
@@ -173,7 +174,7 @@ const TodayPage = () => {
             </TasksBox>
             <FlexCenterBox>
                 {todayHasNextPage ? (
-                    <MoreButton onClick={() => todayFetchNextPage()}>
+                    <MoreButton onClick={() => todayAssignmentFetchNextPage()}>
                         {t("button_load_more")}
                     </MoreButton>
                 ) : null}
