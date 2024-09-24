@@ -2,10 +2,18 @@ import { Link } from "react-router-dom"
 
 import styled, { css, keyframes } from "styled-components"
 
+import { skeletonCSS } from "@assets/skeleton"
+
 const Module = styled.article`
     position: relative;
-    width: 100%;
     margin-bottom: 2em;
+
+    ${(p) =>
+        p.$skeleton &&
+        css`
+            height: ${p.$height};
+            ${skeletonCSS}
+        `}
 `
 
 export const Title = ({ className, children, to, underline }) => {

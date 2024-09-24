@@ -11,13 +11,15 @@ const AssignedToday = () => {
         queryFn: () => getTodayTasksGroupedByProject(),
     })
 
-    const { items, countAll } = data || { items: [], countAll: 0 }
+    if (isFetching) {
+        return <Module $skeleton $height="2em" />
+    }
+
+    const { items, countAll } = data
 
     return (
         <Module>
-            <Title to="/app/today">
-                {countAll} tasks assigned today
-            </Title>
+            <Title to="/app/today">{countAll} tasks assigned today</Title>
             <VGraph items={items} countAll={countAll} />
         </Module>
     )
