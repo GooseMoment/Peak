@@ -15,6 +15,7 @@ class Announcement(Base):
     title = models.CharField(max_length=128)
     content = models.TextField()
     lang = models.CharField(max_length=128, choices=LANGUAGE_CHOICES)
+    pinned_until = models.DateTimeField(blank=True, null=True)
 
     def __str__(self) -> str:
         return f"[{self.lang}] {self.title}"

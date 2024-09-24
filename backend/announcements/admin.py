@@ -11,7 +11,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ["title", "content", "lang"],
+                "fields": ["title", "content", "lang", "pinned_until"],
             },
         ),
         fieldset_base,
