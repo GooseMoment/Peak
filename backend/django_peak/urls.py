@@ -20,11 +20,12 @@ from django.urls import path, include
 from users import urls as users_urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
     path("health/", include("api.urls")),
     path("notifications/", include("notifications.urls")),
     path("projects/", include("projects.urls")),
     path("drawers/", include("drawers.urls")),
     path("tasks/", include("tasks.urls")),
     path("social/", include("social.urls")),
+    path("announcements/", include("announcements.urls")),
 ] + users_urls.urlpatterns
