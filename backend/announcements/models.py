@@ -17,7 +17,7 @@ class Announcement(Base):
     lang = models.CharField(max_length=128, choices=LANGUAGE_CHOICES)
 
     def __str__(self) -> str:
-        return self.title
+        return f"[{self.lang}] {self.title}"
 
     class Meta:
         db_table = "announcements"
