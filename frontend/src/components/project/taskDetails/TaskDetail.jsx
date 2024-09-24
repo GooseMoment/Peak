@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
@@ -7,9 +7,10 @@ import styled from "styled-components"
 
 import DeleteAlert from "@components/common/DeleteAlert"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
+import { ErrorBox } from "@components/errors/ErrorProjectPage"
+import SkeletonTaskDetail from "@components/project/skeletons/SkeletonTaskDetail"
+import Contents from "@components/project/taskDetails/Contents"
 import TaskNameInput from "@components/tasks/TaskNameInput"
-
-import Contents from "./Contents"
 
 import { deleteTask, getTask, patchTask } from "@api/tasks.api"
 
@@ -36,9 +37,10 @@ const TaskDetail = () => {
     const { closeModal } = useModalWindowCloseContext()
 
     const {
-        isPending,
-        isError,
         data: task,
+        isLoading,
+        isError,
+        refetch,
     } = useQuery({
         queryKey: ["task", { taskID: task_id }],
         queryFn: () => getTask(task_id),
@@ -102,8 +104,20 @@ const TaskDetail = () => {
         deleteMutation.mutate()
     }
 
-    if (isPending) {
-        return <TaskDetailBox />
+    if (isLoading) {
+        return (
+            <TaskDetailBox>
+                <SkeletonTaskDetail />
+            </TaskDetailBox>
+        )
+    }
+
+    if (isError) {
+        return (
+            <TaskDetailBox>
+                <ErrorBox onClick={refetch}>{t("error_load_task")}</ErrorBox>
+            </TaskDetailBox>
+        )
     }
 
     return (
@@ -147,22 +161,20 @@ const TaskDetailBox = styled.div`
 `
 
 const TaskNameBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 1em 1.8em;
+    margin: 1.8em 1.8em 1em;
 `
 
 const Icons = styled.div`
     display: flex;
     align-items: center;
+    gap: 1em;
 
     & svg {
-        top: 0.4em;
         cursor: pointer;
         stroke: ${(p) => p.theme.primaryColors.danger};
-        margin-left: 1em;
     }
 `
 

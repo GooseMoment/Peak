@@ -18,8 +18,7 @@ const TaskCircle = ({
             $isInput={isInput}
             $isLoading={isLoading}
             $clickable={!isLoading && onClick}
-            onClick={onClick}
-        >
+            onClick={onClick}>
             {completed && <FeatherIcon icon="check" />}
         </Circle>
     )
@@ -32,7 +31,7 @@ const Circle = styled.div`
 
     top: ${(props) => {
         if (props.$isInput) {
-            return 0.1 // optical center
+            return 0.05 // optical center
         }
 
         if (props.$hasDate) {
@@ -68,9 +67,7 @@ const Circle = styled.div`
             ? css`
                   border: 3px dashed
                       ${(props) =>
-                          props.$completed
-                              ? props.theme.grey
-                              : props.$color};
+                          props.$completed ? props.theme.grey : props.$color};
                   animation: ${rotateAnimation} 6s linear infinite;
 
                   & svg {

@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import LoaderCircle from "@components/common/LoaderCircle"
@@ -20,7 +20,6 @@ import {
 } from "@api/users.api"
 
 import sleep from "@utils/sleep"
-import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import {
     AtSign,
@@ -93,8 +92,7 @@ export const SignInForm = () => {
                     <Button
                         type="submit"
                         disabled={isLoading}
-                        $loading={isLoading}
-                    >
+                        loading={isLoading}>
                         {isLoading ? t("loading") : t("button_sign_in")}
                     </Button>
                 </ButtonGroup>
@@ -186,8 +184,7 @@ export const SignUpForm = () => {
                     <Button
                         type="submit"
                         disabled={isLoading}
-                        $loading={isLoading}
-                    >
+                        loading={isLoading}>
                         {isLoading ? t("loading") : t("button_sign_up")}
                     </Button>
                 </ButtonGroup>
@@ -274,10 +271,9 @@ export const EmailVerificationResendForm = () => {
                     />
                     <ButtonGroup $justifyContent="right" $margin="1em 0">
                         <Button
-                            $loading={mutation.isPending}
+                            loading={mutation.isPending}
                             type="submit"
-                            disabled={mutation.isPending}
-                        >
+                            disabled={mutation.isPending}>
                             {t("button_submit")}
                         </Button>
                     </ButtonGroup>
@@ -389,10 +385,9 @@ export const PasswordRecoveryRequestForm = () => {
                     />
                     <ButtonGroup $justifyContent="right" $margin="1em 0">
                         <Button
-                            $loading={mutation.isPending}
+                            loading={mutation.isPending}
                             type="submit"
-                            disabled={mutation.isPending}
-                        >
+                            disabled={mutation.isPending}>
                             {t("button_submit")}
                         </Button>
                     </ButtonGroup>
@@ -469,10 +464,9 @@ export const PasswordRecoveryForm = () => {
                 />
                 <ButtonGroup $justifyContent="right" $margin="1em 0">
                     <Button
-                        $loading={mutation.isPending}
+                        loading={mutation.isPending}
                         type="submit"
-                        disabled={mutation.isPending}
-                    >
+                        disabled={mutation.isPending}>
                         {t("button_set")}
                     </Button>
                 </ButtonGroup>

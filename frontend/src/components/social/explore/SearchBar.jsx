@@ -46,7 +46,7 @@ const Box = styled.div`
     height: 2em;
 
     border-radius: 0.7em;
-    background-color: #f0f0f0;
+    background-color: ${(p) => p.theme.secondBackgroundColor};
     padding: 0.2em 1em 0.2em;
 
     font-size: 1.2em;
@@ -68,7 +68,7 @@ const SearchButton = styled(MildButton)`
         margin-right: unset;
         height: 100%;
 
-        color: #a9a9a9;
+        color: ${(props) => props.theme.social.buttonColor};
         stroke-width: 0.15em;
     }
 `

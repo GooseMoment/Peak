@@ -10,7 +10,7 @@ import { getEmojis } from "@api/social.api"
 
 import FeatherIcon from "feather-icons-react"
 
-const EmojiPickerButton = ({ setPickedEmoji }) => {
+const EmojiPickerButton = ({ setPickedEmoji, className }) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
     const buttonRef = useRef(null)
@@ -26,7 +26,7 @@ const EmojiPickerButton = ({ setPickedEmoji }) => {
             if (buttonRef.current) {
                 const rect = buttonRef.current.getBoundingClientRect()
                 setModalPosition({
-                    top: rect.top,
+                    top: window.scrollY + rect.top,
                     left: rect.left,
                 })
             }
@@ -40,7 +40,7 @@ const EmojiPickerButton = ({ setPickedEmoji }) => {
     }
 
     return (
-        <>
+        <div className={className}>
             <PickerButton onClick={handleOpenModal} ref={buttonRef}>
                 <FeatherIcon icon={isModalOpen ? "x-square" : "plus-square"} />
             </PickerButton>
@@ -51,7 +51,7 @@ const EmojiPickerButton = ({ setPickedEmoji }) => {
                 onSelect={handleEmoji}
                 position={modalPosition}
             />
-        </>
+        </div>
     )
 }
 

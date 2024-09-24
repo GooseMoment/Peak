@@ -1,34 +1,40 @@
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 const ReactionButton = ({ emoji, emojiCount, isSelected, saveReaction }) => {
+    const theme = useTheme()
+
     const handleReaction = () => {
         const action = isSelected ? "delete" : "post"
-        saveReaction({ action, emoji:emoji.name })
+        saveReaction({ action, emoji: emoji.name })
     }
 
     return (
         <EmojiBox
-            $bgcolor={isSelected ? "#FFD7C7" : "#F2F2F2"}
-            onClick={handleReaction}
-        >
+            $bgcolor={
+                isSelected
+                    ? theme.social.activeBackgroundColor
+                    : theme.thirdBackgroundColor
+            }
+            onClick={handleReaction}>
             <Emoji src={emoji.img} />
             <EmojiCounts>{emojiCount}</EmojiCounts>
         </EmojiBox>
     )
 }
 
+// common Button을 상속받는게 더 복잡해질 것 같아 이모지가 고민이네
 const EmojiBox = styled.div`
     height: 2em;
     width: 4em;
 
-    border-radius: 0.5em;
+    border-radius: 10px;
     background-color: ${(props) => props.$bgcolor};
 
     display: flex;
     justify-content: center;
     align-items: center;
 `
-// TODO: 여기도 프로필 이미지처험 svg 따로..?
+
 const Emoji = styled.img`
     margin-left: 0.4em;
     width: 1.3em;
@@ -38,11 +44,13 @@ const Emoji = styled.img`
 const EmojiCounts = styled.div`
     flex-grow: 1;
     margin-right: 0.1em;
-    font-size: 0.9em;
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    font-size: 0.9em;
+    color: ${(props) => props.theme.textColor};
 `
 
 export default ReactionButton

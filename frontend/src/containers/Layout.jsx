@@ -1,52 +1,25 @@
-import { useEffect, useState } from "react"
-
 import styled, { css } from "styled-components"
 
 import Navbar from "@components/navbar/Navbar"
 import Sidebar from "@components/sidebar/Sidebar"
+import { useSidebarContext } from "@components/sidebar/SidebarContext"
 
 import { useClientSetting } from "@utils/clientSettings"
-import useScreenType, {
-    WIDTH_TABLET,
-    ifMobile,
-    ifTablet,
-} from "@utils/useScreenType"
-
-const startUpWidth = window.innerWidth
+import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 const Layout = ({ children }) => {
     const [clientSetting] = useClientSetting()
 
-    const [sidebarHidden, setSidebarHidden] = useState(true)
-    const [sidebarCollapsed, setSidebarCollapsed] = useState(
-        startUpWidth <= WIDTH_TABLET ||
-            clientSetting["close_sidebar_on_startup"],
-    )
     const contentPadding = clientSetting["main_width"] || "5rem"
 
-    const { isMobile } = useScreenType()
-
-    useEffect(() => {
-        setSidebarHidden(isMobile)
-    }, [isMobile])
-
-    const openSidebarFromNavbar = () => {
-        setSidebarHidden(false)
-        setSidebarCollapsed(false)
-    }
+    const { openFromNav, isHidden, isCollapsed } = useSidebarContext()
 
     return (
         <App>
-            <Navbar openSidebar={openSidebarFromNavbar} />
-            {!sidebarHidden && (
-                <Sidebar
-                    setSidebarHidden={setSidebarHidden}
-                    collapsed={sidebarCollapsed}
-                    setCollapsed={setSidebarCollapsed}
-                />
-            )}
+            <Navbar openSidebar={openFromNav} />
+            {!isHidden && <Sidebar />}
             <Content
-                $sidebarCollapsed={sidebarCollapsed}
+                $sidebarCollapsed={isCollapsed}
                 $sidePadding={contentPadding}>
                 {children}
             </Content>

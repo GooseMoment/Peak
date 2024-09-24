@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 
 import styled from "styled-components"
 
-import TaskCircle from "../tasks/TaskCircle"
+import TaskCircle from "@components/tasks/TaskCircle"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -20,10 +20,10 @@ const TaskNameInput = ({
 
     const [isLoading, setIsLoading] = useState(false)
 
-    useEffect(()=>{
-        if (inputRef.current) {
+    useEffect(() => {
+        if (inputRef?.current) {
             inputRef.current.focus()
-          }
+        }
     }, [])
 
     useEffect(() => {
@@ -35,15 +35,12 @@ const TaskNameInput = ({
         setNewTaskName(newName)
     }
 
-    const changeTaskName = (name) => {
-        setFunc({ name })
-    }
-
     const onEnter = (e) => {
-        if (isCreate)
+        if (isCreate) {
             return
-        if (e.key === "Enter") {
-            changeTaskName(newTaskName)
+        }
+        if (e.code === "Enter") {
+            setFunc({ name: newTaskName })
             toast.success(t("name_change_success"))
         }
     }
@@ -63,7 +60,7 @@ const TaskNameInput = ({
                 completed={task.completed_at}
                 color={color}
                 isLoading={isLoading}
-                onClick={toComplete}
+                onClick={isCreate ? null : toComplete}
                 isInput
             />
             <InputText
@@ -82,14 +79,11 @@ const TaskNameInput = ({
 const Box = styled.div`
     display: flex;
     align-items: center;
-
-    margin-top: 0.8em;
+    width: 100%;
 `
 
 const InputText = styled.input`
-    width: 36em;
-    height: auto;
-    font-weight: normal;
+    flex-grow: 1;
     font-size: 1.1em;
     color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};
     margin-top: 0.1em;
