@@ -13,7 +13,8 @@ class Announcement(Base):
     ]
 
     title = models.CharField(max_length=128)
-    content = models.TextField()
+    content_raw = models.TextField()
+    content = models.TextField(editable=False)
     lang = models.CharField(max_length=128, choices=LANGUAGE_CHOICES)
     pinned_until = models.DateTimeField(blank=True, null=True)
 

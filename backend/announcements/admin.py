@@ -6,12 +6,19 @@ from api.admin import fieldset_base, readonly_fields_base
 class AnnouncementAdmin(admin.ModelAdmin):
     ordering = ["-created_at"]
     search_fields = ["title", "content"]
-    readonly_fields = readonly_fields_base
+    readonly_fields = readonly_fields_base + ("content", )
     fieldsets = [
         (
             None,
             {
-                "fields": ["title", "content", "lang", "pinned_until"],
+                "fields": ["title", "content_raw", "lang", "pinned_until"],
+            },
+        ),
+        (
+            "Computed values",
+            {
+                "classes": ["collapse"],
+                "fields": ["content"],
             },
         ),
         fieldset_base,
