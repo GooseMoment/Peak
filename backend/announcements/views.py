@@ -2,11 +2,14 @@ from rest_framework import mixins, generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
+from django.conf import settings
+from datetime import datetime, UTC
+
 from .models import Announcement, Heart
 from .serializers import AnnouncementSerializer 
 from users.models import User
 
-class AnnouncementList(mixins.ListModelMixin, generics.GenericAPIView):
+class AnnouncementList(generics.GenericAPIView):
     serializer_class = AnnouncementSerializer
     permission_classes = (AllowAny, )
 
@@ -14,7 +17,23 @@ class AnnouncementList(mixins.ListModelMixin, generics.GenericAPIView):
         return Announcement.objects.all().order_by("-created_at")
 
     def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+        lang = request.GET.get("lang", settings.LANGUAGE_CODE)
+        pinned_only = request.GET.get("pinned_only", "true") == "true"
+
+        now = datetime.now(UTC)
+        queryset = self.get_queryset().filter(lang=lang)
+
+        if pinned_only:
+            queryset.filter(pinned_until__gte=now)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 class HeartDetail(generics.GenericAPIView):
     def get_queryset(self):
