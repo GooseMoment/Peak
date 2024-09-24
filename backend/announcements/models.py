@@ -4,8 +4,17 @@ from api.models import Base
 from users.models import User
 
 class Announcement(Base):
+    EN = "en"
+    KO = "ko"
+
+    LANGUAGE_CHOICES = [
+        (EN, "English"),
+        (KO, "Korean"),
+    ]
+
     title = models.CharField(max_length=128)
     content = models.TextField()
+    lang = models.CharField(max_length=128, choices=LANGUAGE_CHOICES)
 
     def __str__(self) -> str:
         return self.title
