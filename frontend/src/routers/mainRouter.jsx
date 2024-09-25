@@ -16,6 +16,10 @@ import { lazily } from "react-lazily"
 
 const SearchPage = lazy(() => import("@pages/SearchPage"))
 const HomePage = lazy(() => import("@pages/HomePage"))
+const AnnouncementListPage = lazy(() => import("@pages/AnnouncementListPage"))
+const AnnouncementDetailPage = lazy(
+    () => import("@pages/AnnouncementDetailPage"),
+)
 const NotificationsPage = lazy(() => import("@pages/NotificationsPage"))
 const TodayPage = lazy(() => import("@pages/TodayPage"))
 const ProjectPage = lazy(() => import("@pages/ProjectPage"))
@@ -120,6 +124,14 @@ const routes = [
             {
                 path: "home",
                 element: <HomePage />,
+            },
+            {
+                path: "announcements",
+                element: <AnnouncementListPage />,
+            },
+            {
+                path: "announcements/:id",
+                element: <AnnouncementDetailPage />,
             },
             {
                 path: "social",
