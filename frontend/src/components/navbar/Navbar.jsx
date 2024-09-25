@@ -128,8 +128,8 @@ const Item = styled.div`
     color: ${(p) => p.theme.textColor};
 
     box-sizing: border-box;
-    aspect-ratio: 1/1;
     height: 3em;
+    width: 3.25em;
     padding: 0.5em;
 
     border-radius: 50%;
@@ -155,7 +155,7 @@ const ActiveItemBackground = styled.div`
     background-color: ${(p) => p.theme.navbar.activeBackgroundColor};
 
     top: 0.25em;
-    left: ${(props) => props.$left}px;
+    left: calc(${(props) => props.$left}px + 0.125em);
     width: 3em;
     height: 3em;
 
