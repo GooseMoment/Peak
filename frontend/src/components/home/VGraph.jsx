@@ -52,6 +52,8 @@ const Item = styled.div`
 const Categories = styled.div`
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 0.5em;
 `
 
 const Category = styled.div`
