@@ -6,6 +6,7 @@ import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import PageTitle from "@components/common/PageTitle"
 
 import { getAnnouncement } from "@api/announcements.api"
+import styled from "styled-components"
 
 const AnnouncementDetailPage = () => {
     const { id } = useParams()
@@ -23,12 +24,18 @@ const AnnouncementDetailPage = () => {
     return (
         <>
             <PageTitle>{data.title}</PageTitle>
-            <div
+            <Content
                 className="announcement_detail_content"
                 dangerouslySetInnerHTML={{ __html: data.content }}
             />
         </>
     )
 }
+
+const Content = styled.div`
+    background-color: ${p => p.theme.thirdBackgroundColor};
+    padding: 1em;
+    border-radius: 16px;
+`
 
 export default AnnouncementDetailPage
