@@ -18,13 +18,13 @@ class AnnouncementList(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         lang = request.GET.get("lang", settings.LANGUAGE_CODE)
-        pinned_only = request.GET.get("pinned_only", "true") == "true"
+        pinned_only = request.GET.get("pinned_only", "false") == "true"
 
         now = datetime.now(UTC)
         queryset = self.get_queryset().filter(lang=lang)
 
         if pinned_only:
-            queryset.filter(pinned_until__gte=now)
+            queryset = queryset.filter(pinned_until__gte=now)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
