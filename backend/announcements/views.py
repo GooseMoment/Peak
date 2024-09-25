@@ -35,6 +35,18 @@ class AnnouncementList(generics.GenericAPIView):
         return Response(serializer.data)
 
 
+class AnnouncementDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+    serializer_class = AnnouncementSerializer
+    lookup_field = "id"
+    permission_classes = (AllowAny, )
+
+    def get_queryset(self):
+        return Announcement.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
 class HeartDetail(generics.GenericAPIView):
     def get_queryset(self):
         return Heart.objects.all()
