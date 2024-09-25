@@ -1,32 +1,39 @@
+import { Link } from "react-router-dom"
+
+import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Module, { Title } from "@components/home/Module"
 
-const mockData = [
-    {
-        id: "1",
-        title: "Introducing Repeat",
-    },
-    {
-        id: "2",
-        title: "Server Maintenance will be held at May 15th",
-    },
-]
+import { getAnnouncements } from "@api/announcements.api"
+
+import { useClientLocale } from "@utils/clientSettings"
 
 const Announcements = () => {
-    const data = mockData
+    const locale = useClientLocale()
+
+    const { data, isLoading } = useQuery({
+        queryKey: ["announcements", "pinned_only"],
+        queryFn: () => getAnnouncements(locale, true),
+    })
+
+    if (isLoading) {
+        return null
+    }
 
     return (
         <Module>
             <Title to="/app/announcements">Announcements</Title>
-            {data?.map((item) => (
-                <Announcement key={item.id}>{item.title}</Announcement>
+            {data.results?.map((item) => (
+                <Announcement to={`/app/announcements/${item.id}`} key={item.id}>{item.title}</Announcement>
             ))}
         </Module>
     )
 }
 
-const Announcement = styled.div`
+const Announcement = styled(Link)`
+    display: block;
+
     border-radius: 0.5em;
     padding: 0.75em;
     margin-bottom: 0.75em;
