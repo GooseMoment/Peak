@@ -35,6 +35,11 @@ const TodayPage = () => {
     const [filter, setFilter] = useState("due_date")
     const [collapsed, setCollapsed] = useState(false)
 
+    const initial_date = new Date()
+    initial_date.setHours(0, 0, 0, 0)
+    const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
+    // #TODO 달력으로 날짜 선택하기
+
     const { 
         data: overdueTasks, 
         fetchNextPage: overdueFetchNextPage, 
@@ -42,7 +47,7 @@ const TodayPage = () => {
         isError: isOverdueError, 
         refetch: overdueRefetch
     } = useInfiniteQuery({
-        queryKey: ["tasks", "overdue", { filter_field: filter }],
+        queryKey: ["today", "overdue", { filter_field: filter }],
         queryFn: (pages) => getOverdueTasks(filter, pages.pageParam || 1),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
@@ -58,7 +63,7 @@ const TodayPage = () => {
         refetch: todayAssignmentRefetch
     } = useInfiniteQuery({
         queryKey: ["today", "assignment"],
-        queryFn: (pages) => getTodayAssignmentTasks(pages.pageParam || 1),
+        queryFn: (pages) => getTodayAssignmentTasks(selectedDate, pages.pageParam || 1),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
@@ -76,10 +81,10 @@ const TodayPage = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["tasks", "overdue"],
+                queryKey: ["today", "overdue"],
             })
             queryClient.invalidateQueries({
-                queryKey: ["tasks", "today"],
+                queryKey: ["today", "assignment"],
             })
         },
         onError: () => {
@@ -119,7 +124,7 @@ const TodayPage = () => {
     return (
         <>
             <PageTitle>{t("title")}</PageTitle>
-            <OverdueTasksBlock>
+            {overdueTasks?.pages[0].count === 0 || <OverdueTasksBlock>
                 <OverdueTitle>
                     <FeatherIcon icon="alert-circle"/>
                     {t("overdue_title")}
@@ -163,10 +168,11 @@ const TodayPage = () => {
                         </MoreText>
                     ) : null}
                 </>}
-            </OverdueTasksBlock>
+            </OverdueTasksBlock>}
             <TasksBox>
                 {isTodayAssignmentLoading && <SkeletonDueTasks taskCount={10} />}
-                {todayAssignmentTasks?.pages?.map((group) =>
+                {todayAssignmentTasks?.pages[0].count === 0 ? <NoTaskText>{t("no_today_assignment")}</NoTaskText>
+                : todayAssignmentTasks?.pages?.map((group) =>
                     group?.results?.map((task) => (
                         <Task key={task.id} task={task} color={getProjectColor(theme.type, task.project_color)} />
                     )),
@@ -267,6 +273,13 @@ const MoreText = styled.div`
 const MoreButton = styled(Button)`
     width: 25em;
     margin-top: 1.3em;
+`
+
+const NoTaskText = styled.div`
+    text-align: center;
+    margin: 1em 0em;
+    font-weight: 600;
+    font-size: 1.4em;
 `
 
 const filterContents = [
