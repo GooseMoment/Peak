@@ -262,5 +262,6 @@ body {
     display: block;
     border-radius: 16px;
     width: calc(100% - 2em) !important;
+    max-width: 600px;
     margin: 1em;
 }
