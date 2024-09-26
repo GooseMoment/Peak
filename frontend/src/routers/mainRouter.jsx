@@ -9,8 +9,8 @@ import StartPage from "@pages/StartPage"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 
+import { signOut } from "@api/auth.api"
 import { getToken } from "@api/client"
-import { signOut } from "@api/users.api"
 
 import { lazily } from "react-lazily"
 
