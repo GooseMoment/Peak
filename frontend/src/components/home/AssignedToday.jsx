@@ -10,12 +10,12 @@ import { useClientTimezone } from "@utils/clientSettings"
 const AssignedToday = () => {
     const tz = useClientTimezone()
 
-    const { data, isFetching } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["home", "tasks", "today"],
         queryFn: () => getTasksTodayAssignedGrouped(tz),
     })
 
-    if (isFetching) {
+    if (isLoading) {
         return (
             <Module>
                 <Title loading />
