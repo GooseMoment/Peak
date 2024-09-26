@@ -1,11 +1,14 @@
+from typing import Any
 from rest_framework import mixins, generics, status
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 
-from datetime import datetime
 from django.utils import timezone
-from django.db.models import Q, F, Count
+from django.db.models import Q, F, Count, ExpressionWrapper, DateTimeField
+
+from datetime import datetime, time, UTC
+from pytz import timezone as get_timezone, UnknownTimeZoneError
 
 from .models import Task
 from .serializers import TaskSerializer, TaskGroupedSerializer
@@ -162,24 +165,77 @@ class TodayTaskList(mixins.ListModelMixin, generics.GenericAPIView):
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+    
 
-class TodayTaskGroupByProject(generics.GenericAPIView):
+class TimezoneView(generics.GenericAPIView):
+    def __init__(self, **kwargs):
+        self._tz = None
+        self._now = None
+        self._today = None
+        self._today_range = None
+
+        super().__init__(**kwargs)
+
+    def get_tz(self):
+        if self._tz is not None:
+            return self._tz
+
+        tz = self.request.GET.get("tz", "UTC") 
+
+        try:
+            tz = get_timezone(tz)
+        except UnknownTimeZoneError:
+            tz = UTC
+        
+        self._tz = tz
+        return tz
+
+    def get_now(self):
+        if self._now is not None:
+            return self._now
+
+        tz = self.get_tz()
+        now = datetime.now(tz)
+
+        self._now = now
+        return now
+
+    def get_today(self):
+        if self._today is not None:
+            return self._today
+
+        now = self.get_now()
+        today = now.date()
+
+        self._today = today
+        return today
+    
+    def get_today_range(self):
+        if self._today_range is not None:
+            return self._today_range
+
+        today = self.get_today()
+        tz = self.get_tz()
+        today_min = datetime.combine(today, time.min, tzinfo=tz)
+        today_max = datetime.combine(today, time.max, tzinfo=tz)
+
+        today_range = (today_min, today_max)
+        self._today_range = today_range
+
+        return today_range
+
+
+class TaskAssignedTodayGrouped(TimezoneView):
     def get(self, request, *args, **kwargs):
-        now = timezone.now()
-        today_start = timezone.datetime.combine(now.date(), timezone.datetime.min.time(), tzinfo=timezone.get_current_timezone())
-        today_end = timezone.datetime.combine(now.date(), timezone.datetime.max.time(), tzinfo=timezone.get_current_timezone())
+        today = self.get_today()
 
         grouped = Task.objects.filter(
-            Q(due_date__gte=today_start, due_date__lte=today_end) |
-            Q(assigned_at__gte=today_start, assigned_at__lte=today_end),
+            assigned_at=today,
             completed_at__isnull=True,
             user=request.user,
         ).values(
             "drawer__project", "drawer__project__color", "drawer__project__name",
         ).annotate(
-            id=F("drawer__project"),
-            color=F("drawer__project__color"),
-            name=F("drawer__project__name"),
             count=Count("drawer__project"),
         ).order_by()
 
@@ -187,3 +243,4 @@ class TodayTaskGroupByProject(generics.GenericAPIView):
         s.is_valid()
 
         return Response(s.data, status=status.HTTP_200_OK)
+

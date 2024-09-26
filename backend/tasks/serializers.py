@@ -57,7 +57,7 @@ class TaskSerializer(serializers.ModelSerializer):
         ]
 
 class TaskGroupedSerializer(serializers.Serializer):
-    id = serializers.UUIDField()
-    name = serializers.CharField()
-    color = serializers.CharField()
+    id = serializers.UUIDField(source="drawer__project")
+    name = serializers.CharField(source="drawer__project__name")
+    color = serializers.CharField(source="drawer__project__color")
     count = serializers.IntegerField()
