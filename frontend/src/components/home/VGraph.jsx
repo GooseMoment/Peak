@@ -20,12 +20,13 @@ const VGraph = ({ items, countAll, loading }) => {
 
     return (
         <Frame>
-            <Graph>
+            <Graph draggable="false">
                 {items?.map((item) => (
                     <Item
                         key={item.name}
                         $width={(item.count / countAll) * 100}
                         $color={getProjectColor(theme.type, item.color)}
+                        draggable="false"
                     />
                 ))}
             </Graph>
@@ -34,6 +35,7 @@ const VGraph = ({ items, countAll, loading }) => {
                     <Category key={item.name}>
                         <CategoryCircle
                             $color={getProjectColor(theme.type, item.color)}
+                            draggable="false"
                         />{" "}
                         {item.name}
                     </Category>
