@@ -8,7 +8,7 @@ urlpatterns = [
     path("", views.TaskList.as_view()),
     path("overdue", views.OverdueTaskList.as_view()),
     path("today", views.TodayTaskList.as_view()),
-    path("today/grouped", views.TodayTaskGroupByProject.as_view()),
+    path("today/assigned/grouped", views.TaskAssignedTodayGrouped.as_view()),
     path("<str:id>", views.TaskDetail.as_view()),
 ]
 
