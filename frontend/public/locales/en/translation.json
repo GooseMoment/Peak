@@ -42,6 +42,7 @@
         "overdue_title": "Missed Tasks",
         "filter_due_date": "Overdue",
         "filter_assigned_at": "Missed",
+        "no_today_assignment": "Add tasks to do today",
         "error_load_task": "Couldn't load tasks 😢",
         "button_load_more": "Load more",
         "due_change_today_success": "Changed {{filter}} to today.",

@@ -42,6 +42,7 @@
         "overdue_title": "놓친 작업",
         "filter_due_date": "지난 기한",
         "filter_assigned_at": "지난 할당",
+        "no_today_assignment": "오늘 할 작업들을 추가하세요.",
         "error_load_task": "작업을 불러오지 못했어요 😢",
         "button_load_more": "더보기",
         "due_change_today_success": "{{filter}}을 오늘로 변경했습니다.",
