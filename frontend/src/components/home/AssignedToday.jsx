@@ -3,12 +3,16 @@ import { useQuery } from "@tanstack/react-query"
 import Module, { Title } from "@components/home/Module"
 import VGraph from "@components/home/VGraph"
 
-import { getTodayTasksGroupedByProject } from "@api/tasks.api"
+import { getTasksTodayAssignedGrouped } from "@api/tasks.api"
+
+import { useClientTimezone } from "@utils/clientSettings"
 
 const AssignedToday = () => {
+    const tz = useClientTimezone()
+
     const { data, isFetching } = useQuery({
         queryKey: ["home", "tasks", "today"],
-        queryFn: () => getTodayTasksGroupedByProject(),
+        queryFn: () => getTasksTodayAssignedGrouped(tz),
     })
 
     if (isFetching) {
