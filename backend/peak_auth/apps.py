@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AuthConfig(AppConfig):
+class PeakAuthConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'auth'
+    name = 'peak_auth'

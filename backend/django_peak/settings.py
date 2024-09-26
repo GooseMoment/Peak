@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'api',
 
     'users',
-    'auth',
+    'peak_auth',
     'tasks',
     'drawers',
     'projects',
