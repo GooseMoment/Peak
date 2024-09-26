@@ -16,7 +16,11 @@ const Module = styled.article`
         `}
 `
 
-export const Title = ({ className, children, to, underline }) => {
+export const Title = ({ className, children, to, underline, loading }) => {
+    if (loading) {
+        return <StyledH2 className={className} $loading />
+    }
+
     const title = (
         <StyledH2 className={className}>
             <TitleText $underline={underline}>{children}</TitleText>{" "}
@@ -35,6 +39,13 @@ const StyledH2 = styled.h2`
     font-weight: 600;
     font-size: 1em;
     margin-bottom: 0.75em;
+
+    ${p => p.$loading && css`
+        height: 1.25em;
+        width: 15em;
+        max-width: 100%;
+        ${skeletonCSS}
+    `}
 `
 
 const mark = keyframes`

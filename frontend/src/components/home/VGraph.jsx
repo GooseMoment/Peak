@@ -2,8 +2,21 @@ import styled, { useTheme } from "styled-components"
 
 import { getProjectColor } from "@components/project/Creates/palettes"
 
-const VGraph = ({ items, countAll }) => {
+const VGraph = ({ items, countAll, loading }) => {
     const theme = useTheme()
+
+    if (loading) {
+        return (
+            <Frame>
+                <Graph>
+                    <Item $width="100" $color={theme.grey} />
+                </Graph>
+                <Categories>
+                    <CategoryCircle />
+                </Categories>
+            </Frame>
+        )
+    }
 
     return (
         <Frame>
@@ -11,7 +24,7 @@ const VGraph = ({ items, countAll }) => {
                 {items?.map((item) => (
                     <Item
                         key={item.name}
-                        $width={item.count / countAll * 100}
+                        $width={(item.count / countAll) * 100}
                         $color={getProjectColor(theme.type, item.color)}
                     />
                 ))}
@@ -19,7 +32,10 @@ const VGraph = ({ items, countAll }) => {
             <Categories>
                 {items?.map((item) => (
                     <Category key={item.name}>
-                        <CategoryCircle $color={getProjectColor(theme.type, item.color)} /> {item.name}
+                        <CategoryCircle
+                            $color={getProjectColor(theme.type, item.color)}
+                        />{" "}
+                        {item.name}
                     </Category>
                 ))}
             </Categories>
@@ -47,6 +63,10 @@ const Item = styled.div`
     width: ${(p) => p.$width}%;
     height: 100%;
     background-color: ${(p) => p.$color};
+
+    transition:
+        background-color 0.25s var(--cubic),
+        width 0.25s var(--cubic);
 `
 
 const Categories = styled.div`

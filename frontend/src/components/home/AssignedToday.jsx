@@ -12,7 +12,12 @@ const AssignedToday = () => {
     })
 
     if (isFetching) {
-        return <Module $skeleton $height="2em" />
+        return (
+            <Module>
+                <Title loading />
+                <VGraph loading />
+            </Module>
+        )
     }
 
     const { items, countAll } = data
