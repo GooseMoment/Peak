@@ -65,8 +65,8 @@ const Item = styled.div`
     background-color: ${(p) => p.$color};
 
     transition:
-        background-color 0.25s var(--cubic),
-        width 0.25s var(--cubic);
+        background-color 0.5s var(--cubic),
+        width 0.5s var(--cubic);
 `
 
 const Categories = styled.div`
