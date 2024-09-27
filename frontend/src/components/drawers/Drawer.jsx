@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
@@ -11,23 +11,26 @@ import ModalWindow from "@components/common/ModalWindow"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
-import DrawerEdit from "@components/project/edit/DrawerEdit"
-import { SkeletonDrawer, SkeletonInboxDrawer } from "@components/project/skeletons/SkeletonProjectPage"
-import SortMenu from "@components/project/sorts/SortMenu"
 import TaskCreateSimple from "@components/project/Creates/simple/TaskCreateSimple"
-import Task from "@components/tasks/Task"
 import DragAndDownBox from "@components/project/dragAndDown/DragAndDownBox"
+import DrawerEdit from "@components/project/edit/DrawerEdit"
+import {
+    SkeletonDrawer,
+    SkeletonInboxDrawer,
+} from "@components/project/skeletons/SkeletonProjectPage"
+import SortMenu from "@components/project/sorts/SortMenu"
+import Task from "@components/tasks/Task"
 
 import { deleteDrawer } from "@api/drawers.api"
+import { patchDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
-import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 
+import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import { patchDrawer } from "@api/drawers.api"
 
 const getPageFromURL = (url) => {
     if (!url) return null
@@ -81,22 +84,33 @@ const Drawer = ({ project, drawer, color }) => {
         },
     })
 
-    useEffect(()=>{
+    const onDrop = ({ location, source }) => {
+        const targetData = location.current.dropTargets[0]?.data
+        const draggedOrder = source?.data.order
+
+        if (targetData === undefined || draggedOrder === undefined) {
+            return
+        }
+
+        const targetOrder = targetData?.order
+        const symbolProperties = Object.getOwnPropertySymbols(targetData)
+        const closestEdge = targetData[symbolProperties[0]]
+
+        if (typeof targetOrder !== "number" || draggedOrder === targetOrder) {
+            return
+        }
+
+        patchMutation.mutate({
+            dragged_order: draggedOrder,
+            target_order: targetOrder,
+            closest_edge: closestEdge,
+        })
+        setOrdering(null)
+    }
+
+    useEffect(() => {
         const cleanupMonitor = monitorForElements({
-            onDrop({ location, source }) {
-                const targetData = location.current.dropTargets[0]?.data
-                const draggedOrder = source?.data.order
-
-                if (targetData !== undefined && draggedOrder !== undefined) {
-                    const targetOrder = targetData?.order
-                    const symbolProperties = Object.getOwnPropertySymbols(targetData)
-                    const closestEdge = targetData[symbolProperties[0]]
-
-                    if (typeof targetOrder === "number" && draggedOrder !== targetOrder) {
-                        patchMutation.mutate({ dragged_order: draggedOrder, target_order: targetOrder, closest_edge: closestEdge })
-                        setOrdering(null)
-                }}
-            }
+            onDrop: onDrop,
         })
 
         return () => {
@@ -150,8 +164,7 @@ const Drawer = ({ project, drawer, color }) => {
         drawer.uncompleted_task_count + drawer.completed_task_count
 
     const handleCollapsed = () => {
-        if (taskCount !== 0)
-            setCollapsed((prev) => !prev)
+        if (taskCount !== 0) setCollapsed((prev) => !prev)
     }
 
     const clickPlus = () => {
@@ -167,8 +180,8 @@ const Drawer = ({ project, drawer, color }) => {
 
     if (isLoading) {
         if (project.type === "inbox")
-            return <SkeletonInboxDrawer taskCount={taskCount}/>
-        return <SkeletonDrawer taskCount={taskCount}/>
+            return <SkeletonInboxDrawer taskCount={taskCount} />
+        return <SkeletonDrawer taskCount={taskCount} />
     }
 
     if (isError) {
@@ -203,23 +216,26 @@ const Drawer = ({ project, drawer, color }) => {
                 <TaskList>
                     {data?.pages?.map((group) =>
                         group?.results?.map((task) => (
-                            <DragAndDownBox key={task.id} task={task}>
+                            <DragAndDownBox
+                                key={task.id}
+                                task={task}
+                                color={color}>
                                 <Task task={task} color={color} />
                             </DragAndDownBox>
-                        ))
+                        )),
                     )}
                 </TaskList>
             )}
-            {isSimpleOpen &&
+            {isSimpleOpen && (
                 <TaskCreateSimple
                     projectID={project.id}
                     projectName={project.name}
                     drawerID={drawer.id}
                     drawerName={drawer.name}
                     color={color}
-                    onClose={()=>setIsSimpleOpen(false)}
+                    onClose={() => setIsSimpleOpen(false)}
                 />
-            }
+            )}
             {isSortMenuOpen && (
                 <SortMenu
                     title={t("sort.task_title")}
@@ -250,22 +266,24 @@ const Drawer = ({ project, drawer, color }) => {
                 <ModalWindow
                     afterClose={() => {
                         setIsDrawerEditOpen(false)
-                    }}
-                >
-                    <DrawerEdit
-                        projectID={project.id}
-                        drawer={drawer}
-                    />
+                    }}>
+                    <DrawerEdit projectID={project.id} drawer={drawer} />
                 </ModalWindow>
             )}
             <TaskCreateButton onClick={handleToggleSimpleCreate}>
-                {isSimpleOpen ? <>
-                    <FeatherIcon icon="x-circle" />
-                    <TaskCreateText>{t("button_close_add_task")}</TaskCreateText>
-                </> : <>
-                    <FeatherIcon icon="plus-circle" />
-                    <TaskCreateText>{t("button_add_task")}</TaskCreateText>
-                </>}
+                {isSimpleOpen ? (
+                    <>
+                        <FeatherIcon icon="x-circle" />
+                        <TaskCreateText>
+                            {t("button_close_add_task")}
+                        </TaskCreateText>
+                    </>
+                ) : (
+                    <>
+                        <FeatherIcon icon="plus-circle" />
+                        <TaskCreateText>{t("button_add_task")}</TaskCreateText>
+                    </>
+                )}
             </TaskCreateButton>
             <FlexBox>
                 {hasNextPage ? (

@@ -1,74 +1,81 @@
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
-import styled, { css, useTheme } from "styled-components"
+import styled, { css } from "styled-components"
 
-import { getProjectColor } from "@components/project/Creates/palettes"
-
-import { draggable, dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 import { attachClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge"
 import { DragHandleButton } from "@atlaskit/pragmatic-drag-and-drop-react-accessibility/drag-handle-button"
+import {
+    draggable,
+    dropTargetForElements,
+} from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 
-const DragAndDownBox = ({ task, children }) => {
-    const theme = useTheme()
-    const ref = useRef(null)
+const DragAndDownBox = ({ task, color, children }) => {
     const dragHandleRef = useRef(null)
 
     const [isDragging, setIsDragging] = useState(false)
     const [closestEdge, setClosestEdge] = useState(null)
 
     useEffect(() => {
-        const element = ref.current
-        const dragHandle = dragHandleRef.current
-        
+        const element = dragHandleRef.current
+
+        const canDrop = ({ source }) => {
+            return source.data.id !== task.id
+        }
+
+        const getData = ({ input }) => {
+            return attachClosestEdge(
+                { order: task.order, id: task.id },
+                {
+                    element,
+                    input,
+                    allowedEdges: ["top", "bottom"],
+                },
+            )
+        }
+
+        const onDrag = ({ location, source }) => {
+            const isSource = source.element === element
+
+            if (isSource) {
+                setClosestEdge(null)
+                return
+            }
+
+            const sourceOrder = source.data.order
+            if (typeof sourceOrder !== "number") return
+
+            const targetData = location.current.dropTargets[0]?.data
+
+            if (targetData) {
+                const symbolProperties =
+                    Object.getOwnPropertySymbols(targetData)
+                const closestEdge = targetData[symbolProperties[0]]
+                setClosestEdge(closestEdge)
+            }
+        }
+
+        const removeClosestEdge = () => {
+            setClosestEdge(null)
+        }
+
         const cleanupDraggable = draggable({
-            element: dragHandle,
+            element: element,
             getInitialData: () => ({ order: task.order, id: task.id }),
             onDragStart() {
                 setIsDragging(true)
             },
             onDrop() {
                 setIsDragging(false)
-            }
+            },
         })
 
         const cleanupDropTarget = dropTargetForElements({
             element,
-            canDrop({ source }) {
-                return source.data.id !== task.id
-            },
-            getData({ input }) {
-                return attachClosestEdge({ order: task.order, id: task.id }, {
-                    element,
-                    input,
-                    allowedEdges: ['top', 'bottom'],
-                })
-            },
-            onDrag({ location, source }) {
-                const isSource = source.element === element
-
-                if (isSource) {
-                    setClosestEdge(null)
-                    return
-                }
-
-                const sourceOrder = source.data.order
-                if (typeof(sourceOrder) !== 'number')
-                    return
-
-                const targetData = location.current.dropTargets[0]?.data
-
-                if (targetData) {
-                    const symbolProperties = Object.getOwnPropertySymbols(targetData)
-                    const closestEdge = targetData[symbolProperties[0]]
-                    setClosestEdge(closestEdge)
-                }
-            },
-            onDragLeave() {
-                setClosestEdge(null)
-            },
-            onDrop() {
-                setClosestEdge(null)
-            }
+            canDrop: canDrop,
+            getData: getData,
+            onDrag: onDrag,
+            onDragLeave: removeClosestEdge,
+            onDrop: removeClosestEdge,
         })
 
         return () => {
@@ -78,13 +85,14 @@ const DragAndDownBox = ({ task, children }) => {
     }, [task.order, task.id])
 
     return (
-        <DragAndDownBlock ref={dragHandleRef} $edge={closestEdge} $color={getProjectColor(theme.type, task.project_color)}>
+        <DragAndDownBlock
+            ref={dragHandleRef}
+            $edge={closestEdge}
+            $color={color}>
             <DragHandleButtonBox>
-                <DragHandleButton/>
+                <DragHandleButton />
             </DragHandleButtonBox>
-            <ChildrenBox ref={ref} $isDragging={isDragging}>
-                {children}
-            </ChildrenBox>
+            <ChildrenBox $isDragging={isDragging}>{children}</ChildrenBox>
         </DragAndDownBlock>
     )
 }
@@ -95,16 +103,16 @@ const DragHandleButtonBox = styled.div`
     margin-right: 0.2em;
 
     & button {
-        background-color: ${p=>p.theme.backgroundColor};
+        background-color: ${(p) => p.theme.backgroundColor};
     }
 
     & span {
-        color: ${p=>p.theme.textColor};
+        color: ${(p) => p.theme.textColor};
     }
 `
 
 const ChildrenBox = styled.div`
-    opacity: ${props=> props.$isDragging ? 0.5 : 1 };
+    opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
 `
 
 const DragAndDownBlock = styled.div`
@@ -113,11 +121,15 @@ const DragAndDownBlock = styled.div`
     border-top: 2px solid transparent;
     border-bottom: 2px solid transparent;
 
-    ${props => props.$edge && props.$edge === "top" ? css`
-        border-top: 2px dashed ${p => p.$color};
-    ` : props.$edge === "bottom" && css`
-        border-bottom: 2px dashed ${p => p.$color};
-    `}
+    ${(props) =>
+        props.$edge && props.$edge === "top"
+            ? css`
+                  border-top: 2px dashed ${(p) => p.$color};
+              `
+            : props.$edge === "bottom" &&
+              css`
+                  border-bottom: 2px dashed ${(p) => p.$color};
+              `}
 
     &:hover {
         ${DragHandleButtonBox} {
