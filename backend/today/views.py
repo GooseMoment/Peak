@@ -7,6 +7,7 @@ from tasks.models import Task
 
 from datetime import datetime, timedelta
 from django.utils import timezone
+from django.db.models import Q
 
 class TaskTodayAssignmentList(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
@@ -63,6 +64,11 @@ class TaskOverdueList(mixins.ListModelMixin, generics.GenericAPIView):
     pagination_class = TaskOverdueListPagination
 
     def get_queryset(self):
+        day = self.request.GET.get('day')
+        day_min = datetime.fromisoformat(day)
+        day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+        day_range = (day_min, day_max)
+
         filter_field = self.request.GET.get('filter_field', 'due_date')
 
         now = timezone.now()
@@ -72,9 +78,10 @@ class TaskOverdueList(mixins.ListModelMixin, generics.GenericAPIView):
             filter_condition = {'due_date__lt': now}
 
         overdue_tasks = Task.objects.filter(
+            ~Q(assigned_at__range=day_range),
             user=self.request.user,
             **filter_condition,
-            completed_at__isnull=True
+            completed_at__isnull=True,
         ).order_by(filter_field).all()
 
         return overdue_tasks
