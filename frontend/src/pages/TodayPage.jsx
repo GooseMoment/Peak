@@ -12,7 +12,7 @@ import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPag
 import { getProjectColor } from "@components/project/Creates/palettes"
 import { useClientTimezone } from "@utils/clientSettings"
 import { patchTask } from "@api/tasks.api"
-import { getTodayAssignmentTasks, getTodayDueTasks, getOverdueTasks } from "@api/today.api"
+import { getTasksAssignedToday, getTasksDueToday, getTasksOverdue } from "@api/today.api"
 
 import queryClient from "@queries/queryClient"
 import FeatherIcon from "feather-icons-react"
@@ -48,7 +48,7 @@ const TodayPage = () => {
         refetch: overdueRefetch
     } = useInfiniteQuery({
         queryKey: ["today", "overdue", { filter_field: filter }],
-        queryFn: (pages) => getOverdueTasks(filter, pages.pageParam || 1),
+        queryFn: (pages) => getTasksOverdue(filter, pages.pageParam || 1),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
@@ -62,8 +62,8 @@ const TodayPage = () => {
         isError: isTodayAssignmentError, 
         refetch: todayAssignmentRefetch
     } = useInfiniteQuery({
-        queryKey: ["today", "assignment"],
-        queryFn: (pages) => getTodayAssignmentTasks(selectedDate, pages.pageParam || 1),
+        queryKey: ["today", "assigned"],
+        queryFn: (pages) => getTasksAssignedToday(selectedDate, pages.pageParam || 1),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
@@ -84,7 +84,7 @@ const TodayPage = () => {
                 queryKey: ["today", "overdue"],
             })
             queryClient.invalidateQueries({
-                queryKey: ["today", "assignment"],
+                queryKey: ["today", "assigned"],
             })
         },
         onError: () => {

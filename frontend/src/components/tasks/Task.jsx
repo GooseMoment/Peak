@@ -28,7 +28,7 @@ const Task = ({ task, color }) => {
                 queryKey: ["today", "overdue"],
             })
             queryClient.invalidateQueries({
-                queryKey: ["today", "assignment"],
+                queryKey: ["today", "assigned"],
             })
         },
     })
