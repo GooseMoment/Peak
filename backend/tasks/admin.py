@@ -12,7 +12,7 @@ class TaskAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ["user", "drawer", "name", "priority", "privacy", "memo", "repeat"],
+                "fields": ["user", "drawer", "name", "priority", "privacy", "order", "memo", "repeat"],
             },
         ),
         (

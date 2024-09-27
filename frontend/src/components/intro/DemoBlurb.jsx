@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import { TaskList } from "@components/drawers/Drawer"
+import { TaskList } from "@components/social/logDetails/DrawerBundle"
 import UserProfile from "@components/intro/UserProfile"
 import TaskFrame from "@components/tasks/TaskFrame"
 
