@@ -1,7 +1,7 @@
 import client from "@api/client"
 
-export const getTasksOverdue = async (filter_field, page) => {
-    const res = await client.get(`today/overdue?filter_field=${filter_field}&page=${page}`)
+export const getTasksOverdue = async (filter_field, day, page) => {
+    const res = await client.get(`today/overdue?filter_field=${filter_field}&day=${day}&page=${page}`)
     return res.data
 }
 

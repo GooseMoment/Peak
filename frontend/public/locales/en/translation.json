@@ -45,8 +45,8 @@
         "no_today_assignment": "Add tasks to do today",
         "error_load_task": "Couldn't load tasks 😢",
         "button_load_more": "Load more",
-        "due_change_today_success": "Changed {{filter}} to today.",
-        "due_change_tomorrow_success": "Changed {{filter}} to tomorrow.",
+        "due_change_today_success": "Changed Missed to today.",
+        "due_change_tomorrow_success": "Changed Missed to tomorrow.",
         "due_change_error": "The due date change failed."
     },
     "project": {

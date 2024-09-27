@@ -1,20 +1,27 @@
 import { useState } from "react"
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled, { css, useTheme } from "styled-components"
 
-import PageTitle from "@components/common/PageTitle"
 import Button from "@components/common/Button"
 import CollapseButton from "@components/common/CollapseButton"
-import Task from "@components/tasks/Task"
+import PageTitle from "@components/common/PageTitle"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
-import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
 import { getProjectColor } from "@components/project/Creates/palettes"
-import { useClientTimezone } from "@utils/clientSettings"
+import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
+import Task from "@components/tasks/Task"
+
 import { patchTask } from "@api/tasks.api"
-import { getTasksAssignedToday, getTasksDueToday, getTasksOverdue } from "@api/today.api"
+import {
+    getTasksAssignedToday,
+    getTasksDueToday,
+    getTasksOverdue,
+} from "@api/today.api"
+
+import { useClientTimezone } from "@utils/clientSettings"
 
 import queryClient from "@queries/queryClient"
+
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -31,7 +38,7 @@ const TodayPage = () => {
     const { t } = useTranslation(null, { keyPrefix: "today" })
     const due_tz = useClientTimezone()
     const theme = useTheme()
-    
+
     const [filter, setFilter] = useState("due_date")
     const [collapsed, setCollapsed] = useState(false)
 
@@ -40,35 +47,40 @@ const TodayPage = () => {
     const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
     // #TODO 달력으로 날짜 선택하기
 
-    const { 
-        data: overdueTasks, 
-        fetchNextPage: overdueFetchNextPage, 
-        isLoading: isOverdueLoading, 
-        isError: isOverdueError, 
-        refetch: overdueRefetch
+    const {
+        data: overdueTasks,
+        fetchNextPage: overdueFetchNextPage,
+        isLoading: isOverdueLoading,
+        isError: isOverdueError,
+        refetch: overdueRefetch,
     } = useInfiniteQuery({
         queryKey: ["today", "overdue", { filter_field: filter }],
-        queryFn: (pages) => getTasksOverdue(filter, pages.pageParam || 1),
+        queryFn: (pages) =>
+            getTasksOverdue(filter, selectedDate, pages.pageParam || 1),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
-    const overdueHasNextPage = overdueTasks?.pages[overdueTasks?.pages?.length - 1].next !== null
+    const overdueHasNextPage =
+        overdueTasks?.pages[overdueTasks?.pages?.length - 1].next !== null
 
-    const { 
-        data: todayAssignmentTasks, 
+    const {
+        data: todayAssignmentTasks,
         fetchNextPage: todayAssignmentFetchNextPage,
-        isLoading: isTodayAssignmentLoading, 
-        isError: isTodayAssignmentError, 
-        refetch: todayAssignmentRefetch
+        isLoading: isTodayAssignmentLoading,
+        isError: isTodayAssignmentError,
+        refetch: todayAssignmentRefetch,
     } = useInfiniteQuery({
         queryKey: ["today", "assigned"],
-        queryFn: (pages) => getTasksAssignedToday(selectedDate, pages.pageParam || 1),
+        queryFn: (pages) =>
+            getTasksAssignedToday(selectedDate, pages.pageParam || 1),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
-    const todayHasNextPage = todayAssignmentTasks?.pages[todayAssignmentTasks?.pages?.length - 1].next !== null
+    const todayHasNextPage =
+        todayAssignmentTasks?.pages[todayAssignmentTasks?.pages?.length - 1]
+            .next !== null
 
     const onClickErrorBox = () => {
         overdueRefetch()
@@ -89,93 +101,124 @@ const TodayPage = () => {
         },
         onError: () => {
             toast.error(t("due_change_error"))
-        }
+        },
     })
 
     const clickArrowDown = (task) => {
         const today = new Date()
         const date = today.toISOString().slice(0, 10)
-        
-        let data = null
-        if (filter === "due_date")
-            data = { due_tz: due_tz, due_date: date }
-        if (filter === "assigned_at")
-            data = { due_tz: due_tz, assigned_at: date }
+        const data = { due_tz: due_tz, assigned_at: date }
 
         patchMutation.mutate({ task, data })
-        toast.success(t("due_change_today_success", {filter: t("filter_" + filter)}))
+        toast.success(t("due_change_today_success"))
     }
 
     const clickArrowRight = (task) => {
         let date = new Date()
         date.setDate(date.getDate() + 1)
         date = date.toISOString().slice(0, 10)
-
-        let data = null
-        if (filter === "due_date")
-            data = { due_tz: due_tz, due_date: date }
-        if (filter === "assigned_at")
-            data = { due_tz: due_tz, assigned_at: date }
+        const data = { due_tz: due_tz, assigned_at: date }
 
         patchMutation.mutate({ task, data })
-        toast.success(t("due_change_tomorrow_success", {filter: t("filter_" + filter)}))
+        toast.success(t("due_change_tomorrow_success"))
     }
 
     return (
         <>
             <PageTitle>{t("title")}</PageTitle>
-            {overdueTasks?.pages[0].count === 0 || <OverdueTasksBlock>
-                <OverdueTitle>
-                    <FeatherIcon icon="alert-circle"/>
-                    {t("overdue_title")}
-                    <CollapseButtonBlock>
-                        <CollapseButton collapsed={collapsed} handleCollapsed={() => setCollapsed((prev) => !prev)}/>
-                    </CollapseButtonBlock>
-                </OverdueTitle>
-                {collapsed ? null : <>
-                    <FilterButtonBox>
-                        {filterContents.map(content=>(
-                            <FilterButton 
-                                key={content}
-                                $isActive={filter === content}
-                                onClick={()=>setFilter(content)}>
-                                {t("filter_" + content)}
-                            </FilterButton>
-                        ))}
-                    </FilterButtonBox>
-                    <TasksBox>
-                        {(isOverdueError || isTodayAssignmentError) &&
-                            <ErrorBox onClick={onClickErrorBox}>
-                                {t("error_load_task")}
-                            </ErrorBox>}
-                        {isOverdueLoading && <SkeletonDueTasks taskCount={4} />}
-                        {overdueTasks?.pages?.map((group) =>
-                            group?.results?.map((task) => (
-                                <OverdueTaskBox key={task.id}>
-                                    <Task task={task} color={getProjectColor(theme.type, task.project_color)} />
-                                    <Icons>
-                                        <FeatherIcon icon="arrow-down" onClick={()=>clickArrowDown(task)}/>
-                                        <FeatherIcon icon="arrow-right" onClick={()=>clickArrowRight(task)}/>
-                                    </Icons>
-                                </OverdueTaskBox>
-                            )),
-                        )}
-                    </TasksBox>
-                    {overdueHasNextPage ? (
-                        <MoreText onClick={() => overdueFetchNextPage()}>
-                            {t("button_load_more") + " "}
-                            ({overdueTasks?.pages[0].count})
-                        </MoreText>
-                    ) : null}
-                </>}
-            </OverdueTasksBlock>}
+            {overdueTasks?.pages[0].count === 0 || (
+                <OverdueTasksBlock>
+                    <OverdueTitle>
+                        <FeatherIcon icon="alert-circle" />
+                        {t("overdue_title")}
+                        <CollapseButtonBlock>
+                            <CollapseButton
+                                collapsed={collapsed}
+                                handleCollapsed={() =>
+                                    setCollapsed((prev) => !prev)
+                                }
+                            />
+                        </CollapseButtonBlock>
+                    </OverdueTitle>
+                    {collapsed ? null : (
+                        <>
+                            <FilterButtonBox>
+                                {filterContents.map((content) => (
+                                    <FilterButton
+                                        key={content}
+                                        $isActive={filter === content}
+                                        onClick={() => setFilter(content)}>
+                                        {t("filter_" + content)}
+                                    </FilterButton>
+                                ))}
+                            </FilterButtonBox>
+                            <TasksBox>
+                                {(isOverdueError || isTodayAssignmentError) && (
+                                    <ErrorBox onClick={onClickErrorBox}>
+                                        {t("error_load_task")}
+                                    </ErrorBox>
+                                )}
+                                {isOverdueLoading && (
+                                    <SkeletonDueTasks taskCount={4} />
+                                )}
+                                {overdueTasks?.pages?.map((group) =>
+                                    group?.results?.map((task) => (
+                                        <OverdueTaskBox key={task.id}>
+                                            <Task
+                                                task={task}
+                                                color={getProjectColor(
+                                                    theme.type,
+                                                    task.project_color,
+                                                )}
+                                            />
+                                            <Icons>
+                                                <FeatherIcon
+                                                    icon="arrow-down"
+                                                    onClick={() =>
+                                                        clickArrowDown(task)
+                                                    }
+                                                />
+                                                <FeatherIcon
+                                                    icon="arrow-right"
+                                                    onClick={() =>
+                                                        clickArrowRight(task)
+                                                    }
+                                                />
+                                            </Icons>
+                                        </OverdueTaskBox>
+                                    )),
+                                )}
+                            </TasksBox>
+                            {overdueHasNextPage ? (
+                                <MoreText
+                                    onClick={() => overdueFetchNextPage()}>
+                                    {t("button_load_more") + " "}(
+                                    {overdueTasks?.pages[0].count})
+                                </MoreText>
+                            ) : null}
+                        </>
+                    )}
+                </OverdueTasksBlock>
+            )}
             <TasksBox>
-                {isTodayAssignmentLoading && <SkeletonDueTasks taskCount={10} />}
-                {todayAssignmentTasks?.pages[0].count === 0 ? <NoTaskText>{t("no_today_assignment")}</NoTaskText>
-                : todayAssignmentTasks?.pages?.map((group) =>
-                    group?.results?.map((task) => (
-                        <Task key={task.id} task={task} color={getProjectColor(theme.type, task.project_color)} />
-                    )),
+                {isTodayAssignmentLoading && (
+                    <SkeletonDueTasks taskCount={10} />
+                )}
+                {todayAssignmentTasks?.pages[0].count === 0 ? (
+                    <NoTaskText>{t("no_today_assignment")}</NoTaskText>
+                ) : (
+                    todayAssignmentTasks?.pages?.map((group) =>
+                        group?.results?.map((task) => (
+                            <Task
+                                key={task.id}
+                                task={task}
+                                color={getProjectColor(
+                                    theme.type,
+                                    task.project_color,
+                                )}
+                            />
+                        )),
+                    )
                 )}
             </TasksBox>
             <FlexCenterBox>
@@ -196,7 +239,7 @@ const FlexCenterBox = styled.div`
 `
 
 const OverdueTasksBlock = styled.div`
-    border: 1.8px solid ${p=>p.theme.project.borderColor};
+    border: 1.8px solid ${(p) => p.theme.project.borderColor};
     border-radius: 15px;
     margin: 2em 1em;
     padding: 1.5em;
@@ -224,7 +267,7 @@ const Icons = styled(FlexCenterBox)`
     gap: 0.8em;
 
     & svg {
-        stroke: ${p=>p.theme.textColor};
+        stroke: ${(p) => p.theme.textColor};
         cursor: pointer;
     }
 `
@@ -238,18 +281,20 @@ const FilterButtonBox = styled.div`
 const FilterButton = styled.div`
     width: fit-content;
     padding: 0.4em 1em;
-    border: 1px solid ${p=>p.theme.borderColor};
+    border: 1px solid ${(p) => p.theme.borderColor};
     border-radius: 15px;
-    color: ${p=>p.theme.textColor};
-    background-color: ${p=>p.theme.backgroundColor};
+    color: ${(p) => p.theme.textColor};
+    background-color: ${(p) => p.theme.backgroundColor};
     font-size: 0.9em;
     font-weight: normal;
     cursor: pointer;
 
-    ${props=>props.$isActive && css`
-        color: ${p=>p.theme.white};
-        background-color: ${p=>p.theme.goose};
-    `}
+    ${(props) =>
+        props.$isActive &&
+        css`
+            color: ${(p) => p.theme.white};
+            background-color: ${(p) => p.theme.goose};
+        `}
 `
 
 const TasksBox = styled.div`
@@ -264,7 +309,7 @@ const MoreText = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    color: ${p=>p.theme.secondTextColor};
+    color: ${(p) => p.theme.secondTextColor};
     margin-top: 1em;
     font-size: 0.9em;
     cursor: pointer;
@@ -279,12 +324,9 @@ const NoTaskText = styled.div`
     text-align: center;
     margin: 1em 0em;
     font-size: 1em;
-    color: ${p=>p.theme.secondTextColor};
+    color: ${(p) => p.theme.secondTextColor};
 `
 
-const filterContents = [
-    "due_date",
-    "assigned_at",
-]
+const filterContents = ["due_date", "assigned_at"]
 
 export default TodayPage

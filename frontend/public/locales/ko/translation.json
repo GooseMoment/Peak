@@ -45,8 +45,8 @@
         "no_today_assignment": "오늘 할 작업들을 추가하세요.",
         "error_load_task": "작업을 불러오지 못했어요 😢",
         "button_load_more": "더보기",
-        "due_change_today_success": "{{filter}}을 오늘로 변경했습니다.",
-        "due_change_tomorrow_success": "{{filter}}을 내일로 변경했습니다.",
+        "due_change_today_success": "지난 할당을 오늘로 변경했습니다.",
+        "due_change_tomorrow_success": "지난 할당을 내일로 변경했습니다.",
         "due_change_error": "기한 변경에 실패했습니다."
     },
     "project": {
