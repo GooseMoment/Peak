@@ -264,7 +264,7 @@ const MoreText = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    color: ${p=>p.theme.grey};
+    color: ${p=>p.theme.secondTextColor};
     margin-top: 1em;
     font-size: 0.9em;
     cursor: pointer;
@@ -278,8 +278,8 @@ const MoreButton = styled(Button)`
 const NoTaskText = styled.div`
     text-align: center;
     margin: 1em 0em;
-    font-weight: 600;
-    font-size: 1.4em;
+    font-size: 1em;
+    color: ${p=>p.theme.secondTextColor};
 `
 
 const filterContents = [
