@@ -50,7 +50,10 @@ class TimezoneMixin:
 
         self._now = now
         return now
-    
+
+    def get_today(self):
+        return self.get_now().date()
+
     def get_datetime_range(self, date: datetime.date):
         tz = self.get_tz()
         day_min = datetime.datetime.combine(date, datetime.time.min, tz) 
@@ -58,9 +61,6 @@ class TimezoneMixin:
         date_range = (day_min, day_max)
 
         return date_range
-
-    def get_today(self):
-        return self.get_now().date()
 
     def get_today_range(self):
         if self._today_range is not None:
