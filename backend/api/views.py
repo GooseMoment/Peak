@@ -3,15 +3,7 @@ from rest_framework.request import Request
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 
-
-# from https://stackoverflow.com/questions/4581789/how-do-i-get-user-ip-address-in-django ㅎㅎ
-def get_client_ip(request: Request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
+from api.utils import get_client_ip
 
 
 @api_view(["GET"])
