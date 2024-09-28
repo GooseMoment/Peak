@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 import styled, { css, useTheme } from "styled-components"
@@ -18,7 +17,6 @@ import { useTranslation } from "react-i18next"
 const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
     const { t } = useTranslation(null, { keyPrefix: "users" })
     const theme = useTheme()
-    const [imgLoaded, setImgLoaded] = useState(false)
 
     const followButton = isMine ? (
         <Link to="/app/settings/account">
@@ -27,10 +25,6 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
     ) : (
         <FollowButton disabled={!user} user={user} />
     )
-
-    useEffect(() => {
-        setImgLoaded(false)
-    }, [user?.profile_img])
 
     return (
         <>
@@ -44,12 +38,8 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
                 {followButton}
             </Banner>
             <Profile>
-                <ProfileImg
-                    $display={imgLoaded}
-                    src={user?.profile_img}
-                    onLoad={() => setImgLoaded(true)}
-                />
-                <ProfileImgEmpty $display={!imgLoaded} />
+                <ProfileImg $display={!isPending} src={user?.profile_img} />
+                <ProfileImgEmpty $display={isPending} />
                 <ProfileTexts>
                     <Names>
                         <DisplayName $skeleton={isPending}>
@@ -72,7 +62,7 @@ const Banner = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
+
     box-sizing: border-box;
     height: 5em;
     width: 100%;
