@@ -8,7 +8,7 @@ import { getProjectColor } from "@components/project/Creates/palettes"
 import FollowButton from "@components/users/FollowButton"
 import FollowsCount from "@components/users/FollowsCount"
 
-import useScreenType, { ifMobile, ifTablet } from "@utils/useScreenType"
+import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
 import { skeletonBreathingCSS } from "@assets/skeleton"
@@ -19,7 +19,6 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
     const { t } = useTranslation(null, { keyPrefix: "users" })
     const theme = useTheme()
     const [imgLoaded, setImgLoaded] = useState(false)
-    const { isDesktop } = useScreenType()
 
     const followButton = isMine ? (
         <Link to="/app/settings/account">
@@ -33,27 +32,17 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
         setImgLoaded(false)
     }, [user?.profile_img])
 
-    // TODO: Edit this and Banner style.
-    useEffect(() => {
-        document.body.style.overflowX = "clip"
-        return () => {
-            document.body.style.overflowX = "unset"
-        }
-    }, [])
-
     return (
         <>
             <Banner
-                $headerColor={getProjectColor(theme.type, user?.header_color)}
-            />
-            <OverBanner>
+                $headerColor={getProjectColor(theme.type, user?.header_color)}>
                 {followingYou?.status === "accepted" ? (
                     <FollowsYou>{t("follows_you")}</FollowsYou>
                 ) : (
                     <div />
                 )}
-                {!isDesktop && followButton}
-            </OverBanner>
+                {followButton}
+            </Banner>
             <Profile>
                 <ProfileImg
                     $display={imgLoaded}
@@ -74,39 +63,27 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
                         <FollowsCount user={user} isPending={isPending} />
                     </Datas>
                 </ProfileTexts>
-                {isDesktop && <ProfileButtons>{followButton}</ProfileButtons>}
             </Profile>
         </>
     )
 }
 
 const Banner = styled.div`
-    background-color: ${(p) =>
-        p.$headerColor ? p.$headerColor : p.theme.skeleton.defaultColor};
-    height: 15em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    box-sizing: border-box;
+    height: 5em;
     width: 100%;
 
-    transform: scale(10, 1) translateY(-5em);
+    border-radius: 16px;
+    margin-bottom: 2em;
+    padding: 1em;
 
+    background-color: ${(p) =>
+        p.$headerColor ? p.$headerColor : p.theme.skeleton.defaultColor};
     transition: background-color 0.25s ${cubicBeizer};
-`
-
-const OverBanner = styled.div`
-    position: absolute;
-    top: 2em;
-
-    box-sizing: border-box;
-
-    display: flex;
-    justify-content: space-between;
-
-    ${ifTablet} {
-        width: calc(100% - 10em);
-    }
-
-    ${ifMobile} {
-        width: calc(100% - 3em);
-    }
 `
 
 const FollowsYou = styled.div`
@@ -128,7 +105,6 @@ const FollowsYou = styled.div`
 const Profile = styled.div`
     position: relative;
     box-sizing: border-box;
-    margin-top: -10em;
 
     display: flex;
     gap: 2em;
@@ -198,8 +174,8 @@ const Names = styled.div`
 `
 
 const DisplayName = styled.h1`
-    color: ${(p) => p.theme.white};
-    text-shadow: 1px 1px 10px #000;
+    color: ${(p) => p.theme.textColor};
+    text-shadow: none;
 
     margin-left: -10px;
     padding-left: 10px;
@@ -217,8 +193,6 @@ const DisplayName = styled.h1`
     }
 
     ${ifMobile} {
-        color: ${(p) => p.theme.textColor};
-        text-shadow: none;
         max-width: unset;
     }
 
@@ -231,12 +205,7 @@ const DisplayName = styled.h1`
 `
 
 const Username = styled.div`
-    text-shadow: 1px 1px 20px #000;
-
-    ${ifMobile} {
-        color: ${(p) => p.theme.textColor};
-        text-shadow: none;
-    }
+    color: ${(p) => p.theme.textColor};
 
     ${(p) =>
         p.$skeleton &&
@@ -247,13 +216,5 @@ const Username = styled.div`
 `
 
 const Datas = styled.div``
-
-const ProfileButtons = styled.div`
-    padding: 1.25em 0;
-
-    display: flex;
-    justify-content: flex-start;
-    align-items: self-start;
-`
 
 export default UserProfileHeader
