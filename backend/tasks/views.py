@@ -3,11 +3,12 @@ from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 
-from api.views import CreateMixin
+from api.mixins import CreateMixin
 from api.permissions import IsUserMatch
 from datetime import datetime
 from django.utils import timezone
 from django.db.models import Q
+
 from .models import Task
 from .serializers import TaskSerializer
 from notifications.models import TaskReminder
