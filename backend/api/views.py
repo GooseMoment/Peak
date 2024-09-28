@@ -44,7 +44,7 @@ class TimezoneMixin:
         self._now = None
         self._today_range = None
 
-        super.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def get_tz(self):
         if self._tz is not None:
