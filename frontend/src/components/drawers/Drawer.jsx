@@ -236,8 +236,11 @@ const Drawer = ({ project, drawer, color }) => {
             </TaskCreateButton>
             <FlexBox>
                 {hasNextPage ? (
-                    <MoreButton onClick={() => fetchNextPage()}>
-                        {t("button_load_more")}
+                    <MoreButton  
+                        disabled={isLoading}
+                        loading={isLoading}
+                        onClick={() => fetchNextPage()}>
+                        {isLoading ? t("loading") : t("button_load_more")}
                     </MoreButton>
                 ) : null}
             </FlexBox>
