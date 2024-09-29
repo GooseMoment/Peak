@@ -62,7 +62,7 @@ const Drawer = ({ project, drawer, color }) => {
 
     const { t } = useTranslation(null, { keyPrefix: "project" })
 
-    const { data, isError, fetchNextPage, isLoading, refetch } =
+    const { data, isError, fetchNextPage, isLoading, isPending, refetch } =
         useInfiniteQuery({
             queryKey: ["tasks", { drawerID: drawer.id, ordering: ordering }],
             queryFn: (pages) =>
@@ -294,8 +294,8 @@ const Drawer = ({ project, drawer, color }) => {
             <FlexBox>
                 {hasNextPage ? (
                     <MoreButton  
-                        disabled={isLoading}
-                        loading={isLoading}
+                        disabled={isPending}
+                        loading={isPending}
                         onClick={() => fetchNextPage()}>
                         {isLoading ? t("loading") : t("button_load_more")}
                     </MoreButton>
