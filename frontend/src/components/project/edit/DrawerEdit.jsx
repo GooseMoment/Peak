@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
@@ -21,6 +21,7 @@ const DrawerEdit = ({ projectID, drawer }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const { closeModal } = useModalWindowCloseContext()
 
+    const inputRef = useRef(null)
     const [name, setName] = useState(drawer.name)
 
     useEffect(() => {
@@ -59,6 +60,7 @@ const DrawerEdit = ({ projectID, drawer }) => {
                 name={name}
                 setName={setName}
                 setFunc={patchMutation.mutate}
+                inputRef={inputRef}
                 isCreate={false}
                 icon="inbox"
                 onClose={closeModal}

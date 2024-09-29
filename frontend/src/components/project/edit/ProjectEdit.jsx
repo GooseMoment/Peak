@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -21,6 +21,7 @@ import { toast } from "react-toastify"
 const ProjectEdit = ({ project }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const theme = useTheme()
+    const inputRef = useRef(null)
 
     const [name, setName] = useState(project.name)
 
@@ -78,6 +79,7 @@ const ProjectEdit = ({ project }) => {
                 name={name}
                 setName={setName}
                 setFunc={patchMutation.mutate}
+                inputRef={inputRef}
                 isCreate={false}
                 icon="archive"
                 onClose={closeModal}
