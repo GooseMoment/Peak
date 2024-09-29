@@ -147,12 +147,12 @@ const ProjectPage = () => {
         )
     }
 
+    const color = getProjectColor(theme.type, project?.color)
+
     return (
         <>
             <TitleBox>
-                <PageTitle $color={getProjectColor(theme.type, project.color)}>
-                    {project.name}
-                </PageTitle>
+                <PageTitle $color={color}>{project.name}</PageTitle>
                 <Icons>
                     <FeatherIcon
                         icon="plus"
@@ -197,7 +197,7 @@ const ProjectPage = () => {
                         key={drawer.id}
                         project={project}
                         drawer={drawer}
-                        color={getProjectColor(theme.type, project.color)}
+                        color={color}
                     />
                 ))
             )}
@@ -244,9 +244,7 @@ const ProjectPage = () => {
                 </ModalWindow>
             )}
             <Suspense key="project-page" fallback={<ModalLoader />}>
-                <Outlet
-                    context={[id, getProjectColor(theme.type, project.color)]}
-                />
+                <Outlet context={[id, color]} />
             </Suspense>
         </>
     )
