@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from django.db.models import Q
 
-class TaskTodayAssignmentList(mixins.ListModelMixin, generics.GenericAPIView):
+class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsUserMatch]
 
