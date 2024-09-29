@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import { useTheme } from "styled-components"
@@ -52,27 +52,10 @@ const ProjectEdit = ({ project }) => {
         },
     })
 
-    const items = [
-        {
-            id: 1,
-            icon: "circle",
-            color: getProjectColor(theme.type, project.color),
-            display: t("color." + project.color),
-            component: <Color setColor={patchMutation.mutate} />,
-        },
-        {
-            id: 2,
-            icon: "server",
-            display: t("privacy." + project.privacy),
-            component: <Privacy setPrivacy={patchMutation.mutate} />,
-        },
-        {
-            id: 3,
-            icon: "award",
-            display: t("type." + project.type),
-            component: <Type setType={patchMutation.mutate} />,
-        },
-    ]
+    const items = useMemo(
+        () => makeItems(t, theme, project, patchMutation.mutate),
+        [t, theme, project, patchMutation],
+    )
 
     return (
         <EditBox>
@@ -94,5 +77,27 @@ const ProjectEdit = ({ project }) => {
         </EditBox>
     )
 }
+
+const makeItems = (t, theme, project, setFunc) => [
+    {
+        id: 1,
+        icon: "circle",
+        color: getProjectColor(theme.type, project.color),
+        display: t("color." + project.color),
+        component: <Color setColor={setFunc} />,
+    },
+    {
+        id: 2,
+        icon: "server",
+        display: t("privacy." + project.privacy),
+        component: <Privacy setPrivacy={setFunc} />,
+    },
+    {
+        id: 3,
+        icon: "award",
+        display: t("type." + project.type),
+        component: <Type setType={setFunc} />,
+    },
+]
 
 export default ProjectEdit

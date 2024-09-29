@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import { useTheme } from "styled-components"
@@ -43,27 +43,10 @@ const ProjectCreate = () => {
     //Component
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
-    const items = [
-        {
-            id: 1,
-            icon: "circle",
-            color: getProjectColor(theme.type, newProject.color),
-            display: t("color." + newProject.color),
-            component: <Color setColor={editNewProject} />,
-        },
-        {
-            id: 2,
-            icon: "server",
-            display: t("privacy." + newProject.privacy),
-            component: <Privacy setPrivacy={editNewProject} />,
-        },
-        {
-            id: 3,
-            icon: "award",
-            display: t("type." + newProject.type),
-            component: <Type setType={editNewProject} />,
-        },
-    ]
+    const items = useMemo(
+        () => makeItems(t, theme, newProject, editNewProject),
+        [t, theme, newProject, editNewProject],
+    )
 
     const postMutation = useMutation({
         mutationFn: (data) => {
@@ -125,5 +108,27 @@ const ProjectCreate = () => {
         </EditBox>
     )
 }
+
+const makeItems = (t, theme, project, setFunc) => [
+    {
+        id: 1,
+        icon: "circle",
+        color: getProjectColor(theme.type, project.color),
+        display: t("color." + project.color),
+        component: <Color setColor={setFunc} />,
+    },
+    {
+        id: 2,
+        icon: "server",
+        display: t("privacy." + project.privacy),
+        component: <Privacy setPrivacy={setFunc} />,
+    },
+    {
+        id: 3,
+        icon: "award",
+        display: t("type." + project.type),
+        component: <Type setType={setFunc} />,
+    },
+]
 
 export default ProjectCreate
