@@ -1,7 +1,7 @@
-import { useState, useRef } from "react"
+import { useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
-import styled, { useTheme } from "styled-components"
+import { useTheme } from "styled-components"
 
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Color from "@components/project/Creates/Color"
@@ -10,6 +10,7 @@ import Type from "@components/project/Creates/Type"
 import { getProjectColor } from "@components/project/Creates/palettes"
 import Middle from "@components/project/common/Middle"
 import TitleInput from "@components/project/common/TitleInput"
+import EditBox from "@components/project/edit/EditBox"
 
 import { postProject } from "@api/projects.api"
 
@@ -103,7 +104,7 @@ const ProjectCreate = () => {
     }
 
     return (
-        <ProjectCreateBox onKeyDown={onEnter}>
+        <EditBox onKeyDown={onEnter}>
             <TitleInput
                 name={name}
                 setName={setName}
@@ -121,22 +122,8 @@ const ProjectCreate = () => {
                 setIsComponentOpen={setIsComponentOpen}
                 disabled={postMutation.isPending}
             />
-        </ProjectCreateBox>
+        </EditBox>
     )
 }
-
-const ProjectCreateBox = styled.div`
-    width: 35em;
-    background-color: ${(p) => p.theme.backgroundColor};
-    border: solid 1px ${(p) => p.theme.project.borderColor};
-    border-radius: 15px;
-
-    &::after {
-        content: " ";
-        display: block;
-        height: 0;
-        clear: both;
-    }
-`
 
 export default ProjectCreate

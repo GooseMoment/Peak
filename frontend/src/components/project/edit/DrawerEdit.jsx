@@ -1,18 +1,16 @@
 import { useEffect, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
-import styled from "styled-components"
 
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Privacy from "@components/project/Creates/Privacy"
 import Middle from "@components/project/common/Middle"
 import TitleInput from "@components/project/common/TitleInput"
+import EditBox from "@components/project/edit/EditBox"
 
 import { patchDrawer } from "@api/drawers.api"
 
 import queryClient from "@queries/queryClient"
-
-import { cubicBeizer } from "@assets/keyframes"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -55,7 +53,7 @@ const DrawerEdit = ({ projectID, drawer }) => {
     ]
 
     return (
-        <DrawerEditBox>
+        <EditBox>
             <TitleInput
                 name={name}
                 setName={setName}
@@ -71,26 +69,8 @@ const DrawerEdit = ({ projectID, drawer }) => {
                 isComponentOpen={isComponentOpen}
                 setIsComponentOpen={setIsComponentOpen}
             />
-        </DrawerEditBox>
+        </EditBox>
     )
 }
-
-const DrawerEditBox = styled.div`
-    width: 35em;
-    background-color: ${(p) => p.theme.backgroundColor};
-    border: solid 1px ${(p) => p.theme.project.borderColor};
-    border-radius: 15px;
-
-    transition:
-        left 0.5s ${cubicBeizer},
-        width 0.5s ${cubicBeizer};
-
-    &::after {
-        content: " ";
-        display: block;
-        height: 0;
-        clear: both;
-    }
-`
 
 export default DrawerEdit

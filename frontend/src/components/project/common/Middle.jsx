@@ -3,7 +3,7 @@ import { Fragment } from "react"
 
 import styled, { css } from "styled-components"
 
-import Button from "@components/common/Button"
+import Button, { ButtonGroup } from "@components/common/Button"
 import ModalWindow from "@components/common/ModalWindow"
 
 import FeatherIcon from "feather-icons-react"
@@ -59,11 +59,13 @@ const Middle = ({
                     ) : null}
                 </Fragment>
             ))}
-            {isCreate ? (
-                <AddButton disabled={disabled} onClick={submit}>{t("button_add")}</AddButton>
-            ) : (
-                <EmptyBox />
-            )}
+            <ButtonGroup $justifyContent="right">
+                {isCreate ? (
+                    <AddButton disabled={disabled} onClick={submit}>{t("button_add")}</AddButton>
+                ) : (
+                    <EmptyBox />
+                )}
+            </ButtonGroup>
         </>
     )
 }
