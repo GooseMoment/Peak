@@ -72,7 +72,7 @@ const ProjectCreate = () => {
     const submit = () => {
         editNewProject({ name })
 
-        if (newProject.name === "Inbox" || newProject.name === "inbox") {
+        if (newProject.name.toLowerCase() === "inbox") {
             toast.error(t("create.project_create_cannot_use_inbox"))
             return
         }
