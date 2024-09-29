@@ -44,7 +44,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                         onClick={toComplete}
                     />
                     {taskDetailPath ? (
-                        <NameLink to={taskDetailPath}>
+                        <NameLink draggable="false" to={taskDetailPath}>
                             {TaskName}
                         </NameLink>
                     ) : (
