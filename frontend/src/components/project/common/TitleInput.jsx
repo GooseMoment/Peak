@@ -6,7 +6,7 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const Title = ({ name, setName, setFunc, inputRef, isCreate, icon, onClose }) => {
+const TitleInput = ({ name, setName, setFunc, inputRef, isCreate, icon, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
 
     useEffect(()=>{
@@ -123,4 +123,4 @@ const Icons = styled.div`
         `}
 `
 
-export default Title
+export default TitleInput

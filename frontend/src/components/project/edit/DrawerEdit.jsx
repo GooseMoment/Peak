@@ -6,7 +6,7 @@ import styled from "styled-components"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Privacy from "@components/project/Creates/Privacy"
 import Middle from "@components/project/common/Middle"
-import Title from "@components/project/common/Title"
+import TitleInput from "@components/project/common/TitleInput"
 
 import { patchDrawer } from "@api/drawers.api"
 
@@ -55,7 +55,7 @@ const DrawerEdit = ({ projectID, drawer }) => {
 
     return (
         <DrawerEditBox>
-            <Title
+            <TitleInput
                 name={name}
                 setName={setName}
                 setFunc={patchMutation.mutate}

@@ -9,7 +9,7 @@ import Privacy from "@components/project/Creates/Privacy"
 import Type from "@components/project/Creates/Type"
 import { getProjectColor } from "@components/project/Creates/palettes"
 import Middle from "@components/project/common/Middle"
-import Title from "@components/project/common/Title"
+import TitleInput from "@components/project/common/TitleInput"
 
 import { postProject } from "@api/projects.api"
 
@@ -104,7 +104,7 @@ const ProjectCreate = () => {
 
     return (
         <ProjectCreateBox onKeyDown={onEnter}>
-            <Title
+            <TitleInput
                 name={name}
                 setName={setName}
                 setFunc={editNewProject}

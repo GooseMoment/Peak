@@ -7,7 +7,7 @@ import styled from "styled-components"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Privacy from "@components/project/Creates/Privacy"
 import Middle from "@components/project/common/Middle"
-import Title from "@components/project/common/Title"
+import TitleInput from "@components/project/common/TitleInput"
 
 import { postDrawer } from "@api/drawers.api"
 
@@ -86,7 +86,7 @@ const DrawerCreate = () => {
 
     return (
         <DrawerCreateBox onKeyDown={onEnter}>
-            <Title
+            <TitleInput
                 name={name}
                 setName={setName}
                 setFunc={editNewDrawer}
