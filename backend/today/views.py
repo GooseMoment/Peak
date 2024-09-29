@@ -64,8 +64,7 @@ class TaskOverdueList(mixins.ListModelMixin, generics.GenericAPIView):
     pagination_class = TaskOverdueListPagination
 
     def get_queryset(self):
-        day = self.request.GET.get('day')
-        day_min = datetime.fromisoformat(day)
+        day_min = timezone.now().replace(hour=15, minute=0, second=0, microsecond=0)
         day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
         day_range = (day_min, day_max)
 

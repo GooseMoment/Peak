@@ -56,7 +56,7 @@ const TodayPage = () => {
     } = useInfiniteQuery({
         queryKey: ["today", "overdue", { filter_field: filter }],
         queryFn: (pages) =>
-            getTasksOverdue(filter, selectedDate, pages.pageParam || 1),
+            getTasksOverdue(filter, pages.pageParam || 1),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
