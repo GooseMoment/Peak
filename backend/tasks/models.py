@@ -40,6 +40,7 @@ class Task(Base, PrivacyMixin):
     assigned_at = models.DateField(null=True, blank=True)
     priority = models.IntegerField(default=0)
     memo = models.TextField(null=True, blank=True)
+    order = models.IntegerField(default=0)
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

@@ -23,5 +23,4 @@ def delete_task_count_for_Task(sender, instance: Task=None, **kwargs):
         instance.drawer.completed_task_count -= 1
 
     instance.drawer.save()
-
         

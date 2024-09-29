@@ -54,7 +54,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocia
                     )}
                 </CircleName>
 
-                <Dates>
+                {hasDate && <Dates>
                     {task.assigned_at && (
                         <AssignedDate
                             $completed={task.completed_at}
@@ -81,7 +81,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocia
                               </Reminder>
                           )
                         : null}
-                </Dates>
+                </Dates>}
             </Content>
         </Box>
     )
@@ -90,7 +90,8 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocia
 const Box = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 1.5em;
+    margin-top: 0.9em;
+    margin-bottom: 0.9em;
 
     min-width: 0;
 `
