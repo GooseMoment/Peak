@@ -31,9 +31,9 @@ export const SkeletonDrawer = ({ taskCount }) => {
 
 export const SkeletonInboxDrawer = ({ taskCount }) => {
     return (
-        <Frame>
+        <Tasks>
             <SkeletonTasks taskCount={taskCount} />
-        </Frame>
+        </Tasks>
     )
 }
 
@@ -41,7 +41,7 @@ const SkeletonTasks = ({ taskCount }) => {
     const skeletonCount = taskCount > 10 ? 10 : taskCount
 
     return (
-        <>
+        <Tasks>
             {[...Array(skeletonCount)].map((e, i) => (
                 <TaskBox key={i}>
                     <Circle />
@@ -52,15 +52,18 @@ const SkeletonTasks = ({ taskCount }) => {
             <FlexCenterBox>
                 {taskCount > 10 && <MoreButtonEmptyBox />}
             </FlexCenterBox>
-        </>
+        </Tasks>
     )
 }
 
 const Frame = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1em;
     margin: 1.5em 0em 0em;
+`
+
+const Tasks = styled(Frame)`
+    margin-top: 1em;
 `
 
 const ProjectTitle = styled.div`
@@ -93,10 +96,9 @@ const DrawerName = styled.div`
 const TaskBox = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 0.5em;
-    margin-left: 1.2em;
+    margin-left: 2.45em;
     gap: 0.8em;
-    padding: 0 0.5em;
+    padding: 1.04em 0.5em;
 `
 
 const Circle = styled.div`
@@ -110,7 +112,7 @@ const Circle = styled.div`
 
 const Bar = styled.div`
     width: 100%;
-    height: 1.4em;
+    height: 1.43em;
     border-radius: 4px;
     ${skeletonCSS("-100px", "300px", "2s")}
 `
