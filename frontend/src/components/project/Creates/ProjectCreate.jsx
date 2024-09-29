@@ -36,12 +36,9 @@ const ProjectCreate = () => {
     const { closeModal } = useModalWindowCloseContext()
 
     const editNewProject = (edit) => {
-        setNewProject(Object.assign(newProject, edit))
+        setNewProject(Object.assign({}, newProject, edit))
         inputRef.current.focus()
     }
-
-    //Component
-    const [isComponentOpen, setIsComponentOpen] = useState(false)
 
     const items = useMemo(
         () => makeItems(t, theme, newProject, editNewProject),
@@ -101,8 +98,6 @@ const ProjectCreate = () => {
                 items={items}
                 isCreate
                 submit={submit}
-                isComponentOpen={isComponentOpen}
-                setIsComponentOpen={setIsComponentOpen}
                 disabled={postMutation.isPending}
             />
         </EditBox>

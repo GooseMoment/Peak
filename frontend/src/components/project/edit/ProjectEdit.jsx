@@ -32,9 +32,6 @@ const ProjectEdit = ({ project }) => {
 
     const { closeModal } = useModalWindowCloseContext()
 
-    //Component
-    const [isComponentOpen, setIsComponentOpen] = useState(false)
-
     const patchMutation = useMutation({
         mutationFn: (data) => {
             return patchProject(project.id, data)
@@ -68,12 +65,7 @@ const ProjectEdit = ({ project }) => {
                 icon="archive"
                 onClose={closeModal}
             />
-            <Middle
-                items={items}
-                isCreate={false}
-                isComponentOpen={isComponentOpen}
-                setIsComponentOpen={setIsComponentOpen}
-            />
+            <Middle items={items} isCreate={false} />
         </EditBox>
     )
 }

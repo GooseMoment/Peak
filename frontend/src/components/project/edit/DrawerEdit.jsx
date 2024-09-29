@@ -26,9 +26,6 @@ const DrawerEdit = ({ projectID, drawer }) => {
         setName(drawer.name)
     }, [drawer])
 
-    //Component
-    const [isComponentOpen, setIsComponentOpen] = useState(false)
-
     const patchMutation = useMutation({
         mutationFn: (data) => {
             return patchDrawer(drawer.id, data)
@@ -63,12 +60,7 @@ const DrawerEdit = ({ projectID, drawer }) => {
                 icon="inbox"
                 onClose={closeModal}
             />
-            <Middle
-                items={items}
-                isCreate={false}
-                isComponentOpen={isComponentOpen}
-                setIsComponentOpen={setIsComponentOpen}
-            />
+            <Middle items={items} isCreate={false} />
         </EditBox>
     )
 }

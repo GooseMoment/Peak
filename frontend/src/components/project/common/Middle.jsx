@@ -13,13 +13,12 @@ const Middle = ({
     items,
     isCreate,
     submit = () => {},
-    isComponentOpen,
-    setIsComponentOpen,
     disabled,
 }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
 
     const [content, setContent] = useState()
+    const [isComponentOpen, setIsComponentOpen] = useState(false)
 
     const handleClickContent = (e) => {
         setIsComponentOpen(true)

@@ -32,12 +32,9 @@ const DrawerCreate = () => {
     const { closeModal } = useModalWindowCloseContext()
 
     const editNewDrawer = (edit) => {
-        setNewDrawer(Object.assign(newDrawer, edit))
+        setNewDrawer(Object.assign({}, newDrawer, edit))
         inputRef.current.focus()
     }
-
-    //Component
-    const [isComponentOpen, setIsComponentOpen] = useState(false)
 
     const items = [
         {
@@ -97,8 +94,6 @@ const DrawerCreate = () => {
                 items={items}
                 isCreate
                 submit={submit}
-                isComponentOpen={isComponentOpen}
-                setIsComponentOpen={setIsComponentOpen}
                 disabled={postMutation.isPending}
             />
         </EditBox>
