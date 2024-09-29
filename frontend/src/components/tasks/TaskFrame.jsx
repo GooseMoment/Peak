@@ -57,7 +57,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                         <AssignedDate
                             $completed={task.completed_at}
                             $isOutOfDue={isOutOfAssigned}>
-                            <FeatherIcon icon="calendar" />
+                            <FeatherIcon draggable="false" icon="calendar" />
                             {task.completed_at ? assigned : calculate_assigned}
                         </AssignedDate>
                     )}
@@ -65,14 +65,14 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                         <DueDate
                             $completed={task.completed_at}
                             $isOutOfDue={isOutOfDue}>
-                            <img src={hourglass} />
+                            <img draggable="false" src={hourglass} />
                             {task.completed_at ? due : calculate_due}
                         </DueDate>
                     )}
                     {task.reminders
                         ? task.reminders?.length !== 0 && (
                               <Reminder $completed={task.completed_at}>
-                                  <img src={alarmclock} />
+                                  <img draggable="false" src={alarmclock} />
                                   {task.reminders?.length}
                               </Reminder>
                           )
