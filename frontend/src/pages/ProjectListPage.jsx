@@ -5,13 +5,13 @@ import styled from "styled-components"
 
 import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
+import ErrorProjectList from "@components/errors/ErrorProjectList"
 import ProjectName from "@components/project/ProjectName"
+import ProjectEdit from "@components/project/edit/ProjectEdit"
 import SkeletonProjectList from "@components/project/skeletons/SkeletonProjectList"
 
 import { getProjectList } from "@api/projects.api"
 
-import ErrorProjectList from "@/components/errors/ErrorProjectList"
-import ProjectEdit from "@/components/project/edit/ProjectEdit"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
