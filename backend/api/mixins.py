@@ -56,11 +56,11 @@ class TimezoneMixin:
 
     def get_datetime_range(self, date: datetime.date):
         tz = self.get_tz()
-        day_min = datetime.datetime.combine(date, datetime.time.min, tz) 
-        day_max = datetime.datetime.combine(date, datetime.time.max, tz) 
-        date_range = (day_min, day_max)
+        datetime_min = datetime.datetime.combine(date, datetime.time.min, tz) 
+        datetime_max = datetime.datetime.combine(date, datetime.time.max, tz) 
+        datetime_range = (datetime_min, datetime_max)
 
-        return date_range
+        return datetime_range
 
     def get_today_range(self):
         if self._today_range is not None:
