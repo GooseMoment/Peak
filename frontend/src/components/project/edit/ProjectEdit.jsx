@@ -23,14 +23,13 @@ const ProjectEdit = ({ project }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const theme = useTheme()
     const inputRef = useRef(null)
+    const { closeModal } = useModalWindowCloseContext()
 
-    const [name, setName] = useState(project.name)
+    const [newProject, setNewProject] = useState(project)
 
     useEffect(() => {
-        setName(project.name)
+        setNewProject(project)
     }, [project])
-
-    const { closeModal } = useModalWindowCloseContext()
 
     const patchMutation = useMutation({
         mutationFn: (data) => {
@@ -49,23 +48,44 @@ const ProjectEdit = ({ project }) => {
         },
     })
 
+    const handleChange = (diff) => {
+        setNewProject(Object.assign({}, newProject, diff))
+        inputRef.current.focus()
+    }
+
+    const submit = () => {
+        if (newProject.name.trim() === "") {
+            toast.error(t("create.project_create_no_name"), {
+                toastId: "project_create_no_name",
+            })
+            return
+        }
+
+        if (newProject.name.toLowerCase() === "inbox") {
+            toast.error(t("create.project_create_cannot_use_inbox"))
+            return
+        }
+
+        patchMutation.mutate(newProject)
+    }
+
     const items = useMemo(
-        () => makeItems(t, theme, project, patchMutation.mutate),
-        [t, theme, project, patchMutation],
+        () => makeItems(t, theme, newProject, handleChange),
+        [t, theme, newProject, handleChange],
     )
 
     return (
         <EditBox>
             <TitleInput
-                name={name}
-                setName={setName}
-                setFunc={patchMutation.mutate}
+                name={newProject.name}
+                setName={(name) => handleChange({ name })}
+                setFunc={handleChange}
                 inputRef={inputRef}
                 isCreate={false}
                 icon="archive"
                 onClose={closeModal}
             />
-            <Middle items={items} isCreate={false} />
+            <Middle items={items} isCreate submit={submit} />
         </EditBox>
     )
 }
