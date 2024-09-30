@@ -59,11 +59,7 @@ const Middle = ({
                 </Fragment>
             ))}
             <ButtonGroup $justifyContent="right">
-                {isCreating ? (
-                    <AddButton disabled={disabled} onClick={submit}>{t("button_add")}</AddButton>
-                ) : (
-                    <EmptyBox />
-                )}
+                <AddButton disabled={disabled} onClick={submit}>{t(isCreating ? "button_add" : "button_save")}</AddButton>
             </ButtonGroup>
         </>
     )

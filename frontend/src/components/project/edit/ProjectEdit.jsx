@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import { useTheme } from "styled-components"
@@ -12,45 +12,72 @@ import Privacy from "@components/project/edit/Privacy"
 import TitleInput from "@components/project/edit/TitleInput"
 import Type from "@components/project/edit/Type"
 
-import { patchProject } from "@api/projects.api"
+import { patchProject, postProject } from "@api/projects.api"
+
+import useScreenType from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
+const projectDefault = {
+    name: "",
+    color: "orange",
+    privacy: "public",
+    type: "regular",
+}
+
 const ProjectEdit = ({ project, isCreating = false }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const theme = useTheme()
-    const inputRef = useRef(null)
     const { closeModal } = useModalWindowCloseContext()
+    const { isDesktop } = useScreenType()
 
-    const [newProject, setNewProject] = useState(project)
+    const [newProject, setNewProject] = useState(
+        isCreating ? projectDefault : project,
+    )
+    const inputRef = useRef(null)
 
-    useEffect(() => {
-        setNewProject(project)
-    }, [project])
-
-    const patchMutation = useMutation({
+    const mutation = useMutation({
         mutationFn: (data) => {
+            if (isCreating) {
+                return postProject(data)
+            }
+
             return patchProject(project.id, data)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["projects", project.id],
-            })
-            queryClient.invalidateQueries({
                 queryKey: ["projects"],
             })
+
+            if (isCreating) {
+                toast.success(t("create.project_create_success"))
+            } else {
+                queryClient.invalidateQueries({
+                    queryKey: ["projects", project.id],
+                })
+                toast.success(t("create.project_save_success"))
+            }
+            closeModal()
         },
         onError: () => {
+            if (isCreating) {
+                toast.error(t("create.project_create_error"))
+                return
+            }
+
             toast.error(t("edit.project_change_error"))
         },
     })
 
     const handleChange = (diff) => {
         setNewProject(Object.assign({}, newProject, diff))
-        inputRef.current.focus()
+
+        if (isDesktop) {
+            inputRef.current.focus()
+        }
     }
 
     const submit = () => {
@@ -64,7 +91,18 @@ const ProjectEdit = ({ project, isCreating = false }) => {
             return
         }
 
-        patchMutation.mutate(newProject)
+        mutation.mutate(newProject)
+    }
+
+    const onEnter = (e) => {
+        if (e.repeat) {
+            return
+        }
+
+        if (e.key === "Enter") {
+            e.preventDefault()
+            submit()
+        }
     }
 
     const items = useMemo(
@@ -73,7 +111,7 @@ const ProjectEdit = ({ project, isCreating = false }) => {
     )
 
     return (
-        <EditBox>
+        <EditBox onKeyDown={onEnter}>
             <TitleInput
                 name={newProject.name}
                 setName={(name) => handleChange({ name })}
