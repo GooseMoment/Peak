@@ -19,7 +19,7 @@ import queryClient from "@queries/queryClient"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const ProjectEdit = ({ project }) => {
+const ProjectEdit = ({ project, isCreating=false }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const theme = useTheme()
     const inputRef = useRef(null)
@@ -55,9 +55,7 @@ const ProjectEdit = ({ project }) => {
 
     const submit = () => {
         if (newProject.name.trim() === "") {
-            toast.error(t("create.project_create_no_name"), {
-                toastId: "project_create_no_name",
-            })
+            toast.error(t("create.project_create_no_name"))
             return
         }
 
@@ -81,11 +79,11 @@ const ProjectEdit = ({ project }) => {
                 setName={(name) => handleChange({ name })}
                 setFunc={handleChange}
                 inputRef={inputRef}
-                isCreate={false}
+                isCreating={isCreating}
                 icon="archive"
                 onClose={closeModal}
             />
-            <Middle items={items} isCreate submit={submit} />
+            <Middle items={items} isCreating={isCreating} submit={submit} />
         </EditBox>
     )
 }

@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next"
 
 const Middle = ({
     items,
-    isCreate,
+    isCreating,
     submit = () => {},
     disabled,
 }) => {
@@ -59,7 +59,7 @@ const Middle = ({
                 </Fragment>
             ))}
             <ButtonGroup $justifyContent="right">
-                {isCreate ? (
+                {isCreating ? (
                     <AddButton disabled={disabled} onClick={submit}>{t("button_add")}</AddButton>
                 ) : (
                     <EmptyBox />

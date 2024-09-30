@@ -6,7 +6,7 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const TitleInput = ({ name, setName, setFunc, inputRef, isCreate, icon, onClose }) => {
+const TitleInput = ({ name, setName, setFunc, inputRef, isCreating, icon, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
 
     useEffect(()=>{
@@ -28,7 +28,7 @@ const TitleInput = ({ name, setName, setFunc, inputRef, isCreate, icon, onClose 
     }
 
     const onEnter = (e) => {
-        if (isCreate)
+        if (isCreating)
             return
         if (e.key === "Enter") {
             changeName()
@@ -48,8 +48,8 @@ const TitleInput = ({ name, setName, setFunc, inputRef, isCreate, icon, onClose 
                     placeholder={t("create.name_placeholder")}
                 />
             </TitleBox>
-            <Icons $isCreate={isCreate}>
-                {isCreate || <FeatherIcon icon="check" onClick={changeName} />}
+            <Icons $isCreate={isCreating}>
+                {isCreating || <FeatherIcon icon="check" onClick={changeName} />}
                 <FeatherIcon icon="x" onClick={onClose} />
             </Icons>
         </TitleFrameBox>
