@@ -3,15 +3,16 @@ import { useState } from "react"
 import styled, { css, useTheme } from "styled-components"
 
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
+import { getProjectColor, palettes } from "@components/project/Creates/palettes"
 import Detail from "@components/project/common/Detail"
-
-import { getProjectColor, palettes } from "../Creates/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const Color = ({ setColor }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit.color" })
+    const { t } = useTranslation(null, {
+        keyPrefix: "project_drawer_edit.color",
+    })
     const theme = useTheme()
 
     const [activeTab, setActiveTab] = useState("theme1")
