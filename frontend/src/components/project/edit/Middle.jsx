@@ -119,8 +119,4 @@ const AddButton = styled(Button)`
     }
 `
 
-const EmptyBox = styled.div`
-    margin: 2.5em 0em;
-`
-
 export default Middle
