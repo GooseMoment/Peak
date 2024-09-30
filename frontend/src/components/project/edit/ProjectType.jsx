@@ -8,7 +8,7 @@ import regular from "@assets/project/type/regular.svg"
 
 import { useTranslation } from "react-i18next"
 
-const Type = ({ setType }) => {
+const ProjectType = ({ setType }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.type" })
 
     const { closeModal } = useModalWindowCloseContext()
@@ -66,4 +66,4 @@ const ItemText = styled.p`
     }
 `
 
-export default Type
+export default ProjectType

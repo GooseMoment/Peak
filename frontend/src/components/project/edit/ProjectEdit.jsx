@@ -9,8 +9,8 @@ import Color from "@components/project/edit/Color"
 import EditBox from "@components/project/edit/EditBox"
 import Middle from "@components/project/edit/Middle"
 import Privacy from "@components/project/edit/Privacy"
+import ProjectType from "@components/project/edit/ProjectType"
 import TitleInput from "@components/project/edit/TitleInput"
-import Type from "@components/project/edit/Type"
 
 import { patchProject, postProject } from "@api/projects.api"
 
@@ -144,7 +144,7 @@ const makeItems = (t, theme, project, setFunc) => [
         id: 3,
         icon: "award",
         display: t("type." + project.type),
-        component: <Type setType={setFunc} />,
+        component: <ProjectType setType={setFunc} />,
     },
 ]
 
