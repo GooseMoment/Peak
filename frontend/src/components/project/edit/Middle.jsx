@@ -3,13 +3,12 @@ import { Fragment } from "react"
 
 import styled, { css } from "styled-components"
 
-import Button, { ButtonGroup } from "@components/common/Button"
 import ModalWindow from "@components/common/ModalWindow"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Middle = ({ items, isCreating, submit, isPending }) => {
+const Middle = ({ items  }) => {
     const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit" })
 
     const [content, setContent] = useState(null)
@@ -53,14 +52,6 @@ const Middle = ({ items, isCreating, submit, isPending }) => {
                     </Fragment>
                 ))}
             </Contents>
-            <ButtonGroup $justifyContent="right">
-                <Button
-                    disabled={isPending}
-                    loading={isPending}
-                    onClick={submit}>
-                    {t(isCreating ? "button_add" : "button_save")}
-                </Button>
-            </ButtonGroup>
         </>
     )
 }

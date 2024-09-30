@@ -3,6 +3,7 @@ import { useMemo, useRef, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { useTheme } from "styled-components"
 
+import Button, { ButtonGroup } from "@components/common/Button"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import { getProjectColor } from "@components/project/Creates/palettes"
 import Color from "@components/project/edit/Color"
@@ -119,7 +120,15 @@ const ProjectEdit = ({ project, isCreating = false }) => {
                 icon="archive"
                 onClose={closeModal}
             />
-            <Middle items={items} isCreating={isCreating} submit={submit} />
+            <Middle items={items} />
+            <ButtonGroup $justifyContent="right">
+                <Button
+                    disabled={mutation.isPending}
+                    loading={mutation.isPending}
+                    onClick={submit}>
+                    {t(isCreating ? "button_add" : "button_save")}
+                </Button>
+            </ButtonGroup>
         </EditBox>
     )
 }

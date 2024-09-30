@@ -17,6 +17,7 @@ import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import Button, { ButtonGroup } from "@/components/common/Button"
 
 const DrawerEdit = ({ drawer, isCreating = false }) => {
     const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit" })
@@ -112,7 +113,15 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
                 icon="inbox"
                 onClose={closeModal}
             />
-            <Middle items={items} isCreating={isCreating} submit={submit} />
+            <Middle items={items} />
+            <ButtonGroup $justifyContent="right">
+                <Button
+                    disabled={mutation.isPending}
+                    loading={mutation.isPending}
+                    onClick={submit}>
+                    {t(isCreating ? "button_add" : "button_save")}
+                </Button>
+            </ButtonGroup>
         </EditBox>
     )
 }
