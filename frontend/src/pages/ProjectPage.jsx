@@ -10,14 +10,15 @@ import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
-import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import DrawerCreate from "@components/project/Creates/DrawerCreate"
-import { getProjectColor } from "@components/project/Creates/palettes"
-import Progress from "@components/project/common/Progress"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
-import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
+import Progress from "@components/project/common/Progress"
+import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
+import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
+import { ErrorBox } from "@components/errors/ErrorProjectPage"
+import { getProjectColor } from "@components/project/Creates/palettes"
 
 import { getDrawersByProject } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
@@ -154,10 +155,7 @@ const ProjectPage = () => {
                     <PageTitle $color={getProjectColor(theme.type, project.color)}>
                         {project.name}
                     </PageTitle>
-                    {project?.privacy === "public" || 
-                    <PrivacyBox $color={getProjectColor(theme.type, project.color)}>
-                        {project?.privacy === "protected" ? <FeatherIcon icon="users"/> : <FeatherIcon icon="lock"/>}
-                    </PrivacyBox>}
+                    <PrivacyIcon privacy={project.privacy} color={getProjectColor(theme.type, project.color)} isProject/>
                 </PageTitleBox>
                 <Icons>
                     <FeatherIcon
@@ -267,17 +265,6 @@ const TitleBox = styled.div`
 const PageTitleBox = styled.div`
     display: flex;
     align-items: center;
-`
-
-const PrivacyBox = styled.div`
-    margin-left: 0.8em;
-    padding-bottom: 0.8em;
-
-    & svg {
-        width: 20px;
-        height: 20px;
-        stroke: ${props=>props.$color};
-    }
 `
 
 const Icons = styled.div`
