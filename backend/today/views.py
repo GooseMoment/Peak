@@ -5,7 +5,7 @@ from api.permissions import IsUserMatch
 from tasks.serializers import TaskSerializer
 from tasks.models import Task
 
-from datetime import datetime, timedelta
+import datetime
 from django.utils import timezone
 from django.db.models import Q
 
@@ -15,8 +15,8 @@ class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
 
     def get_queryset(self):
         day = self.request.GET.get('day')
-        day_min = datetime.fromisoformat(day)
-        day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+        day_min = datetime.datetime.fromisoformat(day)
+        day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
         day_range = (day_min, day_max)
 
         today_assignment_tasks = Task.objects.filter(
@@ -40,8 +40,8 @@ class TaskTodayDueList(mixins.ListModelMixin, generics.GenericAPIView):
 
     def get_queryset(self):
         day = self.request.GET.get('day')
-        day_min = datetime.fromisoformat(day)
-        day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+        day_min = datetime.datetime.fromisoformat(day)
+        day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
         day_range = (day_min, day_max)
 
         today_due_tasks = Task.objects.filter(
@@ -65,7 +65,7 @@ class TaskOverdueList(mixins.ListModelMixin, generics.GenericAPIView):
 
     def get_queryset(self):
         day_min = timezone.now().replace(hour=15, minute=0, second=0, microsecond=0)
-        day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+        day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
         day_range = (day_min, day_max)
 
         filter_field = self.request.GET.get('filter_field', 'due_date')
