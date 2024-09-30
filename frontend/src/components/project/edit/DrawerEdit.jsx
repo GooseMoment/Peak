@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
 
+import Button, { ButtonGroup } from "@components/common/Button"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import EditBox from "@components/project/edit/EditBox"
 import Middle from "@components/project/edit/Middle"
@@ -17,7 +18,6 @@ import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import Button, { ButtonGroup } from "@/components/common/Button"
 
 const DrawerEdit = ({ drawer, isCreating = false }) => {
     const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit" })
