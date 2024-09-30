@@ -26,5 +26,6 @@ urlpatterns = [
     path("projects/", include("projects.urls")),
     path("drawers/", include("drawers.urls")),
     path("tasks/", include("tasks.urls")),
+    path("today/", include("today.urls")),
     path("social/", include("social.urls")),
 ] + users_urls.urlpatterns

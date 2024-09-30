@@ -6,21 +6,12 @@ import Middle from "@components/sidebar/Middle"
 import { useSidebarContext } from "@components/sidebar/SidebarContext"
 
 import { ifMobile } from "@utils/useScreenType"
-import useStopScroll from "@utils/useStopScroll"
-
-import {
-    cubicBeizer,
-    slideLeftToRight,
-    slideLeftToRightReverse,
-} from "@assets/keyframes"
 
 const Sidebar = () => {
-    const { isMobile, isClosing, isCollapsed } = useSidebarContext()
-
-    useStopScroll(isMobile)
+    const { isCollapsed } = useSidebarContext()
 
     return (
-        <SidebarBox $closing={isClosing} $collapsed={isCollapsed}>
+        <SidebarBox $collapsed={isCollapsed}>
             <Header />
             <Middle />
             <Footer />
@@ -53,18 +44,7 @@ export const SidebarBox = styled.nav`
     }
 
     ${ifMobile} {
-        width: 100dvw;
-        padding-left: 0.75em;
-        padding-right: 0.75em;
-
-        animation: ${slideLeftToRight} 0.25s ${cubicBeizer};
-
-        ${(p) =>
-            p.$closing &&
-            css`
-                animation: ${slideLeftToRightReverse} 0.5s ${cubicBeizer}
-                    forwards;
-            `}
+        display: none;
     }
 
     ${(p) =>

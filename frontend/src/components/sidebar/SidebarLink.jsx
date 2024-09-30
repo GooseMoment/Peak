@@ -3,8 +3,6 @@ import { NavLink, useNavigate } from "react-router-dom"
 
 import styled from "styled-components"
 
-import { useSidebarContext } from "@components/sidebar/SidebarContext"
-
 import { cubicBeizer } from "@assets/keyframes"
 
 const StyledNavLink = styled(NavLink)`
@@ -36,7 +34,6 @@ const SidebarLink = ({
     noNavigate = false, // if true, then navigate() isn't called.
 }) => {
     const navigate = useNavigate()
-    const { isMobile, startClosing } = useSidebarContext()
 
     const onClickThis = (e) => {
         e.preventDefault()
@@ -55,10 +52,6 @@ const SidebarLink = ({
             })
         } else {
             navigate(to)
-        }
-
-        if (isMobile) {
-            startClosing()
         }
     }
 
