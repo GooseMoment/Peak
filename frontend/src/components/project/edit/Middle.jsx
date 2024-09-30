@@ -5,10 +5,12 @@ import styled, { css } from "styled-components"
 
 import ModalWindow from "@components/common/ModalWindow"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Middle = ({ items  }) => {
+const Middle = ({ items }) => {
     const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit" })
 
     const [content, setContent] = useState(null)
@@ -59,6 +61,11 @@ const Middle = ({ items  }) => {
 const Contents = styled.div`
     margin-left: 1.5em;
     margin-bottom: 2em;
+
+    ${ifMobile} {
+        margin-left: 1em;
+        margin-bottom: 1.5em;
+    }
 `
 
 const ContentBox = styled.div`
@@ -67,9 +74,11 @@ const ContentBox = styled.div`
     justify-content: flex-start;
 
     & svg {
+        flex-shrink: 0;
         width: 1.3em;
         height: 1.3em;
         margin-top: 1.3em;
+        margin-right: 0;
         top: 0;
         color: ${(p) => p.theme.textColor};
     }
@@ -78,8 +87,9 @@ const ContentBox = styled.div`
 const VLine = styled.div`
     border-left: thin solid ${(p) => p.theme.project.lineColor};
     height: 1em;
-    margin-top: 1.3em;
-    margin-left: 1em;
+
+    margin: 1.3em 1em 0;
+
     transform: scale(1, 3.8);
 
     ${({ $end }) =>
@@ -94,7 +104,6 @@ const ContentText = styled.div`
     font-size: 1em;
     color: ${(p) => p.theme.textColor};
     margin-top: 1.3em;
-    margin-left: 1.3em;
     text-decoration: none;
 
     &:hover {
