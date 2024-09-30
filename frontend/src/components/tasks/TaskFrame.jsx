@@ -12,7 +12,7 @@ import hourglass from "@assets/project/hourglass.svg"
 import FeatherIcon from "feather-icons-react"
 
 const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocial }) => {
-    const updatedCompletedAt = isSocial ? null : task.completed_at
+    const completedAt = isSocial ? null : task.completed_at
 
     const {
         due,
@@ -24,7 +24,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocia
     } = taskCalculation(task, isSocial)
 
     const TaskName = (
-        <TaskNameBox $completed={updatedCompletedAt}>{task?.name}</TaskNameBox>
+        <TaskNameBox $completed={completedAt}>{task?.name}</TaskNameBox>
     )
 
     const hasDate = task.due_date || task.assigned_at
@@ -61,7 +61,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocia
                             $isSocial={isSocial}
                             $isOutOfDue={isOutOfAssigned}>
                             <FeatherIcon icon="calendar" />
-                            {updatedCompletedAt ? assigned : calculate_assigned}
+                            {completedAt ? assigned : calculate_assigned}
                         </AssignedDate>
                     )}
                     {task.due_date && (
@@ -70,7 +70,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocia
                             $isSocial={isSocial}
                             $isOutOfDue={isOutOfDue}>
                             <img src={hourglass} />
-                            {updatedCompletedAt ? due : calculate_due}
+                            {completedAt ? due : calculate_due}
                         </DueDate>
                     )}
                     {isSocial || task?.reminders

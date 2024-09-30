@@ -7,14 +7,10 @@ const calculate = (name, newDate, diff, isSocial) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
     let calculatedDue = ""
-    if (!isSocial) {
-        if (diff.years < 0 || diff.months < 0 || diff.days < -1) {
-            calculatedDue = name === "assigned" ? t("missed") : t("overdue")
-            return [calculatedDue, true]
-        }
-    }
-    
-    if (-1 <= diff.days && diff.days < 0) {
+    if (!isSocial && (diff.years < 0 || diff.months < 0 || diff.days < -1)) {
+        calculatedDue = name === "assigned" ? t("missed") : t("overdue")
+        return [calculatedDue, true]
+    } else if (-1 <= diff.days && diff.days < 0) {
         calculatedDue = t("due_today")
     } else if (0 <= diff.days && diff.days <= 1) {
         calculatedDue = t("due_tomorrow")
