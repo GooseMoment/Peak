@@ -2,11 +2,11 @@ from rest_framework import mixins, generics
 from rest_framework.pagination import PageNumberPagination
 
 from api.permissions import IsUserMatch
+from api.mixins import TimezoneMixin
 from tasks.serializers import TaskSerializer
 from tasks.models import Task
 
 import datetime
-from django.utils import timezone
 from django.db.models import Q
 
 class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
@@ -14,14 +14,14 @@ class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
     permission_classes = [IsUserMatch]
 
     def get_queryset(self):
-        date_isoformat = self.request.GET.get("date")
+        date_isoformat = self.request.GET.get("date") # e.g. "2024-09-29"
         date = datetime.date.fromisoformat(date_isoformat)
 
         today_assignment_tasks = Task.objects.filter(
             user=self.request.user,
             assigned_at=date,
             completed_at__isnull=True
-        ).order_by("assigned_at").all()
+        ).order_by("-priority", "due_date").all()
 
         return today_assignment_tasks
     
@@ -31,20 +31,22 @@ class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
 class TaskTodayDueListPagination(PageNumberPagination):
     page_size = 4
     
-class TaskTodayDueList(mixins.ListModelMixin, generics.GenericAPIView):
+class TaskTodayDueList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsUserMatch]
     pagination_class = TaskTodayDueListPagination
 
     def get_queryset(self):
-        day = self.request.GET.get('day')
-        day_min = datetime.datetime.fromisoformat(day)
-        day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-        day_range = (day_min, day_max)
+        date_isoformat = self.request.GET.get("date") # e.g. "2024-09-28"
+        date = datetime.date.fromisoformat(date_isoformat)
+        # comment out below after adding a 'due_datetime' field instead of the method
+        # datetime_range = self.get_datetime_range(date)
 
         today_due_tasks = Task.objects.filter(
+            # comment out two lines right below after adding a 'due_datetime' field instead of the method
+            Q(due_date=date), # |
+            # Q(due_datetime__range=datetime_range), 
             user=self.request.user,
-            due_datetime__range=day_range,
             completed_at__isnull=True
         ).order_by("due_date").all()
 
@@ -56,29 +58,30 @@ class TaskTodayDueList(mixins.ListModelMixin, generics.GenericAPIView):
 class TaskOverdueListPagination(PageNumberPagination):
     page_size = 4
 
-class TaskOverdueList(mixins.ListModelMixin, generics.GenericAPIView):
+class TaskOverdueList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsUserMatch]
     pagination_class = TaskOverdueListPagination
 
     def get_queryset(self):
-        day_min = timezone.now().replace(hour=15, minute=0, second=0, microsecond=0)
-        day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-        day_range = (day_min, day_max)
-
         filter_field = self.request.GET.get('filter_field', 'due_date')
 
-        now = timezone.now()
-        if filter_field == 'assigned_at':
-            filter_condition = {'assigned_at__lt': now}
-        if filter_field == 'due_date':
-            filter_condition = {'due_date__lt': now}
+        # comment out below after adding a 'due_datetime' field instead of the method
+        # now = self.get_now()
+        today = self.get_today()
+
+        if filter_field == "assigned_at":
+            filter_condition = {"assigned_at__lt": today}
+        if filter_field == "due_date":
+            # comment out below after adding a 'due_datetime' field instead of the method
+            filter_condition = {"due_date__lt": today, } # "due_datetime__lt": now} 
 
         overdue_tasks = Task.objects.filter(
-            ~Q(assigned_at__range=day_range),
             user=self.request.user,
             **filter_condition,
             completed_at__isnull=True,
+        ).exclude(
+            assigned_at=today,
         ).order_by(filter_field).all()
 
         return overdue_tasks
