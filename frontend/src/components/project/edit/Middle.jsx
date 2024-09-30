@@ -9,12 +9,7 @@ import ModalWindow from "@components/common/ModalWindow"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Middle = ({
-    items,
-    isCreating,
-    submit = () => {},
-    disabled,
-}) => {
+const Middle = ({ items, isCreating, submit, disabled }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
 
     const [content, setContent] = useState()
@@ -43,23 +38,23 @@ const Middle = ({
                         <VLine $end={item.id === 1 || item.id === 3} />
                         <ContentText
                             id={item.icon}
-                            onClick={handleClickContent}
-                        >
+                            onClick={handleClickContent}>
                             {item.display ? item.display : t("none")}
                         </ContentText>
                     </ContentsBox>
                     {content === item.icon && isComponentOpen ? (
                         <ModalWindow
                             afterClose={() => setIsComponentOpen(false)}
-                            additional
-                        >
+                            additional>
                             {item.component}
                         </ModalWindow>
                     ) : null}
                 </Fragment>
             ))}
             <ButtonGroup $justifyContent="right">
-                <AddButton disabled={disabled} onClick={submit}>{t(isCreating ? "button_add" : "button_save")}</AddButton>
+                <AddButton disabled={disabled} onClick={submit}>
+                    {t(isCreating ? "button_add" : "button_save")}
+                </AddButton>
             </ButtonGroup>
         </>
     )

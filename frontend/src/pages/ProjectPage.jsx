@@ -11,9 +11,9 @@ import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
-import DrawerCreate from "@components/project/Creates/DrawerCreate"
 import { getProjectColor } from "@components/project/Creates/palettes"
 import Progress from "@components/project/common/Progress"
+import DrawerEdit from "@components/project/edit/DrawerEdit"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
@@ -232,7 +232,7 @@ const ProjectPage = () => {
                     afterClose={() => {
                         setIsDrawerCreateOpen(false)
                     }}>
-                    <DrawerCreate />
+                    <DrawerEdit isCreating />
                 </ModalWindow>
             )}
             {isProjectEditOpen && (
