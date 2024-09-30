@@ -3,7 +3,6 @@ import { Fragment } from "react"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
-import { TaskList } from "@components/drawers/Drawer"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import { getProjectColor } from "@components/project/Creates/palettes"
 import TaskBox from "@components/social/logDetails/TaskBox"
@@ -69,6 +68,10 @@ const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
         </Fragment>
     )
 }
+
+export const TaskList = styled.div`
+    margin-left: 0.5em;
+`
 
 const More = styled.div`
     height: 2em;

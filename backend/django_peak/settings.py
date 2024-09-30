@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     'social',
     'notifications',
 
-    # 'today',
+    'today',
     # 'search',
     'user_setting',
 
