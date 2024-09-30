@@ -1,9 +1,10 @@
 from rest_framework import mixins, generics
 from rest_framework.response import Response
 
-from api.views import CreateMixin
-from api.permissions import IsUserMatch
 from datetime import datetime
+
+from api.mixins import CreateMixin
+from api.permissions import IsUserMatch
 from .models import Task
 from .serializers import TaskSerializer
 from notifications.models import TaskReminder

@@ -3,7 +3,7 @@ from rest_framework import mixins, generics
 from .models import Drawer
 from .serializers import DrawerSerializer
 from api.permissions import IsUserMatch
-from api.views import CreateMixin
+from api.mixins import CreateMixin
 from rest_framework.filters import OrderingFilter
 
 from .utils import reorder_tasks, normalize_drawer_order
