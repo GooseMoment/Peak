@@ -84,11 +84,13 @@ const ProjectEdit = ({ project, isCreating = false }) => {
     const submit = () => {
         if (newProject.name.trim() === "") {
             toast.error(t("name_required"))
+            inputRef.current.focus()
             return
         }
 
         if (newProject.name.toLowerCase() === "inbox") {
             toast.error(t("project_cannot_name_inbox"))
+            inputRef.current.focus()
             return
         }
 

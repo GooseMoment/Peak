@@ -78,6 +78,7 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
     const submit = () => {
         if (!newDrawer.name || newDrawer.name.trim() === "") {
             toast.error(t("name_required"))
+            inputRef.current.focus()
             return
         }
 
