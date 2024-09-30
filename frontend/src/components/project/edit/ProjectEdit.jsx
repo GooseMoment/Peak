@@ -126,20 +126,20 @@ const ProjectEdit = ({ project, isCreating = false }) => {
 
 const makeItems = (t, theme, project, setFunc) => [
     {
-        id: 1,
+        id: "color",
         icon: "circle",
         color: getProjectColor(theme.type, project.color),
         display: t("color." + project.color),
         component: <Color setColor={setFunc} />,
     },
     {
-        id: 2,
+        id: "privacy",
         icon: "server",
         display: t("privacy." + project.privacy),
         component: <Privacy setPrivacy={setFunc} />,
     },
     {
-        id: 3,
+        id: "type",
         icon: "award",
         display: t("type." + project.type),
         component: <ProjectType setType={setFunc} />,

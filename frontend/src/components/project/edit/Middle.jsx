@@ -13,10 +13,8 @@ const Middle = ({ items, isCreating, submit, isPending }) => {
     const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit" })
 
     const [content, setContent] = useState(null)
-    const [isComponentOpen, setIsComponentOpen] = useState(false)
 
     const handleClickContent = (e) => {
-        setIsComponentOpen(true)
         const name = e.target.id
         setContent(name)
     }
@@ -25,7 +23,7 @@ const Middle = ({ items, isCreating, submit, isPending }) => {
         <>
             <Contents>
                 {items.map((item, i) => (
-                    <Fragment key={item.icon}>
+                    <Fragment key={item.id}>
                         <ContentBox>
                             {item.icon === "circle" ? (
                                 <FeatherIcon
@@ -40,18 +38,18 @@ const Middle = ({ items, isCreating, submit, isPending }) => {
                                 $end={(i === 0) | (i === items.length - 1)}
                             />
                             <ContentText
-                                id={item.icon}
+                                id={item.id}
                                 onClick={handleClickContent}>
                                 {item.display ? item.display : t("none")}
                             </ContentText>
                         </ContentBox>
-                        {content === item.icon && isComponentOpen ? (
+                        {content === item.id && (
                             <ModalWindow
-                                afterClose={() => setIsComponentOpen(false)}
+                                afterClose={() => setContent(null)}
                                 additional>
                                 {item.component}
                             </ModalWindow>
-                        ) : null}
+                        )}
                     </Fragment>
                 ))}
             </Contents>

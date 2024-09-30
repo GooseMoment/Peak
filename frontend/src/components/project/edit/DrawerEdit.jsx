@@ -96,7 +96,7 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
 
     const items = [
         {
-            id: 1,
+            id: "privacy",
             icon: "server",
             display: t("privacy." + newDrawer.privacy),
             component: <Privacy setPrivacy={handleChange} />,
