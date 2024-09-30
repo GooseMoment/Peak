@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next"
 const Middle = ({ items, isCreating, submit, isPending }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
 
-    const [content, setContent] = useState()
+    const [content, setContent] = useState(null)
     const [isComponentOpen, setIsComponentOpen] = useState(false)
 
     const handleClickContent = (e) => {
@@ -23,36 +23,43 @@ const Middle = ({ items, isCreating, submit, isPending }) => {
 
     return (
         <>
-            {items.map((item) => (
-                <Fragment key={item.icon}>
-                    <ContentsBox>
-                        {item.icon === "circle" ? (
-                            <FeatherIcon
-                                icon={item.icon}
-                                fill={item.color}
-                                stroke="none"
+            <Contents>
+                {items.map((item, i) => (
+                    <Fragment key={item.icon}>
+                        <ContentBox>
+                            {item.icon === "circle" ? (
+                                <FeatherIcon
+                                    icon={item.icon}
+                                    fill={item.color}
+                                    stroke="none"
+                                />
+                            ) : (
+                                <FeatherIcon icon={item.icon} />
+                            )}
+                            <VLine
+                                $end={(i === 0) | (i === items.length - 1)}
                             />
-                        ) : (
-                            <FeatherIcon icon={item.icon} />
-                        )}
-                        <VLine $end={item.id === 1 || item.id === 3} />
-                        <ContentText
-                            id={item.icon}
-                            onClick={handleClickContent}>
-                            {item.display ? item.display : t("none")}
-                        </ContentText>
-                    </ContentsBox>
-                    {content === item.icon && isComponentOpen ? (
-                        <ModalWindow
-                            afterClose={() => setIsComponentOpen(false)}
-                            additional>
-                            {item.component}
-                        </ModalWindow>
-                    ) : null}
-                </Fragment>
-            ))}
-            <ButtonGroup $justifyContent="right" $margin="2em">
-                <Button disabled={isPending} loading={isPending} onClick={submit}>
+                            <ContentText
+                                id={item.icon}
+                                onClick={handleClickContent}>
+                                {item.display ? item.display : t("none")}
+                            </ContentText>
+                        </ContentBox>
+                        {content === item.icon && isComponentOpen ? (
+                            <ModalWindow
+                                afterClose={() => setIsComponentOpen(false)}
+                                additional>
+                                {item.component}
+                            </ModalWindow>
+                        ) : null}
+                    </Fragment>
+                ))}
+            </Contents>
+            <ButtonGroup $justifyContent="right">
+                <Button
+                    disabled={isPending}
+                    loading={isPending}
+                    onClick={submit}>
                     {t(isCreating ? "button_add" : "button_save")}
                 </Button>
             </ButtonGroup>
@@ -60,11 +67,15 @@ const Middle = ({ items, isCreating, submit, isPending }) => {
     )
 }
 
-const ContentsBox = styled.div`
+const Contents = styled.div`
+    margin-left: 1.5em;
+    margin-bottom: 2em;
+`
+
+const ContentBox = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin: 0em 3em;
 
     & svg {
         width: 1.3em;

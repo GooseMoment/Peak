@@ -115,9 +115,7 @@ const ProjectEdit = ({ project, isCreating = false }) => {
             <TitleInput
                 name={newProject.name}
                 setName={(name) => handleChange({ name })}
-                setFunc={handleChange}
                 inputRef={inputRef}
-                isCreating={isCreating}
                 icon="archive"
                 onClose={closeModal}
             />

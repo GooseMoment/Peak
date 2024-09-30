@@ -108,9 +108,7 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
             <TitleInput
                 name={newDrawer.name}
                 setName={(name) => handleChange({ name })}
-                setFunc={handleChange}
                 inputRef={inputRef}
-                isCreating={isCreating}
                 icon="inbox"
                 onClose={closeModal}
             />
