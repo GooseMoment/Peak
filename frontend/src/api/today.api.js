@@ -12,7 +12,7 @@ export const getTasksAssignedToday = async (date, page) => {
     return res.data
 }
 
-export const getTasksDueToday = async (day, page) => {
-    const res = await client.get(`today/due`, { params: { day, page } })
+export const getTasksDueToday = async (date, page) => {
+    const res = await client.get(`today/due`, { params: { date, page } })
     return res.data
 }
