@@ -9,8 +9,6 @@ import SidebarLink from "@components/sidebar/SidebarLink"
 
 import { getProjectList } from "@api/projects.api"
 
-import { ifMobile } from "@utils/useScreenType"
-
 import { cubicBeizer } from "@assets/keyframes"
 import { skeletonCSS } from "@assets/skeleton"
 
@@ -143,11 +141,6 @@ export const ItemBox = styled.div`
                 margin-right: 0;
             }
         `}
-
-    ${ifMobile} {
-        font-size: 1.1em;
-        padding: 1em 0 1em 1em;
-    }
 `
 
 const ProjectItemsContainer = styled.div`
@@ -169,10 +162,6 @@ const ProjectItemsContainer = styled.div`
         css`
             overflow-y: hidden;
         `}
-
-    ${ifMobile} {
-        height: 30dvh;
-    }
 `
 
 const ProjectItemBox = styled.div`
@@ -212,11 +201,6 @@ const ProjectItemBox = styled.div`
                 margin-right: 0;
             }
         `}
-
-    ${ifMobile} {
-        font-size: 1.1em;
-        padding: 1em;
-    }
 `
 
 const ProjectLoadErrorBox = styled(ProjectItemBox)`
