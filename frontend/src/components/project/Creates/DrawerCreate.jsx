@@ -5,8 +5,8 @@ import { useMutation } from "@tanstack/react-query"
 
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Privacy from "@components/project/Creates/Privacy"
-import Middle from "@components/project/common/Middle"
-import TitleInput from "@components/project/common/TitleInput"
+import Middle from "@components/project/edit/Middle"
+import TitleInput from "@components/project/edit/TitleInput"
 import EditBox from "@components/project/edit/EditBox"
 
 import { postDrawer } from "@api/drawers.api"
