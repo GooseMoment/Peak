@@ -16,8 +16,7 @@ const Middle = ({ items }) => {
     const [content, setContent] = useState(null)
 
     const handleClickContent = (e) => {
-        const name = e.target.id
-        setContent(name)
+        setContent(e.target.id)
     }
 
     return (
