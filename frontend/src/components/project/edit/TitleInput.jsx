@@ -2,6 +2,8 @@ import { useEffect } from "react"
 
 import styled from "styled-components"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
@@ -21,8 +23,8 @@ const TitleInput = ({ name, setName, inputRef, icon, onClose }) => {
 
     return (
         <TitleFrameBox>
-            <TitleBox>
-                <FeatherIcon icon={icon} />
+            <TitleIcon icon={icon} />
+            <InputWrapper>
                 <InputText
                     ref={inputRef}
                     type="text"
@@ -30,37 +32,48 @@ const TitleInput = ({ name, setName, inputRef, icon, onClose }) => {
                     onChange={onChange}
                     placeholder={t("create.name_placeholder")}
                 />
-            </TitleBox>
-            <Icons>
-                <FeatherIcon icon="x" onClick={onClose} />
-            </Icons>
+            </InputWrapper>
+            <CloseIcon icon="x" onClick={onClose} />
         </TitleFrameBox>
     )
 }
 
 const TitleFrameBox = styled.div`
+    width: 100%;
+
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 0.5em;
+
     margin-bottom: 0.5em;
 `
 
-const TitleBox = styled.div`
-    display: flex;
-    align-items: center;
+const TitleIcon = styled(FeatherIcon)`
+    aspect-ratio: 1/1;
+    width: 1.3em;
+    height: 1.3em;
 
-    & svg {
-        width: 1.3em;
-        height: 1.3em;
-        stroke: ${(p) => p.theme.textColor};
-        margin-right: 0.6em;
-        top: 0;
+    margin-right: 0;
+    stroke: ${(p) => p.theme.textColor};
+    top: 0;
+
+    flex-shrink: 0;
+`
+
+const InputWrapper = styled.div`
+    flex-grow: 1;
+    width: 35em;
+
+    padding: 0.3em;
+
+    ${ifMobile} {
+        width: auto;
     }
 `
 
 const InputText = styled.input`
-    width: 20em;
-    margin: 0.3em;
+    width: 100%;
+
     font-weight: bold;
     font-size: 1.1em;
     color: ${(p) => p.theme.textColor};
@@ -75,16 +88,15 @@ const InputText = styled.input`
     }
 `
 
-const Icons = styled.div`
-    display: flex;
-    align-items: center;
+const CloseIcon = styled(FeatherIcon)`
+    aspect-ratio: 1/1;
+    width: 1.1em;
+    height: 1.1em;
 
-    & svg {
-        width: 1.1em;
-        height: 1.1em;
-        cursor: pointer;
-        color: ${(p) => p.theme.primaryColors.danger};
-    }
+    cursor: pointer;
+    color: ${(p) => p.theme.primaryColors.danger};
+
+    flex-shrink: 0;
 `
 
 export default TitleInput
