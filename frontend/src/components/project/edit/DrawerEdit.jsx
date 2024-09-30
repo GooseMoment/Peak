@@ -76,7 +76,7 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
 
     const submit = () => {
         if (!newDrawer.name || newDrawer.name.trim() === "") {
-            toast.error(t("create.project_create_no_name"))
+            toast.error(t("create.drawer_create_no_name"))
             return
         }
 
@@ -99,7 +99,7 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
             id: 1,
             icon: "server",
             display: t("privacy." + newDrawer.privacy),
-            component: <Privacy setPrivacy={mutation.mutate} />,
+            component: <Privacy setPrivacy={handleChange} />,
         },
     ]
 
