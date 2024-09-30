@@ -15,7 +15,7 @@ import queryClient from "@queries/queryClient"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const DrawerEdit = ({ projectID, drawer }) => {
+const DrawerEdit = ({ projectID, drawer, isCreating = false }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const { closeModal } = useModalWindowCloseContext()
 
@@ -56,11 +56,11 @@ const DrawerEdit = ({ projectID, drawer }) => {
                 setName={setName}
                 setFunc={patchMutation.mutate}
                 inputRef={inputRef}
-                isCreate={false}
+                isCreating={isCreating}
                 icon="inbox"
                 onClose={closeModal}
             />
-            <Middle items={items} isCreate={false} />
+            <Middle items={items} isCreating={isCreating} />
         </EditBox>
     )
 }
