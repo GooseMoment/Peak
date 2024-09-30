@@ -5,7 +5,7 @@ import styled, { css, useTheme } from "styled-components"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
-import { getProjectColor, palettes } from "./palettes"
+import { getProjectColor, palettes } from "../Creates/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"

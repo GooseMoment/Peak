@@ -3,10 +3,10 @@ import { useEffect, useRef, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import Privacy from "@components/project/Creates/Privacy"
-import Middle from "@components/project/edit/Middle"
-import TitleInput from "@components/project/edit/TitleInput"
 import EditBox from "@components/project/edit/EditBox"
+import Middle from "@components/project/edit/Middle"
+import Privacy from "@components/project/edit/Privacy"
+import TitleInput from "@components/project/edit/TitleInput"
 
 import { patchDrawer } from "@api/drawers.api"
 

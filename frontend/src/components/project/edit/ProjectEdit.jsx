@@ -4,13 +4,13 @@ import { useMutation } from "@tanstack/react-query"
 import { useTheme } from "styled-components"
 
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import Color from "@components/project/Creates/Color"
-import Privacy from "@components/project/Creates/Privacy"
-import Type from "@components/project/Creates/Type"
 import { getProjectColor } from "@components/project/Creates/palettes"
-import Middle from "@components/project/edit/Middle"
-import TitleInput from "@components/project/edit/TitleInput"
+import Color from "@components/project/edit/Color"
 import EditBox from "@components/project/edit/EditBox"
+import Middle from "@components/project/edit/Middle"
+import Privacy from "@components/project/edit/Privacy"
+import TitleInput from "@components/project/edit/TitleInput"
+import Type from "@components/project/edit/Type"
 
 import { patchProject } from "@api/projects.api"
 
@@ -19,7 +19,7 @@ import queryClient from "@queries/queryClient"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const ProjectEdit = ({ project, isCreating=false }) => {
+const ProjectEdit = ({ project, isCreating = false }) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const theme = useTheme()
     const inputRef = useRef(null)

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
 
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import Privacy from "@components/project/Creates/Privacy"
+import Privacy from "@components/project/edit/Privacy"
 import Middle from "@components/project/edit/Middle"
 import TitleInput from "@components/project/edit/TitleInput"
 import EditBox from "@components/project/edit/EditBox"
