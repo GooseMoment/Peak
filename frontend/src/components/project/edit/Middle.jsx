@@ -9,7 +9,7 @@ import ModalWindow from "@components/common/ModalWindow"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Middle = ({ items, isCreating, submit, disabled }) => {
+const Middle = ({ items, isCreating, submit, isPending }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.create" })
 
     const [content, setContent] = useState()
@@ -51,10 +51,10 @@ const Middle = ({ items, isCreating, submit, disabled }) => {
                     ) : null}
                 </Fragment>
             ))}
-            <ButtonGroup $justifyContent="right">
-                <AddButton disabled={disabled} onClick={submit}>
+            <ButtonGroup $justifyContent="right" $margin="2em">
+                <Button disabled={isPending} loading={isPending} onClick={submit}>
                     {t(isCreating ? "button_add" : "button_save")}
-                </AddButton>
+                </Button>
             </ButtonGroup>
         </>
     )
@@ -99,18 +99,6 @@ const ContentText = styled.div`
 
     &:hover {
         cursor: pointer;
-    }
-`
-
-const AddButton = styled(Button)`
-    float: right;
-    margin: 1em;
-    margin-right: 2.5em;
-    margin-bottom: 2em;
-
-    &:disabled {
-        cursor: not-allowed;
-        opacity: 0.6;
     }
 `
 
