@@ -9,7 +9,7 @@ import regular from "@assets/project/type/regular.svg"
 import { useTranslation } from "react-i18next"
 
 const ProjectType = ({ setType }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.type" })
+    const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit.type" })
 
     const { closeModal } = useModalWindowCloseContext()
 

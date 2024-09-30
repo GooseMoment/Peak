@@ -29,7 +29,7 @@ const projectDefault = {
 }
 
 const ProjectEdit = ({ project, isCreating = false }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit" })
     const theme = useTheme()
     const { closeModal } = useModalWindowCloseContext()
     const { isDesktop } = useScreenType()
@@ -53,22 +53,22 @@ const ProjectEdit = ({ project, isCreating = false }) => {
             })
 
             if (isCreating) {
-                toast.success(t("create.project_create_success"))
+                toast.success(t("created_project"))
             } else {
                 queryClient.invalidateQueries({
                     queryKey: ["projects", project.id],
                 })
-                toast.success(t("create.project_save_success"))
+                toast.success(t("edited"))
             }
             closeModal()
         },
         onError: () => {
             if (isCreating) {
-                toast.error(t("create.project_create_error"))
+                toast.error(t("created_project_error"))
                 return
             }
 
-            toast.error(t("edit.project_change_error"))
+            toast.error(t("edited_error"))
         },
     })
 
@@ -82,12 +82,12 @@ const ProjectEdit = ({ project, isCreating = false }) => {
 
     const submit = () => {
         if (newProject.name.trim() === "") {
-            toast.error(t("create.project_create_no_name"))
+            toast.error(t("name_required"))
             return
         }
 
         if (newProject.name.toLowerCase() === "inbox") {
-            toast.error(t("create.project_create_cannot_use_inbox"))
+            toast.error(t("project_cannot_name_inbox"))
             return
         }
 

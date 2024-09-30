@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const DrawerEdit = ({ drawer, isCreating = false }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit" })
     const { closeModal } = useModalWindowCloseContext()
     const { isDesktop } = useScreenType()
 
@@ -49,20 +49,20 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
             })
 
             if (isCreating) {
-                toast.success(t("create.drawer_create_success"))
+                toast.success(t("created_drawer"))
             } else {
-                toast.success(t("create.drawer_edit_success"))
+                toast.success(t("edited"))
             }
 
             closeModal()
         },
         onError: () => {
             if (isCreating) {
-                toast.error(t("create.drawer_create_error"))
+                toast.error(t("created_drawer_error"))
                 return
             }
 
-            toast.error(t("create.drawer_change_error"))
+            toast.error(t("edited_error"))
         },
     })
 
@@ -76,7 +76,7 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
 
     const submit = () => {
         if (!newDrawer.name || newDrawer.name.trim() === "") {
-            toast.error(t("create.drawer_create_no_name"))
+            toast.error(t("name_required"))
             return
         }
 

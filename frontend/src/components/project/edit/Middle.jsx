@@ -10,7 +10,7 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const Middle = ({ items, isCreating, submit, isPending }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.create" })
+    const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit" })
 
     const [content, setContent] = useState(null)
     const [isComponentOpen, setIsComponentOpen] = useState(false)

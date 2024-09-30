@@ -10,7 +10,7 @@ import publicsvg from "@assets/project/privacy/public.svg"
 import { useTranslation } from "react-i18next"
 
 const Privacy = ({ setPrivacy }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.privacy" })
+    const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit.privacy" })
 
     const { closeModal } = useModalWindowCloseContext()
 
