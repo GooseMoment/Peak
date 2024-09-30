@@ -14,14 +14,12 @@ class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
     permission_classes = [IsUserMatch]
 
     def get_queryset(self):
-        day = self.request.GET.get('day')
-        day_min = datetime.datetime.fromisoformat(day)
-        day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-        day_range = (day_min, day_max)
+        date_isoformat = self.request.GET.get("date")
+        date = datetime.date.fromisoformat(date_isoformat)
 
         today_assignment_tasks = Task.objects.filter(
             user=self.request.user,
-            assigned_at__range=day_range,
+            assigned_at=date,
             completed_at__isnull=True
         ).order_by("assigned_at").all()
 

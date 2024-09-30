@@ -23,6 +23,7 @@ import { useClientTimezone } from "@utils/clientSettings"
 import queryClient from "@queries/queryClient"
 
 import FeatherIcon from "feather-icons-react"
+import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -36,15 +37,14 @@ const getPageFromURL = (url) => {
 
 const TodayPage = () => {
     const { t } = useTranslation(null, { keyPrefix: "today" })
-    const due_tz = useClientTimezone()
+    const tz = useClientTimezone()
     const theme = useTheme()
 
     const [filter, setFilter] = useState("due_date")
     const [collapsed, setCollapsed] = useState(false)
 
-    const initial_date = new Date()
-    initial_date.setHours(0, 0, 0, 0)
-    const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
+    const today = DateTime.fromJSDate(new Date()).setZone(tz)
+    const [selectedDate, setSelectedDate] = useState(today.toISODate())
     // #TODO 달력으로 날짜 선택하기
 
     const {
@@ -55,8 +55,7 @@ const TodayPage = () => {
         refetch: overdueRefetch,
     } = useInfiniteQuery({
         queryKey: ["today", "overdue", { filter_field: filter }],
-        queryFn: (pages) =>
-            getTasksOverdue(filter, pages.pageParam || 1),
+        queryFn: (pages) => getTasksOverdue(filter, pages.pageParam || 1),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
@@ -105,19 +104,15 @@ const TodayPage = () => {
     })
 
     const clickArrowDown = (task) => {
-        const today = new Date()
-        const date = today.toISOString().slice(0, 10)
-        const data = { due_tz: due_tz, assigned_at: date }
+        const data = { assigned_at: today.toISODate() }
 
         patchMutation.mutate({ task, data })
         toast.success(t("due_change_today_success"))
     }
 
     const clickArrowRight = (task) => {
-        let date = new Date()
-        date.setDate(date.getDate() + 1)
-        date = date.toISOString().slice(0, 10)
-        const data = { due_tz: due_tz, assigned_at: date }
+        const tomorrow = today.plus({ days: 1})
+        const data = { assigned_at: tomorrow.toISODate() }
 
         patchMutation.mutate({ task, data })
         toast.success(t("due_change_tomorrow_success"))
