@@ -11,8 +11,9 @@ import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
+import { getProjectColor } from "@components/project/Creates/palettes"
+import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import Progress from "@components/project/common/Progress"
-import { getProjectColor } from "@components/project/common/palettes"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
@@ -152,7 +153,14 @@ const ProjectPage = () => {
     return (
         <>
             <TitleBox>
-                <PageTitle $color={color}>{project.name}</PageTitle>
+                <PageTitleBox>
+                    <PageTitle $color={color}>{project.name}</PageTitle>
+                    <PrivacyIcon
+                        privacy={project.privacy}
+                        color={getProjectColor(theme.type, project.color)}
+                        isProject
+                    />
+                </PageTitleBox>
                 <Icons>
                     <FeatherIcon
                         icon="plus"
@@ -251,10 +259,14 @@ const ProjectPage = () => {
 }
 
 const TitleBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
+`
+
+const PageTitleBox = styled.div`
+    display: flex;
+    align-items: center;
 `
 
 const Icons = styled.div`
