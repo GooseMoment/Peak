@@ -1,15 +1,24 @@
 import { useParams } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
+import styled, { useTheme } from "styled-components"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import PageTitle from "@components/common/PageTitle"
 
 import { getAnnouncement } from "@api/announcements.api"
-import styled from "styled-components"
 
 const AnnouncementDetailPage = () => {
     const { id } = useParams()
+    const theme = useTheme()
+
+    if (theme.type === "light") {
+        import("github-markdown-css/github-markdown-light.css")
+    } else if (theme.type === "dark") {
+        import("github-markdown-css/github-markdown-dark.css")
+    } else {
+        import("github-markdown-css/github-markdown.css")
+    }
 
     const { data, isLoading } = useQuery({
         queryKey: ["announcements", id],
@@ -25,7 +34,7 @@ const AnnouncementDetailPage = () => {
         <>
             <PageTitle>{data.title}</PageTitle>
             <Content
-                className="announcement_detail_content"
+                className="markdown-body announcement_detail_content"
                 dangerouslySetInnerHTML={{ __html: data.content }}
             />
         </>
@@ -33,7 +42,7 @@ const AnnouncementDetailPage = () => {
 }
 
 const Content = styled.div`
-    background-color: ${p => p.theme.thirdBackgroundColor};
+    background-color: ${(p) => p.theme.thirdBackgroundColor};
     padding: 1em;
     border-radius: 16px;
 `

@@ -241,27 +241,8 @@ body {
     Markdown
 */
 
-.announcement_detail_content h1 {
-    font-weight: bold;
-}
-
-.announcement_detail_content p {
-    line-height: 1.25;
-}
-
-.announcement_detail_content ul {
-    margin: 1em 0;
-}
-
-.announcement_detail_content li {
-    margin: 0.5em;
-    line-height: 1.25;
-}
-
 .announcement_detail_content img {
     display: block;
-    border-radius: 16px;
-    width: calc(100% - 2em) !important;
     max-width: 600px;
     margin: 1em;
 }
