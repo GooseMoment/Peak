@@ -21,14 +21,13 @@ const DrawerBox = styled.div`
 export default DrawerBox
 
 export const DrawerName = styled.h1`
-    width: 42em;
+    max-width: 38em;
     font-size: 1.4em;
     line-height: 1.2em;
     font-weight: bold;
     text-align: left;
     margin-left: 1.45em;
     color: ${(props) => props.$color};
-    stroke-opacity: 0.2;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
