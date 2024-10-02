@@ -5,7 +5,7 @@ import { useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import { getProjectColor } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/common/palettes"
 import Color from "@components/project/edit/Color"
 import EditBox from "@components/project/edit/EditBox"
 import Middle from "@components/project/edit/Middle"

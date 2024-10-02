@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import styled, { css, useTheme } from "styled-components"
 
 import Button from "@components/common/Button"
-import { getProjectColor } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/common/palettes"
 import FollowButton from "@components/users/FollowButton"
 import FollowsCount from "@components/users/FollowsCount"
 

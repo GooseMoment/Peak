@@ -3,8 +3,8 @@ import { useState } from "react"
 import styled, { css, useTheme } from "styled-components"
 
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import { getProjectColor, palettes } from "@components/project/Creates/palettes"
 import Detail from "@components/project/common/Detail"
+import { getProjectColor, palettes } from "@components/project/common/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
