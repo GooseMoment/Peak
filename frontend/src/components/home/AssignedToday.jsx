@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query"
 import Module, { Title } from "@components/home/Module"
 import VGraph from "@components/home/VGraph"
 
-import { getTasksTodayAssignedGrouped } from "@api/tasks.api"
+import { getTasksTodayAssignedGrouped } from "@api/today.api"
 
 import { useClientTimezone } from "@utils/clientSettings"
 

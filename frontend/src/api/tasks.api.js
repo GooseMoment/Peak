@@ -7,32 +7,6 @@ export const getTasksByDrawer = async (drawerID, ordering, page) => {
     return res.data
 }
 
-export const getOverdueTasks = async (filter_field, page) => {
-    const res = await client.get(
-        `tasks/overdue?filter_field=${filter_field}&page=${page}`,
-    )
-    return res.data
-}
-
-export const getTodayTasks = async (page) => {
-    const res = await client.get(`tasks/today?page=${page}`)
-    return res.data
-}
-
-export const getTasksTodayAssignedGrouped = async (tz) => {
-    const res = await client.get(`tasks/today/assigned/grouped`, {
-        params: { tz },
-    })
-    const items = res.data
-    let countAll = 0
-
-    for (const i in items) {
-        countAll += items[i].count
-    }
-
-    return { items, countAll }
-}
-
 export const getTask = async (id) => {
     const res = await client.get(`tasks/${id}`)
     return res.data

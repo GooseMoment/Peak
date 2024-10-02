@@ -12,12 +12,12 @@ const Layout = ({ children }) => {
 
     const contentPadding = clientSetting["main_width"] || "5rem"
 
-    const { openFromNav, isHidden, isCollapsed } = useSidebarContext()
+    const { isCollapsed } = useSidebarContext()
 
     return (
         <App>
-            <Navbar openSidebar={openFromNav} />
-            {!isHidden && <Sidebar />}
+            <Navbar />
+            <Sidebar />
             <Content
                 $sidebarCollapsed={isCollapsed}
                 $sidePadding={contentPadding}>

@@ -4,7 +4,8 @@ from rest_framework.pagination import PageNumberPagination
 from .models import Project
 from .serializers import ProjectSerializer, ProjectSerializerForUserProjectList
 from api.permissions import IsUserMatch
-from api.views import CreateMixin
+from api.mixins import CreateMixin
+
 
 class ProjectDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -24,8 +25,10 @@ class ProjectDetail(mixins.RetrieveModelMixin,
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     
+
 class ProjectListPagination(PageNumberPagination):
     page_size = 1000
+
 
 class ProjectList(CreateMixin,
                   mixins.ListModelMixin,
@@ -42,6 +45,7 @@ class ProjectList(CreateMixin,
     
     def post(self, request, *args, **kwargs):
         return self.create_with_user(request, order=0, *args, **kwargs)
+
 
 class UserProjectList(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = ProjectSerializerForUserProjectList
