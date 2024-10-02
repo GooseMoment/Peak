@@ -10,15 +10,15 @@ import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
+import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import DrawerCreate from "@components/project/Creates/DrawerCreate"
-import ProjectEdit from "@components/project/edit/ProjectEdit"
-import Progress from "@components/project/common/Progress"
+import { getProjectColor } from "@components/project/Creates/palettes"
 import PrivacyIcon from "@components/project/common/PrivacyIcon"
+import Progress from "@components/project/common/Progress"
+import ProjectEdit from "@components/project/edit/ProjectEdit"
+import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
-import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
-import { ErrorBox } from "@components/errors/ErrorProjectPage"
-import { getProjectColor } from "@components/project/Creates/palettes"
 
 import { getDrawersByProject } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
@@ -152,10 +152,15 @@ const ProjectPage = () => {
         <>
             <TitleBox>
                 <PageTitleBox>
-                    <PageTitle $color={getProjectColor(theme.type, project.color)}>
+                    <PageTitle
+                        $color={getProjectColor(theme.type, project.color)}>
                         {project.name}
                     </PageTitle>
-                    <PrivacyIcon privacy={project.privacy} color={getProjectColor(theme.type, project.color)} isProject/>
+                    <PrivacyIcon
+                        privacy={project.privacy}
+                        color={getProjectColor(theme.type, project.color)}
+                        isProject
+                    />
                 </PageTitleBox>
                 <Icons>
                     <FeatherIcon

@@ -3,7 +3,7 @@ import FeatherIcon from "feather-icons-react"
 
 const PrivacyIcon = ({ privacy, color, isProject }) => {
     if (privacy === "public") {
-        return
+        return null
     }
 
     const icon = privacy === "protected" ? <FeatherIcon icon="users"/> : <FeatherIcon icon="lock"/>
