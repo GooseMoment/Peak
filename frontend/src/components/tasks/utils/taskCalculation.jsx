@@ -3,11 +3,11 @@ import { useClientLocale } from "@utils/clientSettings"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 
-const calculate = (name, newDate, diff) => {
+const calculate = (name, newDate, diff, isSocial) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
     let calculatedDue = ""
-    if (diff.years < 0 || diff.months < 0 || diff.days < -1) {
+    if (!isSocial && (diff.years < 0 || diff.months < 0 || diff.days < -1)) {
         calculatedDue = name === "assigned" ? t("missed") : t("overdue")
         return [calculatedDue, true]
     } else if (-1 <= diff.days && diff.days < 0) {
@@ -23,7 +23,7 @@ const calculate = (name, newDate, diff) => {
     return [calculatedDue, false]
 }
 
-const taskCalculation = (task) => {
+const taskCalculation = (task, isSocial) => {
     const locale = useClientLocale()
     const option = { day: "numeric", month: "numeric" }
 
@@ -57,11 +57,12 @@ const taskCalculation = (task) => {
     let due = new_due_date
     let assigned = new_assigned_at_date
 
-    let [calculate_due, isOutOfDue] = calculate("due", new_due_date, diff_due)
+    let [calculate_due, isOutOfDue] = calculate("due", new_due_date, diff_due, isSocial)
     let [calculate_assigned, isOutOfAssigned] = calculate(
         "assigned",
         new_assigned_at_date,
         diff_assigned,
+        isSocial,
     )
 
     return {
