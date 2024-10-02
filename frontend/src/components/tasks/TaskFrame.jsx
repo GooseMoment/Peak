@@ -2,9 +2,9 @@ import { Link } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 
-import Priority from "./Priority"
-import TaskCircle from "./TaskCircle"
-import taskCalculation from "./utils/taskCalculation"
+import Priority from "@components/tasks/Priority"
+import TaskCircle from "@components/tasks/TaskCircle"
+import taskCalculation from "@components/tasks/utils/taskCalculation"
 
 import alarmclock from "@assets/project/alarmclock.svg"
 import hourglass from "@assets/project/hourglass.svg"
@@ -46,7 +46,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocia
                         onClick={toComplete}
                     />
                     {taskDetailPath ? (
-                        <NameLink to={taskDetailPath}>
+                        <NameLink draggable="false" to={taskDetailPath}>
                             {TaskName}
                         </NameLink>
                     ) : (
@@ -54,34 +54,41 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocia
                     )}
                 </CircleName>
 
-                {hasDate && <Dates>
-                    {task.assigned_at && (
-                        <AssignedDate
-                            $completed={task.completed_at}
-                            $isSocial={isSocial}
-                            $isOutOfDue={isOutOfAssigned}>
-                            <FeatherIcon icon="calendar" />
-                            {completedAt ? assigned : calculate_assigned}
-                        </AssignedDate>
-                    )}
-                    {task.due_date && (
-                        <DueDate
-                            $completed={task.completed_at}
-                            $isSocial={isSocial}
+                {hasDate && (
+                    <Dates>
+                        {task.assigned_at && (
+                            <AssignedDate
+                                $completed={task.completed_at}
+                                $isSocial={isSocial}
+                                $isOutOfDue={isOutOfAssigned}>
+                                <FeatherIcon
+                                    draggable="false"
+                                    icon="calendar"
+                                />
+                                {completedAt
+                                    ? assigned
+                                    : calculate_assigned}
+                            </AssignedDate>
+                        )}
+                        {task.due_date && (
+                            <DueDate
+                                $completed={task.completed_at}
+                                $isSocial={isSocial}
                             $isOutOfDue={isOutOfDue}>
-                            <img src={hourglass} />
-                            {completedAt ? due : calculate_due}
-                        </DueDate>
-                    )}
-                    {isSocial || task?.reminders
-                        ? task.reminders?.length !== 0 && (
-                              <Reminder $completed={task.completed_at}>
-                                  <img src={alarmclock} />
-                                  {task.reminders?.length}
-                              </Reminder>
-                          )
-                        : null}
-                </Dates>}
+                                <img draggable="false" src={hourglass} />
+                                {completedAt ? due : calculate_due}
+                            </DueDate>
+                        )}
+                        {isSocial || task.reminders
+                            ? task.reminders?.length !== 0 && (
+                                  <Reminder $completed={task.completed_at}>
+                                      <img draggable="false" src={alarmclock} />
+                                      {task.reminders?.length}
+                                  </Reminder>
+                              )
+                            : null}
+                    </Dates>
+                )}
             </Content>
         </Box>
     )

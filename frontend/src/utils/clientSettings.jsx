@@ -106,6 +106,15 @@ export const useClientTimezone = () => {
     return tz
 }
 
+export const getClientTimezone = () => {
+    const setting = getClientSettings()
+
+    const settingTz = setting?.timezone
+    const tz = getTimezone(settingTz)
+
+    return tz
+}
+
 export const useClientTheme = (systemTheme) => {
     const [setting] = useContext(ClientSettingContext)
     const theme = setting?.theme === "system" ? systemTheme : setting?.theme

@@ -4,26 +4,17 @@ import priority0 from "@assets/project/priority/priority0.svg"
 import priority1 from "@assets/project/priority/priority1.svg"
 import priority2 from "@assets/project/priority/priority2.svg"
 
-const Priority = ({ priority, completed, hasDate }) => {
-    const prioritys = [
-        <PriorityImg
-            $completed={completed}
-            $hasDate={hasDate}
-            src={priority0}
-        />,
-        <PriorityImg
-            $completed={completed}
-            $hasDate={hasDate}
-            src={priority1}
-        />,
-        <PriorityImg
-            $completed={completed}
-            $hasDate={hasDate}
-            src={priority2}
-        />,
-    ]
+const priorityIcons = [priority0, priority1, priority2]
 
-    return prioritys[priority]
+const Priority = ({ priority, completed, hasDate }) => {
+    return (
+        <PriorityImg
+            draggable="false"
+            $completed={completed}
+            $hasDate={hasDate}
+            src={priorityIcons[priority]}
+        />
+    )
 }
 
 const PriorityImg = styled.img`

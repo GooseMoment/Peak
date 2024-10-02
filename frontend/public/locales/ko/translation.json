@@ -42,10 +42,11 @@
         "overdue_title": "놓친 작업",
         "filter_due_date": "지난 기한",
         "filter_assigned_at": "지난 할당",
+        "no_today_assignment": "오늘 할 작업들을 추가하세요.",
         "error_load_task": "작업을 불러오지 못했어요 😢",
         "button_load_more": "더보기",
-        "due_change_today_success": "{{filter}}을 오늘로 변경했습니다.",
-        "due_change_tomorrow_success": "{{filter}}을 내일로 변경했습니다.",
+        "due_change_today_success": "작업을 오늘로 할당했습니다.",
+        "due_change_tomorrow_success": "작업을 내일로 할당했습니다.",
         "due_change_error": "기한 변경에 실패했습니다."
     },
     "project": {
@@ -270,10 +271,12 @@
         "success_follow": "@{{username}} 님을 팔로우 합니다.",
         "success_requested": "@{{username}} 님에게 팔로우 요청을 보냈습니다.",
         "error_follow": "@{{username}} 님에게 팔로우 요청을 보내지 못했습니다.",
-        "success_unfollow": "이제 @{{username}} 님을 팔로우하지 않습니다.",
+        "success_unfollow": "이제 @{{username}} 님을 언팔로우 했습니다.",
         "success_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소했습니다.",
-        "error_unfollow": "@{{username}} 님의 내 팔로우를 취소하지 못했습니다.",
-        "error_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소하지 못했습니다."
+        "error_unfollow": "@{{username}} 님을 언팔로우 하지 못했습니다.",
+        "error_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소하지 못했습니다.",
+        "cancel_accepted": "@{{username}} 님을 언팔로우 할까요?",
+        "button_sure": "네"
     },
     "error-page": {
         "unknown_error_code": "ㅠ_ㅠ",

@@ -136,6 +136,12 @@ const DragAndDownBlock = styled.div`
             visibility: visible;
         }
     }
+
+    & * {
+        user-select: none;
+        -webkit-user-drag: none;
+        -webkit-user-select: none;
+    }
 `
 
 export default DragAndDownBox
