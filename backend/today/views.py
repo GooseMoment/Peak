@@ -90,7 +90,7 @@ class TaskOverdueList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIV
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-class TaskAssignedTodayGrouped(TimezoneMixin):
+class TaskTodayAssignedGrouped(TimezoneMixin):
     def get(self, request, *args, **kwargs):
         today = self.get_today()
 

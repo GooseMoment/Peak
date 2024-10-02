@@ -18,7 +18,7 @@ export const getTasksDueToday = async (date, page) => {
 }
 
 export const getTasksTodayAssignedGrouped = async (tz) => {
-    const res = await client.get(`tasks/today/assigned/grouped`, {
+    const res = await client.get(`today/assigned/grouped`, {
         params: { tz },
     })
     const items = res.data
