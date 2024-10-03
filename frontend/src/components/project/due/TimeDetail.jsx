@@ -47,6 +47,15 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
             due_datetime: converted_datetime,
         })
         toast.success(t("time_change_success"))
+    }
+
+    const removeTime = () => {
+        setFunc({
+            due_type: "due_date",
+            due_date: due_datetime.toISODate(),
+            due_datetime: null,
+        })
+        toast.error(t("time_remove"))
         closeComponent()
     }
 
@@ -113,9 +122,10 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
                     />
                 </InputBox>
             </FlexBox>
-            <FlexCenterBox>
+            <ButtonsBox>
+                <Button state="danger" onClick={removeTime}>{t("button_remove")}</Button>
                 <Button onClick={changeTime}>{t("button_add")}</Button>
-            </FlexCenterBox>
+            </ButtonsBox>
         </DetailBox>
     )
 }
@@ -134,12 +144,13 @@ const FlexBox = styled.div`
     gap: 1.1em;
 `
 
-const FlexCenterBox = styled.div`
+const ButtonsBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 0.9em;
     margin-left: 0em;
+    gap: 0.6em;
 `
 
 const ToggleBox = styled.div`
