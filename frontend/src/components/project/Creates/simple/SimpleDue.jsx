@@ -6,8 +6,6 @@ import {
 } from "@components/project/Creates/simple/CreateSimpleBox"
 import addDateFromToday from "@components/project/Creates/utils/addDateFromToday"
 
-import { useClientTimezone } from "@utils/clientSettings"
-
 import hourglass from "@assets/project/hourglass.svg"
 
 import FeatherIcon from "feather-icons-react"
@@ -15,7 +13,6 @@ import { useTranslation } from "react-i18next"
 
 const SimpleDue = ({ dueIndex, setDueIndex, editNewTask, color }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
-    const tz = useClientTimezone()
 
     const onKeyDown = (e) => {
         if (e.key === "ArrowRight") {
