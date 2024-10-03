@@ -123,7 +123,7 @@ const Contents = ({ task, setFunc }) => {
                         <ToolTip message={t((item.name)+".name")}>{item.icon}</ToolTip>
                         <VLine $end={item.id === 1 || item.id === 6} />
                         <ContentText
-                            name={item.name === "reminder" || item.name}
+                            name={item.name === "reminder" ? null : item.name}
                             onClick={handleClickContent}
                             $isReminder={item.name === "reminder"}>
                             {item.display}
