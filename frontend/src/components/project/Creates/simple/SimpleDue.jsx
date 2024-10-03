@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next"
 
 const SimpleDue = ({ dueIndex, setDueIndex, editNewTask, color }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
-    const due_tz = useClientTimezone()
+    const tz = useClientTimezone()
 
     const onKeyDown = (e) => {
         if (e.key === "ArrowRight") {
@@ -38,8 +38,9 @@ const SimpleDue = ({ dueIndex, setDueIndex, editNewTask, color }) => {
 
     useEffect(() => {
         editNewTask({
-            due_tz: due_tz,
+            due_type: "due_date",
             due_date: addDateFromToday(items[dueIndex].set),
+            due_datetime: null,
         })
     }, [dueIndex])
 
