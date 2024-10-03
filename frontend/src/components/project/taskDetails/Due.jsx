@@ -63,7 +63,6 @@ const Due = ({ task, setFunc }) => {
             }
             
             setFunc({ due_type: "due_date", due_date: date.toISODate(), due_datetime: null })
-            closeModal()
         }
     }
 
