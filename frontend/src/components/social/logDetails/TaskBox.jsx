@@ -6,7 +6,7 @@ import TaskFrame from "@components/tasks/TaskFrame"
 const TaskBox = ({ task, color, isFollowingPage }) => {
     return (
         <TaskContainer>
-            <TaskFrame task={task} color={color} />
+            <TaskFrame task={task} color={color} isSocial/>
             { isFollowingPage && <InteractionBox parentType={"task"} parent={task} />}
         </TaskContainer>
     )

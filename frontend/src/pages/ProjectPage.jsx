@@ -11,9 +11,10 @@ import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
-import DrawerCreate from "@components/project/Creates/DrawerCreate"
-import { getProjectColor } from "@components/project/Creates/palettes"
+import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import Progress from "@components/project/common/Progress"
+import { getProjectColor } from "@components/project/common/palettes"
+import DrawerEdit from "@components/project/edit/DrawerEdit"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
@@ -147,12 +148,19 @@ const ProjectPage = () => {
         )
     }
 
+    const color = getProjectColor(theme.type, project?.color)
+
     return (
         <>
             <TitleBox>
-                <PageTitle $color={getProjectColor(theme.type, project.color)}>
-                    {project.name}
-                </PageTitle>
+                <PageTitleBox>
+                    <PageTitle $color={color}>{project.name}</PageTitle>
+                    <PrivacyIcon
+                        privacy={project.privacy}
+                        color={getProjectColor(theme.type, project.color)}
+                        isProject
+                    />
+                </PageTitleBox>
                 <Icons>
                     <FeatherIcon
                         icon="plus"
@@ -197,7 +205,7 @@ const ProjectPage = () => {
                         key={drawer.id}
                         project={project}
                         drawer={drawer}
-                        color={getProjectColor(theme.type, project.color)}
+                        color={color}
                     />
                 ))
             )}
@@ -232,7 +240,7 @@ const ProjectPage = () => {
                     afterClose={() => {
                         setIsDrawerCreateOpen(false)
                     }}>
-                    <DrawerCreate />
+                    <DrawerEdit isCreating />
                 </ModalWindow>
             )}
             {isProjectEditOpen && (
@@ -244,19 +252,21 @@ const ProjectPage = () => {
                 </ModalWindow>
             )}
             <Suspense key="project-page" fallback={<ModalLoader />}>
-                <Outlet
-                    context={[id, getProjectColor(theme.type, project.color)]}
-                />
+                <Outlet context={[id, color]} />
             </Suspense>
         </>
     )
 }
 
 const TitleBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
+`
+
+const PageTitleBox = styled.div`
+    display: flex;
+    align-items: center;
 `
 
 const Icons = styled.div`

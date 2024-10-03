@@ -7,7 +7,7 @@ import Button from "@components/common/Button"
 import CollapseButton from "@components/common/CollapseButton"
 import PageTitle from "@components/common/PageTitle"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
-import { getProjectColor } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/common/palettes"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
 import Task from "@components/tasks/Task"
 
@@ -111,7 +111,7 @@ const TodayPage = () => {
     }
 
     const clickArrowRight = (task) => {
-        const tomorrow = today.plus({ days: 1})
+        const tomorrow = today.plus({ days: 1 })
         const data = { assigned_at: tomorrow.toISODate() }
 
         patchMutation.mutate({ task, data })

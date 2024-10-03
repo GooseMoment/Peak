@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 import styled, { css, useTheme } from "styled-components"
 
-import { getProjectColor } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/common/palettes"
 import { Section, SectionTitle } from "@components/users/Section"
 
 import { skeletonCSS } from "@assets/skeleton"

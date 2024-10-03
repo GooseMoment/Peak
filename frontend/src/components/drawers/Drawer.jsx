@@ -14,12 +14,13 @@ import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 import TaskCreateSimple from "@components/project/Creates/simple/TaskCreateSimple"
 import DragAndDownBox from "@components/project/dragAndDown/DragAndDownBox"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
+import PrivacyIcon from "@components/project/common/PrivacyIcon"
+import SortMenu from "@components/project/sorts/SortMenu"
+import Task from "@components/tasks/Task"
 import {
     SkeletonDrawer,
     SkeletonInboxDrawer,
 } from "@components/project/skeletons/SkeletonProjectPage"
-import SortMenu from "@components/project/sorts/SortMenu"
-import Task from "@components/tasks/Task"
 
 import { deleteDrawer } from "@api/drawers.api"
 import { patchDrawer } from "@api/drawers.api"
@@ -62,7 +63,7 @@ const Drawer = ({ project, drawer, color }) => {
 
     const { t } = useTranslation(null, { keyPrefix: "project" })
 
-    const { data, isError, fetchNextPage, isLoading, refetch } =
+    const { data, isError, fetchNextPage, isLoading, isFetchingNextPage, refetch } =
         useInfiniteQuery({
             queryKey: ["tasks", { drawerID: drawer.id, ordering: ordering }],
             queryFn: (pages) =>
@@ -197,7 +198,10 @@ const Drawer = ({ project, drawer, color }) => {
         <>
             {project.type === "inbox" ? null : (
                 <DrawerBox $color={color}>
-                    <DrawerName $color={color}>{drawer.name}</DrawerName>
+                    <DrawerTitleBox>
+                        <DrawerName $color={color}>{drawer.name}</DrawerName>
+                        <PrivacyIcon privacy={drawer.privacy} color={color}/>
+                    </DrawerTitleBox>
                     <DrawerIcons
                         color={color}
                         collapsed={collapsed}
@@ -287,14 +291,22 @@ const Drawer = ({ project, drawer, color }) => {
             </TaskCreateButton>
             <FlexBox>
                 {hasNextPage ? (
-                    <MoreButton onClick={() => fetchNextPage()}>
-                        {t("button_load_more")}
+                    <MoreButton  
+                        disabled={isFetchingNextPage}
+                        loading={isFetchingNextPage}
+                        onClick={() => fetchNextPage()}>
+                        {isLoading ? t("loading") : t("button_load_more")}
                     </MoreButton>
                 ) : null}
             </FlexBox>
         </>
     )
 }
+
+const DrawerTitleBox = styled.div`
+    display: flex;
+    align-items: center;
+`
 
 const TaskCreateButton = styled.div`
     display: flex;

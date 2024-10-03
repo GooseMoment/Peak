@@ -11,7 +11,9 @@ import hourglass from "@assets/project/hourglass.svg"
 
 import FeatherIcon from "feather-icons-react"
 
-const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
+const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocial }) => {
+    const completedAt = isSocial ? null : task.completed_at
+
     const {
         due,
         assigned,
@@ -19,10 +21,10 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
         calculate_assigned,
         isOutOfDue,
         isOutOfAssigned,
-    } = taskCalculation(task)
+    } = taskCalculation(task, isSocial)
 
     const TaskName = (
-        <TaskNameBox $completed={task.completed_at}>{task?.name}</TaskNameBox>
+        <TaskNameBox $completed={completedAt}>{task?.name}</TaskNameBox>
     )
 
     const hasDate = task.due_type || task.assigned_at
@@ -57,12 +59,13 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                         {task.assigned_at && (
                             <AssignedDate
                                 $completed={task.completed_at}
+                                $isSocial={isSocial}
                                 $isOutOfDue={isOutOfAssigned}>
                                 <FeatherIcon
                                     draggable="false"
                                     icon="calendar"
                                 />
-                                {task.completed_at
+                                {completedAt
                                     ? assigned
                                     : calculate_assigned}
                             </AssignedDate>
@@ -70,12 +73,13 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                         {task.due_type && (
                             <DueDate
                                 $completed={task.completed_at}
-                                $isOutOfDue={isOutOfDue}>
+                                $isSocial={isSocial}
+                            $isOutOfDue={isOutOfDue}>
                                 <img draggable="false" src={hourglass} />
-                                {task.completed_at ? due : calculate_due}
+                                {completedAt ? due : calculate_due}
                             </DueDate>
                         )}
-                        {task.reminders
+                        {isSocial || task.reminders
                             ? task.reminders?.length !== 0 && (
                                   <Reminder $completed={task.completed_at}>
                                       <img draggable="false" src={alarmclock} />
@@ -140,7 +144,9 @@ const AssignedDate = styled.div`
     font-size: 0.8em;
     margin-left: 0.5em;
     color: ${(props) =>
-        props.$completed
+        props.$isSocial
+        ? props.theme.textColor
+        : props.$completed
             ? props.theme.grey
             : props.$isOutOfDue
               ? props.theme.project.danger
@@ -152,7 +158,9 @@ const AssignedDate = styled.div`
         height: 1em;
         margin-right: 0.3em;
         color: ${(props) =>
-            props.$completed
+            props.$isSocial
+            ? props.theme.textColor
+            : props.$completed
                 ? props.theme.grey
                 : props.$isOutOfDue
                   ? props.theme.project.danger
@@ -167,7 +175,9 @@ const DueDate = styled.div`
     font-size: 0.8em;
     margin-left: 0.5em;
     color: ${(props) =>
-        props.$completed
+        props.$isSocial
+        ? props.theme.textColor
+        : props.$completed
             ? props.theme.grey
             : props.$isOutOfDue
               ? props.theme.project.danger
@@ -179,7 +189,11 @@ const DueDate = styled.div`
         margin-right: 0.2em;
 
         ${(props) =>
-            props.$completed
+            props.$isSocial
+            ? css`
+                filter: ${(p) => p.theme.project.imgColor};
+            `
+            : props.$completed
                 ? css`
                       filter: ${(p) => p.theme.project.imgGreyColor};
                   `

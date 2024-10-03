@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import styled, { useTheme } from "styled-components"
 
-import { getProjectColor } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/common/palettes"
 
 import FeatherIcon from "feather-icons-react"
 

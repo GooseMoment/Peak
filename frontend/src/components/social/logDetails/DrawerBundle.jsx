@@ -4,7 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
-import { getProjectColor } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/common/palettes"
 import TaskBox from "@components/social/logDetails/TaskBox"
 
 import { getDailyLogTasks } from "@api/social.api"
@@ -43,10 +43,7 @@ const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
     return (
         <Fragment>
             <DrawerBox $color={color}>
-                <DrawerName $color={color}>
-                    {" "}
-                    {drawer.name}{" "}
-                </DrawerName>
+                <DrawerName $color={color}> {drawer.name} </DrawerName>
             </DrawerBox>
             <TaskList>
                 {taskPage?.pages?.map((group) =>
