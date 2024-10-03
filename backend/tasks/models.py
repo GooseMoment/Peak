@@ -1,10 +1,8 @@
 from django.db import models
-from datetime import datetime, time
 
 from api.models import Base, PrivacyMixin
 from users.models import User
 from drawers.models import Drawer
-from tasks.utils import combine_due_datetime
 
 class Repeat(Base):
     # TODO: 자연어로 빠른 Repeat 지정
@@ -34,9 +32,9 @@ class Task(Base, PrivacyMixin):
         on_delete=models.CASCADE,
         related_name='tasks'
     )
+    due_type = models.CharField(max_length=12, null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)
-    due_time = models.TimeField(null=True, blank=True)
-    due_tz = models.CharField(max_length=128, null=True, blank=True)
+    due_datetime = models.DateTimeField(null=True, blank=True)
     assigned_at = models.DateField(null=True, blank=True)
     priority = models.IntegerField(default=0)
     memo = models.TextField(null=True, blank=True)
@@ -52,9 +50,6 @@ class Task(Base, PrivacyMixin):
         null=True,
         blank=True,
     )
-
-    def due_datetime(self): 
-        return combine_due_datetime(self.due_tz, self.due_date, self.due_time)
 
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"
