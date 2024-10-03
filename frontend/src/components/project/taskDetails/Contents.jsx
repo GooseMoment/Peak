@@ -55,7 +55,7 @@ const Contents = ({ task, setFunc }) => {
             id: 2,
             name: "due",
             icon: <img src={hourglass} />,
-            display: task.due_date ? formatted_due_datetime : t("none"),
+            display: task.due_type && (task.due_date || task.due_datetime) ? formatted_due_datetime : t("none"),
             component: <Due task={task} setFunc={setFunc} />,
         },
         {
@@ -71,7 +71,7 @@ const Contents = ({ task, setFunc }) => {
                             </ReminderBlock>
                         ))}
                     </RemindersBox>
-                ) : task.due_date ? (
+                ) : task.due_type ? (
                     <EmptyReminderBox name="reminder">+</EmptyReminderBox>
                 ) : (
                     <EmptyReminderBox

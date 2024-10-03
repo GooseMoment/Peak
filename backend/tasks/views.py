@@ -10,7 +10,6 @@ from .serializers import TaskSerializer
 from notifications.models import TaskReminder
 from notifications.serializers import TaskReminderSerializer
 from notifications.utils import caculateScheduled
-from .utils import combine_due_datetime
 from drawers.utils import normalize_drawer_order
 
 class TaskDetail(mixins.RetrieveModelMixin,
@@ -32,39 +31,38 @@ class TaskDetail(mixins.RetrieveModelMixin,
     
     def patch(self, request, *args, **kwargs):
         try:
-            due_tz = request.data["due_tz"]
+            new_due_type = request.data["due_type"]
             new_due_date = request.data["due_date"]
-            new_due_time = request.data["due_time"]
+            new_due_datetime = request.data["due_datetime"]
         except KeyError:
             pass
         else:
             task: Task = self.get_object()
+            prev_due_type = task.due_type
             prev_due_date = None
-            prev_due_time = None
+            prev_due_datetime = None
 
-            if task.due_date is not None:
+            if task.due_type == "due_date":
                 prev_due_date = task.due_date.strftime("%Y-%m-%d")
-
-            if task.due_time is not None:
-                prev_due_time = task.due_time.strftime("%H:%M:%S")
+            elif task.due_type == "due_datetime":
+                prev_due_datetime= task.due_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
             # new_due_date is None
-            if (new_due_date is None) and (prev_due_date is not None):
+            if (new_due_type is None) and (prev_due_type is not None):
                 TaskReminder.objects.filter(task=task.id).delete()
             # new_due_date is true
-            else:   
-                if (prev_due_date != new_due_date) or (prev_due_time != new_due_time):
-                    converted_due_date = datetime.strptime(new_due_date, "%Y-%m-%d").date()
-                    # new_due_time is None -> 9시 설정
-                    if new_due_time is None:
-                        converted_due_time = datetime.strptime("09:00:00", "%H:%M:%S").time()
-                    # new_due_time is true -> new_due_time 대로 설정
+            else:
+                if (new_due_type is None):
+                    pass
+                elif (prev_due_date != new_due_date) or (prev_due_datetime != new_due_datetime):
+                    if new_due_type == "due_date":
+                        converted_due_datetime = datetime.strptime(new_due_date, "%Y-%m-%d").replace(hour=9, minute=0, second=0, microsecond=0)
                     else:
-                        converted_due_time = datetime.strptime(new_due_time, "%H:%M:%S").time()
+                        converted_due_datetime = datetime.strptime(new_due_datetime, "%Y-%m-%d %H:%M:%S")
                     
                     reminders = TaskReminder.objects.filter(task=task.id)
                     for reminder in reminders:
-                        reminder.scheduled = caculateScheduled(combine_due_datetime(due_tz, converted_due_date, converted_due_time), reminder.delta)
+                        reminder.scheduled = caculateScheduled(converted_due_datetime, reminder.delta)
                         reminder.save()
     
         try:
@@ -101,7 +99,7 @@ class TaskList(CreateMixin,
         if drawer_id is not None:
             queryset = queryset.filter(drawer__id=drawer_id)
 
-        ordering_fields = ['name', 'assigned_at', 'due_date', 'due_time', 'priority', 'created_at', 'reminders']
+        ordering_fields = ['name', 'assigned_at', 'due_date', 'due_datetime', 'priority', 'created_at', 'reminders']
         ordering = self.request.GET.get("ordering", None)
 
         if ordering.lstrip('-') in ordering_fields:

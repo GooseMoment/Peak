@@ -25,7 +25,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
         <TaskNameBox $completed={task.completed_at}>{task?.name}</TaskNameBox>
     )
 
-    const hasDate = task.due_date || task.assigned_at
+    const hasDate = task.due_type || task.assigned_at
 
     return (
         <Box>
@@ -67,7 +67,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete }) => {
                                     : calculate_assigned}
                             </AssignedDate>
                         )}
-                        {task.due_date && (
+                        {task.due_type && (
                             <DueDate
                                 $completed={task.completed_at}
                                 $isOutOfDue={isOutOfDue}>
