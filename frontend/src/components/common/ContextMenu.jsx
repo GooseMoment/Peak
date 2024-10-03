@@ -10,8 +10,7 @@ const ContextMenu = ({ items, selectedButtonPosition }) => {
     return (
         <ContextMenuBox
             $top={selectedButtonPosition.top}
-            $left={selectedButtonPosition.left}
-        >
+            $left={selectedButtonPosition.left}>
             {items.map((item, i) => (
                 <Fragment key={item.icon}>
                     <DisplayBox $color={item.color} onClick={item.func}>

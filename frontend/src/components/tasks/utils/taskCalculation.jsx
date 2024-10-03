@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next"
 
 const calculateDate = (name, date, today, isSocial) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
-    
+
     const locale = useClientLocale()
     const option = { day: "numeric", month: "numeric" }
 
@@ -31,7 +31,7 @@ const calculateDate = (name, date, today, isSocial) => {
         calculatedDue = name === "assigned" ? t("missed") : t("overdue")
         return [newDate, calculatedDue, true]
     } else if (diff_days === 0) {
-        if ((name === "due_datetime") && (diff_due.days < 0)) {
+        if (name === "due_datetime" && diff_due.days < 0) {
             calculatedDue = t("overdue")
             return [newDate, calculatedDue, true]
         }
@@ -52,8 +52,15 @@ const taskCalculation = (task, isSocial) => {
 
     const today = DateTime.fromJSDate(new Date()).setZone(tz)
 
-    const taskAssigned_at = DateTime.fromJSDate(new Date(task.assigned_at)).setZone(tz)
-    const [assigned, calculate_assigned, isOutOfAssigned] = calculateDate("assigned", taskAssigned_at, today, isSocial)
+    const taskAssigned_at = DateTime.fromJSDate(
+        new Date(task.assigned_at),
+    ).setZone(tz)
+    const [assigned, calculate_assigned, isOutOfAssigned] = calculateDate(
+        "assigned",
+        taskAssigned_at,
+        today,
+        isSocial,
+    )
 
     let taskDue = null
     if (task.due_type === "due_date") {
@@ -61,7 +68,12 @@ const taskCalculation = (task, isSocial) => {
     } else if (task.due_type === "due_datetime") {
         taskDue = DateTime.fromJSDate(new Date(task.due_datetime)).setZone(tz)
     }
-    const [due, calculate_due, isOutOfDue] = calculateDate(task.due_type, taskDue, today, isSocial)
+    const [due, calculate_due, isOutOfDue] = calculateDate(
+        task.due_type,
+        taskDue,
+        today,
+        isSocial,
+    )
 
     return {
         due,

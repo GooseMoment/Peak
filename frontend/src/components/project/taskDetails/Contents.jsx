@@ -55,7 +55,10 @@ const Contents = ({ task, setFunc }) => {
             id: 2,
             name: "due",
             icon: <img src={hourglass} />,
-            display: task.due_type && (task.due_date || task.due_datetime) ? formatted_due_datetime : t("none"),
+            display:
+                task.due_type && (task.due_date || task.due_datetime)
+                    ? formatted_due_datetime
+                    : t("none"),
             component: <Due task={task} setFunc={setFunc} />,
         },
         {
@@ -120,7 +123,9 @@ const Contents = ({ task, setFunc }) => {
             {items.map((item) => (
                 <Fragment key={item.id}>
                     <ContentsBox>
-                        <ToolTip message={t((item.name)+".name")}>{item.icon}</ToolTip>
+                        <ToolTip message={t(item.name + ".name")}>
+                            {item.icon}
+                        </ToolTip>
                         <VLine $end={item.id === 1 || item.id === 6} />
                         <ContentText
                             name={item.name === "reminder" ? null : item.name}

@@ -22,18 +22,30 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
     const [setting] = useClientSetting()
     const tz = useClientTimezone()
 
-    const due = task.due_type === "due_datetime" ? task.due_datetime : task.due_date
+    const due =
+        task.due_type === "due_datetime" ? task.due_datetime : task.due_date
     const due_datetime = DateTime.fromJSDate(new Date(due)).setZone(tz)
-    const due_time = task.due_type === "due_datetime" ? due_datetime.toISOTime() : DateTime.fromJSDate(new Date('00:00:00')).toISOTime()
+    const due_time =
+        task.due_type === "due_datetime"
+            ? due_datetime.toISOTime()
+            : DateTime.fromJSDate(new Date("00:00:00")).toISOTime()
 
     const [ampm, setAmpm] = useState(ampms[0].name)
     const [hour, setHour] = useState(due_time && parseInt(due_time.slice(0, 2)))
     const [min, setMin] = useState(due_time && parseInt(due_time.slice(3, 5)))
 
     const changeTime = () => {
-        let converted_hour = !setting.time_as_24_hour && ampm === "pm" ? hour + 12 : hour
-        const converted_datetime = due_datetime.set({ hour: converted_hour, minute: min }).setZone("UTC").toFormat('yyyy-MM-dd HH:mm:00');
-        setFunc({ due_type: "due_datetime", due_date: null, due_datetime: converted_datetime })
+        let converted_hour =
+            !setting.time_as_24_hour && ampm === "pm" ? hour + 12 : hour
+        const converted_datetime = due_datetime
+            .set({ hour: converted_hour, minute: min })
+            .setZone("UTC")
+            .toFormat("yyyy-MM-dd HH:mm:00")
+        setFunc({
+            due_type: "due_datetime",
+            due_date: null,
+            due_datetime: converted_datetime,
+        })
         toast.success(t("time_change_success"))
         closeComponent()
     }
@@ -81,8 +93,7 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
                                 $active={ampm == t.name}
                                 onClick={() => {
                                     setAmpm(t.name)
-                                }}
-                            >
+                                }}>
                                 {t.display}
                             </AmpmToggle>
                         ))}

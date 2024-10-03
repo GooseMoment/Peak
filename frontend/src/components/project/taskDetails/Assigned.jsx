@@ -7,12 +7,13 @@ import Detail from "@components/project/common/Detail"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 
-import { cubicBeizer } from "@assets/keyframes"
-import { rotateToUnder, rotateToUp } from "@assets/keyframes"
 import { useClientTimezone } from "@utils/clientSettings"
 
-import { DateTime } from "luxon"
+import { cubicBeizer } from "@assets/keyframes"
+import { rotateToUnder, rotateToUp } from "@assets/keyframes"
+
 import FeatherIcon from "feather-icons-react"
+import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -28,11 +29,12 @@ const Assigned = ({ setFunc }) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
         else {
             if (name === "repeat") {
-                toast.error("coming soon...", {toastId: "coming_soon"})
+                toast.error("coming soon...", { toastId: "coming_soon" })
                 return
             }
             setIsAdditionalComp(name)
-    }}
+        }
+    }
 
     const today = DateTime.fromJSDate(new Date()).setZone(tz)
 

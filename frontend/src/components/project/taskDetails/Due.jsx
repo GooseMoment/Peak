@@ -7,13 +7,14 @@ import Detail from "@components/project/common/Detail"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 import TimeDetail from "@components/project/due/TimeDetail"
+
 import { useClientTimezone } from "@utils/clientSettings"
 
 import { cubicBeizer } from "@assets/keyframes"
 import { rotateToUnder, rotateToUp } from "@assets/keyframes"
 
-import { DateTime } from "luxon"
 import FeatherIcon from "feather-icons-react"
+import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -37,7 +38,7 @@ const Due = ({ task, setFunc }) => {
                 }
             }
             if (name === "repeat") {
-                toast.error("coming soon...", {toastId: "coming_soon"})
+                toast.error("coming soon...", { toastId: "coming_soon" })
                 return
             }
             setIsAdditionalComp(name)
@@ -56,13 +57,23 @@ const Due = ({ task, setFunc }) => {
             }
 
             if (task.due_type === "due_datetime") {
-                const due_datetime = DateTime.fromJSDate(new Date(task.due_datetime)).setZone(tz)
-                const converted_datetime = due_datetime.set({ year: date.year, month: date.month, day: date.day })
+                const due_datetime = DateTime.fromJSDate(
+                    new Date(task.due_datetime),
+                ).setZone(tz)
+                const converted_datetime = due_datetime.set({
+                    year: date.year,
+                    month: date.month,
+                    day: date.day,
+                })
                 setFunc({ due_datetime: converted_datetime })
                 return
             }
-            
-            setFunc({ due_type: "due_date", due_date: date.toISODate(), due_datetime: null })
+
+            setFunc({
+                due_type: "due_date",
+                due_date: date.toISODate(),
+                due_datetime: null,
+            })
         }
     }
 
@@ -107,16 +118,14 @@ const Due = ({ task, setFunc }) => {
                         <IndexBox
                             $start={i === 0}
                             $end={i === 3}
-                            onClick={() => handleAdditionalComp(comp.name)}
-                        >
+                            onClick={() => handleAdditionalComp(comp.name)}>
                             <EmptyBlock />
                             <Box>
                                 <FeatherIcon icon={comp.icon} />
                                 {comp.display}
                             </Box>
                             <CollapseButton
-                                $collapsed={isAdditionalComp === comp.name}
-                            >
+                                $collapsed={isAdditionalComp === comp.name}>
                                 <FeatherIcon icon="chevron-down" />
                             </CollapseButton>
                         </IndexBox>
