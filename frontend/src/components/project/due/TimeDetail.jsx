@@ -4,8 +4,10 @@ import styled, { css } from "styled-components"
 
 import Button from "@components/common/Button"
 
-import { useClientSetting, useClientTimezone } from "@utils/clientSettings"
+import { useClientSetting } from "@utils/clientSettings"
+import { useClientTimezone } from "@utils/clientSettings"
 
+import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -18,20 +20,20 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
     ]
 
     const [setting] = useClientSetting()
-    const due_tz = useClientTimezone()
+    const tz = useClientTimezone()
 
-    const due_time = task?.due_time || ""
+    const due = task.due_type === "due_datetime" ? task.due_datetime : task.due_date
+    const due_datetime = DateTime.fromJSDate(new Date(due)).setZone(tz)
+    const due_time = task.due_type === "due_datetime" ? due_datetime.toISOTime() : DateTime.fromJSDate(new Date('00:00:00')).toISOTime()
 
     const [ampm, setAmpm] = useState(ampms[0].name)
     const [hour, setHour] = useState(due_time && parseInt(due_time.slice(0, 2)))
     const [min, setMin] = useState(due_time && parseInt(due_time.slice(3, 5)))
 
     const changeTime = () => {
-        const due_date = task.due_date
-        let converted_hour =
-            !setting.time_as_24_hour && ampm === "pm" ? hour + 12 : hour
-        const due_time = `${converted_hour}:${min}:00`
-        setFunc({ due_tz, due_date, due_time })
+        let converted_hour = !setting.time_as_24_hour && ampm === "pm" ? hour + 12 : hour
+        const converted_datetime = due_datetime.set({ hour: converted_hour, minute: min }).setZone("UTC").toFormat('yyyy-MM-dd HH:mm:00');
+        setFunc({ due_type: "due_datetime", due_date: null, due_datetime: converted_datetime })
         toast.success(t("time_change_success"))
         closeComponent()
     }

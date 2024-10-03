@@ -9,30 +9,33 @@ const taskDate = (task) => {
         return formattedDate
     }
 
-    const formatTime = (time) => {
-        let formattedTime = ""
+    const formatDateTime = (datetime) => {
+        let formattedDateTime = ""
         if (setting.time_as_24_hour)
-            formattedTime = time.toLocaleTimeString(locale, {
+            formattedDateTime = datetime.toLocaleString(locale, {
                 hour12: false,
-                hour: "numeric",
-                minute: "numeric",
+                dateStyle: "medium",
+                timeStyle: "short",
             })
         else
-            formattedTime = time.toLocaleTimeString(locale, {
+            formattedDateTime = datetime.toLocaleString(locale, {
                 hour12: true,
-                hour: "numeric",
-                minute: "numeric",
+                dateStyle: "medium",
+                timeStyle: "short",
             })
-        return formattedTime
+        return formattedDateTime
     }
 
-    const task_due = new Date(
-        `${task.due_date}${task.due_time ? "T" + task.due_time : ""}`,
-    )
+    let formatted_due_datetime = null
+    if (task.due_type === "due_date") {
+        const task_due = new Date(task.due_date)
+        formatted_due_datetime = formatDate(task_due)
+    } else {
+        const task_due = new Date(task.due_datetime)
+        formatted_due_datetime = formatDateTime(task_due)
+    }
+
     const assigned_at_date = new Date(task.assigned_at)
-    const formatted_due_datetime = task.due_time
-        ? formatDate(task_due) + " " + formatTime(task_due)
-        : formatDate(task_due)
     const formatted_assigned_date = formatDate(assigned_at_date)
 
     return { formatted_due_datetime, formatted_assigned_date }

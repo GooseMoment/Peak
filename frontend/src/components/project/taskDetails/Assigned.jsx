@@ -9,7 +9,9 @@ import RepeatDetail from "@components/project/due/RepeatDetail"
 
 import { cubicBeizer } from "@assets/keyframes"
 import { rotateToUnder, rotateToUp } from "@assets/keyframes"
+import { useClientTimezone } from "@utils/clientSettings"
 
+import { DateTime } from "luxon"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -19,6 +21,7 @@ const Assigned = ({ setFunc }) => {
 
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
+    const tz = useClientTimezone()
     const { closeModal } = useModalWindowCloseContext()
 
     const handleAdditionalComp = (name) => {
@@ -31,14 +34,14 @@ const Assigned = ({ setFunc }) => {
             setIsAdditionalComp(name)
     }}
 
-    let date = new Date()
+    const today = DateTime.fromJSDate(new Date()).setZone(tz)
 
     const changeAssignedDate = (set) => {
         return async () => {
-            date.setDate(date.getDate() + set)
+            const date = today.plus({ days: set })
             let assigned_at = null
             if (!(set === null)) {
-                assigned_at = date.toISOString().slice(0, 10)
+                assigned_at = date.toISODate()
             }
             setFunc({ assigned_at })
             closeModal()

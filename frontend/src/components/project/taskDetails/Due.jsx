@@ -2,31 +2,34 @@ import { Fragment, useState } from "react"
 
 import styled, { css } from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 import TimeDetail from "@components/project/due/TimeDetail"
+import { useClientTimezone } from "@utils/clientSettings"
 
 import { cubicBeizer } from "@assets/keyframes"
 import { rotateToUnder, rotateToUp } from "@assets/keyframes"
 
+import { DateTime } from "luxon"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 
 const Due = ({ task, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due" })
 
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
+    const tz = useClientTimezone()
     const { closeModal } = useModalWindowCloseContext()
 
     const handleAdditionalComp = (name) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
         else {
             if (name === "time") {
-                if (!task.due_date) {
+                if (task.type === "due_date" && !task.due_date) {
                     toast.error(t("time.no_due_before_time"), {
                         toastId: "handle_time_open",
                     })
@@ -41,16 +44,25 @@ const Due = ({ task, setFunc }) => {
         }
     }
 
-    let date = new Date()
+    const today = DateTime.fromJSDate(new Date()).setZone(tz)
 
     const changeDueDate = (set) => {
         return async () => {
-            date.setDate(date.getDate() + set)
-            let due_date = null
-            if (!(set === null)) {
-                due_date = date.toISOString().slice(0, 10)
+            const date = today.plus({ days: set })
+
+            if (set === null) {
+                setFunc({ due_type: null, due_date: null, due_datetime: null })
+                return
             }
-            setFunc({ due_date })
+
+            if (task.due_type === "due_datetime") {
+                const due_datetime = DateTime.fromJSDate(new Date(task.due_datetime)).setZone(tz)
+                const converted_datetime = due_datetime.set({ year: date.year, month: date.month, day: date.day })
+                setFunc({ due_datetime: converted_datetime })
+                return
+            }
+            
+            setFunc({ due_type: "due_date", due_date: date.toISODate(), due_datetime: null })
             closeModal()
         }
     }

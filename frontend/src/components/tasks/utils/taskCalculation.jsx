@@ -1,68 +1,67 @@
 import { useClientLocale } from "@utils/clientSettings"
+import { useClientTimezone } from "@utils/clientSettings"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 
-const calculate = (name, newDate, diff) => {
+const calculateDate = (name, date, today) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
+    
+    const locale = useClientLocale()
+    const option = { day: "numeric", month: "numeric" }
+
+    if (date === null) {
+        return [null, null, null]
+    }
+
+    const diff_years = date.year - today.year
+    const diff_months = date.month - today.month
+    const diff_days = date.day - today.day
+    const diff_due = date.diff(today, ["years", "months", "days"]).toObject()
+
+    let newDate = null
+    if (diff_years > 0) {
+        newDate = date.toLocaleString(locale)
+    } else {
+        newDate = date.toLocaleString(locale, option)
+    }
 
     let calculatedDue = ""
-    if (diff.years < 0 || diff.months < 0 || diff.days < -1) {
+    if (diff_years < 0 || diff_months < 0 || diff_days < 0) {
         calculatedDue = name === "assigned" ? t("missed") : t("overdue")
-        return [calculatedDue, true]
-    } else if (-1 <= diff.days && diff.days < 0) {
+        return [newDate, calculatedDue, true]
+    } else if (diff_days === 0) {
+        if ((name === "due_datetime") && (diff_due.days < 0)) {
+            calculatedDue = t("overdue")
+            return [newDate, calculatedDue, true]
+        }
         calculatedDue = t("due_today")
-    } else if (0 <= diff.days && diff.days <= 1) {
+    } else if (diff_days === 1) {
         calculatedDue = t("due_tomorrow")
-    } else if (1 < diff.days && diff.days <= 30) {
-        calculatedDue = `${Math.floor(diff.days)}` + t("days_left")
+    } else if (2 <= diff_days && diff_days <= 30) {
+        calculatedDue = `${diff_days}` + t("days_left")
     } else {
         calculatedDue = newDate
     }
 
-    return [calculatedDue, false]
+    return [newDate, calculatedDue, false]
 }
 
 const taskCalculation = (task) => {
-    const locale = useClientLocale()
-    const option = { day: "numeric", month: "numeric" }
+    const tz = useClientTimezone()
 
-    const today = new Date()
-    const task_due_time = new Date(
-        `${task.due_date}${task.due_time ? "T" + task.due_time : ""}`,
-    )
-    const assigned_at_date = new Date(task.assigned_at)
+    const today = DateTime.fromJSDate(new Date()).setZone(tz)
 
-    const dtoday = DateTime.fromJSDate(today)
-    const ddue = DateTime.fromJSDate(task_due_time)
-    const dassigned = DateTime.fromJSDate(assigned_at_date)
+    const taskAssigned_at = DateTime.fromJSDate(new Date(task.assigned_at)).setZone(tz)
+    const [assigned, calculate_assigned, isOutOfAssigned] = calculateDate("assigned", taskAssigned_at, today)
 
-    const diff_due = ddue.diff(dtoday, ["years", "months", "days"]).toObject()
-    const diff_assigned = dassigned
-        .diff(dtoday, ["years", "months", "days"])
-        .toObject()
-
-    let new_due_date = task_due_time.toLocaleDateString(locale, option)
-    if (today.getFullYear() - task_due_time.getFullYear() > 0) {
-        new_due_date = task_due_time.toLocaleDateString(locale)
+    let taskDue = null
+    if (task.due_type === "due_date") {
+        taskDue = DateTime.fromJSDate(new Date(task.due_date)).setZone(tz)
+    } else if (task.due_type === "due_datetime") {
+        taskDue = DateTime.fromJSDate(new Date(task.due_datetime)).setZone(tz)
     }
-    let new_assigned_at_date = assigned_at_date.toLocaleDateString(
-        locale,
-        option,
-    )
-    if (today.getFullYear() - assigned_at_date.getFullYear() > 0) {
-        new_assigned_at_date = assigned_at_date.toLocaleDateString(locale)
-    }
-
-    let due = new_due_date
-    let assigned = new_assigned_at_date
-
-    let [calculate_due, isOutOfDue] = calculate("due", new_due_date, diff_due)
-    let [calculate_assigned, isOutOfAssigned] = calculate(
-        "assigned",
-        new_assigned_at_date,
-        diff_assigned,
-    )
+    const [due, calculate_due, isOutOfDue] = calculateDate(task.due_type, taskDue, today)
 
     return {
         due,
