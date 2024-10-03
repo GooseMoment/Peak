@@ -3,35 +3,37 @@ import styled from "styled-components"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
-import goal from "@assets/project/type/goal.svg"
-import regular from "@assets/project/type/regular.svg"
+import privatesvg from "@assets/project/privacy/private.svg"
+import protectedsvg from "@assets/project/privacy/protected.svg"
+import publicsvg from "@assets/project/privacy/public.svg"
 
 import { useTranslation } from "react-i18next"
 
-const Type = ({ setType }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.type" })
+const Privacy = ({ setPrivacy }) => {
+    const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit.privacy" })
 
     const { closeModal } = useModalWindowCloseContext()
 
-    const changeType = (type) => {
+    const changePrivacy = (privacy) => {
         return () => {
-            setType({ type })
+            setPrivacy({ privacy })
             closeModal()
         }
     }
 
     const items = [
-        { icon: <img src={regular} />, type: "regular" },
-        { icon: <img src={goal} />, type: "goal" },
+        { icon: <img src={publicsvg} />, privacy: "public" },
+        { icon: <img src={protectedsvg} />, privacy: "protected" },
+        { icon: <img src={privatesvg} />, privacy: "private" },
     ]
 
     return (
         <Detail title={t("title")} onClose={closeModal}>
             {items.map((item) => (
-                <ItemBlock key={item.type}>
+                <ItemBlock key={item.privacy}>
                     {item.icon}
-                    <ItemText onClick={changeType(item.type)}>
-                        {t(item.type)}
+                    <ItemText onClick={changePrivacy(item.privacy)}>
+                        {t(item.privacy)}
                     </ItemText>
                 </ItemBlock>
             ))}
@@ -66,4 +68,4 @@ const ItemText = styled.p`
     }
 `
 
-export default Type
+export default Privacy

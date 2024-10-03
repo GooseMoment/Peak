@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import DrawerFolder from "@components/project/Creates/DrawerFolder"
+import DrawerFolder from "@components/project/taskDetails/DrawerFolder"
 import Detail from "@components/project/common/Detail"
 
 import { getProjectList } from "@api/projects.api"
