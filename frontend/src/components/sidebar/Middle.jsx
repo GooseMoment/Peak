@@ -3,7 +3,7 @@ import { useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import styled, { css, useTheme } from "styled-components"
 
-import { getProjectColor } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/common/palettes"
 import { useSidebarContext } from "@components/sidebar/SidebarContext"
 import SidebarLink from "@components/sidebar/SidebarLink"
 

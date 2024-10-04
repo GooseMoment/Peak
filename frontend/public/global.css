@@ -103,6 +103,10 @@ html {
     background-color: transparent;
 
     transition: background-color 0.25s var(--cubic);
+
+    @media screen and (max-width: 500px) {
+        flex-direction: column;
+    }
 }
 
 #window-container:has(div) {

@@ -1,6 +1,6 @@
 import styled, { useTheme } from "styled-components"
 
-import { getProjectColor } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/common/palettes"
 import SimpleProfile from "@components/social/common/SimpleProfile"
 
 import { DateTime } from "luxon"
