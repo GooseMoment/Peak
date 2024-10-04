@@ -19,7 +19,7 @@ const getPageFromURL = (url) => {
     return page
 }
 
-const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
+const DrawerBundle = ({ drawer, pageType, selectedDate }) => {
     const {
         data: taskPage,
         fetchNextPage: fetchNextTaskPage,
@@ -55,7 +55,7 @@ const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
                             key={task.id}
                             task={task}
                             color={color}
-                            isFollowingPage={isFollowingPage}
+                            isFollowingPage={pageType === "following"}
                         />
                     )),
                 )}

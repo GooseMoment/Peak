@@ -50,7 +50,6 @@ const SocialExplorePage = () => {
     const {
         data: foundPage,
         fetchNextPage: fetchNextFoundPage,
-        isPending: isFoundPending,
         isFetching: isFoundFetching,
         refetch: refetchFound,
     } = useInfiniteQuery({
@@ -68,28 +67,7 @@ const SocialExplorePage = () => {
     
     useEffect(() => {
         if(searchQuery.length !== 0) refetchFound()
-    }, [searchQuery])
-
-    const { data: quote } = useQuery({
-        queryKey: ["quote", selectedUser],
-        queryFn: () => getQuote(selectedUser, selectedDate),
-        enabled: !!selectedUser,
-    })
-
-    const {
-        data: drawerPage,
-        fetchNextPage: fetchNextDrawerPage,
-        isPending: isDrawerPending,
-        refetch: refetchDrawer,
-    } = useInfiniteQuery({
-        queryKey: ["daily", "log", "details", "drawer", selectedUser],
-        queryFn: (page) =>
-            getDailyLogDrawers(selectedUser, page.pageParam),
-        initialPageParam: "",
-        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
-        enabled: !!selectedUser
-    })
-    
+    }, [searchQuery])    
 
     const handleSearch = (searchTerm) => {
         setSearchQuery(searchTerm.trim())
@@ -120,13 +98,11 @@ const SocialExplorePage = () => {
                 </Container>
 
                 <StickyContainer>
-                    {quote && (
+                    {selectedUser && (
                         <LogDetails
-                            user={quote?.user}
-                            quote={quote}
-                            logDetails={drawerPage}
-                            isFollowingPage={false}
+                            username={selectedUser}
                             selectedDate={selectedDate}     //temp
+                            pageType="explore"
                         />
                     )}
                 </StickyContainer>
