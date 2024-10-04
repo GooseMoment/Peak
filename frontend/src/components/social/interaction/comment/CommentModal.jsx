@@ -86,11 +86,13 @@ const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
 }
 
 const Wrapper = styled.div`
+    z-index:100;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -121,7 +123,6 @@ const Modal = styled.div`
     padding: 1em;
 
     overflow-y: auto;
-    z-index: 10;
     pointer-events: auto;
 
     display: flex;
