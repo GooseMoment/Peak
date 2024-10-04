@@ -3,8 +3,8 @@ import { useState } from "react"
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import { styled } from "styled-components"
 
+import CommonCalendar from "@components/common/CommonCalendar"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
-import SocialCalendar from "@components/social/SocialCalendar"
 import SocialPageTitle from "@components/social/SocialPageTitle"
 import LogDetails from "@components/social/logDetails/LogDetails"
 import LogsPreview from "@components/social/logsPreview/LogsPreview"
@@ -16,6 +16,8 @@ import {
     getQuote,
     postQuote,
 } from "@api/social.api"
+
+import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
@@ -74,15 +76,14 @@ const SocialFollowingPage = () => {
         refetch: refetchDrawer,
     } = useInfiniteQuery({
         queryKey: ["daily", "log", "details", "drawer", targetUser],
-        queryFn: (page) =>
-            getDailyLogDrawers(targetUser, page.pageParam),
+        queryFn: (page) => getDailyLogDrawers(targetUser, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
     })
 
     const hasNextPage =
         drawerPage?.pages[drawerPage?.pages?.length - 1].next !== null
-    const isNotificationEmpty = drawerPage?.pages[0]?.results?.length === 0
+    const isLogDetailsEmpty = drawerPage?.pages[0]?.results?.length === 0
 
     const saveQuote = (content) => {
         QuoteMutation.mutate({ day: selectedDate, content })
@@ -95,10 +96,11 @@ const SocialFollowingPage = () => {
             <Wrapper>
                 <Container>
                     <CalendarWrapper>
-                        <SocialCalendar
-                            newLogDates={mockNewLogDates}
-                            selectedDate={selectedDate}
-                            setSelectedDate={setSelectedDate}
+                        <CommonCalendar
+                            isRangeSelectMode={false}
+                            selectedStartDate={selectedDate}
+                            setSelectedStartDate={setSelectedDate}
+                            contentedDates={mockNewLogDates}
                         />
                     </CalendarWrapper>
                     {dailyLogs && (
@@ -115,7 +117,7 @@ const SocialFollowingPage = () => {
                     {isQuotePending || isDrawerPending ? (
                         <SkeletonProjectPage />
                     ) : (
-                        drawerPage &&
+                        drawerPage && (
                             <LogDetails
                                 user={quote?.user}
                                 quote={quote}
@@ -124,18 +126,16 @@ const SocialFollowingPage = () => {
                                 logDetails={drawerPage}
                                 isFollowingPage
                             />
+                        )
                     )}
                     <ImpressionArea
                         onImpressionStart={() => fetchNextDrawerPage()}
-                        timeThreshold={200}
-                    >
+                        timeThreshold={200}>
                         {hasNextPage && "next"}
-                        {!hasNextPage && !isNotificationEmpty && (
-                            "no_more"
-                        )}
+                        {!hasNextPage && !isLogDetailsEmpty && "no_more"}
                     </ImpressionArea>
-                    
-                    {isNotificationEmpty && "empty"}
+
+                    {isLogDetailsEmpty && "empty"}
                 </StickyContainer>
             </Wrapper>
         </>
@@ -145,7 +145,10 @@ const SocialFollowingPage = () => {
 const Wrapper = styled.div`
     display: flex;
     gap: 2rem;
-    gap: 2rem;
+
+    ${ifMobile} {
+        flex-direction: column;
+    }
 `
 
 const Container = styled.div`
@@ -155,12 +158,18 @@ const Container = styled.div`
 
     padding: 0 1rem 0;
     overflow: hidden;
-    overflow: hidden;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 1rem;
+
+    ${ifMobile} {
+        width: 100%;
+        min-width: auto;
+
+        padding: 0;
+    }
 `
 
 const StickyContainer = styled(Container)`
@@ -170,12 +179,15 @@ const StickyContainer = styled(Container)`
 `
 
 const CalendarWrapper = styled.div`
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
     width: 80%;
-    max-width: 40rem;
-    width: 80%;
-    max-width: 40rem;
+    max-width: 35rem;
+
+    ${ifMobile} {
+        min-width: 20rem;
+
+        font-size: 0.9em;
+    }
 `
 
 const mockNewLogDates = [
