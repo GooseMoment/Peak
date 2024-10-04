@@ -18,6 +18,7 @@ const Header = () => {
     const { data: me, isFetching } = useQuery({
         queryKey: ["users", "me"],
         queryFn: () => getMe(),
+        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 
     const { t } = useTranslation("home", { keyPrefix: "page" })
