@@ -91,6 +91,9 @@ export const light = {
         todayColor: white,
         hoverColor: "#FFC6C6",
     },
+    help: {
+        addressBarShadowColor: "rgba(0, 0, 0, 0.4)",
+    },
     toastTheme: "light",
 }
 
@@ -171,6 +174,9 @@ export const dark = {
         secondBackgroundColor: "#292929",
         todayColor: white,
         hoverColor: "#804A30",
+    },
+    help: {
+        addressBarShadowColor: "rgba(0, 0, 0, 0.8)",
     },
     toastTheme: "dark",
 }

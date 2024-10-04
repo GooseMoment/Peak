@@ -35,6 +35,10 @@ const { SocialRedirector, SocialFollowingPage, SocialExplorePage } = lazily(
 
 const UserPage = lazy(() => import("@pages/UserPage"))
 
+const InstallInstructionPage = lazy(
+    () => import("@pages/docs/InstallInstructionPage"),
+)
+
 const redirectIfSignedIn = () => {
     if (getToken()) {
         return redirect("/app/")
@@ -182,6 +186,16 @@ const routes = [
                 path: "sign_out",
                 loader: signOut,
                 element: null,
+            },
+        ],
+    },
+    {
+        path: "/docs",
+        element: null,
+        children: [
+            {
+                path: "install-instruction",
+                element: <InstallInstructionPage />,
             },
         ],
     },
