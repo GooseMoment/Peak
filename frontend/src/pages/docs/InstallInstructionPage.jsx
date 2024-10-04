@@ -183,6 +183,9 @@ const SafariShareMenuItem = styled.div`
 
     background-color: ${(p) => p.theme.backgroundColor};
     padding: 1em;
+
+    user-select: none;
+    -webkit-user-select: none;
 `
 
 export default InstallInstructionPage
