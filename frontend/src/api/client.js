@@ -1,4 +1,7 @@
-import { setClientSettingsByName } from "@utils/clientSettings"
+import {
+    getClientTimezone,
+    setClientSettingsByName,
+} from "@utils/clientSettings"
 
 import axios from "axios"
 
@@ -51,10 +54,19 @@ client.interceptors.request.use((config) => {
     return config
 })
 
-client.interceptors.response.use(
-    (res) => {
-        return res
+const TIMEZONE_HEADER = "Client-Timezone"
+
+client.interceptors.request.use(
+    (config) => {
+        const tz = getClientTimezone()
+        config.headers[TIMEZONE_HEADER] = tz
+        return config
     },
+    (err) => err,
+)
+
+client.interceptors.response.use(
+    (res) => res,
     (err) => {
         if (err.response && err.response.status === 401) {
             clearUserCredentials()

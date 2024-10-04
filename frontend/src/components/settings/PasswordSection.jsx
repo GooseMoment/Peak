@@ -116,9 +116,9 @@ const PasswordSection = () => {
                             <ButtonGroup $justifyContent="right">
                                 <Button
                                     disabled={mutation.isPending}
-                                    $loading={mutation.isPending}
-                                    $form={buttonForms.filled}
-                                    $state={states.danger}
+                                    loading={mutation.isPending}
+                                    form={buttonForms.filled}
+                                    state={states.danger}
                                     type="submit"
                                 >
                                     {t("button_change")}

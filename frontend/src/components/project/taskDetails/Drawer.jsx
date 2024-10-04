@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import DrawerFolder from "@components/project/Creates/DrawerFolder"
 import Detail from "@components/project/common/Detail"
 
@@ -8,7 +9,6 @@ import { getProjectList } from "@api/projects.api"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 
 const Drawer = ({ setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.drawer" })
@@ -26,7 +26,12 @@ const Drawer = ({ setFunc }) => {
 
     const changeDrawer = (drawerID, drawerName, projectID, projectName) => {
         return () => {
-            setFunc({ drawer: drawerID, drawer_name: drawerName, project_id: projectID, project_name: projectName })
+            setFunc({
+                drawer: drawerID,
+                drawer_name: drawerName,
+                project_id: projectID,
+                project_name: projectName,
+            })
             closeModal()
         }
     }
