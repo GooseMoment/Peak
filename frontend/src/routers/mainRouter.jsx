@@ -191,7 +191,12 @@ const routes = [
     },
     {
         path: "/docs",
-        element: null,
+        async lazy() {
+            const { default: DocsLayout } = await import(
+                "@containers/DocsLayout"
+            )
+            return { element: <DocsLayout /> }
+        },
         children: [
             {
                 path: "install-instruction",

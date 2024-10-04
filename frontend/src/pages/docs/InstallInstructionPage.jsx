@@ -13,7 +13,7 @@ const InstallInstructionPage = () => {
     })
 
     return (
-        <Page>
+        <>
             <PageBack defaultTo="/app/home">{t("back")}</PageBack>
             <PageTitle>{t("title")}</PageTitle>
             <PageDescription>{t("description")}</PageDescription>
@@ -64,18 +64,9 @@ const InstallInstructionPage = () => {
                 </SafariShareMenuItem>
                 <CardText>{t("select_add_to_homescreen")}</CardText>
             </Card>
-        </Page>
+        </>
     )
 }
-
-const Page = styled.div`
-    min-height: 100dvh;
-    max-width: 100dvw;
-    padding-top: max(env(safe-area-inset-top), 2rem);
-    padding-right: max(env(safe-area-inset-right), 1.5rem);
-    padding-bottom: calc(2rem + 6rem);
-    padding-left: max(env(safe-area-inset-left), 1.5rem);
-`
 
 const Blank = styled.div`
     margin-bottom: 2.5em;
