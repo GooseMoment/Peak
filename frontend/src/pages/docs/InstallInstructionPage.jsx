@@ -5,18 +5,23 @@ import PageDescription from "@components/common/PageDescription"
 import PageTitle from "@components/common/PageTitle"
 
 import FeatherIcon from "feather-icons-react"
+import { Trans, useTranslation } from "react-i18next"
 
 const InstallInstructionPage = () => {
+    const { t } = useTranslation("docs", {
+        keyPrefix: "install_instruction_ios",
+    })
+
     return (
         <Page>
-            <PageBack defaultTo="/app/home">돌아가기</PageBack>
-            <PageTitle>Install Peak for iOS</PageTitle>
-            <PageDescription>Add Peak on your homescreen.</PageDescription>
+            <PageBack defaultTo="/app/home">{t("back")}</PageBack>
+            <PageTitle>{t("title")}</PageTitle>
+            <PageDescription>{t("description")}</PageDescription>
             <Blank />
-            <SectionNumber>Step 1</SectionNumber>
+            <SectionNumber>{t("step1")}</SectionNumber>
             <Card>
                 <BrowserIcon draggable="false" src="/images/safari.webp" />
-                <CardText>Open Safari</CardText>
+                <CardText>{t("open_safari")}</CardText>
             </Card>
             <Card>
                 <SafariAddressBar>
@@ -26,9 +31,11 @@ const InstallInstructionPage = () => {
                         <FeatherIcon icon="x-circle" />
                     </AddressBarIcons>
                 </SafariAddressBar>
-                <CardText>Go to alpha.peak.ooo</CardText>
+                <CardText>
+                    {t("go_to_website", { site: "alpha.peak.ooo" })}{" "}
+                </CardText>
             </Card>
-            <SectionNumber>Step 2</SectionNumber>
+            <SectionNumber>{t("step2")}</SectionNumber>
             <Card>
                 <SafariWrapper>
                     <SafariAddressBar>
@@ -44,14 +51,18 @@ const InstallInstructionPage = () => {
                     <ShareIcon icon="share" />
                 </SafariWrapper>
                 <CardText>
-                    Press the <FeatherIcon icon="share" /> share icon
+                    <Trans
+                        t={t}
+                        i18nKey="press_share"
+                        components={{ Icon: <FeatherIcon icon="share" /> }}
+                    />
                 </CardText>
             </Card>
             <Card>
                 <SafariShareMenuItem>
-                    <div>Add to Homescreen</div> <div></div>
+                    <div>{t("menu_add_to_homescreen")}</div> <div></div>
                 </SafariShareMenuItem>
-                <CardText>Select &quot;Add to Homescreen&quot;</CardText>
+                <CardText>{t("select_add_to_homescreen")}</CardText>
             </Card>
         </Page>
     )
