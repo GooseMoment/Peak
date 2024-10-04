@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react"
-import { useSearchParams } from "react-router-dom"
+import { useState } from "react"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 
@@ -12,39 +11,41 @@ import { getSearchResults } from "@api/search.api"
 
 import queryClient from "@queries/queryClient"
 
+import { useTranslation } from "react-i18next"
+
 const initialFilterGroup = (t) => ({
     searchTerms: {
-        name: "Terms",
+        name: t("search_terms"),
         type: "text",
         value: null,
     },
     project: {
-        name: "Project",
+        name: t("project"),
         type: "text",
         value: null,
     },
     drawer: {
-        name: "Drawer",
+        name: t("drawer"),
         type: "text",
         value: null,
     },
     assignedAt: {
-        name: "Assign",
+        name: t("assigned_at"),
         type: "date",
         value: null,
     },
     completedAt: {
-        name: "Completed",
+        name: t("completed_at"),
         type: "date",
         value: null,
     },
     privacy: {
-        name: "Privacy",
+        name: t("privacy"),
         type: "text",
         value: null,
     },
     memo: {
-        name: "Memo",
+        name: t("memo"),
         type: "text",
         value: null,
     },
@@ -59,7 +60,11 @@ const getCursorFromURL = (url) => {
 }
 
 const SearchPage = () => {
-    const [filters, setFilters] = useState(initialFilterGroup)
+    const { t } = useTranslation("", { keyPrefix: "search" })
+
+    const [filters, setFilters] = useState(
+        initialFilterGroup((key) => t(`filter_button.${key}`)),
+    )
 
     const updateFilterValue = (filterName, filterValue) => {
         setFilters((prev) => ({
@@ -95,7 +100,7 @@ const SearchPage = () => {
 
     return (
         <>
-            <PageTitle>Search</PageTitle>
+            <PageTitle>{t("title")}</PageTitle>
             <SearchBar handleSearch={updateSearchQuery("searchTerms")} />
             <FilterGroup filters={filters} handleSearch={updateSearchQuery} />
             {resultPage && (

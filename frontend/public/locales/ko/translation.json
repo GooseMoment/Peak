@@ -341,5 +341,17 @@
         "recovery_error_password_length": "암호는 8자 이상이어야 합니다.",
         "recovery_error_password_unmatch": "새 암호가 서로 다릅니다.",
         "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다."
+    },
+    "search" : {
+        "title": "검색",
+        "filter_button" : {
+            "search_terms" : "검색어",
+            "project" : "프로젝트",
+            "drawer" : "서랍",
+            "assigned_at" : "할당 날짜",
+            "completed_at" : "완수 날짜",
+            "privacy" : "공개 범위",
+            "memo" : "메모"
+        }
     }
 }
