@@ -3,7 +3,10 @@ import styled, { useTheme } from "styled-components"
 import { getProjectColor } from "@components/project/Creates/palettes"
 import SimpleProfile from "@components/social/common/SimpleProfile"
 
+import { useClientLocale } from "@utils/clientSettings"
+
 import { DateTime } from "luxon"
+import { useTranslation } from "react-i18next"
 
 const putEllipsis = (text, maxLength) => {
     return text.length > maxLength
@@ -13,6 +16,8 @@ const putEllipsis = (text, maxLength) => {
 
 const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
     const theme = useTheme()
+    const { t } = useTranslation("", { keyPrefix: "social" })
+    const locale = useClientLocale()
 
     if (!log) return null
 
@@ -42,14 +47,15 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
                         <TaskName>
                             {' "' +
                                 putEllipsis(log.recent_task.name, 32) +
-                                '" 완료! '}
+                                '" ' +
+                                t("log_preview_completed")}
                         </TaskName>
-                        {/* TODO: set locale */}
+
                         <Ago>
                             {" " +
-                                DateTime.fromISO(
-                                    log.recent_task.completed_at,
-                                ).toRelative({ locale: "ko" }) +
+                                DateTime.fromISO(log.recent_task.completed_at)
+                                    .setLocale(locale)
+                                    .toRelative() +
                                 " "}
                         </Ago>
                     </>

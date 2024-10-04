@@ -10,7 +10,6 @@ import SearchBar from "@components/social/explore/SearchBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
 
 import {
-    getDailyLogTasks,
     getExploreRecommend,
     getExploreFound,
     getQuote,

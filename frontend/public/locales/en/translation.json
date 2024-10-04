@@ -356,5 +356,20 @@
         "recovery_error_password_length": "Password should be more than 8 letters.",
         "recovery_error_password_unmatch": "Two forms have different values.",
         "recovery_error": "Oops. Perhaps this link is invalid or expired."
+    },
+    "social" : {
+        "following_title": "Following",
+        "explore_title": "Explore",
+        "log_preview_completed": "completed!",
+        "quote" : {
+            "empty_self_quote": "Write your today's quote.",
+            "empty_others_quote": "No quote yet."
+        },
+        "emoji_modal" : {
+            "searchbar" : "Search emojis"
+        },
+        "explore" : {
+            "searchbar" : "Search for usernames to follow."
+        }
     }
 }

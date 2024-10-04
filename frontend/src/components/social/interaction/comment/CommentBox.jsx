@@ -1,9 +1,11 @@
 import styled, { useTheme } from "styled-components"
 
 import { DateTime } from "luxon"
+import { useClientLocale } from "@/utils/clientSettings"
 
 const CommentBox = ({ comment }) => {
     const theme = useTheme()
+    const locale = useClientLocale()
 
     return (
         <Box>
@@ -13,11 +15,8 @@ const CommentBox = ({ comment }) => {
             <Wrapper $color={theme.textColor}>
                 <InfoBox>
                     <Username>@{comment.user.username}</Username>
-                    {/* TODO: Set locale */}
                     <Ago>
-                        {DateTime.fromISO(comment.created_at).toRelative({
-                            locale: "ko",
-                        })}
+                        {DateTime.fromISO(comment.created_at).setLocale(locale).toRelative()}
                     </Ago>
                 </InfoBox>
 

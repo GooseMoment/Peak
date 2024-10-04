@@ -4,24 +4,31 @@ import styled, { useTheme } from "styled-components"
 
 import PageTitle from "@components/common/PageTitle"
 
+import { useTranslation } from "react-i18next"
+
 const SocialPageTitle = ({ active }) => {
     const theme = useTheme()
+    const { t } = useTranslation("", { keyPrefix: "social" })
 
     if (active === "following")
         return (
             <PageTitleGroup>
-                <PageTitleButton to="../following">Following</PageTitleButton>
+                <PageTitleButton to="../following">
+                    {t("following_title")}
+                </PageTitleButton>
                 <PageTitleButton to="../explore" $color={theme.secondTextColor}>
-                    Explore
+                    {t("explore_title")}
                 </PageTitleButton>
             </PageTitleGroup>
         )
 
     return (
         <PageTitleGroup>
-            <PageTitleButton to="../explore">Explore</PageTitleButton>
+            <PageTitleButton to="../explore">
+                {t("explore_title")}
+            </PageTitleButton>
             <PageTitleButton to="../following" $color={theme.secondTextColor}>
-                Following
+                {t("following_title")}
             </PageTitleButton>
         </PageTitleGroup>
     )
@@ -39,8 +46,7 @@ const PageTitleButton = ({ $color, to, children }) => {
         <PageTitle
             $cursor="pointer"
             $color={$color}
-            onClick={() => navigate(to)}
-        >
+            onClick={() => navigate(to)}>
             {children}
         </PageTitle>
     )
