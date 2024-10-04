@@ -7,6 +7,8 @@ import PageTitle from "@components/common/PageTitle"
 import FeatherIcon from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 
+const siteDomain = window.location.host
+
 const InstallInstructionPage = () => {
     const { t } = useTranslation("docs", {
         keyPrefix: "install_instruction_ios",
@@ -25,14 +27,14 @@ const InstallInstructionPage = () => {
             </Card>
             <Card>
                 <SafariAddressBar>
-                    <div>alpha.peak.ooo</div>
+                    <div>{siteDomain}</div>
                     <AddressBarIcons>
                         <FeatherIcon icon="mic" />
                         <FeatherIcon icon="x-circle" />
                     </AddressBarIcons>
                 </SafariAddressBar>
                 <CardText>
-                    {t("go_to_website", { site: "alpha.peak.ooo" })}{" "}
+                    {t("go_to_website", { site: siteDomain })}{" "}
                 </CardText>
             </Card>
             <SectionNumber>{t("step2")}</SectionNumber>
@@ -42,7 +44,7 @@ const InstallInstructionPage = () => {
                         <div />
                         <div>
                             <FeatherIcon icon="lock" />
-                            alpha.peak.ooo
+                            {siteDomain}
                         </div>
                         <AddressBarIcons>
                             <FeatherIcon icon="rotate-cw" />
@@ -131,7 +133,7 @@ const SafariWrapper = styled.div`
 
     background-color: ${(p) => p.theme.backgroundColor};
     border-radius: 16px;
-    padding: 0.5em 1em 1em;
+    padding: 0.5em 2em 1em;
 `
 
 const AddressBarIcons = styled.div`
