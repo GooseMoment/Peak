@@ -5,6 +5,8 @@ import styled from "styled-components"
 import MildButton from "@components/common/MildButton"
 import FilterInput from "@components/search/FilterInput"
 
+import { useClientLocale } from "@utils/clientSettings"
+
 import FeatherIcon from "feather-icons-react"
 
 const FilterButton = ({
@@ -13,6 +15,8 @@ const FilterButton = ({
     inputState,
     setInputState,
 }) => {
+    const locale = useClientLocale()
+
     const [inputPosition, setInputPosition] = useState({ top: 0, left: 0 })
 
     const buttonRef = useRef(null)
@@ -30,8 +34,6 @@ const FilterButton = ({
     }
 
     const displayFilterValue = () => {
-        console.log(filter.value, typeof filter.value, !!filter.value)
-
         if (!filter.value) return null
 
         if (filter.type === "text") {
@@ -43,12 +45,10 @@ const FilterButton = ({
             }
 
             const startDate = new Date(filter.value.startDate).toLocaleString(
-                navigator.language,
-                options,
+                locale, options
             )
             const endDate = new Date(filter.value.endDate).toLocaleString(
-                navigator.language,
-                options,
+                locale, options
             )
 
             if (startDate === endDate) return startDate
