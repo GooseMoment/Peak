@@ -10,6 +10,7 @@ import { getAnnouncements } from "@api/announcements.api"
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
 import { DateTime } from "luxon"
+import PageBack from "@/components/common/PageBack"
 
 const getPageFromURL = (url) => {
     if (!url) return null
@@ -36,6 +37,7 @@ const AnnouncementListPage = () => {
     if (isFetching) {
         return (
             <>
+                <PageBack defaultTo="/app/home">Back to Home</PageBack>
                 <PageTitle>Announcements</PageTitle>
             </>
         )
@@ -43,6 +45,7 @@ const AnnouncementListPage = () => {
 
     return (
         <>
+            <PageBack defaultTo="/app/home">Back to Home</PageBack>
             <PageTitle>Announcements</PageTitle>
             {data.pages.map((group, i) =>
                 group.results.map((item) => (

@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
+import PageBack from "@components/common/PageBack"
 import PageTitle from "@components/common/PageTitle"
 
 import { getAnnouncement } from "@api/announcements.api"
@@ -32,6 +33,7 @@ const AnnouncementDetailPage = () => {
 
     return (
         <>
+            <PageBack defaultTo="/app/announcements">Back to the list</PageBack>
             <PageTitle>{data.title}</PageTitle>
             <Content
                 className="markdown-body announcement_detail_content"
