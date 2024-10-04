@@ -29,7 +29,11 @@ export const Title = ({ className, children, to, underline, loading }) => {
     )
 
     if (to) {
-        return <Link to={to}>{title}</Link>
+        return (
+            <Link state={{ backTo: "/app/home" }} to={to}>
+                {title}
+            </Link>
+        )
     }
 
     return title
@@ -40,12 +44,14 @@ const StyledH2 = styled.h2`
     font-size: 1em;
     margin-bottom: 0.75em;
 
-    ${p => p.$loading && css`
-        height: 1.25em;
-        width: 15em;
-        max-width: 100%;
-        ${skeletonCSS}
-    `}
+    ${(p) =>
+        p.$loading &&
+        css`
+            height: 1.25em;
+            width: 15em;
+            max-width: 100%;
+            ${skeletonCSS}
+        `}
 `
 
 const mark = keyframes`
