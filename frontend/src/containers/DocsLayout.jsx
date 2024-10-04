@@ -19,7 +19,8 @@ const DocsLayout = () => {
 
 const Page = styled.div`
     min-height: 100dvh;
-    max-width: 100dvw;
+    max-width: 500px;
+    margin: auto;
     padding-top: max(env(safe-area-inset-top), 2rem);
     padding-right: max(env(safe-area-inset-right), 1.5rem);
     padding-bottom: calc(2rem + 6rem);
