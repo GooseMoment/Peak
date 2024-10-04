@@ -5,12 +5,16 @@ import Module, { Title } from "@components/home/Module"
 
 import PlusCircle from "@assets/home/PlusCircle"
 
+import { useTranslation } from "react-i18next"
+
 const AddTask = () => {
+    const { t } = useTranslation("home", { keyPrefix: "add_task" })
+
     return (
         <Module>
-            <Title>Add a task</Title>
+            <Title>{t("title")}</Title>
             <ButtonOpen>
-                <div>Tap to open...</div> <PlusCircle />
+                <div>{t("tap_to_open")}</div> <PlusCircle />
             </ButtonOpen>
         </Module>
     )

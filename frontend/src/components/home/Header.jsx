@@ -12,6 +12,7 @@ import { ifMobile } from "@utils/useScreenType"
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
 const Header = () => {
     const { data: me, isFetching } = useQuery({
@@ -19,9 +20,11 @@ const Header = () => {
         queryFn: () => getMe(),
     })
 
+    const { t } = useTranslation("home", { keyPrefix: "page" })
+
     return (
         <Frame>
-            <PageTitle>Home</PageTitle>
+            <PageTitle>{t("title")}</PageTitle>
             <HeaderIcons>
                 {isFetching ? (
                     <HeaderProfileLoading />

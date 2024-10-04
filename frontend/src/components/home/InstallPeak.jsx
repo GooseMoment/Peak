@@ -1,18 +1,21 @@
 import styled from "styled-components"
 
 import Module, { CenteredText, Title } from "@components/home/Module"
+import { useTranslation } from "react-i18next"
 
 const InstallPeak = () => {
+    const { t } = useTranslation("home", {keyPrefix: "install_peak"})
+
     return (
         <Module>
             <Title to="/docs/install-instruction" underline>
-                Install Peak as an app
+                {t("title")} 
             </Title>
             <IconWrapper>
                 <AppIcon src="/logo.svg" draggable="false" />
             </IconWrapper>
             <CenteredText>
-                With Safari, you can install Peak as an app.
+                {t("description")} 
             </CenteredText>
         </Module>
     )

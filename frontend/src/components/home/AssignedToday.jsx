@@ -7,6 +7,8 @@ import { getTasksTodayAssignedGrouped } from "@api/today.api"
 
 import { useClientTimezone } from "@utils/clientSettings"
 
+import { useTranslation } from "react-i18next"
+
 const AssignedToday = () => {
     const tz = useClientTimezone()
 
@@ -14,6 +16,8 @@ const AssignedToday = () => {
         queryKey: ["home", "tasks", "today"],
         queryFn: () => getTasksTodayAssignedGrouped(tz),
     })
+
+    const { t } = useTranslation("home", { keyPrefix: "assigned_today" })
 
     if (isLoading) {
         return (
@@ -28,7 +32,7 @@ const AssignedToday = () => {
 
     return (
         <Module>
-            <Title to="/app/today">{countAll} tasks assigned today</Title>
+            <Title to="/app/today">{t("title", { number: countAll })}</Title>
             <VGraph items={items} countAll={countAll} />
         </Module>
     )
