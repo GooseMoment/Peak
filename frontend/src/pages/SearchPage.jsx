@@ -12,7 +12,7 @@ import { getSearchResults } from "@api/search.api"
 
 import queryClient from "@queries/queryClient"
 
-const initialFilterGroup = {
+const initialFilterGroup = (t) => ({
     searchTerms: {
         name: "Terms",
         type: "text",
@@ -48,7 +48,7 @@ const initialFilterGroup = {
         type: "text",
         value: null,
     },
-}
+})
 
 const getCursorFromURL = (url) => {
     if (!url) return null
@@ -59,18 +59,7 @@ const getCursorFromURL = (url) => {
 }
 
 const SearchPage = () => {
-    const [filters, setFilters] = useState()
-
-    // useState로 하면 아주 잘 돌아감 아니 왜?
-    const [searchParams, setSearchParams] = useSearchParams()
-
-    useEffect(() => {
-        searchParams?.forEach((value, key) => {
-            initialFilterGroup[key].value = value === "null" ? null : value
-        })
-        setFilters(initialFilterGroup)
-    }, [searchParams])
-    // 이러면 굳이 updateFilterValue가 필요 없을 거긴 한데 나중에 기능 추가하면서 수정 고려
+    const [filters, setFilters] = useState(initialFilterGroup)
 
     const updateFilterValue = (filterName, filterValue) => {
         setFilters((prev) => ({
@@ -82,23 +71,7 @@ const SearchPage = () => {
         }))
     }
 
-    const updateSearchParam = (filterName, filterValue) => {
-        const newParams = new URLSearchParams(searchParams)
-
-        if (filterValue && filters[filterName].type === "date") {
-            newParams.set(
-                filterName,
-                filterValue.startDate + "to" + filterValue.endDate,
-            )
-        } else {
-            newParams.set(filterName, filterValue)
-        }
-
-        setSearchParams(newParams)
-    }
-
     const updateSearchQuery = (filterName) => (filterValue) => {
-        updateSearchParam(filterName, filterValue)
         updateFilterValue(filterName, filterValue)
 
         queryClient.invalidateQueries(["search"])
@@ -114,7 +87,7 @@ const SearchPage = () => {
         refetch: refetchResult,
     } = useInfiniteQuery({
         queryKey: ["search"],
-        queryFn: (page) => getSearchResults(searchParams, page.pageParam),
+        queryFn: (page) => getSearchResults(filters, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
         enabled: false,
