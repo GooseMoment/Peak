@@ -1,7 +1,13 @@
 import client, { getCurrentUsername } from "@api/client"
 
-export const getAnnouncements = async (lang, pinned_only=false, page = "") => {
-    const res = await client.get(`announcements`, { params: { lang, page, pinned_only }})
+export const getAnnouncements = async (
+    lang,
+    pinned_only = false,
+    page = "",
+) => {
+    const res = await client.get(`announcements`, {
+        params: { lang, page, pinned_only },
+    })
     return res.data
 }
 
@@ -14,7 +20,9 @@ export const getHeart = async (announcement_id) => {
     const username = getCurrentUsername()
 
     try {
-        client.get(`announcements/${announcement_id}/hearts/@${username}`)
+        await client.get(
+            `announcements/${announcement_id}/hearts/@${username}/`,
+        )
     } catch (e) {
         if (e.response.status === 404) {
             return false
@@ -28,10 +36,12 @@ export const getHeart = async (announcement_id) => {
 
 export const postHeart = async (announcement_id) => {
     const username = getCurrentUsername()
-    return client.post(`announcements/${announcement_id}/hearts/@${username}`)
+    return client.post(`announcements/${announcement_id}/hearts/@${username}/`)
 }
 
 export const deleteHeart = async (announcement_id) => {
     const username = getCurrentUsername()
-    return client.delete(`announcements/${announcement_id}/hearts/@${username}`)
+    return client.delete(
+        `announcements/${announcement_id}/hearts/@${username}/`,
+    )
 }
