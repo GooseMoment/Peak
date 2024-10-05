@@ -25,6 +25,8 @@ const Page = styled.div`
     padding-right: max(env(safe-area-inset-right), 1.5rem);
     padding-bottom: calc(2rem + 6rem);
     padding-left: max(env(safe-area-inset-left), 1.5rem);
+
+    color: ${(p) => p.theme.textColor};
 `
 
 export default DocsLayout
