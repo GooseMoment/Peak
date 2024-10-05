@@ -57,10 +57,9 @@ class HeartDetail(generics.GenericAPIView):
 
         exists = self.get_queryset().filter(user__username=username, announcement_id=announcement_id).exists()
 
-        if not exists:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        return Response(status=status.HTTP_200_OK)
+        return Response({
+            "hearted": exists,
+        }, status=status.HTTP_200_OK)
     
     def post(self, request, announcement_id, username, *args, **kwargs):
         if request.user.username != username:

@@ -19,19 +19,11 @@ export const getAnnouncement = async (id) => {
 export const getHeart = async (announcement_id) => {
     const username = getCurrentUsername()
 
-    try {
-        await client.get(
-            `announcements/${announcement_id}/hearts/@${username}/`,
-        )
-    } catch (e) {
-        if (e.response.status === 404) {
-            return false
-        }
+    const res = await client.get(
+        `announcements/${announcement_id}/hearts/@${username}/`,
+    )
 
-        throw e
-    }
-
-    return true
+    return res.data.hearted
 }
 
 export const postHeart = async (announcement_id) => {
