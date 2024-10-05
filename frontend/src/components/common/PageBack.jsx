@@ -22,7 +22,9 @@ const BackLink = styled(Link)`
     font-weight: 700;
 
     & svg {
+        top: 0.15em;
         margin-right: 0.25em;
+        stroke-width: 3px;
     }
 `
 
