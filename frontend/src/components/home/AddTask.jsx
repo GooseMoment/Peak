@@ -6,14 +6,19 @@ import Module, { Title } from "@components/home/Module"
 import PlusCircle from "@assets/home/PlusCircle"
 
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const AddTask = () => {
     const { t } = useTranslation("home", { keyPrefix: "add_task" })
 
+    const onClick = () => {
+        toast.info("Work In Progress!")
+    }
+
     return (
         <Module>
             <Title>{t("title")}</Title>
-            <ButtonOpen>
+            <ButtonOpen onClick={onClick}>
                 <div>{t("tap_to_open")}</div> <PlusCircle />
             </ButtonOpen>
         </Module>
