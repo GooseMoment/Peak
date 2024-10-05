@@ -33,9 +33,7 @@ const InstallInstructionPage = () => {
                         <FeatherIcon icon="x-circle" />
                     </AddressBarIcons>
                 </SafariAddressBar>
-                <CardText>
-                    {t("go_to_website", { site: siteDomain })}{" "}
-                </CardText>
+                <CardText>{t("go_to_website", { site: siteDomain })} </CardText>
             </Card>
             <SectionNumber>{t("step2")}</SectionNumber>
             <Card>
@@ -62,7 +60,8 @@ const InstallInstructionPage = () => {
             </Card>
             <Card>
                 <SafariShareMenuItem>
-                    <div>{t("menu_add_to_homescreen")}</div> <div></div>
+                    <div>{t("menu_add_to_homescreen")}</div>
+                    <FeatherIcon icon="plus-square" />
                 </SafariShareMenuItem>
                 <CardText>{t("select_add_to_homescreen")}</CardText>
             </Card>
@@ -143,6 +142,7 @@ const AddressBarIcons = styled.div`
     & svg {
         stroke: ${(p) => p.theme.secondTextColor};
         margin: 0;
+        top: 0;
     }
 
     & .feather-mic > g:nth-child(1) > path:nth-child(1) {
@@ -179,6 +179,11 @@ const SafariShareMenuItem = styled.div`
 
     user-select: none;
     -webkit-user-select: none;
+
+    & svg {
+        margin-right: 0;
+        top: 0.1em;
+    }
 `
 
 export default InstallInstructionPage
