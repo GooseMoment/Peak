@@ -8,19 +8,20 @@ import Module, { Title } from "@components/home/Module"
 import { getAnnouncements } from "@api/announcements.api"
 
 import { useClientLocale } from "@utils/clientSettings"
+
 import { useTranslation } from "react-i18next"
 
 const Announcements = () => {
     const locale = useClientLocale()
 
-    const { t } = useTranslation("home", {keyPrefix: "announcements"})
+    const { t } = useTranslation("home", { keyPrefix: "announcements" })
 
     const { data, isLoading } = useQuery({
         queryKey: ["announcements", "pinned_only"],
         queryFn: () => getAnnouncements(locale, true),
     })
 
-    if (isLoading) {
+    if (isLoading || data?.results?.length === 0) {
         return null
     }
 
@@ -28,7 +29,12 @@ const Announcements = () => {
         <Module>
             <Title to="/app/announcements">{t("title")}</Title>
             {data.results?.map((item) => (
-                <Announcement to={`/app/announcements/${item.id}`} key={item.id}>{item.title}</Announcement>
+                <Announcement
+                    to={`/app/announcements/${item.id}`}
+                    state={{ backTo: "/app/home" }}
+                    key={item.id}>
+                    {item.title}
+                </Announcement>
             ))}
         </Module>
     )
