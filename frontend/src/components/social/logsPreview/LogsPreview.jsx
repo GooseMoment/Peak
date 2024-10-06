@@ -1,8 +1,14 @@
 import styled from "styled-components"
 
 import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
+import { getCurrentUsername } from "@/api/client"
 
 const compareDailyLogs = (a, b) => {
+    // Show self log first
+    const me = getCurrentUsername()
+    if(a.username === me) return -1
+    else if(b.username === me) return 1
+
     if (!a.recent_task === !b.recent_task) {
         // (when there is no completed task) Show the user with the earliest username in alphabetical order first
         if (!a.recent_task) return a.username > b.username ? 1 : -1
