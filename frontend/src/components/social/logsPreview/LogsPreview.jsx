@@ -20,7 +20,7 @@ const compareDailyLogs = (a, b) => {
     return !a.recent_task - !b.recent_task
 }
 
-const LogsPreview = ({ logs, selectedUser, setSelectedUser }) => {
+const LogsPreview = ({ logs, selectedUser, setSelectedUser, selectedDate }) => {
     return (
         <LogsPreviewContainer>
             {logs.sort(compareDailyLogs).map((log) => (
@@ -29,6 +29,7 @@ const LogsPreview = ({ logs, selectedUser, setSelectedUser }) => {
                     log={log}
                     selectedUser={selectedUser}
                     setSelectedUser={setSelectedUser}
+                    selectedDate={selectedDate}
                 />
             ))}
         </LogsPreviewContainer>

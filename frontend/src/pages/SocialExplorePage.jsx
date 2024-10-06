@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { styled } from "styled-components"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
@@ -9,12 +9,7 @@ import ExploreFeed from "@components/social/explore/ExploreFeed"
 import SearchBar from "@components/social/explore/SearchBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
 
-import {
-    getExploreRecommend,
-    getExploreFound,
-    getQuote,
-    getDailyLogDrawers,
-} from "@api/social.api"
+import { getExploreFound, getExploreRecommend } from "@api/social.api"
 
 import queryClient from "@queries/queryClient"
 
@@ -40,11 +35,10 @@ const SocialExplorePage = () => {
         refetch: refetchRecommend,
     } = useInfiniteQuery({
         queryKey: ["explore", "recommend", "users"],
-        queryFn: (page) =>
-            getExploreRecommend(page.pageParam),
+        queryFn: (page) => getExploreRecommend(page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
-        refetchOnWindowFocus: false
+        refetchOnWindowFocus: false,
     })
 
     const {
@@ -54,8 +48,7 @@ const SocialExplorePage = () => {
         refetch: refetchFound,
     } = useInfiniteQuery({
         queryKey: ["explore", "found", "users"],
-        queryFn: (page) =>
-            getExploreFound(searchQuery, page.pageParam),
+        queryFn: (page) => getExploreFound(searchQuery, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
         refetchOnWindowFocus: false,
@@ -64,10 +57,10 @@ const SocialExplorePage = () => {
 
     // useRef로 대체??
     const [searchQuery, setSearchQuery] = useState("")
-    
+
     useEffect(() => {
-        if(searchQuery.length !== 0) refetchFound()
-    }, [searchQuery])    
+        if (searchQuery.length !== 0) refetchFound()
+    }, [searchQuery])
 
     const handleSearch = (searchTerm) => {
         setSearchQuery(searchTerm.trim())
@@ -79,9 +72,7 @@ const SocialExplorePage = () => {
             <SocialPageTitle active="explore" />
             <Wrapper>
                 <Container>
-                    <SearchBar
-                        handleSearch={handleSearch}
-                    />
+                    <SearchBar handleSearch={handleSearch} />
                     {isRecommendPending || (searchQuery && isFoundFetching) ? (
                         <LoaderCircleWrapper>
                             <LoaderCircleFull />
@@ -101,7 +92,7 @@ const SocialExplorePage = () => {
                     {selectedUser && (
                         <LogDetails
                             username={selectedUser}
-                            selectedDate={selectedDate}     //temp
+                            selectedDate={selectedDate} //temp
                             pageType="explore"
                         />
                     )}

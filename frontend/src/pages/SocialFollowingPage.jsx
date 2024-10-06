@@ -11,7 +11,7 @@ import LogsPreview from "@components/social/logsPreview/LogsPreview"
 import { getCurrentUsername } from "@api/client"
 import { getDailyLogsPreview } from "@api/social.api"
 
-import { ifMobile } from "@utils/useScreenType"
+import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 const SocialFollowingPage = () => {
     const initial_date = new Date()
@@ -19,6 +19,8 @@ const SocialFollowingPage = () => {
 
     const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
     const [selectedUser, setSelectedUser] = useState(null)
+
+    const isMobile = useScreenType().isMobile
 
     const me = getCurrentUsername()
 
@@ -49,17 +51,20 @@ const SocialFollowingPage = () => {
                             logs={dailyLogs}
                             selectedUser={selectedUser}
                             setSelectedUser={setSelectedUser}
+                            selectedDate={selectedDate}
                         />
                     )}
                 </Container>
 
                 {/* TODO: 날짜가 선택되지 않았을 때 */}
-                <StickyContainer>
-                    <LogDetails
-                        username={targetUser}
-                        selectedDate={selectedDate}
-                    />
-                </StickyContainer>
+                {!isMobile && (
+                    <StickyContainer>
+                        <LogDetails
+                            username={targetUser}
+                            selectedDate={selectedDate}
+                        />
+                    </StickyContainer>
+                )}
             </Wrapper>
         </>
     )

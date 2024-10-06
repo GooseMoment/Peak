@@ -3,7 +3,12 @@ import styled, { useTheme } from "styled-components"
 import { getProjectColor } from "@components/project/Creates/palettes"
 import SimpleProfile from "@components/social/common/SimpleProfile"
 
+import LogDetails from "../logDetails/LogDetails"
+
+import { getCurrentUsername } from "@api/client"
+
 import { useClientLocale } from "@utils/clientSettings"
+import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
@@ -14,10 +19,19 @@ const putEllipsis = (text, maxLength) => {
         : text
 }
 
-const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
+const LogPreviewBox = ({
+    log,
+    selectedUser,
+    setSelectedUser,
+    selectedDate,
+}) => {
     const theme = useTheme()
     const { t } = useTranslation("", { keyPrefix: "social" })
     const locale = useClientLocale()
+
+    const me = getCurrentUsername()
+
+    const isMobile = useScreenType().isMobile
 
     if (!log) return null
 
@@ -39,41 +53,66 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
             : theme.backgroundColor
 
     return (
-        <Frame onClick={handleSelect} $bgColor={backgroundColor}>
-            <SimpleProfile user={log} ringColor={setRingColor} />
-            <RecentTask>
-                {log.recent_task && (
+        (isMobile || log.username !== me) && (
+            <Frame onClick={handleSelect} $bgColor={backgroundColor}>
+                {isMobile && log.username === selectedUser ? (
+                    <LogDetails
+                        username={selectedUser}
+                        selectedDate={selectedDate}
+                    />
+                ) : (
                     <>
-                        <TaskName>
-                            {' "' +
-                                putEllipsis(log.recent_task.name, 32) +
-                                '" ' +
-                                t("log_preview_completed")}
-                        </TaskName>
+                        <SimpleProfile user={log} ringColor={setRingColor} />
+                        <RecentTask>
+                            {log.recent_task && (
+                                <>
+                                    <TaskName>
+                                        {' "' +
+                                            putEllipsis(
+                                                log.recent_task.name,
+                                                32,
+                                            ) +
+                                            '" ' +
+                                            t("log_preview_completed")}
+                                    </TaskName>
 
-                        <Ago>
-                            {" " +
-                                DateTime.fromISO(log.recent_task.completed_at)
-                                    .setLocale(locale)
-                                    .toRelative() +
-                                " "}
-                        </Ago>
+                                    <Ago>
+                                        {" " +
+                                            DateTime.fromISO(
+                                                log.recent_task.completed_at,
+                                            )
+                                                .setLocale(locale)
+                                                .toRelative() +
+                                            " "}
+                                    </Ago>
+                                </>
+                            )}
+                        </RecentTask>
                     </>
                 )}
-            </RecentTask>
-        </Frame>
+            </Frame>
+        )
     )
 }
 
 const Frame = styled.div`
     border-bottom: 0.05em solid ${(p) => p.theme.social.borderColor};
-    background-color: ${(p) => p.$bgColor};
+    background-color: ${(props) => props.$bgColor};
 
     padding: 1.2em 1em 1.2em;
 
     display: flex;
     align-items: center;
     gap: 1em;
+
+    ${ifMobile} {
+        background-color: ${(p) => p.theme.backgroundColor};
+    }
+`
+
+const LogDetailsWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
 `
 
 const RecentTask = styled.div`

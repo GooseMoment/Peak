@@ -250,7 +250,10 @@ def get_daily_logs(request: HttpRequest, username, day):
         follower__username=username,
         status=Following.ACCEPTED
     ).all()
-    followingUsers = User.objects.filter(followers__in=followings.all()).all()
+    
+    daily_logs_filter = Q(followers__in=followings.all()) | Q(id=request.user.id)
+    
+    followingUsers = User.objects.filter(daily_logs_filter).all().distinct()
     day = datetime.fromisoformat(day)
     
     user_id = str(get_object_or_404(User, username=username).id)

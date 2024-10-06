@@ -76,7 +76,7 @@ const LogDetails = ({
     return isQuotePending | isDrawerPending ? (
         <SkeletonProjectPage />
     ) : (
-        <>
+        <DetailBox>
             <DetailHeader>
                 {quote && (
                     <>
@@ -125,9 +125,14 @@ const LogDetails = ({
                 
                 </ImpressionArea>
             </DetailBody>
-        </>
+        </DetailBox>
     )
 }
+
+const DetailBox = styled.div`
+    display: flex;
+    flex-direction: column;
+`
 
 const DetailHeader = styled.div`
     padding: 1.2em 1em 0.2em;
