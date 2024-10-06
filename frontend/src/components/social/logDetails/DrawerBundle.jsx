@@ -40,9 +40,8 @@ const DrawerBundle = ({ drawer, pageType, selectedDate }) => {
 
     const color = getProjectColor(theme.type, drawer.color)
 
-    // 왜 잠깐씩 보이는 거지..?
     return (
-        taskPage?.pages[0]?.count !== 0 && (
+        (taskPage && taskPage?.pages[0]?.count !== 0) && (
             <Fragment>
                 <DrawerBox $color={color}>
                     <DrawerName $color={color}> {drawer.name} </DrawerName>
