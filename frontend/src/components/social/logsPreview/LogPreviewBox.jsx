@@ -2,8 +2,7 @@ import styled, { useTheme } from "styled-components"
 
 import { getProjectColor } from "@components/project/Creates/palettes"
 import SimpleProfile from "@components/social/common/SimpleProfile"
-
-import LogDetails from "../logDetails/LogDetails"
+import LogDetails from "@components/social/logDetails/LogDetails"
 
 import { getCurrentUsername } from "@api/client"
 
@@ -35,8 +34,9 @@ const LogPreviewBox = ({
 
     if (!log) return null
 
-    const handleSelect = () => {
-        setSelectedUser(log.username === selectedUser ? null : log.username)
+    const handleSelect = (e) => {
+        if (e.target.dataset.accpet === "true")
+            setSelectedUser(log.username === selectedUser ? null : log.username)
     }
 
     const setRingColor = () => {
@@ -54,7 +54,10 @@ const LogPreviewBox = ({
 
     return (
         (isMobile || log.username !== me) && (
-            <Frame onClick={handleSelect} $bgColor={backgroundColor}>
+            <Frame
+                onClick={handleSelect}
+                $bgColor={backgroundColor}
+                data-accpet="true">
                 {isMobile && log.username === selectedUser ? (
                     <LogDetails
                         username={selectedUser}
@@ -62,8 +65,12 @@ const LogPreviewBox = ({
                     />
                 ) : (
                     <>
-                        <SimpleProfile user={log} ringColor={setRingColor} />
-                        <RecentTask>
+                        <SimpleProfile
+                            user={log}
+                            ringColor={setRingColor}
+                            data-accept="true"
+                        />
+                        <RecentTask data-accpet="true">
                             {log.recent_task && (
                                 <>
                                     <TaskName>

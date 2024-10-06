@@ -19,7 +19,7 @@ const getPageFromURL = (url) => {
     return page
 }
 
-const DrawerBundle = ({ drawer, pageType, selectedDate }) => {
+const DrawerBundle = ({ drawer, pageType, selectedDate, onDataCheck }) => {
     const {
         data: taskPage,
         fetchNextPage: fetchNextTaskPage,
@@ -41,8 +41,10 @@ const DrawerBundle = ({ drawer, pageType, selectedDate }) => {
     const color = getProjectColor(theme.type, drawer.color)
 
     return (
-        (taskPage && taskPage?.pages[0]?.count !== 0) && (
+        taskPage &&
+        taskPage?.pages[0]?.count !== 0 && (
             <Fragment>
+                {onDataCheck()}
                 <DrawerBox $color={color}>
                     <DrawerName $color={color}> {drawer.name} </DrawerName>
                 </DrawerBox>

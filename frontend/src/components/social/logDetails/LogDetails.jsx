@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react"
+
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
@@ -12,6 +14,7 @@ import { getCurrentUsername } from "@/api/client"
 import { getDailyLogDrawers, getQuote, postQuote } from "@/api/social.api"
 import { SkeletonProjectPage } from "@/components/project/skeletons/SkeletonProjectPage"
 import { ImpressionArea } from "@toss/impression-area"
+import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const getCursorFromURL = (url) => {
@@ -22,19 +25,16 @@ const getCursorFromURL = (url) => {
     return cursor
 }
 
-const LogDetails = ({
-    pageType = "following",
-    username,
-    selectedDate,
-    isFollowingPage,
-}) => {
+const LogDetails = ({ pageType = "following", username, selectedDate }) => {
+    const { t } = useTranslation("", { keyPrefix: "social.log_details" })
+
     const me = getCurrentUsername()
 
     // quote
     const { data: quote, isPending: isQuotePending } = useQuery({
         queryKey: ["quote", username, selectedDate],
         queryFn: () => getQuote(username, selectedDate),
-        enabled: !!selectedDate,    // && pageType === "following"
+        enabled: !!selectedDate, // && pageType === "following"
     })
 
     const QuoteMutation = useMutation({
@@ -73,11 +73,27 @@ const LogDetails = ({
         drawerPage?.pages[drawerPage?.pages?.length - 1].next !== null
     const isLogDetailsEmpty = drawerPage?.pages[0]?.results?.length === 0
 
+    const [hasData, setHasData] = useState(true)
+    const timer = useRef(null)
+
+    const handleDataCheck = () => {
+        setHasData(true)
+    }
+
+    useEffect(() => {
+        setHasData(true)
+        if (timer.current) clearTimeout(timer.current)
+
+        timer.current = setTimeout(async () => {
+            setHasData(false)
+        }, 200)
+    }, [selectedDate, username])
+
     return isQuotePending | isDrawerPending ? (
         <SkeletonProjectPage />
     ) : (
         <DetailBox>
-            <DetailHeader>
+            <DetailHeader data-accpet="true">
                 {quote && (
                     <>
                         <Quote
@@ -110,19 +126,20 @@ const LogDetails = ({
                                     drawer={drawer}
                                     selectedDate={selectedDate}
                                     pageType={pageType}
+                                    onDataCheck={handleDataCheck}
                                 />
                             ),
                     ),
                 )}
 
+                {!hasData && <NoContent>{t("no_content")}</NoContent>}
+
                 <ImpressionArea
                     onImpressionStart={() => fetchNextDrawerPage()}
                     timeThreshold={200}>
-
                     {hasNextPage && "next"}
                     {!hasNextPage && !isLogDetailsEmpty && "no_more"}
                     {isLogDetailsEmpty && "empty"}
-                
                 </ImpressionArea>
             </DetailBody>
         </DetailBox>
@@ -154,6 +171,16 @@ const DetailBody = styled.div`
     &::-webkit-scrollbar {
         display: none;
     }
+`
+
+const NoContent = styled.div`
+    margin: 2em;
+
+    font-size: larger;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 
 export default LogDetails

@@ -361,6 +361,9 @@
         "following_title": "Following",
         "explore_title": "Explore",
         "log_preview_completed": "completed!",
+        "log_details": {
+            "no_content": "There is no task."
+        },
         "quote" : {
             "empty_self_quote": "Write your today's quote.",
             "empty_others_quote": "No quote yet."
