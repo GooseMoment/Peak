@@ -110,11 +110,6 @@ const Frame = styled.div`
     }
 `
 
-const LogDetailsWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-`
-
 const RecentTask = styled.div`
     min-width: 40%;
     flex-grow: 1;
