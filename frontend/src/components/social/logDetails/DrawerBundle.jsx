@@ -40,32 +40,32 @@ const DrawerBundle = ({ drawer, pageType, selectedDate }) => {
 
     const color = getProjectColor(theme.type, drawer.color)
 
+    // 왜 잠깐씩 보이는 거지..?
     return (
-        <Fragment>
-            <DrawerBox $color={color}>
-                <DrawerName $color={color}>
-                    {" "}
-                    {drawer.name}{" "}
-                </DrawerName>
-            </DrawerBox>
-            <TaskList>
-                {taskPage?.pages?.map((group) =>
-                    group?.results?.map((task) => (
-                        <TaskBox
-                            key={task.id}
-                            task={task}
-                            color={color}
-                            isFollowingPage={pageType === "following"}
-                        />
-                    )),
-                )}
-                {hasNextPage && (
-                    <More onClick={() => fetchNextTaskPage()}>
-                        <FeatherIcon icon="chevron-down" />
-                    </More>
-                )}
-            </TaskList>
-        </Fragment>
+        taskPage?.pages[0]?.count !== 0 && (
+            <Fragment>
+                <DrawerBox $color={color}>
+                    <DrawerName $color={color}> {drawer.name} </DrawerName>
+                </DrawerBox>
+                <TaskList>
+                    {taskPage?.pages?.map((group) =>
+                        group?.results?.map((task) => (
+                            <TaskBox
+                                key={task.id}
+                                task={task}
+                                color={color}
+                                isFollowingPage={pageType === "following"}
+                            />
+                        )),
+                    )}
+                    {hasNextPage && (
+                        <More onClick={() => fetchNextTaskPage()}>
+                            <FeatherIcon icon="chevron-down" />
+                        </More>
+                    )}
+                </TaskList>
+            </Fragment>
+        )
     )
 }
 
