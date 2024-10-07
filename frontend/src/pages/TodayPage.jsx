@@ -43,7 +43,7 @@ const TodayPage = () => {
     const [filter, setFilter] = useState("due_date")
     const [collapsed, setCollapsed] = useState(false)
 
-    const today = DateTime.fromJSDate(new Date()).setZone(tz)
+    const today = DateTime.now().setZone(tz)
     const [selectedDate, setSelectedDate] = useState(today.toISODate())
     // #TODO 달력으로 날짜 선택하기
 

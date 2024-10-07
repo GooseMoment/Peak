@@ -36,11 +36,11 @@ const Assigned = ({ setFunc }) => {
         }
     }
 
-    const today = DateTime.fromJSDate(new Date()).setZone(tz)
+    const today = DateTime.now().setZone(tz)
 
     const changeAssignedDate = (set) => {
         return async () => {
-            const date = today.plus({ days: set })
+            const date = today.plus(set)
             let assigned_at = null
             if (!(set === null)) {
                 assigned_at = date.toISODate()

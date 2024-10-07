@@ -50,23 +50,21 @@ const calculateDate = (name, date, today, isSocial) => {
 const taskCalculation = (task, isSocial) => {
     const tz = useClientTimezone()
 
-    const today = DateTime.fromJSDate(new Date()).setZone(tz)
+    const today = DateTime.now().setZone(tz)
 
-    const taskAssigned_at = DateTime.fromJSDate(
-        new Date(task.assigned_at),
-    ).setZone(tz)
+    const taskAssignedAt = DateTime.fromISO(task.assigned_at, { zone: tz })
     const [assigned, calculate_assigned, isOutOfAssigned] = calculateDate(
         "assigned",
-        taskAssigned_at,
+        taskAssignedAt,
         today,
         isSocial,
     )
 
     let taskDue = null
     if (task.due_type === "due_date") {
-        taskDue = DateTime.fromJSDate(new Date(task.due_date)).setZone(tz)
+        taskDue = DateTime.fromISO(task.due_date, { zone: tz })
     } else if (task.due_type === "due_datetime") {
-        taskDue = DateTime.fromJSDate(new Date(task.due_datetime)).setZone(tz)
+        taskDue = DateTime.fromISO(task.due_datetime, { zone: tz })
     }
     const [due, calculate_due, isOutOfDue] = calculateDate(
         task.due_type,

@@ -45,11 +45,11 @@ const Due = ({ task, setFunc }) => {
         }
     }
 
-    const today = DateTime.fromJSDate(new Date()).setZone(tz)
+    const today = DateTime.now().setZone(tz)
 
     const changeDueDate = (set) => {
         return async () => {
-            const date = today.plus({ days: set })
+            const date = today.plus(set)
 
             if (set === null) {
                 setFunc({ due_type: null, due_date: null, due_datetime: null })
@@ -57,9 +57,7 @@ const Due = ({ task, setFunc }) => {
             }
 
             if (task.due_type === "due_datetime") {
-                const due_datetime = DateTime.fromJSDate(
-                    new Date(task.due_datetime),
-                ).setZone(tz)
+                const due_datetime = DateTime.fromISO(task.due_datetime, { zone: tz })
                 const converted_datetime = due_datetime.set({
                     year: date.year,
                     month: date.month,
