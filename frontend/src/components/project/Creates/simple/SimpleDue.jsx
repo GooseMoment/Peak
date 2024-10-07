@@ -43,22 +43,22 @@ const SimpleDue = ({ dueIndex, setDueIndex, editNewTask, color }) => {
 
     const items = [
         { index: 0, display: t("no_date"), set: null },
-        { index: 1, display: t("today"), set: 0 },
-        { index: 2, display: t("tomorrow"), set: 1 },
+        { index: 1, display: t("today"), set: { days: 0 }},
+        { index: 2, display: t("tomorrow"), set: { days: 1 }},
         {
             index: 3,
             display: t("next_week"),
-            set: 7,
+            set: { days: 7 },
         },
         {
             index: 4,
             display: t("next_two_weeks"),
-            set: 14,
+            set: { days: 14 },
         },
         {
             index: 5,
             display: t("next_month"),
-            set: 30,
+            set: { months: 1 },
         },
     ]
 
