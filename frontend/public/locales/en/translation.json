@@ -178,11 +178,11 @@
                 "am": "AM",
                 "pm": "PM",
                 "button_add": "Add",
-                "button_remove": "Remove",
+                "button_remove": "Delete",
                 "no_due_before_time": "Set a due date before setting a time.",
                 "acceptable_numbers": "The maximum number you can enter is {{max}}.",
                 "time_change_success": "The time has changed.",
-                "time_remove": "Time has been removed."
+                "time_remove": "Deleted the time."
             },
             "repeat": {
                 "title": "Recurrence Settings",

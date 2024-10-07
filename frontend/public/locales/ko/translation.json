@@ -178,11 +178,11 @@
                 "am": "오전",
                 "pm": "오후",
                 "button_add": "추가하기",
-                "button_remove": "시간제거",
+                "button_remove": "삭제하기",
                 "no_due_before_time": "시간 설정 전에 기한을 설정해주세요.",
                 "acceptable_numbers": "입력 가능한 최대 숫자는 {{max}}입니다.",
                 "time_change_success": "시간을 변경했습니다.",
-                "time_remove": "시간이 제거되었습니다."
+                "time_remove": "시간을 삭제했습니다."
             },
             "repeat": {
                 "title": "반복 설정",
