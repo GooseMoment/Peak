@@ -1,9 +1,7 @@
 from rest_framework import mixins, generics
 from rest_framework.response import Response
 
-from datetime import datetime
-
-from api.mixins import CreateMixin
+from api.mixins import CreateMixin, TimezoneMixin
 from api.permissions import IsUserMatch
 from .models import Task
 from .serializers import TaskSerializer
@@ -12,9 +10,13 @@ from notifications.serializers import TaskReminderSerializer
 from notifications.utils import caculateScheduled
 from drawers.utils import normalize_drawer_order
 
+from datetime import datetime, time
+from zoneinfo import ZoneInfo
+
 class TaskDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
+                    TimezoneMixin,
                     generics.GenericAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -43,9 +45,9 @@ class TaskDetail(mixins.RetrieveModelMixin,
             prev_due_datetime = None
 
             if task.due_type == "due_date":
-                prev_due_date = task.due_date.strftime("%Y-%m-%d")
+                prev_due_date = task.due_date.isoformat()
             elif task.due_type == "due_datetime":
-                prev_due_datetime= task.due_datetime.strftime("%Y-%m-%d %H:%M:%S")
+                prev_due_datetime= task.due_datetime.isoformat()
 
             # new_due_date is None
             if (new_due_type is None) and (prev_due_type is not None):
@@ -56,9 +58,12 @@ class TaskDetail(mixins.RetrieveModelMixin,
                     pass
                 elif (prev_due_date != new_due_date) or (prev_due_datetime != new_due_datetime):
                     if new_due_type == "due_date":
-                        converted_due_datetime = datetime.strptime(new_due_date, "%Y-%m-%d").replace(hour=9, minute=0, second=0, microsecond=0)
+                        tz = self.get_tz()
+                        converted_due_date = datetime.fromisoformat(new_due_date)
+                        nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=ZoneInfo(str(tz)))
+                        converted_due_datetime = datetime.combine(converted_due_date, nine_oclock_time)
                     else:
-                        converted_due_datetime = datetime.strptime(new_due_datetime, "%Y-%m-%d %H:%M:%S")
+                        converted_due_datetime = datetime.fromisoformat(new_due_datetime)
                     
                     reminders = TaskReminder.objects.filter(task=task.id)
                     for reminder in reminders:
