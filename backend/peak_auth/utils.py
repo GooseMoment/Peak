@@ -3,7 +3,8 @@ from django.core.mail import EmailMultiAlternatives
 
 from rest_framework.request import Request
 
-from .models import User, EmailVerificationToken
+from users.models import User
+from .models import EmailVerificationToken
 from .locale import get_translations
 
 from datetime import datetime, UTC
