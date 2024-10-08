@@ -80,7 +80,7 @@ const DemoCheer = () => {
 
     return (
         <SubSection>
-            <TaskFrame task={task} color={task.color} />
+            <TaskFrame task={task} color={task.color} isSocial />
             <ReactionButtonGroup>
                 {selectedEmojis.map((emoji) => (
                     <ReactionButton
