@@ -66,7 +66,7 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
         queryFn: (page) => getDailyLogDrawers(username, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
-        // enabled: pageType === "following",
+        // enabled: pageType === "following",   // 나중에 백엔드에서 Explore 용 view 따로 만들고 enabled 조건 추가
     })
 
     const hasNextPage =
