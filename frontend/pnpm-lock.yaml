@@ -24,8 +24,8 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0(react@18.3.1)
       axios:
-        specifier: ^1.6.7
-        version: 1.7.1
+        specifier: ^1.7.4
+        version: 1.7.4
       feather-icons-react:
         specifier: ^0.7.0
         version: 0.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -931,8 +931,8 @@ packages:
     resolution: {integrity: sha512-Mr2ZakwQ7XUAjp7pAwQWRhhK8mQQ6JAaNWSjmjxil0R8BPioMtQsTLOolGYkji1rcL++3dCqZA3zWqpT+9Ew6g==}
     engines: {node: '>=4'}
 
-  axios@1.7.1:
-    resolution: {integrity: sha512-+LV37nQcd1EpFalkXksWNBiA17NZ5m5/WspmHGmZmdx1qBOg/VNq/c4eRJiA9VQQHBOs+N0ZhhdU10h2TyNK7Q==}
+  axios@1.7.4:
+    resolution: {integrity: sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==}
 
   axobject-query@3.1.1:
     resolution: {integrity: sha512-goKlv8DZrK9hUh975fnHzhNIO4jUnFCfv/dszV5VwUGDFjI6vQ2VwoyjYjYNEbBE8AH87TduWP5uyDR1D+Iteg==}
@@ -3385,7 +3385,7 @@ snapshots:
 
   axe-core@4.10.0: {}
 
-  axios@1.7.1:
+  axios@1.7.4:
     dependencies:
       follow-redirects: 1.15.6
       form-data: 4.0.0
