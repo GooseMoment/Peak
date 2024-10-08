@@ -28,8 +28,11 @@ class TimezoneMixin:
         super().__init__(*args, **kwargs)
 
     def get_tz(self):
-        if self._tz is not None:
-            return self._tz
+        try:
+            if self._tz is not None:
+                return self._tz
+        except AttributeError:
+            TypeError("TimezoneMixin was not initialized. Place TimezoneMixin before GenericAPIView, etc.")
         
         zone = self.request.headers.get(self.TZ_HEADER, "UTC")
         
