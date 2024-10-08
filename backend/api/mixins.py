@@ -2,7 +2,7 @@ from rest_framework import mixins, status
 from rest_framework.response import Response
 
 import datetime
-from pytz import timezone as timezone_from_zone, NonExistentTimeError
+import zoneinfo
 
 
 class CreateMixin(mixins.CreateModelMixin):
@@ -37,8 +37,8 @@ class TimezoneMixin:
         zone = self.request.headers.get(self.TZ_HEADER, "UTC")
         
         try:
-            tz = timezone_from_zone(zone)
-        except NonExistentTimeError:
+            tz = zoneinfo.ZoneInfo(zone)
+        except zoneinfo.ZoneInfoNotFoundError:
             tz = datetime.UTC
         
         self._tz = tz
