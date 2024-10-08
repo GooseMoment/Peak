@@ -39,13 +39,10 @@ class TaskTodayDueList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPI
     def get_queryset(self):
         date_isoformat = self.request.GET.get("date") # e.g. "2024-09-28"
         date = datetime.date.fromisoformat(date_isoformat)
-        # comment out below after adding a 'due_datetime' field instead of the method
-        # datetime_range = self.get_datetime_range(date)
+        datetime_range = self.get_datetime_range(date)
 
         today_due_tasks = Task.objects.filter(
-            # comment out two lines right below after adding a 'due_datetime' field instead of the method
-            Q(due_date=date), # |
-            # Q(due_datetime__range=datetime_range), 
+            Q(due_date=date) | Q(due_datetime__range=datetime_range), 
             user=self.request.user,
             completed_at__isnull=True
         ).order_by("due_date").all()
@@ -66,15 +63,13 @@ class TaskOverdueList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIV
     def get_queryset(self):
         filter_field = self.request.GET.get('filter_field', 'due_date')
 
-        # comment out below after adding a 'due_datetime' field instead of the method
-        # now = self.get_now()
+        now = self.get_now()
         today = self.get_today()
 
         if filter_field == "assigned_at":
             filter_condition = {"assigned_at__lt": today}
         if filter_field == "due_date":
-            # comment out below after adding a 'due_datetime' field instead of the method
-            filter_condition = {"due_date__lt": today, } # "due_datetime__lt": now} 
+            filter_condition = {"due_date__lt": today, "due_datetime__lt": now} 
 
         overdue_tasks = Task.objects.filter(
             user=self.request.user,

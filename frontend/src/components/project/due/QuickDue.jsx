@@ -11,25 +11,25 @@ const QuickDue = ({ changeDueDate }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
 
     const items = [
-        { id: 0, icon: <img src={today} />, display: t("today"), set: 0 },
-        { id: 1, icon: <img src={tomorrow} />, display: t("tomorrow"), set: 1 },
+        { id: 0, icon: <img src={today} />, display: t("today"), set: { days: 0 }},
+        { id: 1, icon: <img src={tomorrow} />, display: t("tomorrow"), set: { days: 1 }},
         {
             id: 2,
             icon: <img src={next_week} />,
             display: t("next_week"),
-            set: 7,
+            set: { days: 7 },
         },
         {
             id: 3,
             icon: <img src={next_week} />,
             display: t("next_two_weeks"),
-            set: 14,
+            set: { days: 14 },
         },
         {
             id: 4,
             icon: <img src={next_week} />,
             display: t("next_month"),
-            set: 30,
+            set: { months: 1 },
         },
         { id: 5, icon: <img src={slach} />, display: t("no_date"), set: null },
     ]

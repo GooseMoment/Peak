@@ -4,8 +4,10 @@ import styled, { css } from "styled-components"
 
 import Button from "@components/common/Button"
 
-import { useClientSetting, useClientTimezone } from "@utils/clientSettings"
+import { useClientSetting } from "@utils/clientSettings"
+import { useClientTimezone } from "@utils/clientSettings"
 
+import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -18,21 +20,41 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
     ]
 
     const [setting] = useClientSetting()
-    const due_tz = useClientTimezone()
+    const tz = useClientTimezone()
 
-    const due_time = task?.due_time || ""
+    const due =
+        task.due_type === "due_datetime" ? task.due_datetime : task.due_date
+    const due_datetime = DateTime.fromISO(due, { zone: tz })
+    const due_time =
+        task.due_type === "due_datetime"
+            ? due_datetime.toISOTime()
+            : "00:00:00.000Z"
 
     const [ampm, setAmpm] = useState(ampms[0].name)
     const [hour, setHour] = useState(due_time && parseInt(due_time.slice(0, 2)))
     const [min, setMin] = useState(due_time && parseInt(due_time.slice(3, 5)))
 
     const changeTime = () => {
-        const due_date = task.due_date
         let converted_hour =
             !setting.time_as_24_hour && ampm === "pm" ? hour + 12 : hour
-        const due_time = `${converted_hour}:${min}:00`
-        setFunc({ due_tz, due_date, due_time })
+        const converted_datetime = due_datetime
+            .set({ hour: converted_hour, minute: min })
+            .toISO()
+        setFunc({
+            due_type: "due_datetime",
+            due_date: null,
+            due_datetime: converted_datetime,
+        })
         toast.success(t("time_change_success"))
+    }
+
+    const removeTime = () => {
+        setFunc({
+            due_type: "due_date",
+            due_date: due_datetime.toISODate(),
+            due_datetime: null,
+        })
+        toast.error(t("time_remove"))
         closeComponent()
     }
 
@@ -79,8 +101,7 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
                                 $active={ampm == t.name}
                                 onClick={() => {
                                     setAmpm(t.name)
-                                }}
-                            >
+                                }}>
                                 {t.display}
                             </AmpmToggle>
                         ))}
@@ -100,9 +121,10 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
                     />
                 </InputBox>
             </FlexBox>
-            <FlexCenterBox>
+            <ButtonsBox>
+                <Button state="danger" onClick={removeTime}>{t("button_remove")}</Button>
                 <Button onClick={changeTime}>{t("button_add")}</Button>
-            </FlexCenterBox>
+            </ButtonsBox>
         </DetailBox>
     )
 }
@@ -121,12 +143,13 @@ const FlexBox = styled.div`
     gap: 1.1em;
 `
 
-const FlexCenterBox = styled.div`
+const ButtonsBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 0.9em;
     margin-left: 0em;
+    gap: 0.6em;
 `
 
 const ToggleBox = styled.div`
