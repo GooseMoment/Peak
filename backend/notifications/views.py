@@ -46,12 +46,11 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
 
         if task.due_type == "due_date":
             tz = self.get_tz()
-            converted_due_date = datetime.fromisoformat(str(task.due_date))
             nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=ZoneInfo(str(tz)))
-            converted_due_datetime = datetime.combine(date=converted_due_date, time=nine_oclock_time)
+            converted_due_datetime = datetime.combine(date=task.due_date, time=nine_oclock_time)
         else:
-            converted_due_datetime = datetime.fromisoformat(str(task.due_datetime))
-        
+            converted_due_datetime = task.due_datetime
+            
         new_scheduled = caculateScheduled(converted_due_datetime, serializer.validated_data["delta"])    
         serializer.validated_data["scheduled"] = new_scheduled
         self.perform_create(serializer)
