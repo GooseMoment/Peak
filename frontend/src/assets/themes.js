@@ -90,6 +90,12 @@ export const light = {
         todayColor: white,
         hoverColor: "#FFC6C6",
     },
+    search: {
+        borderColor: black,
+        buttonColor: black,
+        activatedColor: "#white",
+        activatedBackgroundColor: "#F78457",
+    },
     toastTheme: "light",
 }
 
@@ -169,6 +175,11 @@ export const dark = {
         secondBackgroundColor: "#292929",
         todayColor: white,
         hoverColor: "#804A30",
+    },
+    search: {
+        borderColor: white,
+        buttonColor: white,
+        activatedBackgroundColor: "#F78457",
     },
     toastTheme: "dark",
 }
