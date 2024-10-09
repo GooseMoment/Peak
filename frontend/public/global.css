@@ -59,6 +59,12 @@ table {
 
 :root {
     --cubic: cubic-bezier(0.165, 0.84, 0.44, 1);
+    --toastify-font-family: inherit !important;
+}
+
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 html {
@@ -97,6 +103,10 @@ html {
     background-color: transparent;
 
     transition: background-color 0.25s var(--cubic);
+
+    @media screen and (max-width: 500px) {
+        flex-direction: column;
+    }
 }
 
 #window-container:has(div) {
@@ -204,17 +214,13 @@ body {
     vertical-align: auto;
 }
 
-:root {
-    --toastify-font-family: inherit;
-}
-
 .reactEasyCrop_Container {
     position: fixed !important;
     z-index: 999;
 }
 
 .Toastify__toast-body {
-    line-height: 1.3;
+    line-height: 1.3 !important;
 }
 
 @media screen and (max-width: 500px) {
@@ -227,10 +233,10 @@ body {
     }
 
     .Toastify__toast-body {
-        font-size: 0.9em;
+        font-size: 0.9em !important;
     }
 
     .Toastify__toast--stacked[data-pos="bot"] {
-        bottom: 5em;
+        bottom: 5em !important;
     }
 }

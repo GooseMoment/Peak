@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
 import Button, { buttonForms } from "@components/common/Button"
+import Confirmation from "@components/common/Confirmation"
 
 import { getCurrentUsername } from "@api/client"
 import {
@@ -22,6 +23,8 @@ const FollowButton = ({ user, disabled = false }) => {
     const { t } = useTranslation(null, { keyPrefix: "follow_button" })
 
     const currentUsername = getCurrentUsername()
+
+    const [confirmationVisible, setConfirmationVisible] = useState(false)
 
     const { data: following, isPending: fetchFollowPending } = useQuery({
         queryKey: ["followings", currentUsername, user?.username],
@@ -90,31 +93,60 @@ const FollowButton = ({ user, disabled = false }) => {
             return
         }
 
+        if (following?.status === "accepted") {
+            setConfirmationVisible(true)
+            return
+        }
+
+        deleteMutation.mutate()
+    }
+
+    const handleConfirmation = () => {
+        setConfirmationVisible(false)
         deleteMutation.mutate()
     }
 
     return (
-        <Button
-            onClick={handleFollow}
-            $loading={followButtonLoading}
-            disabled={followButtonLoading || disabled}
-            $state={
-                (following?.status === "accepted" && states.success) ||
-                (following?.status === "requested" && states.link) ||
-                states.text
-            }
-            $form={
-                isHover && followAccpetedOrRequested
-                    ? buttonForms.filled
-                    : buttonForms.outlined
-            }
-            onMouseEnter={() => setIsHover(true)}
-            onMouseLeave={() => setIsHover(false)}
-        >
-            {(following?.status === "requested" && t("button_requested")) ||
-                (following?.status === "accepted" && t("button_accepted")) ||
-                t("button_follow")}
-        </Button>
+        <>
+            <Button
+                onClick={handleFollow}
+                loading={followButtonLoading}
+                disabled={followButtonLoading || disabled}
+                state={
+                    (following?.status === "accepted" && states.success) ||
+                    (following?.status === "requested" && states.link) ||
+                    states.text
+                }
+                form={
+                    isHover && followAccpetedOrRequested
+                        ? buttonForms.filled
+                        : buttonForms.outlined
+                }
+                onMouseEnter={() => setIsHover(true)}
+                onMouseLeave={() => setIsHover(false)}>
+                {(following?.status === "requested" && t("button_requested")) ||
+                    (following?.status === "accepted" &&
+                        t("button_accepted")) ||
+                    t("button_follow")}
+            </Button>
+            {confirmationVisible && (
+                <Confirmation
+                    onClose={() => setConfirmationVisible(false)}
+                    question={t("cancel_" + following?.status, {
+                        username: user?.username,
+                    })}
+                    buttons={[
+                        "close",
+                        <Button
+                            key="confirm"
+                            onClick={handleConfirmation}
+                            $state={states.danger}>
+                            {t("button_sure")}
+                        </Button>,
+                    ]}
+                />
+            )}
+        </>
     )
 }
 

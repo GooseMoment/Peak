@@ -29,8 +29,6 @@ const LogDetails = ({
                 ) : (
                     <FollowButton user={user} />
                 )}
-
-                {/* TODO: who and what emoji */}
             </DetailHeader>
 
             {/* TODO: When there are no task */}
@@ -58,7 +56,7 @@ const DetailHeader = styled.div`
 
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 0.7em;
 `
 
 const DetailBody = styled.div`

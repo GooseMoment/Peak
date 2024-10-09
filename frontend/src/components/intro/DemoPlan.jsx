@@ -35,6 +35,7 @@ const makeSampleTasks = (t) => [
         name: t("sample0"),
         completed_at: true,
         priority: 0,
+        due_type: "due_date",
         due_date: today,
     },
     {
@@ -42,6 +43,7 @@ const makeSampleTasks = (t) => [
         name: t("sample2"),
         completed_at: true,
         priority: 1,
+        due_type: "due_date",
         due_date: yesterday,
     },
     {
@@ -49,6 +51,7 @@ const makeSampleTasks = (t) => [
         name: t("sample3"),
         completed_at: true,
         priority: 2,
+        due_type: "due_date",
         due_date: tomorrow,
     },
     {
@@ -56,12 +59,13 @@ const makeSampleTasks = (t) => [
         name: t("sample4"),
         completed_at: true,
         priority: 0,
+        due_type: "due_date",
         due_date: nextWeek,
     },
 ]
 
 const DemoPlan = () => {
-    const { t } = useTranslation(null, { keyPrefix: "intro.section_plan.demo" })
+    const { t } = useTranslation("intro", { keyPrefix: "section_plan.demo" })
     const { t: taskT } = useTranslation(null, { keyPrefix: "task" })
 
     const [priority, setPriority] = useState("1")
@@ -70,6 +74,7 @@ const DemoPlan = () => {
     const task = {
         name: t("sample1"),
         priority: Number(priority),
+        due_type: "due_date",
         due_date: deadlineTable[deadline],
     }
 

@@ -56,8 +56,7 @@ const RepeatDetail = () => {
                     <ButtonBox
                         key={quickButton.display}
                         $active={quick == quickButton.display}
-                        onClick={() => handleQuick(quickButton.display)}
-                    >
+                        onClick={() => handleQuick(quickButton.display)}>
                         <img src={quickButton.src} />
                         {quickButton.display}
                     </ButtonBox>
@@ -75,8 +74,7 @@ const RepeatDetail = () => {
                         key={day.name}
                         $isFirst={day.name == "sun"}
                         $active={days.includes(day.name)}
-                        onClick={() => handleDays(day.name)}
-                    >
+                        onClick={() => handleDays(day.name)}>
                         {day.display}
                     </Circle>
                 ))}

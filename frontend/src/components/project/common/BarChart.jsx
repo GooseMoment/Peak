@@ -2,12 +2,7 @@ import styled, { css } from "styled-components"
 
 import { cubicBeizer } from "@assets/keyframes"
 
-const BarChart = ({
-    isCompleted,
-    color,
-    drawers,
-    projectTaskCount,
-}) => {
+const BarChart = ({ isCompleted, color, drawers, projectTaskCount }) => {
     if (isCompleted) {
         return (
             <BarChartBox $percent={100} $isCompleted={true} $color={color}>
@@ -28,8 +23,7 @@ const BarChart = ({
                 $percent={calculatePercent(
                     drawer.uncompleted_task_count + drawer.completed_task_count,
                     projectTaskCount,
-                )}
-            >
+                )}>
                 <PercentText>
                     {calculatePercent(
                         drawer.completed_task_count,

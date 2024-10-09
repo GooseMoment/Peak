@@ -1,7 +1,7 @@
 import styled, { useTheme } from "styled-components"
 
-import { getProjectColor } from "@components/project/Creates/palettes"
 import BarChart from "@components/project/common/BarChart"
+import { getProjectColor } from "@components/project/common/palettes"
 
 import { useTranslation } from "react-i18next"
 

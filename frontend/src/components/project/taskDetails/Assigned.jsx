@@ -7,32 +7,43 @@ import Detail from "@components/project/common/Detail"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 
+import { useClientTimezone } from "@utils/clientSettings"
+
 import { cubicBeizer } from "@assets/keyframes"
 import { rotateToUnder, rotateToUp } from "@assets/keyframes"
 
 import FeatherIcon from "feather-icons-react"
+import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const Assigned = ({ setFunc }) => {
-    const { t } = useTranslation(null, { keyPrefix: "task.due" })
+    const { t } = useTranslation(null, { keyPrefix: "task" })
 
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
+    const tz = useClientTimezone()
     const { closeModal } = useModalWindowCloseContext()
 
     const handleAdditionalComp = (name) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
-        else setIsAdditionalComp(name)
+        else {
+            if (name === "repeat") {
+                toast.error("coming soon...", { toastId: "coming_soon" })
+                return
+            }
+            setIsAdditionalComp(name)
+        }
     }
 
-    let date = new Date()
+    const today = DateTime.now().setZone(tz)
 
     const changeAssignedDate = (set) => {
         return async () => {
-            date.setDate(date.getDate() + set)
+            const date = today.plus(set)
             let assigned_at = null
             if (!(set === null)) {
-                assigned_at = date.toISOString().slice(0, 10)
+                assigned_at = date.toISODate()
             }
             setFunc({ assigned_at })
             closeModal()
@@ -42,26 +53,26 @@ const Assigned = ({ setFunc }) => {
     const addComponent = [
         {
             name: "quick",
-            display: t("quick.title"),
+            display: t("due.quick.title"),
             icon: "menu",
             component: <QuickDue changeDueDate={changeAssignedDate} />,
         },
         {
             name: "calendar",
-            display: t("calendar"),
+            display: t("due.calendar"),
             icon: "calendar",
             component: <div>달력입니다</div>,
         },
         {
             name: "repeat",
-            display: t("repeat.title"),
+            display: t("due.repeat.title"),
             icon: "refresh-cw",
             component: <RepeatDetail />,
         },
     ]
 
     return (
-        <Detail title={t("assigned_title")} onClose={closeModal} special={true}>
+        <Detail title={t("assigned.title")} onClose={closeModal} special={true}>
             {addComponent.map((comp, i) => (
                 <Fragment key={comp.name}>
                     <FlexCenterBox>

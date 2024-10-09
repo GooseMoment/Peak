@@ -33,11 +33,11 @@ export const light = {
     secondTextColor: "#9c9c9c",
     backgroundColor: white,
     secondBackgroundColor: "#F3F3F3",
-    thirdBackgroundColor: "#F3F3F3",
+    thirdBackgroundColor: "#F3F3F3", // 원래 second랑 똑같은 건 의도된건가...?
     accentColor: goose,
     scrollbarColor: "#FFC6C6",
-    frontSignPageTextColor: goose,
-    frontSignPageBackgroundColor: "#FFD7C7",
+    introTextColor: goose,
+    introBackgroundColor: "#FFD7C7",
     imgIconFilter: "invert(0%)",
     sidebar: {
         activeColor: black,
@@ -48,7 +48,8 @@ export const light = {
         scrollbarColor: "#FFC6C6",
     },
     navbar: {
-        backgroundColor: "rgb(255, 255, 255, 0.7)",
+        backgroundColor: "rgb(243, 243, 243, 0.9)",
+        activeBackgroundColor: white,
     },
     project: {
         borderColor: "#D9D9D9",
@@ -76,22 +77,21 @@ export const light = {
     notifications: {
         boxShadowColor: "rgba(149, 157, 165, 0.2)",
     },
+    social: {
+        borderColor: black,
+        activeBackgroundColor: "rgb(255 74 3 / 0.35)",
+        modalShadowColor: "rgba(123, 123, 123, 0.1)",
+        modalCellHoverColor: "#F0F0F0",
+        buttonColor: "#A9A9A9",
+    },
+    calendar: {
+        backgroundColor: "#D9D9D9",
+        secondBackgroundColor: "#E6E6E6",
+        todayColor: white,
+        hoverColor: "#FFC6C6",
+    },
     toastTheme: "light",
 }
-
-export const lightSystemcolor = Object.assign({}, light, {
-    primaryColors: Object.assign({}, light.primaryColors, {
-        primary: "AccentColor",
-    }),
-    accentColor: "AccentColor",
-    sidebar: Object.assign({}, light.sidebar, {
-        activeColor: "HighlightText",
-        activeBackgroundColor: "Highlight",
-        hoverColor: black,
-        hoverBackgroundColor: "#D9D9D9",
-        backgroundColor: "#F9F7F6",
-    }),
-})
 
 export const dark = {
     type: "dark",
@@ -116,8 +116,8 @@ export const dark = {
     thirdBackgroundColor: "#2A2A2A",
     accentColor: goose,
     scrollbarColor: "#4A4A4A",
-    frontSignPageTextColor: goose,
-    frontSignPageBackgroundColor: "#FFD7C7",
+    introTextColor: "#FFD7C7",
+    introBackgroundColor: "#77371F",
     imgIconFilter: "invert(100%)",
     sidebar: {
         activeColor: white,
@@ -128,7 +128,8 @@ export const dark = {
         scrollbarColor: "#4A4A4A",
     },
     navbar: {
-        backgroundColor: "rgb(0, 0, 0, 0.7)",
+        backgroundColor: "rgb(50, 50, 50, 0.9)",
+        activeBackgroundColor: black,
     },
     project: {
         borderColor: "#474747",
@@ -156,29 +157,26 @@ export const dark = {
     notifications: {
         boxShadowColor: "rgba(0, 0, 0, 0.4)",
     },
+    social: {
+        borderColor: white,
+        activeBackgroundColor: "rgb(255 74 3 / 0.35)",
+        modalShadowColor: "rgba(210, 210, 210, 0.1)",
+        modalCellHoverColor: "#383838",
+        buttonColor: "#A9A9A9",
+    },
+    calendar: {
+        backgroundColor: "#323232",
+        secondBackgroundColor: "#292929",
+        todayColor: white,
+        hoverColor: "#804A30",
+    },
     toastTheme: "dark",
 }
-
-export const darkSystemcolor = Object.assign({}, dark, {
-    primaryColors: Object.assign({}, dark.primaryColors, {
-        primary: "AccentColor",
-    }),
-    accentColor: "AccentColor",
-    sidebar: Object.assign({}, dark.sidebar, {
-        activeColor: "HighlightText",
-        activeBackgroundColor: "Highlight",
-        hoverColor: white,
-        hoverBackgroundColor: black,
-        backgroundColor: "#2F2F2F",
-    }),
-})
 
 const themes = {
     system: null,
     light: light,
-    "light-systemcolor": lightSystemcolor,
     dark: dark,
-    "dark-systemcolor": darkSystemcolor,
 }
 
 export default themes

@@ -1,42 +1,80 @@
-import { useNavigate } from "react-router-dom"
+import { useCallback, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 
 import styled from "styled-components"
 
 import { ifMobile } from "@utils/useScreenType"
 
-import { Bell, Calendar, Menu, PlusCircle, Users } from "feather-icons-react"
-import { toast } from "react-toastify"
+import FeatherIcon from "feather-icons-react"
 
-const Navbar = ({ openSidebar }) => {
+const items = [
+    {
+        to: "search",
+        match: "search",
+        icon: "search",
+    },
+    {
+        to: "today",
+        match: "today",
+        icon: "calendar",
+    },
+    {
+        to: "home",
+        match: "home",
+        icon: "home",
+    },
+    {
+        to: "projects",
+        match: "projects",
+        icon: "archive",
+    },
+    {
+        to: "social/following",
+        match: "social",
+        icon: "users",
+    },
+]
+
+const Navbar = () => {
     const navigate = useNavigate()
+    const location = useLocation()
 
-    const onClickTaskCreate = () => {
-        toast.info("TaskCreate")
-    }
+    const [activeItemLeft, setActiveItemLeft] = useState(0)
+    const [activeItemVisible, setActiveItemVisible] = useState(false)
+
+    const onRefChange = useCallback(
+        (node) => {
+            if (!node) {
+                setActiveItemVisible(false)
+                return
+            }
+
+            setActiveItemVisible(true)
+            setActiveItemLeft(node.offsetLeft)
+        },
+        [location.pathname],
+    )
 
     return (
         <Frame>
-            <Item key="sidebar" onClick={openSidebar}>
-                <Menu />
-            </Item>
-            <Item key="today" onClick={() => navigate("/app/today")}>
-                <Calendar />
-            </Item>
-            <Item key="taskCreate" onClick={onClickTaskCreate}>
-                <PlusCircle />
-            </Item>
-            <Item
-                key="notifications"
-                onClick={() => navigate("/app/notifications")}
-            >
-                <Bell />
-            </Item>
-            <Item
-                key="social"
-                onClick={() => navigate("/app/social/following")}
-            >
-                <Users />
-            </Item>
+            <Box>
+                <ActiveItemBackground
+                    $left={activeItemLeft}
+                    $visible={activeItemVisible}
+                />
+                {items.map((item) => (
+                    <Item
+                        key={item.match}
+                        onClick={() => navigate("/app/" + item.to)}
+                        ref={
+                            location.pathname.startsWith("/app/" + item.match)
+                                ? onRefChange
+                                : null
+                        }>
+                        <FeatherIcon icon={item.icon} />
+                    </Item>
+                ))}
+            </Box>
         </Frame>
     )
 }
@@ -44,25 +82,22 @@ const Navbar = ({ openSidebar }) => {
 const Frame = styled.nav`
     z-index: 97;
 
+    box-sizing: border-box;
+    width: 100dvw;
+
+    pointer-events: none;
+
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
 
-    justify-content: space-between;
+    padding-left: max(env(safe-area-inset-left, 1em), 1em);
+    padding-right: max(env(safe-area-inset-right, 1em), 1em);
+    padding-bottom: max(env(safe-area-inset-bottom, 1em), 2em);
+
+    justify-content: center;
     align-items: center;
-
-    box-sizing: border-box;
-    width: 100vw;
-    padding: 1em 1.25em;
-    padding-bottom: max(env(safe-area-inset-bottom, 1em), 1em);
-
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-
-    background-color: ${(p) => p.theme.navbar.backgroundColor};
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
 
     display: none;
 
@@ -71,13 +106,31 @@ const Frame = styled.nav`
     }
 `
 
+const Box = styled.div`
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+
+    pointer-events: all;
+
+    padding: 0.25em;
+
+    border-radius: 32px;
+
+    background-color: ${(p) => p.theme.navbar.backgroundColor};
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+`
+
 const Item = styled.div`
     color: ${(p) => p.theme.textColor};
-    background-color: ${(p) => p.theme.backgroundColor};
 
     box-sizing: border-box;
-    aspect-ratio: 1/1;
-    height: 3.5em;
+    height: 3em;
+    width: 3.25em;
+    padding: 0.5em;
 
     border-radius: 50%;
 
@@ -88,12 +141,31 @@ const Item = styled.div`
     cursor: pointer;
 
     & svg {
-        font-size: 1.75em;
-        stroke-width: 0.075em;
+        font-size: 1.5em;
+        stroke-width: 2.5px;
 
         top: 0;
         margin-right: unset;
     }
+`
+
+const ActiveItemBackground = styled.div`
+    position: absolute;
+
+    background-color: ${(p) => p.theme.navbar.activeBackgroundColor};
+
+    top: 0.25em;
+    left: calc(${(props) => props.$left}px + 0.125em);
+    width: 3em;
+    height: 3em;
+
+    opacity: ${(p) => (p.$visible ? 1 : 0)};
+
+    transition:
+        left 0.25s var(--cubic),
+        opacity 0.25s var(--cubic);
+
+    border-radius: 50px;
 `
 
 export default Navbar

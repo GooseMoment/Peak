@@ -1,32 +1,25 @@
 import { Link } from "react-router-dom"
 
-import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button from "@components/common/Button"
+import DemoCheer from "@components/intro/DemoCheer"
 import DemoDrawer from "@components/intro/DemoDrawer"
 import DemoPlan from "@components/intro/DemoPlan"
 import DemoProject from "@components/intro/DemoProject"
+import DemoShare from "@components/intro/DemoShare"
 import DemoTheme from "@components/intro/DemoTheme"
 import Section, {
     SectionDescription,
     SectionTitle,
 } from "@components/intro/Section"
-import SubSection, { SubGroup, SubTitle } from "@components/intro/SubSection"
+import { SubGroup } from "@components/intro/SubSection"
 import Brand from "@components/sign/Brand"
-
-import { getEmojis } from "@api/social.api"
 
 import { useTranslation } from "react-i18next"
 
 const IntroPage = () => {
-    useQuery({
-        queryKey: ["emojis"],
-        queryFn: () => getEmojis(),
-        staleTime: 1000 * 60 * 60 * 5,
-    })
-
-    const { t } = useTranslation(null, { keyPrefix: "intro" })
+    const { t } = useTranslation("intro")
 
     return (
         <>
@@ -76,11 +69,7 @@ const IntroPage = () => {
                     {t("section_cheer.description")}
                 </SectionDescription>
                 <SubGroup>
-                    <SubSection>
-                        <SubTitle>
-                            *** Emoji Selector Box should be here ***
-                        </SubTitle>
-                    </SubSection>
+                    <DemoCheer />
                 </SubGroup>
             </Section>
 
@@ -90,11 +79,7 @@ const IntroPage = () => {
                     {t("section_share.description")}
                 </SectionDescription>
                 <SubGroup>
-                    <SubSection>
-                        <SubTitle>
-                            *** UserLogDetail should be here ***
-                        </SubTitle>
-                    </SubSection>
+                    <DemoShare />
                 </SubGroup>
             </Section>
 
@@ -125,8 +110,8 @@ const Nav = styled.nav`
 `
 
 const TopHero = styled(Section)`
-    color: ${(p) => p.theme.frontSignPageTextColor};
-    background-color: ${(p) => p.theme.frontSignPageBackgroundColor};
+    color: ${(p) => p.theme.introTextColor};
+    background-color: ${(p) => p.theme.introBackgroundColor};
     padding-top: 10em;
     padding-bottom: 10em;
 `
@@ -141,8 +126,8 @@ const TopHeroButton = styled(Button)`
     margin-top: 3em;
     font-size: 1.25em;
     color: inherit;
-    background-color: ${(p) => p.theme.frontSignPageBackgroundColor};
-    border-color: ${(p) => p.theme.frontSignPageTextColor};
+    background-color: ${(p) => p.theme.introBackgroundColor};
+    border-color: ${(p) => p.theme.introTextColor};
     border-width: 0.15em;
 `
 

@@ -37,14 +37,83 @@
         "completed_tasks": "Completed",
         "uncompleted_tasks": "Uncompleted"
     },
+    "today": {
+        "title": "Today",
+        "overdue_title": "Missed Tasks",
+        "filter_due_date": "Overdue",
+        "filter_assigned_at": "Missed",
+        "no_today_assignment": "Add tasks to do today",
+        "error_load_task": "Couldn't load tasks 😢",
+        "button_load_more": "Load more",
+        "due_change_today_success": "Assigned the task to today.",
+        "due_change_tomorrow_success": "Assigned the task to tomorrow.",
+        "due_change_error": "The due date change failed."
+    },
     "project": {
         "no_drawer": "Press + to add drawers",
         "progress": "Progress",
         "button_load_more": "Load more",
         "button_add_task": "Add new task",
+        "button_close_add_task": "Close",
         "loading": "Loading...",
         "error_load_project_and_drawer": "Couldn't load project and drawers 😢",
         "error_load_task": "Couldn't load tasks 😢",
+        "create": {
+            "name_placeholder": "Enter a name",
+            "button_add": "Add",
+            "none": "none",
+            "task_create_success": "Created a new task.",
+            "task_create_error": "Failed to create a new task.",
+            "task_create_no_name": "Write a name of a task."
+        },
+        "edit": {
+            "display": "Edit",
+            "name_change_success": "The name has changed."
+        },
+        "delete": {
+            "display": "Delete",
+            "button_delete": "Delete",
+            "button_done": "Dismiss",
+            "alert_project_title": "the \"{{project_name}}\" project",
+            "alert_drawer_title": "the \"{{drawer_name}}\" drawer",
+            "alert_task_title": "the \"{{task_name}}\" task",
+            "alert_question": "Delete {{title}}?",
+            "project_delete_success": "Deleted the \"{{project_name}}\" project.",
+            "project_delete_error": "Failed to delete the \"{{project_name}}\" project.",
+            "drawer_delete_success": "Delted \"{{drawer_name}}\" drawer.",
+            "drawer_delete_error": "Failed to delete the \"{{drawer_name}}\" drawer.",
+            "task_delete_success": "Deleted the \"{{task_name}}\" task.",
+            "task_delete_error": "Failed to delete \"{{task_name}}\" task."
+        },
+        "sort": {
+            "title": "{{title}} Sort by",
+            "drawer_title": "Drawer",
+            "task_title": "Task",
+            "name": "Name alphabetical order",
+            "-name": "Name alphabetical reverse order",
+            "created_at": "Creation Date Newest",
+            "-created_at": "Creation Date Oldest",
+            "-uncompleted_task_count": "Most Uncompleted tasks",
+            "-completed_task_count": "Most Completed tasks",
+            "completed_task_count": "Least Completed tasks",
+            "-priority": "Order of importance",
+            "due_date": "Early due date order",
+            "-due_date": "Late due date order",
+            "reminders": "With reminders first"
+        }
+    },
+    "project_drawer_edit": {
+        "none": "None",
+        "button_add": "Create",
+        "button_save": "Save",
+        "created_project": "Created a new project.",
+        "created_project_error": "Failed to create a new project.",
+        "created_drawer": "Created a new drawer.",
+        "created_drawer_error": "Failed to create a new drawer.",
+        "edited": "Saved changes.",
+        "edited_error": "Failed to save changes.",
+        "project_cannot_name_inbox": "Can't name a project as Inbox.",
+        "name_required": "A name is required.",
         "color": {
             "title": "Color Settings",
             "theme1": "Theme1",
@@ -76,58 +145,6 @@
             "title": "Project Type Settings",
             "regular": "a regular project",
             "goal": "a goal project"
-        },
-        "create": {
-            "name_placeholder": "Enter a name",
-            "button_add": "Add",
-            "none": "none",
-            "project_create_success": "The project was successfully created.",
-            "project_create_error": "The project creation failed.",
-            "project_create_no_name": "Write a name for your project.",
-            "project_create_cannot_use_inbox": "Can't name a new project as an inbox.",
-            "drawer_create_success": "The drawer was successfully created.",
-            "drawer_create_error": "The drawer creation failed.",
-            "drawer_create_no_name": "Write a name for your drawer.",
-            "task_create_success": "The task was successfully created.",
-            "task_create_error": "The task creation failed.",
-            "task_create_no_name": "Write a name for your task."
-        },
-        "edit": {
-            "display": "Edit",
-            "name_change_success": "The name has changed.",
-            "project_change_error": "The project change failed.",
-            "drawer_change_error": "The drawer change failed."
-        },
-        "delete": {
-            "display": "Delete",
-            "button_delete": "Delete",
-            "button_done": "Dismiss",
-            "alert_project_title": "the \"{{project_name}}\" project",
-            "alert_drawer_title": "the \"{{drawer_name}}\" drawer",
-            "alert_task_title": "the \"{{task_name}}\" task",
-            "alert_question": "Delete {{title}}?",
-            "project_delete_success": "The \"{{project_name}}\" project was deleted.",
-            "project_delete_error": "Deleting the \"{{project_name}}\" project failed.",
-            "drawer_delete_success": "The \"{{drawer_name}}\" drawer was deleted.",
-            "drawer_delete_error": "Deleting the \"{{drawer_name}}\" drawer failed.",
-            "task_delete_success": "The \"{{task_name}}\" task was deleted.",
-            "task_delete_error": "Deleting the \"{{task_name}}\" task failed."
-        },
-        "sort": {
-            "title": "{{title}} Sort by",
-            "drawer_title": "Drawer",
-            "task_title": "Task",
-            "name": "Name alphabetical order",
-            "-name": "Name alphabetical reverse order",
-            "created_at": "Creation Date Newest",
-            "-created_at": "Creation Date Oldest",
-            "-uncompleted_task_count": "Most Uncompleted tasks",
-            "-completed_task_count": "Most Completed tasks",
-            "completed_task_count": "Least Completed tasks",
-            "-priority": "Order of importance",
-            "due_date": "Early due date order",
-            "-due_date": "Late due date order",
-            "reminders": "Reminders first"
         }
     },
     "task": {
@@ -139,9 +156,13 @@
         "name_placeholder": "Enter a name for the task.",
         "name_change_success": "The name has changed.",
         "none": "none",
+        "assigned": {
+            "name": "Assignment Date",
+            "title": "Assignment date Settings"
+        },
         "due": {
-            "assigned_title": "Assignment date Settings",
-            "due_title": "Due date Settings",
+            "name": "Due",
+            "title": "Due date Settings",
             "quick": {
                 "title": "Quick Assignments",
                 "today": "Today",
@@ -157,9 +178,11 @@
                 "am": "AM",
                 "pm": "PM",
                 "button_add": "Add",
+                "button_remove": "Delete",
                 "no_due_before_time": "Set a due date before setting a time.",
                 "acceptable_numbers": "The maximum number you can enter is {{max}}.",
-                "time_change_success": "The time has changed."
+                "time_change_success": "The time has changed.",
+                "time_remove": "Deleted the time."
             },
             "repeat": {
                 "title": "Recurrence Settings",
@@ -183,6 +206,7 @@
             }
         },
         "reminder": {
+            "name": "Reminder",
             "title": "Reminder Settings",
             "reminder_before_due_date": "Set a due date before setting a reminder.",
             "then": "then",
@@ -201,20 +225,23 @@
             "display_2_days_before": "2 days"
         },
         "priority": {
+            "name": "Priority",
             "title": "Importance Settings",
             "normal": "Normal",
             "important": "Important",
             "critical": "Critical"
         },
         "drawer": {
+            "name": "Drawer",
             "title": "Select a drawer",
             "fetching_error": "An error occurred while fetching data."
         },
         "memo": {
+            "name": "Memo",
             "title": "Memo settings",
             "memo_placeholder": "Enter a memo.",
             "button_change": "Change",
-            "memo_edit_success": "The memo was changed."
+            "memo_edit_success": "The memo has changed."
         }
     },
     "users": {
@@ -243,79 +270,6 @@
         "follower_list_empty": "Nothing is here.",
         "follower_list_error": "Unable to load followers."
     },
-    "intro": {
-        "section_top": {
-            "title1": "Plan, Organize, and Cheer.",
-            "title2": "Do all them in Peak",
-            "button_start": "Start",
-            "button_sign_in": "Sign in"
-        },
-        "section_plan": {
-            "title": "Plan",
-            "description": "Track priority and deadline of tasks.",
-            "demo": {
-                "priority_selection": "Choose a priority",
-                "deadline_selection": "Choose a deadline",
-                "sample0": "Prepare midtest",
-                "sample1": "Order at Amazon",
-                "sample2": "Chat mom",
-                "sample3": "Submit the report",
-                "sample4": "Plan vacation"
-            }
-        },
-        "section_organize": {
-            "title": "Organize",
-            "description": "Place tasks in the right place with projects and drawers.",
-            "demo_project": {
-                "title": "A project contains drawers.",
-                "button_add": "Add project",
-                "sample0": "Uni-life",
-                "sample1": "Household",
-                "sample2": "Exchange Student",
-                "sample3": "August Vacation",
-                "sample4": "Be Healthy"
-            },
-            "demo_drawer": {
-                "title": "A drawer is home for tasks.",
-                "button_add": "Add drawer",
-                "project_name": "Uni-life",
-                "drawer0": {
-                    "drawer_name": "🖋️ Assignments",
-                    "sample0": "Assignment 11",
-                    "sample1": "E-learning this week",
-                    "sample2": "Course Reservation"
-                },
-                "drawer1": {
-                    "drawer_name": "📖 Reading",
-                    "sample0": "DUNE MESSSIAH",
-                    "sample1": "Clean Architecture",
-                    "sample2": "Cut In Half"
-                },
-                "drawer2": {
-                    "drawer_name": "🎈 Hackathon",
-                    "sample0": "Apply Con2024",
-                    "sample1": "Make a team",
-                    "sample2": "Idea Meeting"
-                }
-            }
-        },
-        "section_cheer": {
-            "title": "Cheer",
-            "description": "Put reactions to your friends’ tasks with fancy emojis. Make motivate and get motivated."
-        },
-        "section_share": {
-            "title": "Share",
-            "description": "Share your daily log with your friends."
-        },
-        "section_customize": {
-            "title": "Customize",
-            "description": "Customize an apperance of Peak.",
-            "demo": {
-                "theme_light": "Light",
-                "theme_dark": "Dark"
-            }
-        }
-    },
     "follow_button": {
         "button_follow": "Follow",
         "button_accepted": "Following",
@@ -326,7 +280,9 @@
         "success_unfollow": "Unfollowed @{{username}}.",
         "success_cancel": "Canceled your follow request to {{username}}.",
         "error_unfollow": "Failed to unfollow @{{username}}.",
-        "error_cancel": "Failed to cancel a follow request to @{{username}}."
+        "error_cancel": "Failed to cancel a follow request to @{{username}}.",
+        "cancel_accepted": "Unfollow @{{username}}?",
+        "button_sure": "Sure"
     },
     "error-page": {
         "unknown_error_code": "X_X",
@@ -338,7 +294,7 @@
     "email_verification": {
         "invalid_access": "Invalid access.",
         "verified_title": "Email Verified",
-        "verified": "{{email}} was verified. Now you can sign in.",
+        "verified": "Now you can sign in using {{email}}.",
         "link_sign": "Click to Sign In",
         "resend_title": "Resend Verification Mail",
         "resend_other_cases": "In cases that the email entered is already verified or not registered, Other types of mail will be sent.",

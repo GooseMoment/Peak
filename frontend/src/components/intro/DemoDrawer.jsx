@@ -2,7 +2,7 @@ import { Fragment, useMemo, useState } from "react"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import PageTitle from "@components/common/PageTitle"
-import { TaskList } from "@components/drawers/Drawer"
+import { TaskList } from "@components/social/logDetails/DrawerBundle"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DemoTask from "@components/intro/DemoTask"
 import SubSection, { SubTitle } from "@components/intro/SubSection"
@@ -20,8 +20,8 @@ import { useTranslation } from "react-i18next"
 const projectColor = "#0E4A84"
 
 const DemoDrawer = () => {
-    const { t } = useTranslation(null, {
-        keyPrefix: "intro.section_organize.demo_drawer",
+    const { t } = useTranslation("intro", {
+        keyPrefix: "section_organize.demo_drawer",
     })
     const drawers = useMemo(() => makeDrawers(t), [t])
     const [count, setCount] = useState(1)
@@ -69,6 +69,7 @@ const makeDrawers = (t) => [
             {
                 name: t("drawer0.sample0"),
                 completed_at: null,
+                due_type: "due_date",
                 due_date: tomorrow,
                 assigned_at: today,
                 priority: 1,
@@ -76,6 +77,7 @@ const makeDrawers = (t) => [
             {
                 name: t("drawer0.sample1"),
                 completed_at: true,
+                due_type: "due_date",
                 due_date: today,
                 assigned_at: yesterday,
                 priority: 0,
@@ -83,6 +85,7 @@ const makeDrawers = (t) => [
             {
                 name: t("drawer0.sample2"),
                 completed_at: false,
+                due_type: "due_date",
                 due_date: dayLongAfter,
                 assigned_at: null,
                 priority: 0,
@@ -95,16 +98,16 @@ const makeDrawers = (t) => [
             {
                 name: t("drawer1.sample0"),
                 completed_at: null,
+                due_type: "due_date",
                 due_date: dayAfterTomorrow,
-                due_time: null,
                 assigned_at: tomorrow,
                 priority: 2,
             },
             {
                 name: t("drawer1.sample1"),
                 completed_at: true,
+                due_type: "due_date",
                 due_date: yesterday,
-                due_time: null,
                 assigned_at: yesterday,
                 priority: 2,
             },
@@ -116,24 +119,24 @@ const makeDrawers = (t) => [
             {
                 name: t("drawer2.sample0"),
                 completed_at: false,
+                due_type: "due_date",
                 due_date: dayAfterTomorrow,
-                due_time: null,
                 assigned_at: null,
                 priority: 0,
             },
             {
                 name: t("drawer2.sample1"),
                 completed_at: false,
+                due_type: "due_date",
                 due_date: today,
-                due_time: null,
                 assigned_at: null,
                 priority: 1,
             },
             {
                 name: t("drawer2.sample2"),
                 completed_at: true,
+                due_type: "due_date",
                 due_date: yesterday,
-                due_time: null,
                 assigned_at: yesterday,
                 priority: 2,
             },

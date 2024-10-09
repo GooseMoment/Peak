@@ -46,7 +46,7 @@ const Contents = ({ task, setFunc }) => {
     const items = [
         {
             id: 1,
-            name: "assigned_due",
+            name: "assigned",
             icon: <FeatherIcon icon="calendar" />,
             display: task.assigned_at ? formatted_assigned_date : t("none"),
             component: <Assigned setFunc={setFunc} />,
@@ -55,7 +55,10 @@ const Contents = ({ task, setFunc }) => {
             id: 2,
             name: "due",
             icon: <img src={hourglass} />,
-            display: task.due_date ? formatted_due_datetime : t("none"),
+            display:
+                task.due_type && (task.due_date || task.due_datetime)
+                    ? formatted_due_datetime
+                    : t("none"),
             component: <Due task={task} setFunc={setFunc} />,
         },
         {
@@ -71,7 +74,7 @@ const Contents = ({ task, setFunc }) => {
                             </ReminderBlock>
                         ))}
                     </RemindersBox>
-                ) : task.due_date ? (
+                ) : task.due_type ? (
                     <EmptyReminderBox name="reminder">+</EmptyReminderBox>
                 ) : (
                     <EmptyReminderBox
@@ -120,10 +123,12 @@ const Contents = ({ task, setFunc }) => {
             {items.map((item) => (
                 <Fragment key={item.id}>
                     <ContentsBox>
-                        <ToolTip message={item.name}>{item.icon}</ToolTip>
+                        <ToolTip message={t(item.name + ".name")}>
+                            {item.icon}
+                        </ToolTip>
                         <VLine $end={item.id === 1 || item.id === 6} />
                         <ContentText
-                            name={item.name === "reminder" || item.name}
+                            name={item.name === "reminder" ? null : item.name}
                             onClick={handleClickContent}
                             $isReminder={item.name === "reminder"}>
                             {item.display}
@@ -141,7 +146,6 @@ const Contents = ({ task, setFunc }) => {
 }
 
 const ContentsBlock = styled.div`
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -149,7 +153,6 @@ const ContentsBlock = styled.div`
 `
 
 const ContentsBox = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: flex-start;

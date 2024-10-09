@@ -3,9 +3,10 @@ import { useEffect, useRef } from "react"
 import styled, { css, keyframes } from "styled-components"
 
 import MildButton from "@components/common/MildButton"
+import { useSidebarContext } from "@components/sidebar/SidebarContext"
 
 import useScreenSize from "@utils/useScreenSize"
-import useScreenType, { WIDTH_TABLET } from "@utils/useScreenType"
+import { WIDTH_TABLET } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
 
@@ -13,17 +14,14 @@ import FeatherIcon from "feather-icons-react"
 
 const autoCollapseWidth = WIDTH_TABLET
 
-const Header = ({ collapsed, setCollapsed, closeSidebar }) => {
+const Header = () => {
     const screenSize = useScreenSize()
-    const { isMobile } = useScreenType()
     const previousScreenSize = useRef(screenSize)
     const autoControlled = useRef(true)
 
-    useEffect(() => {
-        if (isMobile) {
-            return
-        }
+    const { isCollapsed, setCollapsed } = useSidebarContext()
 
+    useEffect(() => {
         if (
             previousScreenSize.current.width > autoCollapseWidth &&
             screenSize.width <= autoCollapseWidth
@@ -59,19 +57,12 @@ const Header = ({ collapsed, setCollapsed, closeSidebar }) => {
 
     return (
         <header>
-            <ButtonContainer $collapsed={collapsed}>
-                {isMobile ? (
-                    <CollapseButton onClick={closeSidebar}>
-                        <FeatherIcon icon="x" />
-                    </CollapseButton>
-                ) : (
-                    <CollapseButton
-                        onClick={onClickCollapseButton}
-                        $collapsed={collapsed}
-                    >
-                        <FeatherIcon icon="chevrons-left" />
-                    </CollapseButton>
-                )}
+            <ButtonContainer $collapsed={isCollapsed}>
+                <CollapseButton
+                    onClick={onClickCollapseButton}
+                    $collapsed={isCollapsed}>
+                    <FeatherIcon icon="chevrons-left" />
+                </CollapseButton>
             </ButtonContainer>
         </header>
     )

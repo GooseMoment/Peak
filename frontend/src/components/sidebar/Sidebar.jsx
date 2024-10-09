@@ -1,43 +1,20 @@
-import { useState } from "react"
-
 import styled, { css } from "styled-components"
 
 import Footer from "@components/sidebar/Footer"
 import Header from "@components/sidebar/Header"
 import Middle from "@components/sidebar/Middle"
+import { useSidebarContext } from "@components/sidebar/SidebarContext"
 
-import useScreenType, { ifMobile } from "@utils/useScreenType"
-import useStopScroll from "@utils/useStopScroll"
+import { ifMobile } from "@utils/useScreenType"
 
-import {
-    cubicBeizer,
-    slideLeftToRight,
-    slideLeftToRightReverse,
-} from "@assets/keyframes"
-
-const Sidebar = ({ collapsed, setCollapsed, setSidebarHidden }) => {
-    const { isMobile } = useScreenType()
-    useStopScroll(isMobile)
-
-    const [closing, setClosing] = useState(false)
-
-    const closeWithTransition = () => {
-        setClosing(true)
-        setTimeout(() => {
-            setSidebarHidden(true)
-            setClosing(false)
-        }, 250)
-    }
+const Sidebar = () => {
+    const { isCollapsed } = useSidebarContext()
 
     return (
-        <SidebarBox $closing={closing} $collapsed={collapsed}>
-            <Header
-                collapsed={collapsed}
-                setCollapsed={setCollapsed}
-                closeSidebar={closeWithTransition}
-            />
-            <Middle collapsed={collapsed} closeSidebar={closeWithTransition} />
-            <Footer collapsed={collapsed} closeSidebar={closeWithTransition} />
+        <SidebarBox $collapsed={isCollapsed}>
+            <Header />
+            <Middle />
+            <Footer />
         </SidebarBox>
     )
 }
@@ -67,18 +44,7 @@ export const SidebarBox = styled.nav`
     }
 
     ${ifMobile} {
-        width: 100dvw;
-        padding-left: 0.75em;
-        padding-right: 0.75em;
-
-        animation: ${slideLeftToRight} 0.25s ${cubicBeizer};
-
-        ${(p) =>
-            p.$closing &&
-            css`
-                animation: ${slideLeftToRightReverse} 0.5s ${cubicBeizer}
-                    forwards;
-            `}
+        display: none;
     }
 
     ${(p) =>

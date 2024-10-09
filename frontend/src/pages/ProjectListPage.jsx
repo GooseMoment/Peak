@@ -5,13 +5,13 @@ import styled from "styled-components"
 
 import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
-import ProjectCreate from "@components/project/Creates/ProjectCreate"
+import ErrorProjectList from "@components/errors/ErrorProjectList"
 import ProjectName from "@components/project/ProjectName"
+import ProjectEdit from "@components/project/edit/ProjectEdit"
 import SkeletonProjectList from "@components/project/skeletons/SkeletonProjectList"
 
 import { getProjectList } from "@api/projects.api"
 
-import ErrorProjectList from "@/components/errors/ErrorProjectList"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
@@ -32,9 +32,14 @@ const ProjectListPage = () => {
 
     return (
         <>
-            <PageTitle>{t("title")}</PageTitle>
+            <PageTitleBox>
+                <PageTitle>{t("title")}</PageTitle>
+                {isPending || <PlusBox onClick={() => {setIsCreateOpen(true)}}><FeatherIcon icon="plus"/></PlusBox>}
+            </PageTitleBox>
+
             {isPending && <SkeletonProjectList />}
             {isError && <ErrorProjectList onClick={() => refetch()} />}
+
             {projects?.map((project) => (
                 <ProjectName key={project.id} project={project} />
             ))}
@@ -54,26 +59,38 @@ const ProjectListPage = () => {
                     afterClose={() => {
                         setIsCreateOpen(false)
                     }}>
-                    <ProjectCreate />
+                    <ProjectEdit isCreating />
                 </ModalWindow>
             )}
         </>
     )
 }
 
+const PageTitleBox = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+const PlusBox = styled.div`
+    margin-left: 0.8em;
+    padding-bottom: 0.8em;
+    cursor: pointer;
+
+    & svg {
+        width: 16px;
+        height: 16px;
+        top: 0;
+    }
+`
+
 const ProjectCreateButton = styled.div`
-    flex: 1;
     display: flex;
     align-items: center;
     padding: 1.3em 0em;
     margin-left: 1.2em;
-
-    &:hover {
-        cursor: pointer;
-    }
+    cursor: pointer;
 
     & svg {
-        text-align: center;
         width: 1.1em;
         height: 1.1em;
         top: 0;
