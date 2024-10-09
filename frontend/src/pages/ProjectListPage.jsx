@@ -12,6 +12,8 @@ import SkeletonProjectList from "@components/project/skeletons/SkeletonProjectLi
 
 import { getProjectList } from "@api/projects.api"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
@@ -86,14 +88,19 @@ const PlusBox = styled.div`
 const ProjectCreateButton = styled.div`
     display: flex;
     align-items: center;
-    padding: 1.3em 0em;
-    margin-left: 1.2em;
+    padding: 1em 0em;
+    margin-left: 0.8em;
     cursor: pointer;
 
     & svg {
         width: 1.1em;
         height: 1.1em;
         top: 0;
+    }
+
+    ${ifMobile} {
+        padding: 0.5em 0em;
+        margin-left: 0em;
     }
 `
 
