@@ -6,11 +6,14 @@ import mainRouter from "@routers/mainRouter"
 
 import FullscreenLoader from "@components/common/FullscreenLoader"
 
-import { ToastContainer } from "react-toastify"
+import useScreenType from "@utils/useScreenType"
+
+import { Bounce, Slide, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
 const Root = () => {
     const theme = useTheme()
+    const { isMobile } = useScreenType()
 
     return (
         <>
@@ -19,6 +22,7 @@ const Root = () => {
                 theme={theme.toastTheme}
                 stacked
                 hideProgressBar
+                transition={isMobile ? Slide : Bounce}
             />
 
             <RouterProvider
