@@ -240,3 +240,13 @@ body {
         bottom: 5em !important;
     }
 }
+
+/*
+    Markdown
+*/
+
+.announcement_detail_content img {
+    display: block;
+    max-width: 600px;
+    margin: 1em;
+}
