@@ -30,18 +30,29 @@ const TaskCreateSimple = ({
     const inputRef = useRef(null)
 
     const [content, setContent] = useState("name")
-    const [newTaskName, setNewTaskName] = useState("")
     const [assignedIndex, setAssignedIndex] = useState(0)
     const [dueIndex, setDueIndex] = useState(0)
     const [priorityIndex, setPriorityIndex] = useState(0)
 
+    const onKeyDownAlt = (e) => {
+        if (!e.altKey) {
+            return
+        }
+
+        const selectedNumber = Number(e.code.slice(5))
+        if (selectedNumber && selectedNumber <= items.length) {
+            e.preventDefault()
+            setContent(items[selectedNumber - 1].name)
+        }
+    }
+
     useEffect(() => {
-        document.addEventListener("keydown", onKeyDown)
+        document.addEventListener("keydown", onKeyDownAlt)
 
         return () => {
-            document.removeEventListener("keydown", onKeyDown)
+            document.removeEventListener("keydown", onKeyDownAlt)
         }
-    }, [newTaskName])
+    }, [])
 
     const handleClickContent = (e) => {
         const name = e.currentTarget.getAttribute("name")
@@ -49,7 +60,7 @@ const TaskCreateSimple = ({
     }
 
     const [newTask, setNewTask] = useState({
-        name: newTaskName,
+        name: "",
         assigned_at: null,
         due_type: null,
         due_date: null,
@@ -65,7 +76,7 @@ const TaskCreateSimple = ({
     })
 
     const editNewTask = (edit) => {
-        setNewTask(Object.assign(newTask, edit))
+        setNewTask(Object.assign({}, newTask, edit))
     }
 
     const postMutation = useMutation({
@@ -86,37 +97,27 @@ const TaskCreateSimple = ({
             onClose()
         },
         onError: () => {
-            toast.error(t("task_create_error"), {
-                toastId: "task_create_error",
-            })
+            toast.error(t("task_create_error"))
         },
     })
 
-    const onKeyDown = (e) => {
+    const onKeyDownEnter = (e) => {
         if (postMutation.isPending) {
+            e.preventDefault()
             return
         }
 
-        if (e.altKey) {
-            const selectedNumber = Number(e.code[5])
-            if (selectedNumber) {
-                e.preventDefault()
-                setContent(items[selectedNumber - 1].name)
-            }
+        if (e.code !== "Enter") {
+            return
         }
-        if (e.code === "Enter") {
-            e.preventDefault()
 
-            editNewTask({ name: newTaskName })
-            if (!newTask.name) {
-                toast.error(t("task_create_no_name"), {
-                    toastId: "task_create_no_name",
-                })
-                return
-            }
+        e.preventDefault()
 
-            postMutation.mutate(newTask)
+        if (newTask.name.trim() === "") {
+            return toast.error(t("task_create_no_name"))
         }
+
+        postMutation.mutate(newTask)
     }
 
     const items = [
@@ -128,8 +129,8 @@ const TaskCreateSimple = ({
                     task={newTask}
                     setFunc={editNewTask}
                     inputRef={inputRef}
-                    newTaskName={newTaskName}
-                    setNewTaskName={setNewTaskName}
+                    newTaskName={newTask.name}
+                    setNewTaskName={(name) => editNewTask({ name })}
                     color={color}
                     isCreate
                 />
@@ -174,7 +175,7 @@ const TaskCreateSimple = ({
     ]
 
     return (
-        <TaskCreateSimpleBlock>
+        <TaskCreateSimpleBlock onKeyDown={onKeyDownEnter}>
             <IndexBlock>
                 {items.map((item) => (
                     <IndexBox
