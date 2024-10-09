@@ -1,6 +1,5 @@
 import styled from "styled-components"
 
-import { TaskList } from "@components/social/logDetails/DrawerBundle"
 import UserProfile from "@components/intro/UserProfile"
 import TaskFrame from "@components/tasks/TaskFrame"
 
@@ -15,15 +14,13 @@ const DemoBlurb = ({ log }) => {
                 />
                 <Blurb>{log.blurb}</Blurb>
             </TopBox>
-            <TaskList>
-                {log.tasks.map((task) => (
-                    <TaskFrame
-                        key={task.id}
-                        task={task}
-                        color={log.colors[task.id]}
-                    />
-                ))}
-            </TaskList>
+            {log.tasks.map((task) => (
+                <TaskFrame
+                    key={task.id}
+                    task={task}
+                    color={log.colors[task.id]}
+                />
+            ))}
         </Box>
     )
 }
