@@ -1,5 +1,7 @@
 import styled from "styled-components"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import FeatherIcon from "feather-icons-react"
 
 const Detail = ({ title, children, onClose, special = false }) => {
@@ -25,6 +27,12 @@ const DetailBox = styled.div`
     border: solid 1px ${(p) => p.theme.project.borderColor};
     border-radius: 15px;
     padding-bottom: ${(props) => (props.$special ? "0" : "1")}em;
+
+    ${ifMobile} {
+        position: relative;
+        top: 0;
+        left: 0;
+    }
 `
 
 const TitleBox = styled.div`
