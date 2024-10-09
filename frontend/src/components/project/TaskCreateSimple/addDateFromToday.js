@@ -1,18 +1,14 @@
-import { useClientTimezone } from "@utils/clientSettings"
+import { getClientTimezone } from "@utils/clientSettings"
 
 import { DateTime } from "luxon"
 
 const addDateFromToday = (set) => {
-    const tz = useClientTimezone()
-
-    const today = DateTime.now().setZone(tz)
-    const date = today.plus(set)
-
-    let calculatedDate = null
-    if (!(set === null)) {
-        calculatedDate = date.toISODate()
+    if (!set) {
+        return null
     }
-    return calculatedDate
+
+    const tz = getClientTimezone()
+    return DateTime.now().setZone(tz).plus(set).toISODate()
 }
 
 export default addDateFromToday
