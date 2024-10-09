@@ -44,6 +44,9 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
         task = serializer.validated_data["task"]
         task = Task.objects.get(id=task.id)
 
+        if (task.reminders and task.reminders.count() != 0):
+            task.reminders.all().delete()
+
         if task.due_type == "due_date":
             tz = self.get_tz()
             nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=ZoneInfo(str(tz)))
