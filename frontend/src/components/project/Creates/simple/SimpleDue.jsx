@@ -4,7 +4,7 @@ import {
     ContentBox,
     CreateSimpleBox,
 } from "@components/project/Creates/simple/CreateSimpleBox"
-import addDateFromToday from "@components/project/Creates/utils/addDateFromToday"
+import addDateFromToday from "@components/project/Creates/simple/addDateFromToday"
 
 import hourglass from "@assets/project/hourglass.svg"
 
@@ -43,8 +43,8 @@ const SimpleDue = ({ dueIndex, setDueIndex, editNewTask, color }) => {
 
     const items = [
         { index: 0, display: t("no_date"), set: null },
-        { index: 1, display: t("today"), set: { days: 0 }},
-        { index: 2, display: t("tomorrow"), set: { days: 1 }},
+        { index: 1, display: t("today"), set: { days: 0 } },
+        { index: 2, display: t("tomorrow"), set: { days: 1 } },
         {
             index: 3,
             display: t("next_week"),
