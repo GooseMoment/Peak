@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components"
 
+import { ifMobile } from "@utils/useScreenType"
+
 const DrawerBox = styled.div`
     height: 3em;
     display: flex;
@@ -27,6 +29,7 @@ export const DrawerName = styled.h1`
     font-weight: bold;
     text-align: left;
     margin-left: 1.45em;
+    margin-bottom: 0.1em;
     color: ${(props) => props.$color};
     white-space: nowrap;
     overflow: hidden;
@@ -38,6 +41,10 @@ export const DrawerName = styled.h1`
             width: unset;
             margin-left: unset;
         `}
+
+    ${ifMobile} {
+        margin-left: 1em;
+    }
 `
 
 export const DrawerIcon = styled.div`
@@ -50,5 +57,9 @@ export const DrawerIcon = styled.div`
         margin-right: 1em;
         color: ${(props) => props.$color};
         cursor: pointer;
+    }
+
+    ${ifMobile} {
+        margin-right: 0.6em;
     }
 `
