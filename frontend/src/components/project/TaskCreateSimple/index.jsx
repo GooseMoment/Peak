@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
 
-import SimpleAssigned from "@components/project/Creates/simple/SimpleAssigned"
-import SimpleDue from "@components/project/Creates/simple/SimpleDue"
-import SimplePriority from "@components/project/Creates/simple/SimplePriority"
+import SimpleAssigned from "@components/project/TaskCreateSimple/SimpleAssigned"
+import SimpleDue from "@components/project/TaskCreateSimple/SimpleDue"
+import SimplePriority from "@components/project/TaskCreateSimple/SimplePriority"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
 import { postTask } from "@api/tasks.api"

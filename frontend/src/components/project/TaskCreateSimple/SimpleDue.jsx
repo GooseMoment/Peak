@@ -3,8 +3,8 @@ import { useEffect } from "react"
 import {
     ContentBox,
     CreateSimpleBox,
-} from "@components/project/Creates/simple/CreateSimpleBox"
-import addDateFromToday from "@components/project/Creates/simple/addDateFromToday"
+} from "@components/project/TaskCreateSimple/CreateSimpleBox"
+import addDateFromToday from "@components/project/TaskCreateSimple/addDateFromToday"
 
 import hourglass from "@assets/project/hourglass.svg"
 
