@@ -26,6 +26,7 @@ import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { ifMobile } from "@/utils/useScreenType"
 
 const getPageFromURL = (url) => {
     if (!url) return null
@@ -121,8 +122,7 @@ const TodayPage = () => {
     return (
         <>
             <PageTitle>{t("title")}</PageTitle>
-            {overdueTasks?.pages[0].count === 0 || (
-                <OverdueTasksBlock>
+            {(<OverdueTasksBlock>
                     <OverdueTitle>
                         <FeatherIcon icon="alert-circle" />
                         {t("overdue_title")}
@@ -236,13 +236,14 @@ const FlexCenterBox = styled.div`
 const OverdueTasksBlock = styled.div`
     border: 1.8px solid ${(p) => p.theme.project.borderColor};
     border-radius: 15px;
-    margin: 2em 1em;
-    padding: 1.5em;
+    margin: 1.4em 0.5em;
+    padding: 1.5em 1em;
 `
 
 const OverdueTitle = styled.div`
     font-size: 1.2em;
     font-weight: bold;
+    margin-left: 1em;
 `
 
 const CollapseButtonBlock = styled.div`
@@ -296,7 +297,7 @@ const TasksBox = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 0 1.2em;
+    padding: 0.3em 0.8em;
     overflow: hidden;
 `
 
