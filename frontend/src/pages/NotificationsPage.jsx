@@ -69,7 +69,7 @@ const NotificationsPage = () => {
     const lastDate = useRef(null)
     useEffect(() => {
         lastDate.current = null
-        setSearchParams({ active: activeFilter })
+        setSearchParams({ active: activeFilter }, { replace: true })
     }, [activeFilter])
 
     const header = (
