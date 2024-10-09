@@ -69,6 +69,7 @@ class FollowView(APIView):
         follower = get_object_or_404(User, username=follower)
         if follower != request.user:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
         followee = get_object_or_404(User, username=followee)
         
         following, created = Following.objects.get_or_create(follower=follower,
@@ -81,6 +82,7 @@ class FollowView(APIView):
                                            blockee=followee).exclude(deleted_at=None).exists()
         if is_blocking:
             return Response(status=status.HTTP_403_FORBIDDEN)
+
         is_blocked = Block.objects.filter(blocker=followee,
                                           blockee=follower).exclude(deleted_at=None).exists()
         if is_blocked:
@@ -89,6 +91,7 @@ class FollowView(APIView):
         if not created:
             if following.status == Following.ACCEPTED or following.status == Following.REQUESTED:
                 return Response(status=status.HTTP_208_ALREADY_REPORTED)
+
             else:
                 following.status = Following.REQUESTED
                 following.deleted_at = None
@@ -105,11 +108,12 @@ class FollowView(APIView):
                                            blockee=request.user).exclude(deleted_at=None).exists()
         if is_follower_blocking:
             return Response(status=status.HTTP_403_FORBIDDEN)
+
         is_followee_blocking = Block.objects.filter(blocker=followee,
                                           blockee=request.user).exclude(deleted_at=None).exists()
         if is_followee_blocking:
             return Response(status=status.HTTP_403_FORBIDDEN)
-        
+
         following_filter = Q(status=Following.REQUESTED) | Q(status=Following.ACCEPTED)
         following_filter &= Q(follower=follower, followee=followee)
         
@@ -131,6 +135,7 @@ class FollowView(APIView):
         followee = get_object_or_404(User, username=followee)
         if followee != request.user:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
         follower = get_object_or_404(User, username=follower)
         
         try:
@@ -149,6 +154,7 @@ class FollowView(APIView):
         follower = get_object_or_404(User, username=follower)
         if follower != request.user:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
         followee = get_object_or_404(User, username=followee)
         
         try:
