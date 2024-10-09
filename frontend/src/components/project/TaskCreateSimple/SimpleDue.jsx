@@ -35,7 +35,7 @@ const SimpleDue = ({ dueIndex, setDueIndex, editNewTask, color }) => {
 
     useEffect(() => {
         editNewTask({
-            due_type: "due_date",
+            due_type: dueIndex === 0 ? null : "due_date",
             due_date: addDateFromToday(items[dueIndex].set),
             due_datetime: null,
         })
