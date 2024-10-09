@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-import { ifMobile, ifTablet } from "@utils/useScreenType"
+import { ifMobile } from "@utils/useScreenType"
 
 import styled, { css } from "styled-components"
 
@@ -40,20 +40,22 @@ const TaskFrame = ({
 
     return (
         <Box>
-            <Priority
-                hasDate={hasDate}
-                priority={task.priority}
-                completed={task.completed_at}
-            />
             <Content>
                 <CircleName>
-                    <TaskCircle
-                        completed={task.completed_at}
-                        color={color}
-                        hasDate={hasDate}
-                        isLoading={isLoading}
-                        onClick={toComplete}
-                    />
+                    <Icons>
+                        <Priority
+                            hasDate={hasDate}
+                            priority={task.priority}
+                            completed={task.completed_at}
+                        />
+                        <TaskCircle
+                            completed={task.completed_at}
+                            color={color}
+                            hasDate={hasDate}
+                            isLoading={isLoading}
+                            onClick={toComplete}
+                        />
+                    </Icons>
                     {taskDetailPath ? (
                         <NameLink draggable="false" to={taskDetailPath}>
                             {TaskName}
@@ -130,13 +132,13 @@ const TaskNameBox = styled.div`
     line-height: 1.3em;
     min-width: 0;
 
-    ${ifTablet} {
-        width: 65vw;
-    }
-
     ${ifMobile} {
         white-space: normal;
         word-wrap: normal;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
 `
 
@@ -144,11 +146,16 @@ const CircleName = styled.div`
     display: flex;
 `
 
+const Icons = styled.div`
+    display: flex;
+    align-items: center;
+`
+
 const Dates = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 0.2em;
-    margin-left: 1.8em;
+    margin-top: 0.4em;
+    margin-left: 3em;
 `
 
 const AssignedDate = styled.div`
