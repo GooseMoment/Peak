@@ -12,7 +12,7 @@ const TaskNameInput = ({
     setName,
     inputRef,
     color,
-    setFunc=()=>{},
+    setFunc = () => {},
     isCreating = false,
 }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })

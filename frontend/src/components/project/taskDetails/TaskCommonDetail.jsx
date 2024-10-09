@@ -4,14 +4,14 @@ import { useNavigate } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import DeleteAlert from "@components/common/DeleteAlert"
 import Button from "@components/common/Button"
+import DeleteAlert from "@components/common/DeleteAlert"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Contents from "@components/project/taskDetails/Contents"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
-import { postTask, deleteTask, patchTask } from "@api/tasks.api"
 import { postReminder } from "@api/notifications.api"
+import { deleteTask, patchTask, postTask } from "@api/tasks.api"
 
 import { useClientSetting } from "@utils/clientSettings"
 import useScreenType from "@utils/useScreenType"
@@ -22,7 +22,13 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const TaskCommonDetail = ({ newTask, setNewTask, projectID=null, color, isCreating=false }) => {
+const TaskCommonDetail = ({
+    newTask,
+    setNewTask,
+    projectID = null,
+    color,
+    isCreating = false,
+}) => {
     const { t } = useTranslation(null, { keyPrefix: "project" })
     const inputRef = useRef(null)
 
@@ -88,7 +94,9 @@ const TaskCommonDetail = ({ newTask, setNewTask, projectID=null, color, isCreati
             )
         },
         onError: () => {
-            toast.error(t("delete.task_delete_error", { task_name: newTask.name }))
+            toast.error(
+                t("delete.task_delete_error", { task_name: newTask.name }),
+            )
         },
     })
 
@@ -125,7 +133,10 @@ const TaskCommonDetail = ({ newTask, setNewTask, projectID=null, color, isCreati
 
         if (newTask.reminders) {
             newTask.reminders.forEach((delta) => {
-                postReminderMutation.mutate({ task: createdTask.id, delta: delta })
+                postReminderMutation.mutate({
+                    task: createdTask.id,
+                    delta: delta,
+                })
             })
         }
         closeModal()
@@ -156,35 +167,43 @@ const TaskCommonDetail = ({ newTask, setNewTask, projectID=null, color, isCreati
     }
 
     return (
-        newTask && <TaskDetailBox onKeyDown={onEnter}>
-            <TaskNameBox>
-                <TaskNameInput
-                    task={newTask}
-                    name={newTask?.name}
-                    setName={(name) => handleChange({ name })}
-                    inputRef={inputRef}
-                    color={color}
-                />
-                <Icons>
-                    {isCreating || <FeatherIcon icon="trash-2" onClick={handleAlert} />}
-                    <FeatherIcon icon="x" onClick={closeModal} />
-                </Icons>
-            </TaskNameBox>
-            <Contents task={newTask} setFunc={handleChange} />
-            <StyledButton disabled={mutation.isPending} loading={mutation.isPending} onClick={submit}>
-                {t(isCreating ? "button_add": "button_save")}
-            </StyledButton>
-            {isAlertOpen && (
-                <DeleteAlert
-                    title={t("delete.alert_task_title", {
-                        task_name: newTask.name,
-                    })}
-                    onClose={() => {
-                        setIsAlertOpen(false)
-                    }}
-                    func={handleDelete}/>
-            )}
-        </TaskDetailBox>
+        newTask && (
+            <TaskDetailBox onKeyDown={onEnter}>
+                <TaskNameBox>
+                    <TaskNameInput
+                        task={newTask}
+                        name={newTask?.name}
+                        setName={(name) => handleChange({ name })}
+                        inputRef={inputRef}
+                        color={color}
+                    />
+                    <Icons>
+                        {isCreating || (
+                            <FeatherIcon icon="trash-2" onClick={handleAlert} />
+                        )}
+                        <FeatherIcon icon="x" onClick={closeModal} />
+                    </Icons>
+                </TaskNameBox>
+                <Contents task={newTask} setFunc={handleChange} />
+                <StyledButton
+                    disabled={mutation.isPending}
+                    loading={mutation.isPending}
+                    onClick={submit}>
+                    {t(isCreating ? "button_add" : "button_save")}
+                </StyledButton>
+                {isAlertOpen && (
+                    <DeleteAlert
+                        title={t("delete.alert_task_title", {
+                            task_name: newTask.name,
+                        })}
+                        onClose={() => {
+                            setIsAlertOpen(false)
+                        }}
+                        func={handleDelete}
+                    />
+                )}
+            </TaskDetailBox>
+        )
     )
 }
 

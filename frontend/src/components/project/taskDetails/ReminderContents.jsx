@@ -13,8 +13,7 @@ const ReminderContents = ({ item, reminders, handleReminder }) => {
             <ItemText
                 onClick={() => handleReminder(item.delta)}
                 onMouseOver={() => setIsHovering(true)}
-                onMouseOut={() => setIsHovering(false)}
-            >
+                onMouseOut={() => setIsHovering(false)}>
                 {item.content}
             </ItemText>
             {reminders.includes(item.delta) ? (

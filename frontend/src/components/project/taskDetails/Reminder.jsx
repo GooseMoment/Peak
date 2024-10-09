@@ -19,7 +19,11 @@ const Reminder = ({ task, setFunc }) => {
 
     const handleReminder = (delta) => {
         if (task.reminders.includes(delta)) {
-            setFunc({ reminders: task.reminders.filter((currentDetla) => currentDetla !== delta) })
+            setFunc({
+                reminders: task.reminders.filter(
+                    (currentDetla) => currentDetla !== delta,
+                ),
+            })
             return
         }
         setFunc({ reminders: [...task.reminders, delta] })

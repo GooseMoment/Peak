@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useOutletContext, useParams } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import TaskCommonDetail from "./TaskCommonDetail"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import SkeletonTaskDetail from "@components/project/skeletons/SkeletonTaskDetail"
+
+import TaskCommonDetail from "./TaskCommonDetail"
 
 import { getTask } from "@api/tasks.api"
 
@@ -32,7 +33,7 @@ const TaskDetail = () => {
 
     useEffect(() => {
         if (task && task.reminders?.length !== 0) {
-            const deltaArray = task.reminders.map(reminder => reminder.delta)
+            const deltaArray = task.reminders.map((reminder) => reminder.delta)
             setNewTask(Object.assign({}, task, { reminders: deltaArray }))
         } else {
             setNewTask(task)
