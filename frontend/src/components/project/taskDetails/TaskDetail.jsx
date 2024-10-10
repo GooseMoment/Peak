@@ -2,12 +2,11 @@ import { useEffect, useState } from "react"
 import { useOutletContext, useParams } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
-import styled from "styled-components"
 
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import SkeletonTaskDetail from "@components/project/skeletons/SkeletonTaskDetail"
 
-import TaskCommonDetail from "./TaskCommonDetail"
+import TaskCommonDetail, { TaskDetailBox } from "./TaskCommonDetail"
 
 import { getTask } from "@api/tasks.api"
 
@@ -66,19 +65,5 @@ const TaskDetail = () => {
         />
     )
 }
-
-const TaskDetailBox = styled.div`
-    width: 50em;
-    background-color: ${(p) => p.theme.backgroundColor};
-    border: solid 1px ${(p) => p.theme.project.borderColor};
-    border-radius: 15px;
-
-    &::after {
-        content: " ";
-        display: block;
-        height: 0;
-        clear: both;
-    }
-`
 
 export default TaskDetail

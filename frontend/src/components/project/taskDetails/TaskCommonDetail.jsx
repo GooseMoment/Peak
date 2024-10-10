@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import Button from "@components/common/Button"
+import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Contents from "@components/project/taskDetails/Contents"
@@ -131,19 +131,21 @@ const TaskCommonDetail = ({
 
         const createdTask = await mutation.mutateAsync(newTask)
 
-        if (newTask.reminders) {
-            newTask.reminders.forEach((delta) => {
-                postReminderMutation.mutate({
-                    task: createdTask.id,
-                    delta: delta,
-                })
+        newTask.reminders?.forEach((delta) => {
+            postReminderMutation.mutate({
+                task: createdTask.id,
+                delta: delta,
             })
-        }
+        })
         closeModal()
     }
 
     const onEnter = (e) => {
         if (e.repeat) {
+            return
+        }
+
+        if (mutation.isPending) {
             return
         }
 
@@ -166,48 +168,52 @@ const TaskCommonDetail = ({
         deleteMutation.mutate()
     }
 
+    if (!newTask) {
+        return null
+    }
+
     return (
-        newTask && (
-            <TaskDetailBox onKeyDown={onEnter}>
-                <TaskNameBox>
-                    <TaskNameInput
-                        task={newTask}
-                        name={newTask?.name}
-                        setName={(name) => handleChange({ name })}
-                        inputRef={inputRef}
-                        color={color}
-                    />
-                    <Icons>
-                        {isCreating || (
-                            <FeatherIcon icon="trash-2" onClick={handleAlert} />
-                        )}
-                        <FeatherIcon icon="x" onClick={closeModal} />
-                    </Icons>
-                </TaskNameBox>
-                <Contents task={newTask} setFunc={handleChange} />
-                <StyledButton
+        <TaskDetailBox onKeyDown={onEnter}>
+            <TaskNameBox>
+                <TaskNameInput
+                    task={newTask}
+                    name={newTask?.name}
+                    setName={(name) => handleChange({ name })}
+                    inputRef={inputRef}
+                    color={color}
+                />
+                <Icons>
+                    {isCreating || (
+                        <FeatherIcon icon="trash-2" onClick={handleAlert} />
+                    )}
+                    <FeatherIcon icon="x" onClick={closeModal} />
+                </Icons>
+            </TaskNameBox>
+            <Contents task={newTask} setFunc={handleChange} />
+            <ButtonGroup $justifyContent="flex-end" $margin="1em 2em 2em">
+                <Button
                     disabled={mutation.isPending}
                     loading={mutation.isPending}
                     onClick={submit}>
                     {t(isCreating ? "button_add" : "button_save")}
-                </StyledButton>
-                {isAlertOpen && (
-                    <DeleteAlert
-                        title={t("delete.alert_task_title", {
-                            task_name: newTask.name,
-                        })}
-                        onClose={() => {
-                            setIsAlertOpen(false)
-                        }}
-                        func={handleDelete}
-                    />
-                )}
-            </TaskDetailBox>
-        )
+                </Button>
+            </ButtonGroup>
+            {isAlertOpen && (
+                <DeleteAlert
+                    title={t("delete.alert_task_title", {
+                        task_name: newTask.name,
+                    })}
+                    onClose={() => {
+                        setIsAlertOpen(false)
+                    }}
+                    func={handleDelete}
+                />
+            )}
+        </TaskDetailBox>
     )
 }
 
-const TaskDetailBox = styled.div`
+export const TaskDetailBox = styled.div`
     width: 50em;
     background-color: ${(p) => p.theme.backgroundColor};
     border: solid 1px ${(p) => p.theme.project.borderColor};
@@ -237,13 +243,6 @@ const Icons = styled.div`
         cursor: pointer;
         stroke: ${(p) => p.theme.primaryColors.danger};
     }
-`
-
-const StyledButton = styled(Button)`
-    float: right;
-    margin: 1em;
-    margin-right: 2.5em;
-    margin-bottom: 1.5em;
 `
 
 export default TaskCommonDetail
