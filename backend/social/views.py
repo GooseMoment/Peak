@@ -170,7 +170,7 @@ class FollowView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class UserList(mixins.ListModelMixin, generics.GenericAPIView):
+class UserListForFollowing(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = UserSerializer
     lookup_field = "username"
 
@@ -195,17 +195,17 @@ class UserList(mixins.ListModelMixin, generics.GenericAPIView):
         return self.list(self, *args, **kwargs)
 
 
-class UserFollowingList(UserList):
+class UserFollowingList(UserListForFollowing):
     def get_user_ids(self, username: str):
         return Following.objects.filter(follower__username=username, status=Following.ACCEPTED).values("followee").all()
 
 
-class UserFollowerList(UserList):
+class UserFollowerList(UserListForFollowing):
     def get_user_ids(self, username: str):
         return Following.objects.filter(followee__username=username, status=Following.ACCEPTED).values("follower").all()
 
 
-class UserFollowRequesterList(UserList):
+class UserFollowRequesterList(UserListForFollowing):
     def get_user_ids(self, username: str):
         if self.request.user.username != username:
             raise PermissionDenied()
