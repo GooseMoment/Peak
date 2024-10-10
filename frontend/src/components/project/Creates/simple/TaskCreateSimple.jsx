@@ -26,22 +26,13 @@ const TaskCreateSimple = ({
     color,
     onClose,
 }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.create" })
+    const { t } = useTranslation(null, { keyPrefix: "project" })
     const inputRef = useRef(null)
 
     const [content, setContent] = useState("name")
-    const [newTaskName, setNewTaskName] = useState("")
     const [assignedIndex, setAssignedIndex] = useState(0)
     const [dueIndex, setDueIndex] = useState(0)
     const [priorityIndex, setPriorityIndex] = useState(0)
-
-    useEffect(() => {
-        document.addEventListener("keydown", onKeyDown)
-
-        return () => {
-            document.removeEventListener("keydown", onKeyDown)
-        }
-    }, [newTaskName])
 
     const handleClickContent = (e) => {
         const name = e.currentTarget.getAttribute("name")
@@ -49,7 +40,7 @@ const TaskCreateSimple = ({
     }
 
     const [newTask, setNewTask] = useState({
-        name: newTaskName,
+        name: "",
         assigned_at: null,
         due_type: null,
         due_date: null,
@@ -63,10 +54,6 @@ const TaskCreateSimple = ({
         memo: "",
         privacy: "public",
     })
-
-    const editNewTask = (edit) => {
-        setNewTask(Object.assign(newTask, edit))
-    }
 
     const postMutation = useMutation({
         mutationFn: (data) => {
@@ -92,6 +79,18 @@ const TaskCreateSimple = ({
         },
     })
 
+    useEffect(() => {
+        document.addEventListener("keydown", onKeyDown)
+
+        return () => {
+            document.removeEventListener("keydown", onKeyDown)
+        }
+    }, [newTask])
+
+    const handleChange = (diff) => {
+        setNewTask(Object.assign({}, newTask, diff))
+    }
+
     const onKeyDown = (e) => {
         if (postMutation.isPending) {
             return
@@ -107,7 +106,6 @@ const TaskCreateSimple = ({
         if (e.code === "Enter") {
             e.preventDefault()
 
-            editNewTask({ name: newTaskName })
             if (!newTask.name) {
                 toast.error(t("task_create_no_name"), {
                     toastId: "task_create_no_name",
@@ -126,10 +124,9 @@ const TaskCreateSimple = ({
             component: (
                 <TaskNameInput
                     task={newTask}
-                    setFunc={editNewTask}
+                    name={newTask?.name}
+                    setName={(name) => handleChange({ name })}
                     inputRef={inputRef}
-                    newTaskName={newTaskName}
-                    setNewTaskName={setNewTaskName}
                     color={color}
                     isCreate
                 />
@@ -142,7 +139,7 @@ const TaskCreateSimple = ({
                 <SimpleAssigned
                     assignedIndex={assignedIndex}
                     setAssignedIndex={setAssignedIndex}
-                    editNewTask={editNewTask}
+                    editNewTask={handleChange}
                     color={color}
                 />
             ),
@@ -154,7 +151,7 @@ const TaskCreateSimple = ({
                 <SimpleDue
                     dueIndex={dueIndex}
                     setDueIndex={setDueIndex}
-                    editNewTask={editNewTask}
+                    editNewTask={handleChange}
                     color={color}
                 />
             ),
@@ -166,7 +163,7 @@ const TaskCreateSimple = ({
                 <SimplePriority
                     priorityIndex={priorityIndex}
                     setPriorityIndex={setPriorityIndex}
-                    editNewTask={editNewTask}
+                    editNewTask={handleChange}
                     color={color}
                 />
             ),
