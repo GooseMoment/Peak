@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination, CursorPagination
 from rest_framework.permissions import AllowAny
+from rest_framework.exceptions import NotFound, PermissionDenied
 
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
@@ -168,47 +169,49 @@ class FollowView(APIView):
         
         return Response(status=status.HTTP_200_OK)
 
-@api_view(["GET"])
-def get_followers(request: HttpRequest, username):
-    target_user = get_object_or_404(User, username=username)
-    
-    is_blocked = Block.objects.filter(blocker=target_user, blockee=request.user).exclude(deleted_at=None).exists()
-    if is_blocked:
-        return Response(status=status.HTTP_403_FORBIDDEN)
-    
-    followers = Following.objects.filter(followee__username=username, status=Following.ACCEPTED).all()
-    followerUsers = User.objects.filter(followings__in=followers.all()).all()
-    
-    serializer = UserSerializer(followerUsers, many=True)    
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(["GET"])
-def get_followings(request: HttpRequest, username):
-    target_user = get_object_or_404(User, username=username)
-    
-    is_blocked = Block.objects.filter(blocker=target_user, blockee=request.user).exclude(deleted_at=None).exists()
-    if is_blocked:
-        return Response(status=status.HTTP_403_FORBIDDEN)
-    
-    followings = Following.objects.filter(follower__username=username, status=Following.ACCEPTED).all()
-    followingUsers = User.objects.filter(followers__in=followings.all()).all()
-    
-    serializer = UserSerializer(followingUsers, many=True)    
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
+class UserList(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = UserSerializer
+    lookup_field = "username"
 
-@api_view(["GET"])
-def get_requesters(request: HttpRequest, username):
-    if request.user.username != username:
-        return Response(status=status.HTTP_403_FORBIDDEN)
+    def check_user_exists(self):
+        username: str = self.kwargs["username"]
+        user_exists = User.objects.filter(username=username).exists()
+
+        if not user_exists:
+            raise NotFound(f"User @{username} not found")
+        
+        return username
+
+    def get_user_ids(self, username: str):
+        raise NotImplementedError()
+
+    def get_queryset(self):
+        username = self.check_user_exists()
+        followings = self.get_user_ids(username)
+        return User.objects.filter(id__in=followings).all()
     
-    requests = Following.objects.filter(followee__username=username, status=Following.REQUESTED).all()
-    requested_users = User.objects.filter(followings__in=requests.all()).all()
-    
-    serializer = UserSerializer(requested_users, many=True)
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    def get(self, *args, **kwargs):
+        return self.list(self, *args, **kwargs)
+
+
+class UserFollowingList(UserList):
+    def get_user_ids(self, username: str):
+        return Following.objects.filter(follower__username=username, status=Following.ACCEPTED).values("followee").all()
+
+
+class UserFollowerList(UserList):
+    def get_user_ids(self, username: str):
+        return Following.objects.filter(followee__username=username, status=Following.ACCEPTED).values("follower").all()
+
+
+class UserFollowRequesterList(UserList):
+    def get_user_ids(self, username: str):
+        if self.request.user.username != username:
+            raise PermissionDenied()
+
+        return Following.objects.filter(followee__username=username, status=Following.REQUESTED).values("follower").all()
+
 
 ## Block
 class BlockView(APIView):

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
@@ -8,8 +8,17 @@ import { getFollowersByUser, getFollowingsByUser } from "@api/social.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
+import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
+
+const getPageFromURL = (url) => {
+    if (!url) return null
+
+    const u = new URL(url)
+    const page = u.searchParams.get("page")
+    return page
+}
 
 export const FollowerList = ({ user }) => {
     const { t } = useTranslation(null, { keyPrefix: "users" })
@@ -17,12 +26,17 @@ export const FollowerList = ({ user }) => {
     const { closeModal } = useModalWindowCloseContext()
 
     const {
-        data: followers,
-        isPending,
+        data,
+        isFetching,
+        isFetchingNextPage,
+        hasNextPage,
+        fetchNextPage,
         isError,
-    } = useQuery({
+    } = useInfiniteQuery({
         queryKey: ["users", user.username, "followers"],
         queryFn: () => getFollowersByUser(user.username),
+        initialPageParam: "",
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
     return (
@@ -40,17 +54,28 @@ export const FollowerList = ({ user }) => {
                 </CloseButton>
             </TitleBar>
             <List>
-                {isPending &&
+                {isFetching &&
+                    !isFetchingNextPage &&
                     [...Array(10)].map((_, i) => (
                         <ListUserProfile key={i} skeleton />
                     ))}
                 {isError && <Message>{t("follower_list_error")}</Message>}
-                {followers?.map((follower) => (
-                    <ListUserProfile user={follower} key={follower.username} />
-                ))}
-                {followers?.length === 0 && (
+                {data?.length === 0 && (
                     <Message>{t("follower_list_empty")}</Message>
                 )}
+                {data?.pages.map((group) =>
+                    group.results.map((follower) => (
+                        <ListUserProfile
+                            user={follower}
+                            key={follower.username}
+                        />
+                    )),
+                )}
+                <ImpressionArea
+                    onImpressionStart={() => fetchNextPage()}
+                    timeThreshold={200}>
+                    {hasNextPage && <ListUserProfile skeleton />}
+                </ImpressionArea>
             </List>
         </Window>
     )
@@ -62,12 +87,17 @@ export const FollowingList = ({ user }) => {
     const { closeModal } = useModalWindowCloseContext()
 
     const {
-        data: followings,
-        isPending,
+        data,
+        isFetching,
+        isFetchingNextPage,
+        hasNextPage,
+        fetchNextPage,
         isError,
-    } = useQuery({
+    } = useInfiniteQuery({
         queryKey: ["users", user.username, "followings"],
         queryFn: () => getFollowingsByUser(user.username),
+        initialPageParam: "",
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
     return (
@@ -85,20 +115,28 @@ export const FollowingList = ({ user }) => {
                 </CloseButton>
             </TitleBar>
             <List>
-                {isPending &&
+                {isFetching &&
+                    !isFetchingNextPage &&
                     [...Array(10)].map((_, i) => (
                         <ListUserProfile key={i} skeleton />
                     ))}
                 {isError && <Message>{t("following_list_error")}</Message>}
-                {followings?.map((following) => (
-                    <ListUserProfile
-                        user={following}
-                        key={following.username}
-                    />
-                ))}
-                {followings?.length === 0 && (
+                {data?.length === 0 && (
                     <Message>{t("following_list_empty")}</Message>
                 )}
+                {data?.pages.map((group) =>
+                    group.results.map((following) => (
+                        <ListUserProfile
+                            user={following}
+                            key={following.username}
+                        />
+                    )),
+                )}
+                <ImpressionArea
+                    onImpressionStart={() => fetchNextPage()}
+                    timeThreshold={200}>
+                    {hasNextPage && <ListUserProfile skeleton />}
+                </ImpressionArea>
             </List>
         </Window>
     )
