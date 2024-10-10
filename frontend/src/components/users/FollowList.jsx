@@ -34,8 +34,9 @@ export const FollowerList = ({ user }) => {
         isError,
     } = useInfiniteQuery({
         queryKey: ["users", user.username, "followers"],
-        queryFn: () => getFollowersByUser(user.username),
-        initialPageParam: "",
+        queryFn: ({ pageParam }) =>
+            getFollowersByUser(user.username, pageParam),
+        initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
@@ -95,7 +96,8 @@ export const FollowingList = ({ user }) => {
         isError,
     } = useInfiniteQuery({
         queryKey: ["users", user.username, "followings"],
-        queryFn: () => getFollowingsByUser(user.username),
+        queryFn: ({ pageParam }) =>
+            getFollowingsByUser(user.username, pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
