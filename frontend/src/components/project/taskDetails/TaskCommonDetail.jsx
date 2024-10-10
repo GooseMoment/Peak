@@ -69,6 +69,7 @@ const TaskCommonDetail = ({
                 toast.error(t("task_create_error"))
                 return
             }
+            toast.error(t("task_edit_error"))
         },
     })
 

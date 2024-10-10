@@ -64,6 +64,7 @@
         "name_placeholder": "Enter a name",
         "task_create_success": "Created a new task.",
         "task_create_error": "Failed to create a new task.",
+        "task_edit_error": "Failed to edit a new task.",
         "task_create_no_name": "Write a name of a task.",
         "edit": {
             "display": "Edit"

@@ -64,6 +64,7 @@
         "name_placeholder": "이름을 입력하세요",
         "task_create_success": "새 작업을 생성했습니다.",
         "task_create_error": "작업 생성에 실패하였습니다.",
+        "task_edit_error": "작업 수정에 실패하였습니다.",
         "task_create_no_name": "작업의 이름을 적어주세요.",
         "edit": {
             "display": "수정"
