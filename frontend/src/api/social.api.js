@@ -51,20 +51,26 @@ export const deleteFollowRequest = async (username) => {
     return res.data
 }
 
-export const getFollowersByUser = async (username) => {
-    const res = await client.get(`users/@${username}/followers/`)
+export const getFollowersByUser = async (username, page) => {
+    const res = await client.get(`users/@${username}/followers/`, {
+        params: { page },
+    })
 
     return res.data
 }
 
-export const getFollowingsByUser = async (username) => {
-    const res = await client.get(`users/@${username}/followings/`)
+export const getFollowingsByUser = async (username, page) => {
+    const res = await client.get(`users/@${username}/followings/`, {
+        params: { page },
+    })
 
     return res.data
 }
 
-export const getRequestersByUser = async (username) => {
-    const res = await client.get(`users/@${username}/requesters/`)
+export const getRequestersByUser = async (username, page) => {
+    const res = await client.get(`users/@${username}/requesters/`, {
+        params: { page },
+    })
 
     return res.data
 }

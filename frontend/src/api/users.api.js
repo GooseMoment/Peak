@@ -1,5 +1,6 @@
 import client, {
     clearUserCredentials,
+    getCurrentUsername,
     setCurrentUsername,
     setToken,
 } from "@api/client"
@@ -127,7 +128,7 @@ export const uploadProfileImg = async (formData) => {
     return res.status
 }
 
-export const getBlocks = async () => {
-    const res = await client.get(`users/me/blocks/`)
+export const getBlocks = async (page) => {
+    const res = await client.get(`users/@${getCurrentUsername()}/blocks/`, { params: { page } })
     return res.data
 }

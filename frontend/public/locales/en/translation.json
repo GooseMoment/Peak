@@ -263,12 +263,16 @@
         "projects_empty": "There are no projects.",
         "button_edit_profile": "Edit Profile",
         "error_user_not_found": "This user is not found.",
-        "following_list_title": "@{{username}}'s followings",
-        "following_list_empty": "Nothing is here.",
-        "following_list_error": "Unable to load followings.",
-        "follower_list_title": "@{{username}}'s followers",
-        "follower_list_empty": "Nothing is here.",
-        "follower_list_error": "Unable to load followers."
+        "followings_list": {
+            "title": "@{{username}}'s followings",
+            "empty": "Nothing is here.",
+            "error": "Unable to load followings."
+        },
+        "followers_list": {
+            "title": "@{{username}}'s followers",
+            "empty": "Nothing is here.",
+            "error": "Unable to load followers."
+        }
     },
     "follow_button": {
         "button_follow": "Follow",

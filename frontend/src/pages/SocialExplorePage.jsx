@@ -10,22 +10,16 @@ import SearchBar from "@components/social/explore/SearchBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
 
 import {
-    getDailyLogTasks,
-    getExploreRecommend,
-    getExploreFound,
-    getQuote,
     getDailyLogDrawers,
+    getDailyLogTasks,
+    getExploreFound,
+    getExploreRecommend,
+    getQuote,
 } from "@api/social.api"
 
+import { getCursorFromURL } from "@utils/pagination"
+
 import queryClient from "@queries/queryClient"
-
-const getCursorFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const cursor = u.searchParams.get("cursor")
-    return cursor
-}
 
 const SocialExplorePage = () => {
     const initial_date = new Date()
@@ -41,11 +35,10 @@ const SocialExplorePage = () => {
         refetch: refetchRecommend,
     } = useInfiniteQuery({
         queryKey: ["explore", "recommend", "users"],
-        queryFn: (page) =>
-            getExploreRecommend(page.pageParam),
+        queryFn: (page) => getExploreRecommend(page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
-        refetchOnWindowFocus: false
+        refetchOnWindowFocus: false,
     })
 
     const {
@@ -56,8 +49,7 @@ const SocialExplorePage = () => {
         refetch: refetchFound,
     } = useInfiniteQuery({
         queryKey: ["explore", "found", "users"],
-        queryFn: (page) =>
-            getExploreFound(searchQuery, page.pageParam),
+        queryFn: (page) => getExploreFound(searchQuery, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
         refetchOnWindowFocus: false,
@@ -66,9 +58,9 @@ const SocialExplorePage = () => {
 
     // useRef로 대체??
     const [searchQuery, setSearchQuery] = useState("")
-    
+
     useEffect(() => {
-        if(searchQuery.length !== 0) refetchFound()
+        if (searchQuery.length !== 0) refetchFound()
     }, [searchQuery])
 
     const { data: quote } = useQuery({
@@ -84,13 +76,11 @@ const SocialExplorePage = () => {
         refetch: refetchDrawer,
     } = useInfiniteQuery({
         queryKey: ["daily", "log", "details", "drawer", selectedUser],
-        queryFn: (page) =>
-            getDailyLogDrawers(selectedUser, page.pageParam),
+        queryFn: (page) => getDailyLogDrawers(selectedUser, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
-        enabled: !!selectedUser
+        enabled: !!selectedUser,
     })
-    
 
     const handleSearch = (searchTerm) => {
         setSearchQuery(searchTerm.trim())
@@ -102,9 +92,7 @@ const SocialExplorePage = () => {
             <SocialPageTitle active="explore" />
             <Wrapper>
                 <Container>
-                    <SearchBar
-                        handleSearch={handleSearch}
-                    />
+                    <SearchBar handleSearch={handleSearch} />
                     {isRecommendPending || (searchQuery && isFoundFetching) ? (
                         <LoaderCircleWrapper>
                             <LoaderCircleFull />
@@ -127,7 +115,7 @@ const SocialExplorePage = () => {
                             quote={quote}
                             logDetails={drawerPage}
                             isFollowingPage={false}
-                            selectedDate={selectedDate}     //temp
+                            selectedDate={selectedDate} //temp
                         />
                     )}
                 </StickyContainer>

@@ -43,13 +43,6 @@ const UserPage = () => {
     } = useQuery({
         queryKey: ["users", username],
         queryFn: () => getUserByUsername(username),
-        retry: (count, err) => {
-            if (err.response.status === 404) {
-                return false
-            }
-
-            return count < 3
-        },
     })
 
     const { data: projects, isPending: projectPending } = useQuery({

@@ -1,7 +1,6 @@
 from rest_framework import mixins, generics
 from rest_framework.pagination import PageNumberPagination
 
-from api.permissions import IsUserMatch
 from api.mixins import TimezoneMixin
 from tasks.serializers import TaskSerializer
 from tasks.models import Task
@@ -11,7 +10,6 @@ from django.db.models import Q
 
 class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
-    permission_classes = [IsUserMatch]
 
     def get_queryset(self):
         date_isoformat = self.request.GET.get("date") # e.g. "2024-09-29"
@@ -33,7 +31,6 @@ class TaskTodayDueListPagination(PageNumberPagination):
     
 class TaskTodayDueList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
-    permission_classes = [IsUserMatch]
     pagination_class = TaskTodayDueListPagination
 
     def get_queryset(self):
@@ -57,7 +54,6 @@ class TaskOverdueListPagination(PageNumberPagination):
 
 class TaskOverdueList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
-    permission_classes = [IsUserMatch]
     pagination_class = TaskOverdueListPagination
 
     def get_queryset(self):

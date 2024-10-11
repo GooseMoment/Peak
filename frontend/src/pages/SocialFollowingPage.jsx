@@ -17,18 +17,12 @@ import {
     postQuote,
 } from "@api/social.api"
 
+import { getCursorFromURL } from "@utils/pagination"
+
 import queryClient from "@queries/queryClient"
 
 import { ImpressionArea } from "@toss/impression-area"
 import { toast } from "react-toastify"
-
-const getCursorFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const cursor = u.searchParams.get("cursor")
-    return cursor
-}
 
 const SocialFollowingPage = () => {
     const initial_date = new Date()
@@ -74,8 +68,7 @@ const SocialFollowingPage = () => {
         refetch: refetchDrawer,
     } = useInfiniteQuery({
         queryKey: ["daily", "log", "details", "drawer", targetUser],
-        queryFn: (page) =>
-            getDailyLogDrawers(targetUser, page.pageParam),
+        queryFn: (page) => getDailyLogDrawers(targetUser, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
     })
@@ -115,7 +108,7 @@ const SocialFollowingPage = () => {
                     {isQuotePending || isDrawerPending ? (
                         <SkeletonProjectPage />
                     ) : (
-                        drawerPage &&
+                        drawerPage && (
                             <LogDetails
                                 user={quote?.user}
                                 quote={quote}
@@ -124,17 +117,15 @@ const SocialFollowingPage = () => {
                                 logDetails={drawerPage}
                                 isFollowingPage
                             />
+                        )
                     )}
                     <ImpressionArea
                         onImpressionStart={() => fetchNextDrawerPage()}
-                        timeThreshold={200}
-                    >
+                        timeThreshold={200}>
                         {hasNextPage && "next"}
-                        {!hasNextPage && !isNotificationEmpty && (
-                            "no_more"
-                        )}
+                        {!hasNextPage && !isNotificationEmpty && "no_more"}
                     </ImpressionArea>
-                    
+
                     {isNotificationEmpty && "empty"}
                 </StickyContainer>
             </Wrapper>
