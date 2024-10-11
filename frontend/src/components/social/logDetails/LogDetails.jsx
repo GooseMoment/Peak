@@ -81,7 +81,13 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
     const isLogDetailsEmpty = logDetailsPage?.pages[0]?.results?.length === 0
 
     // TODO: Drawer 접기
-    const [hideDrawerList, setHideDrawerList] = useState([])
+    const [hiddenDrawers, setHiddenDrawers] = useState(new Set())
+
+    const handleHiddenDrawer = (drawer) => {
+        if (hiddenDrawers.has(drawer))
+            setHiddenDrawers((prev) => new Set(prev).delete(drawer))
+        else setHiddenDrawers((prev) => new Set(prev).add(drawer))
+    }
 
     return isQuotePending | isLogDetailsPending ? (
         <SkeletonProjectPage />
@@ -126,18 +132,21 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
                                 </DrawerBox>
                             )}
 
-                            <TaskBox
-                                task={task}
-                                color={task.project_color}
-                                isFollowingPage={pageType === "following"}
-                            />
+                            {!hiddenDrawers.has(task.drawer) && (
+                                <TaskBox
+                                    task={task}
+                                    color={task.project_color}
+                                    isFollowingPage={pageType === "following"}
+                                />
+                            )}
                         </Fragment>
                     )),
                 )}
 
                 <ImpressionArea
                     onImpressionStart={() => fetchNextLogDetailsPage()}
-                    timeThreshold={200} />
+                    timeThreshold={200}
+                />
             </DetailBody>
         </DetailBox>
     )
