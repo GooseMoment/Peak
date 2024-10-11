@@ -11,4 +11,4 @@ class IsUserSelfRequest(permissions.IsAuthenticated):
         username = view.kwargs["username"]
 
         return super().has_permission(request, view) and request.user.username == username
-    
+
