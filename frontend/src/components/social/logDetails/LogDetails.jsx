@@ -1,18 +1,26 @@
-import { useEffect, useRef, useState } from "react"
+import { Fragment, useEffect, useRef, useState } from "react"
 
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
+import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import InteractionBox from "@components/social/interaction/InteractionBox"
 import DrawerBundle from "@components/social/logDetails/DrawerBundle"
 import Quote from "@components/social/logDetails/Quote"
 import FollowButton from "@components/users/FollowButton"
 
+import TaskBox from "./TaskBox"
+
 import queryClient from "@queries/queryClient"
 
 import { getCurrentUsername } from "@/api/client"
-import { getDailyLogDrawers, getQuote, postQuote } from "@/api/social.api"
-import { SkeletonProjectPage } from "@/components/project/skeletons/SkeletonProjectPage"
+import {
+    getDailyLogDetails,
+    getDailyLogDrawers,
+    getQuote,
+    postQuote,
+} from "@/api/social.api"
 import { ImpressionArea } from "@toss/impression-area"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -57,39 +65,25 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
 
     // logDetails
     const {
-        data: drawerPage,
-        fetchNextPage: fetchNextDrawerPage,
-        isPending: isDrawerPending,
-        refetch: refetchDrawer,
+        data: logDetailsPage,
+        fetchNextPage: fetchNextLogDetailsPage,
+        isPending: isLogDetailsPending,
+        refetch: refetchLogDetails,
     } = useInfiniteQuery({
-        queryKey: ["daily", "log", "details", "drawer", username],
-        queryFn: (page) => getDailyLogDrawers(username, page.pageParam),
+        queryKey: ["daily", "log", "details", username, selectedDate],
+        queryFn: (page) =>
+            getDailyLogDetails(username, selectedDate, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
         // enabled: pageType === "following",   // 나중에 백엔드에서 Explore 용 view 따로 만들고 enabled 조건 추가
     })
 
-    const hasNextPage =
-        drawerPage?.pages[drawerPage?.pages?.length - 1].next !== null
-    const isLogDetailsEmpty = drawerPage?.pages[0]?.results?.length === 0
+    const isLogDetailsEmpty = logDetailsPage?.pages[0]?.results?.length === 0
 
-    const [hasData, setHasData] = useState(true)
-    const timer = useRef(null)
+    // TODO: Drawer 접기
+    const [hideDrawerList, setHideDrawerList] = useState([])
 
-    const handleDataCheck = () => {
-        setHasData(true)
-    }
-
-    useEffect(() => {
-        setHasData(true)
-        if (timer.current) clearTimeout(timer.current)
-
-        timer.current = setTimeout(async () => {
-            setHasData(false)
-        }, 200)
-    }, [selectedDate, username])
-
-    return isQuotePending | isDrawerPending ? (
+    return isQuotePending | isLogDetailsPending ? (
         <SkeletonProjectPage />
     ) : (
         <DetailBox>
@@ -117,30 +111,33 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
 
             {/* TODO: When there are no task */}
             <DetailBody>
-                {drawerPage?.pages.map((group) =>
-                    group.results.map(
-                        (drawer) =>
-                            drawer && (
-                                <DrawerBundle
-                                    key={drawer.id}
-                                    drawer={drawer}
-                                    selectedDate={selectedDate}
-                                    pageType={pageType}
-                                    onDataCheck={handleDataCheck}
-                                />
-                            ),
-                    ),
+                {isLogDetailsEmpty && <NoContent>{t("no_content")}</NoContent>}
+
+                {logDetailsPage?.pages.map((group) =>
+                    group.results.map((task, index, array) => (
+                        <Fragment key={task.id}>
+                            {(index === 0 ||
+                                array[index - 1].drawer !== task.drawer) && (
+                                <DrawerBox $color={task.project_color}>
+                                    <DrawerName $color={task.project_color}>
+                                        {" "}
+                                        {task.drawer_name}{" "}
+                                    </DrawerName>
+                                </DrawerBox>
+                            )}
+
+                            <TaskBox
+                                task={task}
+                                color={task.project_color}
+                                isFollowingPage={pageType === "following"}
+                            />
+                        </Fragment>
+                    )),
                 )}
 
-                {!hasData && <NoContent>{t("no_content")}</NoContent>}
-
                 <ImpressionArea
-                    onImpressionStart={() => fetchNextDrawerPage()}
-                    timeThreshold={200}>
-                    {hasNextPage && "next"}
-                    {!hasNextPage && !isLogDetailsEmpty && "no_more"}
-                    {isLogDetailsEmpty && "empty"}
-                </ImpressionArea>
+                    onImpressionStart={() => fetchNextLogDetailsPage()}
+                    timeThreshold={200} />
             </DetailBody>
         </DetailBox>
     )
