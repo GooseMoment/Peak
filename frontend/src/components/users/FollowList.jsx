@@ -6,19 +6,12 @@ import ListUserProfile from "@components/users/ListUserProfile"
 
 import { getFollowersByUser, getFollowingsByUser } from "@api/social.api"
 
+import { getPageFromURL } from "@utils/pagination"
 import { ifMobile } from "@utils/useScreenType"
 
 import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
-
-const getPageFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const page = u.searchParams.get("page")
-    return page
-}
 
 export const FollowerList = ({ user }) => {
     const { t } = useTranslation(null, { keyPrefix: "users" })

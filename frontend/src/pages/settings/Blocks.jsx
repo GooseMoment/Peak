@@ -8,16 +8,10 @@ import ListUserProfile from "@components/users/ListUserProfile"
 
 import { getBlocks } from "@api/users.api"
 
+import { getPageFromURL } from "@utils/pagination"
+
 import { ImpressionArea } from "@toss/impression-area"
 import { useTranslation } from "react-i18next"
-
-const getPageFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const page = u.searchParams.get("page")
-    return page
-}
 
 const Blocks = () => {
     const {
