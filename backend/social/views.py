@@ -243,14 +243,14 @@ class BlockView(APIView):
         
         return Response(status=status.HTTP_200_OK)
 
-@api_view(["GET"])
-def get_blocks(request: HttpRequest, username):
-    blocks = Block.objects.filter(blocker__username=username).all()
-    blockUsers = User.objects.filter(blockers__in=blocks.all()).all()
-    
-    serializer = UserSerializer(blockUsers, many=True)    
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
+
+class BlockList(UserListForFollowing):
+    def get_user_ids(self, username: str):
+        if self.request.user.username != username:
+            raise PermissionDenied()
+
+        return Block.objects.filter(blocker__username=username, deleted_at=None).values("blockee").all()
+
 
 ## Daily Logs
 @api_view(["GET"])

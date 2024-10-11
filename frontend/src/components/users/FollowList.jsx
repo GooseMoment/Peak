@@ -39,6 +39,7 @@ export const FollowerList = ({ user }) => {
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
+    const isEmpty = data?.pages[0]?.results?.length === 0
 
     return (
         <Window>
@@ -61,9 +62,7 @@ export const FollowerList = ({ user }) => {
                         <ListUserProfile key={i} skeleton />
                     ))}
                 {isError && <Message>{t("follower_list_error")}</Message>}
-                {data?.length === 0 && (
-                    <Message>{t("follower_list_empty")}</Message>
-                )}
+                {isEmpty && <Message>{t("follower_list_empty")}</Message>}
                 {data?.pages.map((group) =>
                     group.results.map((follower) => (
                         <ListUserProfile
@@ -101,6 +100,7 @@ export const FollowingList = ({ user }) => {
         initialPageParam: "",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
+    const isEmpty = data?.pages[0]?.results?.length === 0
 
     return (
         <Window>
@@ -123,9 +123,7 @@ export const FollowingList = ({ user }) => {
                         <ListUserProfile key={i} skeleton />
                     ))}
                 {isError && <Message>{t("following_list_error")}</Message>}
-                {data?.length === 0 && (
-                    <Message>{t("following_list_empty")}</Message>
-                )}
+                {isEmpty && <Message>{t("following_list_empty")}</Message>}
                 {data?.pages.map((group) =>
                     group.results.map((following) => (
                         <ListUserProfile
