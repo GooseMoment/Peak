@@ -55,11 +55,13 @@ const Blocks = () => {
                             </ListUserProfile>
                         )),
                     )}
-                    <ImpressionArea
-                        onImpressionStart={() => fetchNextPage()}
-                        timeThreshold={200}>
-                        {hasNextPage && <ListUserProfile skeleton />}
-                    </ImpressionArea>
+                    {hasNextPage && (
+                        <ImpressionArea
+                            onImpressionStart={() => fetchNextPage()}
+                            timeThreshold={200}>
+                            <ListUserProfile skeleton />
+                        </ImpressionArea>
+                    )}
                 </Value>
             </Section>
         </>

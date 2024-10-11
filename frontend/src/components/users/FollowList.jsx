@@ -70,11 +70,13 @@ const FollowList = ({ user, list = "followers" }) => {
                         <ListUserProfile user={user} key={user.username} />
                     )),
                 )}
-                <ImpressionArea
-                    onImpressionStart={() => fetchNextPage()}
-                    timeThreshold={200}>
-                    {hasNextPage && <ListUserProfile skeleton />}
-                </ImpressionArea>
+                {hasNextPage && (
+                    <ImpressionArea
+                        onImpressionStart={() => fetchNextPage()}
+                        timeThreshold={200}>
+                        <ListUserProfile skeleton />
+                    </ImpressionArea>
+                )}
             </List>
         </Window>
     )
