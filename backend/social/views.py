@@ -172,7 +172,7 @@ class FollowView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class UserListForFollowing(mixins.ListModelMixin, generics.GenericAPIView):
+class GenericUserList(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = UserSerializer
     lookup_field = "username"
     permission_classes = [permissions.IsUserNotBlockedOrBlocking]
@@ -198,17 +198,17 @@ class UserListForFollowing(mixins.ListModelMixin, generics.GenericAPIView):
         return self.list(self, *args, **kwargs)
 
 
-class UserFollowingList(UserListForFollowing):
+class UserFollowingList(GenericUserList):
     def get_user_ids(self, username: str):
         return Following.objects.filter(follower__username=username, status=Following.ACCEPTED).values("followee").all()
 
 
-class UserFollowerList(UserListForFollowing):
+class UserFollowerList(GenericUserList):
     def get_user_ids(self, username: str):
         return Following.objects.filter(followee__username=username, status=Following.ACCEPTED).values("follower").all()
 
 
-class UserFollowRequesterList(UserListForFollowing):
+class UserFollowRequesterList(GenericUserList):
     permission_classes = [IsUserSelfRequest]
 
     def get_user_ids(self, username: str):
@@ -246,7 +246,7 @@ class BlockView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class BlockList(UserListForFollowing):
+class BlockList(GenericUserList):
     permission_classes = [IsUserSelfRequest]
 
     def get_user_ids(self, username: str):
