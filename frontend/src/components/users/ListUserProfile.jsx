@@ -11,21 +11,19 @@ import { skeletonCSS } from "@assets/skeleton"
 const ListUserProfile = ({ user, children, skeleton }) => {
     return (
         <UserContainer>
-            <Profile $skeleton={skeleton}>
-                {skeleton ? (
-                    <>
-                        <ProfileImgSkeleton />
-                        <Username $skeleton />
-                    </>
-                ) : (
-                    <>
-                        <ProfileImg src={user?.profile_img} />
-                        <Link to={`/app/users/@${user?.username}`}>
-                            <Username>@{user?.username}</Username>
-                        </Link>
-                    </>
-                )}
-            </Profile>
+            {skeleton ? (
+                <Profile $skeleton>
+                    <ProfileImgSkeleton />
+                    <Username $skeleton />
+                </Profile>
+            ) : (
+                <Profile>
+                    <ProfileImg src={user?.profile_img} />
+                    <Link to={`/app/users/@${user?.username}`}>
+                        <Username>@{user?.username}</Username>
+                    </Link>
+                </Profile>
+            )}
             <div>
                 {skeleton ||
                     children ||
@@ -45,7 +43,7 @@ const UserContainer = styled.div`
     padding: 1em;
     border-bottom: 1px ${(p) => p.theme.grey} solid;
 
-    &:last-child {
+    &:nth-last-of-type(2) {
         border-bottom-width: 0px;
     }
 `
