@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination, CursorPagination
 from rest_framework.permissions import AllowAny
-from rest_framework.exceptions import NotFound, PermissionDenied
+from rest_framework.exceptions import NotFound
 
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
@@ -19,10 +19,12 @@ from datetime import datetime, timedelta
 
 from .models import *
 from .serializers import *
+from . import permissions
 from api.models import PrivacyMixin
+from api.permissions import IsUserSelfRequest
 from drawers.models import Drawer
-
 from users.serializers import UserSerializer
+
 
 class ExploreFeedPagination(CursorPagination):
     page_size = 8
@@ -173,6 +175,7 @@ class FollowView(APIView):
 class UserListForFollowing(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = UserSerializer
     lookup_field = "username"
+    permission_classes = [permissions.IsUserNotBlockedOrBlocking]
 
     def check_user_exists(self):
         username: str = self.kwargs["username"]
@@ -206,10 +209,9 @@ class UserFollowerList(UserListForFollowing):
 
 
 class UserFollowRequesterList(UserListForFollowing):
-    def get_user_ids(self, username: str):
-        if self.request.user.username != username:
-            raise PermissionDenied()
+    permission_classes = [IsUserSelfRequest]
 
+    def get_user_ids(self, username: str):
         return Following.objects.filter(followee__username=username, status=Following.REQUESTED).values("follower").all()
 
 
@@ -245,10 +247,9 @@ class BlockView(APIView):
 
 
 class BlockList(UserListForFollowing):
-    def get_user_ids(self, username: str):
-        if self.request.user.username != username:
-            raise PermissionDenied()
+    permission_classes = [IsUserSelfRequest]
 
+    def get_user_ids(self, username: str):
         return Block.objects.filter(blocker__username=username, deleted_at=None).values("blockee").all()
 
 
