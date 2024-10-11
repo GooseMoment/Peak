@@ -198,17 +198,17 @@ class GenericUserList(mixins.ListModelMixin, generics.GenericAPIView):
         return self.list(self, *args, **kwargs)
 
 
-class UserFollowingList(GenericUserList):
+class FollowingList(GenericUserList):
     def get_user_ids(self, username: str):
         return Following.objects.filter(follower__username=username, status=Following.ACCEPTED).values("followee").all()
 
 
-class UserFollowerList(GenericUserList):
+class FollowerList(GenericUserList):
     def get_user_ids(self, username: str):
         return Following.objects.filter(followee__username=username, status=Following.ACCEPTED).values("follower").all()
 
 
-class UserFollowRequesterList(GenericUserList):
+class FollowRequesterList(GenericUserList):
     permission_classes = [IsUserSelfRequest]
 
     def get_user_ids(self, username: str):

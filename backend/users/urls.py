@@ -19,9 +19,9 @@ urlpatterns = [
     path("sign_up/verification/", views.VerifyEmailVerificationToken.as_view()),
     path("sign_up/verification/resend/", views.ResendEmailVerificationMail.as_view()),
     path("users/@<str:username>/", views.UserDetail.as_view()),
-    path("users/@<str:username>/followers/", social_views.UserFollowerList.as_view()),
-    path("users/@<str:username>/followings/", social_views.UserFollowingList.as_view()),
-    path("users/@<str:username>/requesters/", social_views.UserFollowRequesterList.as_view()),
+    path("users/@<str:username>/followers/", social_views.FollowerList.as_view()),
+    path("users/@<str:username>/followings/", social_views.FollowingList.as_view()),
+    path("users/@<str:username>/requesters/", social_views.FollowRequesterList.as_view()),
     path("users/@<str:username>/blocks/", social_views.BlockList.as_view()),
     path("users/@<str:username>/projects/", UserProjectList.as_view()),
 ]
