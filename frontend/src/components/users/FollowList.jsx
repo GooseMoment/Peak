@@ -13,8 +13,12 @@ import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 
-export const FollowerList = ({ user }) => {
-    const { t } = useTranslation(null, { keyPrefix: "users" })
+const FollowList = ({ user, list = "followers" }) => {
+    if (list !== "followers" && list !== "followings") {
+        throw Error(`Expected "followers" or "followings", but got "${list}".`)
+    }
+
+    const { t } = useTranslation(null, { keyPrefix: `users.${list}_list` })
 
     const { closeModal } = useModalWindowCloseContext()
 
@@ -26,9 +30,14 @@ export const FollowerList = ({ user }) => {
         fetchNextPage,
         isError,
     } = useInfiniteQuery({
-        queryKey: ["users", user.username, "followers"],
-        queryFn: ({ pageParam }) =>
-            getFollowersByUser(user.username, pageParam),
+        queryKey: ["users", user.username, list],
+        queryFn: ({ pageParam }) => {
+            if (list === "followers") {
+                return getFollowersByUser(user.username, pageParam)
+            } else if (list == "followings") {
+                return getFollowingsByUser(user.username, pageParam)
+            }
+        },
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
@@ -40,7 +49,7 @@ export const FollowerList = ({ user }) => {
                 <Title>
                     <Trans
                         t={t}
-                        i18nKey="follower_list_title"
+                        i18nKey="title"
                         values={{ username: user?.username }}
                     />
                 </Title>
@@ -54,75 +63,11 @@ export const FollowerList = ({ user }) => {
                     [...Array(10)].map((_, i) => (
                         <ListUserProfile key={i} skeleton />
                     ))}
-                {isError && <Message>{t("follower_list_error")}</Message>}
-                {isEmpty && <Message>{t("follower_list_empty")}</Message>}
+                {isError && <Message>{t("error")}</Message>}
+                {isEmpty && <Message>{t("empty")}</Message>}
                 {data?.pages.map((group) =>
-                    group.results.map((follower) => (
-                        <ListUserProfile
-                            user={follower}
-                            key={follower.username}
-                        />
-                    )),
-                )}
-                <ImpressionArea
-                    onImpressionStart={() => fetchNextPage()}
-                    timeThreshold={200}>
-                    {hasNextPage && <ListUserProfile skeleton />}
-                </ImpressionArea>
-            </List>
-        </Window>
-    )
-}
-
-export const FollowingList = ({ user }) => {
-    const { t } = useTranslation(null, { keyPrefix: "users" })
-
-    const { closeModal } = useModalWindowCloseContext()
-
-    const {
-        data,
-        isFetching,
-        isFetchingNextPage,
-        hasNextPage,
-        fetchNextPage,
-        isError,
-    } = useInfiniteQuery({
-        queryKey: ["users", user.username, "followings"],
-        queryFn: ({ pageParam }) =>
-            getFollowingsByUser(user.username, pageParam),
-        initialPageParam: "",
-        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
-    })
-    const isEmpty = data?.pages[0]?.results?.length === 0
-
-    return (
-        <Window>
-            <TitleBar>
-                <Title>
-                    <Trans
-                        t={t}
-                        i18nKey="following_list_title"
-                        values={{ username: user?.username }}
-                    />
-                </Title>
-                <CloseButton onClick={closeModal}>
-                    <FeatherIcon icon="x" />
-                </CloseButton>
-            </TitleBar>
-            <List>
-                {isFetching &&
-                    !isFetchingNextPage &&
-                    [...Array(10)].map((_, i) => (
-                        <ListUserProfile key={i} skeleton />
-                    ))}
-                {isError && <Message>{t("following_list_error")}</Message>}
-                {isEmpty && <Message>{t("following_list_empty")}</Message>}
-                {data?.pages.map((group) =>
-                    group.results.map((following) => (
-                        <ListUserProfile
-                            user={following}
-                            key={following.username}
-                        />
+                    group.results.map((user) => (
+                        <ListUserProfile user={user} key={user.username} />
                     )),
                 )}
                 <ImpressionArea
@@ -203,3 +148,5 @@ const Message = styled.div`
     width: 100%;
     height: 10em;
 `
+
+export default FollowList
