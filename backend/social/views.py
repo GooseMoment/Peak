@@ -337,7 +337,8 @@ def get_privacy_filter(follower, followee):
 
 class DailyLogDetailsPagination(CursorPagination):
     page_size = 5
-    ordering = ['drawer__project__order', 'drawer__order', 'order']
+    ordering = ['project_order', 'drawer_order', 'order']
+    
 
 class DailyLogDetailsView(generics.GenericAPIView):
     
@@ -356,15 +357,16 @@ class DailyLogDetailsView(generics.GenericAPIView):
         # TODO: ( | Q(due_datetime__range=day_range))
         tasks_filter = privacy_filter & (completed_tasks_filter | uncompleted_tasks_filter)
 
-        tasks_queryset = Task.objects.filter(tasks_filter).all()
+        tasks_queryset = Task.objects.filter(tasks_filter).all().annotate(project_order=F('drawer__project__order'), drawer_order=F('drawer__order'))
         
         page = self.paginate_queryset(tasks_queryset)
         if page is not None:
-            serializer = TaskSerializer(page, many=True)
+            serializer = DailyLogDetailsSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-        serializers = TaskSerializer(tasks_queryset, many=True)
         
-        return Response(serializers.data)
+        serializer = DailyLogDetailsSerializer(tasks_queryset, many=True)
+        
+        return Response(serializer.data)
 
 class DailyLogDrawerPagination(CursorPagination):
     page_size = 5
