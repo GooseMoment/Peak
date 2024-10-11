@@ -43,7 +43,7 @@ const UserContainer = styled.div`
     padding: 1em;
     border-bottom: 1px ${(p) => p.theme.grey} solid;
 
-    &:nth-last-of-type(2) {
+    &:last-of-type {
         border-bottom-width: 0px;
     }
 `
