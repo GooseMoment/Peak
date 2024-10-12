@@ -46,7 +46,7 @@ const TaskCreate = () => {
     })
 
     const editNewTask = (edit) => {
-        setNewTask(Object.assign(newTask, edit))
+        setNewTask(Object.assign({}, newTask, edit))
         inputRef.current.focus()
     }
 

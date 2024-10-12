@@ -1,9 +1,8 @@
-import { useState, useMemo } from "react"
+import { useMemo } from "react"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
-import ModalWindow from "@components/common/ModalWindow"
 import taskDate from "@components/tasks/utils/taskDate"
 
 import Assigned from "@components/project/taskDetails/Assigned"
@@ -19,27 +18,25 @@ import hourglass from "@assets/project/hourglass.svg"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 
-const ContentsMobile = ({ newTask, editNewTask }) => {
+const ContentsMobile = ({ newTask, editNewTask, activeContent, setActiveContent }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
-    const [isComponentOpen, setIsComponentOpen] = useState(false)
-    
     const priorities = useMemo(() => makePriorities(t), [t])
     const displayReminder = useMemo(() => makeDisplayReminder(t), [t])
 
-    const [content, setContent] = useState(null)
-
-    const handleClickContent = (e) => {
-        const { name } = e.target.attributes
-        setContent(name.value)
-        setIsComponentOpen(true)
-    }
-
-    const closeComponent = () => {
-        setIsComponentOpen(false)
+    const handleClickContent = (item) => {
+        if (item.name === "reminder" && !newTask.due_type) {
+            setActiveContent(null)
+        } else {
+            setActiveContent(item)
+        }
     }
 
     const { formatted_due_datetime, formatted_assigned_date } = taskDate(newTask)
+
+    const onClose = () => {
+        setActiveContent(null)
+    }
 
     const items = [
         {
@@ -47,7 +44,7 @@ const ContentsMobile = ({ newTask, editNewTask }) => {
             name: "assigned",
             icon: <FeatherIcon icon="calendar" />,
             display: newTask.assigned_at ? formatted_assigned_date : t("none"),
-            component: <Assigned setFunc={editNewTask} />,
+            component: <Assigned setFunc={editNewTask} onClose={onClose}/>,
         },
         {
             id: 2,
@@ -58,6 +55,7 @@ const ContentsMobile = ({ newTask, editNewTask }) => {
                     ? formatted_due_datetime
                     : t("none"),
             component: <Due task={newTask} setFunc={editNewTask} />,
+
         },
         {
             id: 3,
@@ -65,18 +63,17 @@ const ContentsMobile = ({ newTask, editNewTask }) => {
             icon: <img src={alarmclock} />,
             display:
                 newTask?.reminders && newTask.reminders?.length !== 0 ? (
-                    <RemindersBox name="reminder">
-                        {newTask.reminders.map((delta, i) => (
+                    <RemindersBox>
+                        {newTask.reminders.map((reminder, i) => (
                             <ReminderBlock key={i} name="reminder">
-                                {displayReminder[0][delta]}
+                                {displayReminder[0][reminder.delta]}
                             </ReminderBlock>
                         ))}
                     </RemindersBox>
                 ) : newTask.due_type ? (
-                    <EmptyReminderBox name="reminder">+</EmptyReminderBox>
+                    <EmptyReminderBox>+</EmptyReminderBox>
                 ) : (
                     <EmptyReminderBox
-                        name="none"
                         onClick={() => {
                             toast.error(
                                 t("reminder.reminder_before_due_date"),
@@ -86,14 +83,14 @@ const ContentsMobile = ({ newTask, editNewTask }) => {
                         -
                     </EmptyReminderBox>
                 ),
-            component: <Reminder task={newTask} />,
+            component: <Reminder task={newTask} onClose={onClose}/>,
         },
         {
             id: 4,
             name: "priority",
             icon: <FeatherIcon icon="alert-circle" />,
             display: priorities[newTask.priority],
-            component: <Priority setFunc={editNewTask} />,
+            component: <Priority setFunc={editNewTask} onClose={onClose}/>,
         },
         {
             id: 5,
@@ -105,36 +102,46 @@ const ContentsMobile = ({ newTask, editNewTask }) => {
                     : newTask.drawer_name
                       ? `${newTask.project_name} / ${newTask.drawer_name}`
                       : t("none"),
-            component: <Drawer setFunc={editNewTask} />,
+            component: <Drawer setFunc={editNewTask} onClose={onClose}/>,
         },
         {
             id: 6,
             name: "memo",
             icon: <FeatherIcon icon="edit" />,
             display: newTask.memo ? newTask.memo : t("none"),
-            component: <Memo previousMemo={newTask.memo} setFunc={editNewTask} />,
+            component: <Memo previousMemo={newTask.memo} setFunc={editNewTask} onClose={onClose}/>,
         },
     ]
 
     return (
         <ContentBlock>
-            {items.map((item) => (
-                <ContentBox key={item.id}>
-                    <ContentNameBox>
-                        {item.icon}
-                        {t(item.name + ".name")}
-                    </ContentNameBox>
-                    <ContentDisplayBox name={item.name === "reminder" ? null : item.name} onClick={handleClickContent}>
-                        {item.display}
-                        <FeatherIcon icon="chevron-right"/>
-                    </ContentDisplayBox>
-                    {content === item.name && isComponentOpen ? (
-                        <ModalWindow afterClose={closeComponent}>
-                            {item.component}
-                        </ModalWindow>
-                    ) : null}
-                </ContentBox>
-            ))}
+            {activeContent === null ? (
+                items.map((item) => (
+                    <ContentBox key={item.id}>
+                        <ContentNameBox>
+                            {item.icon}
+                            {t(item.name + ".name")}
+                        </ContentNameBox>
+                        <ContentDisplayBox onClick={() => handleClickContent({ name: item.name, component: item.component })}>
+                            {item.display}
+                            <FeatherIcon icon="chevron-right"/>
+                        </ContentDisplayBox>
+                    </ContentBox>
+                ))
+            ) : (
+                items.filter(item => item.name === activeContent.name).map((item) => (
+                    <ContentBox key={item.id} $activeContent={activeContent}>
+                        <ContentNameBox>
+                            {item.icon}
+                            {t(item.name + ".name")}
+                        </ContentNameBox>
+                        <TopContentDisplayBox>
+                            {item.display}
+                        </TopContentDisplayBox>
+                        <CLine/>
+                    </ContentBox>
+                ))
+            )}
         </ContentBlock>
     )
 }
@@ -143,17 +150,36 @@ const ContentsMobile = ({ newTask, editNewTask }) => {
 const ContentBlock = styled.div`
     display: flex;
     flex-direction: column;
+    width: 100%;
     gap: 1.8em;
-    margin-top: 2.5em;
+    margin-top: 2em;
+    min-width: 0;
 `
 
 const ContentBox = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
+    min-width: 0;
+
+    ${p => p.$activeContent && css`
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 0.1em;
+        margin-bottom: 0.6em;
+        gap: 0.8em;
+        min-width: 0;
+    `}
 `
 
-const ContentNameBox = styled.div`
+const CLine = styled.div`
+    border-top: thin solid ${(p) => p.theme.project.lineColor};
+    margin: 0.3em 0em;
+    width: 100%;
+`
+
+export const ContentNameBox = styled.div`
     display: flex;
     align-items: center;
     gap: 0.3em;
@@ -175,12 +201,24 @@ const ContentNameBox = styled.div`
 const ContentDisplayBox = styled.div`
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 0.4em;
+    max-width: 70%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    line-height: 1.3em;
+    min-width: 0;
 
     & svg {
         top: 0;
         margin-right: 0;
     }
+`
+
+const TopContentDisplayBox = styled(ContentDisplayBox)`
+    justify-content: flex-start;
+    width: 100%;
 `
 
 const RemindersBox = styled.div`
