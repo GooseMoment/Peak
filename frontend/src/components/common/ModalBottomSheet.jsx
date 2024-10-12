@@ -41,10 +41,18 @@ const StyledBottomSheet = styled(BottomSheet)`
         z-index: 98;
         border-top-left-radius: 30px;
         border-top-right-radius: 30px;
+        background-color: ${p=>p.theme.backgroundColor};
     }
 
     [data-rsbs-header] {
         box-shadow: none;
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+        background-color: ${p=>p.theme.backgroundColor};
+    }
+
+    [data-rsbs-scroll] {
+        background-color: ${p=>p.theme.backgroundColor};
     }
 `
 
@@ -54,6 +62,7 @@ const HeaderBox = styled.div`
     align-items: center;
     font-size: 1.1em;
     font-weight: bold;
+    color: ${p=>p.theme.textColor};
     margin-top: 1em;
 
     & svg {

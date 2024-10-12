@@ -182,6 +182,7 @@ const CLine = styled.div`
 export const ContentNameBox = styled.div`
     display: flex;
     align-items: center;
+    color: ${(p) => p.theme.textColor};
     gap: 0.3em;
 
     & svg,
@@ -203,6 +204,7 @@ const ContentDisplayBox = styled.div`
     align-items: center;
     justify-content: flex-end;
     gap: 0.4em;
+    color: ${(p) => p.theme.textColor};
     max-width: 70%;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -241,6 +243,7 @@ const ReminderBlock = styled.div`
 const EmptyReminderBox = styled.div`
     font-size: 0.9em;
     width: 1em;
+    height: 1em;
     padding: 0.3em;
     margin-right: 0em;
     border: solid 1.5px ${(p) => p.theme.grey};
