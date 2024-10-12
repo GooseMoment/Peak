@@ -6,7 +6,7 @@ import priority2 from "@assets/project/priority/priority2.svg"
 
 const priorityIcons = [priority0, priority1, priority2]
 
-const Priority = ({ priority, completed, hasDate }) => {
+const Priority = ({ priority = 0, completed, hasDate }) => {
     return (
         <PriorityImg
             draggable="false"

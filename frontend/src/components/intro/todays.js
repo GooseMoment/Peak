@@ -1,19 +1,12 @@
-export const today = new Date()
+import { DateTime } from "luxon"
 
-export const yesterday = new Date()
-yesterday.setDate(today.getDate() - 1)
+const construct = (diffDays) =>
+    DateTime.now().plus({ days: diffDays }).toISODate()
 
-export const tomorrow = new Date()
-tomorrow.setDate(today.getDate() + 1)
-
-export const dayAfterTomorrow = new Date()
-dayAfterTomorrow.setDate(tomorrow.getDate() + 1)
-
-export const dayLongAfter = new Date()
-dayLongAfter.setDate(today.getDate() + 20)
-
-export const nextWeek = new Date()
-nextWeek.setDate(today.getDate() + 8)
-
-export const twoWeeksLater = new Date()
-twoWeeksLater.setDate(today.getDate() + 15)
+export const today = construct(0)
+export const yesterday = construct(-1)
+export const tomorrow = construct(1)
+export const dayAfterTomorrow = construct(2)
+export const dayLongAfter = construct(20)
+export const nextWeek = construct(7)
+export const twoWeeksLater = construct(14)
