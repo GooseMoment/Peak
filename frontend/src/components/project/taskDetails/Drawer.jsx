@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 import DrawerFolder from "@components/project/taskDetails/DrawerFolder"
 
@@ -10,10 +9,8 @@ import { getProjectList } from "@api/projects.api"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Drawer = ({ setFunc }) => {
+const Drawer = ({ setFunc, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.drawer" })
-
-    const { closeModal } = useModalWindowCloseContext()
 
     const {
         isPending,
@@ -32,30 +29,31 @@ const Drawer = ({ setFunc }) => {
                 project_id: projectID,
                 project_name: projectName,
             })
-            closeModal()
+            onClose()
         }
     }
 
     if (isPending) {
-        return <Detail title={t("title")} onClose={closeModal} />
+        return <Detail title={t("title")}/>
     }
 
+    if (isError) {
+        return (
+            <DrawerSettingLoadErrorBox>
+                <FeatherIcon icon="alert-triangle" />
+                {t("fetching_error")}
+            </DrawerSettingLoadErrorBox>
+        )
+    }
+        
     return (
-        <Detail title={t("title")} onClose={closeModal}>
-            {isError && (
-                <DrawerSettingLoadErrorBox>
-                    <FeatherIcon icon="alert-triangle" />
-                    {t("fetching_error")}
-                </DrawerSettingLoadErrorBox>
-            )}
-            {projects?.map((project) => (
-                <DrawerFolder
-                    key={project.id}
-                    project={project}
-                    changeDrawer={changeDrawer}
-                />
-            ))}
-        </Detail>
+        projects?.map((project) => (
+            <DrawerFolder
+                key={project.id}
+                project={project}
+                changeDrawer={changeDrawer}
+            />
+        ))
     )
 }
 
