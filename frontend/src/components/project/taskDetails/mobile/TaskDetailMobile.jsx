@@ -1,35 +1,27 @@
 import { useRef, useState, useEffect } from "react"
-import { useOutletContext, useParams, useNavigate } from "react-router-dom"
+import { useOutletContext, useParams } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import DeleteAlert from "@components/common/DeleteAlert"
+import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
+import ContentsMobile from "@components/project/taskDetails/mobile/ContentsMobile"
 import TaskNameInput from "@components/tasks/TaskNameInput"
-import ContentsMobile from "./ContentsMobile"
 
-import { getTask, patchTask, deleteTask } from "@api/tasks.api"
+import { getTask, patchTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
 
-import { useClientSetting } from "@utils/clientSettings"
-
 import { useTranslation } from "react-i18next"
-import { toast } from "react-toastify"
 
 const TaskDetailMobile = ({ closeDetail }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation(null, { keyPrefix: "task" })
 
     const inputRef = useRef(null)
 
-    const [projectID, color] = useOutletContext()
+    const [_, color] = useOutletContext()
     const { task_id } = useParams()
-    const navigate = useNavigate()
-    const [setting] = useClientSetting()
-
-    const [taskName, setTaskName] = useState("")
-    const [isAlertOpen, setIsAlertOpen] = useState(false)
 
     const {
         data: task,
@@ -40,6 +32,22 @@ const TaskDetailMobile = ({ closeDetail }) => {
         queryKey: ["task", { taskID: task_id }],
         queryFn: () => getTask(task_id),
     })
+
+    const [title, setTitle] = useState(null)
+    const [taskName, setTaskName] = useState(task?.name)
+    const [activeContent, setActiveContent] = useState(null)
+
+    useEffect(()=>{
+        setTaskName(task?.name)
+    }, [task])
+
+    useEffect(() => {
+        if (activeContent === null) {
+            setTitle(t("edit"))
+        } else if (activeContent) {
+            setTitle(t(activeContent.name + ".title"))
+        }
+    }, [activeContent])
 
     const patchMutation = useMutation({
         mutationFn: (data) => {
@@ -56,72 +64,28 @@ const TaskDetailMobile = ({ closeDetail }) => {
         },
     })
 
-    const deleteMutation = useMutation({
-        mutationFn: () => {
-            return deleteTask(task_id)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["task", { taskID: task_id }],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: task.drawer }],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["drawers", { projectID: projectID }],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["projects", projectID],
-            })
-            toast.success(
-                t("delete.task_delete_success", { task_name: task.name }),
-            )
-        },
-        onError: () => {
-            toast.error(t("delete.task_delete_error", { task_name: task.name }))
-        },
-    })
-
-    useEffect(() => {
-        setTaskName(task?.name)
-    }, [task])
-
-    const handleAlert = () => {
-        if (setting.delete_task_after_alert) {
-            setIsAlertOpen(true)
-        } else {
-            handleDelete()
-        }
-    }
-
-    const handleDelete = () => {
-        navigate(`/app/projects/${projectID}`)
-        deleteMutation.mutate()
+    if (isLoading) {
+        return null
     }
 
     return (
-        task && <TaskDetailMobileBox>
-            <TaskNameInput
-                task={task}
-                setFunc={patchMutation.mutate}
-                inputRef={inputRef}
-                newTaskName={taskName}
-                setNewTaskName={setTaskName}
-                color={color}
-            />
-            <ContentsMobile newTask={task} editNewTask={patchMutation.mutate}/>
-            {isAlertOpen && (
-                <DeleteAlert
-                    title={t("delete.alert_task_title", {
-                        task_name: task.name,
-                    })}
-                    onClose={() => {
-                        setIsAlertOpen(false)
-                    }}
-                    func={handleDelete}
+        <ModalBottomSheet
+            onClose={closeDetail} 
+            headerContent={<Header title={title} closeSheet={closeDetail} handleBack={activeContent ? ()=>setActiveContent(null) : null}/>}>
+            <TaskDetailMobileBox>
+                <TaskNameInput
+                    task={task}
+                    setFunc={patchMutation.mutate}
+                    inputRef={inputRef}
+                    newTaskName={taskName}
+                    setNewTaskName={setTaskName}
+                    color={color}
+                    isCreate
                 />
-            )}
-        </TaskDetailMobileBox>
+                <ContentsMobile newTask={task} editNewTask={patchMutation.mutate} activeContent={activeContent} setActiveContent={setActiveContent}/>
+                {activeContent?.component}
+            </TaskDetailMobileBox>
+        </ModalBottomSheet>
     )
 }
 

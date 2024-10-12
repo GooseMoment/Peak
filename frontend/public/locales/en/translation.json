@@ -156,6 +156,8 @@
         "name_placeholder": "Enter a name for the task.",
         "name_change_success": "The name has changed.",
         "none": "none",
+        "create": "Create task",
+        "edit": "Task Settings",
         "assigned": {
             "name": "Assignment Date",
             "title": "Assignment date Settings"

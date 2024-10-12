@@ -156,6 +156,8 @@
         "name_placeholder": "작업의 이름을 입력하세요.",
         "name_change_success": "이름을 변경했습니다.",
         "none": "없음",
+        "create": "작업 생성",
+        "edit": "작업 설정",
         "assigned": {
             "name": "할당 날짜",
             "title": "할당 날짜 설정"
