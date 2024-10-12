@@ -15,7 +15,7 @@
 		try_files {path} /
 		file_server
 	}
-	
+
 	handle_errors {
 		root * /web
 
@@ -39,19 +39,12 @@
 		file_server
 	}
 
-	@private_ips {
-		# https://caddyserver.com/docs/caddyfile/matchers#example-7
-		remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
-	}
+	# https://caddyserver.com/docs/caddyfile/matchers#example
+	@denied_admin not client_ip private_ranges {$ADMIN_ACCESS_ALLOWED_IP_RANGES}
 
 	handle /admin/* {
-		# https://caddy.community/t/restrict-ip-access-using-remote-ip-with-reverse-proxy/16365/2
-		handle @private_ips {
-			reverse_proxy @private_ips api:8000
-		}
-		handle {
-			abort
-		}
+		respond @denied_admin "Access Denied" 403
+		reverse_proxy api:8000
 	}
 
 	handle * {
