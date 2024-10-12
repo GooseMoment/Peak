@@ -1,7 +1,7 @@
 from rest_framework import mixins, generics
 from rest_framework.response import Response
 
-from api.mixins import CreateMixin, TimezoneMixin
+from api.mixins import TimezoneMixin
 from api.permissions import IsUserMatch
 from .models import Task
 from .serializers import TaskSerializer
@@ -12,6 +12,7 @@ from drawers.utils import normalize_drawer_order
 
 from datetime import datetime, time
 from zoneinfo import ZoneInfo
+
 
 class TaskDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -91,10 +92,8 @@ class TaskDetail(mixins.RetrieveModelMixin,
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     
-class TaskList(CreateMixin,
-                  mixins.ListModelMixin,
-                  mixins.CreateModelMixin,
-                  generics.GenericAPIView):
+
+class TaskList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsUserMatch]
 
@@ -116,4 +115,5 @@ class TaskList(CreateMixin,
         return self.list(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
-        return self.create_with_user(request, *args, **kwargs)
+        return self.create(request, *args, **kwargs)
+
