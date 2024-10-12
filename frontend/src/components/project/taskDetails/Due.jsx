@@ -2,13 +2,12 @@ import { Fragment, useState } from "react"
 
 import styled, { css } from "styled-components"
 
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import Detail from "@components/project/common/Detail"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 import TimeDetail from "@components/project/due/TimeDetail"
 
 import { useClientTimezone } from "@utils/clientSettings"
+import { ifMobile } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
 import { rotateToUnder, rotateToUp } from "@assets/keyframes"
@@ -24,7 +23,6 @@ const Due = ({ task, setFunc }) => {
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
     const tz = useClientTimezone()
-    const { closeModal } = useModalWindowCloseContext()
 
     const handleAdditionalComp = (name) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
@@ -49,12 +47,12 @@ const Due = ({ task, setFunc }) => {
 
     const changeDueDate = (set) => {
         return async () => {
-            const date = today.plus(set)
-
             if (set === null) {
                 setFunc({ due_type: null, due_date: null, due_datetime: null })
                 return
             }
+
+            const date = today.plus(set)
 
             if (task.due_type === "due_datetime") {
                 const due_datetime = DateTime.fromISO(task.due_datetime, { zone: tz })
@@ -96,7 +94,6 @@ const Due = ({ task, setFunc }) => {
                 <TimeDetail
                     task={task}
                     setFunc={setFunc}
-                    closeComponent={closeModal}
                 />
             ),
         },
@@ -109,30 +106,28 @@ const Due = ({ task, setFunc }) => {
     ]
 
     return (
-        <Detail title={t("title")} onClose={closeModal} special={true}>
-            {addComponent.map((comp, i) => (
-                <Fragment key={comp.name}>
-                    <FlexCenterBox>
-                        <IndexBox
-                            $start={i === 0}
-                            $end={i === 3}
-                            onClick={() => handleAdditionalComp(comp.name)}>
-                            <EmptyBlock />
-                            <Box>
-                                <FeatherIcon icon={comp.icon} />
-                                {comp.display}
-                            </Box>
-                            <CollapseButton
-                                $collapsed={isAdditionalComp === comp.name}>
-                                <FeatherIcon icon="chevron-down" />
-                            </CollapseButton>
-                        </IndexBox>
-                    </FlexCenterBox>
-                    {isAdditionalComp === comp.name && comp.component}
-                    {i !== 3 && <CLine />}
-                </Fragment>
-            ))}
-        </Detail>
+        addComponent.map((comp, i) => (
+            <Fragment key={comp.name}>
+                <FlexCenterBox>
+                    <IndexBox
+                        $start={i === 0}
+                        $end={i === 3}
+                        onClick={() => handleAdditionalComp(comp.name)}>
+                        <EmptyBlock />
+                        <Box>
+                            <FeatherIcon icon={comp.icon} />
+                            {comp.display}
+                        </Box>
+                        <CollapseButton
+                            $collapsed={isAdditionalComp === comp.name}>
+                            <FeatherIcon icon="chevron-down" />
+                        </CollapseButton>
+                    </IndexBox>
+                </FlexCenterBox>
+                {isAdditionalComp === comp.name && comp.component}
+                {i !== 3 && <CLine />}
+            </Fragment>
+        ))
     )
 }
 
@@ -147,6 +142,10 @@ const CLine = styled.div`
     border-top: thin solid ${(p) => p.theme.project.lineColor};
     width: 90%;
     margin: 0.8em;
+
+    ${ifMobile} {
+        width: 95%;
+    }
 `
 
 const IndexBox = styled.div`
@@ -163,6 +162,7 @@ const IndexBox = styled.div`
     padding: 0em 0.5em;
     margin-top: ${(props) => (props.$start ? 0.8 : 0)}em;
     margin-bottom: ${(props) => (props.$end ? 0.8 : 0)}em;
+    cursor: pointer;
 
     & svg {
         margin-right: unset;
@@ -171,7 +171,10 @@ const IndexBox = styled.div`
     &:hover {
         font-weight: bolder;
         color: ${(p) => p.theme.goose};
-        cursor: pointer;
+    }
+
+    ${ifMobile} {
+        width: 90%;
     }
 `
 
