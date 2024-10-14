@@ -31,9 +31,9 @@ def reorder_tasks(drawer_tasks, dragged_order, target_order, closest_edge):
 
 def normalize_drawer_order(drawer_tasks, ordering):
     if (ordering == "due_date"):
-        ordered_tasks = drawer_tasks.order_by("assigned_at", "due_date", "due_time")
+        ordered_tasks = drawer_tasks.order_by("assigned_at", "due_date", "due_datetime")
     elif (ordering == "-due_date"):
-        ordered_tasks = drawer_tasks.order_by("-assigned_at", "-due_date", "-due_time")
+        ordered_tasks = drawer_tasks.order_by("-assigned_at", "-due_date", "-due_datetime")
     else:
         ordered_tasks = drawer_tasks.order_by(ordering)
     

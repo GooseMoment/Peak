@@ -2,31 +2,35 @@ import { Fragment, useState } from "react"
 
 import styled, { css } from "styled-components"
 
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 import TimeDetail from "@components/project/due/TimeDetail"
 
+import { useClientTimezone } from "@utils/clientSettings"
+
 import { cubicBeizer } from "@assets/keyframes"
 import { rotateToUnder, rotateToUp } from "@assets/keyframes"
 
 import FeatherIcon from "feather-icons-react"
+import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 
 const Due = ({ task, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due" })
 
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
+    const tz = useClientTimezone()
     const { closeModal } = useModalWindowCloseContext()
 
     const handleAdditionalComp = (name) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
         else {
             if (name === "time") {
-                if (!task.due_date) {
+                if (task.type === "due_date" && !task.due_date) {
                     toast.error(t("time.no_due_before_time"), {
                         toastId: "handle_time_open",
                     })
@@ -34,24 +38,40 @@ const Due = ({ task, setFunc }) => {
                 }
             }
             if (name === "repeat") {
-                toast.error("coming soon...", {toastId: "coming_soon"})
+                toast.error("coming soon...", { toastId: "coming_soon" })
                 return
             }
             setIsAdditionalComp(name)
         }
     }
 
-    let date = new Date()
+    const today = DateTime.now().setZone(tz)
 
     const changeDueDate = (set) => {
         return async () => {
-            date.setDate(date.getDate() + set)
-            let due_date = null
-            if (!(set === null)) {
-                due_date = date.toISOString().slice(0, 10)
+            const date = today.plus(set)
+
+            if (set === null) {
+                setFunc({ due_type: null, due_date: null, due_datetime: null })
+                return
             }
-            setFunc({ due_date })
-            closeModal()
+
+            if (task.due_type === "due_datetime") {
+                const due_datetime = DateTime.fromISO(task.due_datetime, { zone: tz })
+                const converted_datetime = due_datetime.set({
+                    year: date.year,
+                    month: date.month,
+                    day: date.day,
+                })
+                setFunc({ due_datetime: converted_datetime })
+                return
+            }
+
+            setFunc({
+                due_type: "due_date",
+                due_date: date.toISODate(),
+                due_datetime: null,
+            })
         }
     }
 
@@ -96,16 +116,14 @@ const Due = ({ task, setFunc }) => {
                         <IndexBox
                             $start={i === 0}
                             $end={i === 3}
-                            onClick={() => handleAdditionalComp(comp.name)}
-                        >
+                            onClick={() => handleAdditionalComp(comp.name)}>
                             <EmptyBlock />
                             <Box>
                                 <FeatherIcon icon={comp.icon} />
                                 {comp.display}
                             </Box>
                             <CollapseButton
-                                $collapsed={isAdditionalComp === comp.name}
-                            >
+                                $collapsed={isAdditionalComp === comp.name}>
                                 <FeatherIcon icon="chevron-down" />
                             </CollapseButton>
                         </IndexBox>

@@ -5,7 +5,7 @@ import styled, { useTheme } from "styled-components"
 
 import SubSection from "@components/intro/SubSection"
 import { today } from "@components/intro/todays"
-import { getProjectColor } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/common/palettes"
 import { Modal as EmojiModalWindow } from "@components/social/interaction/reaction/EmojiModal"
 import EmojiPickerButton from "@components/social/interaction/reaction/EmojiPickerButton"
 import ReactionButton from "@components/social/interaction/reaction/ReactionButton"

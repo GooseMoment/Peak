@@ -2,11 +2,15 @@ from rest_framework import mixins, generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.pagination import CursorPagination
 
+from api.mixins import TimezoneMixin
 from .models import Notification, WebPushSubscription, TaskReminder
 from tasks.models import Task
 from .serializers import NotificatonSerializer, WebPushSubscriptionSerializer, TaskReminderSerializer
 from api.permissions import IsUserMatch
 from .utils import caculateScheduled
+
+from zoneinfo import ZoneInfo
+from datetime import datetime, time
 
 class IsUserMatchInReminder(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj):
@@ -30,7 +34,7 @@ class ReminderDetail(mixins.RetrieveModelMixin,
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     
-class ReminderList(mixins.CreateModelMixin, generics.GenericAPIView):
+class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIView):
     queryset = TaskReminder.objects.all()
     serializer_class = TaskReminderSerializer
 
@@ -39,7 +43,15 @@ class ReminderList(mixins.CreateModelMixin, generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         task = serializer.validated_data["task"]
         task = Task.objects.get(id=task.id)
-        new_scheduled = caculateScheduled(task.due_datetime(), serializer.validated_data["delta"])
+
+        if task.due_type == "due_date":
+            tz = self.get_tz()
+            nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=ZoneInfo(str(tz)))
+            converted_due_datetime = datetime.combine(date=task.due_date, time=nine_oclock_time)
+        else:
+            converted_due_datetime = task.due_datetime
+            
+        new_scheduled = caculateScheduled(converted_due_datetime, serializer.validated_data["delta"])    
         serializer.validated_data["scheduled"] = new_scheduled
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)

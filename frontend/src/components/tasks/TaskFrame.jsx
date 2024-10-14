@@ -11,7 +11,14 @@ import hourglass from "@assets/project/hourglass.svg"
 
 import FeatherIcon from "feather-icons-react"
 
-const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocial }) => {
+const TaskFrame = ({
+    task,
+    color,
+    taskDetailPath,
+    isLoading,
+    toComplete,
+    isSocial,
+}) => {
     const completedAt = isSocial ? null : task.completed_at
 
     const {
@@ -27,7 +34,7 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocia
         <TaskNameBox $completed={completedAt}>{task?.name}</TaskNameBox>
     )
 
-    const hasDate = task.due_date || task.assigned_at
+    const hasDate = task.due_type || task.assigned_at
 
     return (
         <Box>
@@ -65,16 +72,14 @@ const TaskFrame = ({ task, color, taskDetailPath, isLoading, toComplete, isSocia
                                     draggable="false"
                                     icon="calendar"
                                 />
-                                {completedAt
-                                    ? assigned
-                                    : calculate_assigned}
+                                {completedAt ? assigned : calculate_assigned}
                             </AssignedDate>
                         )}
-                        {task.due_date && (
+                        {task.due_type && (
                             <DueDate
                                 $completed={task.completed_at}
                                 $isSocial={isSocial}
-                            $isOutOfDue={isOutOfDue}>
+                                $isOutOfDue={isOutOfDue}>
                                 <img draggable="false" src={hourglass} />
                                 {completedAt ? due : calculate_due}
                             </DueDate>
@@ -145,12 +150,12 @@ const AssignedDate = styled.div`
     margin-left: 0.5em;
     color: ${(props) =>
         props.$isSocial
-        ? props.theme.textColor
-        : props.$completed
-            ? props.theme.grey
-            : props.$isOutOfDue
-              ? props.theme.project.danger
-              : props.theme.project.assignColor};
+            ? props.theme.textColor
+            : props.$completed
+              ? props.theme.grey
+              : props.$isOutOfDue
+                ? props.theme.project.danger
+                : props.theme.project.assignColor};
 
     & .feather {
         top: 0;
@@ -159,12 +164,12 @@ const AssignedDate = styled.div`
         margin-right: 0.3em;
         color: ${(props) =>
             props.$isSocial
-            ? props.theme.textColor
-            : props.$completed
-                ? props.theme.grey
-                : props.$isOutOfDue
-                  ? props.theme.project.danger
-                  : props.theme.project.assignColor};
+                ? props.theme.textColor
+                : props.$completed
+                  ? props.theme.grey
+                  : props.$isOutOfDue
+                    ? props.theme.project.danger
+                    : props.theme.project.assignColor};
     }
 `
 
@@ -176,12 +181,12 @@ const DueDate = styled.div`
     margin-left: 0.5em;
     color: ${(props) =>
         props.$isSocial
-        ? props.theme.textColor
-        : props.$completed
-            ? props.theme.grey
-            : props.$isOutOfDue
-              ? props.theme.project.danger
-              : props.theme.project.dueColor};
+            ? props.theme.textColor
+            : props.$completed
+              ? props.theme.grey
+              : props.$isOutOfDue
+                ? props.theme.project.danger
+                : props.theme.project.dueColor};
 
     & img {
         width: 1em;
@@ -190,20 +195,20 @@ const DueDate = styled.div`
 
         ${(props) =>
             props.$isSocial
-            ? css`
-                filter: ${(p) => p.theme.project.imgColor};
-            `
-            : props.$completed
                 ? css`
-                      filter: ${(p) => p.theme.project.imgGreyColor};
+                      filter: ${(p) => p.theme.project.imgColor};
                   `
-                : props.$isOutOfDue
+                : props.$completed
                   ? css`
-                        filter: ${(p) => p.theme.project.imgDangerColor};
+                        filter: ${(p) => p.theme.project.imgGreyColor};
                     `
-                  : css`
-                        filter: ${(p) => p.theme.project.imgDueColor};
-                    `};
+                  : props.$isOutOfDue
+                    ? css`
+                          filter: ${(p) => p.theme.project.imgDangerColor};
+                      `
+                    : css`
+                          filter: ${(p) => p.theme.project.imgDueColor};
+                      `};
     }
 `
 

@@ -18,7 +18,7 @@
         "@atlaskit/pragmatic-drag-and-drop-react-accessibility": "^1.1.12",
         "@tanstack/react-query": "^5.29.0",
         "@toss/impression-area": "^1.4.0",
-        "axios": "^1.6.7",
+        "axios": "^1.7.4",
         "feather-icons-react": "^0.7.0",
         "grapheme-splitter": "^1.0.4",
         "i18next": "^23.11.4",
@@ -52,6 +52,6 @@
         "globals": "^15.9.0",
         "prettier": "^3.3.3",
         "typescript-eslint": "^8.0.1",
-        "vite": "^5.1.7"
+        "vite": "^5.2.14"
     }
 }
