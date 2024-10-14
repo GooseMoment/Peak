@@ -57,15 +57,14 @@ const SocialFollowingPage = () => {
                 </Container>
 
                 {/* TODO: 날짜가 선택되지 않았을 때 */}
-                <StickyContainer>
+                {!isMobile && (
+                    <StickyContainer>
                         <LogDetails
                             username={targetUser}
                             selectedDate={selectedDate}
                         />
                     </StickyContainer>
-                {/* {!isMobile && (
-                    
-                )} */}
+                )}
             </Wrapper>
         </>
     )
