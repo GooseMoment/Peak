@@ -17,12 +17,12 @@ const SocialFollowingPage = () => {
     const initial_date = new Date()
     initial_date.setHours(0, 0, 0, 0)
 
-    const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
-    const [selectedUser, setSelectedUser] = useState(null)
-
     const isMobile = useScreenType().isMobile
 
     const me = getCurrentUsername()
+
+    const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
+    const [selectedUser, setSelectedUser] = useState(null)
 
     const targetUser = selectedUser ? selectedUser : me
 

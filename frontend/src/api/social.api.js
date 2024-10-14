@@ -105,22 +105,6 @@ export const getDailyLogDetails = async (username, day, cursor) => {
     return res.data
 }
 
-export const getDailyLogDrawers = async (username, cursor) => {
-    const res = await client.get(
-        `social/daily/log/details/drawer/@${username}/?cursor=${cursor}`,
-    )
-
-    return res.data
-}
-
-export const getDailyLogTasks = async (drawerID, day, page) => {
-    const res = await client.get(
-        `social/daily/log/details/task/${drawerID}/${day}/?page=${page}`,
-    )
-
-    return res.data
-}
-
 export const getExploreRecommend = async (cursor) => {
     const res = await client.get(`social/explore/?cursor=${cursor}`)
 

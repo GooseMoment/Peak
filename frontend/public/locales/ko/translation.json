@@ -372,7 +372,9 @@
             "searchbar" : "이모지 찾기"
         },
         "explore" : {
-            "searchbar" : "새로운 인연을 찾아보세요."
+            "searchbar" : "새로운 인연을 찾아보세요.",
+            "no_result" : "당신이 찾는 사람이 없습니다 😢",
+            "suggestion" : "새로운 사람과 새로운 인연은 어떤가요?"
         }
     }
 }

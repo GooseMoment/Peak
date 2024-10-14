@@ -372,7 +372,9 @@
             "searchbar" : "Search emojis"
         },
         "explore" : {
-            "searchbar" : "Search for usernames to follow."
+            "searchbar" : "Search for usernames to follow.",
+            "no_result" : "Can't find the user you're looking for 😢",
+            "suggestion" : "Make new connections with new people!"
         }
     }
 }

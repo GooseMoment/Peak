@@ -24,6 +24,11 @@ const LogPreviewBox = ({
     setSelectedUser,
     selectedDate,
 }) => {
+    // TODO: explore feed용 view 추가하면 삭제
+    const initial_date = new Date()
+    initial_date.setHours(0, 0, 0, 0)
+    const tempSelectedDate = initial_date.toISOString()
+
     const theme = useTheme()
     const { t } = useTranslation("", { keyPrefix: "social" })
     const locale = useClientLocale()
@@ -35,7 +40,7 @@ const LogPreviewBox = ({
     if (!log) return null
 
     const handleSelect = (e) => {
-        if (e.target.dataset.accpet === "true")
+        if (e.target.dataset.accept === 'true')
             setSelectedUser(log.username === selectedUser ? null : log.username)
     }
 
@@ -57,23 +62,25 @@ const LogPreviewBox = ({
             <Frame
                 onClick={handleSelect}
                 $bgColor={backgroundColor}
-                data-accpet="true">
+                data-accept='true'>
                 {isMobile && log.username === selectedUser ? (
-                    <LogDetails
-                        username={selectedUser}
-                        selectedDate={selectedDate}
-                    />
+                    <MobileLogDetail data-accept='true'>
+                        <LogDetails
+                            username={selectedUser}
+                            selectedDate={selectedDate || tempSelectedDate}
+                        />
+                    </MobileLogDetail>
                 ) : (
                     <>
                         <SimpleProfile
                             user={log}
                             ringColor={setRingColor}
-                            data-accept="true"
+                            data-accept='true'
                         />
-                        <RecentTask data-accpet="true">
+                        <RecentTask data-accept='true'>
                             {log.recent_task && (
                                 <>
-                                    <TaskName>
+                                    <TaskName data-accept='true'>
                                         {' "' +
                                             putEllipsis(
                                                 log.recent_task.name,
@@ -83,7 +90,7 @@ const LogPreviewBox = ({
                                             t("log_preview_completed")}
                                     </TaskName>
 
-                                    <Ago>
+                                    <Ago data-accept='true'>
                                         {" " +
                                             DateTime.fromISO(
                                                 log.recent_task.completed_at,
@@ -139,6 +146,13 @@ const Ago = styled.span`
     font-size: 0.9em;
     color: ${(p) => p.theme.secondTextColor};
     white-space: nowrap;
+`
+
+const MobileLogDetail = styled.div`
+    height: 70vh;
+    width: 100%;
+
+    overflow-y: scroll;
 `
 
 export default LogPreviewBox

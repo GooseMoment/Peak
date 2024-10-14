@@ -2,6 +2,8 @@ import { useState } from "react"
 
 import styled from "styled-components"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import { useTranslation } from "react-i18next"
 
 const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
@@ -79,11 +81,17 @@ export const Modal = styled.div`
 
     overflow-y: auto;
     pointer-events: auto;
+
+    ${ifMobile} {
+        position: absolute;
+        left: 0;
+        width: 90vw;
+    }
 `
 
 const EmojiSearchBox = styled.input`
     margin-bottom: 1em;
-    width: 27em;
+    width: 90%;
     height: 2em;
 
     border-radius: 0.4em;

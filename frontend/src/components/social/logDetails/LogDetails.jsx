@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from "react"
+import { Fragment, useState } from "react"
 
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
@@ -6,21 +6,17 @@ import styled from "styled-components"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import InteractionBox from "@components/social/interaction/InteractionBox"
-import DrawerBundle from "@components/social/logDetails/DrawerBundle"
 import Quote from "@components/social/logDetails/Quote"
 import FollowButton from "@components/users/FollowButton"
 
 import TaskBox from "./TaskBox"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import queryClient from "@queries/queryClient"
 
 import { getCurrentUsername } from "@/api/client"
-import {
-    getDailyLogDetails,
-    getDailyLogDrawers,
-    getQuote,
-    postQuote,
-} from "@/api/social.api"
+import { getDailyLogDetails, getQuote, postQuote } from "@/api/social.api"
 import { ImpressionArea } from "@toss/impression-area"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -163,6 +159,10 @@ const DetailHeader = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.7em;
+
+    ${ifMobile} {
+        padding: 0em 0 0.2em;
+    }
 `
 
 const DetailBody = styled.div`

@@ -12,6 +12,8 @@ import {
     postComment,
 } from "@api/social.api"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import queryClient from "@queries/queryClient"
 
 import { toast } from "react-toastify"
@@ -86,13 +88,13 @@ const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
 }
 
 const Wrapper = styled.div`
-    z-index:100;
+    z-index: 100;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -128,6 +130,12 @@ const Modal = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: end;
+
+    ${ifMobile} {
+        position: absolute;
+        left: 0;
+        width: 90vw;
+    }
 `
 
 const CommentContainer = styled.div`

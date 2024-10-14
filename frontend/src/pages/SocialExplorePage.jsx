@@ -11,6 +11,8 @@ import LogDetails from "@components/social/logDetails/LogDetails"
 
 import { getExploreFound, getExploreRecommend } from "@api/social.api"
 
+import useScreenType, { ifMobile } from "@utils/useScreenType"
+
 import queryClient from "@queries/queryClient"
 
 const getCursorFromURL = (url) => {
@@ -25,6 +27,8 @@ const SocialExplorePage = () => {
     const initial_date = new Date()
     initial_date.setHours(0, 0, 0, 0)
     const selectedDate = initial_date.toISOString()
+
+    const isMobile = useScreenType().isMobile
 
     const [selectedUser, setSelectedUser] = useState(null)
 
@@ -80,6 +84,7 @@ const SocialExplorePage = () => {
                     ) : (
                         <ExploreFeed
                             recommendPage={recommendPage}
+                            fetchNextRecommendPage={fetchNextRecommendPage}
                             foundPage={foundPage}
                             fetchNextFoundPage={fetchNextFoundPage}
                             selectedUser={selectedUser}
@@ -88,15 +93,15 @@ const SocialExplorePage = () => {
                     )}
                 </Container>
 
-                <StickyContainer>
+                {!isMobile && <StickyContainer>
                     {selectedUser && (
                         <LogDetails
                             username={selectedUser}
-                            selectedDate={selectedDate} //temp
+                            selectedDate={selectedDate} //TOD temp
                             pageType="explore"
                         />
                     )}
-                </StickyContainer>
+                </StickyContainer>}
             </Wrapper>
         </>
     )
@@ -105,6 +110,10 @@ const SocialExplorePage = () => {
 const Wrapper = styled.div`
     display: flex;
     gap: 2rem;
+
+    ${ifMobile} {
+        flex-direction: column;
+    }
 `
 
 const Container = styled.div`
@@ -119,6 +128,13 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     gap: 1rem;
+
+    ${ifMobile} {
+        width: 100%;
+        min-width: auto;
+
+        padding: 0;
+    }
 `
 
 const StickyContainer = styled(Container)`
