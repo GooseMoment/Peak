@@ -51,9 +51,10 @@ const TaskCreateSimple = ({
     const [newTask, setNewTask] = useState({
         name: newTaskName,
         assigned_at: null,
+        due_type: null,
         due_date: null,
+        due_datetime: null,
         priority: 0,
-        due_time: null,
         reminders: [],
         drawer: drawerID,
         drawer_name: drawerName,

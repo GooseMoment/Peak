@@ -32,8 +32,9 @@ const TaskCreate = () => {
     const [newTask, setNewTask] = useState({
         name: newTaskName,
         assigned_at: null,
+        due_type: null,
         due_date: null,
-        due_time: null,
+        due_datetime: null,
         reminders: [],
         priority: 0,
         project_id: state?.project_id,
