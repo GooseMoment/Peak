@@ -32,6 +32,7 @@ const ExploreFeed = ({
                         log={feedUser}
                         selectedUser={selectedUser}
                         setSelectedUser={setSelectedUser}
+                        pageType="explore"
                     />
                 )),
             )}
@@ -50,6 +51,7 @@ const ExploreFeed = ({
                             log={feedUser}
                             selectedUser={selectedUser}
                             setSelectedUser={setSelectedUser}
+                            pageType="explore"
                         />
                     )),
                 )}

@@ -23,6 +23,7 @@ const LogPreviewBox = ({
     selectedUser,
     setSelectedUser,
     selectedDate,
+    pageType="following"
 }) => {
     // TODO: explore feed용 view 추가하면 삭제
     const initial_date = new Date()
@@ -68,6 +69,7 @@ const LogPreviewBox = ({
                         <LogDetails
                             username={selectedUser}
                             selectedDate={selectedDate || tempSelectedDate}
+                            pageType={pageType}
                         />
                     </MobileLogDetail>
                 ) : (
