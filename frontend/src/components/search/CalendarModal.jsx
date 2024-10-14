@@ -4,6 +4,8 @@ import styled from "styled-components"
 
 import CommonCalendar from "@components/common/CommonCalendar"
 
+import { ifMobile } from "@utils/useScreenType"
+
 const CalendarModal = ({
     isOpen,
     handleClose,
@@ -11,11 +13,15 @@ const CalendarModal = ({
     filter,
     updateFilterValue,
 }) => {
-    const initial_date = new Date()
-    initial_date.setHours(0, 0, 0, 0)
+    const initialDate = new Date()
+    initialDate.setHours(0, 0, 0, 0)
 
-    const [startDate, setStartDate] = useState(filter.value ? filter.value.startDate : initial_date.toISOString())
-    const [endDate, setEndDate] = useState(filter.value ? filter.value.endDate : initial_date.toISOString())
+    const [startDate, setStartDate] = useState(
+        filter.value ? filter.value.startDate : initialDate.toISOString(),
+    )
+    const [endDate, setEndDate] = useState(
+        filter.value ? filter.value.endDate : initialDate.toISOString(),
+    )
 
     useEffect(() => {
         updateFilterValue({
@@ -50,6 +56,7 @@ const Wrapper = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 100;
 
     display: flex;
     align-items: center;
@@ -79,12 +86,15 @@ const Modal = styled.div`
 
     font-size: 0.8em;
     overflow-y: auto;
-    z-index: 10;
     pointer-events: auto;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    ${ifMobile} {
+        left: auto;
+    }
 `
 
 export default CalendarModal

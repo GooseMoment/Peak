@@ -1,34 +1,62 @@
 import { Fragment } from "react"
 
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
+import { getProjectColor } from "@components/project/Creates/palettes"
 import TaskFrame from "@components/tasks/TaskFrame"
 
+import { ImpressionArea } from "@toss/impression-area"
+import { useTranslation } from "react-i18next"
+
 const SearchResults = ({ resultPage, fetchNextResultPage }) => {
+    const { t } = useTranslation("", { keyPrefix: "search" })
+    const theme = useTheme()
+
     return (
         <Container>
-            {resultPage?.pages.map((page) =>
-                page.results.map((task) => (
-                    <Fragment key={task.id}>
-                        <DrawerBox $color={task.color}>
-                            <DrawerName $color={task.color}>
-                                {" " +
-                                    task.project_name +
-                                    " / " +
-                                    task.drawer_name +
-                                    " "}
-                            </DrawerName>
-                        </DrawerBox>
-                        <TaskFrame task={task} color={task.color} />
-                    </Fragment>
-                )),
+            {resultPage && resultPage.pages[0].results.length === 0 && (
+                <NoResult>{t("no_result")}</NoResult>
             )}
-            <button onClick={() => fetchNextResultPage()}>test</button>
+
+            {resultPage?.pages.map((page) =>
+                page.results.map((task) => {
+                    const color = getProjectColor(
+                        theme.type,
+                        task.project_color,
+                    )
+
+                    return (
+                        <Fragment key={task.id}>
+                            <DrawerBox $color={color}>
+                                <DrawerName $color={color}>
+                                    {" " +
+                                        task.project_name +
+                                        " / " +
+                                        task.drawer_name +
+                                        " "}
+                                </DrawerName>
+                            </DrawerBox>
+                            <TaskFrame task={task} color={color} />
+                        </Fragment>
+                    )
+                }),
+            )}
+
+            <ImpressionArea
+                onImpressionStart={() => fetchNextResultPage()}
+                timeThreshold={200}
+            />
         </Container>
     )
 }
 
 const Container = styled.div``
+
+const NoResult = styled.div`
+    margin-top: 5em;
+
+    text-align: center;
+`
 
 export default SearchResults

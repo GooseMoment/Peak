@@ -4,6 +4,7 @@ import styled from "styled-components"
 
 import MildButton from "@components/common/MildButton"
 
+import { ifMobile } from "@/utils/useScreenType"
 import FeatherIcon from "feather-icons-react"
 
 const SearchBar = ({ handleSearch }) => {
@@ -45,6 +46,7 @@ const SearchBar = ({ handleSearch }) => {
     )
 }
 
+// TODO: 내가 왜 와퍼를 따로 했었지..?
 const Wrapper = styled.div`
     display: flex;
 `
@@ -59,6 +61,10 @@ const Box = styled.div`
     background-color: ${(props) => props.theme.secondBackgroundColor};
 
     display: flex;
+
+    ${ifMobile} {
+        width: 100%;
+    }
 `
 
 const SearchInput = styled.input`

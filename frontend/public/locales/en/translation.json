@@ -367,6 +367,7 @@
             "completed_at" : "Completed",
             "privacy" : "Privacy",
             "memo" : "Memo"
-        }
+        },
+        "no_result" : "I can't find anything 🤔"
     }
 }

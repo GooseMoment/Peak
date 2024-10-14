@@ -64,15 +64,13 @@ const FilterInput = ({
         )
     else if (filter.type === "date") {
         return (
-            <>
-                <CalendarModal
-                    isOpen={isModalOpen}
-                    handleClose={() => setIsModalOpen(null)}
-                    position={position}
-                    filter={filter}
-                    updateFilterValue={updateFilterValue}
-                />
-            </>
+            <CalendarModal
+                isOpen={isModalOpen}
+                handleClose={() => setIsModalOpen(null)}
+                position={position}
+                filter={filter}
+                updateFilterValue={updateFilterValue}
+            />
         )
     } else return null
 }

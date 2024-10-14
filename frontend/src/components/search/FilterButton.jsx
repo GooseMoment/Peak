@@ -6,6 +6,7 @@ import MildButton from "@components/common/MildButton"
 import FilterInput from "@components/search/FilterInput"
 
 import { useClientLocale } from "@utils/clientSettings"
+import { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -45,10 +46,12 @@ const FilterButton = ({
             }
 
             const startDate = new Date(filter.value.startDate).toLocaleString(
-                locale, options
+                locale,
+                options,
             )
             const endDate = new Date(filter.value.endDate).toLocaleString(
-                locale, options
+                locale,
+                options,
             )
 
             if (startDate === endDate) return startDate
@@ -63,34 +66,32 @@ const FilterButton = ({
     }
 
     return (
-        <>
-            <ButtonBox
-                ref={buttonRef}
-                onClick={handleInputState}
-                $isActive={filter.value !== null || inputState === filter.name}>
-                {filter.value !== null || inputState === filter.name
-                    ? filter.name + " : "
-                    : filter.name}
+        <ButtonBox
+            ref={buttonRef}
+            onClick={handleInputState}
+            $isActive={filter.value !== null || inputState === filter.name}>
+            {filter.value !== null || inputState === filter.name
+                ? filter.name + ": "
+                : filter.name}
 
-                {inputState === filter.name ? (
-                    <FilterInput
-                        setInputState={setInputState}
-                        filter={filter}
-                        updateFilterValue={updateFilterValue}
-                        position={inputPosition}
-                    />
-                ) : (
-                    // position 고민해볼 필요...
-                    displayFilterValue()
-                )}
+            {inputState === filter.name ? (
+                <FilterInput
+                    setInputState={setInputState}
+                    filter={filter}
+                    updateFilterValue={updateFilterValue}
+                    position={inputPosition}
+                />
+            ) : (
+                // position 고민해볼 필요...
+                displayFilterValue()
+            )}
 
-                {filter.value !== null && inputState !== filter.name && (
-                    <ClearButton onClick={handleClear}>
-                        <FeatherIcon icon="x-circle" />
-                    </ClearButton>
-                )}
-            </ButtonBox>
-        </>
+            {filter.value !== null && inputState !== filter.name && (
+                <ClearButton onClick={handleClear}>
+                    <FeatherIcon icon="x-circle" />
+                </ClearButton>
+            )}
+        </ButtonBox>
     )
 }
 
@@ -112,6 +113,10 @@ const ButtonBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+
+    ${ifMobile} {
+        padding: 0.5em ${(props) => (props.$isActive ? 1.75 : 1)}em 0.5em 1em;
+    }
 `
 
 const ClearButton = styled(MildButton)`
@@ -140,6 +145,10 @@ const ClearButton = styled(MildButton)`
         padding: 0.1em;
         background-color: ${(props) =>
             props.theme.search.activatedBackgroundColor};
+    }
+
+    ${ifMobile} {
+        opacity: 100%;
     }
 `
 

@@ -39,11 +39,11 @@ const initialFilterGroup = (t) => ({
         type: "date",
         value: null,
     },
-    privacy: {
-        name: t("privacy"),
-        type: "text",
-        value: null,
-    },
+    // privacy: {
+    //     name: t("privacy"),
+    //     type: "text",
+    //     value: null,
+    // },
     memo: {
         name: t("memo"),
         type: "text",
