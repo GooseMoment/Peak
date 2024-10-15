@@ -2,8 +2,15 @@ import styled, { useTheme } from "styled-components"
 
 import { getProjectColor } from "@components/project/common/palettes"
 import SimpleProfile from "@components/social/common/SimpleProfile"
+import LogDetails from "@components/social/logDetails/LogDetails"
+
+import { getCurrentUsername } from "@api/client"
+
+import { useClientLocale } from "@utils/clientSettings"
+import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import { DateTime } from "luxon"
+import { useTranslation } from "react-i18next"
 
 const putEllipsis = (text, maxLength) => {
     return text.length > maxLength
@@ -11,13 +18,30 @@ const putEllipsis = (text, maxLength) => {
         : text
 }
 
-const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
+const LogPreviewBox = ({
+    log,
+    selectedUser,
+    setSelectedUser,
+    selectedDate,
+    pageType = "following",
+}) => {
+    // TODO: explore feed용 view 추가하면 삭제
+    const initial_date = new Date()
+    initial_date.setHours(0, 0, 0, 0)
+    const tempSelectedDate = initial_date.toISOString()
+
     const theme = useTheme()
+    const locale = useClientLocale()
+    const { isMobile } = useScreenType()
+    const { t } = useTranslation("", { keyPrefix: "social" })
+
+    const me = getCurrentUsername()
 
     if (!log) return null
 
-    const handleSelect = () => {
-        setSelectedUser(log.username === selectedUser ? null : log.username)
+    const handleSelect = (e) => {
+        if (e.target.dataset.accept === "true")
+            setSelectedUser(log.username === selectedUser ? null : log.username)
     }
 
     const setRingColor = () => {
@@ -34,40 +58,71 @@ const LogPreviewBox = ({ log, selectedUser, setSelectedUser }) => {
             : theme.backgroundColor
 
     return (
-        <Frame onClick={handleSelect} $bgColor={backgroundColor}>
-            <SimpleProfile user={log} ringColor={setRingColor} />
-            <RecentTask>
-                {log.recent_task && (
+        (isMobile || log.username !== me) && (
+            <Frame
+                onClick={handleSelect}
+                $bgColor={backgroundColor}
+                data-accept="true">
+                {isMobile && log.username === selectedUser ? (
+                    <MobileLogDetail data-accept="true">
+                        <LogDetails
+                            username={selectedUser}
+                            selectedDate={selectedDate || tempSelectedDate}
+                            pageType={pageType}
+                        />
+                    </MobileLogDetail>
+                ) : (
                     <>
-                        <TaskName>
-                            {' "' +
-                                putEllipsis(log.recent_task.name, 32) +
-                                '" 완료! '}
-                        </TaskName>
-                        {/* TODO: set locale */}
-                        <Ago>
-                            {" " +
-                                DateTime.fromISO(
-                                    log.recent_task.completed_at,
-                                ).toRelative({ locale: "ko" }) +
-                                " "}
-                        </Ago>
+                        <SimpleProfile
+                            user={log}
+                            ringColor={setRingColor}
+                            data-accept="true"
+                        />
+                        <RecentTask data-accept="true">
+                            {log.recent_task && (
+                                <>
+                                    <TaskName data-accept="true">
+                                        {' "' +
+                                            putEllipsis(
+                                                log.recent_task.name,
+                                                32,
+                                            ) +
+                                            '" ' +
+                                            t("log_preview_completed")}
+                                    </TaskName>
+
+                                    <Ago data-accept="true">
+                                        {" " +
+                                            DateTime.fromISO(
+                                                log.recent_task.completed_at,
+                                            )
+                                                .setLocale(locale)
+                                                .toRelative() +
+                                            " "}
+                                    </Ago>
+                                </>
+                            )}
+                        </RecentTask>
                     </>
                 )}
-            </RecentTask>
-        </Frame>
+            </Frame>
+        )
     )
 }
 
 const Frame = styled.div`
     border-bottom: 0.05em solid ${(p) => p.theme.social.borderColor};
-    background-color: ${(p) => p.$bgColor};
+    background-color: ${(props) => props.$bgColor};
 
     padding: 1.2em 1em 1.2em;
 
     display: flex;
     align-items: center;
     gap: 1em;
+
+    ${ifMobile} {
+        background-color: ${(p) => p.theme.backgroundColor};
+    }
 `
 
 const RecentTask = styled.div`
@@ -92,6 +147,13 @@ const Ago = styled.span`
     font-size: 0.9em;
     color: ${(p) => p.theme.secondTextColor};
     white-space: nowrap;
+`
+
+const MobileLogDetail = styled.div`
+    height: 70vh;
+    width: 100%;
+
+    overflow-y: scroll;
 `
 
 export default LogPreviewBox

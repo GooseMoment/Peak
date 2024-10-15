@@ -5,8 +5,11 @@ import styled from "styled-components"
 import MildButton from "@components/common/MildButton"
 
 import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
 const SearchBar = ({ handleSearch }) => {
+    const { t } = useTranslation("", { keyPrefix: "social.explore" })
+
     const [searchTerm, setSearchTerm] = useState("")
     const timer = useRef(null)
 
@@ -33,7 +36,7 @@ const SearchBar = ({ handleSearch }) => {
                 value={searchTerm}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
-                placeholder="Search for usernames to follow"
+                placeholder={t("searchbar")}
             />
             <SearchButton onClick={() => handleSearch()}>
                 <FeatherIcon icon={"search"} />

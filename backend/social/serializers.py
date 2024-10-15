@@ -74,6 +74,13 @@ class QuoteSerializer(serializers.ModelSerializer):
         
     #     return data
 
+class DailyLogDetailsSerializer(TaskSerializer):
+    project_order = serializers.IntegerField(read_only=True)
+    drawer_order = serializers.IntegerField(read_only=True)
+
+    class Meta(TaskSerializer.Meta):
+        fields = TaskSerializer.Meta.fields + ['project_order', 'drawer_order']
+
 class DailyLogDrawerSerializer(DrawerSerializer):
     color = serializers.CharField(read_only=True)
     

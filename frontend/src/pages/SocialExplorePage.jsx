@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { styled } from "styled-components"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
@@ -9,13 +9,9 @@ import ExploreFeed from "@components/social/explore/ExploreFeed"
 import SearchBar from "@components/social/explore/SearchBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
 
-import {
-    getDailyLogTasks,
-    getExploreRecommend,
-    getExploreFound,
-    getQuote,
-    getDailyLogDrawers,
-} from "@api/social.api"
+import { getExploreFound, getExploreRecommend } from "@api/social.api"
+
+import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
@@ -28,9 +24,11 @@ const getCursorFromURL = (url) => {
 }
 
 const SocialExplorePage = () => {
-    const initial_date = new Date()
-    initial_date.setHours(0, 0, 0, 0)
-    const selectedDate = initial_date.toISOString()
+    const initialDate = new Date()
+    initialDate.setHours(0, 0, 0, 0)
+    const selectedDate = initialDate.toISOString()
+
+    const { isMobile } = useScreenType()
 
     const [selectedUser, setSelectedUser] = useState(null)
 
@@ -41,23 +39,20 @@ const SocialExplorePage = () => {
         refetch: refetchRecommend,
     } = useInfiniteQuery({
         queryKey: ["explore", "recommend", "users"],
-        queryFn: (page) =>
-            getExploreRecommend(page.pageParam),
+        queryFn: (page) => getExploreRecommend(page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
-        refetchOnWindowFocus: false
+        refetchOnWindowFocus: false,
     })
 
     const {
         data: foundPage,
         fetchNextPage: fetchNextFoundPage,
-        isPending: isFoundPending,
         isFetching: isFoundFetching,
         refetch: refetchFound,
     } = useInfiniteQuery({
         queryKey: ["explore", "found", "users"],
-        queryFn: (page) =>
-            getExploreFound(searchQuery, page.pageParam),
+        queryFn: (page) => getExploreFound(searchQuery, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
         refetchOnWindowFocus: false,
@@ -66,31 +61,10 @@ const SocialExplorePage = () => {
 
     // useRef로 대체??
     const [searchQuery, setSearchQuery] = useState("")
-    
+
     useEffect(() => {
-        if(searchQuery.length !== 0) refetchFound()
+        if (searchQuery.length !== 0) refetchFound()
     }, [searchQuery])
-
-    const { data: quote } = useQuery({
-        queryKey: ["quote", selectedUser],
-        queryFn: () => getQuote(selectedUser, selectedDate),
-        enabled: !!selectedUser,
-    })
-
-    const {
-        data: drawerPage,
-        fetchNextPage: fetchNextDrawerPage,
-        isPending: isDrawerPending,
-        refetch: refetchDrawer,
-    } = useInfiniteQuery({
-        queryKey: ["daily", "log", "details", "drawer", selectedUser],
-        queryFn: (page) =>
-            getDailyLogDrawers(selectedUser, page.pageParam),
-        initialPageParam: "",
-        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
-        enabled: !!selectedUser
-    })
-    
 
     const handleSearch = (searchTerm) => {
         setSearchQuery(searchTerm.trim())
@@ -102,9 +76,7 @@ const SocialExplorePage = () => {
             <SocialPageTitle active="explore" />
             <Wrapper>
                 <Container>
-                    <SearchBar
-                        handleSearch={handleSearch}
-                    />
+                    <SearchBar handleSearch={handleSearch} />
                     {isRecommendPending || (searchQuery && isFoundFetching) ? (
                         <LoaderCircleWrapper>
                             <LoaderCircleFull />
@@ -112,6 +84,7 @@ const SocialExplorePage = () => {
                     ) : (
                         <ExploreFeed
                             recommendPage={recommendPage}
+                            fetchNextRecommendPage={fetchNextRecommendPage}
                             foundPage={foundPage}
                             fetchNextFoundPage={fetchNextFoundPage}
                             selectedUser={selectedUser}
@@ -120,17 +93,17 @@ const SocialExplorePage = () => {
                     )}
                 </Container>
 
-                <StickyContainer>
-                    {quote && (
-                        <LogDetails
-                            user={quote?.user}
-                            quote={quote}
-                            logDetails={drawerPage}
-                            isFollowingPage={false}
-                            selectedDate={selectedDate}     //temp
-                        />
-                    )}
-                </StickyContainer>
+                {!isMobile && (
+                    <StickyContainer>
+                        {selectedUser && (
+                            <LogDetails
+                                username={selectedUser}
+                                selectedDate={selectedDate} //TOD temp
+                                pageType="explore"
+                            />
+                        )}
+                    </StickyContainer>
+                )}
             </Wrapper>
         </>
     )
@@ -139,6 +112,10 @@ const SocialExplorePage = () => {
 const Wrapper = styled.div`
     display: flex;
     gap: 2rem;
+
+    ${ifMobile} {
+        flex-direction: column;
+    }
 `
 
 const Container = styled.div`
@@ -153,6 +130,13 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     gap: 1rem;
+
+    ${ifMobile} {
+        width: 100%;
+        min-width: auto;
+
+        padding: 0;
+    }
 `
 
 const StickyContainer = styled(Container)`

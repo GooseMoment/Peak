@@ -6,7 +6,11 @@ import SimpleProfile from "@components/social/common/SimpleProfile"
 
 import { getCurrentUsername } from "@api/client"
 
+import { useTranslation } from "react-i18next"
+
 const Quote = ({ user, quote, saveQuote }) => {
+    const { t } = useTranslation("", { keyPrefix: "social.quote" })
+
     const [inputState, setInputState] = useState(false)
     const [content, setContent] = useState(quote.content)
 
@@ -61,11 +65,12 @@ const Quote = ({ user, quote, saveQuote }) => {
                     </Content>
                 ) : quote.user.username === me ? (
                     <Content $color={theme.secondTextColor} $fontstyle="italic">
-                        {"Write your today's quote"}
+                        {t("empty_self_quote")}
                     </Content>
                 ) : (
                     <Content $color={theme.secondTextColor} $fontstyle="italic">
-                        {"No quote yet"}
+                        {t("empty_others_quote")}
+                        {/* 상대방의 username(또는 displayname) 보여주면 좋을 듯 */}
                     </Content>
                 )}
             </Wrapper>
