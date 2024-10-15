@@ -14,7 +14,7 @@ export const getTask = async (id) => {
 
 export const postTask = async (task) => {
     const res = await client.post("tasks/", task)
-    return res.status
+    return res.data
 }
 
 export const patchTask = async (id, edit) => {

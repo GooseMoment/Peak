@@ -11,8 +11,8 @@ export const getReminder = async (id) => {
     return res.data
 }
 
-export const postReminder = async (reminder) => {
-    const res = await client.post(`notifications/reminders/`, reminder)
+export const postReminder = async (reminders) => {
+    const res = await client.post(`notifications/reminders/`, reminders)
     return res.status
 }
 

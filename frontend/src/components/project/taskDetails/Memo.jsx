@@ -3,11 +3,11 @@ import { useState } from "react"
 import styled from "styled-components"
 
 import Button from "@components/common/Button"
+import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 
 const Memo = ({ previousMemo, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.memo" })

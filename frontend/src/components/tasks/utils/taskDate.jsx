@@ -1,4 +1,9 @@
-import { useClientLocale, useClientSetting, useClientTimezone } from "@utils/clientSettings"
+import {
+    useClientLocale,
+    useClientSetting,
+    useClientTimezone,
+} from "@utils/clientSettings"
+
 import { DateTime } from "luxon"
 
 const taskDate = (task) => {
