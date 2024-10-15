@@ -3,15 +3,15 @@ import { Fragment } from "react"
 import styled, { useTheme } from "styled-components"
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
-import { getProjectColor } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/common/palettes"
 import TaskFrame from "@components/tasks/TaskFrame"
 
 import { ImpressionArea } from "@toss/impression-area"
 import { useTranslation } from "react-i18next"
 
 const SearchResults = ({ resultPage, fetchNextResultPage }) => {
-    const { t } = useTranslation("", { keyPrefix: "search" })
     const theme = useTheme()
+    const { t } = useTranslation("", { keyPrefix: "search" })
 
     return (
         <Container>
