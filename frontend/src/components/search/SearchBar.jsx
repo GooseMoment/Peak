@@ -4,7 +4,7 @@ import styled from "styled-components"
 
 import MildButton from "@components/common/MildButton"
 
-import { ifMobile } from "@/utils/useScreenType"
+import { ifMobile } from "@utils/useScreenType"
 import FeatherIcon from "feather-icons-react"
 
 const SearchBar = ({ handleSearch }) => {
