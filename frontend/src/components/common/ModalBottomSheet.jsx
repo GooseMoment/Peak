@@ -17,16 +17,16 @@ export const Header = ({ title=null, handleBack, closeSheet }) => {
 }
 
 const ModalBottomSheet = ({ headerContent=null, onClose, children }) => {
-    const [closing, setClosing] = useState(false)
+    const [isOpen, setIsOpen] = useState(true)
 
     const closeModal = () => {
-        setClosing(false)
+        setIsOpen(false)
         onClose()
     }
 
     return (
         <StyledBottomSheet
-            open={!closing}
+            open={isOpen}
             onDismiss={closeModal}
             snapPoints={({ maxHeight }) => [maxHeight * 0.8, maxHeight * 0.9]}
             header={headerContent}
