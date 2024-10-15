@@ -26,6 +26,7 @@ const TaskCommonDetail = ({
     newTask,
     setNewTask,
     projectID = null,
+    projectType = null,
     color,
     isCreating = false,
 }) => {
@@ -84,12 +85,16 @@ const TaskCommonDetail = ({
             queryClient.invalidateQueries({
                 queryKey: ["tasks", { drawerID: newTask.drawer }],
             })
-            queryClient.invalidateQueries({
-                queryKey: ["drawers", { projectID: projectID }],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["projects", projectID],
-            })
+
+            if (projectType === "goal") {
+                queryClient.invalidateQueries({
+                    queryKey: ["drawers", { projectID: projectID }],
+                })
+                queryClient.invalidateQueries({
+                    queryKey: ["projects", projectID],
+                })
+            }
+            
             toast.success(
                 t("delete.task_delete_success", { task_name: newTask.name }),
             )

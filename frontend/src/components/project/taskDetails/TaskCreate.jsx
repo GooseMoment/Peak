@@ -4,7 +4,7 @@ import { useLocation, useOutletContext } from "react-router-dom"
 import TaskCommonDetail from "./TaskCommonDetail"
 
 const TaskCreate = () => {
-    const [_, color] = useOutletContext()
+    const [_, __, color] = useOutletContext()
     const { state } = useLocation()
 
     const [newTask, setNewTask] = useState({
