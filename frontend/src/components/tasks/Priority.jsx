@@ -20,7 +20,7 @@ const Priority = ({ priority, completed, hasDate }) => {
 const PriorityImg = styled.img`
     width: 15px;
     height: 15px;
-    margin-top: ${(p) => (p.$hasDate ? "-0.5em" : "-0.25em")};
+    margin-top: ${(p) => (p.$hasDate ? "0.5em" : "-0.25em")};
     margin-right: 0.2em;
     filter: ${(p) => p.theme.project.imgDangerColor};
 

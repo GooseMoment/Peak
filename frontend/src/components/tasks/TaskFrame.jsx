@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import styled, { css } from "styled-components"
 
 import Priority from "@components/tasks/Priority"
@@ -38,20 +40,22 @@ const TaskFrame = ({
 
     return (
         <Box>
-            <Priority
-                hasDate={hasDate}
-                priority={task.priority}
-                completed={task.completed_at}
-            />
             <Content>
                 <CircleName>
-                    <TaskCircle
-                        completed={task.completed_at}
-                        color={color}
-                        hasDate={hasDate}
-                        isLoading={isLoading}
-                        onClick={toComplete}
-                    />
+                    <Icons>
+                        <Priority
+                            hasDate={hasDate}
+                            priority={task.priority}
+                            completed={task.completed_at}
+                        />
+                        <TaskCircle
+                            completed={task.completed_at}
+                            color={color}
+                            hasDate={hasDate}
+                            isLoading={isLoading}
+                            onClick={toComplete}
+                        />
+                    </Icons>
                     {taskDetailPath ? (
                         <NameLink draggable="false" to={taskDetailPath}>
                             {TaskName}
@@ -119,27 +123,39 @@ const NameLink = styled(Link)`
 
 const TaskNameBox = styled.div`
     display: inline-block;
-
-    font-style: normal;
     font-size: 1.1em;
+    font-style: normal;
     color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
+    overflow: hidden;
     line-height: 1.3em;
-
     min-width: 0;
+
+    ${ifMobile} {
+        white-space: normal;
+        word-wrap: normal;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
 `
 
 const CircleName = styled.div`
     display: flex;
 `
 
+const Icons = styled.div`
+    display: flex;
+    align-items: center;
+`
+
 const Dates = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 0.2em;
-    margin-left: 1.8em;
+    margin-top: 0.4em;
+    margin-left: 3em;
 `
 
 const AssignedDate = styled.div`

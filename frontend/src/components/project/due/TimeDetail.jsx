@@ -11,7 +11,7 @@ import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const TimeDetail = ({ task, setFunc, closeComponent }) => {
+const TimeDetail = ({ task, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.time" })
 
     const ampms = [
@@ -55,7 +55,6 @@ const TimeDetail = ({ task, setFunc, closeComponent }) => {
             due_datetime: null,
         })
         toast.error(t("time_remove"))
-        closeComponent()
     }
 
     const handleHour = (e) => {

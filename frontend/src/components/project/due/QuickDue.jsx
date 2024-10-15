@@ -5,6 +5,8 @@ import today from "@assets/project/calendar/today.svg"
 import tomorrow from "@assets/project/calendar/tomorrow.svg"
 import slach from "@assets/project/slach.svg"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import { useTranslation } from "react-i18next"
 
 const QuickDue = ({ changeDueDate }) => {
@@ -54,6 +56,10 @@ const ButtonFlexBox = styled.div`
     margin: 0.5em;
     margin-top: 1em;
     gap: 0.8em;
+
+    ${ifMobile} {
+        margin: 1em 0em;
+    }
 `
 
 const ButtonBox = styled.div`

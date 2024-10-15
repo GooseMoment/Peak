@@ -4,6 +4,8 @@ import styled, { useTheme } from "styled-components"
 
 import { getProjectColor } from "@components/project/common/palettes"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import FeatherIcon from "feather-icons-react"
 
 const DrawerFolder = ({ project, changeDrawer }) => {
@@ -57,6 +59,10 @@ const ItemBox = styled.div`
         margin-left: 1.3em;
         top: 0;
         color: ${(p) => p.theme.textColor};
+    }
+
+    ${ifMobile} {
+        margin-left: 0.2em;
     }
 `
 

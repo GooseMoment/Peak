@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 import FeatherIcon from "feather-icons-react"
 
-const Detail = ({ title, children, onClose, special = false }) => {
+const Detail = ({ title, children, onClose = () => {}, special = false }) => {
     return (
         <DetailBox $special={special}>
             <TitleBox>

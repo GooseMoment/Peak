@@ -19,6 +19,7 @@ import {
 } from "@api/today.api"
 
 import { useClientTimezone } from "@utils/clientSettings"
+import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
@@ -121,8 +122,7 @@ const TodayPage = () => {
     return (
         <>
             <PageTitle>{t("title")}</PageTitle>
-            {overdueTasks?.pages[0].count === 0 || (
-                <OverdueTasksBlock>
+            {(<OverdueTasksBlock>
                     <OverdueTitle>
                         <FeatherIcon icon="alert-circle" />
                         {t("overdue_title")}
@@ -236,26 +236,37 @@ const FlexCenterBox = styled.div`
 const OverdueTasksBlock = styled.div`
     border: 1.8px solid ${(p) => p.theme.project.borderColor};
     border-radius: 15px;
-    margin: 2em 1em;
-    padding: 1.5em;
+    margin: 1.4em 0.5em;
+    padding: 1.5em 0.8em;
+    
+    ${ifMobile} {
+        margin: 0;
+        padding: 1em;
+    }
 `
 
 const OverdueTitle = styled.div`
     font-size: 1.2em;
     font-weight: bold;
+    margin-left: 0.6em;
 `
 
 const CollapseButtonBlock = styled.div`
     float: right;
     cursor: pointer;
     margin-top: 0.1em;
-    margin-right: 0.5em;
+    margin-right: 0.4em;
 `
 
 const OverdueTaskBox = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    ${ifMobile} {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 `
 
 const Icons = styled(FlexCenterBox)`
@@ -265,12 +276,16 @@ const Icons = styled(FlexCenterBox)`
         stroke: ${(p) => p.theme.textColor};
         cursor: pointer;
     }
+
+    ${ifMobile} {
+        margin: 0em 1.2em 1em;
+    }
 `
 
 const FilterButtonBox = styled.div`
     display: flex;
     gap: 0.8em;
-    margin: 1em 1.2em 0em;
+    margin: 1em 0.6em 0em;
 `
 
 const FilterButton = styled.div`
@@ -296,7 +311,7 @@ const TasksBox = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 0 1.2em;
+    padding: 0.3em 0.8em;
     overflow: hidden;
 `
 

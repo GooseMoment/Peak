@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react"
 
 import styled, { css } from "styled-components"
 
+import useScreenType from "@utils/useScreenType"
+
 import { attachClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge"
 import { DragHandleButton } from "@atlaskit/pragmatic-drag-and-drop-react-accessibility/drag-handle-button"
 import {
@@ -10,6 +12,8 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 
 const DragAndDownBox = ({ task, color, children }) => {
+    const { isDesktop } = useScreenType()
+
     const dragHandleRef = useRef(null)
 
     const [isDragging, setIsDragging] = useState(false)
@@ -89,9 +93,9 @@ const DragAndDownBox = ({ task, color, children }) => {
             ref={dragHandleRef}
             $edge={closestEdge}
             $color={color}>
-            <DragHandleButtonBox>
+            {isDesktop && <DragHandleButtonBox>
                 <DragHandleButton />
-            </DragHandleButtonBox>
+            </DragHandleButtonBox>}
             <ChildrenBox $isDragging={isDragging}>{children}</ChildrenBox>
         </DragAndDownBlock>
     )

@@ -1,5 +1,7 @@
 import styled, { keyframes } from "styled-components"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import { skeletonCSS } from "@assets/skeleton"
 
 export const SkeletonProjectPage = () => {
@@ -99,6 +101,10 @@ const TaskBox = styled.div`
     margin-left: 2.45em;
     gap: 0.8em;
     padding: 1.04em 0.5em;
+
+    ${ifMobile} {
+        margin-left: 0.8em;
+    }
 `
 
 const Circle = styled.div`
