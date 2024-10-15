@@ -23,7 +23,7 @@ const LogPreviewBox = ({
     selectedUser,
     setSelectedUser,
     selectedDate,
-    pageType="following"
+    pageType = "following",
 }) => {
     // TODO: explore feed용 view 추가하면 삭제
     const initial_date = new Date()
@@ -31,17 +31,16 @@ const LogPreviewBox = ({
     const tempSelectedDate = initial_date.toISOString()
 
     const theme = useTheme()
-    const { t } = useTranslation("", { keyPrefix: "social" })
     const locale = useClientLocale()
+    const { isMobile } = useScreenType()
+    const { t } = useTranslation("", { keyPrefix: "social" })
 
     const me = getCurrentUsername()
-
-    const isMobile = useScreenType().isMobile
 
     if (!log) return null
 
     const handleSelect = (e) => {
-        if (e.target.dataset.accept === 'true')
+        if (e.target.dataset.accept === "true")
             setSelectedUser(log.username === selectedUser ? null : log.username)
     }
 
@@ -63,9 +62,9 @@ const LogPreviewBox = ({
             <Frame
                 onClick={handleSelect}
                 $bgColor={backgroundColor}
-                data-accept='true'>
+                data-accept="true">
                 {isMobile && log.username === selectedUser ? (
-                    <MobileLogDetail data-accept='true'>
+                    <MobileLogDetail data-accept="true">
                         <LogDetails
                             username={selectedUser}
                             selectedDate={selectedDate || tempSelectedDate}
@@ -77,12 +76,12 @@ const LogPreviewBox = ({
                         <SimpleProfile
                             user={log}
                             ringColor={setRingColor}
-                            data-accept='true'
+                            data-accept="true"
                         />
-                        <RecentTask data-accept='true'>
+                        <RecentTask data-accept="true">
                             {log.recent_task && (
                                 <>
-                                    <TaskName data-accept='true'>
+                                    <TaskName data-accept="true">
                                         {' "' +
                                             putEllipsis(
                                                 log.recent_task.name,
@@ -92,7 +91,7 @@ const LogPreviewBox = ({
                                             t("log_preview_completed")}
                                     </TaskName>
 
-                                    <Ago data-accept='true'>
+                                    <Ago data-accept="true">
                                         {" " +
                                             DateTime.fromISO(
                                                 log.recent_task.completed_at,

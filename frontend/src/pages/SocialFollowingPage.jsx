@@ -17,7 +17,7 @@ const SocialFollowingPage = () => {
     const initial_date = new Date()
     initial_date.setHours(0, 0, 0, 0)
 
-    const isMobile = useScreenType().isMobile
+    const { isMobile } = useScreenType()
 
     const me = getCurrentUsername()
 

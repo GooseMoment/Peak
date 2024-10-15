@@ -28,7 +28,7 @@ const SocialExplorePage = () => {
     initial_date.setHours(0, 0, 0, 0)
     const selectedDate = initial_date.toISOString()
 
-    const isMobile = useScreenType().isMobile
+    const { isMobile } = useScreenType()
 
     const [selectedUser, setSelectedUser] = useState(null)
 
@@ -93,15 +93,17 @@ const SocialExplorePage = () => {
                     )}
                 </Container>
 
-                {!isMobile && <StickyContainer>
-                    {selectedUser && (
-                        <LogDetails
-                            username={selectedUser}
-                            selectedDate={selectedDate} //TOD temp
-                            pageType="explore"
-                        />
-                    )}
-                </StickyContainer>}
+                {!isMobile && (
+                    <StickyContainer>
+                        {selectedUser && (
+                            <LogDetails
+                                username={selectedUser}
+                                selectedDate={selectedDate} //TOD temp
+                                pageType="explore"
+                            />
+                        )}
+                    </StickyContainer>
+                )}
             </Wrapper>
         </>
     )
