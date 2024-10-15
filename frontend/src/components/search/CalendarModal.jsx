@@ -13,11 +13,14 @@ const CalendarModal = ({
     filter,
     updateFilterValue,
 }) => {
+    const initialDate = new Date()
+    initialDate.setHours(0, 0, 0, 0)
+
     const [startDate, setStartDate] = useState(
-        filter.value ? filter.value.startDate : null,
+        filter.value ? filter.value.startDate : initialDate.toISOString(),
     )
     const [endDate, setEndDate] = useState(
-        filter.value ? filter.value.endDate : null,
+        filter.value ? filter.value.endDate : initialDate.toISOString(),
     )
 
     useEffect(() => {
