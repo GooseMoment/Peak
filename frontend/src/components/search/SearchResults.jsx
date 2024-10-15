@@ -1,4 +1,5 @@
 import { Fragment } from "react"
+import { useNavigate } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
 
@@ -12,6 +13,18 @@ import { useTranslation } from "react-i18next"
 const SearchResults = ({ resultPage, fetchNextResultPage }) => {
     const theme = useTheme()
     const { t } = useTranslation("", { keyPrefix: "search" })
+
+    const navigate = useNavigate()
+
+    const handleDrawerLink = (task) => {
+        // TODO: drawer id 지정
+
+        navigate(`../projects/${task.project_id}`)
+    }
+
+    const handleTaskLink = (task) => {
+        return `../projects/${task.project_id}/tasks/${task.id}/detail`
+    }
 
     return (
         <Container>
@@ -28,7 +41,7 @@ const SearchResults = ({ resultPage, fetchNextResultPage }) => {
 
                     return (
                         <Fragment key={task.id}>
-                            <DrawerBox $color={color}>
+                            <DrawerBox $color={color} onClick={() => handleDrawerLink(task)}>
                                 <DrawerName $color={color}>
                                     {" " +
                                         task.project_name +
@@ -37,7 +50,7 @@ const SearchResults = ({ resultPage, fetchNextResultPage }) => {
                                         " "}
                                 </DrawerName>
                             </DrawerBox>
-                            <TaskFrame task={task} color={color} />
+                            <TaskFrame task={task} color={color} taskDetailPath={handleTaskLink(task)}/>
                         </Fragment>
                     )
                 }),
