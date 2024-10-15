@@ -4,7 +4,7 @@ import styled from "styled-components"
 
 import MildButton from "@components/common/MildButton"
 
-import { ifMobile } from "@utils/useScreenType"
+import { ifMobile, ifTablet } from "@utils/useScreenType"
 import FeatherIcon from "feather-icons-react"
 
 const SearchBar = ({ handleSearch }) => {
@@ -62,6 +62,10 @@ const Box = styled.div`
 
     display: flex;
 
+    ${ifTablet} {
+        width: 80%;
+    }
+
     ${ifMobile} {
         width: 100%;
     }
@@ -73,6 +77,10 @@ const SearchInput = styled.input`
     padding: 0 0 0 1em;
 
     font-size: 1em;
+
+    ${ifMobile} {
+        width: 70%;
+    }
 `
 
 const SaerchButton = styled(MildButton)`
