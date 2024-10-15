@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useOutletContext, useParams } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
@@ -37,7 +37,7 @@ const TaskDetailMobile = ({ closeDetail }) => {
     const [taskName, setTaskName] = useState(task?.name)
     const [activeContent, setActiveContent] = useState(null)
 
-    useEffect(()=>{
+    useEffect(() => {
         setTaskName(task?.name)
     }, [task])
 
@@ -70,8 +70,16 @@ const TaskDetailMobile = ({ closeDetail }) => {
 
     return (
         <ModalBottomSheet
-            onClose={closeDetail} 
-            headerContent={<Header title={title} closeSheet={closeDetail} handleBack={activeContent ? ()=>setActiveContent(null) : null}/>}>
+            onClose={closeDetail}
+            headerContent={
+                <Header
+                    title={title}
+                    closeSheet={closeDetail}
+                    handleBack={
+                        activeContent ? () => setActiveContent(null) : null
+                    }
+                />
+            }>
             <TaskDetailMobileBox>
                 <TaskNameInput
                     task={task}
@@ -82,7 +90,12 @@ const TaskDetailMobile = ({ closeDetail }) => {
                     color={color}
                     isCreate
                 />
-                <ContentsMobile newTask={task} editNewTask={patchMutation.mutate} activeContent={activeContent} setActiveContent={setActiveContent}/>
+                <ContentsMobile
+                    newTask={task}
+                    editNewTask={patchMutation.mutate}
+                    activeContent={activeContent}
+                    setActiveContent={setActiveContent}
+                />
                 {activeContent?.component}
             </TaskDetailMobileBox>
         </ModalBottomSheet>

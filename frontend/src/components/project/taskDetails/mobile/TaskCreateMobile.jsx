@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useLocation, useOutletContext } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
@@ -9,9 +9,9 @@ import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
 import ContentsMobile from "@components/project/taskDetails/mobile/ContentsMobile"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
-import useScreenType from "@utils/useScreenType"
-
 import { postTask } from "@api/tasks.api"
+
+import useScreenType from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
@@ -19,7 +19,9 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const TaskCreateMobile = ({ closeCreate }) => {
-    const { t: tProject } = useTranslation(null, { keyPrefix: "project.create" })
+    const { t: tProject } = useTranslation(null, {
+        keyPrefix: "project.create",
+    })
     const { t: tTask } = useTranslation(null, { keyPrefix: "task" })
 
     const inputRef = useRef(null)
@@ -99,8 +101,16 @@ const TaskCreateMobile = ({ closeCreate }) => {
 
     return (
         <ModalBottomSheet
-            onClose={closeCreate} 
-            headerContent={<Header title={title} closeSheet={closeCreate} handleBack={activeContent ? ()=>setActiveContent(null) : null}/>}>
+            onClose={closeCreate}
+            headerContent={
+                <Header
+                    title={title}
+                    closeSheet={closeCreate}
+                    handleBack={
+                        activeContent ? () => setActiveContent(null) : null
+                    }
+                />
+            }>
             <TaskCreateMobileBox onKeyDown={onKeyDown}>
                 <TaskNameInput
                     task={newTask}
@@ -111,16 +121,25 @@ const TaskCreateMobile = ({ closeCreate }) => {
                     color={color}
                     isCreate
                 />
-                <ContentsMobile newTask={newTask} editNewTask={handleChange} activeContent={activeContent} setActiveContent={setActiveContent}/>
+                <ContentsMobile
+                    newTask={newTask}
+                    editNewTask={handleChange}
+                    activeContent={activeContent}
+                    setActiveContent={setActiveContent}
+                />
                 {activeContent?.component}
-                {!activeContent && <ButtonGroup $justifyContent="flex-end" $margin="1em 0em 1em">
-                    <Button 
-                        disabled={postMutation.isPending}
-                        loading={postMutation.isPending} 
-                        onClick={makeTask}>
-                        {tProject("button_add")}
-                    </Button>
-                </ButtonGroup>}
+                {!activeContent && (
+                    <ButtonGroup
+                        $justifyContent="flex-end"
+                        $margin="1em 0em 1em">
+                        <Button
+                            disabled={postMutation.isPending}
+                            loading={postMutation.isPending}
+                            onClick={makeTask}>
+                            {tProject("button_add")}
+                        </Button>
+                    </ButtonGroup>
+                )}
             </TaskCreateMobileBox>
         </ModalBottomSheet>
     )

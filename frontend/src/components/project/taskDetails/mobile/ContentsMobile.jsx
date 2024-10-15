@@ -1,24 +1,28 @@
 import { useMemo } from "react"
 
 import styled, { css } from "styled-components"
-import FeatherIcon from "feather-icons-react"
-
-import taskDate from "@components/tasks/utils/taskDate"
 
 import Assigned from "@components/project/taskDetails/Assigned"
-import Due from "@components/project/taskDetails/Due"
-import Reminder from "@components/project/taskDetails/Reminder"
-import Priority from "@components/project/taskDetails/Priority"
 import Drawer from "@components/project/taskDetails/Drawer"
+import Due from "@components/project/taskDetails/Due"
 import Memo from "@components/project/taskDetails/Memo"
+import Priority from "@components/project/taskDetails/Priority"
+import Reminder from "@components/project/taskDetails/Reminder"
+import taskDate from "@components/tasks/utils/taskDate"
 
 import alarmclock from "@assets/project/alarmclock.svg"
 import hourglass from "@assets/project/hourglass.svg"
 
-import { toast } from "react-toastify"
+import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
-const ContentsMobile = ({ newTask, editNewTask, activeContent, setActiveContent }) => {
+const ContentsMobile = ({
+    newTask,
+    editNewTask,
+    activeContent,
+    setActiveContent,
+}) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
     const priorities = useMemo(() => makePriorities(t), [t])
@@ -32,7 +36,8 @@ const ContentsMobile = ({ newTask, editNewTask, activeContent, setActiveContent 
         }
     }
 
-    const { formatted_due_datetime, formatted_assigned_date } = taskDate(newTask)
+    const { formatted_due_datetime, formatted_assigned_date } =
+        taskDate(newTask)
 
     const onClose = () => {
         setActiveContent(null)
@@ -44,7 +49,7 @@ const ContentsMobile = ({ newTask, editNewTask, activeContent, setActiveContent 
             name: "assigned",
             icon: <FeatherIcon icon="calendar" />,
             display: newTask.assigned_at ? formatted_assigned_date : t("none"),
-            component: <Assigned setFunc={editNewTask} onClose={onClose}/>,
+            component: <Assigned setFunc={editNewTask} onClose={onClose} />,
         },
         {
             id: 2,
@@ -55,7 +60,6 @@ const ContentsMobile = ({ newTask, editNewTask, activeContent, setActiveContent 
                     ? formatted_due_datetime
                     : t("none"),
             component: <Due task={newTask} setFunc={editNewTask} />,
-
         },
         {
             id: 3,
@@ -83,14 +87,14 @@ const ContentsMobile = ({ newTask, editNewTask, activeContent, setActiveContent 
                         -
                     </EmptyReminderBox>
                 ),
-            component: <Reminder task={newTask} onClose={onClose}/>,
+            component: <Reminder task={newTask} onClose={onClose} />,
         },
         {
             id: 4,
             name: "priority",
             icon: <FeatherIcon icon="alert-circle" />,
             display: priorities[newTask.priority],
-            component: <Priority setFunc={editNewTask} onClose={onClose}/>,
+            component: <Priority setFunc={editNewTask} onClose={onClose} />,
         },
         {
             id: 5,
@@ -102,50 +106,63 @@ const ContentsMobile = ({ newTask, editNewTask, activeContent, setActiveContent 
                     : newTask.drawer_name
                       ? `${newTask.project_name} / ${newTask.drawer_name}`
                       : t("none"),
-            component: <Drawer setFunc={editNewTask} onClose={onClose}/>,
+            component: <Drawer setFunc={editNewTask} onClose={onClose} />,
         },
         {
             id: 6,
             name: "memo",
             icon: <FeatherIcon icon="edit" />,
             display: newTask.memo ? newTask.memo : t("none"),
-            component: <Memo previousMemo={newTask.memo} setFunc={editNewTask} onClose={onClose}/>,
+            component: (
+                <Memo
+                    previousMemo={newTask.memo}
+                    setFunc={editNewTask}
+                    onClose={onClose}
+                />
+            ),
         },
     ]
 
     return (
         <ContentBlock>
-            {activeContent === null ? (
-                items.map((item) => (
-                    <ContentBox key={item.id}>
-                        <ContentNameBox>
-                            {item.icon}
-                            {t(item.name + ".name")}
-                        </ContentNameBox>
-                        <ContentDisplayBox onClick={() => handleClickContent({ name: item.name, component: item.component })}>
-                            {item.display}
-                            <FeatherIcon icon="chevron-right"/>
-                        </ContentDisplayBox>
-                    </ContentBox>
-                ))
-            ) : (
-                items.filter(item => item.name === activeContent.name).map((item) => (
-                    <ContentBox key={item.id} $activeContent={activeContent}>
-                        <ContentNameBox>
-                            {item.icon}
-                            {t(item.name + ".name")}
-                        </ContentNameBox>
-                        <TopContentDisplayBox>
-                            {item.display}
-                        </TopContentDisplayBox>
-                        <CLine/>
-                    </ContentBox>
-                ))
-            )}
+            {activeContent === null
+                ? items.map((item) => (
+                      <ContentBox key={item.id}>
+                          <ContentNameBox>
+                              {item.icon}
+                              {t(item.name + ".name")}
+                          </ContentNameBox>
+                          <ContentDisplayBox
+                              onClick={() =>
+                                  handleClickContent({
+                                      name: item.name,
+                                      component: item.component,
+                                  })
+                              }>
+                              {item.display}
+                              <FeatherIcon icon="chevron-right" />
+                          </ContentDisplayBox>
+                      </ContentBox>
+                  ))
+                : items
+                      .filter((item) => item.name === activeContent.name)
+                      .map((item) => (
+                          <ContentBox
+                              key={item.id}
+                              $activeContent={activeContent}>
+                              <ContentNameBox>
+                                  {item.icon}
+                                  {t(item.name + ".name")}
+                              </ContentNameBox>
+                              <TopContentDisplayBox>
+                                  {item.display}
+                              </TopContentDisplayBox>
+                              <CLine />
+                          </ContentBox>
+                      ))}
         </ContentBlock>
     )
 }
-
 
 const ContentBlock = styled.div`
     display: flex;
@@ -163,14 +180,16 @@ const ContentBox = styled.div`
     width: 100%;
     min-width: 0;
 
-    ${p => p.$activeContent && css`
-        flex-direction: column;
-        align-items: flex-start;
-        margin-left: 0.1em;
-        margin-bottom: 0.6em;
-        gap: 0.8em;
-        min-width: 0;
-    `}
+    ${(p) =>
+        p.$activeContent &&
+        css`
+            flex-direction: column;
+            align-items: flex-start;
+            margin-left: 0.1em;
+            margin-bottom: 0.6em;
+            gap: 0.8em;
+            min-width: 0;
+        `}
 `
 
 const CLine = styled.div`
