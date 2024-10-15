@@ -157,7 +157,7 @@
         "name_change_success": "The name has changed.",
         "none": "none",
         "create": "Create task",
-        "edit": "Task Settings",
+        "edit": "Edit task",
         "assigned": {
             "name": "Assignment Date",
             "title": "Assignment date Settings"
