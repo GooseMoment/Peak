@@ -19,6 +19,7 @@ import {
 } from "@api/today.api"
 
 import { useClientTimezone } from "@utils/clientSettings"
+import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
@@ -26,7 +27,6 @@ import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import { ifMobile } from "@/utils/useScreenType"
 
 const getPageFromURL = (url) => {
     if (!url) return null
