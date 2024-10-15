@@ -1,7 +1,8 @@
 import styled, { useTheme } from "styled-components"
 
+import { useClientLocale } from "@utils/clientSettings"
+
 import { DateTime } from "luxon"
-import { useClientLocale } from "@/utils/clientSettings"
 
 const CommentBox = ({ comment }) => {
     const theme = useTheme()
@@ -16,7 +17,9 @@ const CommentBox = ({ comment }) => {
                 <InfoBox>
                     <Username>@{comment.user.username}</Username>
                     <Ago>
-                        {DateTime.fromISO(comment.created_at).setLocale(locale).toRelative()}
+                        {DateTime.fromISO(comment.created_at)
+                            .setLocale(locale)
+                            .toRelative()}
                     </Ago>
                 </InfoBox>
 
