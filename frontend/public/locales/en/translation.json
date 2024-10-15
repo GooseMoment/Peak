@@ -374,6 +374,6 @@
             "privacy" : "Privacy",
             "memo" : "Memo"
         },
-        "no_result" : "I can't find anything 🤔"
+        "no_result" : "Your search did not match any tasks 🤔"
     }
 }
