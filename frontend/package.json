@@ -20,6 +20,7 @@
         "@toss/impression-area": "^1.4.0",
         "axios": "^1.7.4",
         "feather-icons-react": "^0.7.0",
+        "github-markdown-css": "^5.7.0",
         "grapheme-splitter": "^1.0.4",
         "i18next": "^23.11.4",
         "i18next-http-backend": "^2.5.2",

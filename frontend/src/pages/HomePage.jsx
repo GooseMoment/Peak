@@ -1,22 +1,17 @@
-import { useQuery } from "@tanstack/react-query"
-
-import PageTitle from "@components/common/PageTitle"
-
-import { getMe } from "@api/users.api"
+import AddTask from "@components/home/AddTask"
+import Announcements from "@components/home/Announcements"
+import AssignedToday from "@components/home/AssignedToday"
+import Header from "@components/home/Header"
+import InstallPeak from "@components/home/InstallPeak"
 
 const HomePage = () => {
-    const { data: me, isPending } = useQuery({
-        queryKey: ["users", "me"],
-        queryFn: () => getMe(),
-    })
-
-    if (isPending) {
-        return <div>Loading...</div>
-    }
-
     return (
         <>
-            <PageTitle>Good morning, @{me.username}</PageTitle>
+            <Header />
+            <AddTask />
+            <InstallPeak />
+            <Announcements />
+            <AssignedToday />
         </>
     )
 }

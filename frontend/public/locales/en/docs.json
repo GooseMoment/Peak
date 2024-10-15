@@ -1,0 +1,14 @@
+{
+    "install_instruction_ios": {
+        "back": "Go Back",
+        "title": "Install Peak for iOS",
+        "description": "Add Peak on your homescreen.",
+        "step1": "Step 1",
+        "open_safari": "Open Safari",
+        "go_to_website": "Go to {{ site }}",
+        "step2": "Step 2",
+        "press_share": "Press the <Icon /> share icon",
+        "menu_add_to_homescreen": "Add to Homescreen",
+        "select_add_to_homescreen": "Select \"Add to Homescreen\""
+    }
+}
