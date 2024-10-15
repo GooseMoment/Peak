@@ -24,9 +24,9 @@ const getCursorFromURL = (url) => {
 }
 
 const SocialExplorePage = () => {
-    const initial_date = new Date()
-    initial_date.setHours(0, 0, 0, 0)
-    const selectedDate = initial_date.toISOString()
+    const initialDate = new Date()
+    initialDate.setHours(0, 0, 0, 0)
+    const selectedDate = initialDate.toISOString()
 
     const { isMobile } = useScreenType()
 

@@ -14,14 +14,14 @@ import { getDailyLogsPreview } from "@api/social.api"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 const SocialFollowingPage = () => {
-    const initial_date = new Date()
-    initial_date.setHours(0, 0, 0, 0)
+    const initialDate = new Date()
+    initialDate.setHours(0, 0, 0, 0)
 
     const { isMobile } = useScreenType()
 
     const me = getCurrentUsername()
 
-    const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
+    const [selectedDate, setSelectedDate] = useState(initialDate.toISOString())
     const [selectedUser, setSelectedUser] = useState(null)
 
     const targetUser = selectedUser ? selectedUser : me
