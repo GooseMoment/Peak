@@ -17,7 +17,7 @@ import {
     signIn,
     signUp,
     verifyEmail,
-} from "@api/users.api"
+} from "@api/auth.api"
 
 import sleep from "@utils/sleep"
 
