@@ -94,7 +94,7 @@ const TaskCommonDetail = ({
                     queryKey: ["projects", projectID],
                 })
             }
-            
+
             toast.success(
                 t("delete.task_delete_success", { task_name: newTask.name }),
             )
@@ -117,6 +117,7 @@ const TaskCommonDetail = ({
             queryClient.invalidateQueries({
                 queryKey: ["tasks", { drawerID: newTask.drawer }],
             })
+            closeModal()
         },
     })
 
@@ -137,13 +138,10 @@ const TaskCommonDetail = ({
 
         const createdTask = await mutation.mutateAsync(newTask)
 
-        newTask.reminders?.forEach((delta) => {
-            postReminderMutation.mutate({
-                task: createdTask.id,
-                delta: delta,
-            })
+        postReminderMutation.mutate({
+            task: createdTask.id,
+            delta_array: newTask.reminders,
         })
-        closeModal()
     }
 
     const onEnter = (e) => {

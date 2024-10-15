@@ -39,26 +39,34 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
     serializer_class = TaskReminderSerializer
 
     def post(self, request, *args, **kwargs):
-        serializer = TaskReminderSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        task = serializer.validated_data["task"]
-        task = Task.objects.get(id=task.id)
-
-        if (task.reminders and task.reminders.count() != 0):
-            task.reminders.all().delete()
-
-        if task.due_type == "due_date":
-            tz = self.get_tz()
-            nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=ZoneInfo(str(tz)))
-            converted_due_datetime = datetime.combine(date=task.due_date, time=nine_oclock_time)
+        try: 
+            task_id = request.data["task"]
+            delta_array = request.data["delta_array"]
+        except KeyError:
+            pass
         else:
-            converted_due_datetime = task.due_datetime
-            
-        new_scheduled = caculateScheduled(converted_due_datetime, serializer.validated_data["delta"])    
-        serializer.validated_data["scheduled"] = new_scheduled
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            task = Task.objects.get(id=task_id)
+
+            if len(delta_array) == 0:
+                if task.reminders.exists():
+                    task.reminders.all().delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+
+            if task.reminders.exists():
+                task.reminders.all().delete()
+
+            for delta in delta_array:
+                if task.due_type == "due_date":
+                    tz = self.get_tz()
+                    nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=ZoneInfo(str(tz)))
+                    converted_due_datetime = datetime.combine(date=task.due_date, time=nine_oclock_time)
+                else:
+                    converted_due_datetime = task.due_datetime
+                    
+                new_scheduled = caculateScheduled(converted_due_datetime, delta)    
+                TaskReminder.objects.create(task=task, delta=delta, scheduled=new_scheduled)
+
+        return Response(status=status.HTTP_201_CREATED)
 
 class NotificationListPagination(CursorPagination):
     page_size = 20
