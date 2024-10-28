@@ -368,7 +368,7 @@
         "explore_title": "탐험",
         "log_preview_completed": "완료!",
         "log_details": {
-            "no_content": "작성된 할 일이 없습니다."
+            "no_content": "작업이 없습니다."
         },
         "quote" : {
             "empty_self_quote": "오늘의 한마디를 남겨주세요.",
