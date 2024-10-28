@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
 from .models import Block, Following
@@ -21,9 +21,6 @@ def delete_following_for_block(sender, instance, created, **kwargs):
         Following.objects.filter(followee=instance.blockee, follower=instance.blocker).delete()
 
 
-@receiver(post_save, sender=Following)
-def update_follow_count_for_following(sender, instance: Following, created, **kwargs):
-    if instance.status not in (Following.ACCEPTED, Following.CANCELED):
-        return
-
+@receiver([post_save, post_delete], sender=Following)
+def update_follow_count_for_following(sender, instance: Following, **kwargs):
     update_users_follow_counts(instance)
