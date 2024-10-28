@@ -1,9 +1,10 @@
 import { Fragment, useState } from "react"
 
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
+import { getProjectColor } from "@components/project/common/palettes"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import InteractionBox from "@components/social/interaction/InteractionBox"
 import Quote from "@components/social/logDetails/Quote"
@@ -31,7 +32,8 @@ const getCursorFromURL = (url) => {
 
 const LogDetails = ({ pageType = "following", username, selectedDate }) => {
     const { t } = useTranslation("", { keyPrefix: "social.log_details" })
-
+    const theme = useTheme()
+    
     const me = getCurrentUsername()
 
     // quote
@@ -116,27 +118,36 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
                 {isLogDetailsEmpty && <NoContent>{t("no_content")}</NoContent>}
 
                 {logDetailsPage?.pages.map((group) =>
-                    group.results.map((task, index, array) => (
-                        <Fragment key={task.id}>
-                            {(index === 0 ||
-                                array[index - 1].drawer !== task.drawer) && (
-                                <DrawerBox $color={task.project_color}>
-                                    <DrawerName $color={task.project_color}>
-                                        {" "}
-                                        {task.drawer_name}{" "}
-                                    </DrawerName>
-                                </DrawerBox>
-                            )}
+                    group.results.map((task, index, array) => {
+                        const color = getProjectColor(
+                            theme.type,
+                            task.project_color,
+                        )
+                        return (
+                            <Fragment key={task.id}>
+                                {(index === 0 ||
+                                    array[index - 1].drawer !==
+                                        task.drawer) && (
+                                    <DrawerBox $color={color}>
+                                        <DrawerName $color={color}>
+                                            {" "}
+                                            {task.drawer_name}{" "}
+                                        </DrawerName>
+                                    </DrawerBox>
+                                )}
 
-                            {!hiddenDrawers.has(task.drawer) && (
-                                <TaskBox
-                                    task={task}
-                                    color={task.project_color}
-                                    isFollowingPage={pageType === "following"}
-                                />
-                            )}
-                        </Fragment>
-                    )),
+                                {!hiddenDrawers.has(task.drawer) && (
+                                    <TaskBox
+                                        task={task}
+                                        color={color}
+                                        isFollowingPage={
+                                            pageType === "following"
+                                        }
+                                    />
+                                )}
+                            </Fragment>
+                        )
+                    }),
                 )}
 
                 <ImpressionArea
