@@ -192,9 +192,7 @@ const DetailBody = styled.div`
 
 const NoContent = styled.div`
     margin: 2em;
-
-    font-size: larger;
-
+    
     display: flex;
     align-items: center;
     justify-content: center;
