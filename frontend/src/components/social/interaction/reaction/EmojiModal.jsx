@@ -7,11 +7,11 @@ import { ifMobile } from "@utils/useScreenType"
 import { useTranslation } from "react-i18next"
 
 const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
-    if (!isOpen || !emojis) return null
-
     const { t } = useTranslation("", { keyPrefix: "social.emoji_modal" })
 
     const [emojiSearchQuery, setEmojiSearchQuery] = useState("")
+
+    if (!isOpen || !emojis) return null
 
     const filteredEmojis = emojis.filter((emoji) =>
         emoji.name.toLowerCase().includes(emojiSearchQuery.toLowerCase()),
