@@ -4,6 +4,8 @@ from rest_framework.response import Response
 import datetime
 import zoneinfo
 
+from . import exceptions
+
 
 class CreateMixin(mixins.CreateModelMixin):
     def create_with_user(self, request, *args, **kwargs):
@@ -34,12 +36,15 @@ class TimezoneMixin:
         except AttributeError:
             TypeError("TimezoneMixin was not initialized. Place TimezoneMixin before GenericAPIView, etc.")
         
-        zone = self.request.headers.get(self.TZ_HEADER, "UTC")
+        try:
+            zone = self.request.headers[self.TZ_HEADER]
+        except KeyError:
+            raise exceptions.ClientTimezoneMissing
         
         try:
             tz = zoneinfo.ZoneInfo(zone)
         except zoneinfo.ZoneInfoNotFoundError:
-            tz = datetime.UTC
+            raise exceptions.ClientTimezoneInvalid
         
         self._tz = tz
         return tz
