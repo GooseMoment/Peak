@@ -2,7 +2,7 @@ from rest_framework import mixins, generics
 from rest_framework.response import Response
 
 from api.mixins import CreateMixin, TimezoneMixin
-from api.permissions import IsUserMatch
+from api.permissions import IsUserOwner
 from .models import Task
 from .serializers import TaskSerializer
 from notifications.models import TaskReminder
@@ -21,7 +21,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     lookup_field = "id"
-    permission_classes = [IsUserMatch]
+    permission_classes = [IsUserOwner]
 
     def get(self, request, id, *args, **kwargs):
         instance = self.get_object()
@@ -96,7 +96,6 @@ class TaskList(CreateMixin,
                   mixins.CreateModelMixin,
                   generics.GenericAPIView):
     serializer_class = TaskSerializer
-    permission_classes = [IsUserMatch]
 
     def get_queryset(self):
         queryset = Task.objects.filter(user=self.request.user).order_by("order").all()

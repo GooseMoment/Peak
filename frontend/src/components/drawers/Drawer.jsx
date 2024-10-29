@@ -26,20 +26,14 @@ import { deleteDrawer } from "@api/drawers.api"
 import { patchDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
 
+import { getPageFromURL } from "@utils/pagination"
+
 import queryClient from "@queries/queryClient"
 
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-
-const getPageFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const page = u.searchParams.get("page")
-    return page
-}
 
 const Drawer = ({ project, drawer, color }) => {
     const theme = useTheme()
