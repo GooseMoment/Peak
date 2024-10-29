@@ -2,26 +2,27 @@ from typing import Any
 from rest_framework import mixins, generics, status
 from rest_framework.response import Response
 
-from datetime import datetime
-
-from api.mixins import CreateMixin
-from api.permissions import IsUserMatch
+from api.mixins import CreateMixin, TimezoneMixin
+from api.permissions import IsUserOwner
 from .models import Task
 from .serializers import TaskSerializer
 from notifications.models import TaskReminder
 from notifications.serializers import TaskReminderSerializer
 from notifications.utils import caculateScheduled
-from .utils import combine_due_datetime
 from drawers.utils import normalize_drawer_order
+
+from datetime import datetime, time
+
 
 class TaskDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
+                    TimezoneMixin,
                     generics.GenericAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     lookup_field = "id"
-    permission_classes = [IsUserMatch]
+    permission_classes = [IsUserOwner]
 
     def get(self, request, id, *args, **kwargs):
         instance = self.get_object()
@@ -33,39 +34,41 @@ class TaskDetail(mixins.RetrieveModelMixin,
     
     def patch(self, request, *args, **kwargs):
         try:
-            due_tz = request.data["due_tz"]
+            new_due_type = request.data["due_type"]
             new_due_date = request.data["due_date"]
-            new_due_time = request.data["due_time"]
+            new_due_datetime = request.data["due_datetime"]
         except KeyError:
             pass
         else:
             task: Task = self.get_object()
+            prev_due_type = task.due_type
             prev_due_date = None
-            prev_due_time = None
+            prev_due_datetime = None
 
-            if task.due_date is not None:
-                prev_due_date = task.due_date.strftime("%Y-%m-%d")
-
-            if task.due_time is not None:
-                prev_due_time = task.due_time.strftime("%H:%M:%S")
+            if task.due_type == "due_date":
+                prev_due_date = task.due_date.isoformat()
+            elif task.due_type == "due_datetime":
+                prev_due_datetime= task.due_datetime.isoformat()
 
             # new_due_date is None
-            if (new_due_date is None) and (prev_due_date is not None):
+            if (new_due_type is None) and (prev_due_type is not None):
                 TaskReminder.objects.filter(task=task.id).delete()
             # new_due_date is true
-            else:   
-                if (prev_due_date != new_due_date) or (prev_due_time != new_due_time):
-                    converted_due_date = datetime.strptime(new_due_date, "%Y-%m-%d").date()
-                    # new_due_time is None -> 9시 설정
-                    if new_due_time is None:
-                        converted_due_time = datetime.strptime("09:00:00", "%H:%M:%S").time()
-                    # new_due_time is true -> new_due_time 대로 설정
+            else:
+                if (new_due_type is None):
+                    pass
+                elif (prev_due_date != new_due_date) or (prev_due_datetime != new_due_datetime):
+                    if new_due_type == "due_date":
+                        tz = self.get_tz()
+                        converted_due_date = datetime.fromisoformat(new_due_date)
+                        nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=tz)
+                        converted_due_datetime = datetime.combine(converted_due_date, nine_oclock_time)
                     else:
-                        converted_due_time = datetime.strptime(new_due_time, "%H:%M:%S").time()
+                        converted_due_datetime = datetime.fromisoformat(new_due_datetime)
                     
                     reminders = TaskReminder.objects.filter(task=task.id)
                     for reminder in reminders:
-                        reminder.scheduled = caculateScheduled(combine_due_datetime(due_tz, converted_due_date, converted_due_time), reminder.delta)
+                        reminder.scheduled = caculateScheduled(converted_due_datetime, reminder.delta)
                         reminder.save()
     
         try:
@@ -94,7 +97,6 @@ class TaskList(CreateMixin,
                   mixins.CreateModelMixin,
                   generics.GenericAPIView):
     serializer_class = TaskSerializer
-    permission_classes = [IsUserMatch]
 
     def get_queryset(self):
         queryset = Task.objects.filter(user=self.request.user).order_by("order").all()
@@ -102,7 +104,7 @@ class TaskList(CreateMixin,
         if drawer_id is not None:
             queryset = queryset.filter(drawer__id=drawer_id)
 
-        ordering_fields = ['name', 'assigned_at', 'due_date', 'due_time', 'priority', 'created_at', 'reminders']
+        ordering_fields = ['name', 'assigned_at', 'due_date', 'due_datetime', 'priority', 'created_at', 'reminders']
         ordering = self.request.GET.get("ordering", None)
 
         if ordering.lstrip('-') in ordering_fields:

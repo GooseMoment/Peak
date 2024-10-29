@@ -1,4 +1,5 @@
 import styled from "styled-components"
+
 import FeatherIcon from "feather-icons-react"
 
 const PrivacyIcon = ({ privacy, color, isProject }) => {
@@ -6,21 +7,17 @@ const PrivacyIcon = ({ privacy, color, isProject }) => {
         return null
     }
 
-    const icon = privacy === "protected" ? <FeatherIcon icon="users"/> : <FeatherIcon icon="lock"/>
+    const icon =
+        privacy === "protected" ? (
+            <FeatherIcon icon="users" />
+        ) : (
+            <FeatherIcon icon="lock" />
+        )
 
     if (isProject) {
-        return (
-            <ProjectPrivacyBox $color={color}>
-                {icon}
-            </ProjectPrivacyBox>
-        )
-    }
-    else {
-        return (
-            <DrawerPrivacyBox $color={color}>
-                {icon}
-            </DrawerPrivacyBox>
-        )
+        return <ProjectPrivacyBox $color={color}>{icon}</ProjectPrivacyBox>
+    } else {
+        return <DrawerPrivacyBox $color={color}>{icon}</DrawerPrivacyBox>
     }
 }
 
@@ -32,7 +29,7 @@ const ProjectPrivacyBox = styled.div`
         width: 20px;
         height: 20px;
         stroke-width: 3.5px;
-        stroke: ${props=>props.$color};
+        stroke: ${(props) => props.$color};
     }
 `
 
@@ -41,7 +38,7 @@ const DrawerPrivacyBox = styled.div`
 
     & svg {
         stroke-width: 3.5px;
-        stroke: ${props=>props.$color};
+        stroke: ${(props) => props.$color};
     }
 `
 

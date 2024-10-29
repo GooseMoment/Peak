@@ -19,6 +19,7 @@ import {
 } from "@api/today.api"
 
 import { useClientTimezone } from "@utils/clientSettings"
+import { getPageFromURL } from "@utils/pagination"
 
 import queryClient from "@queries/queryClient"
 
@@ -26,14 +27,6 @@ import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-
-const getPageFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const page = u.searchParams.get("page")
-    return page
-}
 
 const TodayPage = () => {
     const { t } = useTranslation(null, { keyPrefix: "today" })
@@ -43,7 +36,7 @@ const TodayPage = () => {
     const [filter, setFilter] = useState("due_date")
     const [collapsed, setCollapsed] = useState(false)
 
-    const today = DateTime.fromJSDate(new Date()).setZone(tz)
+    const today = DateTime.now().setZone(tz)
     const [selectedDate, setSelectedDate] = useState(today.toISODate())
     // #TODO 달력으로 날짜 선택하기
 

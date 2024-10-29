@@ -12,19 +12,21 @@ import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 import TaskCreateSimple from "@components/project/Creates/simple/TaskCreateSimple"
+import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import DragAndDownBox from "@components/project/dragAndDown/DragAndDownBox"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
-import PrivacyIcon from "@components/project/common/PrivacyIcon"
-import SortMenu from "@components/project/sorts/SortMenu"
-import Task from "@components/tasks/Task"
 import {
     SkeletonDrawer,
     SkeletonInboxDrawer,
 } from "@components/project/skeletons/SkeletonProjectPage"
+import SortMenu from "@components/project/sorts/SortMenu"
+import Task from "@components/tasks/Task"
 
 import { deleteDrawer } from "@api/drawers.api"
 import { patchDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
+
+import { getPageFromURL } from "@utils/pagination"
 
 import queryClient from "@queries/queryClient"
 
@@ -32,14 +34,6 @@ import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/ad
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-
-const getPageFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const page = u.searchParams.get("page")
-    return page
-}
 
 const Drawer = ({ project, drawer, color }) => {
     const theme = useTheme()
@@ -63,14 +57,20 @@ const Drawer = ({ project, drawer, color }) => {
 
     const { t } = useTranslation(null, { keyPrefix: "project" })
 
-    const { data, isError, fetchNextPage, isLoading, isFetchingNextPage, refetch } =
-        useInfiniteQuery({
-            queryKey: ["tasks", { drawerID: drawer.id, ordering: ordering }],
-            queryFn: (pages) =>
-                getTasksByDrawer(drawer.id, ordering, pages.pageParam || 1),
-            initialPageParam: 1,
-            getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
-        })
+    const {
+        data,
+        isError,
+        fetchNextPage,
+        isLoading,
+        isFetchingNextPage,
+        refetch,
+    } = useInfiniteQuery({
+        queryKey: ["tasks", { drawerID: drawer.id, ordering: ordering }],
+        queryFn: (pages) =>
+            getTasksByDrawer(drawer.id, ordering, pages.pageParam || 1),
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
+    })
 
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
 
@@ -200,7 +200,7 @@ const Drawer = ({ project, drawer, color }) => {
                 <DrawerBox $color={color}>
                     <DrawerTitleBox>
                         <DrawerName $color={color}>{drawer.name}</DrawerName>
-                        <PrivacyIcon privacy={drawer.privacy} color={color}/>
+                        <PrivacyIcon privacy={drawer.privacy} color={color} />
                     </DrawerTitleBox>
                     <DrawerIcons
                         color={color}
@@ -291,7 +291,7 @@ const Drawer = ({ project, drawer, color }) => {
             </TaskCreateButton>
             <FlexBox>
                 {hasNextPage ? (
-                    <MoreButton  
+                    <MoreButton
                         disabled={isFetchingNextPage}
                         loading={isFetchingNextPage}
                         onClick={() => fetchNextPage()}>
