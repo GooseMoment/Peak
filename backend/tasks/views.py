@@ -11,7 +11,7 @@ from notifications.utils import caculateScheduled
 from drawers.utils import normalize_drawer_order
 
 from datetime import datetime, time
-from zoneinfo import ZoneInfo
+
 
 class TaskDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -60,7 +60,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
                     if new_due_type == "due_date":
                         tz = self.get_tz()
                         converted_due_date = datetime.fromisoformat(new_due_date)
-                        nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=ZoneInfo(str(tz)))
+                        nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=tz)
                         converted_due_datetime = datetime.combine(converted_due_date, nine_oclock_time)
                     else:
                         converted_due_datetime = datetime.fromisoformat(new_due_datetime)
