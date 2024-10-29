@@ -1,4 +1,4 @@
-import client, { setCurrentUsername } from "@api/client"
+import client, { getCurrentUsername, setCurrentUsername } from "@api/client"
 
 export const getMe = async () => {
     const res = await client.get("users/me")
@@ -34,7 +34,9 @@ export const uploadProfileImg = async (formData) => {
     return res.status
 }
 
-export const getBlocks = async () => {
-    const res = await client.get(`users/me/blocks/`)
+export const getBlocks = async (page) => {
+    const res = await client.get(`users/@${getCurrentUsername()}/blocks/`, {
+        params: { page },
+    })
     return res.data
 }

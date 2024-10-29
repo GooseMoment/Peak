@@ -6,8 +6,6 @@ import {
 } from "@components/project/Creates/simple/CreateSimpleBox"
 import addDateFromToday from "@components/project/Creates/utils/addDateFromToday"
 
-import { useClientTimezone } from "@utils/clientSettings"
-
 import hourglass from "@assets/project/hourglass.svg"
 
 import FeatherIcon from "feather-icons-react"
@@ -15,7 +13,6 @@ import { useTranslation } from "react-i18next"
 
 const SimpleDue = ({ dueIndex, setDueIndex, editNewTask, color }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
-    const due_tz = useClientTimezone()
 
     const onKeyDown = (e) => {
         if (e.key === "ArrowRight") {
@@ -38,29 +35,30 @@ const SimpleDue = ({ dueIndex, setDueIndex, editNewTask, color }) => {
 
     useEffect(() => {
         editNewTask({
-            due_tz: due_tz,
+            due_type: "due_date",
             due_date: addDateFromToday(items[dueIndex].set),
+            due_datetime: null,
         })
     }, [dueIndex])
 
     const items = [
         { index: 0, display: t("no_date"), set: null },
-        { index: 1, display: t("today"), set: 0 },
-        { index: 2, display: t("tomorrow"), set: 1 },
+        { index: 1, display: t("today"), set: { days: 0 }},
+        { index: 2, display: t("tomorrow"), set: { days: 1 }},
         {
             index: 3,
             display: t("next_week"),
-            set: 7,
+            set: { days: 7 },
         },
         {
             index: 4,
             display: t("next_two_weeks"),
-            set: 14,
+            set: { days: 14 },
         },
         {
             index: 5,
             display: t("next_month"),
-            set: 30,
+            set: { months: 1 },
         },
     ]
 

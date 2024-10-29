@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query"
 
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import ReminderContents from "@components/project/Creates/ReminderContents"
 import Detail from "@components/project/common/Detail"
+import ReminderContents from "@components/project/taskDetails/ReminderContents"
 
 import { deleteReminder, postReminder } from "@api/notifications.api"
 

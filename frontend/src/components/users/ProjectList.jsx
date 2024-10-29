@@ -2,8 +2,10 @@ import { Link } from "react-router-dom"
 
 import styled, { css, useTheme } from "styled-components"
 
-import { getProjectColor } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/common/palettes"
 import { Section, SectionTitle } from "@components/users/Section"
+
+import { ifMobile } from "@utils/useScreenType"
 
 import { skeletonCSS } from "@assets/skeleton"
 
@@ -60,6 +62,10 @@ const Projects = styled.div`
     margin-left: 1.25em;
 
     flex-wrap: wrap;
+
+    ${ifMobile} {
+        margin-left: 0;
+    }
 `
 
 const Project = styled.div`

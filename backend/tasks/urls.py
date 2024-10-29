@@ -6,8 +6,6 @@ from . import views
 
 urlpatterns = [
     path("", views.TaskList.as_view()),
-    path("overdue", views.OverdueTaskList.as_view()),
-    path("today", views.TodayTaskList.as_view()),
     path("<str:id>", views.TaskDetail.as_view()),
 ]
 

@@ -3,22 +3,15 @@ import { Fragment } from "react"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
-import { TaskList } from "@components/drawers/Drawer"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
-import { getProjectColor } from "@components/project/Creates/palettes"
+import { getProjectColor } from "@components/project/common/palettes"
 import TaskBox from "@components/social/logDetails/TaskBox"
 
 import { getDailyLogTasks } from "@api/social.api"
 
+import { getPageFromURL } from "@utils/pagination"
+
 import FeatherIcon from "feather-icons-react"
-
-const getPageFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const page = u.searchParams.get("page")
-    return page
-}
 
 const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
     const {
@@ -44,10 +37,7 @@ const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
     return (
         <Fragment>
             <DrawerBox $color={color}>
-                <DrawerName $color={color}>
-                    {" "}
-                    {drawer.name}{" "}
-                </DrawerName>
+                <DrawerName $color={color}> {drawer.name} </DrawerName>
             </DrawerBox>
             <TaskList>
                 {taskPage?.pages?.map((group) =>
@@ -69,6 +59,10 @@ const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
         </Fragment>
     )
 }
+
+export const TaskList = styled.div`
+    margin-left: 0.5em;
+`
 
 const More = styled.div`
     height: 2em;

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Error from "@components/settings/Error"
@@ -8,18 +8,27 @@ import ListUserProfile from "@components/users/ListUserProfile"
 
 import { getBlocks } from "@api/users.api"
 
+import { getPageFromURL } from "@utils/pagination"
+
+import { ImpressionArea } from "@toss/impression-area"
 import { useTranslation } from "react-i18next"
 
 const Blocks = () => {
     const {
-        data: blocks,
-        isPending,
+        data,
+        isFetching,
+        isFetchingNextPage,
+        hasNextPage,
+        fetchNextPage,
         isError,
-    } = useQuery({
+    } = useInfiniteQuery({
         queryKey: ["blocks"],
-        queryFn: () => getBlocks(),
+        queryFn: ({ pageParam }) => getBlocks(pageParam),
         refetchOnWindowFocus: false,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
+    const isEmpty = data?.pages[0]?.results?.length === 0
 
     const { t } = useTranslation("settings", { keyPrefix: "blocks" })
 
@@ -33,17 +42,25 @@ const Blocks = () => {
                 <Name>{t("blockees.name")}</Name>
                 <Description>{t("blockees.description")}</Description>
                 <Value>
-                    {isPending &&
+                    {isFetching &&
+                        !isFetchingNextPage &&
                         [...Array(10)].map((_, i) => (
                             <ListUserProfile key={i} skeleton />
                         ))}
-                    {blocks?.map((user) => (
-                        <ListUserProfile user={user} key={user.username}>
-                            <UnblockButton user={user} />
-                        </ListUserProfile>
-                    ))}
-                    {blocks?.length === 0 && (
-                        <Message>{t("blockees.empty")}</Message>
+                    {isEmpty && <Message>{t("blockees.empty")}</Message>}
+                    {data?.pages.map((group) =>
+                        group.results.map((user) => (
+                            <ListUserProfile user={user} key={user.username}>
+                                <UnblockButton user={user} />
+                            </ListUserProfile>
+                        )),
+                    )}
+                    {hasNextPage && (
+                        <ImpressionArea
+                            onImpressionStart={() => fetchNextPage()}
+                            timeThreshold={200}>
+                            <ListUserProfile skeleton />
+                        </ImpressionArea>
                     )}
                 </Value>
             </Section>

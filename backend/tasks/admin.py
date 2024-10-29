@@ -12,13 +12,13 @@ class TaskAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ["user", "drawer", "name", "priority", "privacy", "memo", "repeat"],
+                "fields": ["user", "drawer", "name", "priority", "privacy", "order", "memo", "repeat"],
             },
         ),
         (
             "Date & Time",
             {
-                "fields": ["completed_at", "due_date", "due_time"],
+                "fields": ["completed_at", "assigned_at", "due_type", "due_date", "due_datetime"],
             },
         ),
         fieldset_base,
