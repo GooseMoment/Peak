@@ -10,7 +10,6 @@ urlpatterns = [
     path("me/setting/", UserSettingDetail.as_view()),
     path("me/password/", views.patch_password),
     path("me/profile_img/", views.upload_profile_img),
-    path("me/blocks/", views.get_my_blocks),
     path("@<str:username>/", views.UserDetail.as_view()),
     path("@<str:username>/followers/", social_views.FollowerList.as_view()),
     path("@<str:username>/followings/", social_views.FollowingList.as_view()),
