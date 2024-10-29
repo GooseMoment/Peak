@@ -1,5 +1,7 @@
 import datetime
-from pytz import timezone as timezone_from_zone, NonExistentTimeError
+import zoneinfo
+
+from . import exceptions
 
 
 class TimezoneMixin:
@@ -13,15 +15,21 @@ class TimezoneMixin:
         super().__init__(*args, **kwargs)
 
     def get_tz(self):
-        if self._tz is not None:
-            return self._tz
-        
-        zone = self.request.headers.get(self.TZ_HEADER, "UTC")
+        try:
+            if self._tz is not None:
+                return self._tz
+        except AttributeError:
+            TypeError("TimezoneMixin was not initialized. Place TimezoneMixin before GenericAPIView, etc.")
         
         try:
-            tz = timezone_from_zone(zone)
-        except NonExistentTimeError:
-            tz = datetime.UTC
+            zone = self.request.headers[self.TZ_HEADER]
+        except KeyError:
+            raise exceptions.ClientTimezoneMissing
+        
+        try:
+            tz = zoneinfo.ZoneInfo(zone)
+        except zoneinfo.ZoneInfoNotFoundError:
+            raise exceptions.ClientTimezoneInvalid
         
         self._tz = tz
         return tz

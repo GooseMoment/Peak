@@ -3,14 +3,14 @@ from rest_framework.response import Response
 from rest_framework.pagination import CursorPagination
 
 from api.mixins import TimezoneMixin
-from .models import Notification, WebPushSubscription, TaskReminder
+from api.permissions import IsUserOwner
 from tasks.models import Task
+from .models import Notification, WebPushSubscription, TaskReminder
 from .serializers import NotificatonSerializer, WebPushSubscriptionSerializer, TaskReminderSerializer
-from api.permissions import IsUserMatch
 from .utils import caculateScheduled
 
-from zoneinfo import ZoneInfo
 from datetime import datetime, time
+
 
 class IsUserMatchInReminder(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj):
@@ -46,7 +46,7 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
 
         if task.due_type == "due_date":
             tz = self.get_tz()
-            nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=ZoneInfo(str(tz)))
+            nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=tz)
             converted_due_datetime = datetime.combine(date=task.due_date, time=nine_oclock_time)
         else:
             converted_due_datetime = task.due_datetime
@@ -83,7 +83,7 @@ class NotificationDetail(mixins.RetrieveModelMixin,
     queryset = Notification.objects.all()
     serializer_class = NotificatonSerializer
     lookup_field = "id"
-    permission_classes = [IsUserMatch]
+    permission_classes = [IsUserOwner]
     
     def get(self, request, id, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -102,7 +102,7 @@ class WebPushSubscriptionDelete(mixins.DestroyModelMixin, generics.GenericAPIVie
     queryset = WebPushSubscription.objects.all()
     serializer_class = WebPushSubscriptionSerializer
     lookup_field = "id"
-    permission_classes = [IsUserMatch]
+    permission_classes = [IsUserOwner]
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)

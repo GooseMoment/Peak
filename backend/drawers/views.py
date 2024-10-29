@@ -2,9 +2,9 @@ from rest_framework import mixins, generics
 from rest_framework.filters import OrderingFilter
 
 from .models import Drawer
-from .utils import reorder_tasks, normalize_drawer_order
 from .serializers import DrawerSerializer
-from api.permissions import IsUserMatch
+from .utils import reorder_tasks, normalize_drawer_order
+from api.permissions import IsUserOwner
 
 
 class DrawerDetail(mixins.RetrieveModelMixin,
@@ -14,7 +14,7 @@ class DrawerDetail(mixins.RetrieveModelMixin,
     queryset = Drawer.objects.all()
     serializer_class = DrawerSerializer
     lookup_field = "id"
-    permission_classes = [IsUserMatch]
+    permission_classes = [IsUserOwner]
 
     def get(self, request, id, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -40,7 +40,7 @@ class DrawerDetail(mixins.RetrieveModelMixin,
 
 class DrawerList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = DrawerSerializer
-    permission_classes = [IsUserMatch]
+    permission_classes = [IsUserOwner]
     filter_backends = [OrderingFilter]
     ordering_fields = ['name', 'created_at', 'uncompleted_task_count', 'completed_task_count']
     ordering = ['created_at']
