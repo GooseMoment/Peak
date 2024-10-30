@@ -379,7 +379,7 @@
         },
         "explore" : {
             "searchbar" : "Search for usernames to follow.",
-            "no_result" : "Can't find the user you're looking for 😢",
+            "no_result" : "No users matched your search",
             "suggestion" : "Make new connections with new people!"
         }
     }
