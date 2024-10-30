@@ -14,16 +14,14 @@ from rest_framework.permissions import AllowAny
 from rest_framework.throttling import AnonRateThrottle
 
 from knox.views import LoginView as KnoxLoginView
-
 import uuid
 from datetime import datetime, UTC
-
 import re
 
 from .models import User, EmailVerificationToken, PasswordRecoveryToken
 from .serializers import UserSerializer
 from .utils import get_first_language, send_mail_verification_email, send_mail_already_verified, send_mail_no_account, send_mail_password_recovery
-from social.views import get_blocks
+
 
 class UserDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -346,7 +344,3 @@ def upload_profile_img(request: Request):
     request.user.save()
 
     return Response(status=status.HTTP_200_OK)
-
-@api_view(["GET"])
-def get_my_blocks(request: Request):
-    return get_blocks(request._request, request.user.username)

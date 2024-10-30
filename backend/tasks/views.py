@@ -2,7 +2,7 @@ from rest_framework import mixins, generics
 from rest_framework.response import Response
 
 from api.mixins import CreateMixin, TimezoneMixin
-from api.permissions import IsUserMatch
+from api.permissions import IsUserOwner
 from .models import Task
 from .serializers import TaskSerializer
 from notifications.models import TaskReminder
@@ -11,7 +11,7 @@ from notifications.utils import caculateScheduled
 from drawers.utils import normalize_drawer_order
 
 from datetime import datetime, time
-from zoneinfo import ZoneInfo
+
 
 class TaskDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -21,7 +21,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     lookup_field = "id"
-    permission_classes = [IsUserMatch]
+    permission_classes = [IsUserOwner]
 
     def get(self, request, id, *args, **kwargs):
         instance = self.get_object()
@@ -60,7 +60,7 @@ class TaskDetail(mixins.RetrieveModelMixin,
                     if new_due_type == "due_date":
                         tz = self.get_tz()
                         converted_due_date = datetime.fromisoformat(new_due_date)
-                        nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=ZoneInfo(str(tz)))
+                        nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=tz)
                         converted_due_datetime = datetime.combine(converted_due_date, nine_oclock_time)
                     else:
                         converted_due_datetime = datetime.fromisoformat(new_due_datetime)
@@ -96,7 +96,6 @@ class TaskList(CreateMixin,
                   mixins.CreateModelMixin,
                   generics.GenericAPIView):
     serializer_class = TaskSerializer
-    permission_classes = [IsUserMatch]
 
     def get_queryset(self):
         queryset = Task.objects.filter(user=self.request.user).order_by("order").all()
