@@ -60,7 +60,7 @@ const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
     )
 }
 
-export const TaskList = styled.div`
+const TaskList = styled.div`
     margin-left: 0.5em;
 `
 
