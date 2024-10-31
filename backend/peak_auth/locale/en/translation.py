@@ -10,6 +10,8 @@ If you are @{username}, please go to the page linked below.
 Verify:
 {link}
 
+If you haven't requested, do NOT click the link above.
+
 Please do not reply to this email, as we are unable to respond from this email address.
         """,
     },
