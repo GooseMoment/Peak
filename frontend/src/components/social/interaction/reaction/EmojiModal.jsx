@@ -69,7 +69,7 @@ export const Modal = styled.div`
     position: absolute;
     top: ${(props) => props.$posY}px;
     left: calc(${(props) => props.$posX}px - 33em); // 32 + 1(shadow)
-    width: 30em;
+    max-width: 30em;
     height: 24em;
 
     box-shadow: 0.2em 0.3em 0.5em
@@ -114,6 +114,7 @@ const EmojiList = styled.div`
 const EmojiListCell = styled.li`
     aspect-ratio: 1/1;
     width: calc(100% / 8);
+    min-width: 2.4em;
 
     display: flex;
     align-items: center;
