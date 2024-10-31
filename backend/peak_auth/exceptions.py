@@ -45,6 +45,24 @@ class PasswordInvalid(APIException):
     default_code = "PASSWORD_INVALID"
 
 
+class CredentialInvalid(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "Given credentials are invalid. Check email and password."
+    default_code = "CREDENTIAL_INVALID"
+
+
+class EmailNotVerified(APIException):
+    status_code = status.HTTP_403_FORBIDDEN
+    default_detail = "The mail address was not verified."
+    default_code = "MAIL_NOT_VERIFIED"
+
+
+class TokenInvalid(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "The given token is expired or not found."
+    default_code = "TOKEN_INVALID"
+
+
 class UnknownError(APIException):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
     default_detail = "Unknown error occuered."

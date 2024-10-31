@@ -12,6 +12,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import throttle_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.throttling import AnonRateThrottle
+from rest_framework.exceptions import ValidationError as APIValidationError
 
 from knox.views import LoginView as KnoxLoginView
 import uuid
@@ -33,10 +34,10 @@ class SignInView(KnoxLoginView):
         user: User | None = authenticate(request, email=email, password=password)
 
         if user is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.CredentialInvalid
         
         if not user.is_active:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+            raise exceptions.EmailNotVerified
 
         login(request, user)
         
@@ -111,26 +112,33 @@ class SignUpView(GenericAPIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class VerifyEmailVerificationToken(GenericAPIView):
-    permission_classes = (AllowAny, )
-
-    def post(self, request: Request):
-        token_hex = request.data.get("token")
+class TokenView:
+    def get_token(self):
+        token_hex = self.request.data.get("token")
         if token_hex is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise APIValidationError(["token is required."])
 
         try:
             token = uuid.UUID(hex=token_hex)
         except ValueError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise APIValidationError(["format of token is invalid."])
+        
+        return token
+
+
+class VerifyEmailVerificationToken(TokenView, GenericAPIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request: Request):
+        token = self.get_token()
 
         try:
             verification = EmailVerificationToken.objects.get(token=token)
         except EmailVerificationToken.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.TokenInvalid
         
         if verification.verified_at is not None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.TokenInvalid
         
         verification.verified_at = datetime.now(UTC)
         verification.save()
@@ -158,7 +166,7 @@ class ResendEmailVerificationMail(GenericAPIView):
         try:
             validate_email(email)
         except ValidationError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.EmailInvalid
 
         locale = utils.get_first_language(request)
         
@@ -201,7 +209,7 @@ class PasswordRecoveryAnonRateThrottle(AnonRateThrottle):
     rate = "5/minute" # up to 5 times a hour
 
 
-class PasswordRecoveryView(GenericAPIView):
+class PasswordRecoveryView(TokenView, GenericAPIView):
     permission_classes = (AllowAny, )
 
     # generate a token
@@ -215,7 +223,7 @@ class PasswordRecoveryView(GenericAPIView):
         try:
             validate_email(email)
         except ValidationError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.EmailInvalid
 
         locale = utils.get_first_language(request)
 
@@ -240,29 +248,19 @@ class PasswordRecoveryView(GenericAPIView):
 
     # use the token
     def patch(self, request: Request):
-        token_hex = request.data.get("token")
-        if token_hex is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            token_uuid = uuid.UUID(hex=token_hex)
-        except ValueError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        token_uuid = self.get_token()
         
         try:
             token = PasswordRecoveryToken.objects.get(token=token_uuid)
         except PasswordRecoveryToken.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.TokenInvalid
         
         if token.expires_at < datetime.now(UTC):
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.TokenInvalid
         
         new_password = request.data.get("new_password")
-        if new_password is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        
-        if len(new_password) < 8:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if new_password is None or len(new_password) < 8:
+            raise exceptions.PasswordInvalid
 
         token.user.set_password(new_password)
         token.user.save()
