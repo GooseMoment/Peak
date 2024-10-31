@@ -367,6 +367,26 @@
         "recovery_error_password_unmatch": "새 암호가 서로 다릅니다.",
         "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다."
     },
+    "social" : {
+        "following_title": "팔로잉",
+        "explore_title": "탐험",
+        "log_preview_completed": "완료!",
+        "log_details": {
+            "no_content": "작업이 없습니다."
+        },
+        "quote" : {
+            "empty_self_quote": "오늘의 한마디를 남겨주세요.",
+            "empty_others_quote": "아직 상대방이 작성하지 않았습니다."
+        },
+        "emoji_modal" : {
+            "searchbar" : "이모지 찾기"
+        },
+        "explore" : {
+            "searchbar" : "새로운 인연을 찾아보세요.",
+            "no_result" : "당신이 찾는 사람이 없습니다 😢",
+            "suggestion" : "새로운 사람과 새로운 인연은 어떤가요?"
+        }
+    },
     "search" : {
         "title": "검색",
         "filter_button" : {
