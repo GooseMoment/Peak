@@ -16,12 +16,10 @@ from rest_framework.throttling import AnonRateThrottle
 from knox.views import LoginView as KnoxLoginView
 import uuid
 from datetime import datetime, UTC
-import re
 
 from users.models import User
+from . import exceptions, utils
 from .models import EmailVerificationToken, PasswordRecoveryToken
-from .utils import get_first_language, send_mail_verification_email, send_mail_already_verified, send_mail_no_account, send_mail_password_recovery
-from . import exceptions
 
 
 class SignInView(KnoxLoginView):
@@ -44,44 +42,18 @@ class SignInView(KnoxLoginView):
         return super(SignInView, self).post(request, format=None)
 
 
-username_validation = re.compile(r"^[a-z0-9_]{4,15}$")
-
 @api_view(["POST"])
 @permission_classes((AllowAny, ))
 @transaction.atomic
 def sign_up(request: Request):
     if request.user.is_authenticated:
         raise exceptions.UserAlreadyAuthenticated
+
+    locale = utils.get_first_language(request)
     
     payload = request.data
+    new_user = utils.fill_and_validate_new_user_from_payload(payload)
     
-    required_fields = [
-        "username", "password", "email",
-    ]
-
-    new_user = User()
-    for field in required_fields:
-        if field not in payload:
-            raise exceptions.RequiredFieldMissing
-        
-        setattr(new_user, field, payload[field])
-
-    try:
-        validate_email(payload["email"])
-    except ValidationError as e:
-        raise exceptions.EmailInvalid
-    
-    if len(payload["username"]) < 4:
-        raise exceptions.UsernameInvalidLength
-    
-    if not username_validation.match(payload["username"]):
-        raise exceptions.UsernameInvalidFormat
-    
-    if len(payload["password"]) < 8:
-        raise exceptions.PasswordInvalid
-    
-    new_user.set_password(payload["password"])
-
     try:
         new_user.save()
     except IntegrityError as e:
@@ -100,11 +72,8 @@ def sign_up(request: Request):
 
         raise exceptions.UnknownError
 
-    locale = get_first_language(request)
-
     verification = EmailVerificationToken.objects.create(user=new_user, locale=locale)
-    
-    send_mail_verification_email(new_user, verification)
+    utils.send_mail_verification_email(new_user, verification)
 
     return Response(status=status.HTTP_200_OK)
 
@@ -158,26 +127,26 @@ class ResendEmailVerificationMail(GenericAPIView):
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        locale = get_first_language(request)
+        locale = utils.get_first_language(request)
         
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            send_mail_no_account(email, locale)
+            utils.send_mail_no_account(email, locale)
             return Response(status=status.HTTP_200_OK)
         
         if user.is_active:
-            send_mail_already_verified(user, locale)
+            utils.send_mail_already_verified(user, locale)
             return Response(status=status.HTTP_200_OK)
 
         try:
             verification = EmailVerificationToken.objects.get(user=user)
         except EmailVerificationToken.DoesNotExist:
-            send_mail_already_verified(user, locale)
+            utils.send_mail_already_verified(user, locale)
             return Response(status=status.HTTP_200_OK)
         
         if verification.verified_at is not None:
-            send_mail_already_verified(user, locale)
+            utils.send_mail_already_verified(user, locale)
             return Response(status=status.HTTP_200_OK)
         
         now = datetime.now(UTC)
@@ -190,7 +159,7 @@ class ResendEmailVerificationMail(GenericAPIView):
                     "seconds": delta.seconds,
                 }, status=status.HTTP_425_TOO_EARLY)
         
-        send_mail_verification_email(verification.user, verification)
+        utils.send_mail_verification_email(verification.user, verification)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -215,12 +184,12 @@ class PasswordRecoveryView(GenericAPIView):
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        locale = get_first_language(request)
+        locale = utils.get_first_language(request)
 
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            send_mail_no_account(email, locale)
+            utils.send_mail_no_account(email, locale)
             return Response(status=status.HTTP_200_OK)
         
         tokens = PasswordRecoveryToken.objects.filter(user=user)
@@ -232,7 +201,7 @@ class PasswordRecoveryView(GenericAPIView):
         token.expires_at = token.created_at + settings.PASSWORD_RECOVERY_TOKEN_TTL
         token.save()
 
-        send_mail_password_recovery(user, token.link, locale)
+        utils.send_mail_password_recovery(user, token.link, locale)
 
         return Response(status=status.HTTP_200_OK)
 

@@ -1,15 +1,50 @@
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 from rest_framework.request import Request
 
 from users.models import User
+from . import exceptions
 from .models import EmailVerificationToken
 from .locale import get_translations
-from .exceptions import EmailNotSent
 
 from datetime import datetime, UTC
 from socket import gaierror
+import re
+
+
+username_validation = re.compile(r"^[a-z0-9_]{4,15}$")
+
+def fill_and_validate_new_user_from_payload(payload: dict) -> User:
+    required_fields = [
+        "username", "password", "email",
+    ]
+
+    new_user = User()
+    for field in required_fields:
+        if field not in payload:
+            raise exceptions.RequiredFieldMissing
+        
+        setattr(new_user, field, payload[field])
+
+    try:
+        validate_email(payload["email"])
+    except ValidationError as e:
+        raise exceptions.EmailInvalid
+    
+    if len(payload["username"]) < 4:
+        raise exceptions.UsernameInvalidLength
+    
+    if not username_validation.match(payload["username"]):
+        raise exceptions.UsernameInvalidFormat
+    
+    if len(payload["password"]) < 8:
+        raise exceptions.PasswordInvalid
+    
+    new_user.set_password(payload["password"])
+    return new_user
 
 
 def get_first_language(request: Request):
@@ -23,7 +58,7 @@ class Email(EmailMultiAlternatives):
             return super().send(fail_silently)
         except gaierror:
             print("[ERROR] Unable to send email. Check out DJANGO_EMAIL_HOST in .env.")
-            raise EmailNotSent
+            raise exceptions.EmailNotSent
 
 
 def send_mail_verification_email(user: User, verification: EmailVerificationToken):
