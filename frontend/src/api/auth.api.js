@@ -34,7 +34,7 @@ export const signUp = async (email, password, username) => {
         } else if (err && err.response && err.response.status === 400) {
             code = err.response.data.code
         } else if (err && err.response && err.response.status === 500) {
-            code = "SIGNUP_INTERNAL_ERROR"
+            code = err?.response?.data?.code || "SIGNUP_INTERNAL_ERROR"
         } else {
             code = "SIGNUP_UNKNOWN_ERROR"
         }
