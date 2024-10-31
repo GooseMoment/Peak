@@ -332,7 +332,7 @@
         "button_already_have_account": "로그인 하기",
         "link_sign_in": "로그인",
         "sign_up_completed": "메일 인증 필요",
-        "check_inbox": "이메일 인증 메일이 전송되었습니다. 메일함을 확인하세요.",
+        "check_inbox": "이메일 인증 메일이 전송되었습니다. 메일함 또는 스팸함을 확인하세요.",
         "sign_up_errors": {
             "NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
             "USER_ALREADY_AUTHENTICATED": "이미 로그인되어 있습니다.",

@@ -332,7 +332,7 @@
         "button_already_have_account": "Have Account",
         "link_sign_in": "Sign In",
         "sign_up_completed": "Verify your email",
-        "check_inbox": "An email verfication mail was sent. Please check your inbox.",
+        "check_inbox": "An email verfication mail was sent. Please check your inbox or spam folder.",
         "sign_up_errors": {
             "NETWORK_ERROR": "Please check your network.",
             "USER_ALREADY_AUTHENTICATED": "You already signed in.",
