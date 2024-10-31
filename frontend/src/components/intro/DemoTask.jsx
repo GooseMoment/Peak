@@ -10,7 +10,7 @@ const DemoTask = ({ task, color }) => {
         setCompleted(!completed)
     }
 
-    return <TaskFrame setFunc={toComplete} task={taskAssigned} color={color} />
+    return <TaskFrame toComplete={toComplete} task={taskAssigned} color={color} />
 }
 
 export default DemoTask

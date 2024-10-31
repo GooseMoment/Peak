@@ -16,7 +16,7 @@ import Input from "@components/sign/Input"
 
 import { getMe, patchUser } from "@api/users.api"
 
-import useScreenType from "@utils/useScreenType"
+import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
@@ -91,8 +91,10 @@ const Account = () => {
                         username={user.username}
                     />
                     <NameEmail>
-                        <Username>@{user.username}</Username>
-                        <Email>{user.email}</Email>
+                        <Username title={"@" + user.username}>
+                            @{user.username}
+                        </Username>
+                        <Email title={user.email}>{user.email}</Email>
                     </NameEmail>
                 </ImgNameEmailContainer>
             </Section>
@@ -167,20 +169,37 @@ const ImgNameEmailContainer = styled.div`
     justify-content: start;
     align-items: center;
     gap: 2.5em;
+    min-width: 0;
+
+    ${ifMobile} {
+        gap: 1.5em;
+    }
 `
 
 const NameEmail = styled.div`
+    position: relative;
     display: flex;
     gap: 1em;
     flex-direction: column;
+    min-width: 0;
 `
 
 const Username = styled.div`
     font-weight: 600;
     font-size: 1.25em;
+
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 
-const Email = styled.div``
+const Email = styled.div`
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`
 
 const Bio = styled.textarea`
     height: 7em;
