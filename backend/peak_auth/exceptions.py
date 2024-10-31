@@ -36,7 +36,7 @@ class UsernameInvalidFormat(APIException):
 class UsernameDuplicate(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = "Duplicate username."
-    default_code = "SIGNUP_EMAIL_NOT_SENT"
+    default_code = "SIGNUP_USERNAME_DUPLICATE"
 
 
 class PasswordInvalid(APIException):
