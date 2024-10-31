@@ -34,7 +34,7 @@ def fill_and_validate_new_user_from_payload(payload: dict) -> User:
     except ValidationError as e:
         raise exceptions.EmailInvalid
     
-    if len(payload["username"]) < 4:
+    if len(payload["username"]) < 4 or len(payload["username"]) > 15:
         raise exceptions.UsernameInvalidLength
     
     if not username_validation.match(payload["username"]):
