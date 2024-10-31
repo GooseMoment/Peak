@@ -15,6 +15,7 @@ from rest_framework.throttling import AnonRateThrottle
 
 from knox.views import LoginView as KnoxLoginView
 import uuid
+import re
 from datetime import datetime, UTC
 
 from users.models import User
@@ -42,37 +43,72 @@ class SignInView(KnoxLoginView):
         return super(SignInView, self).post(request, format=None)
 
 
-@api_view(["POST"])
-@permission_classes((AllowAny, ))
-@transaction.atomic
-def sign_up(request: Request):
-    if request.user.is_authenticated:
-        raise exceptions.UserAlreadyAuthenticated
+class SignUpView(GenericAPIView):
+    permission_classes = (AllowAny, )
+    required_fields = [
+        "username", "password", "email",
+    ]
+    username_validation = re.compile(r"^[a-z0-9_]{4,15}$")
 
-    locale = utils.get_first_language(request)
-    
-    payload = request.data
-    new_user = utils.fill_and_validate_new_user_from_payload(payload)
-    
-    try:
-        new_user.save()
-    except IntegrityError as e:
-        if not "unique constraint" in str(e):
+    def get_new_user(self) -> User:
+        payload = self.request.data
+
+        new_user = User()
+        for field in self.required_fields:
+            if field not in payload:
+                raise exceptions.RequiredFieldMissing
+            
+            setattr(new_user, field, payload[field])
+
+        try:
+            validate_email(payload["email"])
+        except ValidationError:
+            raise exceptions.EmailInvalid
+        
+        if len(payload["username"]) < 4 or len(payload["username"]) > 15:
+            raise exceptions.UsernameInvalidLength
+        
+        if not self.username_validation.match(payload["username"]):
+            raise exceptions.UsernameInvalidFormat
+        
+        if len(payload["password"]) < 8:
+            raise exceptions.PasswordInvalid
+        
+        new_user.set_password(payload["password"])
+        return new_user
+
+    def save_user(self, user: User, locale: str):
+        try:
+            user.save()
+        except IntegrityError as e:
+            if not "unique constraint" in str(e):
+                raise exceptions.UnknownError
+
+            if "email" in str(e):
+                utils.send_mail_already_registered(user, locale)
+                return Response(status=status.HTTP_200_OK)
+
+            if "username" in str(e):
+                raise exceptions.UsernameDuplicate
+
             raise exceptions.UnknownError
 
-        if "email" in str(e):
-            utils.send_mail_already_registered(new_user, locale)
-            return Response(status=status.HTTP_200_OK)
+    @transaction.atomic
+    def post(self, request: Request):
+        if request.user.is_authenticated:
+            raise exceptions.UserAlreadyAuthenticated
 
-        if "username" in str(e):
-            raise exceptions.UsernameDuplicate
+        locale = utils.get_first_language(request)
+        
+        new_user = self.get_new_user()
+        res = self.save_user(new_user, locale)
+        if res is not None:
+            return res
 
-        raise exceptions.UnknownError
+        verification = EmailVerificationToken.objects.create(user=new_user, locale=locale)
+        utils.send_mail_verification_email(new_user, verification)
 
-    verification = EmailVerificationToken.objects.create(user=new_user, locale=locale)
-    utils.send_mail_verification_email(new_user, verification)
-
-    return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
 
 
 class VerifyEmailVerificationToken(GenericAPIView):
