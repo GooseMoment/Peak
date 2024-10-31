@@ -21,10 +21,16 @@ class EmailInvalid(APIException):
     default_code = "SIGNUP_EMAIL_INVALID"
 
 
-class UsernameInvalid(APIException):
+class UsernameInvalidLength(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
-    default_detail = "Username should be longer than 4 and contain alphanumberics and underscore only."
-    default_code = "SIGNUP_USERNAME_INVALID"
+    default_detail = "Username should be between 4 and 15."
+    default_code = "SIGNUP_USERNAME_INVALID_LENGTH"
+
+
+class UsernameInvalidFormat(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "Username should contain alphanumberics and underscore only."
+    default_code = "SIGNUP_USERNAME_INVALID_FORMAT"
 
 
 class UsernameDuplicate(APIException):
@@ -42,7 +48,7 @@ class PasswordInvalid(APIException):
 class UnknownError(APIException):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
     default_detail = "Unknown error occuered."
-    default_code = "SIGNUP_EMAIL_NOT_SENT"
+    default_code = "SIGNUP_UNKNOWN_ERROR"
 
 
 class EmailNotSent(APIException):

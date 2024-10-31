@@ -21,6 +21,8 @@ import re
 from users.models import User
 from .models import EmailVerificationToken, PasswordRecoveryToken
 from .utils import get_first_language, send_mail_verification_email, send_mail_already_verified, send_mail_no_account, send_mail_password_recovery
+from . import exceptions
+
 
 class SignInView(KnoxLoginView):
     permission_classes = (AllowAny, )
@@ -49,10 +51,7 @@ username_validation = re.compile(r"^[a-z0-9_]{4,15}$")
 @transaction.atomic
 def sign_up(request: Request):
     if request.user.is_authenticated:
-        return Response({
-            "code": "SIGNUP_SIGNED_IN_USER",
-            "message": "You're already signed in."
-        }, status=status.HTTP_400_BAD_REQUEST)
+        raise exceptions.UserAlreadyAuthenticated
     
     payload = request.data
     
@@ -63,64 +62,43 @@ def sign_up(request: Request):
     new_user = User()
     for field in required_fields:
         if field not in payload:
-            return Response({
-                "code": "SIGNUP_REQUIRED_FIELDS_MISSING",
-                "message": "There're some missing field(s)."
-            }, status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.RequiredFieldMissing
         
         setattr(new_user, field, payload[field])
 
     try:
         validate_email(payload["email"])
     except ValidationError as e:
-        return Response({
-            "code": "SIGNUP_EMAIL_WRONG",
-            "message": "email validation error occuered."
-        }, status=status.HTTP_400_BAD_REQUEST)
+        raise exceptions.EmailInvalid
     
     if len(payload["username"]) < 4:
-        return Response({
-            "code": "SIGNUP_USERNAME_TOO_SHORT",
-            "message": "username should be longer than 4."
-        }, status=status.HTTP_400_BAD_REQUEST)
+        raise exceptions.UsernameInvalidLength
     
     if not username_validation.match(payload["username"]):
-        return Response({
-            "code": "SIGNUP_USERNAME_WRONG",
-            "message": "username should contain alphabets, underscore and digits only."
-        }, status=status.HTTP_400_BAD_REQUEST)
+        raise exceptions.UsernameInvalidFormat
     
     if len(payload["password"]) < 8:
-        return Response({
-            "code": "SIGNUP_PASSWORD_TOO_SHORT",
-            "message": "password should be longer than 8."
-        }, status=status.HTTP_400_BAD_REQUEST)
+        raise exceptions.PasswordInvalid
     
     new_user.set_password(payload["password"])
-
 
     try:
         new_user.save()
     except IntegrityError as e:
         if not "unique constraint" in str(e):
-            return Response({
-                "code": "SIGNUP_UNKNOWN_ERROR",
-                "message": "unknown error occuered."
-            }, status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.UnknownError
 
         if "email" in str(e):
+            # TODO: Just send duplicate email address
             return Response({
                 "code": "SIGNUP_EMAIL_EXISTS",
                 "message": "a user with a provided email already exists."
             }, status=status.HTTP_400_BAD_REQUEST)
 
         if "username" in str(e):
-            return Response({
-                "code": "SIGNUP_USERNAME_EXISTS",
-                "message": "a user with a provided username already exists."
-            }, status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.UsernameDuplicate
 
-        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        raise exceptions.UnknownError
 
     locale = get_first_language(request)
 
