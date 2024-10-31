@@ -15,14 +15,6 @@ import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
-const getCursorFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const cursor = u.searchParams.get("cursor")
-    return cursor
-}
-
 const SocialExplorePage = () => {
     const initialDate = new Date()
     initialDate.setHours(0, 0, 0, 0)
@@ -53,6 +45,7 @@ const SocialExplorePage = () => {
     } = useInfiniteQuery({
         queryKey: ["explore", "found", "users"],
         queryFn: (page) => getExploreFound(searchQuery, page.pageParam),
+        queryFn: (page) => getExploreFound(searchQuery, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
         refetchOnWindowFocus: false,
@@ -62,7 +55,9 @@ const SocialExplorePage = () => {
     // useRef로 대체??
     const [searchQuery, setSearchQuery] = useState("")
 
+
     useEffect(() => {
+        if (searchQuery.length !== 0) refetchFound()
         if (searchQuery.length !== 0) refetchFound()
     }, [searchQuery])
 

@@ -9,15 +9,9 @@ import TaskBox from "@components/social/logDetails/TaskBox"
 
 import { getDailyLogTasks } from "@api/social.api"
 
+import { getPageFromURL } from "@utils/pagination"
+
 import FeatherIcon from "feather-icons-react"
-
-const getPageFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const page = u.searchParams.get("page")
-    return page
-}
 
 const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
     const {
@@ -66,7 +60,7 @@ const DrawerBundle = ({ drawer, isFollowingPage, selectedDate }) => {
     )
 }
 
-export const TaskList = styled.div`
+const TaskList = styled.div`
     margin-left: 0.5em;
 `
 

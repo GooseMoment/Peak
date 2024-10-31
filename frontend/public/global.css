@@ -236,7 +236,22 @@ body {
         font-size: 0.9em !important;
     }
 
-    .Toastify__toast--stacked[data-pos="bot"] {
-        bottom: 5em !important;
+    .Toastify__toast-container {
+        bottom: calc(max(env(safe-area-inset-bottom), 10px) + 6em) !important;
+        display: flex;
+    }
+
+    .Toastify__toast--stacked {
+        left: 1em !important;
+        right: 1em !important;
+        width: calc(100dvw - 2em) !important;
+    }
+
+    .Toastify__toast {
+        border-radius: 16px !important;
+    }
+
+    .Toastify__close-button {
+        margin: auto 10px;
     }
 }
