@@ -18,7 +18,7 @@ def get_first_language(request: Request):
 
 
 class Email(EmailMultiAlternatives):
-    def send(self, fail_silently: bool) -> int:
+    def send(self, fail_silently: bool=False) -> int:
         try: 
             return super().send(fail_silently)
         except gaierror:
