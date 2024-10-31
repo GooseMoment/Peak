@@ -6,7 +6,7 @@ import MildButton from "@components/common/MildButton"
 
 import FeatherIcon from "feather-icons-react"
 
-const SearchBar = ({ handleSearch }) => {
+const ExploreSearchBar = ({ handleSearch }) => {
     const [searchTerm, setSearchTerm] = useState("")
     const timer = useRef(null)
 
@@ -73,4 +73,4 @@ const SearchButton = styled(MildButton)`
     }
 `
 
-export default SearchBar
+export default ExploreSearchBar
