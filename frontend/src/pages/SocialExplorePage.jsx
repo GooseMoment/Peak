@@ -6,7 +6,7 @@ import { styled } from "styled-components"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import SocialPageTitle from "@components/social/SocialPageTitle"
 import ExploreFeed from "@components/social/explore/ExploreFeed"
-import SearchBar from "@components/social/explore/SearchBar"
+import ExploreSearchBar from "@components/social/explore/ExploreSearchBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
 
 import { getExploreFound, getExploreRecommend } from "@api/social.api"
@@ -71,7 +71,9 @@ const SocialExplorePage = () => {
             <SocialPageTitle active="explore" />
             <Wrapper>
                 <Container>
-                    <SearchBar handleSearch={handleSearch} />
+                    <ExploreSearchBar
+                        handleSearch={handleSearch}
+                    />
                     {isRecommendPending || (searchQuery && isFoundFetching) ? (
                         <LoaderCircleWrapper>
                             <LoaderCircleFull />

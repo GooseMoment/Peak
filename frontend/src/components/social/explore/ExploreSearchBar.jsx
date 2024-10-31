@@ -7,7 +7,7 @@ import MildButton from "@components/common/MildButton"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const SearchBar = ({ handleSearch }) => {
+const ExploreSearchBar = ({ handleSearch }) => {
     const { t } = useTranslation("", { keyPrefix: "social.explore" })
 
     const [searchTerm, setSearchTerm] = useState("")
@@ -76,4 +76,4 @@ const SearchButton = styled(MildButton)`
     }
 `
 
-export default SearchBar
+export default ExploreSearchBar
