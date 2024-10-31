@@ -149,3 +149,25 @@ def send_mail_password_recovery(user: User, link: str, locale: str):
 
     email.send()
 
+
+def send_mail_already_registered(user: User, locale: str):
+    t = get_translations(locale)["mail_already_registered"]
+
+    subject = t["subject"]
+
+    link = f"{settings.SCHEME}{settings.WEB_HOSTNAME}/sign/in"
+
+    text_content = t["text_content"].format(
+        email=user.email,
+        link=link,
+    )
+    
+    email = Email(
+        subject=subject,
+        body=text_content,
+        from_email=None,
+        to=(user.email, ),
+    )
+
+    email.send()
+

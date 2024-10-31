@@ -13,7 +13,7 @@ Verify:
 If you haven't requested, do NOT click the link above.
 
 Please do not reply to this email, as we are unable to respond from this email address.
-        """,
+""",
     },
     "mail_already_verified": {
         "subject": "This was already verified.",
@@ -28,7 +28,7 @@ Sign in:
 If you haven't done any action, you can ignore this mail.
 
 Please do not reply to this email, as we are unable to respond from this email address.
-        """,
+""",
     },
     "mail_no_account": {
         "subject": "No Account",
@@ -43,7 +43,7 @@ Sign up:
 If you haven't done any action, you can ignore this mail.
 
 Please do not reply to this email, as we are unable to respond from this email address.
-        """,
+""",
     },
     "mail_password_recovery": {
         "subject": "Password Recovery",
@@ -60,6 +60,23 @@ This link is your unique link. DO NOT TELL ANYONE.
 If you haven't done any action, you can ignore this mail.
 
 Please do not reply to this email, as we are unable to respond from this email address.
-        """,
-    }
+""",
+    },
+    "mail_already_registered": {
+        "subject": "Already registered address",
+        "text_content": """Hello,
+
+{email} was used in sigining up, but it was already registered.
+You are able to sign in at Peak.
+
+Sign in:
+{link}
+
+If you forget the password, you can try 'Password Recovery'.
+
+If you haven't done any action, you can ignore this mail.
+
+Please do not reply to this email, as we are unable to respond from this email address.
+""",
+    },
 }

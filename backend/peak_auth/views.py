@@ -61,11 +61,8 @@ def sign_up(request: Request):
             raise exceptions.UnknownError
 
         if "email" in str(e):
-            # TODO: Just send duplicate email address
-            return Response({
-                "code": "SIGNUP_EMAIL_EXISTS",
-                "message": "a user with a provided email already exists."
-            }, status=status.HTTP_400_BAD_REQUEST)
+            utils.send_mail_already_registered(new_user, locale)
+            return Response(status=status.HTTP_200_OK)
 
         if "username" in str(e):
             raise exceptions.UsernameDuplicate
