@@ -7,8 +7,10 @@ from .models import Notification, WebPushSubscription, TaskReminder
 from tasks.models import Task
 from .serializers import NotificatonSerializer, WebPushSubscriptionSerializer, TaskReminderSerializer
 from api.permissions import IsUserMatch
+from django.shortcuts import get_object_or_404
 from .utils import caculateScheduled
 
+import uuid
 from zoneinfo import ZoneInfo
 from datetime import datetime, time
 
@@ -42,11 +44,12 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
         try: 
             task_id = request.data["task"]
             delta_list = request.data["delta_list"]
-        except KeyError:
-            pass
+            uuid_task_id = uuid.UUID(hex=task_id)
+        except (KeyError, ValueError, TypeError):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
-            task = Task.objects.get(id=task_id)
-
+            task = get_object_or_404(Task, id=uuid_task_id)
+            
             if len(delta_list) == 0:
                 if task.reminders.exists():
                     task.reminders.all().delete()
