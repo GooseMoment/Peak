@@ -41,13 +41,13 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
     def post(self, request, *args, **kwargs):
         try: 
             task_id = request.data["task"]
-            delta_array = request.data["delta_array"]
+            delta_list = request.data["delta_list"]
         except KeyError:
             pass
         else:
             task = Task.objects.get(id=task_id)
 
-            if len(delta_array) == 0:
+            if len(delta_list) == 0:
                 if task.reminders.exists():
                     task.reminders.all().delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
@@ -55,7 +55,7 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
             if task.reminders.exists():
                 task.reminders.all().delete()
 
-            for delta in delta_array:
+            for delta in delta_list:
                 if task.due_type == "due_date":
                     tz = self.get_tz()
                     nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=ZoneInfo(str(tz)))

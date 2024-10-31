@@ -140,7 +140,7 @@ const TaskCommonDetail = ({
 
         postReminderMutation.mutate({
             task: createdTask.id,
-            delta_array: newTask.reminders,
+            delta_list: newTask.reminders,
         })
     }
 
