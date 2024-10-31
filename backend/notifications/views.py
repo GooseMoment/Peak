@@ -49,14 +49,12 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
             task = get_object_or_404(Task, id=uuid_task_id)
-            
-            if len(delta_list) == 0:
-                if task.reminders.exists():
-                    task.reminders.all().delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
 
             if task.reminders.exists():
                 task.reminders.all().delete()
+            
+            if len(delta_list) == 0:
+                return Response(status=status.HTTP_204_NO_CONTENT)
 
             for delta in delta_list:
                 if task.due_type == "due_date":
@@ -69,7 +67,7 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
                 new_scheduled = caculateScheduled(converted_due_datetime, delta)    
                 TaskReminder.objects.create(task=task, delta=delta, scheduled=new_scheduled)
 
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_200_OK)
 
 class NotificationListPagination(CursorPagination):
     page_size = 20
