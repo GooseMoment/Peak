@@ -11,6 +11,7 @@ import LogDetails from "@components/social/logDetails/LogDetails"
 
 import { getExploreFound, getExploreRecommend } from "@api/social.api"
 
+import { getCursorFromURL } from "@utils/pagination"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -45,7 +46,6 @@ const SocialExplorePage = () => {
     } = useInfiniteQuery({
         queryKey: ["explore", "found", "users"],
         queryFn: (page) => getExploreFound(searchQuery, page.pageParam),
-        queryFn: (page) => getExploreFound(searchQuery, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
         refetchOnWindowFocus: false,
@@ -54,7 +54,6 @@ const SocialExplorePage = () => {
 
     // useRef로 대체??
     const [searchQuery, setSearchQuery] = useState("")
-
 
     useEffect(() => {
         if (searchQuery.length !== 0) refetchFound()
@@ -71,9 +70,7 @@ const SocialExplorePage = () => {
             <SocialPageTitle active="explore" />
             <Wrapper>
                 <Container>
-                    <ExploreSearchBar
-                        handleSearch={handleSearch}
-                    />
+                    <ExploreSearchBar handleSearch={handleSearch} />
                     {isRecommendPending || (searchQuery && isFoundFetching) ? (
                         <LoaderCircleWrapper>
                             <LoaderCircleFull />
