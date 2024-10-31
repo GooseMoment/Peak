@@ -262,12 +262,16 @@
         "projects_empty": "There are no projects.",
         "button_edit_profile": "Edit Profile",
         "error_user_not_found": "This user is not found.",
-        "following_list_title": "@{{username}}'s followings",
-        "following_list_empty": "Nothing is here.",
-        "following_list_error": "Unable to load followings.",
-        "follower_list_title": "@{{username}}'s followers",
-        "follower_list_empty": "Nothing is here.",
-        "follower_list_error": "Unable to load followers."
+        "followings_list": {
+            "title": "@{{username}}'s followings",
+            "empty": "Nothing is here.",
+            "error": "Unable to load followings."
+        },
+        "followers_list": {
+            "title": "@{{username}}'s followers",
+            "empty": "Nothing is here.",
+            "error": "Unable to load followers."
+        }
     },
     "follow_button": {
         "button_follow": "Follow",
@@ -361,5 +365,18 @@
         "recovery_error_password_length": "Password should be more than 8 letters.",
         "recovery_error_password_unmatch": "Two forms have different values.",
         "recovery_error": "Oops. Perhaps this link is invalid or expired."
+    },
+    "search" : {
+        "title": "Search",
+        "filter_button" : {
+            "search_terms" : "Terms",
+            "project" : "Project",
+            "drawer" : "Drawer",
+            "assigned_at" : "Assign",
+            "completed_at" : "Completed",
+            "privacy" : "Privacy",
+            "memo" : "Memo"
+        },
+        "no_result" : "Your search did not match any tasks 🤔"
     }
 }

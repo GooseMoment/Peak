@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import styled, { css } from "styled-components"
 
 import ModalWindow from "@components/common/ModalWindow"
-import { FollowerList, FollowingList } from "@components/users/FollowList"
+import FollowList from "@components/users/FollowList"
 
 import { skeletonCSS } from "@assets/skeleton"
 
@@ -45,10 +45,10 @@ const FollowsCount = ({ user, isPending }) => {
             {window !== "" && (
                 <ModalWindow afterClose={closeModal}>
                     {window === "followers" && (
-                        <FollowerList user={user} />
+                        <FollowList list="followers" user={user} />
                     )}
                     {window === "followings" && (
-                        <FollowingList user={user} />
+                        <FollowList list="followings" user={user} />
                     )}
                 </ModalWindow>
             )}
