@@ -3,6 +3,8 @@ import { useState } from "react"
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 
+import { ifMobile } from "@utils/useScreenType"
+
 const ReminderContents = ({ item, reminders, handleReminder }) => {
     const [isHovering, setIsHovering] = useState(false)
 
