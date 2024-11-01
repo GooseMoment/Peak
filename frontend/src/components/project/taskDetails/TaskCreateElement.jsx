@@ -10,10 +10,10 @@ const TaskCreateElement = () => {
     const navigate = useNavigate()
     const { isMobile } = useScreenType()
 
-    const [projectId] = useOutletContext()
+    const [projectID] = useOutletContext()
 
     const closeCreate = () => {
-        navigate(`/app/projects/${projectId}`)
+        navigate(`/app/projects/${projectID}`)
     }
 
     return (

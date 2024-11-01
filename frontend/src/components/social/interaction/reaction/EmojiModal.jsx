@@ -2,10 +2,16 @@ import { useState } from "react"
 
 import styled from "styled-components"
 
+import { ifMobile } from "@utils/useScreenType"
+
+import { useTranslation } from "react-i18next"
+
 const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
-    if (!isOpen || !emojis) return null
+    const { t } = useTranslation("", { keyPrefix: "social.emoji_modal" })
 
     const [emojiSearchQuery, setEmojiSearchQuery] = useState("")
+
+    if (!isOpen || !emojis) return null
 
     const filteredEmojis = emojis.filter((emoji) =>
         emoji.name.toLowerCase().includes(emojiSearchQuery.toLowerCase()),
@@ -17,7 +23,7 @@ const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
             <Modal $posY={position.top} $posX={position.left}>
                 <EmojiSearchBox
                     type="text"
-                    placeholder="Search emojis"
+                    placeholder={t("searchbar")}
                     value={emojiSearchQuery}
                     onChange={(e) => setEmojiSearchQuery(e.target.value)}
                 />
@@ -37,7 +43,6 @@ const EmojiModal = ({ isOpen, onClose, emojis, onSelect, position }) => {
 
 const Wrapper = styled.div`
     z-index: 100;
-
     position: fixed;
     top: 0;
     left: 0;
@@ -64,7 +69,7 @@ export const Modal = styled.div`
     position: absolute;
     top: ${(props) => props.$posY}px;
     left: calc(${(props) => props.$posX}px - 33em); // 32 + 1(shadow)
-    width: 30em;
+    max-width: 30em;
     height: 24em;
 
     box-shadow: 0.2em 0.3em 0.5em
@@ -75,13 +80,18 @@ export const Modal = styled.div`
     padding: 1em;
 
     overflow-y: auto;
-    z-index: 10;
     pointer-events: auto;
+
+    ${ifMobile} {
+        position: absolute;
+        left: 0;
+        width: 90vw;
+    }
 `
 
 const EmojiSearchBox = styled.input`
     margin-bottom: 1em;
-    width: 27em;
+    width: 90%;
     height: 2em;
 
     border-radius: 0.4em;
@@ -104,6 +114,7 @@ const EmojiList = styled.div`
 const EmojiListCell = styled.li`
     aspect-ratio: 1/1;
     width: calc(100% / 8);
+    min-width: 2.4em;
 
     display: flex;
     align-items: center;

@@ -2,7 +2,6 @@ import { Fragment, useMemo, useState } from "react"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import PageTitle from "@components/common/PageTitle"
-import { TaskList } from "@components/social/logDetails/DrawerBundle"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DemoTask from "@components/intro/DemoTask"
 import SubSection, { SubTitle } from "@components/intro/SubSection"
@@ -38,15 +37,9 @@ const DemoDrawer = () => {
                             {drawer.name}
                         </DrawerName>
                     </DrawerBox>
-                    <TaskList>
-                        {drawer.tasks?.map((task, i) => (
-                            <DemoTask
-                                color={projectColor}
-                                task={task}
-                                key={i}
-                            />
-                        ))}
-                    </TaskList>
+                    {drawer.tasks?.map((task, i) => (
+                        <DemoTask color={projectColor} task={task} key={i} />
+                    ))}
                 </Fragment>
             ))}
 

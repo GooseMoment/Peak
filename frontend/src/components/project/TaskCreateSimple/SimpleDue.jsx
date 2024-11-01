@@ -3,31 +3,25 @@ import { useEffect } from "react"
 import {
     ContentBox,
     CreateSimpleBox,
-} from "@components/project/Creates/simple/CreateSimpleBox"
-import addDateFromToday from "@components/project/Creates/utils/addDateFromToday"
+} from "@components/project/TaskCreateSimple/CreateSimpleBox"
+import addDateFromToday from "@components/project/TaskCreateSimple/addDateFromToday"
 
-import { useClientTimezone } from "@utils/clientSettings"
+import hourglass from "@assets/project/hourglass.svg"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const SimpleAssigned = ({
-    assignedIndex,
-    setAssignedIndex,
-    editNewTask,
-    color,
-}) => {
+const SimpleDue = ({ dueIndex, setDueIndex, editNewTask, color }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
-    const due_tz = useClientTimezone()
 
     const onKeyDown = (e) => {
         if (e.key === "ArrowRight") {
-            if (assignedIndex === 5) return
-            setAssignedIndex(assignedIndex + 1)
+            if (dueIndex === 5) return
+            setDueIndex(dueIndex + 1)
         }
         if (e.key === "ArrowLeft") {
-            if (assignedIndex === 0) return
-            setAssignedIndex(assignedIndex - 1)
+            if (dueIndex === 0) return
+            setDueIndex(dueIndex - 1)
         }
     }
 
@@ -37,19 +31,20 @@ const SimpleAssigned = ({
         return () => {
             document.removeEventListener("keydown", onKeyDown)
         }
-    }, [assignedIndex])
+    }, [dueIndex])
 
     useEffect(() => {
         editNewTask({
-            due_tz: due_tz,
-            assigned_at: addDateFromToday(items[assignedIndex].set),
+            due_type: dueIndex === 0 ? null : "due_date",
+            due_date: addDateFromToday(items[dueIndex].set),
+            due_datetime: null,
         })
-    }, [assignedIndex])
+    }, [dueIndex])
 
     const items = [
         { index: 0, display: t("no_date"), set: null },
-        { index: 1, display: t("today"), set: { days: 0 }},
-        { index: 2, display: t("tomorrow"), set: { days: 1 }},
+        { index: 1, display: t("today"), set: { days: 0 } },
+        { index: 2, display: t("tomorrow"), set: { days: 1 } },
         {
             index: 3,
             display: t("next_week"),
@@ -68,18 +63,14 @@ const SimpleAssigned = ({
     ]
 
     return (
-        <CreateSimpleBox
-            onKeyDown={onKeyDown}
-            icon={<FeatherIcon icon="calendar" />}>
+        <CreateSimpleBox icon={<img src={hourglass} />}>
             {items.map((item) => (
                 <ContentBox
                     key={item.index}
                     $color={color}
-                    $isActive={assignedIndex === item.index}
-                    onClick={() => setAssignedIndex(item.index)}>
-                    {assignedIndex === item.index && (
-                        <FeatherIcon icon="check" />
-                    )}
+                    $isActive={dueIndex === item.index}
+                    onClick={() => setDueIndex(item.index)}>
+                    {dueIndex === item.index && <FeatherIcon icon="check" />}
                     {item.display}
                 </ContentBox>
             ))}
@@ -87,4 +78,4 @@ const SimpleAssigned = ({
     )
 }
 
-export default SimpleAssigned
+export default SimpleDue

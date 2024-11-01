@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination, CursorPagination
 from rest_framework.permissions import AllowAny
+from rest_framework.exceptions import NotFound
 
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
@@ -18,10 +19,12 @@ from datetime import datetime, timedelta
 
 from .models import *
 from .serializers import *
+from . import permissions
 from api.models import PrivacyMixin
+from api.permissions import IsUserSelfRequest
 from drawers.models import Drawer
-
 from users.serializers import UserSerializer
+
 
 class ExploreFeedPagination(CursorPagination):
     page_size = 8
@@ -69,6 +72,7 @@ class FollowView(APIView):
         follower = get_object_or_404(User, username=follower)
         if follower != request.user:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
         followee = get_object_or_404(User, username=followee)
         
         following, created = Following.objects.get_or_create(follower=follower,
@@ -81,6 +85,7 @@ class FollowView(APIView):
                                            blockee=followee).exclude(deleted_at=None).exists()
         if is_blocking:
             return Response(status=status.HTTP_403_FORBIDDEN)
+
         is_blocked = Block.objects.filter(blocker=followee,
                                           blockee=follower).exclude(deleted_at=None).exists()
         if is_blocked:
@@ -89,6 +94,7 @@ class FollowView(APIView):
         if not created:
             if following.status == Following.ACCEPTED or following.status == Following.REQUESTED:
                 return Response(status=status.HTTP_208_ALREADY_REPORTED)
+
             else:
                 following.status = Following.REQUESTED
                 following.deleted_at = None
@@ -105,11 +111,12 @@ class FollowView(APIView):
                                            blockee=request.user).exclude(deleted_at=None).exists()
         if is_follower_blocking:
             return Response(status=status.HTTP_403_FORBIDDEN)
+
         is_followee_blocking = Block.objects.filter(blocker=followee,
                                           blockee=request.user).exclude(deleted_at=None).exists()
         if is_followee_blocking:
             return Response(status=status.HTTP_403_FORBIDDEN)
-        
+
         following_filter = Q(status=Following.REQUESTED) | Q(status=Following.ACCEPTED)
         following_filter &= Q(follower=follower, followee=followee)
         
@@ -131,6 +138,7 @@ class FollowView(APIView):
         followee = get_object_or_404(User, username=followee)
         if followee != request.user:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
         follower = get_object_or_404(User, username=follower)
         
         try:
@@ -149,6 +157,7 @@ class FollowView(APIView):
         follower = get_object_or_404(User, username=follower)
         if follower != request.user:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
         followee = get_object_or_404(User, username=followee)
         
         try:
@@ -162,47 +171,49 @@ class FollowView(APIView):
         
         return Response(status=status.HTTP_200_OK)
 
-@api_view(["GET"])
-def get_followers(request: HttpRequest, username):
-    target_user = get_object_or_404(User, username=username)
-    
-    is_blocked = Block.objects.filter(blocker=target_user, blockee=request.user).exclude(deleted_at=None).exists()
-    if is_blocked:
-        return Response(status=status.HTTP_403_FORBIDDEN)
-    
-    followers = Following.objects.filter(followee__username=username, status=Following.ACCEPTED).all()
-    followerUsers = User.objects.filter(followings__in=followers.all()).all()
-    
-    serializer = UserSerializer(followerUsers, many=True)    
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(["GET"])
-def get_followings(request: HttpRequest, username):
-    target_user = get_object_or_404(User, username=username)
-    
-    is_blocked = Block.objects.filter(blocker=target_user, blockee=request.user).exclude(deleted_at=None).exists()
-    if is_blocked:
-        return Response(status=status.HTTP_403_FORBIDDEN)
-    
-    followings = Following.objects.filter(follower__username=username, status=Following.ACCEPTED).all()
-    followingUsers = User.objects.filter(followers__in=followings.all()).all()
-    
-    serializer = UserSerializer(followingUsers, many=True)    
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
+class GenericUserList(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = UserSerializer
+    lookup_field = "username"
+    permission_classes = [permissions.IsUserNotBlockedOrBlocking]
 
-@api_view(["GET"])
-def get_requesters(request: HttpRequest, username):
-    if request.user.username != username:
-        return Response(status=status.HTTP_403_FORBIDDEN)
+    def check_user_exists(self):
+        username: str = self.kwargs["username"]
+        user_exists = User.objects.filter(username=username).exists()
+
+        if not user_exists:
+            raise NotFound(f"User @{username} not found")
+        
+        return username
+
+    def get_user_ids(self, username: str):
+        raise NotImplementedError()
+
+    def get_queryset(self):
+        username = self.check_user_exists()
+        followings = self.get_user_ids(username)
+        return User.objects.filter(id__in=followings).all()
     
-    requests = Following.objects.filter(followee__username=username, status=Following.REQUESTED).all()
-    requested_users = User.objects.filter(followings__in=requests.all()).all()
-    
-    serializer = UserSerializer(requested_users, many=True)
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    def get(self, *args, **kwargs):
+        return self.list(self, *args, **kwargs)
+
+
+class FollowingList(GenericUserList):
+    def get_user_ids(self, username: str):
+        return Following.objects.filter(follower__username=username, status=Following.ACCEPTED).values("followee").all()
+
+
+class FollowerList(GenericUserList):
+    def get_user_ids(self, username: str):
+        return Following.objects.filter(followee__username=username, status=Following.ACCEPTED).values("follower").all()
+
+
+class FollowRequesterList(GenericUserList):
+    permission_classes = [IsUserSelfRequest]
+
+    def get_user_ids(self, username: str):
+        return Following.objects.filter(followee__username=username, status=Following.REQUESTED).values("follower").all()
+
 
 ## Block
 class BlockView(APIView):
@@ -234,14 +245,13 @@ class BlockView(APIView):
         
         return Response(status=status.HTTP_200_OK)
 
-@api_view(["GET"])
-def get_blocks(request: HttpRequest, username):
-    blocks = Block.objects.filter(blocker__username=username).all()
-    blockUsers = User.objects.filter(blockers__in=blocks.all()).all()
-    
-    serializer = UserSerializer(blockUsers, many=True)    
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
+
+class BlockList(GenericUserList):
+    permission_classes = [IsUserSelfRequest]
+
+    def get_user_ids(self, username: str):
+        return Block.objects.filter(blocker__username=username, deleted_at=None).values("blockee").all()
+
 
 ## Daily Logs
 @api_view(["GET"])
@@ -250,7 +260,10 @@ def get_daily_logs(request: HttpRequest, username, day):
         follower__username=username,
         status=Following.ACCEPTED
     ).all()
-    followingUsers = User.objects.filter(followers__in=followings.all()).all()
+    
+    daily_logs_filter = Q(followers__in=followings.all()) | Q(id=request.user.id)
+    
+    followingUsers = User.objects.filter(daily_logs_filter).all().distinct()
     day = datetime.fromisoformat(day)
     
     user_id = str(get_object_or_404(User, username=username).id)
@@ -331,6 +344,39 @@ def get_privacy_filter(follower, followee):
     privacyFilter &= Q(user=followee)
     
     return privacyFilter
+
+class DailyLogDetailsPagination(CursorPagination):
+    page_size = 5
+    ordering = ['project_order', 'drawer_order', 'order']
+    
+
+class DailyLogDetailsView(generics.GenericAPIView):
+    
+    pagination_class = DailyLogDetailsPagination
+    
+    def get(self, request, followee, day):
+        followee_user = get_object_or_404(User, username=followee)
+        day_min = datetime.fromisoformat(day)
+        day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+        day_range = (day_min, day_max)
+
+        privacy_filter = get_privacy_filter(request.user, followee_user)
+
+        completed_tasks_filter = Q(completed_at__range=day_range)
+        uncompleted_tasks_filter = Q(completed_at=None) & Q(assigned_at__range=day_range)
+        # TODO: ( | Q(due_datetime__range=day_range))
+        tasks_filter = privacy_filter & (completed_tasks_filter | uncompleted_tasks_filter)
+
+        tasks_queryset = Task.objects.filter(tasks_filter).all().annotate(project_order=F('drawer__project__order'), drawer_order=F('drawer__order'))
+        
+        page = self.paginate_queryset(tasks_queryset)
+        if page is not None:
+            serializer = DailyLogDetailsSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = DailyLogDetailsSerializer(tasks_queryset, many=True)
+        
+        return Response(serializer.data)
 
 class DailyLogDrawerPagination(CursorPagination):
     page_size = 5

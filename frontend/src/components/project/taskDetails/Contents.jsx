@@ -69,9 +69,9 @@ const Contents = ({ task, setFunc }) => {
             display:
                 task?.reminders && task.reminders?.length !== 0 ? (
                     <RemindersBox name="reminder">
-                        {task.reminders.map((reminder) => (
-                            <ReminderBlock key={reminder.id} name="reminder">
-                                {displayReminder[0][reminder.delta]}
+                        {task.reminders.map((delta, i) => (
+                            <ReminderBlock key={i} name="reminder">
+                                {displayReminder[0][delta]}
                             </ReminderBlock>
                         ))}
                     </RemindersBox>
@@ -89,7 +89,7 @@ const Contents = ({ task, setFunc }) => {
                         -
                     </EmptyReminderBox>
                 ),
-            component: <Reminder task={task} onClose={closeComponent}/>,
+            component: <Reminder task={task} setFunc={setFunc} />,
         },
         {
             id: 4,

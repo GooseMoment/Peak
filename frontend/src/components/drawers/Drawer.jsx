@@ -11,7 +11,7 @@ import ModalWindow from "@components/common/ModalWindow"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
-import TaskCreateSimple from "@components/project/Creates/simple/TaskCreateSimple"
+import TaskCreateSimple from "@components/project/TaskCreateSimple"
 import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import DragAndDownBox from "@components/project/dragAndDown/DragAndDownBox"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
@@ -26,20 +26,14 @@ import { deleteDrawer } from "@api/drawers.api"
 import { patchDrawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
 
+import { getPageFromURL } from "@utils/pagination"
+
 import queryClient from "@queries/queryClient"
 
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-
-const getPageFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const page = u.searchParams.get("page")
-    return page
-}
 
 const Drawer = ({ project, drawer, color }) => {
     const theme = useTheme()

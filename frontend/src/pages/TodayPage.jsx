@@ -20,6 +20,7 @@ import {
 
 import { useClientTimezone } from "@utils/clientSettings"
 import { ifMobile } from "@utils/useScreenType"
+import { getPageFromURL } from "@utils/pagination"
 
 import queryClient from "@queries/queryClient"
 
@@ -27,14 +28,6 @@ import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-
-const getPageFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const page = u.searchParams.get("page")
-    return page
-}
 
 const TodayPage = () => {
     const { t } = useTranslation(null, { keyPrefix: "today" })

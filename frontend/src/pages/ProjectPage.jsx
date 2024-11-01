@@ -253,7 +253,7 @@ const ProjectPage = () => {
                 </ModalWindow>
             )}
             <Suspense key="project-page" fallback={<ModalLoader />}>
-                <Outlet context={[id, color]} />
+                <Outlet context={[id, project.type, color]} />
             </Suspense>
         </>
     )

@@ -1,8 +1,8 @@
-from rest_framework import mixins, generics, permissions
+from rest_framework import mixins, generics
 
 from .models import UserSetting
 from .serializers import UserSettingSerializer
-from api.permissions import IsUserMatch
+
 
 class UserSettingDetail(mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,

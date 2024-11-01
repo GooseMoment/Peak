@@ -3,7 +3,6 @@ import { useState } from "react"
 import styled from "styled-components"
 
 import Button from "@components/common/Button"
-
 import { ifMobile } from "@utils/useScreenType"
 
 import { useTranslation } from "react-i18next"

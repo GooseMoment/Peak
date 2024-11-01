@@ -55,20 +55,19 @@
         "button_load_more": "더보기",
         "button_add_task": "새 작업 추가",
         "button_close_add_task": "닫힘",
+        "button_add": "추가하기",
+        "button_save": "수정",
         "loading": "로딩 중",
+        "none": "없음",
         "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요 😢",
         "error_load_task": "작업을 불러오지 못했어요 😢",
-        "create": {
-            "name_placeholder": "이름을 입력하세요",
-            "button_add": "추가하기",
-            "none": "없음",
-            "task_create_success": "새 작업을 생성했습니다.",
-            "task_create_error": "작업 생성에 실패하였습니다.",
-            "task_create_no_name": "작업의 이름을 적어주세요."
-        },
+        "name_placeholder": "이름을 입력하세요",
+        "task_create_success": "새 작업을 생성했습니다.",
+        "task_create_error": "작업 생성에 실패하였습니다.",
+        "task_edit_error": "작업 수정에 실패하였습니다.",
+        "task_create_no_name": "작업의 이름을 적어주세요.",
         "edit": {
-            "display": "수정",
-            "name_change_success": "이름을 변경했습니다."
+            "display": "수정"
         },
         "delete": {
             "display": "삭제",
@@ -265,12 +264,16 @@
         "projects_empty": "프로젝트가 없습니다.",
         "button_edit_profile": "프로필 수정",
         "error_user_not_found": "찾을 수 없는 유저입니다.",
-        "following_list_title": "@{{username}} 님의 팔로잉 목록",
-        "following_list_empty": "아무 것도 없습니다.",
-        "following_list_error": "팔로잉 목록을 불러올 수 없습니다.",
-        "follower_list_title": "@{{username}} 님의 팔로워 목록",
-        "follower_list_empty": "아무 것도 없습니다.",
-        "follower_list_error": "팔로워 목록을 불러올 수 없습니다."
+        "followings_list": {
+            "title": "@{{username}} 님의 팔로잉 목록",
+            "empty": "아무 것도 없습니다.",
+            "error": "팔로잉 목록을 불러올 수 없습니다."
+        },
+        "followers_list": {
+            "title": "@{{username}} 님의 팔로워 목록",
+            "empty": "아무 것도 없습니다.",
+            "error": "팔로워 목록을 불러올 수 없습니다."
+        }
     },
     "follow_button": {
         "button_follow": "팔로우",
@@ -364,5 +367,38 @@
         "recovery_error_password_length": "암호는 8자 이상이어야 합니다.",
         "recovery_error_password_unmatch": "새 암호가 서로 다릅니다.",
         "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다."
+    },
+    "social" : {
+        "following_title": "팔로잉",
+        "explore_title": "탐험",
+        "log_preview_completed": "완료!",
+        "log_details": {
+            "no_content": "작업이 없습니다."
+        },
+        "quote" : {
+            "empty_self_quote": "오늘의 한마디를 남겨주세요.",
+            "empty_others_quote": "아직 상대방이 작성하지 않았습니다."
+        },
+        "emoji_modal" : {
+            "searchbar" : "이모지 찾기"
+        },
+        "explore" : {
+            "searchbar" : "새로운 인연을 찾아보세요.",
+            "no_result" : "당신이 찾는 사람이 없습니다 😢",
+            "suggestion" : "새로운 사람과 새로운 인연은 어떤가요?"
+        }
+    },
+    "search" : {
+        "title": "검색",
+        "filter_button" : {
+            "search_terms" : "검색어",
+            "project" : "프로젝트",
+            "drawer" : "서랍",
+            "assigned_at" : "할당 날짜",
+            "completed_at" : "완수 날짜",
+            "privacy" : "공개 범위",
+            "memo" : "메모"
+        },
+        "no_result" : "조건에 맞는 결과를 찾을 수 없습니다 🤔"
     }
 }
