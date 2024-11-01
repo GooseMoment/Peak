@@ -1,26 +1,18 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useOutletContext, useParams } from "react-router-dom"
 
-import { useMutation } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
-import styled from "styled-components"
 
-import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
-import ContentsMobile from "@components/project/taskDetails/mobile/ContentsMobile"
-import TaskNameInput from "@components/tasks/TaskNameInput"
+import TaskCommonDetailMobile from "@components/project/taskDetails/mobile/TaskCommonDetailMobile"
 
-import { getTask, patchTask } from "@api/tasks.api"
-
-import queryClient from "@queries/queryClient"
+import { getTask } from "@api/tasks.api"
 
 import { useTranslation } from "react-i18next"
 
 const TaskDetailMobile = ({ closeDetail }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
-    const inputRef = useRef(null)
-
-    const [_, color] = useOutletContext()
+    const [_, __, color] = useOutletContext()
     const { task_id } = useParams()
 
     const {
@@ -33,77 +25,29 @@ const TaskDetailMobile = ({ closeDetail }) => {
         queryFn: () => getTask(task_id),
     })
 
-    const [title, setTitle] = useState(null)
-    const [taskName, setTaskName] = useState(task?.name)
-    const [activeContent, setActiveContent] = useState(null)
+    const [newTask, setNewTask] = useState(task)
 
     useEffect(() => {
-        setTaskName(task?.name)
+        if (task && task.reminders?.length !== 0) {
+            const deltaArray = task.reminders.map((reminder) => reminder.delta)
+            setNewTask(Object.assign({}, task, { reminders: deltaArray }))
+        } else {
+            setNewTask(task)
+        }
     }, [task])
 
-    useEffect(() => {
-        if (activeContent === null) {
-            setTitle(t("edit"))
-        } else if (activeContent) {
-            setTitle(t(activeContent.name + ".title"))
-        }
-    }, [activeContent])
-
-    const patchMutation = useMutation({
-        mutationFn: (data) => {
-            return patchTask(task_id, data)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["task", { taskID: task_id }],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: task.drawer }],
-            })
-            inputRef.current.focus()
-        },
-    })
-
-    if (isLoading) {
+    if (isLoading || isError) {
         return null
     }
 
     return (
-        <ModalBottomSheet
+        <TaskCommonDetailMobile
+            newTask={newTask}
+            setNewTask={setNewTask}
+            color={color}
             onClose={closeDetail}
-            headerContent={
-                <Header
-                    title={title}
-                    closeSheet={closeDetail}
-                    handleBack={
-                        activeContent ? () => setActiveContent(null) : null
-                    }
-                />
-            }>
-            <TaskDetailMobileBox>
-                <TaskNameInput
-                    task={task}
-                    setFunc={patchMutation.mutate}
-                    inputRef={inputRef}
-                    newTaskName={taskName}
-                    setNewTaskName={setTaskName}
-                    color={color}
-                    isCreate
-                />
-                <ContentsMobile
-                    newTask={task}
-                    editNewTask={patchMutation.mutate}
-                    activeContent={activeContent}
-                    setActiveContent={setActiveContent}
-                />
-                {activeContent?.component}
-            </TaskDetailMobileBox>
-        </ModalBottomSheet>
+        />
     )
 }
-
-const TaskDetailMobileBox = styled.div`
-    margin: 1em 1.2em;
-`
 
 export default TaskDetailMobile
