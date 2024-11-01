@@ -68,9 +68,9 @@ const ContentsMobile = ({
             display:
                 newTask?.reminders && newTask.reminders?.length !== 0 ? (
                     <RemindersBox>
-                        {newTask.reminders.map((reminder, i) => (
+                        {newTask.reminders.map((delta, i) => (
                             <ReminderBlock key={i} name="reminder">
-                                {displayReminder[0][reminder.delta]}
+                                {displayReminder[0][delta]}
                             </ReminderBlock>
                         ))}
                     </RemindersBox>
@@ -87,7 +87,7 @@ const ContentsMobile = ({
                         -
                     </EmptyReminderBox>
                 ),
-            component: <Reminder task={newTask} onClose={onClose} />,
+            component: <Reminder task={newTask} setFunc={editNewTask} />,
         },
         {
             id: 4,
