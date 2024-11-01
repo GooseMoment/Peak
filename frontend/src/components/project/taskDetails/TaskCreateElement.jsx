@@ -18,7 +18,8 @@ const TaskCreateElement = () => {
 
     return (
         isMobile ?
-        <TaskCreateMobile closeCreate={closeCreate}/> :
+        <TaskCreateMobile closeCreate={closeCreate}/>
+        :
         <ModalWindow afterClose={closeCreate}>
             <TaskCreate />
         </ModalWindow>

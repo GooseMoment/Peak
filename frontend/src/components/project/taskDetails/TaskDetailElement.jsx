@@ -18,7 +18,8 @@ const TaskDetailElement = () => {
 
     return (
         isMobile ?
-        <TaskDetailMobile closeDetail={closeDetail}/> :
+        <TaskDetailMobile closeDetail={closeDetail}/>
+        :
         <ModalWindow afterClose={closeDetail}>
             <TaskDetail />
         </ModalWindow>
