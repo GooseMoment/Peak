@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
 
-import SimpleAssigned from "@components/project/Creates/simple/SimpleAssigned"
-import SimpleDue from "@components/project/Creates/simple/SimpleDue"
-import SimplePriority from "@components/project/Creates/simple/SimplePriority"
+import SimpleAssigned from "@components/project/TaskCreateSimple/SimpleAssigned"
+import SimpleDue from "@components/project/TaskCreateSimple/SimpleDue"
+import SimplePriority from "@components/project/TaskCreateSimple/SimplePriority"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
 import { postTask } from "@api/tasks.api"
@@ -34,6 +34,26 @@ const TaskCreateSimple = ({
     const [dueIndex, setDueIndex] = useState(0)
     const [priorityIndex, setPriorityIndex] = useState(0)
 
+    const onKeyDownAlt = (e) => {
+        if (!e.altKey) {
+            return
+        }
+
+        const selectedNumber = Number(e.code.slice(5))
+        if (selectedNumber && selectedNumber <= items.length) {
+            e.preventDefault()
+            setContent(items[selectedNumber - 1].name)
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("keydown", onKeyDownAlt)
+
+        return () => {
+            document.removeEventListener("keydown", onKeyDownAlt)
+        }
+    }, [])
+
     const handleClickContent = (e) => {
         const name = e.currentTarget.getAttribute("name")
         setContent(name)
@@ -55,6 +75,10 @@ const TaskCreateSimple = ({
         privacy: "public",
     })
 
+    const editNewTask = (edit) => {
+        setNewTask(Object.assign({}, newTask, edit))
+    }
+
     const postMutation = useMutation({
         mutationFn: (data) => {
             return postTask(data)
@@ -73,48 +97,27 @@ const TaskCreateSimple = ({
             onClose()
         },
         onError: () => {
-            toast.error(t("task_create_error"), {
-                toastId: "task_create_error",
-            })
+            toast.error(t("task_create_error"))
         },
     })
 
-    useEffect(() => {
-        document.addEventListener("keydown", onKeyDown)
-
-        return () => {
-            document.removeEventListener("keydown", onKeyDown)
-        }
-    }, [newTask])
-
-    const handleChange = (diff) => {
-        setNewTask(Object.assign({}, newTask, diff))
-    }
-
-    const onKeyDown = (e) => {
+    const onKeyDownEnter = (e) => {
         if (postMutation.isPending) {
+            e.preventDefault()
             return
         }
 
-        if (e.altKey) {
-            const selectedNumber = Number(e.code[5])
-            if (selectedNumber) {
-                e.preventDefault()
-                setContent(items[selectedNumber - 1].name)
-            }
+        if (e.code !== "Enter") {
+            return
         }
-        if (e.code === "Enter") {
-            e.preventDefault()
 
-            if (!newTask.name) {
-                toast.error(t("task_create_no_name"), {
-                    toastId: "task_create_no_name",
-                })
-                return
-            }
+        e.preventDefault()
 
-            postMutation.mutate(newTask)
+        if (newTask.name.trim() === "") {
+            return toast.error(t("task_create_no_name"))
         }
+
+        postMutation.mutate(newTask)
     }
 
     const items = [
@@ -124,10 +127,11 @@ const TaskCreateSimple = ({
             component: (
                 <TaskNameInput
                     task={newTask}
-                    name={newTask?.name}
-                    setName={(name) => handleChange({ name })}
+                    name={newTask.name}
+                    setName={(name) => editNewTask({ name })}
                     inputRef={inputRef}
                     color={color}
+                    setFunc={editNewTask}
                     isCreate
                 />
             ),
@@ -139,7 +143,7 @@ const TaskCreateSimple = ({
                 <SimpleAssigned
                     assignedIndex={assignedIndex}
                     setAssignedIndex={setAssignedIndex}
-                    editNewTask={handleChange}
+                    editNewTask={editNewTask}
                     color={color}
                 />
             ),
@@ -151,7 +155,7 @@ const TaskCreateSimple = ({
                 <SimpleDue
                     dueIndex={dueIndex}
                     setDueIndex={setDueIndex}
-                    editNewTask={handleChange}
+                    editNewTask={editNewTask}
                     color={color}
                 />
             ),
@@ -163,7 +167,7 @@ const TaskCreateSimple = ({
                 <SimplePriority
                     priorityIndex={priorityIndex}
                     setPriorityIndex={setPriorityIndex}
-                    editNewTask={handleChange}
+                    editNewTask={editNewTask}
                     color={color}
                 />
             ),
@@ -171,7 +175,7 @@ const TaskCreateSimple = ({
     ]
 
     return (
-        <TaskCreateSimpleBlock>
+        <TaskCreateSimpleBlock onKeyDown={onKeyDownEnter}>
             <IndexBlock>
                 {items.map((item) => (
                     <IndexBox

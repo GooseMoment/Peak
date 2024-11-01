@@ -366,6 +366,26 @@
         "recovery_error_password_unmatch": "Two forms have different values.",
         "recovery_error": "Oops. Perhaps this link is invalid or expired."
     },
+    "social" : {
+        "following_title": "Following",
+        "explore_title": "Explore",
+        "log_preview_completed": "completed!",
+        "log_details": {
+            "no_content": "There is no task."
+        },
+        "quote" : {
+            "empty_self_quote": "Write your today's quote.",
+            "empty_others_quote": "No quote yet."
+        },
+        "emoji_modal" : {
+            "searchbar" : "Search emojis"
+        },
+        "explore" : {
+            "searchbar" : "Search for usernames to follow.",
+            "no_result" : "No users matched your search",
+            "suggestion" : "Make new connections with new people!"
+        }
+    },
     "search" : {
         "title": "Search",
         "filter_button" : {
