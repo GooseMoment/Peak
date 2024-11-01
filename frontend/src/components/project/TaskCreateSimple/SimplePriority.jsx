@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import {
     ContentBox,
     CreateSimpleBox,
-} from "@components/project/Creates/simple/CreateSimpleBox"
+} from "@components/project/TaskCreateSimple/CreateSimpleBox"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
