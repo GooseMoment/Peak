@@ -30,7 +30,7 @@ const TaskCommonDetail = ({
     color,
     isCreating = false,
 }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation(null, { keyPrefix: "task" })
     const inputRef = useRef(null)
 
     const navigate = useNavigate()
@@ -62,15 +62,17 @@ const TaskCommonDetail = ({
                 queryClient.invalidateQueries({
                     queryKey: ["projects", newTask.project_id],
                 })
-                toast.success(t("task_create_success"))
+                toast.success(t("edit.create_success"))
+            } else {
+                toast.success(t("edit.edit_success"))
             }
         },
         onError: () => {
             if (isCreating) {
-                toast.error(t("task_create_error"))
+                toast.error(t("edit.create_error"))
                 return
             }
-            toast.error(t("task_edit_error"))
+            toast.error(t("edit.edit_error"))
         },
     })
 
@@ -96,12 +98,12 @@ const TaskCommonDetail = ({
             }
 
             toast.success(
-                t("delete.task_delete_success", { task_name: newTask.name }),
+                t("delete.delete_success", { task_name: newTask.name }),
             )
         },
         onError: () => {
             toast.error(
-                t("delete.task_delete_error", { task_name: newTask.name }),
+                t("delete.delete_error", { task_name: newTask.name }),
             )
         },
     })
@@ -131,7 +133,7 @@ const TaskCommonDetail = ({
 
     const submit = async () => {
         if (newTask.name.trim() === "") {
-            toast.error(t("task_create_no_name"))
+            toast.error(t("edit.create_no_name"))
             inputRef.current.focus()
             return
         }
@@ -199,7 +201,7 @@ const TaskCommonDetail = ({
                     disabled={mutation.isPending}
                     loading={mutation.isPending}
                     onClick={submit}>
-                    {t(isCreating ? "button_add" : "button_save")}
+                    {t(isCreating ? "edit.button_add" : "edit.button_save")}
                 </Button>
             </ButtonGroup>
             {isAlertOpen && (

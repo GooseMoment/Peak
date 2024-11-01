@@ -13,7 +13,7 @@ import { getTask } from "@api/tasks.api"
 import { useTranslation } from "react-i18next"
 
 const TaskDetail = () => {
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation(null, { keyPrefix: "task" })
 
     const [projectID, projectType, color] = useOutletContext()
     const { task_id } = useParams()
@@ -57,7 +57,6 @@ const TaskDetail = () => {
 
     return (
         <TaskCommonDetail
-            task={task}
             newTask={newTask}
             setNewTask={setNewTask}
             projectID={projectID}

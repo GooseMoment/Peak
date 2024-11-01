@@ -60,12 +60,7 @@
         "loading": "Loading...",
         "none": "none",
         "error_load_project_and_drawer": "Couldn't load project and drawers 😢",
-        "error_load_task": "Couldn't load tasks 😢",
         "name_placeholder": "Enter a name",
-        "task_create_success": "Created a new task.",
-        "task_create_error": "Failed to create a new task.",
-        "task_edit_error": "Failed to edit a new task.",
-        "task_create_no_name": "Write a name of a task.",
         "edit": {
             "display": "Edit"
         },
@@ -75,14 +70,11 @@
             "button_done": "Dismiss",
             "alert_project_title": "the \"{{project_name}}\" project",
             "alert_drawer_title": "the \"{{drawer_name}}\" drawer",
-            "alert_task_title": "the \"{{task_name}}\" task",
             "alert_question": "Delete {{title}}?",
             "project_delete_success": "Deleted the \"{{project_name}}\" project.",
             "project_delete_error": "Failed to delete the \"{{project_name}}\" project.",
             "drawer_delete_success": "Delted \"{{drawer_name}}\" drawer.",
-            "drawer_delete_error": "Failed to delete the \"{{drawer_name}}\" drawer.",
-            "task_delete_success": "Deleted the \"{{task_name}}\" task.",
-            "task_delete_error": "Failed to delete \"{{task_name}}\" task."
+            "drawer_delete_error": "Failed to delete the \"{{drawer_name}}\" drawer."
         },
         "sort": {
             "title": "{{title}} Sort by",
@@ -155,8 +147,23 @@
         "name_placeholder": "Enter a name for the task.",
         "name_change_success": "The name has changed.",
         "none": "none",
-        "create": "Create task",
-        "edit": "Edit task",
+        "error_load_task": "Couldn't load tasks 😢",
+        "edit" : {
+            "edit_title": "Edit task",
+            "edit_success": "Saved changes.",
+            "edit_error": "Failed to edit a new task.",
+            "create_title": "Create task",
+            "create_success": "Created a new task.",
+            "create_error": "Failed to create a new task.",
+            "create_no_name": "Write a name of a task.",
+            "button_add": "Add",
+            "button_save": "Save"
+        },
+        "delete": {
+            "alert_task_title": "the \"{{task_name}}\" task",
+            "delete_success": "Deleted the \"{{task_name}}\" task.",
+            "delete_error": "Failed to delete \"{{task_name}}\" task."
+        },
         "assigned": {
             "name": "Assignment Date",
             "title": "Assignment date Settings"
