@@ -55,20 +55,19 @@
         "button_load_more": "더보기",
         "button_add_task": "새 작업 추가",
         "button_close_add_task": "닫힘",
+        "button_add": "추가하기",
+        "button_save": "수정",
         "loading": "로딩 중",
+        "none": "없음",
         "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요 😢",
         "error_load_task": "작업을 불러오지 못했어요 😢",
-        "create": {
-            "name_placeholder": "이름을 입력하세요",
-            "button_add": "추가하기",
-            "none": "없음",
-            "task_create_success": "새 작업을 생성했습니다.",
-            "task_create_error": "작업 생성에 실패하였습니다.",
-            "task_create_no_name": "작업의 이름을 적어주세요."
-        },
+        "name_placeholder": "이름을 입력하세요",
+        "task_create_success": "새 작업을 생성했습니다.",
+        "task_create_error": "작업 생성에 실패하였습니다.",
+        "task_edit_error": "작업 수정에 실패하였습니다.",
+        "task_create_no_name": "작업의 이름을 적어주세요.",
         "edit": {
-            "display": "수정",
-            "name_change_success": "이름을 변경했습니다."
+            "display": "수정"
         },
         "delete": {
             "display": "삭제",

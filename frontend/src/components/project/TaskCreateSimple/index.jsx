@@ -26,7 +26,7 @@ const TaskCreateSimple = ({
     color,
     onClose,
 }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.create" })
+    const { t } = useTranslation(null, { keyPrefix: "project" })
     const inputRef = useRef(null)
 
     const [content, setContent] = useState("name")
@@ -127,11 +127,11 @@ const TaskCreateSimple = ({
             component: (
                 <TaskNameInput
                     task={newTask}
-                    setFunc={editNewTask}
+                    name={newTask.name}
+                    setName={(name) => editNewTask({ name })}
                     inputRef={inputRef}
-                    newTaskName={newTask.name}
-                    setNewTaskName={(name) => editNewTask({ name })}
                     color={color}
+                    setFunc={editNewTask}
                     isCreate
                 />
             ),
