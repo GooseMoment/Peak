@@ -34,44 +34,6 @@ class TaskDetail(mixins.RetrieveModelMixin,
     
     def patch(self, request, *args, **kwargs):
         try:
-            new_due_type = request.data["due_type"]
-            new_due_date = request.data["due_date"]
-            new_due_datetime = request.data["due_datetime"]
-        except KeyError:
-            pass
-        else:
-            task: Task = self.get_object()
-            prev_due_type = task.due_type
-            prev_due_date = None
-            prev_due_datetime = None
-
-            if task.due_type == "due_date":
-                prev_due_date = task.due_date.isoformat()
-            elif task.due_type == "due_datetime":
-                prev_due_datetime= task.due_datetime.isoformat()
-
-            # new_due_date is None
-            if (new_due_type is None) and (prev_due_type is not None):
-                TaskReminder.objects.filter(task=task.id).delete()
-            # new_due_date is true
-            else:
-                if (new_due_type is None):
-                    pass
-                elif (prev_due_date != new_due_date) or (prev_due_datetime != new_due_datetime):
-                    if new_due_type == "due_date":
-                        tz = self.get_tz()
-                        converted_due_date = datetime.fromisoformat(new_due_date)
-                        nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=tz)
-                        converted_due_datetime = datetime.combine(converted_due_date, nine_oclock_time)
-                    else:
-                        converted_due_datetime = datetime.fromisoformat(new_due_datetime)
-                    
-                    reminders = TaskReminder.objects.filter(task=task.id)
-                    for reminder in reminders:
-                        reminder.scheduled = caculateScheduled(converted_due_datetime, reminder.delta)
-                        reminder.save()
-    
-        try:
             new_completed = request.data["completed_at"]
         except KeyError:
             pass

@@ -260,7 +260,10 @@ def get_daily_logs(request: HttpRequest, username, day):
         follower__username=username,
         status=Following.ACCEPTED
     ).all()
-    followingUsers = User.objects.filter(followers__in=followings.all()).all()
+    
+    daily_logs_filter = Q(followers__in=followings.all()) | Q(id=request.user.id)
+    
+    followingUsers = User.objects.filter(daily_logs_filter).all().distinct()
     day = datetime.fromisoformat(day)
     
     user_id = str(get_object_or_404(User, username=username).id)
@@ -341,6 +344,39 @@ def get_privacy_filter(follower, followee):
     privacyFilter &= Q(user=followee)
     
     return privacyFilter
+
+class DailyLogDetailsPagination(CursorPagination):
+    page_size = 5
+    ordering = ['project_order', 'drawer_order', 'order']
+    
+
+class DailyLogDetailsView(generics.GenericAPIView):
+    
+    pagination_class = DailyLogDetailsPagination
+    
+    def get(self, request, followee, day):
+        followee_user = get_object_or_404(User, username=followee)
+        day_min = datetime.fromisoformat(day)
+        day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+        day_range = (day_min, day_max)
+
+        privacy_filter = get_privacy_filter(request.user, followee_user)
+
+        completed_tasks_filter = Q(completed_at__range=day_range)
+        uncompleted_tasks_filter = Q(completed_at=None) & Q(assigned_at__range=day_range)
+        # TODO: ( | Q(due_datetime__range=day_range))
+        tasks_filter = privacy_filter & (completed_tasks_filter | uncompleted_tasks_filter)
+
+        tasks_queryset = Task.objects.filter(tasks_filter).all().annotate(project_order=F('drawer__project__order'), drawer_order=F('drawer__order'))
+        
+        page = self.paginate_queryset(tasks_queryset)
+        if page is not None:
+            serializer = DailyLogDetailsSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = DailyLogDetailsSerializer(tasks_queryset, many=True)
+        
+        return Response(serializer.data)
 
 class DailyLogDrawerPagination(CursorPagination):
     page_size = 5

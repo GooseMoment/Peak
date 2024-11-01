@@ -1,37 +1,28 @@
 import { useState } from "react"
 
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { styled } from "styled-components"
 
-import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
-import SocialCalendar from "@components/social/SocialCalendar"
+import CommonCalendar from "@components/common/CommonCalendar"
 import SocialPageTitle from "@components/social/SocialPageTitle"
 import LogDetails from "@components/social/logDetails/LogDetails"
 import LogsPreview from "@components/social/logsPreview/LogsPreview"
 
 import { getCurrentUsername } from "@api/client"
-import {
-    getDailyLogDrawers,
-    getDailyLogsPreview,
-    getQuote,
-    postQuote,
-} from "@api/social.api"
+import { getDailyLogsPreview } from "@api/social.api"
 
-import { getCursorFromURL } from "@utils/pagination"
-
-import queryClient from "@queries/queryClient"
-
-import { ImpressionArea } from "@toss/impression-area"
-import { toast } from "react-toastify"
+import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 const SocialFollowingPage = () => {
-    const initial_date = new Date()
-    initial_date.setHours(0, 0, 0, 0)
+    const initialDate = new Date()
+    initialDate.setHours(0, 0, 0, 0)
 
-    const [selectedDate, setSelectedDate] = useState(initial_date.toISOString())
-    const [selectedUser, setSelectedUser] = useState(null)
+    const { isMobile } = useScreenType()
 
     const me = getCurrentUsername()
+
+    const [selectedDate, setSelectedDate] = useState(initialDate.toISOString())
+    const [selectedUser, setSelectedUser] = useState(null)
 
     const targetUser = selectedUser ? selectedUser : me
 
@@ -41,46 +32,6 @@ const SocialFollowingPage = () => {
         enabled: !!selectedDate && !!me,
     })
 
-    const { data: quote, isPending: isQuotePending } = useQuery({
-        queryKey: ["quote", targetUser, selectedDate],
-        queryFn: () => getQuote(targetUser, selectedDate),
-        enabled: !!selectedDate && !!me,
-    })
-
-    const QuoteMutation = useMutation({
-        mutationFn: ({ day, content }) => {
-            return postQuote(day, content)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["quote", me, selectedDate],
-            })
-        },
-        onError: (e) => {
-            toast.error(e)
-        },
-    })
-
-    const {
-        data: drawerPage,
-        fetchNextPage: fetchNextDrawerPage,
-        isPending: isDrawerPending,
-        refetch: refetchDrawer,
-    } = useInfiniteQuery({
-        queryKey: ["daily", "log", "details", "drawer", targetUser],
-        queryFn: (page) => getDailyLogDrawers(targetUser, page.pageParam),
-        initialPageParam: "",
-        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
-    })
-
-    const hasNextPage =
-        drawerPage?.pages[drawerPage?.pages?.length - 1].next !== null
-    const isNotificationEmpty = drawerPage?.pages[0]?.results?.length === 0
-
-    const saveQuote = (content) => {
-        QuoteMutation.mutate({ day: selectedDate, content })
-    }
-
     return (
         <>
             <SocialPageTitle active="following" />
@@ -88,10 +39,11 @@ const SocialFollowingPage = () => {
             <Wrapper>
                 <Container>
                     <CalendarWrapper>
-                        <SocialCalendar
-                            newLogDates={mockNewLogDates}
-                            selectedDate={selectedDate}
-                            setSelectedDate={setSelectedDate}
+                        <CommonCalendar
+                            isRangeSelectMode={false}
+                            selectedStartDate={selectedDate}
+                            setSelectedStartDate={setSelectedDate}
+                            contentedDates={mockNewLogDates}
                         />
                     </CalendarWrapper>
                     {dailyLogs && (
@@ -99,35 +51,20 @@ const SocialFollowingPage = () => {
                             logs={dailyLogs}
                             selectedUser={selectedUser}
                             setSelectedUser={setSelectedUser}
+                            selectedDate={selectedDate}
                         />
                     )}
                 </Container>
 
                 {/* TODO: 날짜가 선택되지 않았을 때 */}
-                <StickyContainer>
-                    {isQuotePending || isDrawerPending ? (
-                        <SkeletonProjectPage />
-                    ) : (
-                        drawerPage && (
-                            <LogDetails
-                                user={quote?.user}
-                                quote={quote}
-                                saveQuote={saveQuote}
-                                selectedDate={selectedDate}
-                                logDetails={drawerPage}
-                                isFollowingPage
-                            />
-                        )
-                    )}
-                    <ImpressionArea
-                        onImpressionStart={() => fetchNextDrawerPage()}
-                        timeThreshold={200}>
-                        {hasNextPage && "next"}
-                        {!hasNextPage && !isNotificationEmpty && "no_more"}
-                    </ImpressionArea>
-
-                    {isNotificationEmpty && "empty"}
-                </StickyContainer>
+                {!isMobile && (
+                    <StickyContainer>
+                        <LogDetails
+                            username={targetUser}
+                            selectedDate={selectedDate}
+                        />
+                    </StickyContainer>
+                )}
             </Wrapper>
         </>
     )
@@ -136,7 +73,10 @@ const SocialFollowingPage = () => {
 const Wrapper = styled.div`
     display: flex;
     gap: 2rem;
-    gap: 2rem;
+
+    ${ifMobile} {
+        flex-direction: column;
+    }
 `
 
 const Container = styled.div`
@@ -146,12 +86,18 @@ const Container = styled.div`
 
     padding: 0 1rem 0;
     overflow: hidden;
-    overflow: hidden;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 1rem;
+
+    ${ifMobile} {
+        width: 100%;
+        min-width: auto;
+
+        padding: 0;
+    }
 `
 
 const StickyContainer = styled(Container)`
@@ -161,12 +107,15 @@ const StickyContainer = styled(Container)`
 `
 
 const CalendarWrapper = styled.div`
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
     width: 80%;
-    max-width: 40rem;
-    width: 80%;
-    max-width: 40rem;
+    max-width: 35rem;
+
+    ${ifMobile} {
+        min-width: 20rem;
+
+        font-size: 0.9em;
+    }
 `
 
 const mockNewLogDates = [

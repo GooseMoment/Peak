@@ -12,6 +12,7 @@ urlpatterns = [
     path('daily/logs/@<str:username>/<str:day>/', views.get_daily_logs),
     path('daily/quote/@<str:followee>/<str:day>/', views.get_quote),
     path('daily/quote/<str:day>/', views.post_quote),
+    path('daily/log/details/@<str:followee>/<str:day>/', views.DailyLogDetailsView.as_view()),
     path('daily/log/details/drawer/@<str:followee>/', views.DailyLogDrawerView.as_view()),
     path('daily/log/details/task/<str:drawer>/<str:day>/', views.DailyLogTaskView.as_view()),
     path('reaction/<str:type>/<str:id>/', views.ReactionView.as_view()),
