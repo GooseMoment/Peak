@@ -1,9 +1,9 @@
 import styled from "styled-components"
 
+import Slach from "@assets/project/Slach"
 import next_week from "@assets/project/calendar/next_week.svg"
 import today from "@assets/project/calendar/today.svg"
 import tomorrow from "@assets/project/calendar/tomorrow.svg"
-import Slach from "@assets/project/Slach"
 
 import { useTranslation } from "react-i18next"
 
@@ -11,8 +11,18 @@ const QuickDue = ({ changeDueDate }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
 
     const items = [
-        { id: 0, icon: <img src={today} />, display: t("today"), set: { days: 0 }},
-        { id: 1, icon: <img src={tomorrow} />, display: t("tomorrow"), set: { days: 1 }},
+        {
+            id: 0,
+            icon: <img src={today} />,
+            display: t("today"),
+            set: { days: 0 },
+        },
+        {
+            id: 1,
+            icon: <img src={tomorrow} />,
+            display: t("tomorrow"),
+            set: { days: 1 },
+        },
         {
             id: 2,
             icon: <img src={next_week} />,

@@ -80,15 +80,15 @@ const TaskFrame = ({
                                 $completed={task.completed_at}
                                 $isSocial={isSocial}
                                 $isOutOfDue={isOutOfDue}>
-                                <Hourglass draggable="false"/>
+                                <Hourglass draggable="false" />
                                 {completedAt ? due : calculate_due}
                             </DueDate>
                         )}
                         {isSocial || task.reminders
                             ? task.reminders?.length !== 0 && (
                                   <Reminder $completed={task.completed_at}>
-                                        <AlarmClock draggable="false"/>
-                                        {task.reminders?.length}
+                                      <AlarmClock draggable="false" />
+                                      {task.reminders?.length}
                                   </Reminder>
                               )
                             : null}
@@ -196,8 +196,8 @@ const DueDate = styled.div`
             props.$isSocial
                 ? props.theme.textColor
                 : props.$completed
-                ? props.theme.grey
-                : props.$isOutOfDue
+                  ? props.theme.grey
+                  : props.$isOutOfDue
                     ? props.theme.project.danger
                     : props.theme.project.dueColor};
     }

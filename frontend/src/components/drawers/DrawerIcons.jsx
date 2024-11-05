@@ -28,15 +28,17 @@ const DrawerIcons = ({
                         setSelectedSortMenuPosition,
                         setIsSortMenuOpen,
                         setIsContextMenuOpen,
-                    )}
-                >
+                    )}>
                     <SortIcon color={color} />
                 </div>
             ),
         },
         {
             icon: (
-                <CollapseButton collapsed={collapsed} handleCollapsed={handleCollapsed}/>
+                <CollapseButton
+                    collapsed={collapsed}
+                    handleCollapsed={handleCollapsed}
+                />
             ),
         },
         {
