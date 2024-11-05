@@ -1,10 +1,10 @@
 import styled, { css } from "styled-components"
 
-import priority0 from "@assets/project/priority/priority0.svg"
-import priority1 from "@assets/project/priority/priority1.svg"
-import priority2 from "@assets/project/priority/priority2.svg"
+import Priority0 from "@assets/project/priority/Priority0"
+import Priority1 from "@assets/project/priority/Priority1"
+import Priority2 from "@assets/project/priority/Priority2"
 
-const priorityIcons = [priority0, priority1, priority2]
+const priorityIcons = [<Priority0/>, <Priority1/>, <Priority2/>]
 
 const Priority = ({ priority = 0, completed, hasDate }) => {
     return (
@@ -12,23 +12,21 @@ const Priority = ({ priority = 0, completed, hasDate }) => {
             draggable="false"
             $completed={completed}
             $hasDate={hasDate}
-            src={priorityIcons[priority]}
-        />
+        >
+            {priorityIcons[priority]}
+        </PriorityImg>
     )
 }
 
-const PriorityImg = styled.img`
-    width: 15px;
-    height: 15px;
+const PriorityImg = styled.div`
     margin-top: ${(p) => (p.$hasDate ? "-0.5em" : "-0.25em")};
     margin-right: 0.2em;
-    filter: ${(p) => p.theme.project.imgDangerColor};
 
-    ${(props) =>
-        props.$completed &&
-        css`
-            filter: ${(p) => p.theme.project.imgGreyColor};
-        `}
+    & svg {
+        width: 15px;
+        height: 15px;
+        stroke: ${(p) => (p.$completed ? p.theme.grey : p.theme.project.danger)};
+    }
 `
 
 export default Priority
