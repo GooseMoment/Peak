@@ -6,7 +6,7 @@ import FeatherIcon from "feather-icons-react"
 import { BottomSheet } from "react-spring-bottom-sheet"
 import "react-spring-bottom-sheet/dist/style.css"
 
-export const Header = ({ title = null, handleBack, closeSheet }) => {
+export const Header = ({ title = null, handleBack = ()=>{}, closeSheet }) => {
     return (
         <HeaderBox>
             {handleBack ? (
@@ -73,6 +73,7 @@ const HeaderBox = styled.div`
     }
 `
 
+// Same as chevron-left icon size
 const EmptyBox = styled.div`
     width: 17.6px;
     height: 17.6px;
