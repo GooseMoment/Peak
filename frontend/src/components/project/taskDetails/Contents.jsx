@@ -13,8 +13,8 @@ import Memo from "./Memo"
 import Priority from "./Priority"
 import Reminder from "./Reminder"
 
-import alarmclock from "@assets/project/alarmclock.svg"
-import hourglass from "@assets/project/hourglass.svg"
+import AlarmClock from "@assets/project/AlarmClock"
+import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -54,7 +54,7 @@ const Contents = ({ task, setFunc }) => {
         {
             id: 2,
             name: "due",
-            icon: <img src={hourglass} />,
+            icon: <Hourglass />,
             display:
                 task.due_type && (task.due_date || task.due_datetime)
                     ? formatted_due_datetime
@@ -64,7 +64,7 @@ const Contents = ({ task, setFunc }) => {
         {
             id: 3,
             name: "reminder",
-            icon: <img src={alarmclock} />,
+            icon: <AlarmClock />,
             display:
                 task?.reminders && task.reminders?.length !== 0 ? (
                     <RemindersBox name="reminder">
@@ -157,18 +157,13 @@ const ContentsBox = styled.div`
     align-items: center;
     justify-content: flex-start;
 
-    & svg,
-    img {
+    & svg {
         width: 1.3em;
         height: 1.3em;
         stroke: ${(p) => p.theme.textColor};
         margin-top: 1.3em;
-        top: 0;
-    }
-
-    & img {
-        filter: ${(p) => p.theme.project.imgColor};
         margin-right: 8px;
+        top: 0;
     }
 `
 

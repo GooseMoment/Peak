@@ -6,8 +6,8 @@ import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"
 import taskCalculation from "@components/tasks/utils/taskCalculation"
 
-import alarmclock from "@assets/project/alarmclock.svg"
-import hourglass from "@assets/project/hourglass.svg"
+import AlarmClock from "@assets/project/AlarmClock"
+import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -80,15 +80,15 @@ const TaskFrame = ({
                                 $completed={task.completed_at}
                                 $isSocial={isSocial}
                                 $isOutOfDue={isOutOfDue}>
-                                <img draggable="false" src={hourglass} />
+                                <Hourglass draggable="false"/>
                                 {completedAt ? due : calculate_due}
                             </DueDate>
                         )}
                         {isSocial || task.reminders
                             ? task.reminders?.length !== 0 && (
                                   <Reminder $completed={task.completed_at}>
-                                      <img draggable="false" src={alarmclock} />
-                                      {task.reminders?.length}
+                                        <AlarmClock draggable="false"/>
+                                        {task.reminders?.length}
                                   </Reminder>
                               )
                             : null}
@@ -188,27 +188,18 @@ const DueDate = styled.div`
                 ? props.theme.project.danger
                 : props.theme.project.dueColor};
 
-    & img {
+    & svg {
         width: 1em;
         height: 1em;
         margin-right: 0.2em;
-
-        ${(props) =>
+        stroke: ${(props) =>
             props.$isSocial
-                ? css`
-                      filter: ${(p) => p.theme.project.imgColor};
-                  `
+                ? props.theme.textColor
                 : props.$completed
-                  ? css`
-                        filter: ${(p) => p.theme.project.imgGreyColor};
-                    `
-                  : props.$isOutOfDue
-                    ? css`
-                          filter: ${(p) => p.theme.project.imgDangerColor};
-                      `
-                    : css`
-                          filter: ${(p) => p.theme.project.imgDueColor};
-                      `};
+                ? props.theme.grey
+                : props.$isOutOfDue
+                    ? props.theme.project.danger
+                    : props.theme.project.dueColor};
     }
 `
 
@@ -223,19 +214,15 @@ const Reminder = styled.div`
             ? props.theme.grey
             : props.theme.project.reminderColor};
 
-    & img {
+    & svg {
         width: 1em;
         height: 1em;
         margin-right: 0.2em;
         top: 0;
-        filter: ${(props) =>
+        stroke: ${(props) =>
             props.$completed
-                ? css`
-                      ${(p) => p.theme.project.imgGreyColor};
-                  `
-                : css`
-                      ${(p) => p.theme.project.imgReminderColor};
-                  `};
+                ? props.theme.grey
+                : props.theme.project.reminderColor};
     }
 `
 

@@ -12,7 +12,7 @@ import { postTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
 
-import hourglass from "@assets/project/hourglass.svg"
+import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -150,7 +150,7 @@ const TaskCreateSimple = ({
         },
         {
             name: "due",
-            icon: <img src={hourglass} />,
+            icon: <Hourglass />,
             component: (
                 <SimpleDue
                     dueIndex={dueIndex}
@@ -251,12 +251,6 @@ const IndexBox = styled.div`
         stroke: ${(p) => p.theme.textColor};
     }
 
-    & img {
-        width: 19px;
-        height: 19px;
-        filter: ${(p) => p.theme.project.imgColor};
-    }
-
     ${(props) =>
         props.$isSelected &&
         css`
@@ -264,11 +258,6 @@ const IndexBox = styled.div`
 
             & svg {
                 stroke: ${(p) => p.theme.white};
-            }
-
-            & img {
-                filter: invert(98%) sepia(99%) saturate(191%) hue-rotate(32deg)
-                    brightness(115%) contrast(99%);
             }
         `}
 `
