@@ -38,10 +38,15 @@ const ProjectName = ({ project, demo = false }) => {
             </FlexBox>
             {!demo && (
                 <TaskCountBox>
+                    <CircleIcon>
+                        <FeatherIcon icon="check" />
+                    </CircleIcon>
                     <TaskCountText>
-                        {t("completed_tasks")}: {project.completed_task_count} /{" "}
-                        {t("uncompleted_tasks")}:{" "}
-                        {project.uncompleted_task_count}
+                        : {project.completed_task_count} &nbsp; &nbsp;
+                    </TaskCountText>
+                    <CircleIcon/>
+                    <TaskCountText>
+                        : {project.uncompleted_task_count}
                     </TaskCountText>
                 </TaskCountBox>
             )}
@@ -108,12 +113,34 @@ const TypeText = styled.div`
     font-size: 1em;
     margin-left: 0.6em;
     margin-top: 0.1em;
-    color: ${(p) => p.theme.grey};
+    color: ${(p) => p.theme.secondTextColor};
 `
 
 const TaskCountText = styled.div`
     font-size: 1em;
     color: ${(p) => p.theme.textColor};
+`
+
+const CircleIcon = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1em;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 2px solid ${p=>p.theme.secondTextColor};
+    margin-left: 0.1em;
+    margin-right: 0.5em;
+
+    & svg {
+        width: 0.8em;
+        height: 0.8em;
+        stroke: ${(p) => p.theme.secondTextColor};
+        stroke-width: 0.2em;
+        top: 0;
+        margin-top: 0.1rem;
+        margin-right: 0;
+    }
 `
 
 export default ProjectName

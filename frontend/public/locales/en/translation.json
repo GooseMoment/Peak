@@ -33,9 +33,7 @@
         "title": "Projects",
         "type_regular": "Regular",
         "type_goal": "Goal",
-        "button_add_project": "Add new project",
-        "completed_tasks": "Completed",
-        "uncompleted_tasks": "Uncompleted"
+        "button_add_project": "Add new project"
     },
     "today": {
         "title": "Today",

@@ -33,9 +33,7 @@
         "title": "프로젝트",
         "type_regular": "상시",
         "type_goal": "목표",
-        "button_add_project": "새 프로젝트 추가",
-        "completed_tasks": "완료",
-        "uncompleted_tasks": "미완"
+        "button_add_project": "새 프로젝트 추가"
     },
     "today": {
         "title": "오늘",

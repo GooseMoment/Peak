@@ -8,7 +8,7 @@ const TaskCircle = ({
     hasDate = null,
     isInput = false,
     isLoading = false,
-    onClick,
+    onClick = null,
 }) => {
     return (
         <Circle
