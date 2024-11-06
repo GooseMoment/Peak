@@ -1,13 +1,12 @@
-import { useState, useEffect, useRef } from "react"
-
-import styled from "styled-components"
+import { useEffect, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
+import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
-import TaskNameInput from "@components/tasks/TaskNameInput"
 import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
 import ContentsMobile from "@components/project/taskDetails/mobile/ContentsMobile"
+import TaskNameInput from "@components/tasks/TaskNameInput"
 
 import { postReminder } from "@api/notifications.api"
 import { patchTask, postTask } from "@api/tasks.api"
@@ -32,10 +31,8 @@ const TaskCommonDetailMobile = ({
 
     useEffect(() => {
         if (activeContent === null) {
-            if (isCreating)
-                setTitle(t("edit.create_title"))
-            else
-                setTitle(t("edit.edit_title"))
+            if (isCreating) setTitle(t("edit.create_title"))
+            else setTitle(t("edit.edit_title"))
         } else if (activeContent) {
             setTitle(t(activeContent + ".title"))
         }
@@ -150,7 +147,11 @@ const TaskCommonDetailMobile = ({
                             disabled={mutation.isPending}
                             loading={mutation.isPending}
                             onClick={submit}>
-                            {t(isCreating ? "edit.button_add" : "edit.button_save")}
+                            {t(
+                                isCreating
+                                    ? "edit.button_add"
+                                    : "edit.button_save",
+                            )}
                         </Button>
                     </ButtonGroup>
                 )}

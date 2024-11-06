@@ -36,7 +36,14 @@ const ProjectListPage = () => {
         <>
             <PageTitleBox>
                 <PageTitle>{t("title")}</PageTitle>
-                {isPending || <PlusBox onClick={() => {setIsCreateOpen(true)}}><FeatherIcon icon="plus"/></PlusBox>}
+                {isPending || (
+                    <PlusBox
+                        onClick={() => {
+                            setIsCreateOpen(true)
+                        }}>
+                        <FeatherIcon icon="plus" />
+                    </PlusBox>
+                )}
             </PageTitleBox>
 
             {isPending && <SkeletonProjectList />}

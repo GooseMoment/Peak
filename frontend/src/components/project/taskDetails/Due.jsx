@@ -55,7 +55,9 @@ const Due = ({ task, setFunc }) => {
             const date = today.plus(set)
 
             if (task.due_type === "due_datetime") {
-                const due_datetime = DateTime.fromISO(task.due_datetime, { zone: tz })
+                const due_datetime = DateTime.fromISO(task.due_datetime, {
+                    zone: tz,
+                })
                 const converted_datetime = due_datetime.set({
                     year: date.year,
                     month: date.month,
@@ -90,12 +92,7 @@ const Due = ({ task, setFunc }) => {
             name: "time",
             display: t("time.title"),
             icon: "clock",
-            component: (
-                <TimeDetail
-                    task={task}
-                    setFunc={setFunc}
-                />
-            ),
+            component: <TimeDetail task={task} setFunc={setFunc} />,
         },
         {
             name: "repeat",
@@ -105,30 +102,27 @@ const Due = ({ task, setFunc }) => {
         },
     ]
 
-    return (
-        addComponent.map((comp, i) => (
-            <FlexCenterBox key={comp.name}>
-                <FlexCenterBox>
-                    <IndexBox
-                        $start={i === 0}
-                        $end={i === 3}
-                        onClick={() => handleAdditionalComp(comp.name)}>
-                        <EmptyBlock />
-                        <Box>
-                            <FeatherIcon icon={comp.icon} />
-                            {comp.display}
-                        </Box>
-                        <CollapseButton
-                            $collapsed={isAdditionalComp === comp.name}>
-                            <FeatherIcon icon="chevron-down" />
-                        </CollapseButton>
-                    </IndexBox>
-                </FlexCenterBox>
-                {isAdditionalComp === comp.name && comp.component}
-                {i !== 3 && <CLine />}
+    return addComponent.map((comp, i) => (
+        <FlexCenterBox key={comp.name}>
+            <FlexCenterBox>
+                <IndexBox
+                    $start={i === 0}
+                    $end={i === 3}
+                    onClick={() => handleAdditionalComp(comp.name)}>
+                    <EmptyBlock />
+                    <Box>
+                        <FeatherIcon icon={comp.icon} />
+                        {comp.display}
+                    </Box>
+                    <CollapseButton $collapsed={isAdditionalComp === comp.name}>
+                        <FeatherIcon icon="chevron-down" />
+                    </CollapseButton>
+                </IndexBox>
             </FlexCenterBox>
-        ))
-    )
+            {isAdditionalComp === comp.name && comp.component}
+            {i !== 3 && <CLine />}
+        </FlexCenterBox>
+    ))
 }
 
 const FlexCenterBox = styled.div`

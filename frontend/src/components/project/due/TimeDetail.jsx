@@ -121,7 +121,9 @@ const TimeDetail = ({ task, setFunc }) => {
                 </InputBox>
             </FlexBox>
             <ButtonsBox>
-                <Button state="danger" onClick={removeTime}>{t("button_remove")}</Button>
+                <Button state="danger" onClick={removeTime}>
+                    {t("button_remove")}
+                </Button>
                 <Button onClick={changeTime}>{t("button_add")}</Button>
             </ButtonsBox>
         </DetailBox>

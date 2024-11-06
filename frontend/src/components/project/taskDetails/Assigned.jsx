@@ -70,30 +70,27 @@ const Assigned = ({ setFunc, onClose }) => {
         },
     ]
 
-    return (
-        addComponent.map((comp, i) => (
-            <Fragment key={comp.name}>
-                <FlexCenterBox>
-                    <IndexBox
-                        $start={i === 0}
-                        $end={i === 2}
-                        onClick={() => handleAdditionalComp(comp.name)}>
-                        <EmptyBlock />
-                        <Box>
-                            <FeatherIcon icon={comp.icon} />
-                            {comp.display}
-                        </Box>
-                        <CollapseButton
-                            $collapsed={isAdditionalComp === comp.name}>
-                            <FeatherIcon icon="chevron-down" />
-                        </CollapseButton>
-                    </IndexBox>
-                </FlexCenterBox>
-                {isAdditionalComp === comp.name && comp.component}
-                {i !== 2 && <CLine />}
-            </Fragment>
-        ))
-    )
+    return addComponent.map((comp, i) => (
+        <Fragment key={comp.name}>
+            <FlexCenterBox>
+                <IndexBox
+                    $start={i === 0}
+                    $end={i === 2}
+                    onClick={() => handleAdditionalComp(comp.name)}>
+                    <EmptyBlock />
+                    <Box>
+                        <FeatherIcon icon={comp.icon} />
+                        {comp.display}
+                    </Box>
+                    <CollapseButton $collapsed={isAdditionalComp === comp.name}>
+                        <FeatherIcon icon="chevron-down" />
+                    </CollapseButton>
+                </IndexBox>
+            </FlexCenterBox>
+            {isAdditionalComp === comp.name && comp.component}
+            {i !== 2 && <CLine />}
+        </Fragment>
+    ))
 }
 
 const FlexCenterBox = styled.div`

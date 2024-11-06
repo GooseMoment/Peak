@@ -19,8 +19,8 @@ import {
 } from "@api/today.api"
 
 import { useClientTimezone } from "@utils/clientSettings"
-import { ifMobile } from "@utils/useScreenType"
 import { getPageFromURL } from "@utils/pagination"
+import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
@@ -115,7 +115,8 @@ const TodayPage = () => {
     return (
         <>
             <PageTitle>{t("title")}</PageTitle>
-            {(<OverdueTasksBlock>
+            {
+                <OverdueTasksBlock>
                     <OverdueTitle>
                         <FeatherIcon icon="alert-circle" />
                         {t("overdue_title")}
@@ -187,7 +188,7 @@ const TodayPage = () => {
                         </>
                     )}
                 </OverdueTasksBlock>
-            )}
+            }
             <TasksBox>
                 {isTodayAssignmentLoading && (
                     <SkeletonDueTasks taskCount={10} />
@@ -231,7 +232,7 @@ const OverdueTasksBlock = styled.div`
     border-radius: 15px;
     margin: 1.4em 0.5em;
     padding: 1.5em 0.8em;
-    
+
     ${ifMobile} {
         margin: 0;
         padding: 1em;

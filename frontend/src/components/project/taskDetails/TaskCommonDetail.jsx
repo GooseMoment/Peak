@@ -102,9 +102,7 @@ const TaskCommonDetail = ({
             )
         },
         onError: () => {
-            toast.error(
-                t("delete.delete_error", { task_name: newTask.name }),
-            )
+            toast.error(t("delete.delete_error", { task_name: newTask.name }))
         },
     })
 

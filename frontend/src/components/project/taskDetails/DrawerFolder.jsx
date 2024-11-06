@@ -17,24 +17,33 @@ const DrawerFolder = ({ project, changeDrawer }) => {
             <ItemBox
                 onClick={
                     project.type === "inbox"
-                        ? changeDrawer(project.drawers[0].id, project.drawers[0].name, project.id, project.name)
+                        ? changeDrawer(
+                              project.drawers[0].id,
+                              project.drawers[0].name,
+                              project.id,
+                              project.name,
+                          )
                         : () => setCollapsed((prev) => !prev)
                 }>
                 <Circle $color={getProjectColor(theme.type, project.color)} />
                 <ItemText $is_project={true}>{project.name}</ItemText>
             </ItemBox>
-            {project.type === "inbox" || collapsed ? null
+            {project.type === "inbox" || collapsed
+                ? null
                 : project.drawers &&
-                    project.drawers.map((drawer) => (
-                        <ItemBox
-                            key={drawer.id}
-                            onClick={changeDrawer(drawer.id, drawer.name, project.id, project.name)}>
-                            <FeatherIcon icon="arrow-right" />
-                            <ItemText $is_project={false}>
-                                {drawer.name}
-                            </ItemText>
-                        </ItemBox>
-                    ))}
+                  project.drawers.map((drawer) => (
+                      <ItemBox
+                          key={drawer.id}
+                          onClick={changeDrawer(
+                              drawer.id,
+                              drawer.name,
+                              project.id,
+                              project.name,
+                          )}>
+                          <FeatherIcon icon="arrow-right" />
+                          <ItemText $is_project={false}>{drawer.name}</ItemText>
+                      </ItemBox>
+                  ))}
         </>
     )
 }

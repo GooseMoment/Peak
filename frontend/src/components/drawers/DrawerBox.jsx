@@ -50,7 +50,7 @@ export const DrawerName = styled.h1`
     ${ifMobile} {
         font-size: 1.2em;
         max-width: 11.3em;
-    }    
+    }
 `
 
 export const DrawerIcon = styled.div`

@@ -44,7 +44,7 @@ const ProjectName = ({ project, demo = false }) => {
                     <TaskCountText>
                         {project.completed_task_count}
                     </TaskCountText>
-                    <CircleIcon/>
+                    <CircleIcon />
                     <TaskCountText>
                         {project.uncompleted_task_count}
                     </TaskCountText>
@@ -128,7 +128,7 @@ const CircleIcon = styled.div`
     height: 1em;
     aspect-ratio: 1;
     border-radius: 50%;
-    border: 2px solid ${p=>p.theme.secondTextColor};
+    border: 2px solid ${(p) => p.theme.secondTextColor};
     margin-left: 1em;
     margin-right: 0.3em;
 

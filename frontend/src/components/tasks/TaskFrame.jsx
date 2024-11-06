@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom"
 
-import { ifMobile } from "@utils/useScreenType"
-
 import styled, { css } from "styled-components"
 
 import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"
 import taskCalculation from "@components/tasks/utils/taskCalculation"
+
+import { ifMobile } from "@utils/useScreenType"
 
 import alarmclock from "@assets/project/alarmclock.svg"
 import hourglass from "@assets/project/hourglass.svg"

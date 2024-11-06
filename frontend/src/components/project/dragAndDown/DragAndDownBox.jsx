@@ -93,9 +93,11 @@ const DragAndDownBox = ({ task, color, children }) => {
             ref={dragHandleRef}
             $edge={closestEdge}
             $color={color}>
-            {isDesktop && <DragHandleButtonBox>
-                <DragHandleButton />
-            </DragHandleButtonBox>}
+            {isDesktop && (
+                <DragHandleButtonBox>
+                    <DragHandleButton />
+                </DragHandleButtonBox>
+            )}
             <ChildrenBox $isDragging={isDragging}>{children}</ChildrenBox>
         </DragAndDownBlock>
     )

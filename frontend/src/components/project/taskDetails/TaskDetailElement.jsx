@@ -16,10 +16,9 @@ const TaskDetailElement = () => {
         navigate(`/app/projects/${projectID}`)
     }
 
-    return (
-        isMobile ?
-        <TaskDetailMobile closeDetail={closeDetail}/>
-        :
+    return isMobile ? (
+        <TaskDetailMobile closeDetail={closeDetail} />
+    ) : (
         <ModalWindow afterClose={closeDetail}>
             <TaskDetail />
         </ModalWindow>

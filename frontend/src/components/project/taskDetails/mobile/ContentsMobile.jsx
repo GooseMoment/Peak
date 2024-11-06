@@ -127,33 +127,36 @@ const ContentsMobile = ({
         <ContentBlock>
             {activeContent === null
                 ? items.map((item) => (
-                    <ContentBox key={item.id}>
-                        <ContentNameBox>
-                            {item.icon}
-                            {t(item.name + ".name")}
-                        </ContentNameBox>
-                        <ContentDisplayBox
-                            onClick={()=>handleClickContent(item.name)}>
-                            {item.display}
-                            <FeatherIcon icon="chevron-right" />
-                        </ContentDisplayBox>
-                    </ContentBox>
-                ))
-                : items.map((item) => (
-                        item.name === activeContent && <ContentBox
-                            key={item.id}
-                            $activeContent={activeContent}>
-                            <ContentNameBox>
-                                {item.icon}
-                                {t(item.name + ".name")}
-                            </ContentNameBox>
-                            <TopContentDisplayBox>
-                                {item.display}
-                            </TopContentDisplayBox>
-                            <CLine />
-                            {item.component}
-                        </ContentBox>
-                      ))}
+                      <ContentBox key={item.id}>
+                          <ContentNameBox>
+                              {item.icon}
+                              {t(item.name + ".name")}
+                          </ContentNameBox>
+                          <ContentDisplayBox
+                              onClick={() => handleClickContent(item.name)}>
+                              {item.display}
+                              <FeatherIcon icon="chevron-right" />
+                          </ContentDisplayBox>
+                      </ContentBox>
+                  ))
+                : items.map(
+                      (item) =>
+                          item.name === activeContent && (
+                              <ContentBox
+                                  key={item.id}
+                                  $activeContent={activeContent}>
+                                  <ContentNameBox>
+                                      {item.icon}
+                                      {t(item.name + ".name")}
+                                  </ContentNameBox>
+                                  <TopContentDisplayBox>
+                                      {item.display}
+                                  </TopContentDisplayBox>
+                                  <CLine />
+                                  {item.component}
+                              </ContentBox>
+                          ),
+                  )}
         </ContentBlock>
     )
 }
@@ -274,7 +277,7 @@ const makePriorities = (t) => [
     t("priority.critical"),
 ]
 
-const makeDisplayReminder = (t) =>({
+const makeDisplayReminder = (t) => ({
     0: t("reminder.display_then"),
     5: t("reminder.display_5_minutes_before"),
     15: t("reminder.display_15_minutes_before"),

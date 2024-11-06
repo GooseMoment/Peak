@@ -1,10 +1,10 @@
 import styled from "styled-components"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import critical from "@assets/project/priority/critical.svg"
 import important from "@assets/project/priority/important.svg"
 import normal from "@assets/project/priority/normal.svg"
-
-import { ifMobile } from "@utils/useScreenType"
 
 import { useTranslation } from "react-i18next"
 
@@ -24,16 +24,14 @@ const Priority = ({ setFunc, onClose }) => {
         { id: 2, icon: <img src={critical} />, content: t("critical") },
     ]
 
-    return (
-        items.map((item) => (
-            <ItemBlock key={item.id}>
-                {item.icon}
-                <ItemText onClick={changePriority(item.id)}>
-                    {item.content}
-                </ItemText>
-            </ItemBlock>
-        ))
-    )
+    return items.map((item) => (
+        <ItemBlock key={item.id}>
+            {item.icon}
+            <ItemText onClick={changePriority(item.id)}>
+                {item.content}
+            </ItemText>
+        </ItemBlock>
+    ))
 }
 
 const ItemBlock = styled.div`

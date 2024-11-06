@@ -34,7 +34,7 @@ const Drawer = ({ setFunc, onClose }) => {
     }
 
     if (isPending) {
-        return <Detail title={t("title")}/>
+        return <Detail title={t("title")} />
     }
 
     if (isError) {
@@ -45,16 +45,14 @@ const Drawer = ({ setFunc, onClose }) => {
             </DrawerSettingLoadErrorBox>
         )
     }
-        
-    return (
-        projects?.map((project) => (
-            <DrawerFolder
-                key={project.id}
-                project={project}
-                changeDrawer={changeDrawer}
-            />
-        ))
-    )
+
+    return projects?.map((project) => (
+        <DrawerFolder
+            key={project.id}
+            project={project}
+            changeDrawer={changeDrawer}
+        />
+    ))
 }
 
 const DrawerSettingLoadErrorBox = styled.div`

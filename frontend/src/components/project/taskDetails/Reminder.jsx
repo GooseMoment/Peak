@@ -65,16 +65,14 @@ const Reminder = ({ task, setFunc }) => {
         },
     ]
 
-    return (
-        items.map((item) => (
-            <ReminderContents
-                key={item.id}
-                item={item}
-                reminders={task.reminders}
-                handleReminder={handleReminder}
-            />
-        ))
-    )
+    return items.map((item) => (
+        <ReminderContents
+            key={item.id}
+            item={item}
+            reminders={task.reminders}
+            handleReminder={handleReminder}
+        />
+    ))
 }
 
 export default Reminder

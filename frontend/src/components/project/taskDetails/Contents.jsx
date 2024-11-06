@@ -3,8 +3,8 @@ import { Fragment, useMemo, useState } from "react"
 import styled, { css } from "styled-components"
 
 import ModalWindow from "@components/common/ModalWindow"
-import ToolTip from "@components/project/common/ToolTip"
 import Detail from "@components/project/common/Detail"
+import ToolTip from "@components/project/common/ToolTip"
 import taskDate from "@components/tasks/utils/taskDate"
 
 import Assigned from "./Assigned"
@@ -50,7 +50,7 @@ const Contents = ({ task, setFunc }) => {
             name: "assigned",
             icon: <FeatherIcon icon="calendar" />,
             display: task.assigned_at ? formatted_assigned_date : t("none"),
-            component: <Assigned setFunc={setFunc} onClose={closeComponent}/>,
+            component: <Assigned setFunc={setFunc} onClose={closeComponent} />,
         },
         {
             id: 2,
@@ -96,7 +96,7 @@ const Contents = ({ task, setFunc }) => {
             name: "priority",
             icon: <FeatherIcon icon="alert-circle" />,
             display: priorities[task.priority],
-            component: <Priority setFunc={setFunc} onClose={closeComponent}/>,
+            component: <Priority setFunc={setFunc} onClose={closeComponent} />,
         },
         {
             id: 5,
@@ -108,14 +108,20 @@ const Contents = ({ task, setFunc }) => {
                     : task.drawer_name
                       ? `${task.project_name} / ${task.drawer_name}`
                       : t("none"),
-            component: <Drawer setFunc={setFunc} onClose={closeComponent}/>,
+            component: <Drawer setFunc={setFunc} onClose={closeComponent} />,
         },
         {
             id: 6,
             name: "memo",
             icon: <FeatherIcon icon="edit" />,
             display: task.memo ? task.memo : t("none"),
-            component: <Memo previousMemo={task.memo} setFunc={setFunc} onClose={closeComponent}/>,
+            component: (
+                <Memo
+                    previousMemo={task.memo}
+                    setFunc={setFunc}
+                    onClose={closeComponent}
+                />
+            ),
         },
     ]
 
@@ -136,10 +142,13 @@ const Contents = ({ task, setFunc }) => {
                         </ContentText>
                         {content === item.name && isComponentOpen ? (
                             <ModalWindow afterClose={closeComponent} additional>
-                                <Detail 
+                                <Detail
                                     title={t(content + ".title")}
                                     onClose={closeComponent}
-                                    special={content === "assigned" || content === "due"}>
+                                    special={
+                                        content === "assigned" ||
+                                        content === "due"
+                                    }>
                                     {item.component}
                                 </Detail>
                             </ModalWindow>

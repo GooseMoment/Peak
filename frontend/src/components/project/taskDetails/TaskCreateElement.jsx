@@ -16,10 +16,9 @@ const TaskCreateElement = () => {
         navigate(`/app/projects/${projectID}`)
     }
 
-    return (
-        isMobile ?
-        <TaskCreateMobile closeCreate={closeCreate}/>
-        :
+    return isMobile ? (
+        <TaskCreateMobile closeCreate={closeCreate} />
+    ) : (
         <ModalWindow afterClose={closeCreate}>
             <TaskCreate />
         </ModalWindow>
