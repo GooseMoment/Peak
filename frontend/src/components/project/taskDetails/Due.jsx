@@ -107,7 +107,7 @@ const Due = ({ task, setFunc }) => {
 
     return (
         addComponent.map((comp, i) => (
-            <Fragment key={comp.name}>
+            <FlexCenterBox key={comp.name}>
                 <FlexCenterBox>
                     <IndexBox
                         $start={i === 0}
@@ -126,7 +126,7 @@ const Due = ({ task, setFunc }) => {
                 </FlexCenterBox>
                 {isAdditionalComp === comp.name && comp.component}
                 {i !== 3 && <CLine />}
-            </Fragment>
+            </FlexCenterBox>
         ))
     )
 }
@@ -136,6 +136,10 @@ const FlexCenterBox = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    ${ifMobile} {
+        width: 100%;
+    }
 `
 
 const CLine = styled.div`

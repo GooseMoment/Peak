@@ -101,6 +101,10 @@ const FlexCenterBox = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    ${ifMobile} {
+        width: 100%;
+    }
 `
 
 const CLine = styled.div`

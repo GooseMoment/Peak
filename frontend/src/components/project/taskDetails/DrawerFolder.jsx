@@ -62,12 +62,14 @@ const ItemBox = styled.div`
     }
 
     ${ifMobile} {
+        width: 100%;
         margin-left: 0.2em;
+        margin: 0.4em 0em;
     }
 `
 
 const ItemText = styled.div`
-    width: 10em;
+    width: 70%;
     font-weight: ${(props) => (props.$is_project ? "500" : "normal")};
     font-size: 1em;
     color: ${(p) => p.theme.textColor};
@@ -79,6 +81,10 @@ const ItemText = styled.div`
         font-weight: bolder;
         color: ${(p) => p.theme.goose};
         cursor: pointer;
+    }
+
+    ${ifMobile} {
+        width: 95%;
     }
 `
 

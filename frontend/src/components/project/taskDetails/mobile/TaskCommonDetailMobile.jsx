@@ -160,6 +160,7 @@ const TaskCommonDetailMobile = ({
 }
 
 const TaskCommonDetailMobileBox = styled.div`
+    width: 90%;
     margin: 1em 1.2em;
 `
 

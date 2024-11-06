@@ -139,9 +139,8 @@ const ContentsMobile = ({
                         </ContentDisplayBox>
                     </ContentBox>
                 ))
-                : items.filter((item) => item.name === activeContent)
-                        .map((item) => (
-                        <ContentBox
+                : items.map((item) => (
+                        item.name === activeContent && <ContentBox
                             key={item.id}
                             $activeContent={activeContent}>
                             <ContentNameBox>
@@ -182,14 +181,14 @@ const ContentBox = styled.div`
             align-items: flex-start;
             margin-left: 0.1em;
             margin-bottom: 0.6em;
-            gap: 0.8em;
+            gap: 0.5em;
             min-width: 0;
         `}
 `
 
 const CLine = styled.div`
     border-top: thin solid ${(p) => p.theme.project.lineColor};
-    margin: 0.3em 0em;
+    margin-top: 0.3em;
     width: 100%;
 `
 

@@ -48,6 +48,10 @@ const FlexBox = styled.div`
     justify-content: center;
     align-items: flex-start;
     margin-top: 0.5em;
+
+    ${ifMobile} {
+        width: 100%;
+    }
 `
 
 const Editor = styled.textarea`
