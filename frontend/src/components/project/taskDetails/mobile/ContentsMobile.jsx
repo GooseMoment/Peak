@@ -28,11 +28,11 @@ const ContentsMobile = ({
     const priorities = useMemo(() => makePriorities(t), [t])
     const displayReminder = useMemo(() => makeDisplayReminder(t), [t])
 
-    const handleClickContent = (item) => {
-        if (item.name === "reminder" && !newTask.due_type) {
+    const handleClickContent = (name) => {
+        if (name === "reminder" && !newTask.due_type) {
             setActiveContent(null)
         } else {
-            setActiveContent(item)
+            setActiveContent(name)
         }
     }
 
@@ -127,38 +127,33 @@ const ContentsMobile = ({
         <ContentBlock>
             {activeContent === null
                 ? items.map((item) => (
-                      <ContentBox key={item.id}>
-                          <ContentNameBox>
-                              {item.icon}
-                              {t(item.name + ".name")}
-                          </ContentNameBox>
-                          <ContentDisplayBox
-                              onClick={() =>
-                                  handleClickContent({
-                                      name: item.name,
-                                      component: item.component,
-                                  })
-                              }>
-                              {item.display}
-                              <FeatherIcon icon="chevron-right" />
-                          </ContentDisplayBox>
-                      </ContentBox>
-                  ))
-                : items
-                      .filter((item) => item.name === activeContent.name)
-                      .map((item) => (
-                          <ContentBox
-                              key={item.id}
-                              $activeContent={activeContent}>
-                              <ContentNameBox>
-                                  {item.icon}
-                                  {t(item.name + ".name")}
-                              </ContentNameBox>
-                              <TopContentDisplayBox>
-                                  {item.display}
-                              </TopContentDisplayBox>
-                              <CLine />
-                          </ContentBox>
+                    <ContentBox key={item.id}>
+                        <ContentNameBox>
+                            {item.icon}
+                            {t(item.name + ".name")}
+                        </ContentNameBox>
+                        <ContentDisplayBox
+                            onClick={()=>handleClickContent(item.name)}>
+                            {item.display}
+                            <FeatherIcon icon="chevron-right" />
+                        </ContentDisplayBox>
+                    </ContentBox>
+                ))
+                : items.filter((item) => item.name === activeContent)
+                        .map((item) => (
+                        <ContentBox
+                            key={item.id}
+                            $activeContent={activeContent}>
+                            <ContentNameBox>
+                                {item.icon}
+                                {t(item.name + ".name")}
+                            </ContentNameBox>
+                            <TopContentDisplayBox>
+                                {item.display}
+                            </TopContentDisplayBox>
+                            <CLine />
+                            {item.component}
+                        </ContentBox>
                       ))}
         </ContentBlock>
     )
@@ -239,7 +234,8 @@ const ContentDisplayBox = styled.div`
 
 const TopContentDisplayBox = styled(ContentDisplayBox)`
     justify-content: flex-start;
-    width: 100%;
+    max-width: 100%;
+    overflow: auto;
 `
 
 const RemindersBox = styled.div`

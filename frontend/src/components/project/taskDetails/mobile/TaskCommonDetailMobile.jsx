@@ -37,7 +37,7 @@ const TaskCommonDetailMobile = ({
             else
                 setTitle(t("edit.edit_title"))
         } else if (activeContent) {
-            setTitle(t(activeContent.name + ".title"))
+            setTitle(t(activeContent + ".title"))
         }
     }, [activeContent])
 
@@ -141,7 +141,6 @@ const TaskCommonDetailMobile = ({
                     activeContent={activeContent}
                     setActiveContent={setActiveContent}
                 />
-                {activeContent?.component}
                 {!activeContent && (
                     <ButtonGroup
                         $justifyContent="flex-end"
