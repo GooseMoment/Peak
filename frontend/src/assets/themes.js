@@ -35,6 +35,7 @@ export const light = {
     secondBackgroundColor: "#F3F3F3",
     thirdBackgroundColor: "#F3F3F3", // 원래 second랑 똑같은 건 의도된건가...?
     accentColor: goose,
+    accentBackgroundColor: "#E8EEFF",
     scrollbarColor: "#FFC6C6",
     introTextColor: goose,
     introBackgroundColor: "#FFD7C7",
@@ -90,6 +91,9 @@ export const light = {
         todayColor: white,
         hoverColor: "#FFC6C6",
     },
+    help: {
+        addressBarShadowColor: "rgba(0, 0, 0, 0.4)",
+    },
     search: {
         borderColor: black,
         buttonColor: black,
@@ -121,6 +125,7 @@ export const dark = {
     secondBackgroundColor: "#323232",
     thirdBackgroundColor: "#2A2A2A",
     accentColor: goose,
+    accentBackgroundColor: "#0c4a6e",
     scrollbarColor: "#4A4A4A",
     introTextColor: "#FFD7C7",
     introBackgroundColor: "#77371F",
@@ -175,6 +180,9 @@ export const dark = {
         secondBackgroundColor: "#292929",
         todayColor: white,
         hoverColor: "#804A30",
+    },
+    help: {
+        addressBarShadowColor: "rgba(0, 0, 0, 0.8)",
     },
     search: {
         borderColor: white,

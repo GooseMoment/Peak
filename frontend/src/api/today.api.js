@@ -16,3 +16,17 @@ export const getTasksDueToday = async (date, page) => {
     const res = await client.get(`today/due`, { params: { date, page } })
     return res.data
 }
+
+export const getTasksTodayAssignedGrouped = async (tz) => {
+    const res = await client.get(`today/assigned/grouped`, {
+        params: { tz },
+    })
+    const items = res.data
+    let countAll = 0
+
+    for (const i in items) {
+        countAll += items[i].count
+    }
+
+    return { items, countAll }
+}

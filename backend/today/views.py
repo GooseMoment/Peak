@@ -1,12 +1,13 @@
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
+from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
 from api.mixins import TimezoneMixin
-from tasks.serializers import TaskSerializer
+from tasks.serializers import TaskSerializer, TaskGroupedSerializer
 from tasks.models import Task
 
 import datetime
-from django.db.models import Q
+from django.db.models import Q, Count
 
 class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
@@ -79,3 +80,22 @@ class TaskOverdueList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIV
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+class TaskTodayAssignedGrouped(TimezoneMixin, generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        today = self.get_today()
+
+        grouped = Task.objects.filter(
+            assigned_at=today,
+            completed_at__isnull=True,
+            user=request.user,
+        ).values(
+            "drawer__project", "drawer__project__color", "drawer__project__name",
+        ).annotate(
+            count=Count("drawer__project"),
+        ).order_by()
+
+        s = TaskGroupedSerializer(data=grouped, many=True)
+        s.is_valid()
+
+        return Response(s.data, status=status.HTTP_200_OK)

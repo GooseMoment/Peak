@@ -52,3 +52,9 @@ class TaskSerializer(serializers.ModelSerializer):
             'priority', 'memo', 'reminders', 'user', 'order', 'repeat', 'created_at', 'updated_at', 'deleted_at', 'project_name',
             'project_id', 'project_color',
         ]
+
+class TaskGroupedSerializer(serializers.Serializer):
+    id = serializers.UUIDField(source="drawer__project")
+    name = serializers.CharField(source="drawer__project__name")
+    color = serializers.CharField(source="drawer__project__color")
+    count = serializers.IntegerField()
