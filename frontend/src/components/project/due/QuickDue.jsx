@@ -1,5 +1,7 @@
 import styled from "styled-components"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import next_week from "@assets/project/calendar/next_week.svg"
 import today from "@assets/project/calendar/today.svg"
 import tomorrow from "@assets/project/calendar/tomorrow.svg"
@@ -11,8 +13,18 @@ const QuickDue = ({ changeDueDate }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
 
     const items = [
-        { id: 0, icon: <img src={today} />, display: t("today"), set: { days: 0 }},
-        { id: 1, icon: <img src={tomorrow} />, display: t("tomorrow"), set: { days: 1 }},
+        {
+            id: 0,
+            icon: <img src={today} />,
+            display: t("today"),
+            set: { days: 0 },
+        },
+        {
+            id: 1,
+            icon: <img src={tomorrow} />,
+            display: t("tomorrow"),
+            set: { days: 1 },
+        },
         {
             id: 2,
             icon: <img src={next_week} />,
@@ -54,6 +66,10 @@ const ButtonFlexBox = styled.div`
     margin: 0.5em;
     margin-top: 1em;
     gap: 0.8em;
+
+    ${ifMobile} {
+        margin: 1em 0em;
+    }
 `
 
 const ButtonBox = styled.div`

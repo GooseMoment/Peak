@@ -3,19 +3,16 @@ import { useOutletContext, useParams } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
 
-import { ErrorBox } from "@components/errors/ErrorProjectPage"
-import SkeletonTaskDetail from "@components/project/skeletons/SkeletonTaskDetail"
-
-import TaskCommonDetail, { TaskDetailBox } from "./TaskCommonDetail"
+import TaskCommonDetailMobile from "@components/project/taskDetails/mobile/TaskCommonDetailMobile"
 
 import { getTask } from "@api/tasks.api"
 
 import { useTranslation } from "react-i18next"
 
-const TaskDetail = () => {
+const TaskDetailMobile = ({ closeDetail }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
-    const [projectID, projectType, color] = useOutletContext()
+    const [_, __, color] = useOutletContext()
     const { task_id } = useParams()
 
     const {
@@ -39,31 +36,18 @@ const TaskDetail = () => {
         }
     }, [task])
 
-    if (isLoading) {
-        return (
-            <TaskDetailBox>
-                <SkeletonTaskDetail />
-            </TaskDetailBox>
-        )
-    }
-
-    if (isError) {
-        return (
-            <TaskDetailBox>
-                <ErrorBox onClick={refetch}>{t("error_load_task")}</ErrorBox>
-            </TaskDetailBox>
-        )
+    if (isLoading || isError) {
+        return null
     }
 
     return (
-        <TaskCommonDetail
+        <TaskCommonDetailMobile
             newTask={newTask}
             setNewTask={setNewTask}
-            projectID={projectID}
-            projectType={projectType}
             color={color}
+            onClose={closeDetail}
         />
     )
 }
 
-export default TaskDetail
+export default TaskDetailMobile

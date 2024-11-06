@@ -1,7 +1,6 @@
 import styled from "styled-components"
 
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import Detail from "@components/project/common/Detail"
+import { ifMobile } from "@utils/useScreenType"
 
 import critical from "@assets/project/priority/critical.svg"
 import important from "@assets/project/priority/important.svg"
@@ -9,15 +8,13 @@ import normal from "@assets/project/priority/normal.svg"
 
 import { useTranslation } from "react-i18next"
 
-const Priority = ({ setFunc }) => {
+const Priority = ({ setFunc, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.priority" })
-
-    const { closeModal } = useModalWindowCloseContext()
 
     const changePriority = (priority) => {
         return async () => {
             setFunc({ priority })
-            closeModal()
+            onClose()
         }
     }
 
@@ -27,18 +24,14 @@ const Priority = ({ setFunc }) => {
         { id: 2, icon: <img src={critical} />, content: t("critical") },
     ]
 
-    return (
-        <Detail title={t("title")} onClose={closeModal}>
-            {items.map((item) => (
-                <ItemBlock key={item.id}>
-                    {item.icon}
-                    <ItemText onClick={changePriority(item.id)}>
-                        {item.content}
-                    </ItemText>
-                </ItemBlock>
-            ))}
-        </Detail>
-    )
+    return items.map((item) => (
+        <ItemBlock key={item.id}>
+            {item.icon}
+            <ItemText onClick={changePriority(item.id)}>
+                {item.content}
+            </ItemText>
+        </ItemBlock>
+    ))
 }
 
 const ItemBlock = styled.div`
@@ -47,6 +40,10 @@ const ItemBlock = styled.div`
     align-items: center;
     margin-left: 1.2em;
     margin-top: 1.2em;
+
+    ${ifMobile} {
+        margin-left: 0.1em;
+    }
 `
 
 const ItemText = styled.p`

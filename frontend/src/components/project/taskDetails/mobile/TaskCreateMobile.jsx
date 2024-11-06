@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { useLocation, useOutletContext } from "react-router-dom"
 
-import TaskCommonDetail from "./TaskCommonDetail"
+import TaskCommonDetailMobile from "@components/project/taskDetails/mobile/TaskCommonDetailMobile"
 
-const TaskCreate = () => {
+const TaskCreateMobile = ({ closeCreate }) => {
     const [_, __, color] = useOutletContext()
     const { state } = useLocation()
 
@@ -25,13 +25,14 @@ const TaskCreate = () => {
     })
 
     return (
-        <TaskCommonDetail
+        <TaskCommonDetailMobile
             newTask={newTask}
             setNewTask={setNewTask}
             color={color}
+            onClose={closeCreate}
             isCreating
         />
     )
 }
 
-export default TaskCreate
+export default TaskCreateMobile

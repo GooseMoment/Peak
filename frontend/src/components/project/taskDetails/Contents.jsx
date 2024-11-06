@@ -3,6 +3,7 @@ import { Fragment, useMemo, useState } from "react"
 import styled, { css } from "styled-components"
 
 import ModalWindow from "@components/common/ModalWindow"
+import Detail from "@components/project/common/Detail"
 import ToolTip from "@components/project/common/ToolTip"
 import taskDate from "@components/tasks/utils/taskDate"
 
@@ -49,7 +50,7 @@ const Contents = ({ task, setFunc }) => {
             name: "assigned",
             icon: <FeatherIcon icon="calendar" />,
             display: task.assigned_at ? formatted_assigned_date : t("none"),
-            component: <Assigned setFunc={setFunc} />,
+            component: <Assigned setFunc={setFunc} onClose={closeComponent} />,
         },
         {
             id: 2,
@@ -70,7 +71,7 @@ const Contents = ({ task, setFunc }) => {
                     <RemindersBox name="reminder">
                         {task.reminders.map((delta, i) => (
                             <ReminderBlock key={i} name="reminder">
-                                {displayReminder[0][delta]}
+                                {displayReminder[delta]}
                             </ReminderBlock>
                         ))}
                     </RemindersBox>
@@ -95,7 +96,7 @@ const Contents = ({ task, setFunc }) => {
             name: "priority",
             icon: <FeatherIcon icon="alert-circle" />,
             display: priorities[task.priority],
-            component: <Priority setFunc={setFunc} />,
+            component: <Priority setFunc={setFunc} onClose={closeComponent} />,
         },
         {
             id: 5,
@@ -107,14 +108,20 @@ const Contents = ({ task, setFunc }) => {
                     : task.drawer_name
                       ? `${task.project_name} / ${task.drawer_name}`
                       : t("none"),
-            component: <Drawer setFunc={setFunc} />,
+            component: <Drawer setFunc={setFunc} onClose={closeComponent} />,
         },
         {
             id: 6,
             name: "memo",
             icon: <FeatherIcon icon="edit" />,
             display: task.memo ? task.memo : t("none"),
-            component: <Memo previousMemo={task.memo} setFunc={setFunc} />,
+            component: (
+                <Memo
+                    previousMemo={task.memo}
+                    setFunc={setFunc}
+                    onClose={closeComponent}
+                />
+            ),
         },
     ]
 
@@ -135,7 +142,15 @@ const Contents = ({ task, setFunc }) => {
                         </ContentText>
                         {content === item.name && isComponentOpen ? (
                             <ModalWindow afterClose={closeComponent} additional>
-                                {item.component}
+                                <Detail
+                                    title={t(content + ".title")}
+                                    onClose={closeComponent}
+                                    special={
+                                        content === "assigned" ||
+                                        content === "due"
+                                    }>
+                                    {item.component}
+                                </Detail>
                             </ModalWindow>
                         ) : null}
                     </ContentsBox>
@@ -237,16 +252,14 @@ const makePriorities = (t) => [
     t("priority.critical"),
 ]
 
-const makeDisplayReminder = (t) => [
-    {
-        0: t("reminder.display_then"),
-        5: t("reminder.display_5_minutes_before"),
-        15: t("reminder.display_15_minutes_before"),
-        30: t("reminder.display_30_minutes_before"),
-        60: t("reminder.display_1_hour_before"),
-        1440: t("reminder.display_1_day_before"),
-        2880: t("reminder.display_2_days_before"),
-    },
-]
+const makeDisplayReminder = (t) => ({
+    0: t("reminder.display_then"),
+    5: t("reminder.display_5_minutes_before"),
+    15: t("reminder.display_15_minutes_before"),
+    30: t("reminder.display_30_minutes_before"),
+    60: t("reminder.display_1_hour_before"),
+    1440: t("reminder.display_1_day_before"),
+    2880: t("reminder.display_2_days_before"),
+})
 
 export default Contents

@@ -1,7 +1,7 @@
 const handleToggleContextMenu = (
     setSelectedButtonPosition,
     setIsMenuOpen,
-    setCloseOtherModals=()=>{},
+    setCloseOtherModals = () => {},
 ) => {
     return async (e) => {
         setSelectedButtonPosition({

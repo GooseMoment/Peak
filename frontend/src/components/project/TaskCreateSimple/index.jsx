@@ -26,7 +26,7 @@ const TaskCreateSimple = ({
     color,
     onClose,
 }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation(null, { keyPrefix: "task.edit" })
     const inputRef = useRef(null)
 
     const [content, setContent] = useState("name")
@@ -93,11 +93,11 @@ const TaskCreateSimple = ({
             queryClient.invalidateQueries({
                 queryKey: ["project", newTask.project_id],
             })
-            toast.success(t("task_create_success"))
+            toast.success(t("create_success"))
             onClose()
         },
         onError: () => {
-            toast.error(t("task_create_error"))
+            toast.error(t("create_error"))
         },
     })
 
@@ -114,7 +114,7 @@ const TaskCreateSimple = ({
         e.preventDefault()
 
         if (newTask.name.trim() === "") {
-            return toast.error(t("task_create_no_name"))
+            return toast.error(t("create_no_name"))
         }
 
         postMutation.mutate(newTask)
