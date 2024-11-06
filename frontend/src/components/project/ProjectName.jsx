@@ -42,11 +42,11 @@ const ProjectName = ({ project, demo = false }) => {
                         <FeatherIcon icon="check" />
                     </CircleIcon>
                     <TaskCountText>
-                        : {project.completed_task_count} &nbsp; &nbsp;
+                        {project.completed_task_count}
                     </TaskCountText>
                     <CircleIcon/>
                     <TaskCountText>
-                        : {project.uncompleted_task_count}
+                        {project.uncompleted_task_count}
                     </TaskCountText>
                 </TaskCountBox>
             )}
@@ -129,8 +129,8 @@ const CircleIcon = styled.div`
     aspect-ratio: 1;
     border-radius: 50%;
     border: 2px solid ${p=>p.theme.secondTextColor};
-    margin-left: 0.1em;
-    margin-right: 0.5em;
+    margin-left: 1em;
+    margin-right: 0.3em;
 
     & svg {
         width: 0.8em;
