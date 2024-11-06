@@ -70,7 +70,7 @@ const ContentsMobile = ({
                     <RemindersBox>
                         {newTask.reminders.map((delta, i) => (
                             <ReminderBlock key={i} name="reminder">
-                                {displayReminder[0][delta]}
+                                {displayReminder[delta]}
                             </ReminderBlock>
                         ))}
                     </RemindersBox>
@@ -279,16 +279,14 @@ const makePriorities = (t) => [
     t("priority.critical"),
 ]
 
-const makeDisplayReminder = (t) => [
-    {
-        0: t("reminder.display_then"),
-        5: t("reminder.display_5_minutes_before"),
-        15: t("reminder.display_15_minutes_before"),
-        30: t("reminder.display_30_minutes_before"),
-        60: t("reminder.display_1_hour_before"),
-        1440: t("reminder.display_1_day_before"),
-        2880: t("reminder.display_2_days_before"),
-    },
-]
+const makeDisplayReminder = (t) =>({
+    0: t("reminder.display_then"),
+    5: t("reminder.display_5_minutes_before"),
+    15: t("reminder.display_15_minutes_before"),
+    30: t("reminder.display_30_minutes_before"),
+    60: t("reminder.display_1_hour_before"),
+    1440: t("reminder.display_1_day_before"),
+    2880: t("reminder.display_2_days_before"),
+})
 
 export default ContentsMobile
