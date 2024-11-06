@@ -80,14 +80,14 @@ const TaskFrame = ({
                                 $completed={task.completed_at}
                                 $isSocial={isSocial}
                                 $isOutOfDue={isOutOfDue}>
-                                <Hourglass/>
+                                <Hourglass />
                                 {completedAt ? due : calculate_due}
                             </DueDate>
                         )}
                         {isSocial || task.reminders
                             ? task.reminders?.length !== 0 && (
                                   <Reminder $completed={task.completed_at}>
-                                      <AlarmClock/>
+                                      <AlarmClock />
                                       {task.reminders?.length}
                                   </Reminder>
                               )
