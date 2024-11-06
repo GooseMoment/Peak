@@ -187,6 +187,7 @@ const TaskCommonDetail = ({
                     setName={(name) => handleChange({ name })}
                     inputRef={inputRef}
                     color={color}
+                    setFunc={handleChange}
                 />
                 <Icons>
                     {isCreating || (
