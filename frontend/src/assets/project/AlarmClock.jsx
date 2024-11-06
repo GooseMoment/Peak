@@ -1,6 +1,7 @@
 const AlarmClock = ({ color }) => {
     return (
         <svg
+            draggable="false"
             width="24"
             height="25"
             viewBox="0 0 24 25"
