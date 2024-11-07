@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'today',
     # 'search',
     'user_setting',
+    'announcements',
 
     'rest_framework',
     'corsheaders',

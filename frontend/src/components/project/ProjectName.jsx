@@ -4,6 +4,8 @@ import styled, { useTheme } from "styled-components"
 
 import { getProjectColor } from "@components/project/common/palettes"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
@@ -35,13 +37,18 @@ const ProjectName = ({ project, demo = false }) => {
                 </TypeText>
             </FlexBox>
             {!demo && (
-                <FlexBox>
-                    <Text>
-                        {t("completed_tasks")}: {project.completed_task_count} /{" "}
-                        {t("uncompleted_tasks")}:{" "}
+                <TaskCountBox>
+                    <CircleIcon>
+                        <FeatherIcon icon="check" />
+                    </CircleIcon>
+                    <TaskCountText>
+                        {project.completed_task_count}
+                    </TaskCountText>
+                    <CircleIcon />
+                    <TaskCountText>
                         {project.uncompleted_task_count}
-                    </Text>
-                </FlexBox>
+                    </TaskCountText>
+                </TaskCountBox>
             )}
         </Box>
     )
@@ -51,13 +58,30 @@ const Box = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 3.7em;
+    margin: 0.8em 0em;
+
+    ${ifMobile} {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 `
 
 const FlexBox = styled.div`
     display: flex;
     align-items: center;
-    margin: 1em 0.5em;
+
+    & svg {
+        width: 1.5em;
+        height: 1.5em;
+        stroke: none;
+        top: 0;
+    }
+`
+
+const TaskCountBox = styled.div`
+    display: flex;
+    align-items: center;
+    margin: 1em 0em;
 
     & svg {
         width: 1.5em;
@@ -71,7 +95,7 @@ const NameText = styled.div`
     max-width: 10em;
     font-weight: normal;
     font-size: 1.25em;
-    margin-left: 0.3em;
+    margin-left: 0.1em;
     color: ${(p) => p.theme.textColor};
     white-space: nowrap;
     overflow: hidden;
@@ -89,12 +113,34 @@ const TypeText = styled.div`
     font-size: 1em;
     margin-left: 0.6em;
     margin-top: 0.1em;
-    color: ${(p) => p.theme.grey};
+    color: ${(p) => p.theme.secondTextColor};
 `
 
-const Text = styled.div`
+const TaskCountText = styled.div`
     font-size: 1em;
     color: ${(p) => p.theme.textColor};
+`
+
+const CircleIcon = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1em;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 2px solid ${(p) => p.theme.secondTextColor};
+    margin-left: 1em;
+    margin-right: 0.3em;
+
+    & svg {
+        width: 0.8em;
+        height: 0.8em;
+        stroke: ${(p) => p.theme.secondTextColor};
+        stroke-width: 0.2em;
+        top: 0;
+        margin-top: 0.1rem;
+        margin-right: 0;
+    }
 `
 
 export default ProjectName

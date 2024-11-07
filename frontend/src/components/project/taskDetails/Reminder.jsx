@@ -1,5 +1,3 @@
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import Detail from "@components/project/common/Detail"
 import ReminderContents from "@components/project/taskDetails/ReminderContents"
 
 import before_1D from "@assets/project/reminder/before_1D.svg"
@@ -14,8 +12,6 @@ import { useTranslation } from "react-i18next"
 
 const Reminder = ({ task, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.reminder" })
-
-    const { closeModal } = useModalWindowCloseContext()
 
     const handleReminder = (delta) => {
         if (task.reminders.includes(delta)) {
@@ -69,18 +65,14 @@ const Reminder = ({ task, setFunc }) => {
         },
     ]
 
-    return (
-        <Detail title={t("title")} onClose={closeModal}>
-            {items.map((item) => (
-                <ReminderContents
-                    key={item.id}
-                    item={item}
-                    reminders={task.reminders}
-                    handleReminder={handleReminder}
-                />
-            ))}
-        </Detail>
-    )
+    return items.map((item) => (
+        <ReminderContents
+            key={item.id}
+            item={item}
+            reminders={task.reminders}
+            handleReminder={handleReminder}
+        />
+    ))
 }
 
 export default Reminder

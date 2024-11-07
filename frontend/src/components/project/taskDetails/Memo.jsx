@@ -3,24 +3,22 @@ import { useState } from "react"
 import styled from "styled-components"
 
 import Button from "@components/common/Button"
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import Detail from "@components/project/common/Detail"
+
+import { ifMobile } from "@utils/useScreenType"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const Memo = ({ previousMemo, setFunc }) => {
+const Memo = ({ previousMemo, setFunc, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.memo" })
 
     const [memo, setMemo] = useState(previousMemo)
 
-    const { closeModal } = useModalWindowCloseContext()
-
     const changeMemo = () => {
         return async () => {
             setFunc({ memo })
-            closeModal()
             toast.success(t("memo_edit_success"))
+            onClose()
         }
     }
 
@@ -30,7 +28,7 @@ const Memo = ({ previousMemo, setFunc }) => {
     }
 
     return (
-        <Detail title={t("title")} onClose={closeModal}>
+        <>
             <FlexBox>
                 <Editor
                     type="text"
@@ -42,7 +40,7 @@ const Memo = ({ previousMemo, setFunc }) => {
             <FlexBox>
                 <Button onClick={changeMemo(memo)}>{t("button_change")}</Button>
             </FlexBox>
-        </Detail>
+        </>
     )
 }
 
@@ -51,6 +49,10 @@ const FlexBox = styled.div`
     justify-content: center;
     align-items: flex-start;
     margin-top: 0.5em;
+
+    ${ifMobile} {
+        width: 100%;
+    }
 `
 
 const Editor = styled.textarea`
@@ -68,6 +70,10 @@ const Editor = styled.textarea`
 
     &:focus {
         outline: none;
+    }
+
+    ${ifMobile} {
+        width: 90%;
     }
 `
 

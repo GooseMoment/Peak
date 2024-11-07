@@ -2,6 +2,8 @@ import { useState } from "react"
 
 import styled from "styled-components"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import FeatherIcon from "feather-icons-react"
 
 const ReminderContents = ({ item, reminders, handleReminder }) => {
@@ -38,6 +40,10 @@ const ItemBlock = styled.div`
         stroke: ${(p) => p.theme.project.danger};
         stroke-width: 3;
         top: 0em;
+    }
+
+    ${ifMobile} {
+        margin-left: 0.1em;
     }
 `
 

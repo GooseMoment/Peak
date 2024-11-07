@@ -4,6 +4,8 @@ import styled, { useTheme } from "styled-components"
 
 import { getProjectColor } from "@components/project/common/palettes"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import FeatherIcon from "feather-icons-react"
 
 const DrawerFolder = ({ project, changeDrawer }) => {
@@ -15,24 +17,33 @@ const DrawerFolder = ({ project, changeDrawer }) => {
             <ItemBox
                 onClick={
                     project.type === "inbox"
-                        ? changeDrawer(project.drawers[0].id, project.drawers[0].name, project.id, project.name)
+                        ? changeDrawer(
+                              project.drawers[0].id,
+                              project.drawers[0].name,
+                              project.id,
+                              project.name,
+                          )
                         : () => setCollapsed((prev) => !prev)
                 }>
                 <Circle $color={getProjectColor(theme.type, project.color)} />
                 <ItemText $is_project={true}>{project.name}</ItemText>
             </ItemBox>
-            {project.type === "inbox" || collapsed ? null
+            {project.type === "inbox" || collapsed
+                ? null
                 : project.drawers &&
-                    project.drawers.map((drawer) => (
-                        <ItemBox
-                            key={drawer.id}
-                            onClick={changeDrawer(drawer.id, drawer.name, project.id, project.name)}>
-                            <FeatherIcon icon="arrow-right" />
-                            <ItemText $is_project={false}>
-                                {drawer.name}
-                            </ItemText>
-                        </ItemBox>
-                    ))}
+                  project.drawers.map((drawer) => (
+                      <ItemBox
+                          key={drawer.id}
+                          onClick={changeDrawer(
+                              drawer.id,
+                              drawer.name,
+                              project.id,
+                              project.name,
+                          )}>
+                          <FeatherIcon icon="arrow-right" />
+                          <ItemText $is_project={false}>{drawer.name}</ItemText>
+                      </ItemBox>
+                  ))}
         </>
     )
 }
@@ -58,10 +69,16 @@ const ItemBox = styled.div`
         top: 0;
         color: ${(p) => p.theme.textColor};
     }
+
+    ${ifMobile} {
+        width: 100%;
+        margin-left: 0.2em;
+        margin: 0.4em 0em;
+    }
 `
 
 const ItemText = styled.div`
-    width: 10em;
+    width: 70%;
     font-weight: ${(props) => (props.$is_project ? "500" : "normal")};
     font-size: 1em;
     color: ${(p) => p.theme.textColor};
@@ -73,6 +90,10 @@ const ItemText = styled.div`
         font-weight: bolder;
         color: ${(p) => p.theme.goose};
         cursor: pointer;
+    }
+
+    ${ifMobile} {
+        width: 95%;
     }
 `
 

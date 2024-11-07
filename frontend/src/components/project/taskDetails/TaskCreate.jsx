@@ -21,6 +21,7 @@ const TaskCreate = () => {
         drawer_name: state?.drawer_name,
         memo: "",
         privacy: "public",
+        completed_at: null,
     })
 
     return (

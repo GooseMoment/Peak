@@ -345,7 +345,9 @@ const FlexBox = styled.div`
 `
 
 const MoreButton = styled(Button)`
-    width: 25em;
+    max-width: 25em;
+    width: 80vw;
+    margin: 1em;
 `
 
 const makeSortMenuItems = (t) => [

@@ -33,9 +33,7 @@
         "title": "프로젝트",
         "type_regular": "상시",
         "type_goal": "목표",
-        "button_add_project": "새 프로젝트 추가",
-        "completed_tasks": "완료",
-        "uncompleted_tasks": "미완"
+        "button_add_project": "새 프로젝트 추가"
     },
     "today": {
         "title": "오늘",
@@ -60,12 +58,7 @@
         "loading": "로딩 중",
         "none": "없음",
         "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요 😢",
-        "error_load_task": "작업을 불러오지 못했어요 😢",
         "name_placeholder": "이름을 입력하세요",
-        "task_create_success": "새 작업을 생성했습니다.",
-        "task_create_error": "작업 생성에 실패하였습니다.",
-        "task_edit_error": "작업 수정에 실패하였습니다.",
-        "task_create_no_name": "작업의 이름을 적어주세요.",
         "edit": {
             "display": "수정"
         },
@@ -75,14 +68,11 @@
             "button_done": "닫기",
             "alert_project_title": "\"{{project_name}}\" 프로젝트를",
             "alert_drawer_title": "\"{{drawer_name}}\" 서랍을",
-            "alert_task_title": "\"{{task_name}}\" 작업을",
             "alert_question": "{{title}} 삭제하시겠습니까?",
             "project_delete_success": "\"{{project_name}}\" 프로젝트를 삭제했습니다.",
             "project_delete_error": "\"{{project_name}}\" 프로젝트 삭제에 실패했습니다.",
             "drawer_delete_success": "\"{{drawer_name}}\" 서랍을 삭제했습니다.",
-            "drawer_delete_error": "\"{{drawer_name}}\" 서랍 삭제에 실패했습니다.",
-            "task_delete_success": "\"{{task_name}}\" 작업을 삭제했습니다.",
-            "task_delete_error": "\"{{task_name}}\" 작업 삭제에 실패했습니다."
+            "drawer_delete_error": "\"{{drawer_name}}\" 서랍 삭제에 실패했습니다."
         },
         "sort": {
             "title": "{{title}} 목록 정렬 기준",
@@ -155,6 +145,23 @@
         "name_placeholder": "작업의 이름을 입력하세요.",
         "name_change_success": "이름을 변경했습니다.",
         "none": "없음",
+        "error_load_task": "작업을 불러오지 못했어요 😢",
+        "edit": {
+            "edit_title": "작업 수정",
+            "edit_success": "변경 사항을 저장했습니다.",
+            "edit_error": "작업 수정에 실패하였습니다.",
+            "create_title": "작업 생성",
+            "create_success": "새 작업을 생성했습니다.",
+            "create_error": "작업 생성에 실패하였습니다.",
+            "create_no_name": "작업의 이름을 적어주세요.",
+            "button_add": "생성",
+            "button_save": "저장"
+        },
+        "delete": {
+            "alert_task_title": "\"{{task_name}}\" 작업을",
+            "delete_success": "\"{{task_name}}\" 작업을 삭제했습니다.",
+            "delete_error": "\"{{task_name}}\" 작업 삭제에 실패했습니다."
+        },
         "assigned": {
             "name": "할당 날짜",
             "title": "할당 날짜 설정"
