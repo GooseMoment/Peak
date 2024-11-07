@@ -95,6 +95,7 @@
         "none": "None",
         "button_add": "Create",
         "button_save": "Save",
+        "name_placeholder": "Enter a name",
         "created_project": "Created a new project.",
         "created_project_error": "Failed to create a new project.",
         "created_drawer": "Created a new drawer.",
