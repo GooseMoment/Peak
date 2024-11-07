@@ -10,8 +10,8 @@ import Priority from "@components/project/taskDetails/Priority"
 import Reminder from "@components/project/taskDetails/Reminder"
 import taskDate from "@components/tasks/utils/taskDate"
 
-import alarmclock from "@assets/project/alarmclock.svg"
-import hourglass from "@assets/project/hourglass.svg"
+import AlarmClock from "@assets/project/AlarmClock"
+import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -54,7 +54,7 @@ const ContentsMobile = ({
         {
             id: 2,
             name: "due",
-            icon: <img src={hourglass} />,
+            icon: <Hourglass />,
             display:
                 newTask.due_type && (newTask.due_date || newTask.due_datetime)
                     ? formatted_due_datetime
@@ -64,7 +64,7 @@ const ContentsMobile = ({
         {
             id: 3,
             name: "reminder",
-            icon: <img src={alarmclock} />,
+            icon: <AlarmClock />,
             display:
                 newTask?.reminders && newTask.reminders?.length !== 0 ? (
                     <RemindersBox>
@@ -201,17 +201,12 @@ export const ContentNameBox = styled.div`
     color: ${(p) => p.theme.textColor};
     gap: 0.3em;
 
-    & svg,
-    img {
+    & svg {
         width: 1.3em;
         height: 1.3em;
+        margin-right: 8px;
         stroke: ${(p) => p.theme.textColor};
         top: 0;
-    }
-
-    & img {
-        filter: ${(p) => p.theme.project.imgColor};
-        margin-right: 8px;
     }
 `
 
