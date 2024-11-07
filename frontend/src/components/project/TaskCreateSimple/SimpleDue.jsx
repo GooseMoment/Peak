@@ -6,7 +6,7 @@ import {
 } from "@components/project/TaskCreateSimple/CreateSimpleBox"
 import addDateFromToday from "@components/project/TaskCreateSimple/addDateFromToday"
 
-import hourglass from "@assets/project/hourglass.svg"
+import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -63,7 +63,7 @@ const SimpleDue = ({ dueIndex, setDueIndex, editNewTask, color }) => {
     ]
 
     return (
-        <CreateSimpleBox icon={<img src={hourglass} />}>
+        <CreateSimpleBox icon={<Hourglass />}>
             {items.map((item) => (
                 <ContentBox
                     key={item.index}

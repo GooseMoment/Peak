@@ -1,11 +1,11 @@
 import styled from "styled-components"
 
+import Slach from "@assets/project/Slach"
 import { ifMobile } from "@utils/useScreenType"
 
 import next_week from "@assets/project/calendar/next_week.svg"
 import today from "@assets/project/calendar/today.svg"
 import tomorrow from "@assets/project/calendar/tomorrow.svg"
-import slach from "@assets/project/slach.svg"
 
 import { useTranslation } from "react-i18next"
 
@@ -43,7 +43,7 @@ const QuickDue = ({ changeDueDate }) => {
             display: t("next_month"),
             set: { months: 1 },
         },
-        { id: 5, icon: <img src={slach} />, display: t("no_date"), set: null },
+        { id: 5, icon: <Slach />, display: t("no_date"), set: null },
     ]
 
     return (

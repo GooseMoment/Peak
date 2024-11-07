@@ -14,18 +14,13 @@ const Box = styled.div`
     display: flex;
     align-items: center;
 
-    & svg,
-    img {
+    & svg {
         top: 0;
         width: 22px;
         height: 22px;
         margin-right: 1em;
         flex-shrink: 0;
         stroke: ${(p) => p.theme.textColor};
-    }
-
-    & img {
-        filter: ${(p) => p.theme.project.imgColor};
     }
 `
 
