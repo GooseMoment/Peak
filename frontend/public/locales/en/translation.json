@@ -106,8 +106,8 @@
         "name_required": "A name is required.",
         "color": {
             "title": "Color Settings",
-            "theme1": "Theme1",
-            "theme2": "Theme2",
+            "theme1": "Basic1",
+            "theme2": "Basic2",
             "orange": "orange",
             "peach": "peach",
             "pink": "pink",

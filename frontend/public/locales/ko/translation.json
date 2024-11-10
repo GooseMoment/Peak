@@ -106,8 +106,8 @@
         "name_required": "이름을 지어주세요.",
         "color": {
             "title": "색깔 설정",
-            "theme1": "테마1",
-            "theme2": "테마2",
+            "theme1": "기본1",
+            "theme2": "기본2",
             "orange": "오렌지",
             "peach": "피치",
             "pink": "핑크",
