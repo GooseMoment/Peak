@@ -338,19 +338,19 @@
         "button_already_have_account": "Have Account",
         "link_sign_in": "Sign In",
         "sign_up_completed": "Verify your email",
-        "check_inbox": "An email verfication mail was sent. Please check your inbox.",
+        "check_inbox": "An email verfication mail was sent. Please check your inbox or spam folder.",
         "sign_up_errors": {
-            "SIGNUP_NETWORK_ERROR": "Please check your network.",
-            "SIGNUP_SIGNED_IN_USER": "You already signed in.",
-            "SIGNUP_REQUIRED_FIELDS_MISSING": "Please enter email, password, username.",
-            "SIGNUP_USERNAME_TOO_SHORT": "Username should be more than 4 letters.",
-            "SIGNUP_EMAIL_WRONG": "Please enter a valid email.",
-            "SIGNUP_PASSWORD_TOO_SHORT": "Password should be more than 8 letters.",
-            "SIGNUP_USERNAME_WRONG": "Username should only contain alphabets, underscore and digits.",
-            "SIGNUP_EMAIL_EXISTS": "An email you entered already exists. Perhaps have an account?",
-            "SIGNUP_USERNAME_EXISTS": "An username you entered already exists.",
-            "SIGNUP_INTERNAL_ERROR": "Something's wrong with our service. Please try again.",
-            "SIGNUP_UNKNOWN_ERROR": "Please try later."
+            "NETWORK_ERROR": "Please check your network.",
+            "USER_ALREADY_AUTHENTICATED": "You already signed in.",
+            "REQUIRED_FIELD_MISSING": "Please enter email, password, username.",
+            "EMAIL_INVALID": "Please enter a valid email.",
+            "USERNAME_INVALID_LENGTH": "Length of the username should be between 4 and 15.",
+            "USERNAME_INVALID_FORMAT": "Username should only contain alphabets, underscore and digits.",
+            "USERNAME_DUPLICATE": "An username you entered already exists.",
+            "PASSWORD_INVALID": "Password should be 8 or more letters.",
+            "INTERNAL_ERROR": "Something's wrong with our service. Please try again.",
+            "EMAIL_NOT_SENT": "The server couldn't send a mail. Please try again after few minutes.",
+            "UNKNOWN_ERROR": "Please try later."
         }
     },
     "password_recovery": {
