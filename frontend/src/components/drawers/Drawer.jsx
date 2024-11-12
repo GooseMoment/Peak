@@ -96,12 +96,14 @@ const Drawer = ({ project, drawer, color }) => {
         const targetOrder = targetData?.order
         const symbolProperties = Object.getOwnPropertySymbols(targetData)
         const closestEdge = targetData[symbolProperties[0]]
+        const taskID = source?.data.id
 
         if (typeof targetOrder !== "number" || draggedOrder === targetOrder) {
             return
         }
 
         patchMutation.mutate({
+            task_id: taskID,
             dragged_order: draggedOrder,
             target_order: targetOrder,
             closest_edge: closestEdge,

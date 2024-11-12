@@ -6,6 +6,8 @@ from api.permissions import IsUserOwner
 from api.mixins import CreateMixin
 from rest_framework.filters import OrderingFilter
 
+from tasks.models import Task
+
 from .utils import reorder_tasks, normalize_drawer_order
 
 class DrawerDetail(mixins.RetrieveModelMixin,
@@ -22,6 +24,7 @@ class DrawerDetail(mixins.RetrieveModelMixin,
     
     def patch(self, request, *args, **kwargs):
         try:
+            task_id = request.data["task_id"]
             dragged_order = int(request.data["dragged_order"])
             target_order = int(request.data["target_order"])
             closest_edge = request.data["closest_edge"]
@@ -29,7 +32,7 @@ class DrawerDetail(mixins.RetrieveModelMixin,
             pass
         else:
             if (dragged_order is not None) or (target_order is not None):
-                drawer: Drawer = self.get_object()
+                drawer: Drawer = Task.objects.filter(id=task_id).get().drawer
                 reorder_tasks(drawer.tasks, dragged_order, target_order, closest_edge)
                 normalize_drawer_order(drawer.tasks, "order")
 
