@@ -1,9 +1,9 @@
-import { css, styled } from "styled-components"
+import { styled } from "styled-components"
 
-const SimpleProfile = ({ user, ringColor }) => {
+const SimpleProfile = ({ user }) => {
     return (
         <Profile>
-            <ProfileImgWrapper $color={ringColor}>
+            <ProfileImgWrapper>
                 <img src={user.profile_img} />
             </ProfileImgWrapper>
             <Username>@{user.username}</Username>
@@ -26,12 +26,6 @@ const ProfileImgWrapper = styled.div`
     width: 3.7em;
 
     border-radius: 100%;
-    ${(props) =>
-        props.$color
-            ? css`
-                  outline: solid 0.2em ${(props) => props.$color};
-              `
-            : null}
 
     display: flex;
     justify-content: center;
