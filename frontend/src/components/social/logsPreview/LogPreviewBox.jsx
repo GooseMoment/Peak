@@ -1,4 +1,4 @@
-import styled, { useTheme } from "styled-components"
+import styled, { css, useTheme } from "styled-components"
 
 import { getProjectColor } from "@components/project/common/palettes"
 import SimpleProfile from "@components/social/common/SimpleProfile"
@@ -44,25 +44,27 @@ const LogPreviewBox = ({
             setSelectedUser(log.username === selectedUser ? null : log.username)
     }
 
-    const setRingColor = () => {
-        return log.recent_task
-            ? log.recent_task.is_read
-                ? theme.grey
-                : getProjectColor(theme.type, log.recent_task.project_color)
-            : null
-    }
+    const boxColor = getProjectColor(theme.type, log.header_color) || theme.grey
+    // log.recent_task
+    //     ? log.recent_task.is_read
+    //         ? theme.grey
+    //         :
+    //     : null
 
     const backgroundColor =
         log.username === selectedUser
             ? theme.social.activeBackgroundColor
             : theme.backgroundColor
 
-    return <Frame $isMe={log.username === me}>
-        {log.username}
-
-    </Frame>
-    
-    
+    return (
+        <Frame $isMe={log.username === me} $bgColor={boxColor}>
+            <FrameRow>
+                <ProfileWrapper $isMe={log.username === me}>
+                    <SimpleProfile user={log} />
+                </ProfileWrapper>
+            </FrameRow>
+        </Frame>
+    )
 
     // return (
     //     (isMobile || log.username !== me) && (
@@ -118,21 +120,38 @@ const LogPreviewBox = ({
 }
 
 const Frame = styled.div`
-    width: ${props => props.$isMe ? 100 : 48}%;
-    height: 5em;
-    /* border-bottom: 0.05em solid ${(p) => p.theme.social.borderColor}; */
-    /* background-color: ${(props) => props.$bgColor}; */
-    background-color: green;
+    /* xa : xa/k     xb = 0.47xa */
+    /* xb : xb/1.1  xb/1.1 = xa/k*/
+    aspect-ratio: ${(props) => (props.$isMe ? 1.1/0.47 : 1.1)};
+    width: ${(props) => (props.$isMe ? 100 : 47)}%;
 
-    /* padding: 1.2em 1em 1.2em; */
-/* 
+    border-radius: 32px;
+    background-color: ${(props) => props.$bgColor};
+    box-sizing: border-box;
+    padding: 1.5em 1.2em 1.2em 1.2em;
+
     display: flex;
-    align-items: center; */
-    /* gap: 1em; */
+    flex-direction: column;
+`
 
-    ${ifMobile} {
-        background-color: ${(p) => p.theme.backgroundColor};
-    }
+const FrameRow = styled.div`
+    display: flex;
+    flex-direction: row;
+`
+
+const ProfileWrapper = styled.div`
+    aspect-ratio: 1;
+    /* max-width: 4.5em; */
+
+    ${(props) =>
+        props.$isMe
+            ? css`
+                  /* ((100% + padding) * box_width - padding) * width */
+                  width: calc(((100% + 2.4em) * 0.47 - 2.4em) * 0.5);
+              `
+            : css`
+                  width: 50%;
+              `}
 `
 
 const RecentTask = styled.div`

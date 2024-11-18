@@ -3,7 +3,6 @@ import styled from "styled-components"
 import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
 
 import { getCurrentUsername } from "@api/client"
-import { useRef } from "react"
 
 const compareDailyLogs = (a, b) => {
     // Show self log first
@@ -45,13 +44,14 @@ const LogsPreview = ({ logs, selectedUser, setSelectedUser, selectedDate }) => {
 }
 
 const LogsPreviewContainer = styled.div`
-    width: 92%;
+    min-width: 20rem;
+    width: 80%;
     margin: 0 auto;
 
     display: flex;
     flex-wrap: wrap;
-    /* column-gap: 1em; */
     justify-content: space-between;
+    row-gap: 1.2em;
 `
 
 export default LogsPreview
