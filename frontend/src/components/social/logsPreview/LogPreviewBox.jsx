@@ -57,68 +57,78 @@ const LogPreviewBox = ({
             ? theme.social.activeBackgroundColor
             : theme.backgroundColor
 
-    return (
-        (isMobile || log.username !== me) && (
-            <Frame
-                onClick={handleSelect}
-                $bgColor={backgroundColor}
-                data-accept="true">
-                {isMobile && log.username === selectedUser ? (
-                    <MobileLogDetail data-accept="true">
-                        <LogDetails
-                            username={selectedUser}
-                            selectedDate={selectedDate || tempSelectedDate}
-                            pageType={pageType}
-                        />
-                    </MobileLogDetail>
-                ) : (
-                    <>
-                        <SimpleProfile
-                            user={log}
-                            ringColor={setRingColor}
-                            data-accept="true"
-                        />
-                        <RecentTask data-accept="true">
-                            {log.recent_task && (
-                                <>
-                                    <TaskName data-accept="true">
-                                        {' "' +
-                                            putEllipsis(
-                                                log.recent_task.name,
-                                                32,
-                                            ) +
-                                            '" ' +
-                                            t("log_preview_completed")}
-                                    </TaskName>
+    return <Frame $isMe={log.username === me}>
+        {log.username}
 
-                                    <Ago data-accept="true">
-                                        {" " +
-                                            DateTime.fromISO(
-                                                log.recent_task.completed_at,
-                                            )
-                                                .setLocale(locale)
-                                                .toRelative() +
-                                            " "}
-                                    </Ago>
-                                </>
-                            )}
-                        </RecentTask>
-                    </>
-                )}
-            </Frame>
-        )
-    )
+    </Frame>
+    
+    
+
+    // return (
+    //     (isMobile || log.username !== me) && (
+    //         <Frame
+    //             onClick={handleSelect}
+    //             $bgColor={backgroundColor}
+    //             data-accept="true">
+    //             {isMobile && log.username === selectedUser ? (
+    //                 <MobileLogDetail data-accept="true">
+    //                     <LogDetails
+    //                         username={selectedUser}
+    //                         selectedDate={selectedDate || tempSelectedDate}
+    //                         pageType={pageType}
+    //                     />
+    //                 </MobileLogDetail>
+    //             ) : (
+    //                 <>
+    //                     <SimpleProfile
+    //                         user={log}
+    //                         ringColor={setRingColor}
+    //                         data-accept="true"
+    //                     />
+    //                     <RecentTask data-accept="true">
+    //                         {log.recent_task && (
+    //                             <>
+    //                                 <TaskName data-accept="true">
+    //                                     {' "' +
+    //                                         putEllipsis(
+    //                                             log.recent_task.name,
+    //                                             32,
+    //                                         ) +
+    //                                         '" ' +
+    //                                         t("log_preview_completed")}
+    //                                 </TaskName>
+
+    //                                 <Ago data-accept="true">
+    //                                     {" " +
+    //                                         DateTime.fromISO(
+    //                                             log.recent_task.completed_at,
+    //                                         )
+    //                                             .setLocale(locale)
+    //                                             .toRelative() +
+    //                                         " "}
+    //                                 </Ago>
+    //                             </>
+    //                         )}
+    //                     </RecentTask>
+    //                 </>
+    //             )}
+    //         </Frame>
+    //     )
+    // )
 }
 
 const Frame = styled.div`
-    border-bottom: 0.05em solid ${(p) => p.theme.social.borderColor};
-    background-color: ${(props) => props.$bgColor};
+    width: ${props => props.$isMe ? 100 : 48}%;
+    height: 5em;
+    /* border-bottom: 0.05em solid ${(p) => p.theme.social.borderColor}; */
+    /* background-color: ${(props) => props.$bgColor}; */
+    background-color: green;
 
-    padding: 1.2em 1em 1.2em;
-
+    /* padding: 1.2em 1em 1.2em; */
+/* 
     display: flex;
-    align-items: center;
-    gap: 1em;
+    align-items: center; */
+    /* gap: 1em; */
 
     ${ifMobile} {
         background-color: ${(p) => p.theme.backgroundColor};

@@ -3,6 +3,7 @@ import styled from "styled-components"
 import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
 
 import { getCurrentUsername } from "@api/client"
+import { useRef } from "react"
 
 const compareDailyLogs = (a, b) => {
     // Show self log first
@@ -27,7 +28,7 @@ const compareDailyLogs = (a, b) => {
     return !a.recent_task - !b.recent_task
 }
 
-const LogsPreview = ({ logs, selectedUser, setSelectedUser, selectedDate }) => {
+const LogsPreview = ({ logs, selectedUser, setSelectedUser, selectedDate }) => {    
     return (
         <LogsPreviewContainer>
             {logs.sort(compareDailyLogs).map((log) => (
@@ -43,6 +44,14 @@ const LogsPreview = ({ logs, selectedUser, setSelectedUser, selectedDate }) => {
     )
 }
 
-const LogsPreviewContainer = styled.div``
+const LogsPreviewContainer = styled.div`
+    width: 92%;
+    margin: 0 auto;
+
+    display: flex;
+    flex-wrap: wrap;
+    /* column-gap: 1em; */
+    justify-content: space-between;
+`
 
 export default LogsPreview
