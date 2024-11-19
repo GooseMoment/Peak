@@ -4,11 +4,15 @@ import { getProjectColor } from "@components/project/common/palettes"
 import SimpleProfile from "@components/social/common/SimpleProfile"
 import LogDetails from "@components/social/logDetails/LogDetails"
 
+import TaskBox from "../logDetails/TaskBox"
+
 import { getCurrentUsername } from "@api/client"
 
 import { useClientLocale } from "@utils/clientSettings"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
+import TaskCircle from "@/components/tasks/TaskCircle"
+import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 
@@ -63,9 +67,25 @@ const LogPreviewBox = ({
                     <SimpleProfile user={log} />
                 </ProfileWrapper>
             </FrameRow>
-            <Username>
-                @{log.username}
-            </Username>
+            <Username>@{log.username}</Username>
+            <SimpleStats>
+                <StatsUnit>
+                    <StatusIconWrapper $type={"completedTask"}>
+                        <FeatherIcon icon="check" />
+                    </StatusIconWrapper>
+                    <StatusCount>
+                        12
+                    </StatusCount>
+                </StatsUnit>
+                <StatsUnit>
+                    <StatusIconWrapper $type={"reaction"}>
+                        <FeatherIcon icon="heart" />
+                    </StatusIconWrapper>
+                    <StatusCount>
+                        12
+                    </StatusCount>
+                </StatsUnit>
+            </SimpleStats>
         </Frame>
     )
 
@@ -125,7 +145,7 @@ const LogPreviewBox = ({
 const Frame = styled.div`
     /* xa : xa/k     xb = 0.47xa */
     /* xb : xb/1.1  xb/1.1 = xa/k*/
-    aspect-ratio: ${(props) => (props.$isMe ? 1.1/0.47 : 1.1)};
+    aspect-ratio: ${(props) => (props.$isMe ? 1.1 / 0.47 : 1.1)};
     width: ${(props) => (props.$isMe ? 100 : 47)}%;
 
     border-radius: 32px;
@@ -135,9 +155,10 @@ const Frame = styled.div`
 
     display: flex;
     flex-direction: column;
+    row-gap: 0.1em;
 
     ${ifMobile} {
-        aspect-ratio: ${(props) => (props.$isMe ? 1/0.47 : 1)};
+        aspect-ratio: ${(props) => (props.$isMe ? 1 / 0.47 : 1)};
         padding: 1em;
     }
 `
@@ -164,17 +185,67 @@ const ProfileWrapper = styled.div`
 
 const Username = styled.div`
     /* display: inline; */
-    /* line-height: 1.5em; */
+    line-height: 1.3em;
     overflow-x: clip;
     text-overflow: ellipsis;
-    
+
     font-size: 1.1em;
     text-align: left;
     white-space: nowrap;
 `
 
 const SimpleStats = styled.div`
+    flex-grow: 1;
 
+    display: flex;
+    flex-direction: row;
+`
+
+const StatsUnit = styled.div`
+    width: 50%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5em;
+`
+
+const StatusIconWrapper = styled.div`
+    aspect-ratio: 1;
+    width: 1.2em;
+
+    ${(props) =>
+        props.$type === "completedTask" &&
+        css`
+            border: 3px solid ${(p) => p.theme.black};
+            border-radius: 50%;
+        `}
+
+    display: flex;
+    justify-content: center;
+
+    & svg {
+        aspect-ratio: 1;
+        width: ${(props) => (props.$type === "completedTask" ? 83 : 100)}%;
+        top: 0;
+        margin: 0.1rem 0;
+
+        stroke: ${(p) => p.theme.black};
+        stroke-width: 0.2em;
+        ${(props) =>
+            props.$type === "reaction" &&
+            css`
+                fill: ${(p) => p.theme.black};
+            `}
+    }
+`
+
+const StatusCount = styled.div`
+    line-height: 1.3em;
+    overflow-x: clip;
+    text-overflow: ellipsis;
+
+    font-size: 1.1em;
 `
 
 const RecentTask = styled.div`
@@ -197,7 +268,7 @@ const Ago = styled.span`
     display: inline;
 
     font-size: 0.9em;
-    color: ${(p) => p.theme.secondTextColor};
+    border-color: ${(p) => p.theme.secondTextColor};
     white-space: nowrap;
 `
 
