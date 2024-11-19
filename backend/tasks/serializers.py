@@ -1,16 +1,17 @@
+from rest_framework import serializers
+
 from .models import Task
 from notifications.models import TaskReminder
-
-from rest_framework import serializers
 from users.models import User
 
 from datetime import datetime
 
+
 class TaskReminderSerializer(serializers.ModelSerializer):
     scheduled = serializers.DateTimeField(default=datetime.now(), required=False)
-    task_name = serializers.SerializerMethodField(read_only=True)
-    project_color = serializers.SerializerMethodField(read_only=True)
-    project_id = serializers.SerializerMethodField(read_only=True)
+    task_name = serializers.SerializerMethodField()
+    project_color = serializers.SerializerMethodField()
+    project_id = serializers.SerializerMethodField()
 
     def get_task_name(self, obj):
         return obj.task.name
@@ -25,13 +26,14 @@ class TaskReminderSerializer(serializers.ModelSerializer):
         model = TaskReminder
         fields = ["id", "task", "delta", "scheduled", "task_name", "project_color", "project_id"]
 
+
 class TaskSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(required=False, queryset=User.objects.all())
-    drawer_name = serializers.SerializerMethodField(read_only=True)
-    project_name = serializers.SerializerMethodField(read_only=True)
-    project_id = serializers.SerializerMethodField(read_only=True)
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), default=serializers.CurrentUserDefault())
+    drawer_name = serializers.SerializerMethodField()
+    project_name = serializers.SerializerMethodField()
+    project_id = serializers.SerializerMethodField()
     reminders = TaskReminderSerializer(many=True, read_only=True)
-    project_color = serializers.SerializerMethodField(read_only=True)
+    project_color = serializers.SerializerMethodField()
 
     def get_project_id(self, obj):
         return obj.drawer.project.id
