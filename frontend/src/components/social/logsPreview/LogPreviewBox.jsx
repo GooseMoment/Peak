@@ -12,6 +12,7 @@ import useScreenType, { ifMobile } from "@utils/useScreenType"
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
 
 const LogPreviewBox = ({
     log,
@@ -20,22 +21,25 @@ const LogPreviewBox = ({
     selectedDate,
     pageType = "following",
 }) => {
-    // TODO: explore feed용 view 추가하면 삭제
-    const initial_date = new Date()
-    initial_date.setHours(0, 0, 0, 0)
-    const tempSelectedDate = initial_date.toISOString()
-
     const theme = useTheme()
     const locale = useClientLocale()
     const { isMobile } = useScreenType()
     const { t } = useTranslation("", { keyPrefix: "social" })
+    const navigate = useNavigate()
 
     const me = getCurrentUsername()
 
     if (!log) return null
 
+    // TODO: explore feed용 view 추가하면 삭제
+    const initial_date = new Date()
+    initial_date.setHours(0, 0, 0, 0)
+    const tempSelectedDate = initial_date.toISOString()
+
     const handleSelect = (e) => {
         setSelectedUser(log.username === selectedUser ? null : log.username)
+
+        if(isMobile) navigate(`../daily/@${log.username}`)
     }
 
     const boxColor = getProjectColor(theme.type, log.header_color) || theme.grey
