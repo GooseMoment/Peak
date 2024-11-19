@@ -63,6 +63,9 @@ const LogPreviewBox = ({
                     <SimpleProfile user={log} />
                 </ProfileWrapper>
             </FrameRow>
+            <Username>
+                @{log.username}
+            </Username>
         </Frame>
     )
 
@@ -132,6 +135,11 @@ const Frame = styled.div`
 
     display: flex;
     flex-direction: column;
+
+    ${ifMobile} {
+        aspect-ratio: ${(props) => (props.$isMe ? 1/0.47 : 1)};
+        padding: 1em;
+    }
 `
 
 const FrameRow = styled.div`
@@ -141,7 +149,7 @@ const FrameRow = styled.div`
 
 const ProfileWrapper = styled.div`
     aspect-ratio: 1;
-    /* max-width: 4.5em; */
+    max-width: 4.1em;
 
     ${(props) =>
         props.$isMe
@@ -152,6 +160,21 @@ const ProfileWrapper = styled.div`
             : css`
                   width: 50%;
               `}
+`
+
+const Username = styled.div`
+    /* display: inline; */
+    /* line-height: 1.5em; */
+    overflow-x: clip;
+    text-overflow: ellipsis;
+    
+    font-size: 1.1em;
+    text-align: left;
+    white-space: nowrap;
+`
+
+const SimpleStats = styled.div`
+
 `
 
 const RecentTask = styled.div`
