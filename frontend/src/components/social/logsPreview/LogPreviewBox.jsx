@@ -4,23 +4,14 @@ import { getProjectColor } from "@components/project/common/palettes"
 import SimpleProfile from "@components/social/common/SimpleProfile"
 import LogDetails from "@components/social/logDetails/LogDetails"
 
-import TaskBox from "../logDetails/TaskBox"
-
 import { getCurrentUsername } from "@api/client"
 
 import { useClientLocale } from "@utils/clientSettings"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
-import TaskCircle from "@/components/tasks/TaskCircle"
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
-
-const putEllipsis = (text, maxLength) => {
-    return text.length > maxLength
-        ? text.substring(0, maxLength - 3) + "..."
-        : text
-}
 
 const LogPreviewBox = ({
     log,
@@ -44,8 +35,7 @@ const LogPreviewBox = ({
     if (!log) return null
 
     const handleSelect = (e) => {
-        if (e.target.dataset.accept === "true")
-            setSelectedUser(log.username === selectedUser ? null : log.username)
+        setSelectedUser(log.username === selectedUser ? null : log.username)
     }
 
     const boxColor = getProjectColor(theme.type, log.header_color) || theme.grey
@@ -61,7 +51,10 @@ const LogPreviewBox = ({
             : theme.backgroundColor
 
     return (
-        <Frame $isMe={log.username === me} $bgColor={boxColor}>
+        <Frame
+            $isMe={log.username === me}
+            $bgColor={boxColor}
+            onClick={handleSelect}>
             <FrameRow>
                 <ProfileWrapper $isMe={log.username === me}>
                     <SimpleProfile user={log} />
@@ -73,17 +66,13 @@ const LogPreviewBox = ({
                     <StatusIconWrapper $type={"completedTask"}>
                         <FeatherIcon icon="check" />
                     </StatusIconWrapper>
-                    <StatusCount>
-                        12
-                    </StatusCount>
+                    <StatusCount>12</StatusCount>
                 </StatsUnit>
                 <StatsUnit>
                     <StatusIconWrapper $type={"reaction"}>
                         <FeatherIcon icon="heart" />
                     </StatusIconWrapper>
-                    <StatusCount>
-                        12
-                    </StatusCount>
+                    <StatusCount>12</StatusCount>
                 </StatsUnit>
             </SimpleStats>
         </Frame>

@@ -13,6 +13,7 @@ import { signOut } from "@api/auth.api"
 import { getToken } from "@api/client"
 
 import { lazily } from "react-lazily"
+import SocialDailyPage from "@/pages/SocialDailyPage"
 
 const SearchPage = lazy(() => import("@pages/SearchPage"))
 const HomePage = lazy(() => import("@pages/HomePage"))
@@ -151,6 +152,10 @@ const routes = [
                     {
                         path: "explore",
                         element: <SocialExplorePage />,
+                    },
+                    {
+                        path: "daily/:username",
+                        element: <SocialDailyPage />
                     },
                 ],
             },
