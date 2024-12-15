@@ -20,7 +20,7 @@ import re
 
 from users.models import User
 from .models import EmailVerificationToken, PasswordRecoveryToken
-from .utils import get_first_language, send_mail_verification_email, send_mail_already_verified, send_mail_no_account, send_mail_password_recovery
+from .mails import get_first_language, send_mail_verification_email, send_mail_already_verified, send_mail_no_account, send_mail_password_recovery
 
 class SignInView(KnoxLoginView):
     permission_classes = (AllowAny, )
