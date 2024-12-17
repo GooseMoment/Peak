@@ -22,7 +22,7 @@ class HOTP:
         truncated = mac[offset:offset+4] # truncated: 4 bytes
 
         # clean MSB to avoid problems related to the sign bit
-        truncated = bytes([0, *truncated[1:]]) 
+        truncated = bytes([truncated[0] & 0x7F, *truncated[1:]]) 
 
         num = int.from_bytes(truncated, "big")
         return num 
