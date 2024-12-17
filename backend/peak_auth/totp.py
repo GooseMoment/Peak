@@ -7,7 +7,7 @@ from urllib.parse import urlencode, quote as urlquote
 
 
 def create_totp_secret() -> str:
-    return str(base64.b32encode(os.urandom(30)))
+    return base64.b32encode(os.urandom(30)).decode()
 
 
 # HOTP: https://datatracker.ietf.org/doc/html/rfc4226
