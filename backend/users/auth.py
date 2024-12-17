@@ -30,6 +30,9 @@ class UserTOTPBackend(BaseBackend):
         if user is None:
             return None
 
+        if len(totp_code) != 6:
+            return None
+
         try:
             totp_secret = TOTPSecret.objects.filter(user=user).get()
         except TOTPSecret.DoesNotExist:
@@ -38,9 +41,8 @@ class UserTOTPBackend(BaseBackend):
         totp_agent = totp_secret.to_totp()
         codes = totp_agent.totp_with_offsets()
 
-        for code in codes:
-            if code == totp_code:
-                return user
+        if totp_code in codes:
+            return user
 
         return None
 
