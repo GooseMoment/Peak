@@ -11,6 +11,7 @@ import Form from "@components/sign/Form"
 import Input from "@components/sign/Input"
 
 import {
+    authTOTP,
     patchPasswordWithPasswordRecoveryToken,
     requestPasswordRecoveryToken,
     resendVerificationEmail,
@@ -23,12 +24,14 @@ import sleep from "@utils/sleep"
 
 import {
     AtSign,
+    Hash,
     HelpCircle,
     Key,
     LogIn,
     Mail,
     RotateCw,
     UserPlus,
+    XCircle,
 } from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -47,11 +50,18 @@ export const SignInForm = () => {
         const password = e.target.password.value
 
         try {
-            await signIn(email, password)
+            const twoFactorAuthEnabled = await signIn(
+                email,
+                password,
+            )
+
+            if (twoFactorAuthEnabled) {
+                return navigate("/sign/two_factor/totp")
+            }
+
             toast.success(t("sign_in_success"))
             await sleep(1000)
 
-            // TODO: don't navigate; redirect
             navigate("/app/")
         } catch (err) {
             const status = err?.response?.status
@@ -114,6 +124,95 @@ export const SignInForm = () => {
                     <LinkText>
                         <Mail />
                         {t("button_resend_verification")}
+                    </LinkText>
+                </Link>
+            </Links>
+        </>
+    )
+}
+
+export const TOTPAuthForm = () => {
+    const { t } = useTranslation(null, { keyPrefix: "sign" })
+    const navigate = useNavigate()
+    const [totpCode, setTOTPCode] = useState("")
+
+    const onChange = (e) => {
+        const value = e.target.value.replace(/\D/g, "").slice(0, 6)
+        setTOTPCode(value)
+
+        if (value.length >= 6) {
+            return mut.mutate()
+        }
+    }
+
+    const mut = useMutation({
+        mutationFn: (e) => {
+            e?.preventDefault()
+
+            if (totpCode.length < 6) {
+                return toast.error("Enter more than 6")
+            }
+
+            return authTOTP("totp", totpCode)
+        },
+        onSuccess: () => {
+            toast.success(t("sign_in_success"))
+            return navigate("/app/")
+        },
+        onError: (err) => {
+            // TODO: elabroate error
+            if (err?.response?.status === 403) {
+                toast.error("Invalid session. Please sign in again.")
+                return navigate("/sign/in")
+            }
+
+            if (err?.response?.status === 429) {
+                toast.error("Try count exceeds. Please sign in again.")
+                return navigate("/sign/in")
+            }
+
+            toast.error("Error.")
+            console.log(err)
+        },
+    })
+
+    return (
+        <>
+            <Title>Two-Factor Authentication</Title>
+            <p>Please</p>
+            <Form onSubmit={mut.mutate}>
+                <Input
+                    icon={<Hash />}
+                    name="totp_code"
+                    value={totpCode}
+                    onChange={onChange}
+                    type="text"
+                    maxLength="6"
+                    pattern="^\d{6}$"
+                    autoComplete="one-time-code"
+                    placeholder={"6-digit code"}
+                    required
+                />
+                <ButtonGroup $justifyContent="right" $margin="1em 0 0 0">
+                    <Button
+                        type="submit"
+                        disabled={mut.isPending}
+                        loading={mut.isPending}>
+                        {mut.isPending ? t("loading") : t("button_auth")}
+                    </Button>
+                </ButtonGroup>
+            </Form>
+            <Links>
+                <Link to="/sign/in">
+                    <LinkText>
+                        <XCircle />
+                        Cancel
+                    </LinkText>
+                </Link>
+                <Link to="/sign/two_factor/email">
+                    <LinkText>
+                        <Mail />
+                        Email Authentication
                     </LinkText>
                 </Link>
             </Links>

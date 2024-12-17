@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.core.cache import cache
 from django.db import transaction
 from django.db.utils import IntegrityError
 from django.conf import settings
@@ -12,6 +13,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.throttling import AnonRateThrottle
+from rest_framework.exceptions import ValidationError as APIValidationError
 
 from knox.views import LoginView as KnoxLoginView
 import uuid
@@ -21,6 +23,7 @@ import re
 from users.models import User
 from .models import EmailVerificationToken, PasswordRecoveryToken, TOTPSecret, TwoFactorAuthToken
 from .mails import get_first_language, send_mail_verification_email, send_mail_already_verified, send_mail_no_account, send_mail_password_recovery
+from .totp import create_totp_secret, TOTP
 
 class SignInView(KnoxLoginView):
     permission_classes = (AllowAny, )
@@ -55,65 +58,44 @@ class SignInView(KnoxLoginView):
         return super(SignInView, self).post(request, format=None)
 
 
-class TwoFactorAuthenticateView(KnoxLoginView):
+class TOTPAuthenticationView(KnoxLoginView):
     permission_classes = (AllowAny, )
 
     def post(self, request: Request):
         try:
             token_hex = request.data["token"] 
-            tfa_type = request.data["type"]
+            code = request.data["code"]
         except KeyError:
             # TODO: replace Response to the custom exception
             return Response({
+                "code": "REQUIRED_FIELD_MISSING",
                 "message": "Missing fields",
             }, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             token = uuid.UUID(hex=token_hex)
         except ValueError:
-            # TODO: replace Response to the custom exception
-            return Response({
-                "message": "Invalid token format",
-            }, status=status.HTTP_400_BAD_REQUEST)
+            raise APIValidationError(["format of token is valid."])
     
         try:
             self.tfat = TwoFactorAuthToken.objects.filter(token=token).get()
         except TwoFactorAuthToken.DoesNotExist:
             # TODO: replace Response to the custom exception
             return Response({
+                "code": "INVALID_TOKEN",
                 "message": "Invalid token",
             }, status=status.HTTP_403_FORBIDDEN)
-
-        try:
-            return self.handlers[tfa_type](self, request)
-        except KeyError:
-            # TODO: replace Response to the custom exception
-            return Response({
-                "message": "Unsupported type",
-            }, status=status.HTTP_400_BAD_REQUEST)
-    
-    def handle_totp(self, request: Request):
-        try:
-            totp_code = request.data["totp_code"].strip()
-        except KeyError:
-            # TODO: replace Response to the custom exception
-            return Response({
-                "message": "Missing fields",
-            }, status=status.HTTP_400_BAD_REQUEST)
         
-        user = authenticate(request, user=self.tfat.user, totp_code=totp_code)
+        user = authenticate(request, user=self.tfat.user, totp_code=code)
         if user is None:
             return self.process_fail(request)
 
         self.tfat.delete()
         return self.process_login(request, user)
-    
-    def handle_recovery_code(self, request: Request):
-        raise NotImplementedError
 
     def process_login(self, request: Request, user: User):
         login(request, user)
-        return super(TwoFactorAuthenticateView, self).post(request, format=None)
+        return super(TOTPAuthenticationView, self).post(request, format=None)
     
     def process_fail(self, request: Request):
         self.tfat.try_count += 1
@@ -122,20 +104,109 @@ class TwoFactorAuthenticateView(KnoxLoginView):
             # TODO: replace Response to the custom exception
             # TODO: add sign in timed restriction
             return Response({
+                "code": "TOKEN_OUT_OF_COUNTS",
                 "message": "Out of try counts. Please sign in again.",
-            }, status=status.HTTP_403_FORBIDDEN)
+            }, status=status.HTTP_429_TOO_MANY_REQUESTS)
 
         self.tfat.save()
         
         # TODO: replace Response to the custom exception
         return Response({
+            "code": "CREDENTIAL_INVALID",
             "message": "Invalid credential.",
-        }, status=status.HTTP_403_FORBIDDEN)
+        }, status=status.HTTP_400_BAD_REQUEST)
 
-    handlers = {
-        "totp": handle_totp,
-        "recovery_code": handle_recovery_code,
-    }
+
+class TOTPRegisterView(GenericAPIView):
+    key_prefix = "totp-secret-pending"
+    cache_timeout = 60 * 30 # 30 minutes
+    
+    def get_cahce_key(self) -> str:
+        return self.key_prefix + "-" + self.request.user.username
+    
+    def get_cached_secret(self) -> str | None:
+        key = self.get_cahce_key()
+        return cache.get(key)
+
+    def create_and_set_secret(self) -> str:
+        key = self.get_cahce_key()
+        secret = create_totp_secret()
+        cache.set(key, secret, self.cache_timeout)
+        return secret
+    
+    def clear_cached_secret(self):
+        key = self.get_cahce_key()
+        cache.delete(key)
+
+    # get wheter TOTP is enabled or not and its created_at if exists
+    def get(self, request: Request):
+        exists = TOTPSecret.objects.filter(user=request.user).exists()
+
+        if not exists:
+            return Response({
+                "enabled": False,
+            })
+        
+        totp_secret = TOTPSecret.objects.get(user=request.user)
+        return Response({
+            "enabled": True,
+            "created_at": totp_secret.created_at,
+        })
+    
+    # create a new TOTP secret
+    def post(self, request: Request):
+        secret = self.create_and_set_secret()
+        totp = TOTP(secret)
+
+        return Response({
+            "secret": secret,
+            "uri": totp.get_uri(request.user.username, "Peak"),
+        }, status=status.HTTP_200_OK)
+        
+    # validate and complete registration TOTP
+    def patch(self, request: Request):
+        secret = self.get_cached_secret() 
+        if secret is None:
+            # TODO: replace Response to the custom exception
+            return Response({
+                "code": "BAD_REQUEST",
+                "message": "TOTP registration not started.",
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            code = request.data["code"]
+        except KeyError:
+            # TODO: replace Response to the custom exception
+            return Response({
+                "code": "REQUIRED_FIELD_MISSING",
+                "message": "Missing fields",
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        totp = TOTP(secret)
+        codes = totp.totp_with_offsets()
+        if code not in codes:
+            # TODO: replace Response to the custom exception
+            return Response({
+                "code": "CREDENTIAL_INVALID",
+                "message": "Invalid credential.",
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+        
+        TOTPSecret.objects.filter(user=request.user).delete()
+        TOTPSecret.objects.create(user=request.user, secret=secret)
+        return Response({
+            "code": "SUCCESS",
+            "message": "TOTP two-factor authentication was successfully added.",
+        }, status=status.HTTP_200_OK)
+    
+    # disable and delete TOTP
+    def delete(self, request: Request):
+        TOTPSecret.objects.filter(user=request.user).delete()
+
+        return Response({
+            "code": "SUCCESS",
+            "message": "Your TOTP two-factor authentication was successfully disabled and deleted.",
+        }, status=status.HTTP_200_OK)
 
 
 username_validation = re.compile(r"^[a-z0-9_]{4,15}$")
