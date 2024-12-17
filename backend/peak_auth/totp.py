@@ -6,7 +6,7 @@ from time import time
 
 
 def create_new_key() -> str:
-    return str(base64.b32encode(os.urandom(20)))
+    return str(base64.b32encode(os.urandom(30)))
 
 
 # HOTP: https://datatracker.ietf.org/doc/html/rfc4226
@@ -42,9 +42,23 @@ class HOTP:
 
 # TOTP: https://datatracker.ietf.org/doc/html/rfc6238
 class TOTP(HOTP):
-    def totp(self) -> str:
-        t = int(time())
-        tx = 30
-        counter = t // tx
+    offset_start = -2 # inclusive
+    offset_end = 2 # exclusive
+    tx = 30 # seconds
+
+    def get_timestamp(self) -> int:
+        return int(time())
+
+    def totp(self, offset: int = 0) -> str:
+        counter = self.get_timestamp() // self.tx + offset
         return self.hotp(counter)
     
+    def totp_with_offsets(self) -> list[str]:
+        codes = []
+        t = self.get_timestamp()
+
+        for offset in range(self.offset_start, self.offset_end):
+            counter = t // self.tx + offset
+            codes.append(self.hotp(counter))
+        
+        return codes
