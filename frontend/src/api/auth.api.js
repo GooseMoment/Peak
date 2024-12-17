@@ -54,17 +54,17 @@ export const authTOTP = async (type, code) => {
 }
 
 export const getTOTPRegistered = async () => {
-    const res = await client.get(`auth/totp/register/`)
+    const res = await client.get(`auth/two_factor/totp/register/`)
     return res.data
 }
 
 export const registerTOTP = async () => {
-    const res = await client.post(`auth/totp/register/`)
+    const res = await client.post(`auth/two_factor/totp/register/`)
     return res.data
 }
 
 export const confirmRegistrationTOTP = async (code) => {
-    await client.patch(`auth/totp/register/`, {
+    await client.patch(`auth/two_factor/totp/register/`, {
         code,
     })
 
@@ -72,7 +72,7 @@ export const confirmRegistrationTOTP = async (code) => {
 }
 
 export const deleteRegistrationTOTP = async () => {
-    await client.delete(`auth/totp/register/`)
+    await client.delete(`auth/two_factor/totp/register/`)
     return true
 }
 
