@@ -19,7 +19,7 @@ from datetime import datetime, UTC
 import re
 
 from users.models import User
-from .models import EmailVerificationToken, PasswordRecoveryToken
+from .models import EmailVerificationToken, PasswordRecoveryToken, TOTPSecret, TwoFactorAuthToken
 from .mails import get_first_language, send_mail_verification_email, send_mail_already_verified, send_mail_no_account, send_mail_password_recovery
 
 class SignInView(KnoxLoginView):
@@ -36,10 +36,106 @@ class SignInView(KnoxLoginView):
         
         if not user.is_active:
             return Response(status=status.HTTP_403_FORBIDDEN)
+        
+        totp_enabled = TOTPSecret.objects.filter(user=user).exists()
+        if totp_enabled:
+            TwoFactorAuthToken.objects.filter(user=user).delete()
+            tfat = TwoFactorAuthToken.objects.create(user=user)
+            return Response({
+                "user": {
+                    "email": user.email,
+                    "username": user.username,
+                },
+                "two_factor_auth": {
+                    "token": tfat.token,
+                },
+            })
 
         login(request, user)
-        
         return super(SignInView, self).post(request, format=None)
+
+
+class TwoFactorAuthenticateView(KnoxLoginView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request: Request):
+        try:
+            token_hex = request.data["token"] 
+            tfa_type = request.data["type"]
+        except KeyError:
+            # TODO: replace Response to the custom exception
+            return Response({
+                "message": "Missing fields",
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            token = uuid.UUID(hex=token_hex)
+        except ValueError:
+            # TODO: replace Response to the custom exception
+            return Response({
+                "message": "Invalid token format",
+            }, status=status.HTTP_400_BAD_REQUEST)
+    
+        try:
+            self.tfat = TwoFactorAuthToken.objects.filter(token=token).get()
+        except TwoFactorAuthToken.DoesNotExist:
+            # TODO: replace Response to the custom exception
+            return Response({
+                "message": "Invalid token",
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            return self.handlers[tfa_type](self, request)
+        except KeyError:
+            # TODO: replace Response to the custom exception
+            return Response({
+                "message": "Unsupported type",
+            }, status=status.HTTP_400_BAD_REQUEST)
+    
+    def handle_totp(self, request: Request):
+        try:
+            totp_code = request.data["totp_code"].strip()
+        except KeyError:
+            # TODO: replace Response to the custom exception
+            return Response({
+                "message": "Missing fields",
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = authenticate(request, user=self.tfat.user, totp_code=totp_code)
+        if user is None:
+            return self.process_fail(request)
+
+        self.tfat.delete()
+        return self.process_login(request, user)
+    
+    def handle_recovery_code(self, request: Request):
+        raise NotImplementedError
+
+    def process_login(self, request: Request, user: User):
+        login(request, user)
+        return super(TwoFactorAuthenticateView, self).post(request, format=None)
+    
+    def process_fail(self, request: Request):
+        self.tfat.try_count += 1
+        if self.tfat.try_count >= settings.TWO_FACTOR_AUTHENTICATION["ALLOWED_TRIES_PER_SIGN_IN"]:
+            self.tfat.delete()
+            # TODO: replace Response to the custom exception
+            # TODO: add sign in timed restriction
+            return Response({
+                "message": "Out of try counts. Please sign in again.",
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        self.tfat.save()
+        
+        # TODO: replace Response to the custom exception
+        return Response({
+            "message": "Invalid credential.",
+        }, status=status.HTTP_403_FORBIDDEN)
+
+    handlers = {
+        "totp": handle_totp,
+        "recovery_code": handle_recovery_code,
+    }
 
 
 username_validation = re.compile(r"^[a-z0-9_]{4,15}$")
