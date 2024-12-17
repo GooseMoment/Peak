@@ -1,10 +1,11 @@
 from django.contrib.auth.backends import BaseBackend
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.http import HttpRequest
+
 from .models import User
+from peak_auth.models import TOTPSecret
+
 
 class UserBackend(BaseBackend):
-    def authenticate(self, request: HttpRequest, email: str, password: str, **kwargs):
+    def authenticate(self, request, email: str, password: str, **kwargs):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -22,3 +23,32 @@ class UserBackend(BaseBackend):
             return None
         
         return user
+
+
+class UserTOTPBackend(BaseBackend):
+    def authenticate(self, request, user: User, totp_code: str, **kwrags):
+        if user is None:
+            return None
+
+        try:
+            totp_secret = TOTPSecret.objects.filter(user=user).get()
+        except TOTPSecret.DoesNotExist:
+            return None
+        
+        totp_agent = totp_secret.to_totp()
+        codes = totp_agent.totp_with_offsets()
+
+        for code in codes:
+            if code == totp_code:
+                return user
+
+        return None
+
+    def get_user(self, user_id: int) -> User:
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return None
+        
+        return user
+
