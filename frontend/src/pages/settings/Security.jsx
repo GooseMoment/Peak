@@ -29,6 +29,7 @@ const Security = () => {
 
     const { t } = useTranslation("settings", { keyPrefix: "security" })
     const [totpQRData, setTOTPQRData] = useState(null)
+    const [totpSecret, setTOTPSecret] = useState(null)
     const [totpCode, setTOTPCode] = useState("")
 
     const totpQuery = useQuery({
@@ -54,25 +55,24 @@ const Security = () => {
             if (method === "post") {
                 const dataURL = await QRCode.toDataURL(data.uri)
                 setTOTPQRData(dataURL)
+                setTOTPSecret(data.secret)
                 return
             }
 
             if (method === "patch") {
                 setTOTPQRData(null)
                 client.invalidateQueries(["auth", "totp"])
-                return toast.success(
-                    "Two-factor authentication is now enabled.",
-                )
+                return toast.success(t("totp.register_success"))
             }
 
             if (method === "delete") {
                 client.invalidateQueries(["auth", "totp"])
-                return toast.info("Two-factor authentication is now disabled.")
+                return toast.info(t("totp.delete_success"))
             }
         },
         onError: async (err, { method }) => {
             if (method === "patch") {
-                toast.error("The code you entered is wrong.")
+                toast.error(t("totp.wrong_code"))
                 return
             }
         },
@@ -98,7 +98,7 @@ const Security = () => {
                 <Description>{t("totp.description")}</Description>
                 <Value>
                     {!totpQuery.isLoading && totpQuery.data.enabled && (
-                        <p>
+                        <Text>
                             {t("totp.activated_at", {
                                 date: DateTime.fromISO(
                                     totpQuery.data.created_at,
@@ -107,7 +107,7 @@ const Security = () => {
                                     .setZone(tz)
                                     .toLocaleString(DateTime.DATETIME_FULL),
                             })}
-                        </p>
+                        </Text>
                     )}
                     {!totpQuery.isLoading && !totpQRData && (
                         <ButtonGroup $justifyContent="left" $margin="1em 0">
@@ -116,7 +116,7 @@ const Security = () => {
                                     totpMut.mutate({ method: "post" })
                                 }
                                 disabled={totpMut.isPending}
-                                loading={totpMut.isLoading}>
+                                loading={totpMut.isPending}>
                                 {t(
                                     totpQuery.data.enabled
                                         ? "totp.edit"
@@ -129,7 +129,7 @@ const Security = () => {
                                         totpMut.mutate({ method: "delete" })
                                     }
                                     disabled={totpMut.isPending}
-                                    loading={totpMut.isLoading}>
+                                    loading={totpMut.isPending}>
                                     {t("totp.delete")}
                                 </Button>
                             )}
@@ -138,12 +138,10 @@ const Security = () => {
 
                     {totpQRData && (
                         <>
-                            <img src={totpQRData} />
-                            <p>
-                                Scan this QR code with your preferred
-                                authentication app. Enter the code below to
-                                complete TOTP registration.
-                            </p>
+                            <QRCodeImg src={totpQRData} />
+                            <Text>{t("totp.qrcode_description")}</Text>
+                            <Text>{t("totp.secret_manual")}</Text>
+                            <Secret>{totpSecret}</Secret>
                             <Input
                                 icon={<FeatherIcon icon="hash" />}
                                 name="totp_code"
@@ -153,15 +151,27 @@ const Security = () => {
                                 value={totpCode}
                                 onChange={onChangeTOTPInput}
                                 autoComplete="one-time-code"
-                                placeholder={"6-digit code"}
+                                placeholder={t("totp.input_placeholder")}
                                 required
                             />
-                            <Button
-                                onClick={() =>
-                                    totpMut.mutate({ method: "patch" })
-                                }>
-                                Enter
-                            </Button>
+                            <ButtonGroup $justifyContent="left" $margin="1em 0">
+                                <Button
+                                    disabled={totpMut.isPending}
+                                    loading={totpMut.isPending}
+                                    onClick={() =>
+                                        totpMut.mutate({ method: "patch" })
+                                    }>
+                                    {t("totp.enter")}
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        setTOTPQRData(null)
+                                        setTOTPSecret(null)
+                                        setTOTPCode("")
+                                    }}>
+                                    {t("totp.cancel")}
+                                </Button>
+                            </ButtonGroup>
                         </>
                     )}
                 </Value>
@@ -170,9 +180,22 @@ const Security = () => {
     )
 }
 
-const TOTPBox = styled.div`
-    display: flex;
-    justify-content: space-between;
+const QRCodeImg = styled.img`
+    aspect-ratio: 1/1;
+    width: 10em;
+    height: 10em;
+`
+
+const Text = styled.p`
+    line-height: 1.3;
+    margin-bottom: 1em;
+`
+
+const Secret = styled.div`
+    padding: 1em;
+    background-color: ${(p) => p.theme.secondBackgroundColor};
+    margin-bottom: 1em;
+    width: min-content;
 `
 
 export default Security

@@ -6,6 +6,7 @@
         "title": "설정",
         "account": "계정",
         "general": "일반",
+        "security": "보안",
         "privacy": "공개 범위",
         "languages_and_time": "언어 및 시간",
         "notifications": "알림",
@@ -52,6 +53,24 @@
         "delete_task_after_alert": {
             "name": "작업 삭제 시 경고",
             "description": "작업을 삭제할 때 되묻는 경고창을 띄웁니다."
+        }
+    },
+    "security": {
+        "totp": {
+            "name": "2단계 인증: 일회용 코드",
+            "description": "일회용 코드(TOTP)를 사용하면 보안을 향상할 수 있습니다.",
+            "activated_at": "{{date}}에 활성화됨",
+            "enable": "켜기",
+            "edit": "수정",
+            "delete": "삭제",
+            "qrcode_description": "인증기 앱으로 QR 코드를 스캔하세요. 앱에 표시되는 숫자를 아래 입력하면 등록이 완료됩니다.",
+            "secret_manual": "또는, 보안 키를 수동으로 입력할 수 있습니다:",
+            "input_placeholder": "6자리 코드",
+            "enter": "입력",
+            "cancel": "취소",
+            "register_success": "2단계 인증을 활성화 했습니다.",
+            "delete_success": "2단계 인증을 삭제했습니다.",
+            "wrong_code": "잘못된 코드입니다. 다시 시도하세요."
         }
     },
     "privacy": {
