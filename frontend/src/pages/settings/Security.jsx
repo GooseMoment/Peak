@@ -6,6 +6,7 @@ import styled from "styled-components"
 import Button, { ButtonGroup } from "@components/common/Button"
 import Confirmation from "@components/common/Confirmation"
 import Error from "@components/settings/Error"
+import PasswordSection from "@components/settings/PasswordSection"
 import Section, { Description, Name, Value } from "@components/settings/Section"
 import Input from "@components/sign/Input"
 
@@ -104,6 +105,8 @@ const Security = () => {
     return (
         <>
             <Section>
+                <PasswordSection />
+
                 <Name>{t("totp.name")}</Name>
                 <Description>{t("totp.description")}</Description>
                 <Value>

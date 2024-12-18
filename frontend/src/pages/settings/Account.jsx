@@ -9,7 +9,6 @@ import ModalWindow from "@components/common/ModalWindow"
 import { getProjectColor } from "@components/project/common/palettes"
 import Color from "@components/project/edit/Color"
 import Error from "@components/settings/Error"
-import PasswordSection from "@components/settings/PasswordSection"
 import ProfileImg from "@components/settings/ProfileImg"
 import Section, { Name, Value } from "@components/settings/Section"
 import Input from "@components/sign/Input"
@@ -158,8 +157,6 @@ const Account = () => {
                     </ButtonGroup>
                 </Section>
             </form>
-
-            <PasswordSection />
         </>
     )
 }
