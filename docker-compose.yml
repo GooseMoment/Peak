@@ -18,6 +18,8 @@ services:
       - ./web/:/web/
       - caddy_data:/data
       - caddy_config:/config
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   api:
     build: ./backend
     command: python manage.py runserver 0.0.0.0:8000
