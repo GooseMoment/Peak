@@ -154,8 +154,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Authentication Backend
 AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
     "users.auth.UserBackend",
+    "users.auth.UserTOTPBackend",
 ]
 
 # CSRF
@@ -261,3 +261,9 @@ REST_KNOX = {
 # Password Recovery Token
 
 PASSWORD_RECOVERY_TOKEN_TTL = timedelta(minutes=10)
+
+# Two-factor Authentication
+
+TWO_FACTOR_AUTHENTICATION = {
+    "ALLOWED_TRIES_PER_SIGN_IN": 3,
+}

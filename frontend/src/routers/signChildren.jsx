@@ -4,6 +4,7 @@ import { lazily } from "react-lazily"
 
 const {
     SignInForm,
+    TOTPAuthForm,
     SignUpForm,
     SignUpComplete,
     PasswordRecoveryForm,
@@ -20,6 +21,10 @@ const signChildren = [
     {
         path: "in",
         element: <SignInForm />,
+    },
+    {
+        path: "two_factor/totp",
+        element: <TOTPAuthForm />,
     },
     {
         path: "up",
