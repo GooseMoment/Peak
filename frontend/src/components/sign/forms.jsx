@@ -162,24 +162,25 @@ export const TOTPAuthForm = () => {
         onError: (err) => {
             // TODO: elabroate error
             if (err?.response?.status === 403) {
-                toast.error("Invalid session. Please sign in again.")
+                toast.error(t("session_invalid"))
                 return navigate("/sign/in")
             }
 
             if (err?.response?.status === 429) {
-                toast.error("Try count exceeds. Please sign in again.")
+                toast.error(t("try_count_exceed"))
                 return navigate("/sign/in")
             }
 
-            toast.error("Error.")
-            console.log(err)
+            toast.error(t("wrong_code"))
         },
     })
 
     return (
         <>
-            <Title>Two-Factor Authentication</Title>
-            <p>Please</p>
+            <div>
+                <Title>{t("two_factor_authentication")}</Title>
+                <Text>{t("two_factor_authentication_description")}</Text>
+            </div>
             <Form onSubmit={mut.mutate}>
                 <Input
                     icon={<Hash />}
@@ -190,7 +191,7 @@ export const TOTPAuthForm = () => {
                     maxLength="6"
                     pattern="^\d{6}$"
                     autoComplete="one-time-code"
-                    placeholder={"6-digit code"}
+                    placeholder={t("6-digit_code")}
                     required
                 />
                 <ButtonGroup $justifyContent="right" $margin="1em 0 0 0">
@@ -198,7 +199,7 @@ export const TOTPAuthForm = () => {
                         type="submit"
                         disabled={mut.isPending}
                         loading={mut.isPending}>
-                        {mut.isPending ? t("loading") : t("button_auth")}
+                        {mut.isPending ? t("loading") : t("button_sign_in")}
                     </Button>
                 </ButtonGroup>
             </Form>
@@ -206,13 +207,13 @@ export const TOTPAuthForm = () => {
                 <Link to="/sign/in">
                     <LinkText>
                         <XCircle />
-                        Cancel
+                        {t("button_cancel")}
                     </LinkText>
                 </Link>
                 <Link to="/sign/two_factor/email">
                     <LinkText>
                         <Mail />
-                        Email Authentication
+                        {t("button_email_authentication")}
                     </LinkText>
                 </Link>
             </Links>
@@ -581,6 +582,7 @@ const Content = styled.div`
 
 const Text = styled.p`
     line-height: 1.3;
+    margin-top: 1em;
     margin-bottom: 1em;
 `
 
