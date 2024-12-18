@@ -63,6 +63,7 @@
             "enable": "Enable",
             "edit": "Edit",
             "delete": "Delete",
+            "ask_delete": "Delete the one-time passcode authentication?",
             "qrcode_description": "Scan this QR code with your preferred authentication app. Enter the numbers from the app below to complete TOTP registration.",
             "secret_manual": "Or, you can enter the secret code manually:",
             "input_placeholder": "6-digit code",

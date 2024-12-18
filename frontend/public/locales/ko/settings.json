@@ -63,6 +63,7 @@
             "enable": "켜기",
             "edit": "수정",
             "delete": "삭제",
+            "ask_delete": "일회용 코드 인증을 삭제할까요?",
             "qrcode_description": "인증기 앱으로 QR 코드를 스캔하세요. 앱에 표시되는 숫자를 아래 입력하면 등록이 완료됩니다.",
             "secret_manual": "또는, 보안 키를 수동으로 입력할 수 있습니다:",
             "input_placeholder": "6자리 코드",

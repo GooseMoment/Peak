@@ -3,8 +3,11 @@ import { useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import Button, { ButtonGroup } from "@components/common/Button"
+import Confirmation from "@components/common/Confirmation"
 import Error from "@components/settings/Error"
 import Section, { Description, Name, Value } from "@components/settings/Section"
+import Input from "@components/sign/Input"
 
 import {
     confirmRegistrationTOTP,
@@ -13,9 +16,10 @@ import {
     registerTOTP,
 } from "@api/auth.api"
 
-import Button, { ButtonGroup } from "@/components/common/Button"
-import Input from "@/components/sign/Input"
-import { useClientLocale, useClientTimezone } from "@/utils/clientSettings"
+import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
+
+import { states } from "@assets/themes"
+
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import QRCode from "qrcode"
@@ -28,6 +32,7 @@ const Security = () => {
     const client = useQueryClient()
 
     const { t } = useTranslation("settings", { keyPrefix: "security" })
+    const [isTOTPConfirmationOpen, setTOTPConfirmationOpen] = useState(false)
     const [totpQRData, setTOTPQRData] = useState(null)
     const [totpSecret, setTOTPSecret] = useState(null)
     const [totpCode, setTOTPCode] = useState("")
@@ -66,6 +71,7 @@ const Security = () => {
             }
 
             if (method === "delete") {
+                setTOTPConfirmationOpen(false)
                 client.invalidateQueries(["auth", "totp"])
                 return toast.info(t("totp.delete_success"))
             }
@@ -77,6 +83,10 @@ const Security = () => {
             }
         },
     })
+
+    const deleteTOTP = () => {
+        setTOTPConfirmationOpen(true)
+    }
 
     const onChangeTOTPInput = (e) => {
         const value = e.target.value.replace(/\D/g, "").slice(0, 6)
@@ -125,11 +135,8 @@ const Security = () => {
                             </Button>
                             {totpQuery.data.enabled && (
                                 <Button
-                                    onClick={() =>
-                                        totpMut.mutate({ method: "delete" })
-                                    }
-                                    disabled={totpMut.isPending}
-                                    loading={totpMut.isPending}>
+                                    onClick={deleteTOTP}
+                                    state={states.danger}>
                                     {t("totp.delete")}
                                 </Button>
                             )}
@@ -176,6 +183,23 @@ const Security = () => {
                     )}
                 </Value>
             </Section>
+            {isTOTPConfirmationOpen && (
+                <Confirmation
+                    question={t("totp.ask_delete")}
+                    buttons={[
+                        <Button
+                            key="delete"
+                            state={states.danger}
+                            onClick={() => totpMut.mutate({ method: "delete" })}
+                            disabled={totpMut.isPending}
+                            loading={totpMut.isPending}>
+                            {t("totp.delete")}
+                        </Button>,
+                        "close",
+                    ]}
+                    onClose={() => setTOTPConfirmationOpen(false)}
+                />
+            )}
         </>
     )
 }
