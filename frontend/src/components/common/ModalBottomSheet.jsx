@@ -6,13 +6,13 @@ import FeatherIcon from "feather-icons-react"
 import { BottomSheet } from "react-spring-bottom-sheet"
 import "react-spring-bottom-sheet/dist/style.css"
 
-export const Header = ({ title = null, handleBack = () => {}, closeSheet }) => {
+export const Header = ({ title = null, icon = null, handleBack = () => {}, closeSheet }) => {
     return (
         <HeaderBox>
             {handleBack ? (
                 <FeatherIcon icon="chevron-left" onClick={handleBack} />
             ) : (
-                <EmptyBox />
+                icon ? icon : <EmptyBox />
             )}
             {title}
             {closeSheet && <FeatherIcon icon="x" onClick={closeSheet} />}

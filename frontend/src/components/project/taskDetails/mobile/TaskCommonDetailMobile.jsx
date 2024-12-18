@@ -1,24 +1,31 @@
 import { useEffect, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
+import DeleteAlert from "@components/common/DeleteAlert"
 import ContentsMobile from "@components/project/taskDetails/mobile/ContentsMobile"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
 import { postReminder } from "@api/notifications.api"
-import { patchTask, postTask } from "@api/tasks.api"
+import { patchTask, postTask, deleteTask } from "@api/tasks.api"
+
+import { useClientSetting } from "@utils/clientSettings"
+import { useNavigate } from "react-router-dom"
 
 import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import FeatherIcon from "feather-icons-react"
 
 const TaskCommonDetailMobile = ({
     newTask,
     setNewTask,
+    projectID = null,
+    projectType = null,
     color,
     onClose,
     isCreating = false,
@@ -26,7 +33,12 @@ const TaskCommonDetailMobile = ({
     const { t } = useTranslation(null, { keyPrefix: "task" })
     const inputRef = useRef(null)
 
+    const theme = useTheme()
+    const navigate = useNavigate()
+    const [setting] = useClientSetting()
+
     const [title, setTitle] = useState(null)
+    const [isAlertOpen, setIsAlertOpen] = useState(false)
     const [activeContent, setActiveContent] = useState(null)
 
     useEffect(() => {
@@ -73,6 +85,36 @@ const TaskCommonDetailMobile = ({
         },
     })
 
+    const deleteMutation = useMutation({
+        mutationFn: () => {
+            return deleteTask(newTask.id)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["task", { taskID: newTask.id }],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", { drawerID: newTask.drawer }],
+            })
+
+            if (projectType === "goal") {
+                queryClient.invalidateQueries({
+                    queryKey: ["drawers", { projectID: projectID }],
+                })
+                queryClient.invalidateQueries({
+                    queryKey: ["projects", projectID],
+                })
+            }
+
+            toast.success(
+                t("delete.delete_success", { task_name: newTask.name }),
+            )
+        },
+        onError: () => {
+            toast.error(t("delete.delete_error", { task_name: newTask.name }))
+        },
+    })
+
     const postReminderMutation = useMutation({
         mutationFn: (data) => {
             return postReminder(data)
@@ -107,6 +149,20 @@ const TaskCommonDetailMobile = ({
         })
     }
 
+    // #TODO: AlertOpen 되게 하기
+    const handleAlert = () => {
+        if (setting.delete_task_after_alert) {
+            setIsAlertOpen(true)
+        } else {
+            handleDelete()
+        }
+    }
+
+    const handleDelete = () => {
+        navigate(`/app/projects/${projectID}`)
+        deleteMutation.mutate()
+    }
+
     if (!newTask) {
         return null
     }
@@ -117,6 +173,8 @@ const TaskCommonDetailMobile = ({
             headerContent={
                 <Header
                     title={title}
+                    icon={isCreating ? null : 
+                        <FeatherIcon icon="trash-2" stroke={theme.project.danger} onClick={handleDelete}/>}
                     closeSheet={onClose}
                     handleBack={
                         activeContent ? () => setActiveContent(null) : null
@@ -156,13 +214,24 @@ const TaskCommonDetailMobile = ({
                     </ButtonGroup>
                 )}
             </TaskCommonDetailMobileBox>
+            {/*isAlertOpen && (
+                <DeleteAlert
+                    title={t("delete.alert_task_title", {
+                        task_name: newTask.name,
+                    })}
+                    onClose={() => {
+                        setIsAlertOpen(false)
+                    }}
+                    func={handleDelete}
+                />
+            )*/}
         </ModalBottomSheet>
     )
 }
 
 const TaskCommonDetailMobileBox = styled.div`
     width: 90%;
-    margin: 1em 1.2em;
+    margin: 1.2em;
 `
 
 export default TaskCommonDetailMobile
