@@ -95,6 +95,7 @@
         "none": "None",
         "button_add": "Create",
         "button_save": "Save",
+        "name_placeholder": "Enter a name",
         "created_project": "Created a new project.",
         "created_project_error": "Failed to create a new project.",
         "created_drawer": "Created a new drawer.",
@@ -105,8 +106,8 @@
         "name_required": "A name is required.",
         "color": {
             "title": "Color Settings",
-            "theme1": "Theme1",
-            "theme2": "Theme2",
+            "theme1": "Basic1",
+            "theme2": "Basic2",
             "orange": "orange",
             "peach": "peach",
             "pink": "pink",

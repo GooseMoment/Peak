@@ -2,15 +2,20 @@ import { useEffect } from "react"
 
 import styled from "styled-components"
 
-import { ifMobile } from "@utils/useScreenType"
+import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const TitleInput = ({ name, setName, inputRef, icon, onClose }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit" })
+    const { isMobile } = useScreenType()
 
     useEffect(() => {
+        if (isMobile) {
+            return
+        }
+        
         if (inputRef.current) {
             inputRef.current.focus()
         }
@@ -30,7 +35,7 @@ const TitleInput = ({ name, setName, inputRef, icon, onClose }) => {
                     type="text"
                     value={name || ""}
                     onChange={onChange}
-                    placeholder={t("create.name_placeholder")}
+                    placeholder={t("name_placeholder")}
                 />
             </InputWrapper>
             <CloseIcon icon="x" onClick={onClose} />

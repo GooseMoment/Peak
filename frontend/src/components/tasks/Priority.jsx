@@ -18,7 +18,7 @@ const Priority = ({ priority = 0, completed, hasDate }) => {
 }
 
 const PriorityImg = styled.div`
-    margin-top: ${(p) => (p.$hasDate ? "-0.5em" : "-0.25em")};
+    margin-top: ${(p) => (p.$hasDate ? "0.5em" : "0em")};
     margin-right: 0.2em;
 
     & svg {
