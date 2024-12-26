@@ -1,5 +1,4 @@
 import { useRef, useState } from "react"
-import { useNavigate } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
@@ -9,11 +8,11 @@ import DeleteAlert from "@components/common/DeleteAlert"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Contents from "@components/project/taskDetails/Contents"
 import TaskNameInput from "@components/tasks/TaskNameInput"
+import { useDeleteTask } from "@components/project/common/useDeleteTask"
 
 import { postReminder } from "@api/notifications.api"
-import { deleteTask, patchTask, postTask } from "@api/tasks.api"
+import { patchTask, postTask } from "@api/tasks.api"
 
-import { useClientSetting } from "@utils/clientSettings"
 import useScreenType from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -25,7 +24,6 @@ import { toast } from "react-toastify"
 const TaskCommonDetail = ({
     newTask,
     setNewTask,
-    projectID = null,
     projectType = null,
     color,
     isCreating = false,
@@ -33,13 +31,17 @@ const TaskCommonDetail = ({
     const { t } = useTranslation(null, { keyPrefix: "task" })
     const inputRef = useRef(null)
 
-    const navigate = useNavigate()
-    const [setting] = useClientSetting()
-
     const { closeModal } = useModalWindowCloseContext()
     const { isDesktop } = useScreenType()
 
     const [isAlertOpen, setIsAlertOpen] = useState(false)
+
+    const { handleAlert, handleDelete } = useDeleteTask({
+        task: newTask,
+        projectType: projectType,
+        setIsAlertOpen: setIsAlertOpen,
+        goBack: true,
+    })
 
     const mutation = useMutation({
         mutationFn: (data) => {
@@ -73,36 +75,6 @@ const TaskCommonDetail = ({
                 return
             }
             toast.error(t("edit.edit_error"))
-        },
-    })
-
-    const deleteMutation = useMutation({
-        mutationFn: () => {
-            return deleteTask(newTask.id)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["task", { taskID: newTask.id }],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: newTask.drawer }],
-            })
-
-            if (projectType === "goal") {
-                queryClient.invalidateQueries({
-                    queryKey: ["drawers", { projectID: projectID }],
-                })
-                queryClient.invalidateQueries({
-                    queryKey: ["projects", projectID],
-                })
-            }
-
-            toast.success(
-                t("delete.delete_success", { task_name: newTask.name }),
-            )
-        },
-        onError: () => {
-            toast.error(t("delete.delete_error", { task_name: newTask.name }))
         },
     })
 
@@ -157,19 +129,6 @@ const TaskCommonDetail = ({
             e.preventDefault()
             submit()
         }
-    }
-
-    const handleAlert = () => {
-        if (setting.delete_task_after_alert) {
-            setIsAlertOpen(true)
-        } else {
-            handleDelete()
-        }
-    }
-
-    const handleDelete = () => {
-        navigate(`/app/projects/${projectID}`)
-        deleteMutation.mutate()
     }
 
     if (!newTask) {

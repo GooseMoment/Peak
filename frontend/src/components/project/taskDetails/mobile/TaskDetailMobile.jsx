@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next"
 const TaskDetailMobile = ({ closeDetail }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
-    const [_, __, color] = useOutletContext()
+    const [_, projectType, color] = useOutletContext()
     const { task_id } = useParams()
 
     const {
@@ -44,6 +44,7 @@ const TaskDetailMobile = ({ closeDetail }) => {
         <TaskCommonDetailMobile
             newTask={newTask}
             setNewTask={setNewTask}
+            projectType={projectType}
             color={color}
             onClose={closeDetail}
         />
