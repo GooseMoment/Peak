@@ -8,12 +8,10 @@ import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
 import DeleteAlert from "@components/common/DeleteAlert"
 import ContentsMobile from "@components/project/taskDetails/mobile/ContentsMobile"
 import TaskNameInput from "@components/tasks/TaskNameInput"
+import { useDeleteTask } from "@components/project/common/useDeleteTask"
 
 import { postReminder } from "@api/notifications.api"
-import { patchTask, postTask, deleteTask } from "@api/tasks.api"
-
-import { useClientSetting } from "@utils/clientSettings"
-import { useNavigate } from "react-router-dom"
+import { patchTask, postTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
 
@@ -24,7 +22,6 @@ import FeatherIcon from "feather-icons-react"
 const TaskCommonDetailMobile = ({
     newTask,
     setNewTask,
-    projectID = null,
     projectType = null,
     color,
     onClose,
@@ -34,12 +31,17 @@ const TaskCommonDetailMobile = ({
     const inputRef = useRef(null)
 
     const theme = useTheme()
-    const navigate = useNavigate()
-    const [setting] = useClientSetting()
 
     const [title, setTitle] = useState(null)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
     const [activeContent, setActiveContent] = useState(null)
+
+    const { handleAlert, handleDelete } = useDeleteTask({
+        task: newTask,
+        projectType: projectType,
+        setIsAlertOpen: setIsAlertOpen,
+        goBack: true,
+    })
 
     useEffect(() => {
         if (activeContent === null) {
@@ -85,36 +87,6 @@ const TaskCommonDetailMobile = ({
         },
     })
 
-    const deleteMutation = useMutation({
-        mutationFn: () => {
-            return deleteTask(newTask.id)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["task", { taskID: newTask.id }],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: newTask.drawer }],
-            })
-
-            if (projectType === "goal") {
-                queryClient.invalidateQueries({
-                    queryKey: ["drawers", { projectID: projectID }],
-                })
-                queryClient.invalidateQueries({
-                    queryKey: ["projects", projectID],
-                })
-            }
-
-            toast.success(
-                t("delete.delete_success", { task_name: newTask.name }),
-            )
-        },
-        onError: () => {
-            toast.error(t("delete.delete_error", { task_name: newTask.name }))
-        },
-    })
-
     const postReminderMutation = useMutation({
         mutationFn: (data) => {
             return postReminder(data)
@@ -147,19 +119,6 @@ const TaskCommonDetailMobile = ({
             task: createdTask.id,
             delta_list: newTask.reminders,
         })
-    }
-
-    const handleAlert = () => {
-        if (setting.delete_task_after_alert) {
-            setIsAlertOpen(true)
-        } else {
-            handleDelete()
-        }
-    }
-
-    const handleDelete = () => {
-        navigate(`/app/projects/${projectID}`)
-        deleteMutation.mutate()
     }
 
     if (!newTask) {

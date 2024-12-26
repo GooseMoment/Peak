@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { useLocation, useOutletContext } from "react-router-dom"
 
-import TaskCommonDetail from "./TaskCommonDetail"
+import TaskCommonDetail from "@components/project/taskDetails/TaskCommonDetail"
 
 const TaskCreate = () => {
-    const [projectID, projectType, color] = useOutletContext()
+    const [_, projectType, color] = useOutletContext()
     const { state } = useLocation()
 
     const [newTask, setNewTask] = useState({
@@ -28,7 +28,6 @@ const TaskCreate = () => {
         <TaskCommonDetail
             newTask={newTask}
             setNewTask={setNewTask}
-            projectID={projectID}
             projectType={projectType}
             color={color}
             isCreating
