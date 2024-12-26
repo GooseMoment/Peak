@@ -15,6 +15,7 @@ import queryClient from "@queries/queryClient"
 
 import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
+import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 
 const DrawerTask = ({ task, color, projectType }) => {
@@ -29,7 +30,6 @@ const DrawerTask = ({ task, color, projectType }) => {
             return deleteTask(task.id)
         },
         onSuccess: () => {
-            console.log("deelteee")
             queryClient.invalidateQueries({
                 queryKey: ["task", { taskID: task.id }],
             })
