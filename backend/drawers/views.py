@@ -1,14 +1,11 @@
 from rest_framework import mixins, generics
+from rest_framework.filters import OrderingFilter
 
 from .models import Drawer
 from .serializers import DrawerSerializer
-from api.permissions import IsUserOwner
-from api.mixins import CreateMixin
-from rest_framework.filters import OrderingFilter
-
-from tasks.models import Task
-
 from .utils import reorder_tasks, normalize_drawer_order
+from api.permissions import IsUserOwner
+
 
 class DrawerDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -40,11 +37,9 @@ class DrawerDetail(mixins.RetrieveModelMixin,
     
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-    
-class DrawerList(CreateMixin,
-                  mixins.ListModelMixin,
-                  mixins.CreateModelMixin,
-                  generics.GenericAPIView):
+
+
+class DrawerList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = DrawerSerializer
     permission_classes = [IsUserOwner]
     filter_backends = [OrderingFilter]
@@ -57,9 +52,10 @@ class DrawerList(CreateMixin,
         if project_id is not None:
             queryset = queryset.filter(project__id=project_id)
         return queryset
-
+    
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
-        return self.create_with_user(request, order=0, *args, **kwargs)
+        return self.create(request, *args, **kwargs)
+
