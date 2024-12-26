@@ -28,7 +28,6 @@ const Color = ({ setColor }) => {
 
     const themes = [
         { id: "theme1", themeName: t("theme1") },
-        { id: "theme2", themeName: t("theme2") },
     ]
 
     return (
