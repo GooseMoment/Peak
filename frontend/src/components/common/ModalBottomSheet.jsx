@@ -31,6 +31,7 @@ const ModalBottomSheet = ({ headerContent = null, onClose, children }) => {
     return (
         <StyledBottomSheet
             open={isOpen}
+            blocking={false}
             onDismiss={closeModal}
             snapPoints={({ maxHeight }) => [maxHeight * 0.8, maxHeight * 0.9]}
             header={headerContent}>

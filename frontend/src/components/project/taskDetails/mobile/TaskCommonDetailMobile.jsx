@@ -149,7 +149,6 @@ const TaskCommonDetailMobile = ({
         })
     }
 
-    // #TODO: AlertOpen 되게 하기
     const handleAlert = () => {
         if (setting.delete_task_after_alert) {
             setIsAlertOpen(true)
@@ -174,7 +173,7 @@ const TaskCommonDetailMobile = ({
                 <Header
                     title={title}
                     icon={isCreating ? null : 
-                        <FeatherIcon icon="trash-2" stroke={theme.project.danger} onClick={handleDelete}/>}
+                        <FeatherIcon icon="trash-2" stroke={theme.project.danger} onClick={handleAlert}/>}
                     closeSheet={onClose}
                     handleBack={
                         activeContent ? () => setActiveContent(null) : null
@@ -214,7 +213,7 @@ const TaskCommonDetailMobile = ({
                     </ButtonGroup>
                 )}
             </TaskCommonDetailMobileBox>
-            {/*isAlertOpen && (
+            {isAlertOpen && (
                 <DeleteAlert
                     title={t("delete.alert_task_title", {
                         task_name: newTask.name,
@@ -224,7 +223,7 @@ const TaskCommonDetailMobile = ({
                     }}
                     func={handleDelete}
                 />
-            )*/}
+            )}
         </ModalBottomSheet>
     )
 }
