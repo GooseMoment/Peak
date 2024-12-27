@@ -6,6 +6,7 @@
         "title": "Settings",
         "account": "Account",
         "general": "General",
+        "security": "Security",
         "privacy": "Privacy",
         "languages_and_time": "Languages & Time",
         "notifications": "Notifications",
@@ -52,6 +53,25 @@
         "delete_task_after_alert": {
             "name": "Alert before task deletion",
             "description": "Show an alert before deleting tasks."
+        }
+    },
+    "security": {
+        "totp": {
+            "name": "Two-Factor Authentication: One-Time Passcode",
+            "description": "Using one-time passcode(TOTP) enhances security.",
+            "activated_at": "Activated at {{date}}",
+            "enable": "Enable",
+            "edit": "Edit",
+            "delete": "Delete",
+            "ask_delete": "Delete the one-time passcode authentication?",
+            "qrcode_description": "Scan this QR code with your preferred authentication app. Enter the numbers from the app below to complete TOTP registration.",
+            "secret_manual": "Or, you can enter the secret code manually:",
+            "input_placeholder": "6-digit code",
+            "enter": "Enter",
+            "cancel": "Cancel",
+            "register_success": "Two-factor authentication is enabled.",
+            "delete_success": "Disabled two-factor authentication.",
+            "wrong_code": "Wrong code. Please try again."
         }
     },
     "privacy": {
