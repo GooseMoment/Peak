@@ -4,8 +4,6 @@ import pluginReact from "eslint-plugin-react"
 import globals from "globals"
 import tseslint from "typescript-eslint"
 
-// TODO: convert to flat config after airbnb updates its repo
-
 export default [
     {
         ignores: ["dist/*", "**/*.config.js", "public/*"],
