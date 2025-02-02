@@ -23,7 +23,7 @@ const CommonCalendar = ({
     const locale = useClientLocale()
 
     const changeDate = (e) => {
-        if(isModal) handleClose()
+        if (isModal) handleClose()
 
         if (isRangeSelectMode) {
             const startDate = moment(e[0]).toISOString()
@@ -43,7 +43,7 @@ const CommonCalendar = ({
         }
     }
 
-    const handleTileContent = ({ date  }) => {
+    const handleTileContent = ({ date }) => {
         const contents = []
         const day = moment(date).toISOString()
 
@@ -350,13 +350,15 @@ const CalendarWrapper = styled.div`
         color: ${(p) => p.theme.textColor};
 
         &:hover {
-            background-color: ${(p) => p.theme.calendar.backgroundColor} !important;
+            background-color: ${(p) =>
+                p.theme.calendar.backgroundColor} !important;
         }
     }
 
-    .react-calendar__navigation__label{
+    .react-calendar__navigation__label {
         &:hover {
-            background-color: ${(p) => p.theme.calendar.backgroundColor} !important;
+            background-color: ${(p) =>
+                p.theme.calendar.backgroundColor} !important;
         }
 
         &:disabled {

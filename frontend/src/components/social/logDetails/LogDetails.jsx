@@ -33,7 +33,7 @@ const getCursorFromURL = (url) => {
 const LogDetails = ({ pageType = "following", username, selectedDate }) => {
     const { t } = useTranslation("", { keyPrefix: "social.log_details" })
     const theme = useTheme()
-    
+
     const me = getCurrentUsername()
 
     // quote
@@ -185,7 +185,7 @@ const DetailBody = styled.div`
 
 const NoContent = styled.div`
     margin: 2em;
-    
+
     display: flex;
     align-items: center;
     justify-content: center;

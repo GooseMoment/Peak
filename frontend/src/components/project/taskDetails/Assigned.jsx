@@ -1,9 +1,9 @@
-import { Fragment, useState, useEffect } from "react"
+import { Fragment, useEffect, useState } from "react"
 
 import styled, { css } from "styled-components"
 
-import QuickDue from "@components/project/due/QuickDue"
 import CommonCalendar from "@components/common/CommonCalendar"
+import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 
 import { useClientTimezone } from "@utils/clientSettings"
@@ -20,7 +20,7 @@ import { toast } from "react-toastify"
 const Assigned = ({ setFunc, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
     const tz = useClientTimezone()
-    
+
     const today = DateTime.now().setZone(tz)
 
     const [selectedDate, setSelectedDate] = useState(today.toISODate())
@@ -51,7 +51,11 @@ const Assigned = ({ setFunc, onClose }) => {
     }
 
     useEffect(() => {
-        setFunc({ assigned_at: DateTime.fromISO(selectedDate, { zone: tz }).toISODate() })
+        setFunc({
+            assigned_at: DateTime.fromISO(selectedDate, {
+                zone: tz,
+            }).toISODate(),
+        })
     }, [selectedDate])
 
     const addComponent = [
@@ -65,12 +69,15 @@ const Assigned = ({ setFunc, onClose }) => {
             name: "calendar",
             display: t("due.calendar"),
             icon: "calendar",
-            component: <CalendarWrapper>
-                <CommonCalendar
-                    isRangeSelectMode={false}
-                    selectedStartDate={selectedDate}
-                    setSelectedStartDate={setSelectedDate}/>
-            </CalendarWrapper>,
+            component: (
+                <CalendarWrapper>
+                    <CommonCalendar
+                        isRangeSelectMode={false}
+                        selectedStartDate={selectedDate}
+                        setSelectedStartDate={setSelectedDate}
+                    />
+                </CalendarWrapper>
+            ),
         },
         {
             name: "repeat",

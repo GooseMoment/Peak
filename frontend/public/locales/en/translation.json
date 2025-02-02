@@ -147,7 +147,7 @@
         "name_change_success": "The name has changed.",
         "none": "none",
         "error_load_task": "Couldn't load tasks 😢",
-        "edit" : {
+        "edit": {
             "edit_title": "Edit task",
             "edit_success": "Saved changes.",
             "edit_error": "Failed to edit a new task.",
@@ -374,37 +374,37 @@
         "recovery_error_password_unmatch": "Two forms have different values.",
         "recovery_error": "Oops. Perhaps this link is invalid or expired."
     },
-    "social" : {
+    "social": {
         "following_title": "Following",
         "explore_title": "Explore",
         "log_preview_completed": "completed!",
         "log_details": {
             "no_content": "There is no task."
         },
-        "quote" : {
+        "quote": {
             "empty_self_quote": "Write your today's quote.",
             "empty_others_quote": "No quote yet."
         },
-        "emoji_modal" : {
-            "searchbar" : "Search emojis"
+        "emoji_modal": {
+            "searchbar": "Search emojis"
         },
-        "explore" : {
-            "searchbar" : "Search for usernames to follow.",
-            "no_result" : "No users matched your search",
-            "suggestion" : "Make new connections with new people!"
+        "explore": {
+            "searchbar": "Search for usernames to follow.",
+            "no_result": "No users matched your search",
+            "suggestion": "Make new connections with new people!"
         }
     },
-    "search" : {
+    "search": {
         "title": "Search",
-        "filter_button" : {
-            "search_terms" : "Terms",
-            "project" : "Project",
-            "drawer" : "Drawer",
-            "assigned_at" : "Assign",
-            "completed_at" : "Completed",
-            "privacy" : "Privacy",
-            "memo" : "Memo"
+        "filter_button": {
+            "search_terms": "Terms",
+            "project": "Project",
+            "drawer": "Drawer",
+            "assigned_at": "Assign",
+            "completed_at": "Completed",
+            "privacy": "Privacy",
+            "memo": "Memo"
         },
-        "no_result" : "Your search did not match any tasks 🤔"
+        "no_result": "Your search did not match any tasks 🤔"
     }
 }

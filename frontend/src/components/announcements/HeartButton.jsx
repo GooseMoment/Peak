@@ -25,7 +25,7 @@ const HeartButton = ({ announcement }) => {
         },
         onSuccess: () => {
             client.invalidateQueries(["announcements", announcement.id])
-        }
+        },
     })
 
     return (

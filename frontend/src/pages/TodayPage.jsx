@@ -12,10 +12,7 @@ import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPag
 import Task from "@components/tasks/Task"
 
 import { patchTask } from "@api/tasks.api"
-import {
-    getTasksAssignedToday,
-    getTasksOverdue,
-} from "@api/today.api"
+import { getTasksAssignedToday, getTasksOverdue } from "@api/today.api"
 
 import { useClientTimezone } from "@utils/clientSettings"
 import { getPageFromURL } from "@utils/pagination"

@@ -30,7 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             </QueryClientProvider>
             <I18nSetLocale i18n={i18n} />
         </ClientThemeProvider>
-    </ClientSettingProvider>
+    </ClientSettingProvider>,
 )
 
 registerSW()
