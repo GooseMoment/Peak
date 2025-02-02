@@ -2,7 +2,6 @@ import pluginJs from "@eslint/js"
 import eslintConfigPrettier from "eslint-config-prettier"
 import pluginReact from "eslint-plugin-react"
 import globals from "globals"
-import tseslint from "typescript-eslint"
 
 export default [
     {
@@ -12,8 +11,8 @@ export default [
     pluginReact.configs.flat.recommended,
     pluginReact.configs.flat["jsx-runtime"],
     eslintConfigPrettier,
-    ...tseslint.configs.recommended,
     {
+        files: ["**/*.{js,jsx,ts,tsx}"],
         languageOptions: {
             globals: { ...globals.browser, ...globals.node },
         },
@@ -24,9 +23,8 @@ export default [
         },
         rules: {
             "react/prop-types": "off",
-            "no-unused-vars": "off",
-            "@typescript-eslint/no-unused-vars": [
-                "warn",
+            "no-unused-vars": [
+                "error",
                 {
                     argsIgnorePattern: "^_",
                     varsIgnorePattern: "^_",
