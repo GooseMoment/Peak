@@ -1,0 +1,7 @@
+skip-missing: true
+ignores:
+  # devDependencies
+  - \@tanstack/react-query-devtools
+  - \@trivago/prettier-plugin-sort-imports
+  - \@types/react
+  - \@types/react-dom
