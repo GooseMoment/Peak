@@ -43,7 +43,7 @@ const CommonCalendar = ({
         }
     }
 
-    const handleTileContent = ({ date, view }) => {
+    const handleTileContent = ({ date  }) => {
         const contents = []
         const day = moment(date).toISOString()
 

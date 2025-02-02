@@ -29,7 +29,6 @@ const SocialExplorePage = () => {
         data: recommendPage,
         fetchNextPage: fetchNextRecommendPage,
         isPending: isRecommendPending,
-        refetch: refetchRecommend,
     } = useInfiniteQuery({
         queryKey: ["explore", "recommend", "users"],
         queryFn: (page) => getExploreRecommend(page.pageParam),

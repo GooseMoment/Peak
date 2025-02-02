@@ -1,9 +1,10 @@
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 
 import Priority0 from "@assets/project/priority/Priority0"
 import Priority1 from "@assets/project/priority/Priority1"
 import Priority2 from "@assets/project/priority/Priority2"
 
+// eslint-disable-next-line react/jsx-key -- items are not used together
 const priorityIcons = [<Priority0 />, <Priority1 />, <Priority2 />]
 
 const Priority = ({ priority = 0, completed, hasDate }) => {

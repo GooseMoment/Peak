@@ -14,7 +14,6 @@ import Task from "@components/tasks/Task"
 import { patchTask } from "@api/tasks.api"
 import {
     getTasksAssignedToday,
-    getTasksDueToday,
     getTasksOverdue,
 } from "@api/today.api"
 
@@ -38,7 +37,7 @@ const TodayPage = () => {
     const [collapsed, setCollapsed] = useState(false)
 
     const today = DateTime.now().setZone(tz)
-    const [selectedDate, setSelectedDate] = useState(today.toISODate())
+    const [selectedDate] = useState(today.toISODate())
     // #TODO 달력으로 날짜 선택하기
 
     const {

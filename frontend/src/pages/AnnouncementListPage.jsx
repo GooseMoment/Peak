@@ -9,8 +9,8 @@ import { getAnnouncements } from "@api/announcements.api"
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
-import { DateTime } from "luxon"
 import PageBack from "@/components/common/PageBack"
+import { DateTime } from "luxon"
 
 const getPageFromURL = (url) => {
     if (!url) return null
@@ -24,15 +24,13 @@ const AnnouncementListPage = () => {
     const locale = useClientLocale()
     const tz = useClientTimezone()
 
-    const { data, isFetching, isFetchingNextPage } = useInfiniteQuery({
+    const { data, isFetching } = useInfiniteQuery({
         queryKey: ["announcements"],
         queryFn: ({ pageParam }) => getAnnouncements(locale, false, pageParam),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
         refetchOnWindowFocus: false,
     })
-
-    const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
 
     if (isFetching) {
         return (
@@ -47,15 +45,17 @@ const AnnouncementListPage = () => {
         <>
             <PageBack defaultTo="/app/home">Back to Home</PageBack>
             <PageTitle>Announcements</PageTitle>
-            {data.pages.map((group, i) =>
+            {data.pages.map((group) =>
                 group.results.map((item) => (
                     <AnnouncementBox key={item.id}>
-                        <AnnouncementTitle
-                            to={`/app/announcements/${item.id}`}>
+                        <AnnouncementTitle to={`/app/announcements/${item.id}`}>
                             {item.title}
                         </AnnouncementTitle>
                         <AnnouncementDate>
-                            {DateTime.fromISO(item.created_at).setLocale(locale).setZone(tz).toLocaleString(DateTime.DATETIME_SHORT)}
+                            {DateTime.fromISO(item.created_at)
+                                .setLocale(locale)
+                                .setZone(tz)
+                                .toLocaleString(DateTime.DATETIME_SHORT)}
                         </AnnouncementDate>
                     </AnnouncementBox>
                 )),
