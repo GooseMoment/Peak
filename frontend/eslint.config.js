@@ -6,7 +6,7 @@ import globals from "globals"
 
 export default [
     {
-        ignores: ["dist/*", "**/*.config.js", "public/*"],
+        ignores: ["dist/*", "**/*.config.js", "public/*", "**/registerSW.js"],
     },
     pluginJs.configs.recommended,
     pluginReact.configs.flat.recommended,
@@ -25,6 +25,7 @@ export default [
         },
         rules: {
             "react/prop-types": "off",
+            "no-console": "error",
             "no-unused-vars": [
                 "error",
                 {
