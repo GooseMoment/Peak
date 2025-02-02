@@ -25,7 +25,7 @@ const AnnouncementListPage = () => {
     const tz = useClientTimezone()
 
     const { data, isFetching } = useInfiniteQuery({
-        queryKey: ["announcements"],
+        queryKey: ["announcements", { locale }],
         queryFn: ({ pageParam }) => getAnnouncements(locale, false, pageParam),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),

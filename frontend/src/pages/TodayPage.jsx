@@ -60,7 +60,7 @@ const TodayPage = () => {
         isError: isTodayAssignmentError,
         refetch: todayAssignmentRefetch,
     } = useInfiniteQuery({
-        queryKey: ["today", "assigned"],
+        queryKey: ["today", "assigned", selectedDate],
         queryFn: (pages) =>
             getTasksAssignedToday(selectedDate, pages.pageParam || 1),
         initialPageParam: 1,

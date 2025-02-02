@@ -43,7 +43,7 @@ const SocialExplorePage = () => {
         isFetching: isFoundFetching,
         refetch: refetchFound,
     } = useInfiniteQuery({
-        queryKey: ["explore", "found", "users"],
+        queryKey: ["explore", "found", "users", { searchQuery }],
         queryFn: (page) => getExploreFound(searchQuery, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
