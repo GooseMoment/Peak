@@ -127,7 +127,6 @@ const TaskCommonDetailMobile = ({
 
     return (
         <ModalBottomSheet
-            onClose={onClose}
             headerContent={
                 <Header
                     title={title}
@@ -138,7 +137,9 @@ const TaskCommonDetailMobile = ({
                         activeContent ? () => setActiveContent(null) : null
                     }
                 />
-            }>
+            }
+            blocking={false}
+            onClose={onClose}>
             <TaskCommonDetailMobileBox>
                 <TaskNameInput
                     task={newTask}
