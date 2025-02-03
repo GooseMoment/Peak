@@ -8,6 +8,8 @@ import SimpleDue from "@components/project/TaskCreateSimple/SimpleDue"
 import SimplePriority from "@components/project/TaskCreateSimple/SimplePriority"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
+import { ifMobile } from "@utils/useScreenType"
+
 import { postTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
@@ -204,7 +206,7 @@ const TaskCreateSimple = ({
 }
 
 const TaskCreateSimpleBlock = styled.div`
-    margin: 1em 0em;
+    margin: 0.5em 0em;
 `
 
 const IndexBlock = styled.div`
@@ -214,6 +216,10 @@ const IndexBlock = styled.div`
     display: flex;
     gap: 0.3em;
     margin-left: 2.5em;
+
+    ${ifMobile} {
+        margin-left: 1.5em;
+    }
 `
 
 const TaskCreateSimpleBox = styled.div`
@@ -221,7 +227,7 @@ const TaskCreateSimpleBox = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    width: 94%;
+    width: 95%;
     height: 3.8em;
     margin-left: 1.7em;
     color: ${(p) => p.theme.textColor};
@@ -230,6 +236,10 @@ const TaskCreateSimpleBox = styled.div`
     border-radius: 15px;
     overflow-y: hidden;
     overflow-x: auto;
+
+    ${ifMobile} {
+        margin-left: 0.8em;
+    }
 `
 
 const IndexBox = styled.div`
@@ -268,7 +278,7 @@ const ComponentBox = styled.div`
     ${(props) =>
         props.$isSelected &&
         css`
-            padding: 0em 1.1em;
+            padding: 0em 1em;
         `}
 `
 

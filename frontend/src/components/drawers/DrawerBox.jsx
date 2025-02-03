@@ -23,7 +23,6 @@ const DrawerBox = styled.div`
 
     ${ifMobile} {
         padding-left: 1.1em;
-        padding-right: 0.4em;
     }
 `
 
@@ -66,6 +65,6 @@ export const DrawerIcon = styled.div`
     }
 
     ${ifMobile} {
-        margin-right: 0em;
+        margin-right: 0.4em;
     }
 `
