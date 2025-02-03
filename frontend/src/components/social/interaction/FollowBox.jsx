@@ -11,7 +11,8 @@ import {
     putFollowRequest,
 } from "@api/social.api"
 
-import queryClient from "@/queries/queryClient"
+import queryClient from "@queries/queryClient"
+
 import { toast } from "react-toastify"
 
 const FollowBox = ({ user }) => {

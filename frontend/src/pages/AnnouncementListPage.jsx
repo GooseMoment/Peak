@@ -3,13 +3,13 @@ import { Link } from "react-router-dom"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import PageBack from "@components/common/PageBack"
 import PageTitle from "@components/common/PageTitle"
 
 import { getAnnouncements } from "@api/announcements.api"
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
-import PageBack from "@/components/common/PageBack"
 import { DateTime } from "luxon"
 
 const getPageFromURL = (url) => {

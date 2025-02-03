@@ -12,12 +12,13 @@ import FollowButton from "@components/users/FollowButton"
 
 import TaskBox from "./TaskBox"
 
+import { getCurrentUsername } from "@api/client"
+import { getDailyLogDetails, getQuote, postQuote } from "@api/social.api"
+
 import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
-import { getCurrentUsername } from "@/api/client"
-import { getDailyLogDetails, getQuote, postQuote } from "@/api/social.api"
 import { ImpressionArea } from "@toss/impression-area"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
