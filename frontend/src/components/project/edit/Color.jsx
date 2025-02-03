@@ -26,9 +26,7 @@ const Color = ({ setColor }) => {
         }
     }
 
-    const themes = [
-        { id: "theme1", themeName: t("theme1") },
-    ]
+    const themes = [{ id: "theme1", themeName: t("theme1") }]
 
     return (
         <Detail title={t("title")} onClose={closeModal}>
