@@ -34,6 +34,21 @@ export default [
                     caughtErrorsIgnorePattern: "^_",
                 },
             ],
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        "@/pages/*",
+                        "@/api/*",
+                        "@/components/*",
+                        "@/utils/*",
+                        "@/containers/*",
+                        "@/assets/*",
+                        "@/queries/*",
+                        "@/routers/*",
+                    ],
+                },
+            ],
         },
     },
 ]
