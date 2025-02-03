@@ -56,3 +56,13 @@ jobs:
       - name: Run depcheck
         working-directory: ./frontend
         run: npx depcheck
+  locales:
+    strategy:
+      matrix:
+        file: [docs, home, intro, settings, translation]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare ${{ matrix.file }}
+        working-directory: ./frontend/public/locales
+        run: npx compare-json ./ko/${{ matrix.file }} ./en/${{ matrix.file }}
