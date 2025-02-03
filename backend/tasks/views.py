@@ -14,11 +14,13 @@ from drawers.utils import normalize_drawer_order
 from datetime import datetime, time
 
 
-class TaskDetail(mixins.RetrieveModelMixin,
-                    mixins.UpdateModelMixin,
-                    mixins.DestroyModelMixin,
-                    TimezoneMixin,
-                    generics.GenericAPIView):
+class TaskDetail(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    TimezoneMixin,
+    generics.GenericAPIView,
+):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     lookup_field = "id"
@@ -26,12 +28,12 @@ class TaskDetail(mixins.RetrieveModelMixin,
 
     def get(self, request, id, *args, **kwargs):
         instance = self.get_object()
-        sorted_reminders = instance.reminders.order_by('delta')
+        sorted_reminders = instance.reminders.order_by("delta")
         serializer = self.get_serializer(instance)
         data = serializer.data
-        data['reminders'] = TaskReminderSerializer(sorted_reminders, many=True).data
+        data["reminders"] = TaskReminderSerializer(sorted_reminders, many=True).data
         return Response(data)
-    
+
     def patch(self, request, *args, **kwargs):
         try:
             new_completed = request.data["completed_at"]
@@ -50,10 +52,10 @@ class TaskDetail(mixins.RetrieveModelMixin,
             task.drawer.save()
 
         return self.partial_update(request, *args, **kwargs)
-    
+
     def delete(self, request, id, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-    
+
 
 class TaskList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
@@ -64,17 +66,24 @@ class TaskList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
         if drawer_id is not None:
             queryset = queryset.filter(drawer__id=drawer_id)
 
-        ordering_fields = ['name', 'assigned_at', 'due_date', 'due_datetime', 'priority', 'created_at', 'reminders']
+        ordering_fields = [
+            "name",
+            "assigned_at",
+            "due_date",
+            "due_datetime",
+            "priority",
+            "created_at",
+            "reminders",
+        ]
         ordering = self.request.GET.get("ordering", None)
 
-        if ordering.lstrip('-') in ordering_fields:
+        if ordering.lstrip("-") in ordering_fields:
             normalize_drawer_order(queryset, ordering)
 
         return queryset
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
-    
+
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-

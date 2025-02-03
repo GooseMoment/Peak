@@ -7,7 +7,9 @@ from users.models import User
 
 class ProjectSerializer(serializers.ModelSerializer):
     drawers = DrawerSerializer(many=True, read_only=True)
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), default=serializers.CurrentUserDefault())
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), default=serializers.CurrentUserDefault()
+    )
     order = serializers.IntegerField(min_value=0, default=0)
     completed_task_count = serializers.SerializerMethodField()
     uncompleted_task_count = serializers.SerializerMethodField()
@@ -19,7 +21,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             completed_task_count += drawer.completed_task_count
 
         return completed_task_count
-    
+
     def get_uncompleted_task_count(self, obj):
         uncompleted_task_count = 0
 
@@ -27,10 +29,24 @@ class ProjectSerializer(serializers.ModelSerializer):
             uncompleted_task_count += drawer.uncompleted_task_count
 
         return uncompleted_task_count
-    
+
     class Meta:
         model = Project
-        fields = ['id', 'name', 'user', 'order', 'privacy', 'color', 'type', 'created_at', 'updated_at', 'deleted_at', 'completed_task_count', 'uncompleted_task_count', 'drawers']
+        fields = [
+            "id",
+            "name",
+            "user",
+            "order",
+            "privacy",
+            "color",
+            "type",
+            "created_at",
+            "updated_at",
+            "deleted_at",
+            "completed_task_count",
+            "uncompleted_task_count",
+            "drawers",
+        ]
 
 
 class ProjectSerializerForUserProjectList(serializers.ModelSerializer):

@@ -10,5 +10,6 @@ class IsUserSelfRequest(permissions.IsAuthenticated):
     def has_permission(self, request, view):
         username = view.kwargs["username"]
 
-        return super().has_permission(request, view) and request.user.username == username
-
+        return (
+            super().has_permission(request, view) and request.user.username == username
+        )

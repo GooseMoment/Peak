@@ -1,11 +1,19 @@
 from .models import Notification, WebPushSubscription
 from rest_framework import serializers
 
-from social.serializers import CommentSerializer, ReactionSerializer, FollowingSerializer, PeckSerializer
+from social.serializers import (
+    CommentSerializer,
+    ReactionSerializer,
+    FollowingSerializer,
+    PeckSerializer,
+)
 from tasks.serializers import TaskReminderSerializer
 
+
 class NotificatonSerializer(serializers.ModelSerializer):
-    username = serializers.PrimaryKeyRelatedField(read_only=True, source="user.username")
+    username = serializers.PrimaryKeyRelatedField(
+        read_only=True, source="user.username"
+    )
 
     task_reminder = TaskReminderSerializer()
     comment = CommentSerializer()
@@ -17,8 +25,17 @@ class NotificatonSerializer(serializers.ModelSerializer):
         model = Notification
         depth = 1
         fields = [
-            "id", "type", "username", "task_reminder", "comment", "reaction", "following", "peck", "created_at",
+            "id",
+            "type",
+            "username",
+            "task_reminder",
+            "comment",
+            "reaction",
+            "following",
+            "peck",
+            "created_at",
         ]
+
 
 class WebPushSubscriptionSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
@@ -27,5 +44,10 @@ class WebPushSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = WebPushSubscription
         fields = [
-            "id", "user", "subscription_info", "locale", "device", "user_agent",
+            "id",
+            "user",
+            "subscription_info",
+            "locale",
+            "device",
+            "user_agent",
         ]

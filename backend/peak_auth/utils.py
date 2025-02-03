@@ -9,9 +9,11 @@ from .locale import get_translations
 
 from datetime import datetime, UTC
 
+
 def get_first_language(request: Request):
     languages = request.headers.get("Accept-Language", "").split(",")
     return languages[0]
+
 
 def send_mail_verification_email(user: User, verification: EmailVerificationToken):
     t = get_translations(verification.locale)["mail_verification_email"]
@@ -29,13 +31,14 @@ def send_mail_verification_email(user: User, verification: EmailVerificationToke
         subject=subject,
         body=text_content,
         from_email=None,
-        to=(user.email, ),
+        to=(user.email,),
     )
 
     email.send()
 
     verification.last_sent_at = datetime.now(UTC)
     verification.save()
+
 
 def send_mail_already_verified(user: User, locale: str):
     t = get_translations(locale)["mail_already_verified"]
@@ -48,15 +51,16 @@ def send_mail_already_verified(user: User, locale: str):
         username=user.username,
         link=link,
     )
-    
+
     email = EmailMultiAlternatives(
         subject=subject,
         body=text_content,
         from_email=None,
-        to=(user.email, ),
+        to=(user.email,),
     )
 
     email.send()
+
 
 def send_mail_no_account(email: str, locale: str):
     t = get_translations(locale)["mail_no_account"]
@@ -69,15 +73,16 @@ def send_mail_no_account(email: str, locale: str):
         email=email,
         link=link,
     )
-    
+
     email = EmailMultiAlternatives(
         subject=subject,
         body=text_content,
         from_email=None,
-        to=(email, ),
+        to=(email,),
     )
 
     email.send()
+
 
 def send_mail_password_recovery(user: User, link: str, locale: str):
     t = get_translations(locale)["mail_password_recovery"]
@@ -88,12 +93,12 @@ def send_mail_password_recovery(user: User, link: str, locale: str):
         username=user.username,
         link=link,
     )
-    
+
     email = EmailMultiAlternatives(
         subject=subject,
         body=text_content,
         from_email=None,
-        to=(user.email, ),
+        to=(user.email,),
     )
 
     email.send()

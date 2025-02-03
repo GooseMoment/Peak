@@ -3,8 +3,9 @@ from django.dispatch import receiver
 
 from .models import Task
 
+
 @receiver(post_save, sender=Task)
-def set_new_task_order(sender, instance: Task=None, created=False, **kwargs):
+def set_new_task_order(sender, instance: Task = None, created=False, **kwargs):
     if not created:
         return
 
