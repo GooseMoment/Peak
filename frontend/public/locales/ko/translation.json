@@ -95,6 +95,7 @@
         "none": "없음",
         "button_add": "생성",
         "button_save": "저장",
+        "name_placeholder": "이름을 입력하세요",
         "created_project": "새 프로젝트를 생성했습니다.",
         "created_project_error": "프로젝트 생성에 실패했습니다.",
         "created_drawer": "새 서랍을 생성했습니다.",
