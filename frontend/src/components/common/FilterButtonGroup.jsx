@@ -41,8 +41,7 @@ const FilterButtonGroup = ({ active, setActive, filters }) => {
                         ref={active === name ? onRefChange : undefined}
                         key={name}
                         onClick={() => setActive(name)}
-                        $active={active === name}
-                    >
+                        $active={active === name}>
                         {filter.display}
                     </FilterButton>
                 ))}

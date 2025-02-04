@@ -1,4 +1,3 @@
-import React from "react"
 import ReactDOM from "react-dom/client"
 
 import { QueryClientProvider } from "@tanstack/react-query"
@@ -31,7 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             </QueryClientProvider>
             <I18nSetLocale i18n={i18n} />
         </ClientThemeProvider>
-    </ClientSettingProvider>
+    </ClientSettingProvider>,
 )
 
 registerSW()

@@ -41,7 +41,9 @@ const SearchResults = ({ resultPage, fetchNextResultPage }) => {
 
                     return (
                         <Fragment key={task.id}>
-                            <DrawerBox $color={color} onClick={() => handleDrawerLink(task)}>
+                            <DrawerBox
+                                $color={color}
+                                onClick={() => handleDrawerLink(task)}>
                                 <DrawerName $color={color}>
                                     {" " +
                                         task.project_name +
@@ -50,7 +52,11 @@ const SearchResults = ({ resultPage, fetchNextResultPage }) => {
                                         " "}
                                 </DrawerName>
                             </DrawerBox>
-                            <TaskFrame task={task} color={color} taskDetailPath={handleTaskLink(task)}/>
+                            <TaskFrame
+                                task={task}
+                                color={color}
+                                taskDetailPath={handleTaskLink(task)}
+                            />
                         </Fragment>
                     )
                 }),

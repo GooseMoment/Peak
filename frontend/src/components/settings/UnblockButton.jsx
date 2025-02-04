@@ -35,9 +35,10 @@ const UnblockButton = ({ user }) => {
         <Button
             loading={mutation.isPending}
             disabled={mutation.isPending}
-            onClick={() => mutation.mutate({ prev: blocked })}
-        >
-            {blocked ? t("blockees.button_unblock") : t("blockees.button_block")}
+            onClick={() => mutation.mutate({ prev: blocked })}>
+            {blocked
+                ? t("blockees.button_unblock")
+                : t("blockees.button_block")}
         </Button>
     )
 }
