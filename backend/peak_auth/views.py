@@ -85,7 +85,7 @@ def sign_up(request: Request):
 
     try:
         validate_email(payload["email"])
-    except ValidationError as e:
+    except ValidationError:
         return Response(
             {
                 "code": "SIGNUP_EMAIL_WRONG",
@@ -126,7 +126,7 @@ def sign_up(request: Request):
     try:
         new_user.save()
     except IntegrityError as e:
-        if not "unique constraint" in str(e):
+        if "unique constraint" not in str(e):
             return Response(
                 {"code": "SIGNUP_UNKNOWN_ERROR", "message": "unknown error occuered."},
                 status=status.HTTP_400_BAD_REQUEST,

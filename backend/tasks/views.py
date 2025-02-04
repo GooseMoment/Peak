@@ -1,17 +1,12 @@
-from typing import Any
-from rest_framework import mixins, generics, status
+from rest_framework import mixins, generics 
 from rest_framework.response import Response
 
 from api.mixins import TimezoneMixin
 from api.permissions import IsUserOwner
 from .models import Task
 from .serializers import TaskSerializer
-from notifications.models import TaskReminder
 from notifications.serializers import TaskReminderSerializer
-from notifications.utils import caculateScheduled
 from drawers.utils import normalize_drawer_order
-
-from datetime import datetime, time
 
 
 class TaskDetail(

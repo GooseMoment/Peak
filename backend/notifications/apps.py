@@ -6,6 +6,6 @@ class NotificationsConfig(AppConfig):
     name = "notifications"
 
     def ready(self) -> None:
-        from . import signals
+        from . import signals  # noqa: F401 -- signals is required
 
         return super().ready()

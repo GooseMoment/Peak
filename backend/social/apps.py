@@ -6,4 +6,4 @@ class SocialConfig(AppConfig):
     name = "social"
 
     def ready(self):
-        import social.signals
+        from . import signals  # noqa: F401 -- signals is required
