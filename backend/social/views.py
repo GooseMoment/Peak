@@ -397,7 +397,7 @@ def post_quote(request: Request, day):
 def get_privacy_filter(follower, followee):
     if follower == followee:
         privacyFilter = Q()
-        privacy = PrivacyMixin.FOR_PROTECTED
+        # privacy = PrivacyMixin.FOR_PROTECTED
     # TODO: BLOCK
     else:
         is_follower = Following.objects.filter(
@@ -408,10 +408,10 @@ def get_privacy_filter(follower, followee):
             privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(
                 privacy=PrivacyMixin.FOR_PROTECTED
             )
-            privacy = PrivacyMixin.FOR_PROTECTED
+            # privacy = PrivacyMixin.FOR_PROTECTED
         else:
             privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
-            privacy = PrivacyMixin.FOR_PUBLIC
+            # privacy = PrivacyMixin.FOR_PUBLIC
 
     privacyFilter &= Q(user=followee)
 
@@ -504,7 +504,7 @@ class DailyLogTaskView(generics.GenericAPIView):
 
     def get(self, request, drawer, day):
         drawer = get_object_or_404(Drawer, id=drawer)
-        followee = drawer.user
+        # followee = drawer.user
 
         # TODO: task Privacy 반영 이후 다시 고려
         # privacyFilter = get_privacy_filter(request.user, followee)
@@ -668,9 +668,9 @@ class PeckView(APIView):
         pecks = Peck.objects.filter(task=task)
 
         serializer = PeckSerializer(pecks, many=True)
-        pecksCounts = self.countPeck(pecks)
+        # pecksCounts = self.countPeck(pecks)
 
-        data = {"pecks": serializer.data, "pecks_counts": pecksCounts}
+        # data = {"pecks": serializer.data, "pecks_counts": pecksCounts}
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
