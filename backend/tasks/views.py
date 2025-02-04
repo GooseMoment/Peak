@@ -1,4 +1,4 @@
-from rest_framework import mixins, generics 
+from rest_framework import mixins, generics
 from rest_framework.response import Response
 
 from api.mixins import TimezoneMixin
