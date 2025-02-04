@@ -139,8 +139,7 @@ const NotificationsPage = () => {
             ))}
             <ImpressionArea
                 onImpressionStart={() => fetchNextPage()}
-                timeThreshold={200}
-            >
+                timeThreshold={200}>
                 {hasNextPage && <Box skeleton />}
                 {!hasNextPage && !isNotificationEmpty && (
                     <NoMore>{t("no_more")}</NoMore>

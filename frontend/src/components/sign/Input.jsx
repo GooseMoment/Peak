@@ -21,7 +21,7 @@ const Box = styled.p`
 `
 
 const StyledInput = styled.input`
-    width: ${p => p.$width || "100%"};
+    width: ${(p) => p.$width || "100%"};
     padding: 0.75em 1.25em;
     border: 1px solid ${(p) => p.theme.textColor};
     border-radius: 16px;

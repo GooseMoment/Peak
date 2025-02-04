@@ -16,8 +16,7 @@ const RoadSign = ({ text, spacing = 10 }) => {
             height="258"
             viewBox="0 0 356 258"
             fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+            xmlns="http://www.w3.org/2000/svg">
             <rect
                 x="3.5"
                 y="3.5"

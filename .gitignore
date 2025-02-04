@@ -11,3 +11,4 @@ dist
 node_modules
 web/cert.pem
 web/cert.key
+.vscode/settings.json

@@ -80,9 +80,7 @@ const RepeatDetail = () => {
                 ))}
             </FlexCenterBox>
             <FlexCenterBox>
-                <Button onClick={() => console.log(week, days)}>
-                    {t("button_add")}
-                </Button>
+                <Button>{t("button_add")}</Button>
             </FlexCenterBox>
         </DetailBox>
     )
