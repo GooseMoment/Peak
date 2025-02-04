@@ -6,6 +6,6 @@ class DrawersConfig(AppConfig):
     name = "drawers"
 
     def ready(self):
-        from . import signals
+        from . import signals  # noqa: F401 -- signals is required
 
         return super().ready()
