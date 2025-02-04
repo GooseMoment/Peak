@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from django.core.cache import cache
 
-from .models import *
+from .models import Emoji, Quote, Reaction, Peck, Comment, Following, Block
 from projects.models import Project
 
 from users.serializers import UserSerializer

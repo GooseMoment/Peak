@@ -31,7 +31,6 @@ COLORS_DEFAULT = [
 
 
 def factory_user() -> User:
-    email = fake.email()
     return User(
         username=fake.user_name(),
         display_name=fake.name(),

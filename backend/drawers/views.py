@@ -4,6 +4,7 @@ from rest_framework.filters import OrderingFilter
 from .models import Drawer
 from .serializers import DrawerSerializer
 from .utils import reorder_tasks, normalize_drawer_order
+from tasks.models import Task
 from api.permissions import IsUserOwner
 
 

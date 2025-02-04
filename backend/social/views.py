@@ -13,16 +13,31 @@ from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.db.models import Q, F
+from django.db.utils import IntegrityError
 from django.utils import timezone
 
 from datetime import datetime, timedelta
 
-from .models import *
-from .serializers import *
+from .models import Emoji, Quote, Reaction, Peck, Comment, Following, Block
+from .serializers import (
+    EmojiSerializer,
+    DailyLogsSerializer,
+    DailyLogDrawerSerializer,
+    DailyLogDetailsSerializer,
+    QuoteSerializer,
+    ReactionSerializer,
+    PeckSerializer,
+    CommentSerializer,
+    FollowingSerializer,
+    BlockSerializer,
+)
 from . import permissions
 from api.models import PrivacyMixin
 from api.permissions import IsUserSelfRequest
 from drawers.models import Drawer
+from tasks.models import Task
+from tasks.serializers import TaskSerializer
+from users.models import User
 from users.serializers import UserSerializer
 
 
@@ -263,7 +278,7 @@ class BlockView(APIView):
 
         try:
             created = Block.objects.create(blocker=blockerUser, blockee=blockeeUser)
-        except:
+        except IntegrityError:
             return Response(status=status.HTTP_208_ALREADY_REPORTED)
 
         serializer = BlockSerializer(created)
