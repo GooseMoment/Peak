@@ -105,7 +105,7 @@ export const postQuote = async (date, quote) => {
 
 export const getDailyLogDetails = async (username, day, cursor) => {
     const res = await client.get(
-        `social/daily/log/details/@${username}/${day}/?cursor=${cursor}`
+        `social/daily/log/details/@${username}/${day}/?cursor=${cursor}`,
     )
 
     return res.data

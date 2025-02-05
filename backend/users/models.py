@@ -7,6 +7,7 @@ from api.models import Base
 import uuid
 import os
 
+
 class UserManager(BaseUserManager):
     def create_user(self, display_name, username, email, password=None):
         user = User(display_name=display_name, username=username, email=email)
@@ -23,9 +24,9 @@ class UserManager(BaseUserManager):
 
 # from: https://stackoverflow.com/a/2677474
 def get_file_path(instance, filename):
-    ext = filename.split('.')[-1]
+    ext = filename.split(".")[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
-    return os.path.join('user_profile_imgs', filename)
+    return os.path.join("user_profile_imgs", filename)
 
 
 class User(AbstractBaseUser, Base, PermissionsMixin):
@@ -44,7 +45,7 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
     header_color = models.CharField(max_length=128, default="grey")
 
     is_staff = models.BooleanField(default=False)
-    
+
     # ---
 
     # fields to substitute default Django's User
@@ -58,10 +59,10 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
 
     def get_full_name(self):
         return self.id + "|@" + self.username
-    
+
     def get_short_name(self):
         return "@" + self.username
-    
+
     objects = UserManager()
 
     def __str__(self) -> str:
@@ -69,4 +70,3 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
 
     class Meta:
         db_table = "users"
-

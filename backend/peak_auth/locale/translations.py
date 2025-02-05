@@ -8,6 +8,7 @@ translations = {
     "ko": KO,
 }
 
+
 def get_translations(locale: str):
     for code in translations.keys():
         if locale.startswith(code):

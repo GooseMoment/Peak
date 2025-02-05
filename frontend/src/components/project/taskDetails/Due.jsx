@@ -1,7 +1,8 @@
-import { Fragment, useState } from "react"
+import { useEffect, useState } from "react"
 
 import styled, { css } from "styled-components"
 
+import CommonCalendar from "@components/common/CommonCalendar"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 import TimeDetail from "@components/project/due/TimeDetail"
@@ -19,10 +20,36 @@ import { toast } from "react-toastify"
 
 const Due = ({ task, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.due" })
+    const tz = useClientTimezone()
 
+    const today = DateTime.now().setZone(tz)
+
+    const [selectedDate, setSelectedDate] = useState(today.toISODate())
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
-    const tz = useClientTimezone()
+    useEffect(() => {
+        if (task.due_type === "due_datetime") {
+            const converted_selectedDate = DateTime.fromISO(selectedDate, {
+                zone: tz,
+            })
+            const due_datetime = DateTime.fromISO(task.due_datetime, {
+                zone: tz,
+            })
+            const converted_datetime = due_datetime.set({
+                year: converted_selectedDate.year,
+                month: converted_selectedDate.month,
+                day: converted_selectedDate.day,
+            })
+            setFunc({ due_datetime: converted_datetime })
+            return
+        }
+
+        setFunc({
+            due_type: "due_date",
+            due_date: DateTime.fromISO(selectedDate, { zone: tz }).toISODate(),
+            due_datetime: null,
+        })
+    }, [selectedDate])
 
     const handleAdditionalComp = (name) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
@@ -42,8 +69,6 @@ const Due = ({ task, setFunc }) => {
             setIsAdditionalComp(name)
         }
     }
-
-    const today = DateTime.now().setZone(tz)
 
     const changeDueDate = (set) => {
         return async () => {
@@ -86,7 +111,15 @@ const Due = ({ task, setFunc }) => {
             name: "calendar",
             display: t("calendar"),
             icon: "calendar",
-            component: <div>달력입니다</div>,
+            component: (
+                <CalendarWrapper>
+                    <CommonCalendar
+                        isRangeSelectMode={false}
+                        selectedStartDate={selectedDate}
+                        setSelectedStartDate={setSelectedDate}
+                    />
+                </CalendarWrapper>
+            ),
         },
         {
             name: "time",
@@ -130,10 +163,7 @@ const FlexCenterBox = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    ${ifMobile} {
-        width: 100%;
-    }
+    width: 100%;
 `
 
 const CLine = styled.div`
@@ -172,7 +202,7 @@ const IndexBox = styled.div`
     }
 
     ${ifMobile} {
-        width: 90%;
+        width: 95%;
     }
 `
 
@@ -199,6 +229,12 @@ const CollapseButton = styled.div`
                 animation: ${rotateToUnder} 0.3s ${cubicBeizer} forwards;
             }
         `}
+`
+
+const CalendarWrapper = styled.div`
+    margin: 0.4em auto;
+    width: 90%;
+    font-size: 0.8em;
 `
 
 export default Due

@@ -12,12 +12,13 @@ import FollowButton from "@components/users/FollowButton"
 
 import TaskBox from "./TaskBox"
 
+import { getCurrentUsername } from "@api/client"
+import { getDailyLogDetails, getQuote, postQuote } from "@api/social.api"
+
 import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
-import { getCurrentUsername } from "@/api/client"
-import { getDailyLogDetails, getQuote, postQuote } from "@/api/social.api"
 import { ImpressionArea } from "@toss/impression-area"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -33,7 +34,7 @@ const getCursorFromURL = (url) => {
 const LogDetails = ({ pageType = "following", username, selectedDate }) => {
     const { t } = useTranslation("", { keyPrefix: "social.log_details" })
     const theme = useTheme()
-    
+
     const me = getCurrentUsername()
 
     // quote
@@ -66,7 +67,6 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
         data: logDetailsPage,
         fetchNextPage: fetchNextLogDetailsPage,
         isPending: isLogDetailsPending,
-        refetch: refetchLogDetails,
     } = useInfiniteQuery({
         queryKey: ["daily", "log", "details", username, selectedDate],
         queryFn: (page) =>
@@ -79,13 +79,7 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
     const isLogDetailsEmpty = logDetailsPage?.pages[0]?.results?.length === 0
 
     // TODO: Drawer 접기
-    const [hiddenDrawers, setHiddenDrawers] = useState(new Set())
-
-    const handleHiddenDrawer = (drawer) => {
-        if (hiddenDrawers.has(drawer))
-            setHiddenDrawers((prev) => new Set(prev).delete(drawer))
-        else setHiddenDrawers((prev) => new Set(prev).add(drawer))
-    }
+    const [hiddenDrawers] = useState(new Set())
 
     return isQuotePending | isLogDetailsPending ? (
         <SkeletonProjectPage />
@@ -192,7 +186,7 @@ const DetailBody = styled.div`
 
 const NoContent = styled.div`
     margin: 2em;
-    
+
     display: flex;
     align-items: center;
     justify-content: center;

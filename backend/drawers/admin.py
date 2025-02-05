@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Drawer
 from api.admin import fieldset_base, readonly_fields_base
 
+
 @admin.register(Drawer)
 class DrawerAdmin(admin.ModelAdmin):
     ordering = ["-updated_at"]

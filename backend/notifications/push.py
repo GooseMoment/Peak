@@ -11,19 +11,17 @@ from urllib3.util import parse_url
 
 SUBSCRIPTION_MAX_FAILURE = 10
 
+
 def _notificationToPushData(notification: Notification, locale: str) -> dict[str, any]:
     # FYI: https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
     data = {
         # Texts
         "title": "",
         "body": "",
-
         # URLS
-        "icon": "", 
-
+        "icon": "",
         # Unix timestamp (only int)
         "timestamp": 0,
-
         # any structure
         "data": {
             "click_url": "",
@@ -55,11 +53,13 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
             else:
                 related_user = notification.reaction.task.user
                 parent = notification.reaction.task.name
-            
+
             print("parent:", parent)
 
             t = t[Notification.FOR_REACTION]
-            data["title"] = t["title"].format(emoji=notification.reaction.emoji.name, username=related_user.username)
+            data["title"] = t["title"].format(
+                emoji=notification.reaction.emoji.name, username=related_user.username
+            )
             data["body"] = t["body"].format(parent=parent)
         case Notification.FOR_FOLLOW:
             related_user = notification.following.follower
@@ -80,7 +80,9 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
             related_user = notification.peck.user
             t = t[Notification.FOR_PECK]
             data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"].format(task=notification.peck.task.name, count=notification.peck.count)
+            data["body"] = t["body"].format(
+                task=notification.peck.task.name, count=notification.peck.count
+            )
         case Notification.FOR_COMMENT:
             related_user = notification.comment.user
             parent: str = ""
@@ -92,8 +94,10 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
 
             t = t[Notification.FOR_COMMENT]
             data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"].format(parent=parent, comment=notification.comment.comment)
-        
+            data["body"] = t["body"].format(
+                parent=parent, comment=notification.comment.comment
+            )
+
     if related_user:
         if related_user.profile_img:
             data["icon"] = related_user.profile_img.url
@@ -102,10 +106,11 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
 
     return data
 
+
 def pushNotificationToUser(user: User, notification: Notification) -> None:
     subscriptions = WebPushSubscription.objects.filter(user=user).all()
     datas_per_locale = dict()
-    
+
     for subscription in subscriptions:
         endpoint = parse_url(subscription.subscription_info.get("endpoint"))
         aud = endpoint.scheme + "://" + endpoint.host
@@ -119,7 +124,7 @@ def pushNotificationToUser(user: User, notification: Notification) -> None:
         try:
             webpush(
                 subscription.subscription_info,
-                dumps(data), 
+                dumps(data),
                 vapid_private_key=settings.WEBPUSH.get("vapid_private_key"),
                 vapid_claims={
                     "sub": "mailto:" + settings.WEBPUSH.get("vapid_claims_email"),
@@ -127,13 +132,15 @@ def pushNotificationToUser(user: User, notification: Notification) -> None:
                 },
             )
         except WebPushException as wpe:
-            if wpe.response and wpe.response.status_code == 401: # 401 GONE
+            if wpe.response and wpe.response.status_code == 401:  # 401 GONE
                 # unsubscribed subscription
                 subscription.delete()
                 continue
 
             subscription.fail_cnt += 1
-            if subscription.fail_cnt > SUBSCRIPTION_MAX_FAILURE: # 최대 횟수를 넘어갈 시 구독 삭제
+            if (
+                subscription.fail_cnt > SUBSCRIPTION_MAX_FAILURE
+            ):  # 최대 횟수를 넘어갈 시 구독 삭제
                 subscription.delete()
                 continue
 
@@ -144,4 +151,3 @@ def pushNotificationToUser(user: User, notification: Notification) -> None:
         if subscription.fail_cnt > 0:
             subscription.fail_cnt = 0
             subscription.save()
-

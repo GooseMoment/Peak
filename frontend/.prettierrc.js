@@ -1,7 +1,7 @@
 export default {
     tabWidth: 4,
     semi: false,
-    bracketSameLine: true, 
+    bracketSameLine: true,
 
     plugins: ["@trivago/prettier-plugin-sort-imports"],
 
