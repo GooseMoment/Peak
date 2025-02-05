@@ -6,12 +6,13 @@ from django.conf import settings
 from datetime import datetime, UTC
 
 from .models import Announcement, Heart
-from .serializers import AnnouncementSerializer 
+from .serializers import AnnouncementSerializer
 from users.models import User
+
 
 class AnnouncementList(generics.GenericAPIView):
     serializer_class = AnnouncementSerializer
-    permission_classes = (AllowAny, )
+    permission_classes = (AllowAny,)
 
     def get_queryset(self):
         return Announcement.objects.all().order_by("-created_at")
@@ -38,7 +39,7 @@ class AnnouncementList(generics.GenericAPIView):
 class AnnouncementDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
     serializer_class = AnnouncementSerializer
     lookup_field = "id"
-    permission_classes = (AllowAny, )
+    permission_classes = (AllowAny,)
 
     def get_queryset(self):
         return Announcement.objects.all()
@@ -50,35 +51,46 @@ class AnnouncementDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 class HeartDetail(generics.GenericAPIView):
     def get_queryset(self):
         return Heart.objects.all()
-    
+
     def get(self, request, announcement_id, username, *args, **kwargs):
         if request.user.username != username:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
-        exists = self.get_queryset().filter(user__username=username, announcement_id=announcement_id).exists()
+        exists = (
+            self.get_queryset()
+            .filter(user__username=username, announcement_id=announcement_id)
+            .exists()
+        )
 
-        return Response({
-            "hearted": exists,
-        }, status=status.HTTP_200_OK)
-    
+        return Response(
+            {
+                "hearted": exists,
+            },
+            status=status.HTTP_200_OK,
+        )
+
     def post(self, request, announcement_id, username, *args, **kwargs):
         if request.user.username != username:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         user = User.objects.get(username=username)
 
-        _, created = self.get_queryset().get_or_create(user=user, announcement_id=announcement_id)
-        
+        _, created = self.get_queryset().get_or_create(
+            user=user, announcement_id=announcement_id
+        )
+
         if created:
-                return Response(status=status.HTTP_201_CREATED)
-        
+            return Response(status=status.HTTP_201_CREATED)
+
         return Response(status=status.HTTP_208_ALREADY_REPORTED)
-    
+
     def delete(self, request, announcement_id, username, *args, **kwargs):
         if request.user.username != username:
             return Response(status=status.HTTP_403_FORBIDDEN)
-        
-        filter = self.get_queryset().filter(user__username=username, announcement=announcement_id)
+
+        filter = self.get_queryset().filter(
+            user__username=username, announcement=announcement_id
+        )
 
         if not filter.exists():
             return Response(status=status.HTTP_404_NOT_FOUND)

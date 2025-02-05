@@ -19,25 +19,27 @@ class TimezoneMixin:
             if self._tz is not None:
                 return self._tz
         except AttributeError:
-            TypeError("TimezoneMixin was not initialized. Place TimezoneMixin before GenericAPIView, etc.")
-        
+            TypeError(
+                "TimezoneMixin was not initialized. Place TimezoneMixin before GenericAPIView, etc."
+            )
+
         try:
             zone = self.request.headers[self.TZ_HEADER]
         except KeyError:
             raise exceptions.ClientTimezoneMissing
-        
+
         try:
             tz = zoneinfo.ZoneInfo(zone)
         except zoneinfo.ZoneInfoNotFoundError:
             raise exceptions.ClientTimezoneInvalid
-        
+
         self._tz = tz
         return tz
-    
+
     def get_now(self):
         if self._now is not None:
             return self._now
-        
+
         tz = self.get_tz()
         now = datetime.datetime.now(tz=tz)
 
@@ -49,8 +51,8 @@ class TimezoneMixin:
 
     def get_datetime_range(self, date: datetime.date):
         tz = self.get_tz()
-        datetime_min = datetime.datetime.combine(date, datetime.time.min, tz) 
-        datetime_max = datetime.datetime.combine(date, datetime.time.max, tz) 
+        datetime_min = datetime.datetime.combine(date, datetime.time.min, tz)
+        datetime_max = datetime.datetime.combine(date, datetime.time.max, tz)
         datetime_range = (datetime_min, datetime_max)
 
         return datetime_range
@@ -58,7 +60,7 @@ class TimezoneMixin:
     def get_today_range(self):
         if self._today_range is not None:
             return self._today_range
-        
+
         today = self.get_today()
         today_range = self.get_datetime_range(today)
 
