@@ -106,24 +106,23 @@
         "name_required": "이름을 지어주세요.",
         "color": {
             "title": "색깔 설정",
-            "theme1": "기본1",
-            "theme2": "기본2",
-            "orange": "오렌지",
-            "peach": "피치",
-            "pink": "핑크",
-            "dark_yellow": "진노랑",
-            "yellow": "노랑",
-            "light_green": "연두",
-            "turquoise": "청록",
-            "dark_blue": "남색",
-            "red": "빨강",
-            "brown": "갈색",
-            "green": "녹색",
-            "sky_blue": "하늘",
-            "light_purple": "연보라",
-            "purple_blue": "보라파랑",
-            "blue": "파랑",
-            "purple": "보라"
+            "theme1": "기본",
+            "red": "빨간색",
+            "red_orange": "레드오렌지",
+            "orange": "주황색",
+            "yellow": "노란색",
+            "bright_sky_blue": "밝은 하늘색",
+            "blue": "파란색",
+            "magenta": "마젠타",
+            "violet": "보라색",
+            "pink": "분홍색",
+            "hot_pink": "핫핑크",
+            "light_green": "연두색",
+            "mint": "민트색",
+            "olive": "올리브색",
+            "dark_violet": "어두운 보라색",
+            "deep_blue": "딥블루",
+            "deep_indigo": "딥인디고"
         },
         "privacy": {
             "title": "공개 범위 설정",
@@ -330,6 +329,14 @@
         "button_create_account": "계정 생성",
         "button_resend_verification": "인증 메일 재전송",
         "button_forgot_password": "암호 찾기",
+        "two_factor_authentication": "2단계 인증",
+        "two_factor_authentication_description": "인증기 앱에 표시된 코드를 입력하세요.",
+        "button_cancel": "취소",
+        "button_email_authentication": "이메일 인증",
+        "6-digit_code": "6자리 코드",
+        "session_invalid": "다시 로그인하세요.",
+        "try_count_exceed": "2단계 인증 시도 횟수를 초과했습니다. 다시 로그인하세요.",
+        "wrong_code": "잘못된 코드입니다. 다시 시도하세요.",
         "sign_up": "회원가입",
         "email": "이메일 주소",
         "password": "암호",
@@ -339,19 +346,19 @@
         "button_already_have_account": "로그인 하기",
         "link_sign_in": "로그인",
         "sign_up_completed": "메일 인증 필요",
-        "check_inbox": "이메일 인증 메일이 전송되었습니다. 메일함을 확인하세요.",
+        "check_inbox": "이메일 인증 메일이 전송되었습니다. 메일함 또는 스팸함을 확인하세요.",
         "sign_up_errors": {
-            "SIGNUP_NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
-            "SIGNUP_SIGNED_IN_USER": "이미 로그인되어 있습니다.",
-            "SIGNUP_REQUIRED_FIELDS_MISSING": "이메일 주소, 암호, 사용자 이름을 모두 입력해주세요.",
-            "SIGNUP_USERNAME_TOO_SHORT": "사용자 이름은 4글자 이상이어야 합니다.",
-            "SIGNUP_PASSWORD_TOO_SHORT": "암호는 8글자 이상이어야 합니다.",
-            "SIGNUP_EMAIL_WRONG": "올바른 이메일 주소를 입력해주세요.",
-            "SIGNUP_USERNAME_WRONG": "사용자 이름은 알파벳, 언더스코어(_), 숫자만 포함할 수 있습니다.",
-            "SIGNUP_EMAIL_EXISTS": "이미 존재하는 이메일 주소입니다.",
-            "SIGNUP_USERNAME_EXISTS": "이미 존재하는 사용자 이름입니다.",
-            "SIGNUP_INTERNAL_ERROR": "문제가 발생했습니다. 다시 시도해 주세요.",
-            "SIGNUP_UNKNOWN_ERROR": "나중에 시도해 주세요."
+            "NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
+            "USER_ALREADY_AUTHENTICATED": "이미 로그인되어 있습니다.",
+            "REQUIRED_FIELD_MISSING": "이메일 주소, 암호, 사용자 이름을 모두 입력해주세요.",
+            "SIGNUP_EMAIL_INVALID": "올바른 이메일 주소를 입력해주세요.",
+            "USERNAME_INVALID_LENGTH": "사용자 이름은 4글자 이상, 15글자 이하여야 합니다.",
+            "USERNAME_INVALID_FORMAT": "사용자 이름은 알파벳, 언더스코어(_), 숫자만 포함할 수 있습니다.",
+            "USERNAME_DUPLICATE": "이미 존재하는 사용자 이름입니다.",
+            "PASSWORD_INVALID": "암호는 8글자 이상이어야 합니다.",
+            "INTERNAL_ERROR": "문제가 발생했습니다. 다시 시도해 주세요.",
+            "EMAIL_NOT_SENT": "이메일을 전송할 수 없습니다. 몇 분 뒤에 다시 시도해주세요.",
+            "UNKNOWN_ERROR": "알 수 없는 문제가 발생했습니다. 나중에 시도해 주세요."
         }
     },
     "password_recovery": {
@@ -374,37 +381,37 @@
         "recovery_error_password_unmatch": "새 암호가 서로 다릅니다.",
         "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다."
     },
-    "social" : {
+    "social": {
         "following_title": "팔로잉",
         "explore_title": "탐험",
         "log_preview_completed": "완료!",
         "log_details": {
             "no_content": "작업이 없습니다."
         },
-        "quote" : {
+        "quote": {
             "empty_self_quote": "오늘의 한마디를 남겨주세요.",
             "empty_others_quote": "아직 상대방이 작성하지 않았습니다."
         },
-        "emoji_modal" : {
-            "searchbar" : "이모지 찾기"
+        "emoji_modal": {
+            "searchbar": "이모지 찾기"
         },
-        "explore" : {
-            "searchbar" : "새로운 인연을 찾아보세요.",
-            "no_result" : "당신이 찾는 사람이 없습니다 😢",
-            "suggestion" : "새로운 사람과 새로운 인연은 어떤가요?"
+        "explore": {
+            "searchbar": "새로운 인연을 찾아보세요.",
+            "no_result": "당신이 찾는 사람이 없습니다 😢",
+            "suggestion": "새로운 사람과 새로운 인연은 어떤가요?"
         }
     },
-    "search" : {
+    "search": {
         "title": "검색",
-        "filter_button" : {
-            "search_terms" : "검색어",
-            "project" : "프로젝트",
-            "drawer" : "서랍",
-            "assigned_at" : "할당 날짜",
-            "completed_at" : "완수 날짜",
-            "privacy" : "공개 범위",
-            "memo" : "메모"
+        "filter_button": {
+            "search_terms": "검색어",
+            "project": "프로젝트",
+            "drawer": "서랍",
+            "assigned_at": "할당 날짜",
+            "completed_at": "완수 날짜",
+            "privacy": "공개 범위",
+            "memo": "메모"
         },
-        "no_result" : "조건에 맞는 결과를 찾을 수 없습니다 🤔"
+        "no_result": "조건에 맞는 결과를 찾을 수 없습니다 🤔"
     }
 }

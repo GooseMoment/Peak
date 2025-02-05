@@ -11,7 +11,7 @@ import FeatherIcon from "feather-icons-react"
 import { toast } from "react-toastify"
 
 const PeckButton = ({ taskID, isUncomplete }) => {
-    const { data: peck, isError: peckError } = useQuery({
+    const { data: peck } = useQuery({
         queryKey: ["peck", taskID],
         queryFn: () => getPeck(taskID),
         enabled: !!taskID,

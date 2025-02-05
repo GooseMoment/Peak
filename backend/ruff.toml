@@ -1,0 +1,12 @@
+exclude = [
+    # python related
+    "__pycache__",
+    ".venv",
+    "venv",
+    # django related
+    "migrations",
+    # ruff
+    ".ruff_cache",
+]
+
+target-version = "py312"

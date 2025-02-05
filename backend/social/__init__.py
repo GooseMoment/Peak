@@ -1,1 +1,1 @@
-default_app_config = 'social.apps.SocialConfig'
+default_app_config = "social.apps.SocialConfig"

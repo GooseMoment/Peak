@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 
 import styled, { css } from "styled-components"
 
-import QuickDue from "@components/project/due/QuickDue"
 import CommonCalendar from "@components/common/CommonCalendar"
+import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 import TimeDetail from "@components/project/due/TimeDetail"
 
@@ -44,7 +44,7 @@ const Due = ({ task, setFunc }) => {
             return
         }
 
-        setFunc({ 
+        setFunc({
             due_type: "due_date",
             due_date: DateTime.fromISO(selectedDate, { zone: tz }).toISODate(),
             due_datetime: null,
@@ -111,12 +111,15 @@ const Due = ({ task, setFunc }) => {
             name: "calendar",
             display: t("calendar"),
             icon: "calendar",
-            component: <CalendarWrapper>
-                <CommonCalendar
-                    isRangeSelectMode={false}
-                    selectedStartDate={selectedDate}
-                    setSelectedStartDate={setSelectedDate}/>
-            </CalendarWrapper>,
+            component: (
+                <CalendarWrapper>
+                    <CommonCalendar
+                        isRangeSelectMode={false}
+                        selectedStartDate={selectedDate}
+                        setSelectedStartDate={setSelectedDate}
+                    />
+                </CalendarWrapper>
+            ),
         },
         {
             name: "time",

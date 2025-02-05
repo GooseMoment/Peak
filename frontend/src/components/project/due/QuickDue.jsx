@@ -1,8 +1,8 @@
 import styled from "styled-components"
 
-import Slach from "@assets/project/Slach"
 import { ifMobile } from "@utils/useScreenType"
 
+import Slach from "@assets/project/Slach"
 import next_week from "@assets/project/calendar/next_week.svg"
 import today from "@assets/project/calendar/today.svg"
 import tomorrow from "@assets/project/calendar/tomorrow.svg"

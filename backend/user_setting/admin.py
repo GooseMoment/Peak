@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import UserSetting
 from api.admin import fieldset_base, readonly_fields_base
 
+
 @admin.register(UserSetting)
 class UserSettingAdmin(admin.ModelAdmin):
     ordering = ["-updated_at"]

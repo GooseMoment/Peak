@@ -8,9 +8,9 @@ import SimpleDue from "@components/project/TaskCreateSimple/SimpleDue"
 import SimplePriority from "@components/project/TaskCreateSimple/SimplePriority"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
-import { ifMobile } from "@utils/useScreenType"
-
 import { postTask } from "@api/tasks.api"
+
+import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
