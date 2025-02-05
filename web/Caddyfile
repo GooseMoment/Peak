@@ -17,7 +17,7 @@
 	handle_errors {
 		root * /web
 
-		@5xx `{err.status_code} >= 500 && {err.status_code} < 600`
+		@5xx `{err.status_code} >= 500 && {err.status_code} <600`
 		handle @5xx {
 			rewrite * /error.html
 			templates
