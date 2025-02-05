@@ -13,6 +13,7 @@ jobs:
       matrix:
         caddyfile: [Caddyfile, Caddyfile.prod]
     steps:
+      - uses: actions/checkout@v4
       - name: Install Caddy from Github Releases
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -20,4 +21,4 @@ jobs:
           gh release -R caddyserver/caddy download --pattern 'caddy_*_linux_amd64.tar.gz' -O - | sudo tar -xz caddy
           chmod +x caddy
       - name: Run caddy fmt
-        run: caddy fmt --config ./web/${{ matrix.caddyfile }} > /dev/null
+        run: ./caddy fmt --config ./web/${{ matrix.caddyfile }} > /dev/null
