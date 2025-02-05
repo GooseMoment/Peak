@@ -1,13 +1,14 @@
 import { useState } from "react"
 
-import DragAndDownBox from "@components/project/dragAndDown/DragAndDownBox"
-import Task from "@components/tasks/Task"
+import styled from "styled-components"
+
 import DeleteAlert from "@components/common/DeleteAlert"
 import { useDeleteTask } from "@components/project/common/useDeleteTask"
+import DragAndDownBox from "@components/project/dragAndDown/DragAndDownBox"
+import Task from "@components/tasks/Task"
 
 import useScreenType from "@utils/useScreenType"
 
-import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
@@ -24,14 +25,14 @@ const DrawerTask = ({ task, color, projectType }) => {
     })
 
     return (
-        <DragAndDownBox
-            task={task}
-            color={color}>
+        <DragAndDownBox task={task} color={color}>
             <TaskBox>
                 <Task task={task} color={color} />
-                {isMobile ? null : <DeleteIcon>
-                    <FeatherIcon icon="trash-2" onClick={handleAlert} />
-                </DeleteIcon>}
+                {isMobile ? null : (
+                    <DeleteIcon>
+                        <FeatherIcon icon="trash-2" onClick={handleAlert} />
+                    </DeleteIcon>
+                )}
             </TaskBox>
             {isAlertOpen && (
                 <DeleteAlert
@@ -42,7 +43,7 @@ const DrawerTask = ({ task, color, projectType }) => {
                         setIsAlertOpen(false)
                     }}
                     func={handleDelete}
-                    />
+                />
             )}
         </DragAndDownBox>
     )
@@ -55,7 +56,7 @@ const DeleteIcon = styled.div`
 
     & svg {
         top: 0;
-        stroke: ${(p)=>p.theme.project.danger};
+        stroke: ${(p) => p.theme.project.danger};
     }
 `
 

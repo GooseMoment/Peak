@@ -4,20 +4,20 @@ import { useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
-import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
 import DeleteAlert from "@components/common/DeleteAlert"
+import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
+import { useDeleteTask } from "@components/project/common/useDeleteTask"
 import ContentsMobile from "@components/project/taskDetails/mobile/ContentsMobile"
 import TaskNameInput from "@components/tasks/TaskNameInput"
-import { useDeleteTask } from "@components/project/common/useDeleteTask"
 
 import { postReminder } from "@api/notifications.api"
 import { patchTask, postTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
 
+import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-import FeatherIcon from "feather-icons-react"
 
 const TaskCommonDetailMobile = ({
     newTask,
@@ -130,8 +130,15 @@ const TaskCommonDetailMobile = ({
             headerContent={
                 <Header
                     title={title}
-                    icon={isCreating ? null : 
-                        <FeatherIcon icon="trash-2" stroke={theme.project.danger} onClick={handleAlert}/>}
+                    icon={
+                        isCreating ? null : (
+                            <FeatherIcon
+                                icon="trash-2"
+                                stroke={theme.project.danger}
+                                onClick={handleAlert}
+                            />
+                        )
+                    }
                     closeSheet={onClose}
                     handleBack={
                         activeContent ? () => setActiveContent(null) : null

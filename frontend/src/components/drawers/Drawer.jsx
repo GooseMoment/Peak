@@ -10,7 +10,6 @@ import DeleteAlert from "@components/common/DeleteAlert"
 import ModalWindow from "@components/common/ModalWindow"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
-import DrawerTask from "@components/tasks/DrawerTask"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 import TaskCreateSimple from "@components/project/TaskCreateSimple"
 import PrivacyIcon from "@components/project/common/PrivacyIcon"
@@ -20,6 +19,7 @@ import {
     SkeletonInboxDrawer,
 } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenu from "@components/project/sorts/SortMenu"
+import DrawerTask from "@components/tasks/DrawerTask"
 
 import { deleteDrawer } from "@api/drawers.api"
 import { patchDrawer } from "@api/drawers.api"
@@ -225,7 +225,8 @@ const Drawer = ({ project, drawer, color }) => {
                                 key={task.id}
                                 task={task}
                                 color={color}
-                                projectType={project.type}/>
+                                projectType={project.type}
+                            />
                         )),
                     )}
                 </TaskList>
