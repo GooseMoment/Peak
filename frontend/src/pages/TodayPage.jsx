@@ -12,11 +12,7 @@ import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPag
 import Task from "@components/tasks/Task"
 
 import { patchTask } from "@api/tasks.api"
-import {
-    getTasksAssignedToday,
-    getTasksDueToday,
-    getTasksOverdue,
-} from "@api/today.api"
+import { getTasksAssignedToday, getTasksOverdue } from "@api/today.api"
 
 import { useClientTimezone } from "@utils/clientSettings"
 import { getPageFromURL } from "@utils/pagination"
@@ -38,7 +34,7 @@ const TodayPage = () => {
     const [collapsed, setCollapsed] = useState(false)
 
     const today = DateTime.now().setZone(tz)
-    const [selectedDate, setSelectedDate] = useState(today.toISODate())
+    const [selectedDate] = useState(today.toISODate())
     // #TODO 달력으로 날짜 선택하기
 
     const {
@@ -64,7 +60,7 @@ const TodayPage = () => {
         isError: isTodayAssignmentError,
         refetch: todayAssignmentRefetch,
     } = useInfiniteQuery({
-        queryKey: ["today", "assigned"],
+        queryKey: ["today", "assigned", selectedDate],
         queryFn: (pages) =>
             getTasksAssignedToday(selectedDate, pages.pageParam || 1),
         initialPageParam: 1,

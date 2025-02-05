@@ -18,6 +18,28 @@
 - `social`: `Emoji`, `Peck`, `DailyComment`, `Reaction`, `Comment`, `Following` & `Block` 모델과 뷰
 - `notifications`: `Notification` & `TaskReminder` 모델과 뷰
 
+## Linter/Formatter
+
+We use [Ruff](https://docs.astral.sh/ruff/) as a Python linter/formatter.
+See the [installation doc](https://docs.astral.sh/ruff/).
+
+If you use vs code, install [Ruff Extension](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)
+and put the following setting in your settings.json or workspace settings.json.
+
+
+```jsonc
+{
+    // ...
+    "ruff.configuration": "./backend/ruff.toml",
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    }
+    // ...
+}
+```
+
+
 ## Docker 미사용 시
 
 ### SQL 설정

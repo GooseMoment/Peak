@@ -1,7 +1,8 @@
-import { Fragment, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 
 import styled, { css } from "styled-components"
 
+import CommonCalendar from "@components/common/CommonCalendar"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 
@@ -18,10 +19,12 @@ import { toast } from "react-toastify"
 
 const Assigned = ({ setFunc, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
-
-    const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
-
     const tz = useClientTimezone()
+
+    const today = DateTime.now().setZone(tz)
+
+    const [selectedDate, setSelectedDate] = useState(today.toISODate())
+    const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
     const handleAdditionalComp = (name) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
@@ -33,8 +36,6 @@ const Assigned = ({ setFunc, onClose }) => {
             setIsAdditionalComp(name)
         }
     }
-
-    const today = DateTime.now().setZone(tz)
 
     const changeAssignedDate = (set) => {
         return async () => {
@@ -49,6 +50,14 @@ const Assigned = ({ setFunc, onClose }) => {
         }
     }
 
+    useEffect(() => {
+        setFunc({
+            assigned_at: DateTime.fromISO(selectedDate, {
+                zone: tz,
+            }).toISODate(),
+        })
+    }, [selectedDate])
+
     const addComponent = [
         {
             name: "quick",
@@ -60,7 +69,15 @@ const Assigned = ({ setFunc, onClose }) => {
             name: "calendar",
             display: t("due.calendar"),
             icon: "calendar",
-            component: <div>달력입니다</div>,
+            component: (
+                <CalendarWrapper>
+                    <CommonCalendar
+                        isRangeSelectMode={false}
+                        selectedStartDate={selectedDate}
+                        setSelectedStartDate={setSelectedDate}
+                    />
+                </CalendarWrapper>
+            ),
         },
         {
             name: "repeat",
@@ -167,6 +184,12 @@ const CollapseButton = styled.div`
                 animation: ${rotateToUnder} 0.3s ${cubicBeizer} forwards;
             }
         `}
+`
+
+const CalendarWrapper = styled.div`
+    margin: 0.4em auto;
+    width: 90%;
+    font-size: 0.8em;
 `
 
 export default Assigned

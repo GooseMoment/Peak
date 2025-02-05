@@ -91,7 +91,7 @@ const SearchPage = () => {
         fetchNextPage: fetchNextResultPage,
         refetch: refetchResult,
     } = useInfiniteQuery({
-        queryKey: ["search"],
+        queryKey: ["search", { ...filters }],
         queryFn: (page) => getSearchResults(filters, page.pageParam),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),

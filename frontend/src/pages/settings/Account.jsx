@@ -197,7 +197,7 @@ const Username = styled.div`
 const Email = styled.div`
     min-width: 0;
     white-space: nowrap;
-    overflow: hidden;
+    overflow-x: clip;
     text-overflow: ellipsis;
 `
 

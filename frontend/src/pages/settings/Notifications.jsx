@@ -115,8 +115,7 @@ const Notifications = () => {
                             setting.push_notification_subscription
                                 ? states.danger
                                 : states.text
-                        }
-                    >
+                        }>
                         {setting.push_notification_subscription
                             ? t(
                                   "push_notification_subscription.values.button_disable",

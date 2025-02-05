@@ -4,12 +4,13 @@ from django.core.cache import cache
 from notifications.models import Notification, TaskReminder
 from datetime import datetime, UTC
 
+
 class Command(BaseCommand):
     help = "Notify TaskReminders in the queue."
 
     def add_arguments(self, parser: CommandParser):
         return super().add_arguments(parser)
-    
+
     def handle(self, *args, **options):
         now = datetime.now(UTC).replace(second=0, microsecond=0)
         now_timestamp = now.isoformat()
@@ -22,7 +23,7 @@ class Command(BaseCommand):
             return
 
         print(f"[NOTIFY] Got {len(reminders)} TaskReminders.")
-        
+
         for reminder in reminders:
             if reminder.scheduled != now:
                 continue
@@ -31,9 +32,9 @@ class Command(BaseCommand):
                 user = reminder.task.user
 
                 Notification.objects.create(
-                    user = user,
-                    task_reminder = reminder,
-                    type = Notification.FOR_TASK_REMINDER,
+                    user=user,
+                    task_reminder=reminder,
+                    type=Notification.FOR_TASK_REMINDER,
                 )
             except Exception as e:
                 print("[NOTIFY] Error while creating Notification:", e)
