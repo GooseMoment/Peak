@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.core.cache import cache
 from django.db import transaction
 from django.db.utils import IntegrityError
 from django.conf import settings
@@ -20,8 +21,14 @@ import re
 from datetime import datetime, UTC
 
 from users.models import User
-from . import exceptions, utils
-from .models import EmailVerificationToken, PasswordRecoveryToken
+from .models import (
+    EmailVerificationToken,
+    PasswordRecoveryToken,
+    TOTPSecret,
+    TwoFactorAuthToken,
+)
+from .totp import create_totp_secret, TOTP
+from . import exceptions, mails
 
 
 class SignInView(KnoxLoginView):
@@ -39,9 +46,211 @@ class SignInView(KnoxLoginView):
         if not user.is_active:
             raise exceptions.EmailNotVerified
 
-        login(request, user)
+        totp_enabled = TOTPSecret.objects.filter(user=user).exists()
+        if totp_enabled:
+            TwoFactorAuthToken.objects.filter(user=user).delete()
+            tfat = TwoFactorAuthToken.objects.create(user=user)
+            return Response(
+                {
+                    "user": {
+                        "email": user.email,
+                        "username": user.username,
+                    },
+                    "two_factor_auth": {
+                        "token": tfat.token,
+                    },
+                }
+            )
 
+        login(request, user)
         return super(SignInView, self).post(request, format=None)
+
+
+class TOTPAuthenticationView(KnoxLoginView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request: Request):
+        try:
+            token_hex = request.data["token"]
+            code = request.data["code"]
+        except KeyError:
+            # TODO: replace Response to the custom exception
+            return Response(
+                {
+                    "code": "REQUIRED_FIELD_MISSING",
+                    "message": "Missing fields",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            token = uuid.UUID(hex=token_hex)
+        except ValueError:
+            raise APIValidationError(["format of token is valid."])
+
+        try:
+            self.tfat = TwoFactorAuthToken.objects.filter(token=token).get()
+        except TwoFactorAuthToken.DoesNotExist:
+            # TODO: replace Response to the custom exception
+            return Response(
+                {
+                    "code": "INVALID_TOKEN",
+                    "message": "Invalid token",
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        user = authenticate(request, user=self.tfat.user, totp_code=code)
+        if user is None:
+            return self.process_fail(request)
+
+        self.tfat.delete()
+        return self.process_login(request, user)
+
+    def process_login(self, request: Request, user: User):
+        login(request, user)
+        return super(TOTPAuthenticationView, self).post(request, format=None)
+
+    def process_fail(self, request: Request):
+        self.tfat.try_count += 1
+        if (
+            self.tfat.try_count
+            >= settings.TWO_FACTOR_AUTHENTICATION["ALLOWED_TRIES_PER_SIGN_IN"]
+        ):
+            self.tfat.delete()
+            # TODO: replace Response to the custom exception
+            # TODO: add sign in timed restriction
+            return Response(
+                {
+                    "code": "TOKEN_OUT_OF_COUNTS",
+                    "message": "Out of try counts. Please sign in again.",
+                },
+                status=status.HTTP_429_TOO_MANY_REQUESTS,
+            )
+
+        self.tfat.save()
+
+        # TODO: replace Response to the custom exception
+        return Response(
+            {
+                "code": "CREDENTIAL_INVALID",
+                "message": "Invalid credential.",
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+class TOTPRegisterView(GenericAPIView):
+    key_prefix = "totp-secret-pending"
+    cache_timeout = 60 * 30  # 30 minutes
+
+    def get_cahce_key(self) -> str:
+        return self.key_prefix + "-" + self.request.user.username
+
+    def get_cached_secret(self) -> str | None:
+        key = self.get_cahce_key()
+        return cache.get(key)
+
+    def create_and_set_secret(self) -> str:
+        key = self.get_cahce_key()
+        secret = create_totp_secret()
+        cache.set(key, secret, self.cache_timeout)
+        return secret
+
+    def clear_cached_secret(self):
+        key = self.get_cahce_key()
+        cache.delete(key)
+
+    # get wheter TOTP is enabled or not and its created_at if exists
+    def get(self, request: Request):
+        exists = TOTPSecret.objects.filter(user=request.user).exists()
+
+        if not exists:
+            return Response(
+                {
+                    "enabled": False,
+                }
+            )
+
+        totp_secret = TOTPSecret.objects.get(user=request.user)
+        return Response(
+            {
+                "enabled": True,
+                "created_at": totp_secret.created_at,
+            }
+        )
+
+    # create a new TOTP secret
+    def post(self, request: Request):
+        secret = self.create_and_set_secret()
+        totp = TOTP(secret)
+
+        return Response(
+            {
+                "secret": secret,
+                "uri": totp.get_uri(request.user.username, "Peak"),
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    # validate and complete registration TOTP
+    def patch(self, request: Request):
+        secret = self.get_cached_secret()
+        if secret is None:
+            # TODO: replace Response to the custom exception
+            return Response(
+                {
+                    "code": "BAD_REQUEST",
+                    "message": "TOTP registration not started.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            code = request.data["code"]
+        except KeyError:
+            # TODO: replace Response to the custom exception
+            return Response(
+                {
+                    "code": "REQUIRED_FIELD_MISSING",
+                    "message": "Missing fields",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        totp = TOTP(secret)
+        codes = totp.totp_with_offsets()
+        if code not in codes:
+            # TODO: replace Response to the custom exception
+            return Response(
+                {
+                    "code": "CREDENTIAL_INVALID",
+                    "message": "Invalid credential.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        TOTPSecret.objects.filter(user=request.user).delete()
+        TOTPSecret.objects.create(user=request.user, secret=secret)
+        return Response(
+            {
+                "code": "SUCCESS",
+                "message": "TOTP two-factor authentication was successfully added.",
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    # disable and delete TOTP
+    def delete(self, request: Request):
+        TOTPSecret.objects.filter(user=request.user).delete()
+
+        return Response(
+            {
+                "code": "SUCCESS",
+                "message": "Your TOTP two-factor authentication was successfully disabled and deleted.",
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class SignUpView(GenericAPIView):
@@ -88,7 +297,7 @@ class SignUpView(GenericAPIView):
                 raise exceptions.UnknownError
 
             if "email" in str(e):
-                utils.send_mail_already_registered(user, locale)
+                mails.send_mail_already_registered(user, locale)
                 return Response(status=status.HTTP_200_OK)
 
             if "username" in str(e):
@@ -101,7 +310,7 @@ class SignUpView(GenericAPIView):
         if request.user.is_authenticated:
             raise exceptions.UserAlreadyAuthenticated
 
-        locale = utils.get_first_language(request)
+        locale = mails.get_first_language(request)
 
         new_user = self.get_new_user()
         res = self.save_user(new_user, locale)
@@ -111,7 +320,7 @@ class SignUpView(GenericAPIView):
         verification = EmailVerificationToken.objects.create(
             user=new_user, locale=locale
         )
-        utils.send_mail_verification_email(new_user, verification)
+        mails.send_mail_verification_email(new_user, verification)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -175,26 +384,26 @@ class ResendEmailVerificationMail(GenericAPIView):
         except ValidationError:
             raise exceptions.EmailInvalid
 
-        locale = utils.get_first_language(request)
+        locale = mails.get_first_language(request)
 
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            utils.send_mail_no_account(email, locale)
+            mails.send_mail_no_account(email, locale)
             return Response(status=status.HTTP_200_OK)
 
         if user.is_active:
-            utils.send_mail_already_verified(user, locale)
+            mails.send_mail_already_verified(user, locale)
             return Response(status=status.HTTP_200_OK)
 
         try:
             verification = EmailVerificationToken.objects.get(user=user)
         except EmailVerificationToken.DoesNotExist:
-            utils.send_mail_already_verified(user, locale)
+            mails.send_mail_already_verified(user, locale)
             return Response(status=status.HTTP_200_OK)
 
         if verification.verified_at is not None:
-            utils.send_mail_already_verified(user, locale)
+            mails.send_mail_already_verified(user, locale)
             return Response(status=status.HTTP_200_OK)
 
         now = datetime.now(UTC)
@@ -210,7 +419,7 @@ class ResendEmailVerificationMail(GenericAPIView):
                     status=status.HTTP_425_TOO_EARLY,
                 )
 
-        utils.send_mail_verification_email(verification.user, verification)
+        mails.send_mail_verification_email(verification.user, verification)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -235,12 +444,12 @@ class PasswordRecoveryView(TokenView, GenericAPIView):
         except ValidationError:
             raise exceptions.EmailInvalid
 
-        locale = utils.get_first_language(request)
+        locale = mails.get_first_language(request)
 
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            utils.send_mail_no_account(email, locale)
+            mails.send_mail_no_account(email, locale)
             return Response(status=status.HTTP_200_OK)
 
         tokens = PasswordRecoveryToken.objects.filter(user=user)
@@ -252,7 +461,7 @@ class PasswordRecoveryView(TokenView, GenericAPIView):
         token.expires_at = token.created_at + settings.PASSWORD_RECOVERY_TOKEN_TTL
         token.save()
 
-        utils.send_mail_password_recovery(user, token.link, locale)
+        mails.send_mail_password_recovery(user, token.link, locale)
 
         return Response(status=status.HTTP_200_OK)
 
