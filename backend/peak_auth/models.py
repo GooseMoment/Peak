@@ -93,4 +93,3 @@ class TOTPSecret(models.Model):
 
     class Meta:
         db_table = "totp_secrets"
-
