@@ -9,24 +9,19 @@ from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-from rest_framework.decorators import api_view, permission_classes, throttle_classes
+from rest_framework.decorators import throttle_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.throttling import AnonRateThrottle
+from rest_framework.exceptions import ValidationError as APIValidationError
 
 from knox.views import LoginView as KnoxLoginView
 import uuid
-from datetime import datetime, UTC
 import re
+from datetime import datetime, UTC
 
 from users.models import User
+from . import exceptions, utils
 from .models import EmailVerificationToken, PasswordRecoveryToken
-from .utils import (
-    get_first_language,
-    send_mail_verification_email,
-    send_mail_already_verified,
-    send_mail_no_account,
-    send_mail_password_recovery,
-)
 
 
 class SignInView(KnoxLoginView):
@@ -39,148 +34,115 @@ class SignInView(KnoxLoginView):
         user: User | None = authenticate(request, email=email, password=password)
 
         if user is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.CredentialInvalid
 
         if not user.is_active:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+            raise exceptions.EmailNotVerified
 
         login(request, user)
 
         return super(SignInView, self).post(request, format=None)
 
 
-username_validation = re.compile(r"^[a-z0-9_]{4,15}$")
-
-
-@api_view(["POST"])
-@permission_classes((AllowAny,))
-@transaction.atomic
-def sign_up(request: Request):
-    if request.user.is_authenticated:
-        return Response(
-            {"code": "SIGNUP_SIGNED_IN_USER", "message": "You're already signed in."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    payload = request.data
-
+class SignUpView(GenericAPIView):
+    permission_classes = (AllowAny,)
     required_fields = [
         "username",
         "password",
         "email",
     ]
+    username_validation = re.compile(r"^[a-z0-9_]{4,15}$")
 
-    new_user = User()
-    for field in required_fields:
-        if field not in payload:
-            return Response(
-                {
-                    "code": "SIGNUP_REQUIRED_FIELDS_MISSING",
-                    "message": "There're some missing field(s).",
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+    def get_new_user(self) -> User:
+        payload = self.request.data
 
-        setattr(new_user, field, payload[field])
+        new_user = User()
+        for field in self.required_fields:
+            if field not in payload:
+                raise exceptions.RequiredFieldMissing
 
-    try:
-        validate_email(payload["email"])
-    except ValidationError:
-        return Response(
-            {
-                "code": "SIGNUP_EMAIL_WRONG",
-                "message": "email validation error occuered.",
-            },
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+            setattr(new_user, field, payload[field])
 
-    if len(payload["username"]) < 4:
-        return Response(
-            {
-                "code": "SIGNUP_USERNAME_TOO_SHORT",
-                "message": "username should be longer than 4.",
-            },
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+        try:
+            validate_email(payload["email"])
+        except ValidationError:
+            raise exceptions.EmailInvalid
 
-    if not username_validation.match(payload["username"]):
-        return Response(
-            {
-                "code": "SIGNUP_USERNAME_WRONG",
-                "message": "username should contain alphabets, underscore and digits only.",
-            },
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+        if len(payload["username"]) < 4 or len(payload["username"]) > 15:
+            raise exceptions.UsernameInvalidLength
 
-    if len(payload["password"]) < 8:
-        return Response(
-            {
-                "code": "SIGNUP_PASSWORD_TOO_SHORT",
-                "message": "password should be longer than 8.",
-            },
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+        if not self.username_validation.match(payload["username"]):
+            raise exceptions.UsernameInvalidFormat
 
-    new_user.set_password(payload["password"])
+        if len(payload["password"]) < 8:
+            raise exceptions.PasswordInvalid
 
-    try:
-        new_user.save()
-    except IntegrityError as e:
-        if "unique constraint" not in str(e):
-            return Response(
-                {"code": "SIGNUP_UNKNOWN_ERROR", "message": "unknown error occuered."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        new_user.set_password(payload["password"])
+        return new_user
 
-        if "email" in str(e):
-            return Response(
-                {
-                    "code": "SIGNUP_EMAIL_EXISTS",
-                    "message": "a user with a provided email already exists.",
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+    def save_user(self, user: User, locale: str):
+        try:
+            user.save()
+        except IntegrityError as e:
+            if "unique constraint" not in str(e):
+                raise exceptions.UnknownError
 
-        if "username" in str(e):
-            return Response(
-                {
-                    "code": "SIGNUP_USERNAME_EXISTS",
-                    "message": "a user with a provided username already exists.",
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            if "email" in str(e):
+                utils.send_mail_already_registered(user, locale)
+                return Response(status=status.HTTP_200_OK)
 
-        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            if "username" in str(e):
+                raise exceptions.UsernameDuplicate
 
-    locale = get_first_language(request)
+            raise exceptions.UnknownError
 
-    verification = EmailVerificationToken.objects.create(user=new_user, locale=locale)
-
-    send_mail_verification_email(new_user, verification)
-
-    return Response(status=status.HTTP_200_OK)
-
-
-class VerifyEmailVerificationToken(GenericAPIView):
-    permission_classes = (AllowAny,)
-
+    @transaction.atomic
     def post(self, request: Request):
-        token_hex = request.data.get("token")
+        if request.user.is_authenticated:
+            raise exceptions.UserAlreadyAuthenticated
+
+        locale = utils.get_first_language(request)
+
+        new_user = self.get_new_user()
+        res = self.save_user(new_user, locale)
+        if res is not None:
+            return res
+
+        verification = EmailVerificationToken.objects.create(
+            user=new_user, locale=locale
+        )
+        utils.send_mail_verification_email(new_user, verification)
+
+        return Response(status=status.HTTP_200_OK)
+
+
+class TokenView:
+    def get_token(self):
+        token_hex = self.request.data.get("token")
         if token_hex is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise APIValidationError(["token is required."])
 
         try:
             token = uuid.UUID(hex=token_hex)
         except ValueError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise APIValidationError(["format of token is invalid."])
+
+        return token
+
+
+class VerifyEmailVerificationToken(TokenView, GenericAPIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request: Request):
+        token = self.get_token()
 
         try:
             verification = EmailVerificationToken.objects.get(token=token)
         except EmailVerificationToken.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.TokenInvalid
 
         if verification.verified_at is not None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.TokenInvalid
 
         verification.verified_at = datetime.now(UTC)
         verification.save()
@@ -211,28 +173,28 @@ class ResendEmailVerificationMail(GenericAPIView):
         try:
             validate_email(email)
         except ValidationError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.EmailInvalid
 
-        locale = get_first_language(request)
+        locale = utils.get_first_language(request)
 
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            send_mail_no_account(email, locale)
+            utils.send_mail_no_account(email, locale)
             return Response(status=status.HTTP_200_OK)
 
         if user.is_active:
-            send_mail_already_verified(user, locale)
+            utils.send_mail_already_verified(user, locale)
             return Response(status=status.HTTP_200_OK)
 
         try:
             verification = EmailVerificationToken.objects.get(user=user)
         except EmailVerificationToken.DoesNotExist:
-            send_mail_already_verified(user, locale)
+            utils.send_mail_already_verified(user, locale)
             return Response(status=status.HTTP_200_OK)
 
         if verification.verified_at is not None:
-            send_mail_already_verified(user, locale)
+            utils.send_mail_already_verified(user, locale)
             return Response(status=status.HTTP_200_OK)
 
         now = datetime.now(UTC)
@@ -248,7 +210,7 @@ class ResendEmailVerificationMail(GenericAPIView):
                     status=status.HTTP_425_TOO_EARLY,
                 )
 
-        send_mail_verification_email(verification.user, verification)
+        utils.send_mail_verification_email(verification.user, verification)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -257,7 +219,7 @@ class PasswordRecoveryAnonRateThrottle(AnonRateThrottle):
     rate = "5/minute"  # up to 5 times a hour
 
 
-class PasswordRecoveryView(GenericAPIView):
+class PasswordRecoveryView(TokenView, GenericAPIView):
     permission_classes = (AllowAny,)
 
     # generate a token
@@ -271,14 +233,14 @@ class PasswordRecoveryView(GenericAPIView):
         try:
             validate_email(email)
         except ValidationError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.EmailInvalid
 
-        locale = get_first_language(request)
+        locale = utils.get_first_language(request)
 
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            send_mail_no_account(email, locale)
+            utils.send_mail_no_account(email, locale)
             return Response(status=status.HTTP_200_OK)
 
         tokens = PasswordRecoveryToken.objects.filter(user=user)
@@ -290,35 +252,25 @@ class PasswordRecoveryView(GenericAPIView):
         token.expires_at = token.created_at + settings.PASSWORD_RECOVERY_TOKEN_TTL
         token.save()
 
-        send_mail_password_recovery(user, token.link, locale)
+        utils.send_mail_password_recovery(user, token.link, locale)
 
         return Response(status=status.HTTP_200_OK)
 
     # use the token
     def patch(self, request: Request):
-        token_hex = request.data.get("token")
-        if token_hex is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            token_uuid = uuid.UUID(hex=token_hex)
-        except ValueError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        token_uuid = self.get_token()
 
         try:
             token = PasswordRecoveryToken.objects.get(token=token_uuid)
         except PasswordRecoveryToken.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.TokenInvalid
 
         if token.expires_at < datetime.now(UTC):
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.TokenInvalid
 
         new_password = request.data.get("new_password")
-        if new_password is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        if len(new_password) < 8:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if new_password is None or len(new_password) < 8:
+            raise exceptions.PasswordInvalid
 
         token.user.set_password(new_password)
         token.user.save()
