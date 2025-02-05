@@ -40,7 +40,6 @@ const TaskDetailMobile = ({ closeDetail }) => {
         <TaskCommonDetailMobile
             newTask={newTask}
             setNewTask={setNewTask}
-            projectType={projectType}
             color={color}
             onClose={closeDetail}
         />
