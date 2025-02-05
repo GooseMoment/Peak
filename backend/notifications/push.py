@@ -52,7 +52,7 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
                 parent = notification.reaction.quote.content
             else:
                 parent = notification.reaction.task.name
-                
+
             t = t[Notification.FOR_REACTION]
             data["title"] = t["title"].format(
                 emoji=notification.reaction.emoji.name, username=related_user.username
