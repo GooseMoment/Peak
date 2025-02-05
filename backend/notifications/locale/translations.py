@@ -8,8 +8,9 @@ translations = {
     "ko": KO,
 }
 
+
 def get_translations(locale: str):
     if locale in translations:
         return translations[locale]
-    
+
     return translations[settings.LANGUAGE_CODE]

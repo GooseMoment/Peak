@@ -11,6 +11,7 @@ const ErrorPage = () => {
 
     useEffect(() => {
         if (import.meta.env.DEBUG == 1) {
+            // eslint-disable-next-line no-console -- execute only in DEBUG
             console.log(error)
         }
     }, [error])

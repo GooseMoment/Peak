@@ -1,46 +1,24 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import styled from "styled-components"
 
-import LoaderCircle from "@components/common/LoaderCircle"
+import { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
 
-const ReminderContents = ({ item, reminders, handleReminder, ReminderID }) => {
-    const [isLoading, setIsLoading] = useState(true)
+const ReminderContents = ({ item, reminders, handleReminder }) => {
     const [isHovering, setIsHovering] = useState(false)
-
-    const clickReminder = (delta) => {
-        return async () => {
-            if (isLoading) {
-                return
-            }
-            if (handleReminder(delta)) {
-                //알람 설정을 할 수 없을 때
-                setIsLoading(false)
-                return
-            }
-            setIsLoading(true)
-        }
-    }
-
-    useEffect(() => {
-        setIsLoading(false)
-    }, [reminders])
 
     return (
         <ItemBlock>
             {item.icon}
             <ItemText
-                onClick={clickReminder(item.delta)}
+                onClick={() => handleReminder(item.delta)}
                 onMouseOver={() => setIsHovering(true)}
-                onMouseOut={() => setIsHovering(false)}
-            >
+                onMouseOut={() => setIsHovering(false)}>
                 {item.content}
             </ItemText>
-            {isLoading ? (
-                <LoaderCircle />
-            ) : ReminderID ? (
+            {reminders.includes(item.delta) ? (
                 isHovering ? (
                     <FeatherIcon icon="x" />
                 ) : (
@@ -62,6 +40,10 @@ const ItemBlock = styled.div`
         stroke: ${(p) => p.theme.project.danger};
         stroke-width: 3;
         top: 0em;
+    }
+
+    ${ifMobile} {
+        margin-left: 0.1em;
     }
 `
 

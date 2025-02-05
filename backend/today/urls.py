@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path("assigned", views.TaskTodayAssignedList.as_view()),
+    path("assigned/grouped", views.TaskTodayAssignedGrouped.as_view()),
     path("due", views.TaskTodayDueList.as_view()),
     path("overdue", views.TaskOverdueList.as_view()),
 ]

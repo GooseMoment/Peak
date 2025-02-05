@@ -1,13 +1,13 @@
-import { Fragment, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 
 import styled, { css } from "styled-components"
 
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import Detail from "@components/project/common/Detail"
+import CommonCalendar from "@components/common/CommonCalendar"
 import QuickDue from "@components/project/due/QuickDue"
 import RepeatDetail from "@components/project/due/RepeatDetail"
 
 import { useClientTimezone } from "@utils/clientSettings"
+import { ifMobile } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
 import { rotateToUnder, rotateToUp } from "@assets/keyframes"
@@ -17,13 +17,14 @@ import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const Assigned = ({ setFunc }) => {
+const Assigned = ({ setFunc, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
-
-    const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
-
     const tz = useClientTimezone()
-    const { closeModal } = useModalWindowCloseContext()
+
+    const today = DateTime.now().setZone(tz)
+
+    const [selectedDate, setSelectedDate] = useState(today.toISODate())
+    const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
     const handleAdditionalComp = (name) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
@@ -36,19 +37,26 @@ const Assigned = ({ setFunc }) => {
         }
     }
 
-    const today = DateTime.now().setZone(tz)
-
     const changeAssignedDate = (set) => {
         return async () => {
-            const date = today.plus(set)
             let assigned_at = null
-            if (!(set === null)) {
+
+            if (set !== null) {
+                const date = today.plus(set)
                 assigned_at = date.toISODate()
             }
             setFunc({ assigned_at })
-            closeModal()
+            onClose()
         }
     }
+
+    useEffect(() => {
+        setFunc({
+            assigned_at: DateTime.fromISO(selectedDate, {
+                zone: tz,
+            }).toISODate(),
+        })
+    }, [selectedDate])
 
     const addComponent = [
         {
@@ -61,7 +69,15 @@ const Assigned = ({ setFunc }) => {
             name: "calendar",
             display: t("due.calendar"),
             icon: "calendar",
-            component: <div>달력입니다</div>,
+            component: (
+                <CalendarWrapper>
+                    <CommonCalendar
+                        isRangeSelectMode={false}
+                        selectedStartDate={selectedDate}
+                        setSelectedStartDate={setSelectedDate}
+                    />
+                </CalendarWrapper>
+            ),
         },
         {
             name: "repeat",
@@ -71,32 +87,27 @@ const Assigned = ({ setFunc }) => {
         },
     ]
 
-    return (
-        <Detail title={t("assigned.title")} onClose={closeModal} special={true}>
-            {addComponent.map((comp, i) => (
-                <Fragment key={comp.name}>
-                    <FlexCenterBox>
-                        <IndexBox
-                            $start={i === 0}
-                            $end={i === 2}
-                            onClick={() => handleAdditionalComp(comp.name)}>
-                            <EmptyBlock />
-                            <Box>
-                                <FeatherIcon icon={comp.icon} />
-                                {comp.display}
-                            </Box>
-                            <CollapseButton
-                                $collapsed={isAdditionalComp === comp.name}>
-                                <FeatherIcon icon="chevron-down" />
-                            </CollapseButton>
-                        </IndexBox>
-                    </FlexCenterBox>
-                    {isAdditionalComp === comp.name && comp.component}
-                    {i !== 2 && <CLine />}
-                </Fragment>
-            ))}
-        </Detail>
-    )
+    return addComponent.map((comp, i) => (
+        <Fragment key={comp.name}>
+            <FlexCenterBox>
+                <IndexBox
+                    $start={i === 0}
+                    $end={i === 2}
+                    onClick={() => handleAdditionalComp(comp.name)}>
+                    <EmptyBlock />
+                    <Box>
+                        <FeatherIcon icon={comp.icon} />
+                        {comp.display}
+                    </Box>
+                    <CollapseButton $collapsed={isAdditionalComp === comp.name}>
+                        <FeatherIcon icon="chevron-down" />
+                    </CollapseButton>
+                </IndexBox>
+            </FlexCenterBox>
+            {isAdditionalComp === comp.name && comp.component}
+            {i !== 2 && <CLine />}
+        </Fragment>
+    ))
 }
 
 const FlexCenterBox = styled.div`
@@ -104,12 +115,20 @@ const FlexCenterBox = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    ${ifMobile} {
+        width: 100%;
+    }
 `
 
 const CLine = styled.div`
     border-top: thin solid ${(p) => p.theme.project.lineColor};
     width: 90%;
     margin: 0.8em;
+
+    ${ifMobile} {
+        width: 95%;
+    }
 `
 
 const IndexBox = styled.div`
@@ -126,6 +145,7 @@ const IndexBox = styled.div`
     padding: 0em 0.5em;
     margin-top: ${(props) => (props.$start ? 0.8 : 0)}em;
     margin-bottom: ${(props) => (props.$end ? 0.8 : 0)}em;
+    cursor: pointer;
 
     & svg {
         margin-right: unset;
@@ -134,7 +154,10 @@ const IndexBox = styled.div`
     &:hover {
         font-weight: bolder;
         color: ${(p) => p.theme.goose};
-        cursor: pointer;
+    }
+
+    ${ifMobile} {
+        width: 95%;
     }
 `
 
@@ -161,6 +184,12 @@ const CollapseButton = styled.div`
                 animation: ${rotateToUnder} 0.3s ${cubicBeizer} forwards;
             }
         `}
+`
+
+const CalendarWrapper = styled.div`
+    margin: 0.4em auto;
+    width: 90%;
+    font-size: 0.8em;
 `
 
 export default Assigned

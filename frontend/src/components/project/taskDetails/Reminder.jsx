@@ -1,12 +1,4 @@
-import { useMutation } from "@tanstack/react-query"
-
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import Detail from "@components/project/common/Detail"
 import ReminderContents from "@components/project/taskDetails/ReminderContents"
-
-import { deleteReminder, postReminder } from "@api/notifications.api"
-
-import queryClient from "@queries/queryClient"
 
 import before_1D from "@assets/project/reminder/before_1D.svg"
 import before_1h from "@assets/project/reminder/before_1h.svg"
@@ -18,58 +10,19 @@ import before_D from "@assets/project/reminder/before_D.svg"
 
 import { useTranslation } from "react-i18next"
 
-const Reminder = ({ task }) => {
+const Reminder = ({ task, setFunc }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.reminder" })
 
-    const { closeModal } = useModalWindowCloseContext()
-
-    const postMutation = useMutation({
-        mutationFn: (data) => {
-            return postReminder(data)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["task", { taskID: task.id }],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: task.drawer }],
-            })
-        },
-    })
-
-    const deleteMutation = useMutation({
-        mutationFn: (reminderId) => {
-            return deleteReminder(reminderId)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["task", { taskID: task.id }],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: task.drawer }],
-            })
-        },
-    })
-
-    const getReminderID = (delta) => {
-        for (let i = 0; i < task.reminders.length; i++) {
-            if (task.reminders[i].delta === delta) {
-                return task.reminders[i].id
-            }
-        }
-        return null
-    }
-
     const handleReminder = (delta) => {
-        const id = getReminderID(delta)
-        if (id) {
-            deleteMutation.mutate(id)
+        if (task.reminders.includes(delta)) {
+            setFunc({
+                reminders: task.reminders.filter(
+                    (currentDetla) => currentDetla !== delta,
+                ),
+            })
             return
         }
-        postMutation.mutate({
-            task: task.id,
-            delta: delta,
-        })
+        setFunc({ reminders: [...task.reminders, delta] })
     }
 
     const items = [
@@ -112,19 +65,14 @@ const Reminder = ({ task }) => {
         },
     ]
 
-    return (
-        <Detail title={t("title")} onClose={closeModal}>
-            {items.map((item) => (
-                <ReminderContents
-                    key={item.id}
-                    item={item}
-                    reminders={task.reminders}
-                    handleReminder={handleReminder}
-                    ReminderID={getReminderID(item.delta)}
-                />
-            ))}
-        </Detail>
-    )
+    return items.map((item) => (
+        <ReminderContents
+            key={item.id}
+            item={item}
+            reminders={task.reminders}
+            handleReminder={handleReminder}
+        />
+    ))
 }
 
 export default Reminder

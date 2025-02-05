@@ -66,16 +66,14 @@ const Requests = ({ user }) => {
                             state={states.danger}
                             onClick={rejection.mutate}
                             loading={rejection.isPending}
-                            disabled={isPending}
-                        >
+                            disabled={isPending}>
                             {t("button_follow_request_reject")}
                         </Button>
                         <Button
                             state={states.success}
                             onClick={acceptance.mutate}
                             loading={acceptance.isPending}
-                            disabled={isPending}
-                        >
+                            disabled={isPending}>
                             {t("button_follow_request_accept")}
                         </Button>
                     </ButtonGroup>

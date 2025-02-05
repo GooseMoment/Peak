@@ -46,6 +46,8 @@ const StyledSelect = styled.select`
     line-height: 1.5em;
     padding: 0.5em 3.5em 0.5em 1em;
 
+    max-width: 100%;
+
     margin: 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;

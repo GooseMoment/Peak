@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom"
 
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 
 import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"
 import taskCalculation from "@components/tasks/utils/taskCalculation"
 
-import alarmclock from "@assets/project/alarmclock.svg"
-import hourglass from "@assets/project/hourglass.svg"
+import { ifMobile } from "@utils/useScreenType"
+
+import AlarmClock from "@assets/project/AlarmClock"
+import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -38,20 +40,22 @@ const TaskFrame = ({
 
     return (
         <Box>
-            <Priority
-                hasDate={hasDate}
-                priority={task.priority}
-                completed={task.completed_at}
-            />
             <Content>
                 <CircleName>
-                    <TaskCircle
-                        completed={task.completed_at}
-                        color={color}
-                        hasDate={hasDate}
-                        isLoading={isLoading}
-                        onClick={toComplete}
-                    />
+                    <Icons>
+                        <Priority
+                            hasDate={hasDate}
+                            priority={task.priority}
+                            completed={task.completed_at}
+                        />
+                        <TaskCircle
+                            completed={task.completed_at}
+                            color={color}
+                            hasDate={hasDate}
+                            isLoading={isLoading}
+                            onClick={toComplete}
+                        />
+                    </Icons>
                     {taskDetailPath ? (
                         <NameLink draggable="false" to={taskDetailPath}>
                             {TaskName}
@@ -80,14 +84,14 @@ const TaskFrame = ({
                                 $completed={task.completed_at}
                                 $isSocial={isSocial}
                                 $isOutOfDue={isOutOfDue}>
-                                <img draggable="false" src={hourglass} />
+                                <Hourglass />
                                 {completedAt ? due : calculate_due}
                             </DueDate>
                         )}
                         {isSocial || task.reminders
                             ? task.reminders?.length !== 0 && (
                                   <Reminder $completed={task.completed_at}>
-                                      <img draggable="false" src={alarmclock} />
+                                      <AlarmClock />
                                       {task.reminders?.length}
                                   </Reminder>
                               )
@@ -119,27 +123,39 @@ const NameLink = styled(Link)`
 
 const TaskNameBox = styled.div`
     display: inline-block;
-
-    font-style: normal;
     font-size: 1.1em;
+    font-style: normal;
     color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
+    overflow: hidden;
     line-height: 1.3em;
-
     min-width: 0;
+
+    ${ifMobile} {
+        white-space: normal;
+        word-wrap: normal;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
 `
 
 const CircleName = styled.div`
     display: flex;
 `
 
+const Icons = styled.div`
+    display: flex;
+    align-items: center;
+`
+
 const Dates = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 0.2em;
-    margin-left: 1.8em;
+    margin-top: 0.4em;
+    margin-left: 3em;
 `
 
 const AssignedDate = styled.div`
@@ -188,27 +204,18 @@ const DueDate = styled.div`
                 ? props.theme.project.danger
                 : props.theme.project.dueColor};
 
-    & img {
+    & svg {
         width: 1em;
         height: 1em;
         margin-right: 0.2em;
-
-        ${(props) =>
+        stroke: ${(props) =>
             props.$isSocial
-                ? css`
-                      filter: ${(p) => p.theme.project.imgColor};
-                  `
+                ? props.theme.textColor
                 : props.$completed
-                  ? css`
-                        filter: ${(p) => p.theme.project.imgGreyColor};
-                    `
+                  ? props.theme.grey
                   : props.$isOutOfDue
-                    ? css`
-                          filter: ${(p) => p.theme.project.imgDangerColor};
-                      `
-                    : css`
-                          filter: ${(p) => p.theme.project.imgDueColor};
-                      `};
+                    ? props.theme.project.danger
+                    : props.theme.project.dueColor};
     }
 `
 
@@ -223,19 +230,15 @@ const Reminder = styled.div`
             ? props.theme.grey
             : props.theme.project.reminderColor};
 
-    & img {
+    & svg {
         width: 1em;
         height: 1em;
         margin-right: 0.2em;
         top: 0;
-        filter: ${(props) =>
+        stroke: ${(props) =>
             props.$completed
-                ? css`
-                      ${(p) => p.theme.project.imgGreyColor};
-                  `
-                : css`
-                      ${(p) => p.theme.project.imgReminderColor};
-                  `};
+                ? props.theme.grey
+                : props.theme.project.reminderColor};
     }
 `
 

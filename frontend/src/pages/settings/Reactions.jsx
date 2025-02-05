@@ -1,8 +1,4 @@
-import Section, {
-    Description,
-    Name,
-    Value,
-} from "@components/settings/Section"
+import Section, { Description, Name, Value } from "@components/settings/Section"
 
 import { useTranslation } from "react-i18next"
 

@@ -9,13 +9,17 @@ import StartPage from "@pages/StartPage"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 
+import { signOut } from "@api/auth.api"
 import { getToken } from "@api/client"
-import { signOut } from "@api/users.api"
 
 import { lazily } from "react-lazily"
 
 const SearchPage = lazy(() => import("@pages/SearchPage"))
 const HomePage = lazy(() => import("@pages/HomePage"))
+const AnnouncementListPage = lazy(() => import("@pages/AnnouncementListPage"))
+const AnnouncementDetailPage = lazy(
+    () => import("@pages/AnnouncementDetailPage"),
+)
 const NotificationsPage = lazy(() => import("@pages/NotificationsPage"))
 const TodayPage = lazy(() => import("@pages/TodayPage"))
 const ProjectPage = lazy(() => import("@pages/ProjectPage"))
@@ -30,6 +34,10 @@ const { SocialRedirector, SocialFollowingPage, SocialExplorePage } = lazily(
 )
 
 const UserPage = lazy(() => import("@pages/UserPage"))
+
+const InstallInstructionPage = lazy(
+    () => import("@pages/docs/InstallInstructionPage"),
+)
 
 const redirectIfSignedIn = () => {
     if (getToken()) {
@@ -122,6 +130,14 @@ const routes = [
                 element: <HomePage />,
             },
             {
+                path: "announcements",
+                element: <AnnouncementListPage />,
+            },
+            {
+                path: "announcements/:id",
+                element: <AnnouncementDetailPage />,
+            },
+            {
                 path: "social",
                 children: [
                     {
@@ -170,6 +186,21 @@ const routes = [
                 path: "sign_out",
                 loader: signOut,
                 element: null,
+            },
+        ],
+    },
+    {
+        path: "/docs",
+        async lazy() {
+            const { default: DocsLayout } = await import(
+                "@containers/DocsLayout"
+            )
+            return { element: <DocsLayout /> }
+        },
+        children: [
+            {
+                path: "install-instruction",
+                element: <InstallInstructionPage />,
             },
         ],
     },

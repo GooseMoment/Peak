@@ -5,17 +5,15 @@ import { skeletonCSS } from "@assets/skeleton"
 export const SkeletonDueTasks = ({ taskCount }) => {
     const skeletonCount = taskCount > 10 ? 10 : taskCount
 
-    return (
-        [...Array(skeletonCount)].map((e, i) => (
-            <SkeletonDueTasksBox key={i}>
-                <TaskBox>
-                    <Circle />
-                    <Bar />
-                </TaskBox>
-                <DueBar />
-            </SkeletonDueTasksBox>
-        ))
-    )
+    return [...Array(skeletonCount)].map((e, i) => (
+        <SkeletonDueTasksBox key={i}>
+            <TaskBox>
+                <Circle />
+                <Bar />
+            </TaskBox>
+            <DueBar />
+        </SkeletonDueTasksBox>
+    ))
 }
 
 const SkeletonDueTasksBox = styled.div`

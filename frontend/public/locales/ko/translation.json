@@ -33,9 +33,7 @@
         "title": "프로젝트",
         "type_regular": "상시",
         "type_goal": "목표",
-        "button_add_project": "새 프로젝트 추가",
-        "completed_tasks": "완료",
-        "uncompleted_tasks": "미완"
+        "button_add_project": "새 프로젝트 추가"
     },
     "today": {
         "title": "오늘",
@@ -55,20 +53,14 @@
         "button_load_more": "더보기",
         "button_add_task": "새 작업 추가",
         "button_close_add_task": "닫힘",
+        "button_add": "추가하기",
+        "button_save": "수정",
         "loading": "로딩 중",
+        "none": "없음",
         "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요 😢",
-        "error_load_task": "작업을 불러오지 못했어요 😢",
-        "create": {
-            "name_placeholder": "이름을 입력하세요",
-            "button_add": "추가하기",
-            "none": "없음",
-            "task_create_success": "새 작업을 생성했습니다.",
-            "task_create_error": "작업 생성에 실패하였습니다.",
-            "task_create_no_name": "작업의 이름을 적어주세요."
-        },
+        "name_placeholder": "이름을 입력하세요",
         "edit": {
-            "display": "수정",
-            "name_change_success": "이름을 변경했습니다."
+            "display": "수정"
         },
         "delete": {
             "display": "삭제",
@@ -76,14 +68,11 @@
             "button_done": "닫기",
             "alert_project_title": "\"{{project_name}}\" 프로젝트를",
             "alert_drawer_title": "\"{{drawer_name}}\" 서랍을",
-            "alert_task_title": "\"{{task_name}}\" 작업을",
             "alert_question": "{{title}} 삭제하시겠습니까?",
             "project_delete_success": "\"{{project_name}}\" 프로젝트를 삭제했습니다.",
             "project_delete_error": "\"{{project_name}}\" 프로젝트 삭제에 실패했습니다.",
             "drawer_delete_success": "\"{{drawer_name}}\" 서랍을 삭제했습니다.",
-            "drawer_delete_error": "\"{{drawer_name}}\" 서랍 삭제에 실패했습니다.",
-            "task_delete_success": "\"{{task_name}}\" 작업을 삭제했습니다.",
-            "task_delete_error": "\"{{task_name}}\" 작업 삭제에 실패했습니다."
+            "drawer_delete_error": "\"{{drawer_name}}\" 서랍 삭제에 실패했습니다."
         },
         "sort": {
             "title": "{{title}} 목록 정렬 기준",
@@ -106,6 +95,7 @@
         "none": "없음",
         "button_add": "생성",
         "button_save": "저장",
+        "name_placeholder": "이름을 입력하세요",
         "created_project": "새 프로젝트를 생성했습니다.",
         "created_project_error": "프로젝트 생성에 실패했습니다.",
         "created_drawer": "새 서랍을 생성했습니다.",
@@ -116,24 +106,23 @@
         "name_required": "이름을 지어주세요.",
         "color": {
             "title": "색깔 설정",
-            "theme1": "테마1",
-            "theme2": "테마2",
-            "orange": "오렌지",
-            "peach": "피치",
-            "pink": "핑크",
-            "dark_yellow": "진노랑",
-            "yellow": "노랑",
-            "light_green": "연두",
-            "turquoise": "청록",
-            "dark_blue": "남색",
-            "red": "빨강",
-            "brown": "갈색",
-            "green": "녹색",
-            "sky_blue": "하늘",
-            "light_purple": "연보라",
-            "purple_blue": "보라파랑",
-            "blue": "파랑",
-            "purple": "보라"
+            "theme1": "기본",
+            "red": "빨간색",
+            "red_orange": "레드오렌지",
+            "orange": "주황색",
+            "yellow": "노란색",
+            "bright_sky_blue": "밝은 하늘색",
+            "blue": "파란색",
+            "magenta": "마젠타",
+            "violet": "보라색",
+            "pink": "분홍색",
+            "hot_pink": "핫핑크",
+            "light_green": "연두색",
+            "mint": "민트색",
+            "olive": "올리브색",
+            "dark_violet": "어두운 보라색",
+            "deep_blue": "딥블루",
+            "deep_indigo": "딥인디고"
         },
         "privacy": {
             "title": "공개 범위 설정",
@@ -156,6 +145,23 @@
         "name_placeholder": "작업의 이름을 입력하세요.",
         "name_change_success": "이름을 변경했습니다.",
         "none": "없음",
+        "error_load_task": "작업을 불러오지 못했어요 😢",
+        "edit": {
+            "edit_title": "작업 수정",
+            "edit_success": "변경 사항을 저장했습니다.",
+            "edit_error": "작업 수정에 실패하였습니다.",
+            "create_title": "작업 생성",
+            "create_success": "새 작업을 생성했습니다.",
+            "create_error": "작업 생성에 실패하였습니다.",
+            "create_no_name": "작업의 이름을 적어주세요.",
+            "button_add": "생성",
+            "button_save": "저장"
+        },
+        "delete": {
+            "alert_task_title": "\"{{task_name}}\" 작업을",
+            "delete_success": "\"{{task_name}}\" 작업을 삭제했습니다.",
+            "delete_error": "\"{{task_name}}\" 작업 삭제에 실패했습니다."
+        },
         "assigned": {
             "name": "할당 날짜",
             "title": "할당 날짜 설정"
@@ -263,12 +269,16 @@
         "projects_empty": "프로젝트가 없습니다.",
         "button_edit_profile": "프로필 수정",
         "error_user_not_found": "찾을 수 없는 유저입니다.",
-        "following_list_title": "@{{username}} 님의 팔로잉 목록",
-        "following_list_empty": "아무 것도 없습니다.",
-        "following_list_error": "팔로잉 목록을 불러올 수 없습니다.",
-        "follower_list_title": "@{{username}} 님의 팔로워 목록",
-        "follower_list_empty": "아무 것도 없습니다.",
-        "follower_list_error": "팔로워 목록을 불러올 수 없습니다."
+        "followings_list": {
+            "title": "@{{username}} 님의 팔로잉 목록",
+            "empty": "아무 것도 없습니다.",
+            "error": "팔로잉 목록을 불러올 수 없습니다."
+        },
+        "followers_list": {
+            "title": "@{{username}} 님의 팔로워 목록",
+            "empty": "아무 것도 없습니다.",
+            "error": "팔로워 목록을 불러올 수 없습니다."
+        }
     },
     "follow_button": {
         "button_follow": "팔로우",
@@ -362,5 +372,38 @@
         "recovery_error_password_length": "암호는 8자 이상이어야 합니다.",
         "recovery_error_password_unmatch": "새 암호가 서로 다릅니다.",
         "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다."
+    },
+    "social": {
+        "following_title": "팔로잉",
+        "explore_title": "탐험",
+        "log_preview_completed": "완료!",
+        "log_details": {
+            "no_content": "작업이 없습니다."
+        },
+        "quote": {
+            "empty_self_quote": "오늘의 한마디를 남겨주세요.",
+            "empty_others_quote": "아직 상대방이 작성하지 않았습니다."
+        },
+        "emoji_modal": {
+            "searchbar": "이모지 찾기"
+        },
+        "explore": {
+            "searchbar": "새로운 인연을 찾아보세요.",
+            "no_result": "당신이 찾는 사람이 없습니다 😢",
+            "suggestion": "새로운 사람과 새로운 인연은 어떤가요?"
+        }
+    },
+    "search": {
+        "title": "검색",
+        "filter_button": {
+            "search_terms": "검색어",
+            "project": "프로젝트",
+            "drawer": "서랍",
+            "assigned_at": "할당 날짜",
+            "completed_at": "완수 날짜",
+            "privacy": "공개 범위",
+            "memo": "메모"
+        },
+        "no_result": "조건에 맞는 결과를 찾을 수 없습니다 🤔"
     }
 }

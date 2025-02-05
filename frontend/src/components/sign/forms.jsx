@@ -17,7 +17,7 @@ import {
     signIn,
     signUp,
     verifyEmail,
-} from "@api/users.api"
+} from "@api/auth.api"
 
 import sleep from "@utils/sleep"
 
@@ -309,13 +309,6 @@ export const EmailVerificationForm = () => {
         queryFn: () => verifyEmail(token),
         enabled: !!token,
         refetchOnWindowFocus: false,
-        retry: (count, err) => {
-            if (err?.response?.status === 400) {
-                return false
-            }
-
-            return count < 3
-        },
     })
 
     if (isPending) {

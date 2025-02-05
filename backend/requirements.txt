@@ -1,4 +1,4 @@
-Django==4.2.16
+Django==4.2.18
 django-cors-headers==4.3.1
 Faker==24.0.0
 django-stubs==4.2.7
@@ -20,4 +20,4 @@ pillow==10.3.0
 django-redis==5.4.0
 pywebpush==2.0.0
 django-rest-knox==4.2.0
-pytz==2024.1
+marko==2.1.2
