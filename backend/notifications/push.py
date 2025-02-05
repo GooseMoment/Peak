@@ -46,15 +46,12 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
 
         case Notification.FOR_REACTION:
             parent: str = ""
+            related_user = notification.reaction.user
 
             if notification.reaction.parent_type == Reaction.FOR_QUOTE:
-                related_user = notification.reaction.quote.user
                 parent = notification.reaction.quote.content
             else:
-                related_user = notification.reaction.task.user
                 parent = notification.reaction.task.name
-
-            print("parent:", parent)
 
             t = t[Notification.FOR_REACTION]
             data["title"] = t["title"].format(
