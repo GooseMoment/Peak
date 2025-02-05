@@ -23,7 +23,7 @@ class EmailVerificationToken(models.Model):
 
     def __str__(self) -> str:
         return f"EmailVerficationToken for {self.user}"
-    
+
     @property
     def link(self) -> str:
         return f"{settings.SCHEME}{settings.WEB_HOSTNAME}/sign/verification/?token={self.token.hex}"
@@ -45,7 +45,7 @@ class PasswordRecoveryToken(models.Model):
 
     def __str__(self) -> str:
         return f"PasswordRecoveryToken for {self.user}"
-    
+
     @property
     def link(self) -> str:
         return f"{settings.SCHEME}{settings.WEB_HOSTNAME}/sign/password-recovery/?token={self.token.hex}"

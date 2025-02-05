@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Announcement, Heart
 
+
 class AnnouncementSerializer(serializers.ModelSerializer):
     hearts_count = serializers.SerializerMethodField()
 
@@ -9,4 +10,12 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Announcement
-        fields = ("id", "created_at", "updated_at", "hearts_count", "lang", "title", "content", )
+        fields = (
+            "id",
+            "created_at",
+            "updated_at",
+            "hearts_count",
+            "lang",
+            "title",
+            "content",
+        )

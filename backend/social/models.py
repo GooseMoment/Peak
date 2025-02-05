@@ -6,10 +6,12 @@ from tasks.models import Task
 
 import os
 
+
 def get_file_path(instance, filename):
-    ext = filename.split('.')[-1]
+    ext = filename.split(".")[-1]
     filename = "%s.%s" % (instance.name, ext)
-    return os.path.join('emojis', filename)
+    return os.path.join("emojis", filename)
+
 
 class Emoji(Base):
     name = models.CharField(max_length=128)
@@ -21,9 +23,10 @@ class Emoji(Base):
 
     def __str__(self) -> str:
         return f":{self.name}:"
-    
+
     class Meta:
         db_table = "emojis"
+
 
 class Peck(Base):
     user = models.ForeignKey(
@@ -38,23 +41,25 @@ class Peck(Base):
 
     def __str__(self) -> str:
         return f"{self.count} pecks by {self.user} → '{self.task.name}'"
-    
+
     class Meta:
         db_table = "pecks"
 
+
 class Quote(Base):
     user = models.ForeignKey(
-        User, 
+        User,
         on_delete=models.CASCADE,
     )
     content = models.TextField()
     date = models.DateTimeField(null=True, blank=True)
-    
+
     def __str__(self) -> str:
         return f"Quote of {self.date} by {self.user}"
-    
+
     class Meta:
         db_table = "quotes"
+
 
 class Reaction(Base):
     FOR_TASK = "task"
@@ -91,9 +96,10 @@ class Reaction(Base):
 
     def __str__(self) -> str:
         return f"{self.emoji} by {self.user} → {self.quote or self.task}"
-    
+
     class Meta:
         db_table = "reactions"
+
 
 class Comment(Base):
     FOR_TASK = "task"
@@ -103,18 +109,13 @@ class Comment(Base):
         (FOR_TASK, "For task"),
         (FOR_QUOTE, "For quote"),
     ]
-    
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
     )
     parent_type = models.CharField(choices=COMMENT_TYPE, max_length=128)
-    task = models.ForeignKey(
-        Task,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, null=True, blank=True)
     quote = models.ForeignKey(
         Quote,
         on_delete=models.CASCADE,
@@ -125,36 +126,33 @@ class Comment(Base):
 
     def __str__(self) -> str:
         return f"Comment by {self.user} → {self.quote or self.task}"
-    
+
     class Meta:
         db_table = "comments"
 
-class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
+
+class Following(models.Model):  # Base 상속 시 id가 생기므로 models.Model 유지
     # 보내는사람
     follower = models.ForeignKey(
-        User,
-        on_delete = models.CASCADE,
-        related_name = "followings"
+        User, on_delete=models.CASCADE, related_name="followings"
     )
     # 받는사람
     followee = models.ForeignKey(
-        User,
-        on_delete = models.CASCADE,
-        related_name = "followers"
+        User, on_delete=models.CASCADE, related_name="followers"
     )
-    
+
     REQUESTED = "requested"
     ACCEPTED = "accepted"
     REJECTED = "rejected"
     CANCELED = "canceled"
-    
+
     STATUS_TYPE = [
         (REQUESTED, "request by follower"),
         (ACCEPTED, "accepted by followee"),
         (REJECTED, "rejected by followee"),
         (CANCELED, "canceled by follower"),
     ]
-    
+
     status = models.CharField(choices=STATUS_TYPE)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -168,20 +166,15 @@ class Following(models.Model): # Base 상속 시 id가 생기므로 models.Model
         db_table = "followings"
 
         constraints = [
-            models.UniqueConstraint(fields=["follower", "followee"], name="constraint_follower_followee"),
+            models.UniqueConstraint(
+                fields=["follower", "followee"], name="constraint_follower_followee"
+            ),
         ]
 
-class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유지
-    blocker = models.ForeignKey(
-        User,
-        on_delete = models.CASCADE,
-        related_name = "blockees"
-    )
-    blockee = models.ForeignKey(
-        User,
-        on_delete = models.CASCADE,
-        related_name = "blockers"
-    )
+
+class Block(models.Model):  # Base 상속 시 id가 생기므로 models.Model 유지
+    blocker = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blockees")
+    blockee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blockers")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -194,5 +187,7 @@ class Block(models.Model): # Base 상속 시 id가 생기므로 models.Model 유
         db_table = "blocks"
 
         constraints = [
-            models.UniqueConstraint(fields=["blocker", "blockee"], name="constraint_blocker_blockee"),
+            models.UniqueConstraint(
+                fields=["blocker", "blockee"], name="constraint_blocker_blockee"
+            ),
         ]

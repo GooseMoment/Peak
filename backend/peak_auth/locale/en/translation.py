@@ -59,5 +59,5 @@ If you haven't done any action, you can ignore this mail.
 
 Please do not reply to this email, as we are unable to respond from this email address.
         """,
-    }
+    },
 }

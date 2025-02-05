@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import TaskReminder, Notification, WebPushSubscription
 from api.admin import fieldset_base, readonly_fields_base
 
+
 @admin.register(TaskReminder)
 class TaskReminderAdmin(admin.ModelAdmin):
     ordering = ["created_at", "updated_at"]
@@ -40,6 +41,7 @@ class NotificationAdmin(admin.ModelAdmin):
         ),
         fieldset_base,
     ]
+
 
 @admin.register(WebPushSubscription)
 class WebPushSubscriptionAdmin(admin.ModelAdmin):

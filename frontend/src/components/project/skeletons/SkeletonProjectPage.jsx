@@ -16,7 +16,7 @@ export const SkeletonProjectPage = () => {
 }
 
 export const SkeletonInboxPage = () => {
-    <>
+    ;<>
         <ProjectTitle />
         <SkeletonInboxDrawer taskCount={15} />
     </>

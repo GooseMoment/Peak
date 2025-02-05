@@ -21,7 +21,7 @@ import { toast } from "react-toastify"
 const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
     const [commentValue, setCommentValue] = useState("")
 
-    const { data: parentComments, isFetching } = useQuery({
+    const { data: parentComments } = useQuery({
         queryKey: ["comment", parentType, parent.id],
         queryFn: () => getComment(parentType, parent.id),
     })

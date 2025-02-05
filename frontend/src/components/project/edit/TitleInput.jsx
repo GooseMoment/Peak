@@ -15,7 +15,7 @@ const TitleInput = ({ name, setName, inputRef, icon, onClose }) => {
         if (isMobile) {
             return
         }
-        
+
         if (inputRef.current) {
             inputRef.current.focus()
         }

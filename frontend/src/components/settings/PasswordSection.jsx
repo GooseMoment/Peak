@@ -101,7 +101,9 @@ const PasswordSection = () => {
                         value={newPasswordAgain}
                         onChange={(e) => setNewPasswordAgain(e.target.value)}
                     />
-                    <ButtonGroup $justifyContent="right" $margin="0em 0em 2em 0em">
+                    <ButtonGroup
+                        $justifyContent="right"
+                        $margin="0em 0em 2em 0em">
                         <Button
                             disabled={mutation.isPending}
                             loading={mutation.isPending}

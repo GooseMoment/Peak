@@ -50,10 +50,7 @@ export const SignInForm = () => {
         const password = e.target.password.value
 
         try {
-            const twoFactorAuthEnabled = await signIn(
-                email,
-                password,
-            )
+            const twoFactorAuthEnabled = await signIn(email, password)
 
             if (twoFactorAuthEnabled) {
                 return navigate("/sign/two_factor/totp")

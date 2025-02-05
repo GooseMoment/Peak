@@ -11,14 +11,15 @@ import {
     putFollowRequest,
 } from "@api/social.api"
 
-import queryClient from "@/queries/queryClient"
+import queryClient from "@queries/queryClient"
+
 import { toast } from "react-toastify"
 
 const FollowBox = ({ user }) => {
     const me = getCurrentUsername()
 
     const { data: follow } = useQuery({
-        queryKey: ["follow", user.username],
+        queryKey: ["followings", me, user.username],
         queryFn: () => getFollow(me, user.username),
         enabled: !!user,
     })
@@ -33,7 +34,7 @@ const FollowBox = ({ user }) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["follow", user.username],
+                queryKey: ["followings", me, user.username],
             })
         },
         onError: (e) => {
@@ -42,7 +43,7 @@ const FollowBox = ({ user }) => {
     })
 
     const { data: followed } = useQuery({
-        queryKey: ["followed", user.username],
+        queryKey: ["followings", user.username, me],
         queryFn: () => getFollow(user.username, me),
         enabled: !!user,
     })
@@ -57,7 +58,7 @@ const FollowBox = ({ user }) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["followed", user.username],
+                queryKey: ["followings", user.username, me],
             })
         },
         onError: (e) => {
