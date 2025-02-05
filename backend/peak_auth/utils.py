@@ -18,8 +18,8 @@ def get_first_language(request: Request):
 
 
 class Email(EmailMultiAlternatives):
-    def send(self, fail_silently: bool=False) -> int:
-        try: 
+    def send(self, fail_silently: bool = False) -> int:
+        try:
             return super().send(fail_silently)
         except gaierror:
             print("[ERROR] Unable to send email. Check out DJANGO_EMAIL_HOST in .env.")
@@ -42,7 +42,7 @@ def send_mail_verification_email(user: User, verification: EmailVerificationToke
         subject=subject,
         body=text_content,
         from_email=None,
-        to=(user.email, ),
+        to=(user.email,),
     )
 
     email.send()
@@ -62,12 +62,12 @@ def send_mail_already_verified(user: User, locale: str):
         username=user.username,
         link=link,
     )
-    
+
     email = Email(
         subject=subject,
         body=text_content,
         from_email=None,
-        to=(user.email, ),
+        to=(user.email,),
     )
 
     email.send()
@@ -84,12 +84,12 @@ def send_mail_no_account(email: str, locale: str):
         email=email,
         link=link,
     )
-    
+
     email = Email(
         subject=subject,
         body=text_content,
         from_email=None,
-        to=(email, ),
+        to=(email,),
     )
 
     email.send()
@@ -104,12 +104,12 @@ def send_mail_password_recovery(user: User, link: str, locale: str):
         username=user.username,
         link=link,
     )
-    
+
     email = Email(
         subject=subject,
         body=text_content,
         from_email=None,
-        to=(user.email, ),
+        to=(user.email,),
     )
 
     email.send()
@@ -126,13 +126,12 @@ def send_mail_already_registered(user: User, locale: str):
         email=user.email,
         link=link,
     )
-    
+
     email = Email(
         subject=subject,
         body=text_content,
         from_email=None,
-        to=(user.email, ),
+        to=(user.email,),
     )
 
     email.send()
-
