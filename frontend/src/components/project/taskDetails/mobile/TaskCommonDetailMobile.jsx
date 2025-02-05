@@ -138,7 +138,7 @@ const TaskCommonDetailMobile = ({
                     }
                 />
             }
-            blocking={false}
+            blocking={!isAlertOpen}
             onClose={onClose}>
             <TaskCommonDetailMobileBox>
                 <TaskNameInput
