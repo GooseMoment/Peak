@@ -22,7 +22,7 @@ const PrivacyIcon = ({ privacy, color, isProject }) => {
 }
 
 const ProjectPrivacyBox = styled.div`
-    margin-left: 0.8em;
+    margin-left: 0.6em;
     padding-bottom: 0.8em;
 
     & svg {
@@ -34,7 +34,8 @@ const ProjectPrivacyBox = styled.div`
 `
 
 const DrawerPrivacyBox = styled.div`
-    margin-left: 0.8em;
+    margin-bottom: 0.1em;
+    margin-left: 0.6em;
 
     & svg {
         stroke-width: 3.5px;

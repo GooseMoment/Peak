@@ -35,6 +35,7 @@ export const light = {
     secondBackgroundColor: "#F3F3F3",
     thirdBackgroundColor: "#F3F3F3", // 원래 second랑 똑같은 건 의도된건가...?
     accentColor: goose,
+    accentBackgroundColor: "#E8EEFF",
     scrollbarColor: "#FFC6C6",
     introTextColor: goose,
     introBackgroundColor: "#FFD7C7",
@@ -59,16 +60,6 @@ export const light = {
         dueColor: "#009773",
         reminderColor: "#7B2CBF",
         danger: "#FF0000",
-        imgColor:
-            "invert(6%) sepia(7%) saturate(65%) hue-rotate(314deg) brightness(100%) contrast(84%)",
-        imgGreyColor:
-            "invert(92%) sepia(0%) saturate(58%) hue-rotate(169deg) brightness(102%) contrast(70%)",
-        imgDangerColor:
-            "invert(20%) sepia(92%) saturate(7288%) hue-rotate(358deg) brightness(106%) contrast(115%)",
-        imgDueColor:
-            "invert(42%) sepia(80%) saturate(4726%) hue-rotate(148deg) brightness(94%) contrast(101%)",
-        imgReminderColor:
-            "invert(23%) sepia(38%) saturate(4190%) hue-rotate(259deg) brightness(91%) contrast(101%)",
     },
     skeleton: {
         defaultColor: "#ddd",
@@ -89,6 +80,9 @@ export const light = {
         secondBackgroundColor: "#E6E6E6",
         todayColor: white,
         hoverColor: "#FFC6C6",
+    },
+    help: {
+        addressBarShadowColor: "rgba(0, 0, 0, 0.4)",
     },
     search: {
         borderColor: black,
@@ -121,6 +115,7 @@ export const dark = {
     secondBackgroundColor: "#323232",
     thirdBackgroundColor: "#2A2A2A",
     accentColor: goose,
+    accentBackgroundColor: "#0c4a6e",
     scrollbarColor: "#4A4A4A",
     introTextColor: "#FFD7C7",
     introBackgroundColor: "#77371F",
@@ -145,16 +140,6 @@ export const dark = {
         dueColor: "#02AF6D",
         reminderColor: "#9D4EEE",
         danger: "#E05153",
-        imgColor:
-            "invert(99%) sepia(72%) saturate(487%) hue-rotate(309deg) brightness(117%) contrast(99%)",
-        imgGreyColor:
-            "invert(56%) sepia(4%) saturate(11%) hue-rotate(26deg) brightness(92%) contrast(89%)",
-        imgDangerColor:
-            "invert(40%) sepia(69%) saturate(3544%) hue-rotate(331deg) brightness(94%) contrast(86%)",
-        imgDueColor:
-            "invert(42%) sepia(93%) saturate(2201%) hue-rotate(130deg) brightness(96%) contrast(98%)",
-        imgReminderColor:
-            "invert(42%) sepia(58%) saturate(5361%) hue-rotate(253deg) brightness(93%) contrast(85%)",
     },
     skeleton: {
         defaultColor: "#2A2A2A",
@@ -175,6 +160,9 @@ export const dark = {
         secondBackgroundColor: "#292929",
         todayColor: white,
         hoverColor: "#804A30",
+    },
+    help: {
+        addressBarShadowColor: "rgba(0, 0, 0, 0.8)",
     },
     search: {
         borderColor: white,

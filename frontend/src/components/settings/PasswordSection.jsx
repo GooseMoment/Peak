@@ -73,8 +73,7 @@ const PasswordSection = () => {
             <Name>
                 {t("change_password")}
                 <ToggleButton
-                    onClick={() => setPasswordFormOpened((prev) => !prev)}
-                >
+                    onClick={() => setPasswordFormOpened((prev) => !prev)}>
                     {passwordFormOpened
                         ? t("section_close")
                         : t("section_open")}
@@ -119,8 +118,7 @@ const PasswordSection = () => {
                                     loading={mutation.isPending}
                                     form={buttonForms.filled}
                                     state={states.danger}
-                                    type="submit"
-                                >
+                                    type="submit">
                                     {t("button_change")}
                                 </Button>
                             </ButtonGroup>

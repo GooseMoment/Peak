@@ -1,11 +1,13 @@
-import { styled, css } from "styled-components"
-import { rotateToUp, rotateToUnder, cubicBeizer } from "@assets/keyframes"
+import { css, styled } from "styled-components"
+
+import { cubicBeizer, rotateToUnder, rotateToUp } from "@assets/keyframes"
+
 import FeatherIcon from "feather-icons-react"
 
 const CollapseButton = ({ collapsed, handleCollapsed }) => {
     return (
         <CollapseButtonBox $collapsed={collapsed}>
-            <FeatherIcon icon="chevron-down" onClick={handleCollapsed}/>
+            <FeatherIcon icon="chevron-down" onClick={handleCollapsed} />
         </CollapseButtonBox>
     )
 }

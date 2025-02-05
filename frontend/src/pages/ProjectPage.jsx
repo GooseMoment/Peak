@@ -24,6 +24,7 @@ import { getDrawersByProject } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
 
 import handleToggleContextMenu from "@utils/handleToggleContextMenu"
+import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
@@ -252,7 +253,7 @@ const ProjectPage = () => {
                 </ModalWindow>
             )}
             <Suspense key="project-page" fallback={<ModalLoader />}>
-                <Outlet context={[id, color]} />
+                <Outlet context={[id, project.type, color]} />
             </Suspense>
         </>
     )
@@ -272,10 +273,17 @@ const PageTitleBox = styled.div`
 const Icons = styled.div`
     display: flex;
     align-items: center;
+    gap: 1em;
+    margin-bottom: 1em;
+    margin-right: 1em;
 
     & svg {
         cursor: pointer;
-        margin-left: 1em;
+    }
+
+    ${ifMobile} {
+        margin-right: 0;
+        gap: 0.5em;
     }
 `
 

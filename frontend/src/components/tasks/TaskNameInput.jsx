@@ -5,16 +5,15 @@ import styled from "styled-components"
 import TaskCircle from "@components/tasks/TaskCircle"
 
 import { useTranslation } from "react-i18next"
-import { toast } from "react-toastify"
 
 const TaskNameInput = ({
     task,
-    setFunc,
+    name,
+    setName,
     inputRef,
-    newTaskName,
-    setNewTaskName,
     color,
-    isCreate,
+    setFunc = () => {},
+    isCreating = false,
 }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
@@ -32,16 +31,16 @@ const TaskNameInput = ({
 
     const onChange = (e) => {
         const newName = e.target.value
-        setNewTaskName(newName)
+        setName(newName)
     }
 
     const onEnter = (e) => {
-        if (isCreate) {
+        if (isCreating) {
             return
         }
         if (e.code === "Enter") {
-            setFunc({ name: newTaskName })
-            toast.success(t("name_change_success"))
+            e.preventDefault()
+            setName(e.target.value)
         }
     }
 
@@ -60,7 +59,7 @@ const TaskNameInput = ({
                 completed={task.completed_at}
                 color={color}
                 isLoading={isLoading}
-                onClick={isCreate ? null : toComplete}
+                onClick={isCreating ? null : toComplete}
                 isInput
             />
             <InputText
@@ -69,7 +68,7 @@ const TaskNameInput = ({
                 type="text"
                 onChange={onChange}
                 onKeyDown={onEnter}
-                value={newTaskName || ""}
+                value={name || ""}
                 placeholder={t("name_placeholder")}
             />
         </Box>

@@ -2,9 +2,12 @@ from django.contrib import admin
 from .models import Emoji, Peck, Quote, Reaction, Comment, Following, Block
 from api.admin import fieldset_base, readonly_fields_base
 
+
 @admin.register(Emoji)
 class EmojiAdmin(admin.ModelAdmin):
-    ordering = ["name",]
+    ordering = [
+        "name",
+    ]
     search_fields = ["name"]
     readonly_fields = readonly_fields_base
     fieldsets = [
@@ -16,6 +19,7 @@ class EmojiAdmin(admin.ModelAdmin):
         ),
         fieldset_base,
     ]
+
 
 @admin.register(Peck)
 class PeckAdmin(admin.ModelAdmin):
@@ -33,6 +37,7 @@ class PeckAdmin(admin.ModelAdmin):
         fieldset_base,
     ]
 
+
 @admin.register(Quote)
 class QuoteAdmin(admin.ModelAdmin):
     ordering = ["-date", "updated_at"]
@@ -48,6 +53,7 @@ class QuoteAdmin(admin.ModelAdmin):
         ),
         fieldset_base,
     ]
+
 
 @admin.register(Reaction)
 class ReactionAdmin(admin.ModelAdmin):
@@ -71,6 +77,7 @@ class ReactionAdmin(admin.ModelAdmin):
         fieldset_base,
     ]
 
+
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     ordering = ["-updated_at"]
@@ -93,12 +100,17 @@ class CommentAdmin(admin.ModelAdmin):
         fieldset_base,
     ]
 
+
 @admin.register(Following)
 class FollowingAdmin(admin.ModelAdmin):
     ordering = ["-updated_at"]
     search_fields = ["followee__username", "follower__username"]
     autocomplete_fields = ["follower", "followee"]
-    readonly_fields = ("created_at", "updated_at", "deleted_at", )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "deleted_at",
+    )
     fieldsets = [
         (
             None,
@@ -111,16 +123,21 @@ class FollowingAdmin(admin.ModelAdmin):
             {
                 "classes": ["collapse"],
                 "fields": ["created_at", "updated_at", "deleted_at"],
-            }
+            },
         ),
     ]
+
 
 @admin.register(Block)
 class BlockAdmin(admin.ModelAdmin):
     ordering = ["-updated_at"]
     search_fields = ["blockee__username", "blocker__username"]
     autocomplete_fields = ["blocker", "blockee"]
-    readonly_fields = ("created_at", "updated_at", "deleted_at", )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "deleted_at",
+    )
     fieldsets = [
         (
             None,
@@ -133,6 +150,6 @@ class BlockAdmin(admin.ModelAdmin):
             {
                 "classes": ["collapse"],
                 "fields": ["created_at", "updated_at", "deleted_at"],
-            }
+            },
         ),
     ]

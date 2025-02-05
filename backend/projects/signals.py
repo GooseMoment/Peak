@@ -5,14 +5,22 @@ from .models import Project
 from users.models import User
 from drawers.models import Drawer
 
+
 @receiver(post_save, sender=User)
-def create_inbox(sender, instance: User=None, created=False, **kwargs):
+def create_inbox(sender, instance: User = None, created=False, **kwargs):
     if not created:
         return
-    
+
     project = Project.objects.create(
-        name="Inbox", user=instance, order=0, color="grey", type="inbox",  
+        name="Inbox",
+        user=instance,
+        order=0,
+        color="grey",
+        type="inbox",
     )
     return Drawer.objects.create(
-        name='Inbox', user=instance, project=project, order=0, 
+        name="Inbox",
+        user=instance,
+        project=project,
+        order=0,
     )

@@ -84,7 +84,7 @@ class SignUpView(GenericAPIView):
         try:
             user.save()
         except IntegrityError as e:
-            if not "unique constraint" in str(e):
+            if "unique constraint" not in str(e):
                 raise exceptions.UnknownError
 
             if "email" in str(e):

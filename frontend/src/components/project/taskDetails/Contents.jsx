@@ -3,6 +3,7 @@ import { Fragment, useMemo, useState } from "react"
 import styled, { css } from "styled-components"
 
 import ModalWindow from "@components/common/ModalWindow"
+import Detail from "@components/project/common/Detail"
 import ToolTip from "@components/project/common/ToolTip"
 import taskDate from "@components/tasks/utils/taskDate"
 
@@ -13,8 +14,8 @@ import Memo from "./Memo"
 import Priority from "./Priority"
 import Reminder from "./Reminder"
 
-import alarmclock from "@assets/project/alarmclock.svg"
-import hourglass from "@assets/project/hourglass.svg"
+import AlarmClock from "@assets/project/AlarmClock"
+import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -49,12 +50,12 @@ const Contents = ({ task, setFunc }) => {
             name: "assigned",
             icon: <FeatherIcon icon="calendar" />,
             display: task.assigned_at ? formatted_assigned_date : t("none"),
-            component: <Assigned setFunc={setFunc} />,
+            component: <Assigned setFunc={setFunc} onClose={closeComponent} />,
         },
         {
             id: 2,
             name: "due",
-            icon: <img src={hourglass} />,
+            icon: <Hourglass />,
             display:
                 task.due_type && (task.due_date || task.due_datetime)
                     ? formatted_due_datetime
@@ -64,13 +65,13 @@ const Contents = ({ task, setFunc }) => {
         {
             id: 3,
             name: "reminder",
-            icon: <img src={alarmclock} />,
+            icon: <AlarmClock />,
             display:
                 task?.reminders && task.reminders?.length !== 0 ? (
                     <RemindersBox name="reminder">
-                        {task.reminders.map((reminder) => (
-                            <ReminderBlock key={reminder.id} name="reminder">
-                                {displayReminder[0][reminder.delta]}
+                        {task.reminders.map((delta, i) => (
+                            <ReminderBlock key={i} name="reminder">
+                                {displayReminder[delta]}
                             </ReminderBlock>
                         ))}
                     </RemindersBox>
@@ -88,14 +89,14 @@ const Contents = ({ task, setFunc }) => {
                         -
                     </EmptyReminderBox>
                 ),
-            component: <Reminder task={task} />,
+            component: <Reminder task={task} setFunc={setFunc} />,
         },
         {
             id: 4,
             name: "priority",
             icon: <FeatherIcon icon="alert-circle" />,
             display: priorities[task.priority],
-            component: <Priority setFunc={setFunc} />,
+            component: <Priority setFunc={setFunc} onClose={closeComponent} />,
         },
         {
             id: 5,
@@ -107,14 +108,20 @@ const Contents = ({ task, setFunc }) => {
                     : task.drawer_name
                       ? `${task.project_name} / ${task.drawer_name}`
                       : t("none"),
-            component: <Drawer setFunc={setFunc} />,
+            component: <Drawer setFunc={setFunc} onClose={closeComponent} />,
         },
         {
             id: 6,
             name: "memo",
             icon: <FeatherIcon icon="edit" />,
             display: task.memo ? task.memo : t("none"),
-            component: <Memo previousMemo={task.memo} setFunc={setFunc} />,
+            component: (
+                <Memo
+                    previousMemo={task.memo}
+                    setFunc={setFunc}
+                    onClose={closeComponent}
+                />
+            ),
         },
     ]
 
@@ -135,7 +142,15 @@ const Contents = ({ task, setFunc }) => {
                         </ContentText>
                         {content === item.name && isComponentOpen ? (
                             <ModalWindow afterClose={closeComponent} additional>
-                                {item.component}
+                                <Detail
+                                    title={t(content + ".title")}
+                                    onClose={closeComponent}
+                                    special={
+                                        content === "assigned" ||
+                                        content === "due"
+                                    }>
+                                    {item.component}
+                                </Detail>
                             </ModalWindow>
                         ) : null}
                     </ContentsBox>
@@ -157,18 +172,13 @@ const ContentsBox = styled.div`
     align-items: center;
     justify-content: flex-start;
 
-    & svg,
-    img {
+    & svg {
         width: 1.3em;
         height: 1.3em;
         stroke: ${(p) => p.theme.textColor};
         margin-top: 1.3em;
-        top: 0;
-    }
-
-    & img {
-        filter: ${(p) => p.theme.project.imgColor};
         margin-right: 8px;
+        top: 0;
     }
 `
 
@@ -237,16 +247,14 @@ const makePriorities = (t) => [
     t("priority.critical"),
 ]
 
-const makeDisplayReminder = (t) => [
-    {
-        0: t("reminder.display_then"),
-        5: t("reminder.display_5_minutes_before"),
-        15: t("reminder.display_15_minutes_before"),
-        30: t("reminder.display_30_minutes_before"),
-        60: t("reminder.display_1_hour_before"),
-        1440: t("reminder.display_1_day_before"),
-        2880: t("reminder.display_2_days_before"),
-    },
-]
+const makeDisplayReminder = (t) => ({
+    0: t("reminder.display_then"),
+    5: t("reminder.display_5_minutes_before"),
+    15: t("reminder.display_15_minutes_before"),
+    30: t("reminder.display_30_minutes_before"),
+    60: t("reminder.display_1_hour_before"),
+    1440: t("reminder.display_1_day_before"),
+    2880: t("reminder.display_2_days_before"),
+})
 
 export default Contents

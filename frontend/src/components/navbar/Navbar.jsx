@@ -99,6 +99,10 @@ const Frame = styled.nav`
     justify-content: center;
     align-items: center;
 
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+
     display: none;
 
     ${ifMobile} {
@@ -122,6 +126,10 @@ const Box = styled.div`
     background-color: ${(p) => p.theme.navbar.backgroundColor};
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
 `
 
 const Item = styled.div`
@@ -139,6 +147,14 @@ const Item = styled.div`
     align-items: center;
 
     cursor: pointer;
+
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -webkit-tap-highlight-color: transparent;
 
     & svg {
         font-size: 1.5em;

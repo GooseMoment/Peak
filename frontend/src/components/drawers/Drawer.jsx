@@ -11,7 +11,7 @@ import ModalWindow from "@components/common/ModalWindow"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
-import TaskCreateSimple from "@components/project/Creates/simple/TaskCreateSimple"
+import TaskCreateSimple from "@components/project/TaskCreateSimple"
 import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import DragAndDownBox from "@components/project/dragAndDown/DragAndDownBox"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
@@ -96,12 +96,14 @@ const Drawer = ({ project, drawer, color }) => {
         const targetOrder = targetData?.order
         const symbolProperties = Object.getOwnPropertySymbols(targetData)
         const closestEdge = targetData[symbolProperties[0]]
+        const taskID = source?.data.id
 
         if (typeof targetOrder !== "number" || draggedOrder === targetOrder) {
             return
         }
 
         patchMutation.mutate({
+            task_id: taskID,
             dragged_order: draggedOrder,
             target_order: targetOrder,
             closest_edge: closestEdge,
@@ -345,7 +347,9 @@ const FlexBox = styled.div`
 `
 
 const MoreButton = styled(Button)`
-    width: 25em;
+    max-width: 25em;
+    width: 80vw;
+    margin: 1em;
 `
 
 const makeSortMenuItems = (t) => [

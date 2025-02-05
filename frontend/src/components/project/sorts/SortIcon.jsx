@@ -5,8 +5,7 @@ const SortIcon = ({ color }) => {
             height="13"
             viewBox="0 0 18 17"
             fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+            xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M4.46154 1L1 6.76923M4.46154 1L7.92308 6.76923M4.46154 1V16"
                 stroke={color}

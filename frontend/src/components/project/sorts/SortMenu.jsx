@@ -17,16 +17,14 @@ const SortMenu = ({
     return (
         <ContextMenuBox
             $top={selectedButtonPosition.top}
-            $left={selectedButtonPosition.left}
-        >
+            $left={selectedButtonPosition.left}>
             <TitleBox>{t("title", { title: title })}</TitleBox>
             <CLine />
             {items.map((item) => (
                 <DisplayBox
                     key={item.display}
                     onClick={() => setOrdering(item.context)}
-                    $isSelected={item.context === ordering}
-                >
+                    $isSelected={item.context === ordering}>
                     <EmptyBox>
                         <FeatherIcon icon="check" />
                     </EmptyBox>
