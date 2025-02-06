@@ -6,11 +6,18 @@ import FeatherIcon from "feather-icons-react"
 import { BottomSheet } from "react-spring-bottom-sheet"
 import "react-spring-bottom-sheet/dist/style.css"
 
-export const Header = ({ title = null, handleBack = () => {}, closeSheet }) => {
+export const Header = ({
+    title = null,
+    icon = null,
+    handleBack = () => {},
+    closeSheet,
+}) => {
     return (
         <HeaderBox>
             {handleBack ? (
                 <FeatherIcon icon="chevron-left" onClick={handleBack} />
+            ) : icon ? (
+                icon
             ) : (
                 <EmptyBox />
             )}
@@ -20,7 +27,12 @@ export const Header = ({ title = null, handleBack = () => {}, closeSheet }) => {
     )
 }
 
-const ModalBottomSheet = ({ headerContent = null, onClose, children }) => {
+const ModalBottomSheet = ({
+    headerContent = null,
+    blocking = true,
+    onClose,
+    children,
+}) => {
     const [isOpen, setIsOpen] = useState(true)
 
     const closeModal = () => {
@@ -31,6 +43,7 @@ const ModalBottomSheet = ({ headerContent = null, onClose, children }) => {
     return (
         <StyledBottomSheet
             open={isOpen}
+            blocking={blocking}
             onDismiss={closeModal}
             snapPoints={({ maxHeight }) => [maxHeight * 0.8, maxHeight * 0.9]}
             header={headerContent}>

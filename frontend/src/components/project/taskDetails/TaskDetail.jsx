@@ -5,8 +5,9 @@ import { useQuery } from "@tanstack/react-query"
 
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import SkeletonTaskDetail from "@components/project/skeletons/SkeletonTaskDetail"
-
-import TaskCommonDetail, { TaskDetailBox } from "./TaskCommonDetail"
+import TaskCommonDetail, {
+    TaskDetailBox,
+} from "@components/project/taskDetails/TaskCommonDetail"
 
 import { getTask } from "@api/tasks.api"
 
@@ -15,7 +16,7 @@ import { useTranslation } from "react-i18next"
 const TaskDetail = () => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
-    const [projectID, projectType, color] = useOutletContext()
+    const [_, projectType, color] = useOutletContext()
     const { task_id } = useParams()
 
     const {
@@ -59,7 +60,6 @@ const TaskDetail = () => {
         <TaskCommonDetail
             newTask={newTask}
             setNewTask={setNewTask}
-            projectID={projectID}
             projectType={projectType}
             color={color}
         />
