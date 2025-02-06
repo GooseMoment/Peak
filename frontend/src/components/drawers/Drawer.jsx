@@ -18,7 +18,7 @@ import {
     SkeletonDrawer,
     SkeletonInboxDrawer,
 } from "@components/project/skeletons/SkeletonProjectPage"
-import SortMenu from "@components/project/sorts/SortMenu"
+import SortMenuSelector from "@components/project/sorts/SortMenuSelector"
 import DrawerTask from "@components/tasks/DrawerTask"
 
 import { deleteDrawer } from "@api/drawers.api"
@@ -267,10 +267,11 @@ const Drawer = ({ project, drawer, color }) => {
                 />
             )}
             {isSortMenuOpen && (
-                <SortMenu
+                <SortMenuSelector
                     title={t("sort.task_title")}
                     items={sortMenuItems}
                     selectedButtonPosition={selectedSortMenuPosition}
+                    onClose={()=>setIsSortMenuOpen(false)}
                     ordering={ordering}
                     setOrdering={setOrdering}
                 />
