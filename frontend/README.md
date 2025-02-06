@@ -2,10 +2,22 @@
 
 ## Start
 
+If you don't have pnpm, then check out [pnpm installation guide](https://pnpm.io/installation).
+
+> Note that Peak uses `pnpm@9`. (not the latest v10!)
+
 ```bash
 pnpm i
-pnpm run dev
+pnpm dev
 ```
+
+## Commands
+
+- `pnpm dev`: start live dev server.
+- `pnpm build`: build
+- `pnpm lint`: Run ESLint
+- `pnpm format:check`: Run prettier check
+- `pnpm format:write`: Run prettier overwrite
 
 ## Structure
 
@@ -17,8 +29,8 @@ pnpm run dev
     -   `pages/`: 페이지
     -   `queries/`: react-query 관련
     -   `utils/`: 유틸성 함수
+    -   `routers`: 메인 라우터
     -   `main.jsx`: 소스코드 시작 부분
-    -   `router.jsx`: 메인 라우터
 
 ## PWA
 
@@ -27,5 +39,5 @@ pnpm run dev
 각종 아이콘은 [pwa-assets-generator](https://vite-pwa-org.netlify.app/assets-generator)로 제작합니다. 해당 설정은 `pwa-assets.config.js`에서 확인할 수 있습니다.
 
 ```bash
-npm run generate-assets
+pnpm generate-assets
 ```
