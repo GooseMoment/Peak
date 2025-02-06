@@ -271,7 +271,7 @@ const Drawer = ({ project, drawer, color }) => {
                     title={t("sort.task_title")}
                     items={sortMenuItems}
                     selectedButtonPosition={selectedSortMenuPosition}
-                    onClose={()=>setIsSortMenuOpen(false)}
+                    onClose={() => setIsSortMenuOpen(false)}
                     ordering={ordering}
                     setOrdering={setOrdering}
                 />

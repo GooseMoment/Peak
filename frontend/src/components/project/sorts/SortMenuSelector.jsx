@@ -1,31 +1,35 @@
-import useScreenType from "@utils/useScreenType"
-
-import SortMenuMobile from "./SortMenuMobile"
 import SortMenu from "./SortMenu"
+import SortMenuMobile from "./SortMenuMobile"
+
+import useScreenType from "@utils/useScreenType"
 
 const SortMenuSelector = ({
     title,
     items,
-    selectedButtonPosition = ()=>{},
-    onClose = ()=>{},
+    selectedButtonPosition = () => {},
+    onClose = () => {},
     ordering,
-    setOrdering
+    setOrdering,
 }) => {
     const { isMobile } = useScreenType()
 
-    return isMobile ? 
+    return isMobile ? (
         <SortMenuMobile
             title={title}
             items={items}
             onClose={onClose}
             ordering={ordering}
-            setOrdering={setOrdering}/> 
-        : <SortMenu
+            setOrdering={setOrdering}
+        />
+    ) : (
+        <SortMenu
             title={title}
             items={items}
             selectedButtonPosition={selectedButtonPosition}
             ordering={ordering}
-            setOrdering={setOrdering}/>
+            setOrdering={setOrdering}
+        />
+    )
 }
 
 export default SortMenuSelector

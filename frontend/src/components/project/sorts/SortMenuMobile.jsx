@@ -5,13 +5,7 @@ import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const SortMenuMobile = ({
-    title,
-    items,
-    onClose,
-    ordering,
-    setOrdering,
-}) => {
+const SortMenuMobile = ({ title, items, onClose, ordering, setOrdering }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.sort" })
 
     return (
@@ -64,9 +58,7 @@ const DisplayBox = styled.div`
         top: 0;
         stroke-width: 3px;
         color: ${(props) =>
-            props.$isSelected
-                ? props.theme.textColor
-                : "transparent"};
+            props.$isSelected ? props.theme.textColor : "transparent"};
     }
 `
 
