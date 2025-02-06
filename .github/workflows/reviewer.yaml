@@ -1,0 +1,19 @@
+name: Random Reviewer Discord
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  assign-reviewer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign random reviewer
+        uses: JedBeom/random-reviewer-discord@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          candidates: ${{ secrets.CANDIDATES }}
+          webhook_url: ${{ secrets.WEBHOOK_URL }}
+          template: "🎉 <@{userID}> 님이 [#{prNumber} PR]({prURL}) 리뷰어로 당첨!"
