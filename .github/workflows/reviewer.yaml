@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  pull-requests: write
+
 jobs:
   assign-reviewer:
     runs-on: ubuntu-latest
