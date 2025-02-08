@@ -53,8 +53,8 @@ export default [
                 "error",
                 {
                     functions: false,
-                    classes: false,
-                    variables: true,
+                    classes: true,
+                    variables: false,
                     allowNamedExports: false,
                 },
             ],
