@@ -1,10 +1,18 @@
-import { useMutation } from "@tanstack/react-query"
+import { useEffect, useMemo, useState } from "react"
 
-import Button from "@components/common/Button"
+import { useMutation, useQuery } from "@tanstack/react-query"
+
+import Button, { ButtonGroup } from "@components/common/Button"
+import CheckboxGroup from "@components/settings/CheckboxGroup"
 import Section, { Description, Name, Value } from "@components/settings/Section"
 import Switch from "@components/settings/SettingSwitch"
 
-import { deleteSubscription, postSubscription } from "@api/notifications.api"
+import {
+    deleteSubscription,
+    getSubscription,
+    patchSubscription,
+    postSubscription,
+} from "@api/notifications.api"
 
 import { useClientSetting } from "@utils/clientSettings"
 
@@ -36,7 +44,7 @@ const subscribePush = async () => {
     return postSubscription(subscription)
 }
 
-const Notifications = () => {
+const SectionNotification = () => {
     const [setting, updateSetting] = useClientSetting()
     const { t } = useTranslation("settings", { keyPrefix: "notifications" })
 
@@ -79,8 +87,6 @@ const Notifications = () => {
         },
     })
 
-    const isPending = enableMutation.isPending || disableMutation.isPending
-
     const toggleWebPush = async () => {
         if (setting.push_notification_subscription) {
             disableMutation.mutate()
@@ -99,33 +105,123 @@ const Notifications = () => {
         enableMutation.mutate()
     }
 
+    const isPending = enableMutation.isPending || disableMutation.isPending
+
+    return (
+        <Section>
+            <Name>{t("push_notification_subscription.name")}</Name>
+            <Description>
+                {t("push_notification_subscription.description")}
+            </Description>
+            <Value>
+                <Button
+                    onClick={toggleWebPush}
+                    loading={isPending}
+                    disabled={isPending}
+                    state={
+                        setting.push_notification_subscription
+                            ? states.danger
+                            : states.text
+                    }>
+                    {setting.push_notification_subscription
+                        ? t(
+                              "push_notification_subscription.values.button_disable",
+                          )
+                        : t(
+                              "push_notification_subscription.values.button_enable",
+                          )}
+                </Button>
+            </Value>
+        </Section>
+    )
+}
+
+const SectionAllowList = () => {
+    const [setting, updateSetting] = useClientSetting()
+    const { t } = useTranslation("settings", {
+        keyPrefix: "notifications.allowed_types",
+    })
+
+    const [selectedItems, setSelectedItems] = useState([])
+    const items = useMemo(() => makeAllowlistItems(t), [t])
+
+    const query = useQuery({
+        placeholderData: {
+            excluded_types: setting.push_notification_excluded_types || [],
+        },
+        queryKey: [
+            "subscriptions",
+            setting.push_notification_subscription,
+            "excluded_types",
+        ],
+        queryFn: () => getSubscription(setting.push_notification_subscription),
+        select: (data) => data.excluded_types,
+        refetchOnWindowFocus: false,
+    })
+
+    useEffect(() => {
+        setSelectedItems(
+            items.filter((item) => !query.data.includes(item.name)),
+        )
+    }, [query.data])
+
+    const mut = useMutation({
+        mutationFn: () => {
+            const data = items
+                .filter(
+                    (item) =>
+                        !selectedItems.some(
+                            (selectedItem) => selectedItem.name === item.name,
+                        ),
+                )
+                .map((item) => item.name)
+            return patchSubscription(setting.push_notification_subscription, {
+                excluded_types: data,
+            })
+        },
+        onSuccess: (data) => {
+            updateSetting(
+                "push_notification_excluded_types",
+                data.excluded_types,
+            )
+            toast.success(t("success"))
+        },
+        onError: () => {
+            toast.error(t("failed"))
+        },
+    })
+
+    return (
+        <Section>
+            <Name>{t("name")}</Name>
+            <Description>{t("description")}</Description>
+            <Value>
+                <CheckboxGroup
+                    items={items}
+                    selectedItems={selectedItems}
+                    setSelectedItems={setSelectedItems}
+                />
+                <ButtonGroup $justifyContent="right" $margin="1em 0">
+                    <Button
+                        onClick={mut.mutate}
+                        disabled={mut.isPending}
+                        loading={mut.isPending}>
+                        {t("values.button_save")}
+                    </Button>
+                </ButtonGroup>
+            </Value>
+        </Section>
+    )
+}
+
+const Notifications = () => {
+    const [setting] = useClientSetting()
+    const { t } = useTranslation("settings", { keyPrefix: "notifications" })
+
     return (
         <>
-            <Section>
-                <Name>{t("push_notification_subscription.name")}</Name>
-                <Description>
-                    {t("push_notification_subscription.description")}
-                </Description>
-                <Value>
-                    <Button
-                        onClick={toggleWebPush}
-                        loading={isPending}
-                        disabled={isPending}
-                        state={
-                            setting.push_notification_subscription
-                                ? states.danger
-                                : states.text
-                        }>
-                        {setting.push_notification_subscription
-                            ? t(
-                                  "push_notification_subscription.values.button_disable",
-                              )
-                            : t(
-                                  "push_notification_subscription.values.button_enable",
-                              )}
-                    </Button>
-                </Value>
-            </Section>
+            <SectionNotification />
+            {setting.push_notification_subscription && <SectionAllowList />}
             <Section>
                 <Name>{t("play_notification_sound.name")}</Name>
                 <Value>
@@ -135,5 +231,36 @@ const Notifications = () => {
         </>
     )
 }
+
+const makeAllowlistItems = (t) => [
+    {
+        name: "comment",
+        display: t("values.comment"),
+    },
+    {
+        name: "follow",
+        display: t("values.follow"),
+    },
+    {
+        name: "follow_request",
+        display: t("values.follow_request"),
+    },
+    {
+        name: "follow_request_accepted",
+        display: t("values.follow_request_accepted"),
+    },
+    {
+        name: "peck",
+        display: t("values.peck"),
+    },
+    {
+        name: "reaction",
+        display: t("values.reaction"),
+    },
+    {
+        name: "task_reminder",
+        display: t("values.task_reminder"),
+    },
+]
 
 export default Notifications
