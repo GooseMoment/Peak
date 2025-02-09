@@ -57,11 +57,11 @@ const getMenuItems = (t) => [
         display: t("security"),
         to: "security",
     },
-    {
-        icon: "lock",
-        display: t("privacy"),
-        to: "privacy",
-    },
+    // {
+    //     icon: "lock",
+    //     display: t("privacy"),
+    //     to: "privacy",
+    // },
     {
         icon: "globe",
         display: t("languages_and_time"),
@@ -77,11 +77,11 @@ const getMenuItems = (t) => [
         display: t("appearance"),
         to: "appearance",
     },
-    {
-        icon: "heart",
-        display: t("reactions"),
-        to: "reactions",
-    },
+    // {
+    //     icon: "heart",
+    //     display: t("reactions"),
+    //     to: "reactions",
+    // },
     {
         icon: "shield",
         display: t("blocks"),
