@@ -9,7 +9,7 @@ import {
 import { useSearchParams } from "react-router-dom"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 import FilterButtonGroup from "@components/common/FilterButtonGroup"
 import PageTitle from "@components/common/PageTitle"
@@ -99,9 +99,14 @@ const NotificationsPage = () => {
     return (
         <>
             {header}
-            {isFetching && !isFetchingNextPage
-                ? [...Array(10)].map((e, i) => <Box key={i} skeleton />)
-                : null}
+            {isFetching && !isFetchingNextPage ? (
+                <>
+                    <Date $loading />
+                    {[...Array(10)].map((e, i) => (
+                        <Box key={i} skeleton />
+                    ))}
+                </>
+            ) : null}
             {data?.pages.map((group, i) => (
                 <Fragment key={i}>
                     {group.results.map((notification, j) => {
@@ -169,6 +174,14 @@ const NoMore = styled.div`
 
 const Date = styled.h2`
     font-weight: bold;
+
+    ${(p) =>
+        p.$loading &&
+        css`
+            width: 5em;
+            height: 1em;
+            background-color: ${(p) => p.theme.skeleton.defaultColor};
+        `}
 `
 
 const makeFilters = (t) => ({
