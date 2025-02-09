@@ -1,7 +1,7 @@
 import { Suspense, useMemo } from "react"
 import { NavLink, Outlet } from "react-router-dom"
 
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import PageTitle from "@components/common/PageTitle"
@@ -24,7 +24,10 @@ const SettingsPage = () => {
             <MenuBox>
                 {menuItems.map((menuItem) => {
                     return (
-                        <Menu to={pathRoot + menuItem.to} key={menuItem.to}>
+                        <Menu
+                            draggable="false"
+                            to={pathRoot + menuItem.to}
+                            key={menuItem.to}>
                             <FeatherIcon icon={menuItem.icon} />
                             {menuItem.display}
                         </Menu>
@@ -100,7 +103,7 @@ const MenuBox = styled.div`
     margin-bottom: 2em;
 `
 
-const menuStyle = css`
+const Menu = styled(NavLink)`
     border: 1.5px solid ${(p) => p.theme.textColor};
     border-radius: 16px;
     padding: 0.5em 0.75em;
@@ -108,10 +111,9 @@ const menuStyle = css`
     font-weight: 500;
 
     transition: background-color 0.15s ${cubicBeizer};
-`
 
-const Menu = styled(NavLink)`
-    ${menuStyle}
+    user-select: none;
+    -webkit-user-drag: none;
 
     &:hover {
         background-color: ${(p) => p.theme.secondBackgroundColor};
