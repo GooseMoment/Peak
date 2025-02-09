@@ -139,9 +139,6 @@
             },
             "success": "Saved the preference of notification types.",
             "failed": "Failed to save the preference. Try again."
-        },
-        "play_notification_sound": {
-            "name": "Play notification sound"
         }
     },
     "appearance": {

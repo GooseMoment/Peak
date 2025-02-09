@@ -139,9 +139,6 @@
             },
             "success": "알림 유형 설정을 저장했습니다.",
             "failed": "알림 유형 설정 저장 중 오류가 발생했습니다. 다시 시도해주세요."
-        },
-        "play_notification_sound": {
-            "name": "알림음 재생하기"
         }
     },
     "appearance": {

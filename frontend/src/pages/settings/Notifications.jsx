@@ -5,7 +5,6 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import Button, { ButtonGroup } from "@components/common/Button"
 import CheckboxGroup from "@components/settings/CheckboxGroup"
 import Section, { Description, Name, Value } from "@components/settings/Section"
-import Switch from "@components/settings/SettingSwitch"
 
 import {
     deleteSubscription,
@@ -216,18 +215,11 @@ const SectionAllowList = () => {
 
 const Notifications = () => {
     const [setting] = useClientSetting()
-    const { t } = useTranslation("settings", { keyPrefix: "notifications" })
 
     return (
         <>
             <SectionNotification />
             {setting.push_notification_subscription && <SectionAllowList />}
-            <Section>
-                <Name>{t("play_notification_sound.name")}</Name>
-                <Value>
-                    <Switch name="play_notification_sound" />
-                </Value>
-            </Section>
         </>
     )
 }
