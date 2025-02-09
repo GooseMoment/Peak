@@ -99,6 +99,7 @@ const HiddenInput = styled.input`
 
 const CheckWrapper = styled.div<{ $selected: boolean }>`
     & svg {
+        top: 0;
         stroke-dasharray: 40;
         stroke-dashoffset: ${(p) => (p.$selected ? 0 : 40)};
         stroke-width: 3px;
