@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { startTransition, useEffect, useState } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -8,6 +8,7 @@ import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import ModalWindow from "@components/common/ModalWindow"
 import { getProjectColor } from "@components/project/common/palettes"
 import Color from "@components/project/edit/Color"
+import ConfirmationSignOut from "@components/settings/ConfirmationSignOut"
 import Error from "@components/settings/Error"
 import ProfileImg from "@components/settings/ProfileImg"
 import Section, { Name, Value } from "@components/settings/Section"
@@ -19,6 +20,7 @@ import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
+import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -71,6 +73,15 @@ const Account = () => {
         e.preventDefault()
         const formData = new FormData(e.target)
         mutation.mutate(formData)
+    }
+
+    const [isSignOutConfirmationOpen, setSignOutConfirmationOpen] =
+        useState(false)
+
+    const openSignOutConfirmation = () => {
+        startTransition(() => {
+            setSignOutConfirmationOpen(true)
+        })
     }
 
     if (isPending) {
@@ -157,6 +168,19 @@ const Account = () => {
                     </ButtonGroup>
                 </Section>
             </form>
+            <Section>
+                <Value>
+                    <Button onClick={openSignOutConfirmation}>
+                        <SignOutIcon icon="log-out" />
+                        로그아웃
+                    </Button>
+                </Value>
+            </Section>
+            {isSignOutConfirmationOpen && (
+                <ConfirmationSignOut
+                    onClose={() => setSignOutConfirmationOpen(false)}
+                />
+            )}
         </>
     )
 }
@@ -225,6 +249,11 @@ const ColorButton = styled.div`
     cursor: pointer;
 
     background-color: ${(p) => p.$color};
+`
+
+const SignOutIcon = styled(FeatherIcon)`
+    stroke-width: 3px;
+    top: 0;
 `
 
 export default Account
