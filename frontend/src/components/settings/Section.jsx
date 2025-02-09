@@ -11,9 +11,15 @@ const Section = styled.section`
     }
 `
 
-export const Name = styled.h2``
+export const Name = styled.h2`
+    user-select: none;
+    -webkit-user-drag: none;
+`
 
 export const Description = styled.span`
+    user-select: none;
+    -webkit-user-drag: none;
+
     display: block;
     margin-top: 1em;
     font-weight: 400;
