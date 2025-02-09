@@ -10,7 +10,7 @@ export default [
         ignores: ["dist/*", "**/*.config.js", "public/*", "**/registerSW.js"],
     },
     eslint.configs.recommended,
-    tseslint.config.recommended,
+    ...tseslint.configs.recommended,
     pluginReact.configs.flat.recommended,
     pluginReact.configs.flat["jsx-runtime"],
     eslintConfigPrettier,
@@ -28,7 +28,8 @@ export default [
         rules: {
             "react/prop-types": "off",
             "no-console": "error",
-            "no-unused-vars": [
+            "no-unused-vars": "off",
+            "@typescript-eslint/no-unused-vars": [
                 "error",
                 {
                     argsIgnorePattern: "^_",
