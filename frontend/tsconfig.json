@@ -16,6 +16,7 @@
             "@routers/*": ["src/routers/*"]
         },
         "strict": true,
+        "target": "ES2016",
         "jsx": "react-jsx"
     },
     "include": ["src/**/*"],
