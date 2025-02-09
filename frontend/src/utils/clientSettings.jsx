@@ -19,6 +19,7 @@ const defaultSettings = {
 
     // Notifications
     push_notification_subscription: null,
+    push_notification_excluded_types: [],
     play_notification_sound: true,
 
     // Appearance
@@ -28,9 +29,11 @@ const defaultSettings = {
 }
 
 export const getClientSettings = () => {
-    return (
-        JSON.parse(localStorage.getItem(KEY_CLIENT_SETTINGS)) || defaultSettings
-    )
+    try {
+        return JSON.parse(localStorage.getItem(KEY_CLIENT_SETTINGS))
+    } catch {
+        return defaultSettings
+    }
 }
 
 export const setClientSettingsByName = (name, value) => {
