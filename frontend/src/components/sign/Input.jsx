@@ -54,6 +54,7 @@ const IconBox = styled.span`
 
     & svg,
     & img {
+        top: 0;
         height: 1em;
     }
 `
