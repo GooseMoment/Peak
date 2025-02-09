@@ -30,7 +30,10 @@ const defaultSettings = {
 
 export const getClientSettings = () => {
     try {
-        return JSON.parse(localStorage.getItem(KEY_CLIENT_SETTINGS))
+        return (
+            JSON.parse(localStorage.getItem(KEY_CLIENT_SETTINGS)) ||
+            defaultSettings
+        )
     } catch {
         return defaultSettings
     }
