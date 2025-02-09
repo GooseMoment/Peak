@@ -16,9 +16,16 @@
             "@routers/*": ["src/routers/*"]
         },
         "strict": true,
+        "skipLibCheck": true,
+        "module": "ES2022",
+        "moduleResolution": "node",
         "target": "ES2016",
+        "types": [],
         "jsx": "react-jsx"
     },
     "include": ["src/**/*"],
-    "exclude": ["**/dist/*", "**/public/*"]
+    "exclude": ["**/dist/*", "**/public/*"],
+    "typeAcquisition": {
+        "enable": true
+    }
 }
