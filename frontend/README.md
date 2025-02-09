@@ -13,11 +13,11 @@ pnpm dev
 
 ## Commands
 
-- `pnpm dev`: start live dev server.
-- `pnpm build`: build
-- `pnpm lint`: Run ESLint
-- `pnpm format:check`: Run prettier check
-- `pnpm format:write`: Run prettier overwrite
+-   `pnpm dev`: start live dev server.
+-   `pnpm build`: build
+-   `pnpm lint`: Run ESLint
+-   `pnpm format:check`: Run prettier check
+-   `pnpm format:write`: Run prettier overwrite
 
 ## Structure
 
@@ -29,7 +29,7 @@ pnpm dev
     -   `pages/`: 페이지
     -   `queries/`: react-query 관련
     -   `utils/`: 유틸성 함수
-    -   `routers`: 메인 라우터
+    -   `routers/`: 라우터 관련
     -   `main.jsx`: 소스코드 시작 부분
 
 ## PWA
