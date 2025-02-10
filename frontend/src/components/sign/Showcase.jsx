@@ -42,6 +42,7 @@ const DisplayArea = styled.div`
     flex-direction: column;
     overflow: hidden;
     user-select: none;
+    -webkit-user-select: none;
     gap: 2rem;
 
     height: 70%;
@@ -79,6 +80,7 @@ const scroll = keyframes`
 
 const ActivitiesBox = styled.div`
     user-select: none;
+    -webkit-user-select: none;
 
     flex-shrink: 0;
     display: flex;
