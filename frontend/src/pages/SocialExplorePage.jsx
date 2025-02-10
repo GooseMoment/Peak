@@ -25,6 +25,9 @@ const SocialExplorePage = () => {
 
     const [selectedUser, setSelectedUser] = useState(null)
 
+    // useRef로 대체??
+    const [searchQuery, setSearchQuery] = useState("")
+
     const {
         data: recommendPage,
         fetchNextPage: fetchNextRecommendPage,
@@ -50,9 +53,6 @@ const SocialExplorePage = () => {
         refetchOnWindowFocus: false,
         enabled: false,
     })
-
-    // useRef로 대체??
-    const [searchQuery, setSearchQuery] = useState("")
 
     useEffect(() => {
         if (searchQuery.length !== 0) refetchFound()
