@@ -401,7 +401,7 @@
             "suggestion": "새로운 사람과 새로운 인연은 어떤가요?"
         }, 
         "date_bar": {
-            "date_format": "MMM d일 EEEE"
+            "date_format": "MMM d일, EEE"
         }
     },
     "search": {
