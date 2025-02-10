@@ -400,6 +400,9 @@
             "searchbar": "Search for usernames to follow.",
             "no_result": "No users matched your search",
             "suggestion": "Make new connections with new people!"
+        },
+        "date_bar": {
+            "date_format": "EEE, MMM. d"
         }
     },
     "search": {
