@@ -385,7 +385,6 @@
     "social": {
         "following_title": "Following",
         "explore_title": "Explore",
-        "back": "Go Back",
         "log_preview_completed": "completed!",
         "log_details": {
             "no_content": "There is no task."
@@ -415,5 +414,10 @@
             "memo": "Memo"
         },
         "no_result": "Your search did not match any tasks 🤔"
+    },
+    "common": {
+        "header": {
+            "back": "Go Back"
+        }
     }
 }

@@ -384,7 +384,6 @@
     "social": {
         "following_title": "팔로잉",
         "explore_title": "탐험",
-        "back": "돌아가기", 
         "log_preview_completed": "완료!",
         "log_details": {
             "no_content": "작업이 없습니다."
@@ -414,5 +413,10 @@
             "memo": "메모"
         },
         "no_result": "조건에 맞는 결과를 찾을 수 없습니다 🤔"
+    },
+    "common": {
+        "header": {
+            "back": "돌아가기"
+        }
     }
 }

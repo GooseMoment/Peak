@@ -7,8 +7,8 @@ import { useTranslation } from "react-i18next"
 
 const PageBack = ({ defaultTo, children }) => {
     const location = useLocation()
-    const { t } = useTranslation("docs", {
-        keyPrefix: "install_instruction_ios",
+    const { t } = useTranslation("", {
+        keyPrefix: "common.header",
     })
 
     return (

@@ -15,11 +15,10 @@ import { useTranslation } from "react-i18next"
 
 const SocialDailyPage = () => {
     const { username } = useParams()
-
-    const { t } = useTranslation("", { keyPrefix: "social" })
-
     const location = useLocation()
     const { selectedDate: receivedDate } = location.state || {}
+
+    const { t } = useTranslation("", { keyPrefix: "common.header" })
 
     const {
         data: user,
