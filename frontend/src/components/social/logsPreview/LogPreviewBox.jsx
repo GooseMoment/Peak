@@ -7,11 +7,9 @@ import SimpleProfile from "@components/social/common/SimpleProfile"
 
 import { getCurrentUsername } from "@api/client"
 
-import { useClientLocale } from "@utils/clientSettings"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
-import { useTranslation } from "react-i18next"
 
 const LogPreviewBox = ({
     log,
@@ -21,9 +19,7 @@ const LogPreviewBox = ({
     pageType = "following",
 }) => {
     const theme = useTheme()
-    const locale = useClientLocale()
     const { isMobile } = useScreenType()
-    const { t } = useTranslation("", { keyPrefix: "social" })
     const navigate = useNavigate()
 
     const me = getCurrentUsername()
@@ -38,7 +34,10 @@ const LogPreviewBox = ({
     const handleSelect = (e) => {
         setSelectedUser(log.username === selectedUser ? null : log.username)
 
-        if (isMobile) navigate(`../daily/@${log.username}`)
+        if (isMobile)
+            navigate(`../daily/@${log.username}`, {
+                state: { selectedDate: selectedDate },
+            })
     }
 
     const boxColor =
@@ -95,7 +94,7 @@ const Frame = styled.div`
     display: flex;
     flex-direction: column;
     row-gap: 0.1em;
-    
+
     transition: all 0.5s ease;
 
     &:hover {
