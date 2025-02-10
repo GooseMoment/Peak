@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 import styled from "styled-components"
 
 import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
@@ -8,12 +10,20 @@ import { useTranslation } from "react-i18next"
 const SortMenuMobile = ({ title, items, onClose, ordering, setOrdering }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.sort" })
 
+    // ordering 임시 상태 추가
+    const [temporaryOrdering, setTemporaryOrdering] = useState(ordering)
+
+    const handleClose = () => {
+        setOrdering(temporaryOrdering)
+        onClose()
+    }
+
     return (
         <ModalBottomSheet
             headerContent={
                 <Header
                     title={t("title", { title: title })}
-                    closeSheet={onClose}
+                    closeSheet={handleClose}
                 />
             }
             onClose={onClose}>
@@ -22,8 +32,8 @@ const SortMenuMobile = ({ title, items, onClose, ordering, setOrdering }) => {
                 {items.map((item) => (
                     <DisplayBox
                         key={item.display}
-                        onClick={() => setOrdering(item.context)}
-                        $isSelected={item.context === ordering}>
+                        onClick={() => setTemporaryOrdering(item.context)}
+                        $isSelected={item.context === temporaryOrdering}>
                         <FeatherIcon icon="check" />
                         {item.display}
                     </DisplayBox>
