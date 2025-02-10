@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom"
+
 import styled, { css, useTheme } from "styled-components"
 
 import { getProjectColor } from "@components/project/common/palettes"
@@ -12,7 +14,6 @@ import useScreenType, { ifMobile } from "@utils/useScreenType"
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
 
 const LogPreviewBox = ({
     log,
@@ -39,15 +40,11 @@ const LogPreviewBox = ({
     const handleSelect = (e) => {
         setSelectedUser(log.username === selectedUser ? null : log.username)
 
-        if(isMobile) navigate(`../daily/@${log.username}`)
+        if (isMobile) navigate(`../daily/@${log.username}`)
     }
 
-    const boxColor = getProjectColor(theme.type, log.header_color) || theme.grey
-    // log.recent_task
-    //     ? log.recent_task.is_read
-    //         ? theme.grey
-    //         :
-    //     : null
+    const boxColor =
+        getProjectColor(theme.type, log?.header_color) || theme.grey
 
     const backgroundColor =
         log.username === selectedUser
@@ -58,6 +55,7 @@ const LogPreviewBox = ({
         <Frame
             $isMe={log.username === me}
             $bgColor={boxColor}
+            $isSelected={log.username === selectedUser}
             onClick={handleSelect}>
             <FrameRow>
                 <ProfileWrapper $isMe={log.username === me}>
@@ -141,7 +139,17 @@ const Frame = styled.div`
     aspect-ratio: ${(props) => (props.$isMe ? 1.1 / 0.47 : 1.1)};
     width: ${(props) => (props.$isMe ? 100 : 47)}%;
 
-    border-radius: 32px;
+    border-radius: 16px;
+    ${(props) =>
+        props.$isSelected
+            ? css`
+                  box-shadow:
+                      0 0 0 0.15em ${(p) => p.theme.backgroundColor},
+                      0 0 0 0.3em ${(p) => p.theme.textColor};
+              `
+            : css`
+                  border: none;
+              `}
     background-color: ${(props) => props.$bgColor};
     box-sizing: border-box;
     padding: 1.5em 1.2em 1.2em 1.2em;

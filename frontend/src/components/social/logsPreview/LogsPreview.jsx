@@ -45,6 +45,7 @@ const LogsPreview = ({ logs, selectedUser, setSelectedUser, selectedDate }) => {
 
 const LogsPreviewContainer = styled.div`
     min-width: 20rem;
+    max-width: 25rem;
     width: 80%;
     margin: 0 auto;
 
