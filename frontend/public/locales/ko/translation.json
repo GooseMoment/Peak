@@ -384,6 +384,7 @@
     "social": {
         "following_title": "팔로잉",
         "explore_title": "탐험",
+        "back": "돌아가기", 
         "log_preview_completed": "완료!",
         "log_details": {
             "no_content": "작업이 없습니다."

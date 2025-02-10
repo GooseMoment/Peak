@@ -1,16 +1,16 @@
 import { styled } from "styled-components"
 
 const SimpleProfile = ({ user, showUsername=false }) => {
-    return showUsername ? (
+    return user && showUsername ? (
         <Profile>
             <ProfileImgWrapper $ratio={75}>
-                <img src={user.profile_img} />
+                <img src={user?.profile_img} />
             </ProfileImgWrapper>
-            <Username>@{user.username}</Username>
+            <Username>@{user?.username}</Username>
         </Profile>
     ) :  (
         <ProfileImgWrapper $ratio={100}>
-            <img src={user.profile_img} />
+            <img src={user?.profile_img} />
         </ProfileImgWrapper>
     )
 }
