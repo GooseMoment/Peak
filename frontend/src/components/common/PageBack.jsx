@@ -3,14 +3,18 @@ import { Link, useLocation } from "react-router-dom"
 import styled from "styled-components"
 
 import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
 const PageBack = ({ defaultTo, children }) => {
     const location = useLocation()
+    const { t } = useTranslation("docs", {
+        keyPrefix: "install_instruction_ios",
+    })
 
     return (
         <BackLink to={location.state?.backTo || defaultTo}>
             <FeatherIcon icon="arrow-left-circle" />
-            {children || "돌아가기"}
+            {children || t("back")}
         </BackLink>
     )
 }
