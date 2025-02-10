@@ -9,6 +9,7 @@ from tasks.models import Task
 import datetime
 from django.db.models import Count
 
+
 class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
 
@@ -40,11 +41,15 @@ class TodayDueTaskList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPI
 
     def get_queryset(self):
         today = self.get_today()
-        return Task.objects.filter(
-            user=self.request.user,
-            due_date=today,
-            completed_at__isnull=True,
-        ).exclude(assigned_at=today).order_by("due_date")
+        return (
+            Task.objects.filter(
+                user=self.request.user,
+                due_date=today,
+                completed_at__isnull=True,
+            )
+            .exclude(assigned_at=today)
+            .order_by("due_date")
+        )
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -68,17 +73,23 @@ class OverDueTaskList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIV
         return self.list(request, *args, **kwargs)
 
 
-class PastAssignedTaskList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIView):
+class PastAssignedTaskList(
+    mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIView
+):
     serializer_class = TaskSerializer
     pagination_class = ImportantTaskListPagination
 
     def get_queryset(self):
         today = self.get_today()
-        return Task.objects.filter(
-            user=self.request.user,
-            assigned_at__lt=today,
-            completed_at__isnull=True,
-        ).exclude(assigned_at=today).order_by("assigned_at")
+        return (
+            Task.objects.filter(
+                user=self.request.user,
+                assigned_at__lt=today,
+                completed_at__isnull=True,
+            )
+            .exclude(assigned_at=today)
+            .order_by("assigned_at")
+        )
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
