@@ -4,7 +4,6 @@ import styled, { css, useTheme } from "styled-components"
 
 import { getProjectColor } from "@components/project/common/palettes"
 import SimpleProfile from "@components/social/common/SimpleProfile"
-import LogDetails from "@components/social/logDetails/LogDetails"
 
 import { getCurrentUsername } from "@api/client"
 
@@ -12,7 +11,6 @@ import { useClientLocale } from "@utils/clientSettings"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
-import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 
 const LogPreviewBox = ({
@@ -74,58 +72,6 @@ const LogPreviewBox = ({
             </SimpleStats>
         </Frame>
     )
-
-    // return (
-    //     (isMobile || log.username !== me) && (
-    //         <Frame
-    //             onClick={handleSelect}
-    //             $bgColor={backgroundColor}
-    //             data-accept="true">
-    //             {isMobile && log.username === selectedUser ? (
-    //                 <MobileLogDetail data-accept="true">
-    //                     <LogDetails
-    //                         username={selectedUser}
-    //                         selectedDate={selectedDate || tempSelectedDate}
-    //                         pageType={pageType}
-    //                     />
-    //                 </MobileLogDetail>
-    //             ) : (
-    //                 <>
-    //                     <SimpleProfile
-    //                         user={log}
-    //                         ringColor={setRingColor}
-    //                         data-accept="true"
-    //                     />
-    //                     <RecentTask data-accept="true">
-    //                         {log.recent_task && (
-    //                             <>
-    //                                 <TaskName data-accept="true">
-    //                                     {' "' +
-    //                                         putEllipsis(
-    //                                             log.recent_task.name,
-    //                                             32,
-    //                                         ) +
-    //                                         '" ' +
-    //                                         t("log_preview_completed")}
-    //                                 </TaskName>
-
-    //                                 <Ago data-accept="true">
-    //                                     {" " +
-    //                                         DateTime.fromISO(
-    //                                             log.recent_task.completed_at,
-    //                                         )
-    //                                             .setLocale(locale)
-    //                                             .toRelative() +
-    //                                         " "}
-    //                                 </Ago>
-    //                             </>
-    //                         )}
-    //                     </RecentTask>
-    //                 </>
-    //             )}
-    //         </Frame>
-    //     )
-    // )
 }
 
 const Frame = styled.div`
@@ -247,37 +193,6 @@ const StatusCount = styled.div`
     text-overflow: ellipsis;
 
     font-size: 1.1em;
-`
-
-const RecentTask = styled.div`
-    min-width: 40%;
-    flex-grow: 1;
-
-    padding-bottom: 0.7em;
-    line-height: 1.3em;
-`
-
-const TaskName = styled.div`
-    color: ${(p) => p.theme.textColor};
-    display: inline;
-    font-size: 1.1em;
-`
-
-const Ago = styled.span`
-    margin-left: 0.5em;
-
-    display: inline;
-
-    font-size: 0.9em;
-    border-color: ${(p) => p.theme.secondTextColor};
-    white-space: nowrap;
-`
-
-const MobileLogDetail = styled.div`
-    height: 70vh;
-    width: 100%;
-
-    overflow-y: scroll;
 `
 
 export default LogPreviewBox
