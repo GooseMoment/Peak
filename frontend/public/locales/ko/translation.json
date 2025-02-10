@@ -37,7 +37,7 @@
     },
     "today": {
         "title": "오늘",
-        "important_title": "오늘의 중요한 할 일",
+        "important_title": "오늘의 중요한 작업",
         "filter_todayDue": "오늘 기한",
         "filter_overDue": "지난 기한",
         "filter_pastAssigned": "지난 할당",
