@@ -113,6 +113,7 @@ const Menu = styled(NavLink)`
     transition: background-color 0.15s ${cubicBeizer};
 
     user-select: none;
+    -webkit-user-select: none;
     -webkit-user-drag: none;
 
     &:hover {
