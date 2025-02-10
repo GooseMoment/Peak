@@ -46,11 +46,6 @@ const LogPreviewBox = ({
     const boxColor =
         getProjectColor(theme.type, log?.header_color) || theme.grey
 
-    const backgroundColor =
-        log.username === selectedUser
-            ? theme.social.activeBackgroundColor
-            : theme.backgroundColor
-
     return (
         <Frame
             $isMe={log.username === me}
@@ -140,23 +135,28 @@ const Frame = styled.div`
     width: ${(props) => (props.$isMe ? 100 : 47)}%;
 
     border-radius: 16px;
-    ${(props) =>
-        props.$isSelected
-            ? css`
-                  box-shadow:
-                      0 0 0 0.15em ${(p) => p.theme.backgroundColor},
-                      0 0 0 0.3em ${(p) => p.theme.textColor};
-              `
-            : css`
-                  border: none;
-              `}
-    background-color: ${(props) => props.$bgColor};
     box-sizing: border-box;
+    ${(props) =>
+        props.$isSelected &&
+        css`
+            box-shadow:
+                0 0 0 0.15em ${(p) => p.theme.backgroundColor},
+                0 0 0 0.3em ${(p) => p.theme.textColor} !important;
+        `}
+    background-color: ${(props) => props.$bgColor};
     padding: 1.5em 1.2em 1.2em 1.2em;
 
     display: flex;
     flex-direction: column;
     row-gap: 0.1em;
+    
+    transition: all 0.5s ease;
+
+    &:hover {
+        box-shadow:
+            0 0 0 0.15em ${(p) => p.theme.backgroundColor},
+            0 0 0 0.3em ${(props) => props.$bgColor};
+    }
 
     ${ifMobile} {
         aspect-ratio: ${(props) => (props.$isMe ? 1 / 0.47 : 1)};
