@@ -118,6 +118,7 @@ const DragHandleButtonBox = styled.div`
 `
 
 const ChildrenBox = styled.div`
+    width: 95%;
     opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
 `
 

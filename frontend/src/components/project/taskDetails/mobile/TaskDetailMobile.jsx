@@ -9,6 +9,7 @@ import { getTask } from "@api/tasks.api"
 
 const TaskDetailMobile = ({ closeDetail }) => {
     const [_, __, color] = useOutletContext()
+
     const { task_id } = useParams()
 
     const {
