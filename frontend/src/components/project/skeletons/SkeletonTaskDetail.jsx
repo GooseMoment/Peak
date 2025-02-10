@@ -13,7 +13,7 @@ const SkeletonTaskDetail = () => {
                 {[...Array(6)].map((e, i) => (
                     <ContentsBox key={i}>
                         <IconBar />
-                        <VLine $end={i === 0 || i === 5}/>
+                        <VLine $end={i === 0 || i === 5} />
                         <Bar />
                     </ContentsBox>
                 ))}
@@ -74,7 +74,7 @@ const VLine = styled.div`
 `
 
 const Bar = styled.div`
-    width: ${props=>props.$isTask ? 91.4 : 85}%;
+    width: ${(props) => (props.$isTask ? 91.4 : 85)}%;
     height: 1.4em;
     border-radius: 4px;
     background-color: ${(p) => p.theme.skeleton.defaultColor};

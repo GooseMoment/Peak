@@ -1,22 +1,21 @@
 import styled from "styled-components"
 
 import Module, { CenteredText, Title } from "@components/home/Module"
+
 import { useTranslation } from "react-i18next"
 
 const InstallPeak = () => {
-    const { t } = useTranslation("home", {keyPrefix: "install_peak"})
+    const { t } = useTranslation("home", { keyPrefix: "install_peak" })
 
     return (
         <Module>
             <Title to="/docs/install-instruction" underline>
-                {t("title")} 
+                {t("title")}
             </Title>
             <IconWrapper>
                 <AppIcon src="/logo.svg" draggable="false" />
             </IconWrapper>
-            <CenteredText>
-                {t("description")} 
-            </CenteredText>
+            <CenteredText>{t("description")}</CenteredText>
         </Module>
     )
 }

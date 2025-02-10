@@ -95,6 +95,7 @@
         "none": "None",
         "button_add": "Create",
         "button_save": "Save",
+        "name_placeholder": "Enter a name",
         "created_project": "Created a new project.",
         "created_project_error": "Failed to create a new project.",
         "created_drawer": "Created a new drawer.",
@@ -105,24 +106,23 @@
         "name_required": "A name is required.",
         "color": {
             "title": "Color Settings",
-            "theme1": "Theme1",
-            "theme2": "Theme2",
-            "orange": "orange",
-            "peach": "peach",
-            "pink": "pink",
-            "dark_yellow": "dark yellow",
-            "yellow": "yellow",
-            "light_green": "light green",
-            "turquoise": "turquoise",
-            "dark_blue": "dark blue",
+            "theme1": "Basic",
             "red": "red",
-            "brown": "brown",
-            "green": "green",
-            "sky_blue": "sky blue",
-            "light_purple": "light purple",
-            "purple_blue": "purple blue",
+            "red_orange": "red orange",
+            "orange": "orange",
+            "yellow": "yellow",
+            "bright_sky_blue": "bright sky blue",
             "blue": "blue",
-            "purple": "purple"
+            "magenta": "magenta",
+            "violet": "violet",
+            "pink": "pink",
+            "hot_pink": "hot pink",
+            "light_green": "light green",
+            "mint": "mint",
+            "olive": "olive",
+            "dark_violet": "dark violet",
+            "deep_blue": "deep blue",
+            "deep_indigo": "deep indigo"
         },
         "privacy": {
             "title": "Privacy Settings",
@@ -146,7 +146,7 @@
         "name_change_success": "The name has changed.",
         "none": "none",
         "error_load_task": "Couldn't load tasks 😢",
-        "edit" : {
+        "edit": {
             "edit_title": "Edit task",
             "edit_success": "Saved changes.",
             "edit_error": "Failed to edit a new task.",
@@ -329,6 +329,15 @@
         "button_create_account": "Create account",
         "button_resend_verification": "Resend verification mail",
         "button_forgot_password": "Forgot password",
+        "two_factor_authentication": "Two-factor Authentication",
+        "two_factor_authentication_description": "Open your authenticator app to view the code.",
+        "button_cancel": "Cancel",
+        "button_email_authentication": "Email Authentication",
+        "6-digit_code": "6-digit code",
+        "enter_6_digits": "Please enter 6 digits.",
+        "session_invalid": "Please sign in again.",
+        "try_count_exceed": "The try count for the authentication is exceeded. Please sign in again.",
+        "wrong_code": "Wrong code. Please try again.",
         "sign_up": "Sign Up",
         "email": "Email",
         "password": "Password",
@@ -338,19 +347,19 @@
         "button_already_have_account": "Have Account",
         "link_sign_in": "Sign In",
         "sign_up_completed": "Verify your email",
-        "check_inbox": "An email verfication mail was sent. Please check your inbox.",
+        "check_inbox": "An email verfication mail was sent. Please check your inbox or spam folder.",
         "sign_up_errors": {
-            "SIGNUP_NETWORK_ERROR": "Please check your network.",
-            "SIGNUP_SIGNED_IN_USER": "You already signed in.",
-            "SIGNUP_REQUIRED_FIELDS_MISSING": "Please enter email, password, username.",
-            "SIGNUP_USERNAME_TOO_SHORT": "Username should be more than 4 letters.",
-            "SIGNUP_EMAIL_WRONG": "Please enter a valid email.",
-            "SIGNUP_PASSWORD_TOO_SHORT": "Password should be more than 8 letters.",
-            "SIGNUP_USERNAME_WRONG": "Username should only contain alphabets, underscore and digits.",
-            "SIGNUP_EMAIL_EXISTS": "An email you entered already exists. Perhaps have an account?",
-            "SIGNUP_USERNAME_EXISTS": "An username you entered already exists.",
-            "SIGNUP_INTERNAL_ERROR": "Something's wrong with our service. Please try again.",
-            "SIGNUP_UNKNOWN_ERROR": "Please try later."
+            "NETWORK_ERROR": "Please check your network.",
+            "USER_ALREADY_AUTHENTICATED": "You already signed in.",
+            "REQUIRED_FIELD_MISSING": "Please enter email, password, username.",
+            "EMAIL_INVALID": "Please enter a valid email.",
+            "USERNAME_INVALID_LENGTH": "Length of the username should be between 4 and 15.",
+            "USERNAME_INVALID_FORMAT": "Username should only contain alphabets, underscore and digits.",
+            "USERNAME_DUPLICATE": "An username you entered already exists.",
+            "PASSWORD_INVALID": "Password should be 8 or more letters.",
+            "INTERNAL_ERROR": "Something's wrong with our service. Please try again.",
+            "EMAIL_NOT_SENT": "The server couldn't send a mail. Please try again after few minutes.",
+            "UNKNOWN_ERROR": "Please try later."
         }
     },
     "password_recovery": {
@@ -373,37 +382,37 @@
         "recovery_error_password_unmatch": "Two forms have different values.",
         "recovery_error": "Oops. Perhaps this link is invalid or expired."
     },
-    "social" : {
+    "social": {
         "following_title": "Following",
         "explore_title": "Explore",
         "log_preview_completed": "completed!",
         "log_details": {
             "no_content": "There is no task."
         },
-        "quote" : {
+        "quote": {
             "empty_self_quote": "Write your today's quote.",
             "empty_others_quote": "No quote yet."
         },
-        "emoji_modal" : {
-            "searchbar" : "Search emojis"
+        "emoji_modal": {
+            "searchbar": "Search emojis"
         },
-        "explore" : {
-            "searchbar" : "Search for usernames to follow.",
-            "no_result" : "No users matched your search",
-            "suggestion" : "Make new connections with new people!"
+        "explore": {
+            "searchbar": "Search for usernames to follow.",
+            "no_result": "No users matched your search",
+            "suggestion": "Make new connections with new people!"
         }
     },
-    "search" : {
+    "search": {
         "title": "Search",
-        "filter_button" : {
-            "search_terms" : "Terms",
-            "project" : "Project",
-            "drawer" : "Drawer",
-            "assigned_at" : "Assign",
-            "completed_at" : "Completed",
-            "privacy" : "Privacy",
-            "memo" : "Memo"
+        "filter_button": {
+            "search_terms": "Terms",
+            "project": "Project",
+            "drawer": "Drawer",
+            "assigned_at": "Assign",
+            "completed_at": "Completed",
+            "privacy": "Privacy",
+            "memo": "Memo"
         },
-        "no_result" : "Your search did not match any tasks 🤔"
+        "no_result": "Your search did not match any tasks 🤔"
     }
 }

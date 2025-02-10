@@ -13,7 +13,7 @@ const AssignedToday = () => {
     const tz = useClientTimezone()
 
     const { data, isLoading } = useQuery({
-        queryKey: ["home", "tasks", "today"],
+        queryKey: ["home", "tasks", "today", { tz }],
         queryFn: () => getTasksTodayAssignedGrouped(tz),
     })
 

@@ -24,7 +24,7 @@ const Box = styled.section`
     align-items: center;
 
     padding: 3rem;
-    color: ${p => p.theme.introTextColor};
+    color: ${(p) => p.theme.introTextColor};
 
     grid-area: 1 / 1 / 2 / 2;
 
@@ -57,7 +57,7 @@ const ScreenTop = styled.div`
     top: 0;
     background: linear-gradient(
         180deg,
-        ${p => p.theme.introBackgroundColor} 29.5%,
+        ${(p) => p.theme.introBackgroundColor} 29.5%,
         rgba(255, 215, 199, 0) 100%
     );
 `

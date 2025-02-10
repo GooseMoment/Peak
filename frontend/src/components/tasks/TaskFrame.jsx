@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 
 import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"

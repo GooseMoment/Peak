@@ -23,7 +23,6 @@ const DrawerBox = styled.div`
 
     ${ifMobile} {
         padding-left: 1.1em;
-        padding-right: 0.4em;
     }
 `
 
@@ -60,8 +59,12 @@ export const DrawerIcon = styled.div`
 
     & svg {
         top: 0;
-        margin-right: 1em;
+        margin-right: 1.45em;
         color: ${(props) => props.$color};
         cursor: pointer;
+    }
+
+    ${ifMobile} {
+        margin-right: 0.4em;
     }
 `

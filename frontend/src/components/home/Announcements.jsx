@@ -17,7 +17,7 @@ const Announcements = () => {
     const { t } = useTranslation("home", { keyPrefix: "announcements" })
 
     const { data, isLoading } = useQuery({
-        queryKey: ["announcements", "pinned_only"],
+        queryKey: ["announcements", "pinned_only", { locale }],
         queryFn: () => getAnnouncements(locale, true),
     })
 

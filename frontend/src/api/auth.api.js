@@ -7,15 +7,72 @@ import { deleteSubscription } from "@api/notifications.api"
 
 import { getClientSettings } from "@utils/clientSettings"
 
+const TwoFactorAuthTokenKey = "two_factor_auth_token"
+
 export const signIn = async (email, password) => {
     const res = await client.post("auth/sign_in/", {
         email: email,
         password: password,
     })
 
+    if (res.data.two_factor_auth !== undefined) {
+        localStorage.setItem(
+            TwoFactorAuthTokenKey,
+            res.data.two_factor_auth.token,
+        )
+        return true // two-factor authentication required
+    }
+
     setToken(res.data.token)
     setCurrentUsername(res.data.user.username)
 
+    return false // signing in completed
+}
+
+export const authTOTP = async (type, code) => {
+    const token = localStorage.getItem(TwoFactorAuthTokenKey)
+    if (!token) {
+        throw Error() // TODO: elabroate error
+    }
+
+    try {
+        const res = await client.post("auth/two_factor/totp/", {
+            token,
+            code,
+        })
+        setToken(res.data.token)
+        setCurrentUsername(res.data.user.username)
+    } catch (e) {
+        if (e?.response?.status === 403) {
+            localStorage.removeItem(TwoFactorAuthTokenKey)
+        }
+
+        throw e
+    }
+
+    return true
+}
+
+export const getTOTPRegistered = async () => {
+    const res = await client.get(`auth/two_factor/totp/register/`)
+    return res.data
+}
+
+export const registerTOTP = async () => {
+    const res = await client.post(`auth/two_factor/totp/register/`)
+    return res.data
+}
+
+export const confirmRegistrationTOTP = async (code) => {
+    await client.patch(`auth/two_factor/totp/register/`, {
+        code,
+    })
+
+    return true
+}
+
+export const deleteRegistrationTOTP = async () => {
+    await client.delete(`auth/two_factor/totp/register/`)
     return true
 }
 
@@ -34,7 +91,7 @@ export const signUp = async (email, password, username) => {
         } else if (err && err.response && err.response.status === 400) {
             code = err.response.data.code
         } else if (err && err.response && err.response.status === 500) {
-            code = "SIGNUP_INTERNAL_ERROR"
+            code = err?.response?.data?.code || "SIGNUP_INTERNAL_ERROR"
         } else {
             code = "SIGNUP_UNKNOWN_ERROR"
         }

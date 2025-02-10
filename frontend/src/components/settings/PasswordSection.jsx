@@ -18,7 +18,6 @@ import { toast } from "react-toastify"
 const PasswordSection = () => {
     const { t } = useTranslation("settings", { keyPrefix: "account" })
 
-    const [passwordFormOpened, setPasswordFormOpened] = useState(false)
     const [currentPassword, setCurrentPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [newPasswordAgain, setNewPasswordAgain] = useState("")
@@ -33,7 +32,6 @@ const PasswordSection = () => {
             setCurrentPassword("")
             setNewPassword("")
             setNewPasswordAgain("")
-            setPasswordFormOpened(false)
         },
         onError: (e) => {
             if (
@@ -70,85 +68,62 @@ const PasswordSection = () => {
 
     return (
         <Section>
-            <Name>
-                {t("change_password")}
-                <ToggleButton
-                    onClick={() => setPasswordFormOpened((prev) => !prev)}
-                >
-                    {passwordFormOpened
-                        ? t("section_close")
-                        : t("section_open")}
-                </ToggleButton>
-            </Name>
+            <Name>{t("change_password")}</Name>
             <Value>
-                {passwordFormOpened ? (
-                    <PasswordChangeForm onSubmit={changePassword}>
-                        <Input
-                            icon={<Key />}
-                            name="password"
-                            type="password"
-                            placeholder={t("current_password")}
-                            required
-                            value={currentPassword}
-                            onChange={(e) => setCurrentPassword(e.target.value)}
-                        />
-                        <Input
-                            icon={<Key />}
-                            name="new_password"
-                            type="password"
-                            placeholder={t("new_password")}
-                            required
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                        />
-                        <Input
-                            icon={<RotateCw />}
-                            name="new_password_again"
-                            type="password"
-                            placeholder={t("new_password_again")}
-                            required
-                            value={newPasswordAgain}
-                            onChange={(e) =>
-                                setNewPasswordAgain(e.target.value)
-                            }
-                        />
-                        <div>
-                            <ButtonGroup $justifyContent="right">
-                                <Button
-                                    disabled={mutation.isPending}
-                                    loading={mutation.isPending}
-                                    form={buttonForms.filled}
-                                    state={states.danger}
-                                    type="submit"
-                                >
-                                    {t("button_change")}
-                                </Button>
-                            </ButtonGroup>
-                        </div>
-                    </PasswordChangeForm>
-                ) : (
-                    <PasswordChangeInputsEmpty />
-                )}
+                <PasswordChangeForm onSubmit={changePassword}>
+                    <Input
+                        icon={<Key />}
+                        name="password"
+                        type="password"
+                        placeholder={t("current_password")}
+                        autoComplete="password"
+                        required
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                    />
+                    <Input
+                        icon={<Key />}
+                        name="new_password"
+                        type="password"
+                        placeholder={t("new_password")}
+                        autoComplete="new-password"
+                        required
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                    <Input
+                        icon={<RotateCw />}
+                        name="new_password_again"
+                        type="password"
+                        autoComplete="new-password"
+                        placeholder={t("new_password_again")}
+                        required
+                        value={newPasswordAgain}
+                        onChange={(e) => setNewPasswordAgain(e.target.value)}
+                    />
+                    <ButtonGroup
+                        $justifyContent="right"
+                        $margin="0em 0em 2em 0em">
+                        <Button
+                            disabled={mutation.isPending}
+                            loading={mutation.isPending}
+                            form={buttonForms.filled}
+                            state={states.danger}
+                            type="submit">
+                            {t("button_change")}
+                        </Button>
+                    </ButtonGroup>
+                </PasswordChangeForm>
             </Value>
         </Section>
     )
 }
-
-const ToggleButton = styled(Button)`
-    margin-left: 1em;
-`
 
 const PasswordChangeForm = styled.form`
     margin-top: 1em;
     display: flex;
     flex-direction: column;
     gap: 1em;
-`
-
-const PasswordChangeInputsEmpty = styled.div`
-    margin-top: 1em;
-    width: 100%;
-    height: calc(1em * 4 + 0.75em * 7 + 1em * 3 + 0.5em * 2 + 1em);
 `
 
 export default PasswordSection

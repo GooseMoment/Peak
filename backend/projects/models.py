@@ -3,6 +3,7 @@ from django.db import models
 from api.models import Base, PrivacyMixin
 from users.models import User
 
+
 class Project(Base, PrivacyMixin):
     INBOX = "inbox"
     REGULAR = "regular"
@@ -25,6 +26,6 @@ class Project(Base, PrivacyMixin):
 
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"
-    
+
     class Meta:
         db_table = "projects"

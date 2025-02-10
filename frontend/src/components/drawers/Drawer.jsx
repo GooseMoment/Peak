@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
-import Button from "@components/common/Button"
+import Button, { ButtonGroup } from "@components/common/Button"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
 import ModalWindow from "@components/common/ModalWindow"
@@ -13,14 +13,13 @@ import DrawerIcons from "@components/drawers/DrawerIcons"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 import TaskCreateSimple from "@components/project/TaskCreateSimple"
 import PrivacyIcon from "@components/project/common/PrivacyIcon"
-import DragAndDownBox from "@components/project/dragAndDown/DragAndDownBox"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
 import {
     SkeletonDrawer,
     SkeletonInboxDrawer,
 } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenu from "@components/project/sorts/SortMenu"
-import Task from "@components/tasks/Task"
+import DrawerTask from "@components/tasks/DrawerTask"
 
 import { deleteDrawer } from "@api/drawers.api"
 import { patchDrawer } from "@api/drawers.api"
@@ -96,12 +95,14 @@ const Drawer = ({ project, drawer, color }) => {
         const targetOrder = targetData?.order
         const symbolProperties = Object.getOwnPropertySymbols(targetData)
         const closestEdge = targetData[symbolProperties[0]]
+        const taskID = source?.data.id
 
         if (typeof targetOrder !== "number" || draggedOrder === targetOrder) {
             return
         }
 
         patchMutation.mutate({
+            task_id: taskID,
             dragged_order: draggedOrder,
             target_order: targetOrder,
             closest_edge: closestEdge,
@@ -220,16 +221,41 @@ const Drawer = ({ project, drawer, color }) => {
                 <TaskList>
                     {data?.pages?.map((group) =>
                         group?.results?.map((task) => (
-                            <DragAndDownBox
+                            <DrawerTask
                                 key={task.id}
                                 task={task}
-                                color={color}>
-                                <Task task={task} color={color} />
-                            </DragAndDownBox>
+                                color={color}
+                                projectType={project.type}
+                            />
                         )),
                     )}
                 </TaskList>
             )}
+            <TaskCreateButton onClick={handleToggleSimpleCreate}>
+                {isSimpleOpen ? (
+                    <>
+                        <FeatherIcon icon="x-circle" />
+                        <TaskCreateText>
+                            {t("button_close_add_task")}
+                        </TaskCreateText>
+                    </>
+                ) : (
+                    <>
+                        <FeatherIcon icon="plus-circle" />
+                        <TaskCreateText>{t("button_add_task")}</TaskCreateText>
+                    </>
+                )}
+            </TaskCreateButton>
+            {hasNextPage ? (
+                <ButtonGroup $justifyContent="center" $margin="1em">
+                    <MoreButton
+                        disabled={isFetchingNextPage}
+                        loading={isFetchingNextPage}
+                        onClick={() => fetchNextPage()}>
+                        {isLoading ? t("loading") : t("button_load_more")}
+                    </MoreButton>
+                </ButtonGroup>
+            ) : null}
             {isSimpleOpen && (
                 <TaskCreateSimple
                     projectID={project.id}
@@ -274,31 +300,6 @@ const Drawer = ({ project, drawer, color }) => {
                     <DrawerEdit projectID={project.id} drawer={drawer} />
                 </ModalWindow>
             )}
-            <TaskCreateButton onClick={handleToggleSimpleCreate}>
-                {isSimpleOpen ? (
-                    <>
-                        <FeatherIcon icon="x-circle" />
-                        <TaskCreateText>
-                            {t("button_close_add_task")}
-                        </TaskCreateText>
-                    </>
-                ) : (
-                    <>
-                        <FeatherIcon icon="plus-circle" />
-                        <TaskCreateText>{t("button_add_task")}</TaskCreateText>
-                    </>
-                )}
-            </TaskCreateButton>
-            <FlexBox>
-                {hasNextPage ? (
-                    <MoreButton
-                        disabled={isFetchingNextPage}
-                        loading={isFetchingNextPage}
-                        onClick={() => fetchNextPage()}>
-                        {isLoading ? t("loading") : t("button_load_more")}
-                    </MoreButton>
-                ) : null}
-            </FlexBox>
         </>
     )
 }
@@ -308,26 +309,22 @@ const DrawerTitleBox = styled.div`
     align-items: center;
 `
 
+const TaskList = styled.div`
+    margin-top: 1em;
+`
+
 const TaskCreateButton = styled.div`
     display: flex;
     align-items: center;
+    margin-top: 1em;
     margin-left: 1.9em;
-    margin-top: 1.8em;
-
-    &:hover {
-        cursor: pointer;
-    }
+    cursor: pointer;
 
     & svg {
-        text-align: center;
         width: 1.1em;
         height: 1.1em;
         top: 0;
     }
-`
-
-const TaskList = styled.div`
-    margin-top: 1em;
 `
 
 const TaskCreateText = styled.div`
@@ -337,17 +334,9 @@ const TaskCreateText = styled.div`
     margin-top: 0em;
 `
 
-const FlexBox = styled.div`
-    display: flex;
-    margin-top: 1em;
-    align-items: center;
-    justify-content: center;
-`
-
 const MoreButton = styled(Button)`
     max-width: 25em;
     width: 80vw;
-    margin: 1em;
 `
 
 const makeSortMenuItems = (t) => [

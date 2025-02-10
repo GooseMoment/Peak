@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Task
 from api.admin import fieldset_base, readonly_fields_base
 
+
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     ordering = ["-updated_at"]
@@ -12,13 +13,28 @@ class TaskAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ["user", "drawer", "name", "priority", "privacy", "order", "memo", "repeat"],
+                "fields": [
+                    "user",
+                    "drawer",
+                    "name",
+                    "priority",
+                    "privacy",
+                    "order",
+                    "memo",
+                    "repeat",
+                ],
             },
         ),
         (
             "Date & Time",
             {
-                "fields": ["completed_at", "assigned_at", "due_type", "due_date", "due_datetime"],
+                "fields": [
+                    "completed_at",
+                    "assigned_at",
+                    "due_type",
+                    "due_date",
+                    "due_datetime",
+                ],
             },
         ),
         fieldset_base,

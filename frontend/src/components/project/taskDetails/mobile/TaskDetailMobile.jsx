@@ -7,19 +7,15 @@ import TaskCommonDetailMobile from "@components/project/taskDetails/mobile/TaskC
 
 import { getTask } from "@api/tasks.api"
 
-import { useTranslation } from "react-i18next"
-
 const TaskDetailMobile = ({ closeDetail }) => {
-    const { t } = useTranslation(null, { keyPrefix: "task" })
-
     const [_, __, color] = useOutletContext()
+
     const { task_id } = useParams()
 
     const {
         data: task,
         isLoading,
         isError,
-        refetch,
     } = useQuery({
         queryKey: ["task", { taskID: task_id }],
         queryFn: () => getTask(task_id),

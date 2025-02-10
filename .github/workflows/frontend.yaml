@@ -1,0 +1,68 @@
+name: Frontend
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Install modules
+        run: pnpm i
+        working-directory: ./frontend
+      - name: Check for pnpm-lock.yaml Changes
+        run: git diff --exit-code pnpm-lock.yaml
+        working-directory: ./frontend
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Install modules
+        run: pnpm i
+        working-directory: ./frontend
+      - name: Run Prettier Check
+        run: pnpm format:check
+        working-directory: ./frontend
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Install modules
+        run: pnpm i
+        working-directory: ./frontend
+      - name: Run ESLint
+        run: pnpm lint
+        working-directory: ./frontend
+  depcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run depcheck
+        working-directory: ./frontend
+        run: npx depcheck
+  locales:
+    strategy:
+      matrix:
+        file: [docs, home, intro, settings, translation]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare ${{ matrix.file }}
+        working-directory: ./frontend/public/locales
+        run: npx compare-json ./ko/${{ matrix.file }}.json ./en/${{ matrix.file }}.json
