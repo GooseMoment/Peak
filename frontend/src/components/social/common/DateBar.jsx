@@ -24,11 +24,15 @@ const DateBar = ({ selectedDate, setSelectedDate }) => {
 
     const handleDate = (diff) => {
         const date = DateTime.fromISO(selectedDate)
-        const newDate = date.plus({days: diff}) 
-        setSelectedDate(newDate.setZone('utc').toISO())
+        const newDate = date.plus({ days: diff })
+        setSelectedDate(newDate.setZone("utc").toISO())
     }
 
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
+
+    useEffect(() => {
+        setIsCalendarOpen(false)
+    }, [selectedDate])
 
     return (
         <Frame>
@@ -104,7 +108,7 @@ const DateBox = styled.div`
     flex-grow: 1;
 
     text-align: center;
-    font-weight: 500;   // Bold: 700
+    font-weight: 500; // Bold: 700
 `
 
 const CalendarWrapper = styled.div`
