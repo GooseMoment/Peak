@@ -85,7 +85,7 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
         <SkeletonProjectPage />
     ) : (
         <DetailBox>
-            <DetailHeader data-accpet="true">
+            <DetailHeader>
                 {quote && (
                     <>
                         <Quote

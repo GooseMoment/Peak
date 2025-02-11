@@ -5,13 +5,14 @@ import { styled } from "styled-components"
 
 import CommonCalendar from "@components/common/CommonCalendar"
 import SocialPageTitle from "@components/social/SocialPageTitle"
+import DateBar from "@components/social/common/DateBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
 import LogsPreview from "@components/social/logsPreview/LogsPreview"
 
 import { getCurrentUsername } from "@api/client"
 import { getDailyLogsPreview } from "@api/social.api"
 
-import useScreenType, { ifMobile } from "@utils/useScreenType"
+import useScreenType, { ifMobile, ifTablet } from "@utils/useScreenType"
 
 const SocialFollowingPage = () => {
     const initialDate = new Date()
@@ -38,14 +39,22 @@ const SocialFollowingPage = () => {
 
             <Wrapper>
                 <Container>
-                    <CalendarWrapper>
-                        <CommonCalendar
-                            isRangeSelectMode={false}
-                            selectedStartDate={selectedDate}
-                            setSelectedStartDate={setSelectedDate}
-                            contentedDates={mockNewLogDates}
+                    {isMobile && (
+                        <DateBar
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
                         />
-                    </CalendarWrapper>
+                    )}
+                    {!isMobile && (
+                        <CalendarWrapper>
+                            <CommonCalendar
+                                isRangeSelectMode={false}
+                                selectedStartDate={selectedDate}
+                                setSelectedStartDate={setSelectedDate}
+                                contentedDates={mockNewLogDates}
+                            />
+                        </CalendarWrapper>
+                    )}
                     {dailyLogs && (
                         <LogsPreview
                             logs={dailyLogs}
@@ -71,8 +80,10 @@ const SocialFollowingPage = () => {
 }
 
 const Wrapper = styled.div`
+    max-width: 60rem;
+
     display: flex;
-    gap: 2rem;
+    justify-content: space-between;
 
     ${ifMobile} {
         flex-direction: column;
@@ -80,11 +91,11 @@ const Wrapper = styled.div`
 `
 
 const Container = styled.div`
-    width: 50%;
-    min-width: 27.5rem;
+    width: 35%;
+    min-width: 22.5rem;
     margin-bottom: auto;
 
-    padding: 0 1rem 0;
+    padding: 0 1em 0;
     overflow: hidden;
 
     display: flex;
@@ -98,17 +109,23 @@ const Container = styled.div`
 
         padding: 0;
     }
+
+    ${ifTablet} {
+        padding: 0 0.5em 0;
+    }
 `
 
 const StickyContainer = styled(Container)`
     position: sticky;
     top: 2.5rem;
     gap: 0rem;
+    flex-grow: 1;
+    max-width: 28rem;
 `
 
 const CalendarWrapper = styled.div`
     margin: 0 auto;
-    width: 80%;
+    width: 100%;
     max-width: 35rem;
 
     ${ifMobile} {

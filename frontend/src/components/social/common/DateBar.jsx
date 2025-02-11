@@ -104,7 +104,6 @@ const DateBox = styled.div`
     flex-grow: 1;
 
     text-align: center;
-    font-size: 1.1em;
     font-weight: 500;   // Bold: 700
 `
 
