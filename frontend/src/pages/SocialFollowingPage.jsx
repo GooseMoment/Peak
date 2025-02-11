@@ -103,15 +103,16 @@ const Container = styled.div`
     justify-content: center;
     gap: 1rem;
 
+    ${ifTablet} {
+        padding: 0 0.5em 0;
+    }
+
     ${ifMobile} {
+        margin: 0;
         width: 100%;
         min-width: auto;
 
         padding: 0;
-    }
-
-    ${ifTablet} {
-        padding: 0 0.5em 0;
     }
 `
 

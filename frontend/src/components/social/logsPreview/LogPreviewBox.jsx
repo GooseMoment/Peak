@@ -55,6 +55,7 @@ const LogPreviewBox = ({
                 </ProfileWrapper>
             </FrameRow>
             <Username>@{log.username}</Username>
+            
             <SimpleStats>
                 <StatsUnit>
                     <StatusIconWrapper $type={"completedTask"}>
@@ -76,8 +77,8 @@ const LogPreviewBox = ({
 const Frame = styled.div`
     /* xa : xa/k     xb = 0.47xa */
     /* xb : xb/1.1  xb/1.1 = xa/k*/
-    aspect-ratio: ${(props) => (props.$isMe ? 1.1 / 0.47 : 1.1)};
-    width: ${(props) => (props.$isMe ? 100 : 47)}%;
+    aspect-ratio: ${(props) => (props.$isMe ? 1.1 / 0.45 : 1.1)};
+    width: ${(props) => (props.$isMe ? 100 : 45)}%;
 
     border-radius: 16px;
     box-sizing: border-box;
@@ -104,7 +105,7 @@ const Frame = styled.div`
     }
 
     ${ifMobile} {
-        aspect-ratio: ${(props) => (props.$isMe ? 1 / 0.47 : 1)};
+        aspect-ratio: ${(props) => (props.$isMe ? 1 / 0.45 : 1)};
         padding: 1em;
     }
 `
@@ -116,17 +117,21 @@ const FrameRow = styled.div`
 
 const ProfileWrapper = styled.div`
     aspect-ratio: 1;
-    max-width: 4.1em;
+    max-width: 2.1rem;
 
     ${(props) =>
         props.$isMe
             ? css`
                   /* ((100% + padding) * box_width - padding) * width */
-                  width: calc(((100% + 2.4em) * 0.47 - 2.4em) * 0.5);
+                  width: calc(((100% + 2.4em) * 0.45 - 2.4em) * 0.5);
               `
             : css`
                   width: 50%;
               `}
+
+    ${ifMobile} {
+        max-width: 3.2rem;
+    }
 `
 
 const Username = styled.div`
@@ -153,7 +158,7 @@ const StatsUnit = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 0.5em;
+    gap: 0.3em;
 `
 
 const StatusIconWrapper = styled.div`
@@ -174,7 +179,7 @@ const StatusIconWrapper = styled.div`
         aspect-ratio: 1;
         width: ${(props) => (props.$type === "completedTask" ? 83 : 100)}%;
         top: 0;
-        margin: 0.1rem 0;
+        margin: 0.1em 0;
 
         stroke: ${(p) => p.theme.black};
         stroke-width: 0.2em;
@@ -187,11 +192,15 @@ const StatusIconWrapper = styled.div`
 `
 
 const StatusCount = styled.div`
-    line-height: 1.3em;
+    line-height: 1.2em;
     overflow-x: clip;
     text-overflow: ellipsis;
 
     font-size: 1.1em;
+
+    ${ifMobile} {
+        font-size: 1em;
+    }
 `
 
 export default LogPreviewBox

@@ -40,6 +40,7 @@ const SocialDailyPage = () => {
         <Frame>
             <Header>
                 <HeaderFrame>
+                    {/* TODO: 뒤로가기 제대로 동작하는지 다시 확인 */}
                     <PageBack defaultTo="/app/social">{t("back")}</PageBack>
                     <UsernameTitle>{username}</UsernameTitle>
                 </HeaderFrame>

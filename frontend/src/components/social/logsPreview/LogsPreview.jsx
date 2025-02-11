@@ -44,7 +44,7 @@ const LogsPreview = ({ logs, selectedUser, setSelectedUser, selectedDate }) => {
 }
 
 const LogsPreviewContainer = styled.div`
-    min-width: 20rem;
+    min-width: auto;
     max-width: 25rem;
     width: 100%;
     margin: 0 auto;
@@ -52,6 +52,7 @@ const LogsPreviewContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: flex-start;
     row-gap: 1.2em;
 `
 
