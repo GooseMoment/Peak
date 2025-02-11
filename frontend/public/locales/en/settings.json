@@ -13,8 +13,7 @@
         "appearance": "Appearance",
         "reactions": "Reactions",
         "blocks": "Blocks",
-        "info": "Info",
-        "sign_out": "Sign out"
+        "info": "Info"
     },
     "account": {
         "display_name": "Display name",
@@ -53,6 +52,12 @@
         "delete_task_after_alert": {
             "name": "Alert before task deletion",
             "description": "Show an alert before deleting tasks."
+        },
+        "sign_out": {
+            "name": "Sign out",
+            "values": {
+                "button_sign_out": "Sign out"
+            }
         }
     },
     "security": {
