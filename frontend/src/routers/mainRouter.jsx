@@ -25,7 +25,7 @@ const TodayPage = lazy(() => import("@pages/TodayPage"))
 const ProjectPage = lazy(() => import("@pages/ProjectPage"))
 const ProjectListPage = lazy(() => import("@pages/ProjectListPage"))
 const SettingsPage = lazy(() => import("@pages/SettingsPage"))
-const { TaskCreateElement, TaskDetailElement } = lazily(
+const { TaskCreateElement } = lazily(
     () => import("@components/project/taskDetails/TaskElements"),
 )
 
@@ -165,11 +165,6 @@ const routes = [
                     {
                         path: "tasks/create/",
                         element: <TaskCreateElement />,
-                    },
-                    {
-                        path: "tasks/:task_id/detail/",
-                        id: "task",
-                        element: <TaskDetailElement />,
                     },
                 ],
             },

@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom"
+import { useState } from "react"
 
 import styled from "styled-components"
 
+import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement"
 import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"
 import taskCalculation from "@components/tasks/utils/taskCalculation"
@@ -16,11 +17,13 @@ import FeatherIcon from "feather-icons-react"
 const TaskFrame = ({
     task,
     color,
-    taskDetailPath,
+    showTaskDetail,
     isLoading,
     toComplete,
     isSocial,
 }) => {
+    const [isModalOpen, setModalOpen] = useState(false)
+
     const completedAt = isSocial ? null : task.completed_at
 
     const {
@@ -33,7 +36,13 @@ const TaskFrame = ({
     } = taskCalculation(task, isSocial)
 
     const TaskName = (
-        <TaskNameBox $completed={completedAt}>{task?.name}</TaskNameBox>
+        <TaskNameBox
+            $completed={completedAt}
+            onClick={() => {
+                showTaskDetail && setModalOpen(true)
+            }}>
+            {task?.name}
+        </TaskNameBox>
     )
 
     const hasDate = task.due_type || task.assigned_at
@@ -56,13 +65,7 @@ const TaskFrame = ({
                             onClick={toComplete}
                         />
                     </Icons>
-                    {taskDetailPath ? (
-                        <NameLink draggable="false" to={taskDetailPath}>
-                            {TaskName}
-                        </NameLink>
-                    ) : (
-                        TaskName
-                    )}
+                    {TaskName}
                 </CircleName>
 
                 {hasDate && (
@@ -99,6 +102,14 @@ const TaskFrame = ({
                     </Dates>
                 )}
             </Content>
+            {isModalOpen ? (
+                <TaskDetailElement
+                    onClose={() => setModalOpen(false)}
+                    projectType={task.projectType}
+                    color={color}
+                    task={task}
+                />
+            ) : null}
         </Box>
     )
 }
@@ -113,11 +124,6 @@ const Box = styled.div`
 `
 
 const Content = styled.div`
-    min-width: 0;
-`
-
-const NameLink = styled(Link)`
-    display: flex;
     min-width: 0;
 `
 
