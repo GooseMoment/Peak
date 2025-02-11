@@ -33,10 +33,10 @@ const DateBar = ({ selectedDate, setSelectedDate }) => {
     return (
         <Frame>
             <NavBar>
-                <NavButton $buttonSize={1} onClick={() => handleDate(-7)}>
+                <NavButton $buttonSize={1.5} onClick={() => handleDate(-7)}>
                     <FeatherIcon icon="chevrons-left" />
                 </NavButton>
-                <NavButton $buttonSize={2} onClick={() => handleDate(-1)}>
+                <NavButton $buttonSize={2.5} onClick={() => handleDate(-1)}>
                     <FeatherIcon icon="chevron-left" />
                 </NavButton>
                 <DateBox
@@ -45,10 +45,10 @@ const DateBar = ({ selectedDate, setSelectedDate }) => {
                     }}>
                     {displayDate()}
                 </DateBox>
-                <NavButton $buttonSize={2} onClick={() => handleDate(1)}>
+                <NavButton $buttonSize={2.5} onClick={() => handleDate(1)}>
                     <FeatherIcon icon="chevron-right" />
                 </NavButton>
-                <NavButton $buttonSize={1} onClick={() => handleDate(7)}>
+                <NavButton $buttonSize={1.5} onClick={() => handleDate(7)}>
                     <FeatherIcon icon="chevrons-right" />
                 </NavButton>
             </NavBar>
@@ -75,7 +75,7 @@ const Frame = styled.div`
 `
 
 const NavBar = styled.div`
-    margin: 0.5em;
+    margin: 0.5em 1em 0.5em;
     width: 100%;
     max-width: 35rem;
     height: 1.2em;
@@ -104,7 +104,8 @@ const DateBox = styled.div`
     flex-grow: 1;
 
     text-align: center;
-    font-weight: bold;
+    font-size: 1.1em;
+    font-weight: 500;   // Bold: 700
 `
 
 const CalendarWrapper = styled.div`
