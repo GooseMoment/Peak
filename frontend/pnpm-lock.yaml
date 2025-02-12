@@ -19,7 +19,7 @@ importers:
         version: 1.0.3
       '@atlaskit/pragmatic-drag-and-drop-react-accessibility':
         specifier: ^1.3.0
-        version: 1.3.1(@babel/core@7.26.8)(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.3.1(@babel/core@7.26.8)(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query':
         specifier: ^5.66.0
         version: 5.66.0(react@18.3.1)
@@ -39,11 +39,11 @@ importers:
         specifier: ^1.0.4
         version: 1.0.4
       i18next:
-        specifier: ^23.11.4
-        version: 23.11.5
+        specifier: ^24.2.2
+        version: 24.2.2(typescript@5.4.5)
       i18next-http-backend:
-        specifier: ^2.5.2
-        version: 2.5.2
+        specifier: ^3.0.2
+        version: 3.0.2
       luxon:
         specifier: ^3.5.0
         version: 3.5.0
@@ -61,7 +61,7 @@ importers:
         version: 18.3.1
       react-calendar:
         specifier: ^4.8.0
-        version: 4.8.0(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 4.8.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-dom:
         specifier: ^18.2.0
         version: 18.3.1(react@18.3.1)
@@ -69,17 +69,17 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-i18next:
-        specifier: ^14.1.1
-        version: 14.1.1(i18next@23.11.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.4.0
+        version: 15.4.0(i18next@24.2.2(typescript@5.4.5))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-lazily:
         specifier: ^0.9.2
         version: 0.9.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-router-dom:
-        specifier: ^6.22.0
-        version: 6.23.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^6.29.0
+        version: 6.29.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-spring-bottom-sheet:
         specifier: ^3.4.1
-        version: 3.4.1(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 3.4.1(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-toastify:
         specifier: ^10.0.5
         version: 10.0.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -100,10 +100,10 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2(prettier@3.5.0)
       '@types/react':
-        specifier: ^18.2.43
-        version: 18.3.2
+        specifier: ^18.3.12
+        version: 18.3.18
       '@types/react-dom':
-        specifier: ^18.2.17
+        specifier: ^18.3.0
         version: 18.3.0
       '@vite-pwa/assets-generator':
         specifier: ^0.2.6
@@ -115,8 +115,8 @@ importers:
         specifier: ^9.20.1
         version: 9.20.1(jiti@1.21.0)
       eslint-config-prettier:
-        specifier: ^9.1.0
-        version: 9.1.0(eslint@9.20.1(jiti@1.21.0))
+        specifier: ^10.0.0
+        version: 10.0.1(eslint@9.20.1(jiti@1.21.0))
       eslint-plugin-react:
         specifier: ^7.37.4
         version: 7.37.4(eslint@9.20.1(jiti@1.21.0))
@@ -305,6 +305,10 @@ packages:
 
   '@babel/runtime@7.24.5':
     resolution: {integrity: sha512-Nms86NXrsaeU9vbBJKni6gXiEXZ4CVpYVzEjDH9Sb8vmZ3UljyA1GSOJl/6LGPO8EHLuSF9H+IxNXHPX8QHJ4g==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.26.7':
+    resolution: {integrity: sha512-AOPI3D+a8dXnja+iwsUqGRjr1BbZIe771sXdapOtYI531gSqpi92vXivKcq2asu/DFpdl1ceFAKZyRzK2PCVcQ==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.26.8':
@@ -634,8 +638,8 @@ packages:
       react: ^16.8.0 || 17.x
       react-dom: ^16.8.0 || 17.x
 
-  '@remix-run/router@1.16.1':
-    resolution: {integrity: sha512-es2g3dq6Nb07iFxGk5GuHN20RwBZOsuDQN7izWIisUcv9r+d2C5jQxqmgkdebXgReWfiyUabcki6Fg77mSNrig==}
+  '@remix-run/router@1.22.0':
+    resolution: {integrity: sha512-MBOl8MeOzpK0HQQQshKB7pABXbmyHizdTpqnrIseTbsv0nAepwC2ENZa1aaBExNQcpLoXmWthhak8SABLzvGPw==}
     engines: {node: '>=14.0.0'}
 
   '@rollup/rollup-android-arm-eabi@4.34.6':
@@ -824,8 +828,8 @@ packages:
   '@types/react-dom@18.3.0':
     resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
 
-  '@types/react@18.3.2':
-    resolution: {integrity: sha512-Btgg89dAnqD4vV7R3hlwOxgqobUQKgx3MmrQRi0yYbs/P0ym8XozIAlkqVilPqHQwXs4e9Tf63rrCgl58BcO4w==}
+  '@types/react@18.3.18':
+    resolution: {integrity: sha512-t4yC+vtgnkYjNSKlFx1jkAhH8LgTo2N/7Qvi83kdEaUtMDiwpbLAktKDaAMlRcJ5eSxZkH74eEGt1ky31d7kfQ==}
 
   '@types/stylis@4.2.5':
     resolution: {integrity: sha512-1Xve+NMN7FWjY14vLoY5tL3BVEQ/n42YLwaqJIPYhotZ9uBHt87VceMwWQpzmdEt2TNXIorIFG+YeCUUW7RInw==}
@@ -1295,8 +1299,8 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  eslint-config-prettier@9.1.0:
-    resolution: {integrity: sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==}
+  eslint-config-prettier@10.0.1:
+    resolution: {integrity: sha512-lZBts941cyJyeaooiKxAtzoPHTN+GbQTJFAIdQbRhA4/8whaAraEh47Whw/ZFfrjNSnlAxqfm9i0XVAEkULjCw==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -1579,11 +1583,16 @@ packages:
   html-parse-stringify@3.0.1:
     resolution: {integrity: sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==}
 
-  i18next-http-backend@2.5.2:
-    resolution: {integrity: sha512-+K8HbDfrvc1/2X8jpb7RLhI9ZxBDpx3xogYkQwGKlWAUXLSEGXzgdt3EcUjLlBCdMwdQY+K+EUF6oh8oB6rwHw==}
+  i18next-http-backend@3.0.2:
+    resolution: {integrity: sha512-PdlvPnvIp4E1sYi46Ik4tBYh/v/NbYfFFgTjkwFl0is8A18s7/bx9aXqsrOax9WUbeNS6mD2oix7Z0yGGf6m5g==}
 
-  i18next@23.11.5:
-    resolution: {integrity: sha512-41pvpVbW9rhZPk5xjCX2TPJi2861LEig/YRhUkY+1FQ2IQPS0bKUDYnEqY8XPPbB48h1uIwLnP9iiEfuSl20CA==}
+  i18next@24.2.2:
+    resolution: {integrity: sha512-NE6i86lBCKRYZa5TaUDkU5S4HFgLIEJRLr3Whf2psgaxBleQ2LC1YW1Vc+SCgkAW7VEzndT6al6+CzegSUHcTQ==}
+    peerDependencies:
+      typescript: ^5
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   ico-endec@0.1.6:
     resolution: {integrity: sha512-ZdLU38ZoED3g1j3iEyzcQj+wAkY2xfWNkymszfJPoxucIUhK7NayQ+/C4Kv0nDFMIsbtbEHldv3V8PU494/ueQ==}
@@ -2208,8 +2217,8 @@ packages:
       react: '>=16.4.0'
       react-dom: '>=16.4.0'
 
-  react-i18next@14.1.1:
-    resolution: {integrity: sha512-QSiKw+ihzJ/CIeIYWrarCmXJUySHDwQr5y8uaNIkbxoGRm/5DukkxZs+RPla79IKyyDPzC/DRlgQCABHtrQuQQ==}
+  react-i18next@15.4.0:
+    resolution: {integrity: sha512-Py6UkX3zV08RTvL6ZANRoBh9sL/ne6rQq79XlkHEdd82cZr2H9usbWpUNVadJntIZP2pu3M2rL1CN+5rQYfYFw==}
     peerDependencies:
       i18next: '>= 23.2.3'
       react: '>= 16.8.0'
@@ -2240,15 +2249,15 @@ packages:
     resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
     engines: {node: '>=0.10.0'}
 
-  react-router-dom@6.23.1:
-    resolution: {integrity: sha512-utP+K+aSTtEdbWpC+4gxhdlPFwuEfDKq8ZrPFU65bbRJY+l706qjR7yaidBpo3MSeA/fzwbXWbKBI6ftOnP3OQ==}
+  react-router-dom@6.29.0:
+    resolution: {integrity: sha512-pkEbJPATRJ2iotK+wUwHfy0xs2T59YPEN8BQxVCPeBZvK7kfPESRc/nyxzdcxR17hXgUPYx2whMwl+eo9cUdnQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: '>=16.8'
       react-dom: '>=16.8'
 
-  react-router@6.23.1:
-    resolution: {integrity: sha512-fzcOaRF69uvqbbM7OhvQyBTFDVrrGlsFdS3AL+1KfIBtGETibHzi3FkoTRyiDJnWNc2VxrfvR+657ROHjaNjqQ==}
+  react-router@6.29.0:
+    resolution: {integrity: sha512-DXZJoE0q+KyeVw75Ck6GkPxFak63C4fGqZGNijnWgzB/HzSP1ZfTlBj5COaGWwhrMQ/R8bXiq5Ooy4KG+ReyjQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: '>=16.8'
@@ -2820,10 +2829,10 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       use-memo-one: 1.1.3(react@18.3.1)
 
-  '@atlaskit/app-provider@1.8.1(@types/react@18.3.2)(react@18.3.1)':
+  '@atlaskit/app-provider@1.8.1(@types/react@18.3.18)(react@18.3.1)':
     dependencies:
       '@atlaskit/platform-feature-flags': 1.0.0(react@18.3.1)
-      '@atlaskit/tokens': 3.3.1(@types/react@18.3.2)(react@18.3.1)
+      '@atlaskit/tokens': 3.3.1(@types/react@18.3.18)(react@18.3.1)
       '@babel/runtime': 7.24.5
       bind-event-listener: 3.0.0
       react: 18.3.1
@@ -2836,9 +2845,9 @@ snapshots:
       '@babel/runtime': 7.24.5
       react: 18.3.1
 
-  '@atlaskit/css@0.8.0(@types/react@18.3.2)(react@18.3.1)':
+  '@atlaskit/css@0.8.0(@types/react@18.3.18)(react@18.3.1)':
     dependencies:
-      '@atlaskit/tokens': 3.3.1(@types/react@18.3.2)(react@18.3.1)
+      '@atlaskit/tokens': 3.3.1(@types/react@18.3.18)(react@18.3.1)
       '@babel/runtime': 7.24.5
       '@compiled/react': 0.18.1(react@18.3.1)
       react: 18.3.1
@@ -2846,13 +2855,13 @@ snapshots:
       - '@types/react'
       - supports-color
 
-  '@atlaskit/ds-lib@3.5.1(@types/react@18.3.2)(react@18.3.1)':
+  '@atlaskit/ds-lib@3.5.1(@types/react@18.3.18)(react@18.3.1)':
     dependencies:
       '@atlaskit/platform-feature-flags': 1.0.0(react@18.3.1)
       '@babel/runtime': 7.24.5
       bind-event-listener: 3.0.0
       react: 18.3.1
-      react-uid: 2.3.3(@types/react@18.3.2)(react@18.3.1)
+      react-uid: 2.3.3(@types/react@18.3.18)(react@18.3.1)
     transitivePeerDependencies:
       - '@types/react'
 
@@ -2865,23 +2874,23 @@ snapshots:
     transitivePeerDependencies:
       - react
 
-  '@atlaskit/focus-ring@2.1.0(@types/react@18.3.2)(react@18.3.1)':
+  '@atlaskit/focus-ring@2.1.0(@types/react@18.3.18)(react@18.3.1)':
     dependencies:
-      '@atlaskit/tokens': 3.3.1(@types/react@18.3.2)(react@18.3.1)
+      '@atlaskit/tokens': 3.3.1(@types/react@18.3.18)(react@18.3.1)
       '@babel/runtime': 7.24.5
-      '@emotion/react': 11.13.3(@types/react@18.3.2)(react@18.3.1)
+      '@emotion/react': 11.13.3(@types/react@18.3.18)(react@18.3.1)
       react: 18.3.1
     transitivePeerDependencies:
       - '@types/react'
       - supports-color
 
-  '@atlaskit/icon@23.8.0(@babel/core@7.26.8)(@types/react@18.3.2)(react@18.3.1)':
+  '@atlaskit/icon@23.8.0(@babel/core@7.26.8)(@types/react@18.3.18)(react@18.3.1)':
     dependencies:
       '@atlaskit/platform-feature-flags': 1.0.0(react@18.3.1)
-      '@atlaskit/tokens': 3.3.1(@types/react@18.3.2)(react@18.3.1)
+      '@atlaskit/tokens': 3.3.1(@types/react@18.3.18)(react@18.3.1)
       '@babel/register': 7.25.9(@babel/core@7.26.8)
       '@babel/runtime': 7.24.5
-      '@emotion/react': 11.13.3(@types/react@18.3.2)(react@18.3.1)
+      '@emotion/react': 11.13.3(@types/react@18.3.18)(react@18.3.1)
       globby: 6.1.0
       puppeteer: 0.0.0
       react: 18.3.1
@@ -2907,15 +2916,15 @@ snapshots:
       '@atlaskit/pragmatic-drag-and-drop': 1.5.0
       '@babel/runtime': 7.24.5
 
-  '@atlaskit/pragmatic-drag-and-drop-react-accessibility@1.3.1(@babel/core@7.26.8)(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@atlaskit/pragmatic-drag-and-drop-react-accessibility@1.3.1(@babel/core@7.26.8)(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@atlaskit/focus-ring': 2.1.0(@types/react@18.3.2)(react@18.3.1)
-      '@atlaskit/icon': 23.8.0(@babel/core@7.26.8)(@types/react@18.3.2)(react@18.3.1)
+      '@atlaskit/focus-ring': 2.1.0(@types/react@18.3.18)(react@18.3.1)
+      '@atlaskit/icon': 23.8.0(@babel/core@7.26.8)(@types/react@18.3.18)(react@18.3.1)
       '@atlaskit/platform-feature-flags': 1.0.0(react@18.3.1)
-      '@atlaskit/primitives': 13.5.0(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@atlaskit/tokens': 3.3.1(@types/react@18.3.2)(react@18.3.1)
+      '@atlaskit/primitives': 13.5.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@atlaskit/tokens': 3.3.1(@types/react@18.3.18)(react@18.3.1)
       '@babel/runtime': 7.24.5
-      '@emotion/react': 11.13.3(@types/react@18.3.2)(react@18.3.1)
+      '@emotion/react': 11.13.3(@types/react@18.3.18)(react@18.3.1)
       react: 18.3.1
     transitivePeerDependencies:
       - '@babel/core'
@@ -2929,18 +2938,18 @@ snapshots:
       bind-event-listener: 3.0.0
       raf-schd: 4.0.3
 
-  '@atlaskit/primitives@13.5.0(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@atlaskit/primitives@13.5.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@atlaskit/analytics-next': 10.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@atlaskit/app-provider': 1.8.1(@types/react@18.3.2)(react@18.3.1)
-      '@atlaskit/css': 0.8.0(@types/react@18.3.2)(react@18.3.1)
-      '@atlaskit/ds-lib': 3.5.1(@types/react@18.3.2)(react@18.3.1)
+      '@atlaskit/app-provider': 1.8.1(@types/react@18.3.18)(react@18.3.1)
+      '@atlaskit/css': 0.8.0(@types/react@18.3.18)(react@18.3.1)
+      '@atlaskit/ds-lib': 3.5.1(@types/react@18.3.18)(react@18.3.1)
       '@atlaskit/interaction-context': 2.6.0(react@18.3.1)
-      '@atlaskit/tokens': 3.3.1(@types/react@18.3.2)(react@18.3.1)
-      '@atlaskit/visually-hidden': 1.6.0(@types/react@18.3.2)(react@18.3.1)
+      '@atlaskit/tokens': 3.3.1(@types/react@18.3.18)(react@18.3.1)
+      '@atlaskit/visually-hidden': 1.6.0(@types/react@18.3.18)(react@18.3.1)
       '@babel/runtime': 7.24.5
       '@compiled/react': 0.18.1(react@18.3.1)
-      '@emotion/react': 11.13.3(@types/react@18.3.2)(react@18.3.1)
+      '@emotion/react': 11.13.3(@types/react@18.3.18)(react@18.3.1)
       '@emotion/serialize': 1.3.1
       bind-event-listener: 3.0.0
       react: 18.3.1
@@ -2950,9 +2959,9 @@ snapshots:
       - react-dom
       - supports-color
 
-  '@atlaskit/tokens@3.3.1(@types/react@18.3.2)(react@18.3.1)':
+  '@atlaskit/tokens@3.3.1(@types/react@18.3.18)(react@18.3.1)':
     dependencies:
-      '@atlaskit/ds-lib': 3.5.1(@types/react@18.3.2)(react@18.3.1)
+      '@atlaskit/ds-lib': 3.5.1(@types/react@18.3.18)(react@18.3.1)
       '@atlaskit/platform-feature-flags': 1.0.0(react@18.3.1)
       '@babel/runtime': 7.24.5
       '@babel/traverse': 7.26.8
@@ -2963,10 +2972,10 @@ snapshots:
       - '@types/react'
       - supports-color
 
-  '@atlaskit/visually-hidden@1.6.0(@types/react@18.3.2)(react@18.3.1)':
+  '@atlaskit/visually-hidden@1.6.0(@types/react@18.3.18)(react@18.3.1)':
     dependencies:
       '@babel/runtime': 7.24.5
-      '@emotion/react': 11.13.3(@types/react@18.3.2)(react@18.3.1)
+      '@emotion/react': 11.13.3(@types/react@18.3.18)(react@18.3.1)
       react: 18.3.1
     transitivePeerDependencies:
       - '@types/react'
@@ -3081,6 +3090,10 @@ snapshots:
     dependencies:
       regenerator-runtime: 0.14.1
 
+  '@babel/runtime@7.26.7':
+    dependencies:
+      regenerator-runtime: 0.14.1
+
   '@babel/template@7.26.8':
     dependencies:
       '@babel/code-frame': 7.26.2
@@ -3151,7 +3164,7 @@ snapshots:
 
   '@emotion/memoize@0.9.0': {}
 
-  '@emotion/react@11.13.3(@types/react@18.3.2)(react@18.3.1)':
+  '@emotion/react@11.13.3(@types/react@18.3.18)(react@18.3.1)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@emotion/babel-plugin': 11.12.0
@@ -3163,7 +3176,7 @@ snapshots:
       hoist-non-react-statics: 3.3.2
       react: 18.3.1
     optionalDependencies:
-      '@types/react': 18.3.2
+      '@types/react': 18.3.18
     transitivePeerDependencies:
       - supports-color
 
@@ -3369,7 +3382,7 @@ snapshots:
       tslib: 2.6.2
       warning: 4.0.3
 
-  '@remix-run/router@1.16.1': {}
+  '@remix-run/router@1.22.0': {}
 
   '@rollup/rollup-android-arm-eabi@4.34.6':
     optional: true
@@ -3455,7 +3468,7 @@ snapshots:
     dependencies:
       '@toss/react': 1.8.1(react@18.3.1)
       '@toss/utils': 1.6.1
-      '@types/react': 18.3.2
+      '@types/react': 18.3.18
       lodash.debounce: 4.0.8
       react: 18.3.1
 
@@ -3531,9 +3544,9 @@ snapshots:
 
   '@types/react-dom@18.3.0':
     dependencies:
-      '@types/react': 18.3.2
+      '@types/react': 18.3.18
 
-  '@types/react@18.3.2':
+  '@types/react@18.3.18':
     dependencies:
       '@types/prop-types': 15.7.12
       csstype: 3.1.3
@@ -3601,10 +3614,10 @@ snapshots:
 
   '@wojtekmaj/date-utils@1.5.1': {}
 
-  '@xstate/react@1.6.3(@types/react@18.3.2)(react@18.3.1)(xstate@4.38.3)':
+  '@xstate/react@1.6.3(@types/react@18.3.18)(react@18.3.1)(xstate@4.38.3)':
     dependencies:
       react: 18.3.1
-      use-isomorphic-layout-effect: 1.1.2(@types/react@18.3.2)(react@18.3.1)
+      use-isomorphic-layout-effect: 1.1.2(@types/react@18.3.18)(react@18.3.1)
       use-subscription: 1.8.2(react@18.3.1)
     optionalDependencies:
       xstate: 4.38.3
@@ -4217,7 +4230,7 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-config-prettier@9.1.0(eslint@9.20.1(jiti@1.21.0)):
+  eslint-config-prettier@10.0.1(eslint@9.20.1(jiti@1.21.0)):
     dependencies:
       eslint: 9.20.1(jiti@1.21.0)
 
@@ -4548,15 +4561,17 @@ snapshots:
     dependencies:
       void-elements: 3.1.0
 
-  i18next-http-backend@2.5.2:
+  i18next-http-backend@3.0.2:
     dependencies:
       cross-fetch: 4.0.0
     transitivePeerDependencies:
       - encoding
 
-  i18next@23.11.5:
+  i18next@24.2.2(typescript@5.4.5):
     dependencies:
       '@babel/runtime': 7.24.5
+    optionalDependencies:
+      typescript: 5.4.5
 
   ico-endec@0.1.6: {}
 
@@ -5119,7 +5134,7 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  react-calendar@4.8.0(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-calendar@4.8.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@wojtekmaj/date-utils': 1.5.1
       clsx: 2.1.1
@@ -5129,7 +5144,7 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       warning: 4.0.3
     optionalDependencies:
-      '@types/react': 18.3.2
+      '@types/react': 18.3.18
 
   react-dom@18.3.1(react@18.3.1):
     dependencies:
@@ -5144,11 +5159,11 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       tslib: 2.6.2
 
-  react-i18next@14.1.1(i18next@23.11.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-i18next@15.4.0(i18next@24.2.2(typescript@5.4.5))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@babel/runtime': 7.24.5
+      '@babel/runtime': 7.26.7
       html-parse-stringify: 3.0.1
-      i18next: 23.11.5
+      i18next: 24.2.2(typescript@5.4.5)
       react: 18.3.1
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
@@ -5163,23 +5178,23 @@ snapshots:
 
   react-refresh@0.14.2: {}
 
-  react-router-dom@6.23.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-router-dom@6.29.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@remix-run/router': 1.16.1
+      '@remix-run/router': 1.22.0
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-router: 6.23.1(react@18.3.1)
+      react-router: 6.29.0(react@18.3.1)
 
-  react-router@6.23.1(react@18.3.1):
+  react-router@6.29.0(react@18.3.1):
     dependencies:
-      '@remix-run/router': 1.16.1
+      '@remix-run/router': 1.22.0
       react: 18.3.1
 
-  react-spring-bottom-sheet@3.4.1(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-spring-bottom-sheet@3.4.1(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@juggle/resize-observer': 3.4.0
       '@reach/portal': 0.13.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@xstate/react': 1.6.3(@types/react@18.3.2)(react@18.3.1)(xstate@4.38.3)
+      '@xstate/react': 1.6.3(@types/react@18.3.18)(react@18.3.1)(xstate@4.38.3)
       body-scroll-lock: 3.1.5
       focus-trap: 6.9.4
       react: 18.3.1
@@ -5204,12 +5219,12 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  react-uid@2.3.3(@types/react@18.3.2)(react@18.3.1):
+  react-uid@2.3.3(@types/react@18.3.18)(react@18.3.1):
     dependencies:
       react: 18.3.1
       tslib: 2.6.2
     optionalDependencies:
-      '@types/react': 18.3.2
+      '@types/react': 18.3.18
 
   react-use-gesture@8.0.1(react@18.3.1):
     dependencies:
@@ -5733,11 +5748,11 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  use-isomorphic-layout-effect@1.1.2(@types/react@18.3.2)(react@18.3.1):
+  use-isomorphic-layout-effect@1.1.2(@types/react@18.3.18)(react@18.3.1):
     dependencies:
       react: 18.3.1
     optionalDependencies:
-      '@types/react': 18.3.2
+      '@types/react': 18.3.18
 
   use-memo-one@1.1.3(react@18.3.1):
     dependencies:
