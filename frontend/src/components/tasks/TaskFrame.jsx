@@ -22,7 +22,7 @@ const TaskFrame = ({
     toComplete,
     isSocial,
 }) => {
-    const [isModalOpen, setModalOpen] = useState(false)
+    const [isDetailOpen, setDetailOpen] = useState(false)
 
     const completedAt = isSocial ? null : task.completed_at
 
@@ -39,7 +39,7 @@ const TaskFrame = ({
         <TaskNameBox
             $completed={completedAt}
             onClick={() => {
-                showTaskDetail && setModalOpen(true)
+                showTaskDetail && setDetailOpen(true)
             }}>
             {task?.name}
         </TaskNameBox>
@@ -102,9 +102,9 @@ const TaskFrame = ({
                     </Dates>
                 )}
             </Content>
-            {isModalOpen ? (
+            {isDetailOpen ? (
                 <TaskDetailElement
-                    onClose={() => setModalOpen(false)}
+                    onClose={() => setDetailOpen(false)}
                     projectType={task.projectType}
                     color={color}
                     task={task}
