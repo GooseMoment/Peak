@@ -1,12 +1,11 @@
-import { Suspense, useEffect, useMemo, useState } from "react"
-import { Outlet, useNavigate, useParams } from "react-router-dom"
+import { useEffect, useMemo, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
-import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
@@ -19,6 +18,7 @@ import ProjectEdit from "@components/project/edit/ProjectEdit"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenuSelector from "@components/project/sorts/SortMenuSelector"
+import TaskCreateElement from "@components/project/taskDetails/TaskCreateElement"
 
 import { getDrawersByProject } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
@@ -51,6 +51,7 @@ const ProjectPage = () => {
         left: 0,
     })
     const [isProjectEditOpen, setIsProjectEditOpen] = useState(false)
+    const [isCreateOpen, setCreateOpen] = useState(false)
 
     const { t } = useTranslation(null, { keyPrefix: "project" })
 
@@ -122,13 +123,7 @@ const ProjectPage = () => {
     }
 
     const openInboxTaskCreate = () => {
-        navigate(`/app/projects/${project.id}/tasks/create/`, {
-            state: {
-                project_name: project.name,
-                drawer_id: project.drawers[0].id,
-                drawer_name: project.drawers[0].name,
-            },
-        })
+        setCreateOpen(true)
     }
 
     const onClickProjectErrorBox = () => {
@@ -253,9 +248,14 @@ const ProjectPage = () => {
                     <ProjectEdit project={project} />
                 </ModalWindow>
             )}
-            <Suspense key="project-page" fallback={<ModalLoader />}>
-                <Outlet context={[id, project.type, color]} />
-            </Suspense>
+            {isCreateOpen && (
+                <TaskCreateElement
+                    onClose={() => setCreateOpen(false)}
+                    project={project}
+                    drawer={project.drawers[0]}
+                    color={color}
+                />
+            )}
         </>
     )
 }

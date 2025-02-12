@@ -1,12 +1,8 @@
 import { useState } from "react"
-import { useLocation, useOutletContext } from "react-router-dom"
 
 import TaskCommonDetailMobile from "@components/project/taskDetails/mobile/TaskCommonDetailMobile"
 
-const TaskCreateMobile = ({ closeCreate }) => {
-    const [_, projectType, color] = useOutletContext()
-    const { state } = useLocation()
-
+const TaskCreateMobile = ({ closeCreate, project, drawer, color }) => {
     const [newTask, setNewTask] = useState({
         name: "",
         assigned_at: null,
@@ -15,10 +11,10 @@ const TaskCreateMobile = ({ closeCreate }) => {
         due_datetime: null,
         reminders: [],
         priority: 0,
-        project_id: state?.project_id,
-        project_name: state?.project_name,
-        drawer: state?.drawer_id,
-        drawer_name: state?.drawer_name,
+        project_id: project.id,
+        project_name: project.name,
+        drawer: drawer.id,
+        drawer_name: drawer.name,
         memo: "",
         privacy: "public",
         completed_at: null,
@@ -28,7 +24,7 @@ const TaskCreateMobile = ({ closeCreate }) => {
         <TaskCommonDetailMobile
             newTask={newTask}
             setNewTask={setNewTask}
-            projectType={projectType}
+            projectType={project.type}
             color={color}
             onClose={closeCreate}
             isCreating

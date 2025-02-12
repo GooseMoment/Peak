@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react"
-import { useNavigate } from "react-router-dom"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -19,6 +18,7 @@ import {
     SkeletonInboxDrawer,
 } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenuSelector from "@components/project/sorts/SortMenuSelector"
+import TaskCreateElement from "@components/project/taskDetails/TaskCreateElement"
 import DrawerTask from "@components/tasks/DrawerTask"
 
 import { deleteDrawer } from "@api/drawers.api"
@@ -36,7 +36,6 @@ import { toast } from "react-toastify"
 
 const Drawer = ({ project, drawer, color }) => {
     const theme = useTheme()
-    const navigate = useNavigate()
 
     const [collapsed, setCollapsed] = useState(false)
     const [ordering, setOrdering] = useState(null)
@@ -53,6 +52,7 @@ const Drawer = ({ project, drawer, color }) => {
     })
     const [isDrawerEditOpen, setIsDrawerEditOpen] = useState(false)
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
+    const [isCreateOpen, setCreateOpen] = useState(false)
 
     const { t } = useTranslation(null, { keyPrefix: "project" })
 
@@ -170,14 +170,7 @@ const Drawer = ({ project, drawer, color }) => {
     }
 
     const clickPlus = () => {
-        navigate(`/app/projects/${project.id}/tasks/create/`, {
-            state: {
-                project_id: project.id,
-                project_name: project.name,
-                drawer_id: drawer.id,
-                drawer_name: drawer.name,
-            },
-        })
+        setCreateOpen(true)
     }
 
     if (isLoading) {
@@ -300,6 +293,14 @@ const Drawer = ({ project, drawer, color }) => {
                     }}>
                     <DrawerEdit projectID={project.id} drawer={drawer} />
                 </ModalWindow>
+            )}
+            {isCreateOpen && (
+                <TaskCreateElement
+                    onClose={() => setCreateOpen(false)}
+                    project={project}
+                    drawer={drawer}
+                    color={color}
+                />
             )}
         </>
     )
