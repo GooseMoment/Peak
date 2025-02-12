@@ -79,7 +79,7 @@ const Checkbox = ({
                 onChange={onChange}
             />
             <CheckWrapper $selected={selected}>
-                <FeatherIcon icon="check" />
+                <FeatherIcon icon={selected ? "minus-circle" : "plus-circle"} />
             </CheckWrapper>
             <Label htmlFor={item.name} $selected={selected}>
                 {item.display}
@@ -88,9 +88,11 @@ const Checkbox = ({
     )
 }
 
-const Box = styled.div`
+const Box = styled.label`
     display: flex;
     padding: 0.5em 0;
+
+    cursor: pointer;
 `
 
 const HiddenInput = styled.input`
@@ -100,19 +102,21 @@ const HiddenInput = styled.input`
 const CheckWrapper = styled.div<{ $selected: boolean }>`
     & svg {
         top: 0;
-        stroke-dasharray: 40;
-        stroke-dashoffset: ${(p) => (p.$selected ? 0 : 40)};
-        stroke-width: 3px;
-        transition: stroke-dashoffset 0.2s ease 0.1s;
+        stroke-width: 2.75px;
+        cursor: pointer;
+        color: ${(p) => (p.$selected ? p.theme.textColor : p.theme.grey)};
+        transition: color 0.2s ease;
     }
 `
 
 const Label = styled.label<{ $selected: boolean }>`
     user-select: none;
-    -webkit-user-drag: none;
+    -webkit-user-select: none;
+
+    cursor: pointer;
 
     color: ${(p) => (p.$selected ? p.theme.textColor : p.theme.grey)};
-    transition: color 0.2s ease 0.1s;
+    transition: color 0.2s ease;
 `
 
 const GroupBox = styled.div`
