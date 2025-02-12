@@ -22,3 +22,12 @@ jobs:
       - uses: astral-sh/ruff-action@v3
         with:
           src: "./backend"
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: >-
+        docker build
+        --file ./backend/Dockerfile
+        --tag peak-api:$(date +%s) ./backend

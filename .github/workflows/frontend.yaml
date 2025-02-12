@@ -70,13 +70,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build frontend docker image 
+      - name: Build the frontend Docker image 
         run: >-
           docker build
           -f ./frontend/Dockerfile
           --build-arg "BUILD_DATE=$(date '+%Y-%m-%dT%H:%M:%S%z')"
           -t frontend-build ./frontend
-      - name: Build frontend using docker container
+      - name: Build frontend using the frontend image
         run: >-
           docker run
           -v ./build:/frontend/dist
