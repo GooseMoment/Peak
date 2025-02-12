@@ -9,16 +9,16 @@ pnpm run dev
 
 ## Structure
 
--   `src/`
-    -   `api/`: API 콜백 함수
-    -   `assets/`: 소스 코드에서 참조해야 하는 데이터 및 미디어
-    -   `components/`: 페이지별 컴포넌트
-    -   `containers`: Layout
-    -   `pages/`: 페이지
-    -   `queries/`: react-query 관련
-    -   `utils/`: 유틸성 함수
-    -   `main.jsx`: 소스코드 시작 부분
-    -   `router.jsx`: 메인 라우터
+- `src/`
+    - `api/`: API 콜백 함수
+    - `assets/`: 소스 코드에서 참조해야 하는 데이터 및 미디어
+    - `components/`: 페이지별 컴포넌트
+    - `containers`: Layout
+    - `pages/`: 페이지
+    - `queries/`: react-query 관련
+    - `utils/`: 유틸성 함수
+    - `main.jsx`: 소스코드 시작 부분
+    - `router.jsx`: 메인 라우터
 
 ## PWA
 
