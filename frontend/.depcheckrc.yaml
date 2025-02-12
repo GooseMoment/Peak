@@ -1,7 +1,5 @@
 skip-missing: true
 ignores:
-    # dependencies
-    - pnpm
     # devDependencies
     - \@tanstack/react-query-devtools
     - \@trivago/prettier-plugin-sort-imports
