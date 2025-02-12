@@ -17,9 +17,7 @@ const ContentTitle = ({ type, actionUser, payload, skeleton }) => {
             </ContentTitleLink>
         )
     } else if (type === "task_reminder") {
-        const taskURL =
-            "/app/projects/" +
-            payload?.project_id
+        const taskURL = "/app/projects/" + payload?.project_id
         title = (
             <ContentTitleLink to={taskURL}>
                 {payload?.task_name}
