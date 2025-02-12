@@ -71,7 +71,7 @@ const Checkbox = ({
     }
 
     return (
-        <Box htmlFor={item.name}>
+        <Box htmlFor={item.name} $selected={selected}>
             <HiddenInput
                 type="checkbox"
                 id={item.name}
@@ -79,7 +79,7 @@ const Checkbox = ({
                 onChange={onChange}
             />
             <CheckWrapper $selected={selected}>
-                <FeatherIcon icon={selected ? "minus-circle" : "plus-circle"} />
+                <FeatherIcon icon={selected ? "check" : "plus-circle"} />
             </CheckWrapper>
             <Label htmlFor={item.name} $selected={selected}>
                 {item.display}
@@ -88,11 +88,15 @@ const Checkbox = ({
     )
 }
 
-const Box = styled.label`
+const Box = styled.label<{ $selected: boolean }>`
     display: flex;
-    padding: 0.5em 0;
+    padding: 0.75em;
+    border-radius: 16px;
 
     cursor: pointer;
+    background-color: ${(p) =>
+        p.$selected ? p.theme.secondBackgroundColor : "transparent"};
+    transition: color 0.2s var(--cubic);
 `
 
 const HiddenInput = styled.input`
@@ -105,7 +109,7 @@ const CheckWrapper = styled.div<{ $selected: boolean }>`
         stroke-width: 2.75px;
         cursor: pointer;
         color: ${(p) => (p.$selected ? p.theme.textColor : p.theme.grey)};
-        transition: color 0.2s ease;
+        transition: color 0.2s var(--cubic);
     }
 `
 
@@ -116,11 +120,12 @@ const Label = styled.label<{ $selected: boolean }>`
     cursor: pointer;
 
     color: ${(p) => (p.$selected ? p.theme.textColor : p.theme.grey)};
-    transition: color 0.2s ease;
+    transition: color 0.2s var(--cubic);
 `
 
 const GroupBox = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
+    gap: 0.25em;
 `
