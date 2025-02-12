@@ -13,8 +13,7 @@
         "appearance": "Appearance",
         "reactions": "Reactions",
         "blocks": "Blocks",
-        "info": "Info",
-        "sign_out": "Sign out"
+        "info": "Info"
     },
     "account": {
         "display_name": "Display name",
@@ -53,6 +52,12 @@
         "delete_task_after_alert": {
             "name": "Alert before task deletion",
             "description": "Show an alert before deleting tasks."
+        },
+        "sign_out": {
+            "name": "Sign out",
+            "values": {
+                "button_sign_out": "Sign out"
+            }
         }
     },
     "security": {
@@ -66,6 +71,7 @@
             "ask_delete": "Delete the one-time passcode authentication?",
             "qrcode_description": "Scan this QR code with your preferred authentication app. Enter the numbers from the app below to complete TOTP registration.",
             "secret_manual": "Or, you can enter the secret code manually:",
+            "copy_success": "Copied the secret code to the clipboard.",
             "input_placeholder": "6-digit code",
             "enter": "Enter",
             "cancel": "Cancel",

@@ -2,6 +2,10 @@ name: Random Reviewer Discord
 
 on:
   pull_request:
+    types:
+      - opened
+      - ready_for_review
+      - reopened
     branches:
       - main
 
@@ -12,8 +16,8 @@ jobs:
   assign-reviewer:
     runs-on: ubuntu-latest
     steps:
-      - name: Assign random reviewer
-        uses: JedBeom/random-reviewer-discord@main
+      - name: Run random-reviewer-discord
+        uses: JedBeom/random-reviewer-discord@v0.1.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

@@ -1,9 +1,8 @@
-import { startTransition, useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import { useQuery } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
 
-import ConfirmationSignOut from "@components/sidebar/ConfirmationSignOut"
 import { useSidebarContext } from "@components/sidebar/SidebarContext"
 import SidebarLink from "@components/sidebar/SidebarLink"
 
@@ -34,16 +33,6 @@ const Footer = () => {
             })
         }
     }, [isError])
-
-    const [isSignOutConfirmationOpen, setSignOutConfirmationOpen] =
-        useState(false)
-
-    const openSignOutConfirmation = (e) => {
-        e.preventDefault()
-        startTransition(() => {
-            setSignOutConfirmationOpen(true)
-        })
-    }
 
     const { isCollapsed } = useSidebarContext()
 
@@ -77,22 +66,6 @@ const Footer = () => {
                         <SmallIcon>
                             <FeatherIcon icon="settings" />
                         </SmallIcon>
-                    </SidebarLink>
-                    <SidebarLink
-                        to="/app/sign_out"
-                        onClick={openSignOutConfirmation}
-                        noNavigate
-                        key="sign-out">
-                        <SmallIcon>
-                            <FeatherIcon icon="log-out" />
-                        </SmallIcon>
-                        {isSignOutConfirmationOpen && (
-                            <ConfirmationSignOut
-                                onClose={() =>
-                                    setSignOutConfirmationOpen(false)
-                                }
-                            />
-                        )}
                     </SidebarLink>
                 </SmallIcons>
             )}
