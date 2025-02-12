@@ -6,9 +6,39 @@ import { compareFn } from "@utils/compareFn"
 
 import FeatherIcon from "feather-icons-react"
 
-interface ICheckboxItem {
+export interface ICheckboxItem {
     name: string
     display: string
+}
+
+export type CheckboxGroupProp = {
+    items: ICheckboxItem[]
+    exclusive: boolean
+    selectedItems: ICheckboxItem[]
+    setSelectedItems: Dispatch<SetStateAction<ICheckboxItem[]>>
+}
+
+export default function CheckboxGroup({
+    items,
+    exclusive = false,
+    selectedItems,
+    setSelectedItems,
+}: CheckboxGroupProp) {
+    return (
+        <GroupBox>
+            {items.map((item) => (
+                <Checkbox
+                    key={item.name}
+                    item={item}
+                    exclusive={exclusive}
+                    selected={selectedItems.some(
+                        (arrItem) => arrItem.name === item.name,
+                    )}
+                    setSelectedItems={setSelectedItems}
+                />
+            ))}
+        </GroupBox>
+    )
 }
 
 type CheckboxProp = {
@@ -58,36 +88,6 @@ const Checkbox = ({
     )
 }
 
-type CheckboxGroupProp = {
-    items: ICheckboxItem[]
-    exclusive: boolean
-    selectedItems: ICheckboxItem[]
-    setSelectedItems: Dispatch<SetStateAction<ICheckboxItem[]>>
-}
-
-const CheckboxGroup = ({
-    items,
-    exclusive = false,
-    selectedItems,
-    setSelectedItems,
-}: CheckboxGroupProp) => {
-    return (
-        <GroupBox>
-            {items.map((item) => (
-                <Checkbox
-                    key={item.name}
-                    item={item}
-                    exclusive={exclusive}
-                    selected={selectedItems.some(
-                        (arrItem) => arrItem.name === item.name,
-                    )}
-                    setSelectedItems={setSelectedItems}
-                />
-            ))}
-        </GroupBox>
-    )
-}
-
 const Box = styled.div`
     display: flex;
     padding: 0.5em 0;
@@ -120,5 +120,3 @@ const GroupBox = styled.div`
     flex-direction: column;
     width: 100%;
 `
-
-export default CheckboxGroup
