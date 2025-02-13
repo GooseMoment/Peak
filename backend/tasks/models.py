@@ -5,27 +5,6 @@ from users.models import User
 from drawers.models import Drawer
 
 
-class Repeat(Base):
-    # TODO: 자연어로 빠른 Repeat 지정
-    startedAt = models.DateTimeField()
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-    )
-
-    weekdays = models.BinaryField(max_length=7, default=b"0000000")
-    week_frequency = models.IntegerField(default=0)
-    month = models.IntegerField(default=0)
-    day = models.IntegerField(default=0)
-
-    def __str__(self) -> str:
-        return f"Repeat by {self.user}"
-
-    class Meta:
-        db_table = "repeats"
-
-
 class Task(Base, PrivacyMixin):
     DUE_DATE = "due_date"
     DUE_DATETIME = "due_datetime"
@@ -51,12 +30,6 @@ class Task(Base, PrivacyMixin):
         User,
         on_delete=models.CASCADE,
         related_name="tasks",
-    )
-    repeat = models.ForeignKey(
-        Repeat,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
     )
 
     def __str__(self) -> str:

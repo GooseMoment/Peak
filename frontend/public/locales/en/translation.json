@@ -189,26 +189,6 @@
                 "acceptable_numbers": "The maximum number you can enter is {{max}}.",
                 "time_change_success": "The time has changed.",
                 "time_remove": "Deleted the time."
-            },
-            "repeat": {
-                "title": "Recurrence Settings",
-                "button_add": "Add",
-                "acceptable_numbers": "The maximum number you can enter is {{max}}.",
-                "every_few_weeks_front": "Every",
-                "every_few_weeks_back": "weeks",
-                "everyday": "Daily",
-                "everyweek": "Weekly",
-                "everymonth": "Monthly",
-                "everyyear": "Yearly",
-                "weekday": "Weekdays",
-                "weekend": "Weekends",
-                "sun": "S",
-                "mon": "M",
-                "tue": "T",
-                "wed": "W",
-                "thu": "T",
-                "fri": "F",
-                "sat": "S"
             }
         },
         "reminder": {
