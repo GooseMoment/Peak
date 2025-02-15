@@ -135,7 +135,7 @@ const DetailBox = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0.7em 0em;
+    margin-bottom: 1em;
 `
 
 const FlexBox = styled.div`
