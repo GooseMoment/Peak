@@ -46,6 +46,11 @@ export const deleteNotification = async (id) => {
     return client.delete(`notifications/${id}`)
 }
 
+export const getSubscription = async (id) => {
+    const res = await client.get(`notifications/subscribe/${id}`)
+    return res.data
+}
+
 export const postSubscription = async (subscription) => {
     let locale = getClientSettings()["locale"]
     if (locale === "system") {
@@ -60,6 +65,11 @@ export const postSubscription = async (subscription) => {
     }
 
     const res = await client.post(`notifications/subscribe`, data)
+    return res.data
+}
+
+export const patchSubscription = async (id, data) => {
+    const res = await client.patch(`notifications/subscribe/${id}`, data)
     return res.data
 }
 

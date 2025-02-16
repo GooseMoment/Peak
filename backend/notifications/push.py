@@ -106,22 +106,25 @@ def _notificationToPushData(notification: Notification, locale: str) -> dict[str
 
 def pushNotificationToUser(user: User, notification: Notification) -> None:
     subscriptions = WebPushSubscription.objects.filter(user=user).all()
-    datas_per_locale = dict()
+    dumped_datas_per_locale = dict()
 
     for subscription in subscriptions:
+        if notification.type in subscription.excluded_types:
+            continue
+
         endpoint = parse_url(subscription.subscription_info.get("endpoint"))
         aud = endpoint.scheme + "://" + endpoint.host
 
-        if subscription.locale in datas_per_locale:
-            data = datas_per_locale[subscription.locale]
+        if subscription.locale in dumped_datas_per_locale:
+            data = dumped_datas_per_locale[subscription.locale]
         else:
-            data = _notificationToPushData(notification, subscription.locale)
-            datas_per_locale[subscription.locale] = data
+            data = dumps(_notificationToPushData(notification, subscription.locale))
+            dumped_datas_per_locale[subscription.locale] = data
 
         try:
             webpush(
                 subscription.subscription_info,
-                dumps(data),
+                data,
                 vapid_private_key=settings.WEBPUSH.get("vapid_private_key"),
                 vapid_claims={
                     "sub": "mailto:" + settings.WEBPUSH.get("vapid_claims_email"),

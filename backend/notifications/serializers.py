@@ -50,4 +50,5 @@ class WebPushSubscriptionSerializer(serializers.ModelSerializer):
             "locale",
             "device",
             "user_agent",
+            "excluded_types",
         ]
