@@ -1,8 +1,9 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
+import sleep from "@utils/sleep"
 import { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
@@ -41,6 +42,15 @@ const Navbar = () => {
 
     const [activeItemLeft, setActiveItemLeft] = useState(0)
     const [activeItemVisible, setActiveItemVisible] = useState(false)
+    const [transition, setTransition] = useState(false)
+
+    useEffect(() => {
+        async function enableTransitionLate() {
+            await sleep(250)
+            setTransition(true)
+        }
+        enableTransitionLate()
+    }, [])
 
     const onRefChange = useCallback(
         (node) => {
@@ -61,6 +71,7 @@ const Navbar = () => {
                 <ActiveItemBackground
                     $left={activeItemLeft}
                     $visible={activeItemVisible}
+                    $transition={transition}
                 />
                 {items.map((item) => (
                     <Item
@@ -171,15 +182,19 @@ const ActiveItemBackground = styled.div`
     background-color: ${(p) => p.theme.navbar.activeBackgroundColor};
 
     top: 0.25em;
-    left: calc(${(props) => props.$left}px + 0.125em);
+    left: ${(p) =>
+        p.$left ? css`calc(${(props) => props.$left}px + 0.125em)` : "7.75em"};
     width: 3em;
     height: 3em;
 
     opacity: ${(p) => (p.$visible ? 1 : 0)};
 
-    transition:
+    transition: ${(p) =>
+        p.$transition
+            ? css`
         left 0.25s var(--cubic),
-        opacity 0.25s var(--cubic);
+        opacity 0.25s var(--cubic)`
+            : css`unset`};
 
     border-radius: 50px;
 `
