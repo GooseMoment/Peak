@@ -177,8 +177,7 @@ const ActiveItemBackground = styled.div`
     background-color: ${(p) => p.theme.navbar.activeBackgroundColor};
 
     top: 0.25em;
-    left: ${(p) =>
-        p.$left ? css`calc(${(props) => props.$left}px + 0.125em)` : "7.75em"};
+    left: calc(${(props) => props.$left}px + 0.125em);
     width: 3em;
     height: 3em;
 
