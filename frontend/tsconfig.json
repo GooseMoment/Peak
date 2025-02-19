@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "allowJs": true,
+        "baseUrl": ".",
+        "outDir": "dist",
+        "paths": {
+            "@/*": ["src/*"],
+            "@pages/*": ["src/pages/*"],
+            "@api/*": ["src/api/*"],
+            "@components/*": ["src/components/*"],
+            "@utils/*": ["src/utils/*"],
+            "@containers/*": ["src/containers/*"],
+            "@assets/*": ["src/assets/*"],
+            "@queries/*": ["src/queries/*"],
+            "@routers/*": ["src/routers/*"]
+        },
+        "strict": true,
+        "skipLibCheck": true,
+        "module": "ES2022",
+        "moduleResolution": "node",
+        "target": "ES2016",
+        "types": [],
+        "jsx": "react-jsx"
+    },
+    "include": ["src/**/*"],
+    "exclude": ["**/dist/*", "**/public/*"],
+    "typeAcquisition": {
+        "enable": true
+    }
+}

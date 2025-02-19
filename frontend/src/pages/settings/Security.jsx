@@ -98,6 +98,11 @@ const Security = () => {
         }
     }
 
+    const onClickSecret = () => {
+        navigator.clipboard.writeText(totpSecret)
+        toast.success(t("totp.copy_success"), { toastId: "totp.copy_success" })
+    }
+
     if (totpQuery.isError) {
         return <Error />
     }
@@ -151,7 +156,9 @@ const Security = () => {
                             <QRCodeImg src={totpQRData} />
                             <Text>{t("totp.qrcode_description")}</Text>
                             <Text>{t("totp.secret_manual")}</Text>
-                            <Secret>{totpSecret}</Secret>
+                            <Secret onClick={onClickSecret}>
+                                {totpSecret}
+                            </Secret>
                             <Input
                                 icon={<FeatherIcon icon="hash" />}
                                 name="totp_code"
@@ -218,11 +225,22 @@ const Text = styled.p`
     margin-bottom: 1em;
 `
 
-const Secret = styled.div`
+const Secret = styled.span`
+    display: block;
+
     padding: 1em;
     background-color: ${(p) => p.theme.secondBackgroundColor};
+
+    font-size: 1em;
+    font-family: monospace !important;
+
+    box-sizing: border-box;
+    width: fit-content;
+    word-break: break-all;
+
+    line-height: 1.2;
+
     margin-bottom: 1em;
-    width: min-content;
 `
 
 export default Security

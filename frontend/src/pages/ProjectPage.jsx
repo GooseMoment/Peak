@@ -18,7 +18,7 @@ import DrawerEdit from "@components/project/edit/DrawerEdit"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
-import SortMenu from "@components/project/sorts/SortMenu"
+import SortMenuSelector from "@components/project/sorts/SortMenuSelector"
 
 import { getDrawersByProject } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
@@ -211,10 +211,11 @@ const ProjectPage = () => {
                 ))
             )}
             {isSortMenuOpen && (
-                <SortMenu
+                <SortMenuSelector
                     title={t("sort.drawer_title")}
                     items={sortMenuItems}
                     selectedButtonPosition={selectedSortMenuPosition}
+                    onClose={() => setIsSortMenuOpen(false)}
                     ordering={ordering}
                     setOrdering={setOrdering}
                 />
