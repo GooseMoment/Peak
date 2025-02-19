@@ -3,6 +3,8 @@
         "alwaysStrict": true,
         "allowJs": true,
         "baseUrl": ".",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
         "outDir": "dist",
         "paths": {
             "@/*": ["src/*"],
@@ -13,7 +15,8 @@
             "@containers/*": ["src/containers/*"],
             "@assets/*": ["src/assets/*"],
             "@queries/*": ["src/queries/*"],
-            "@routers/*": ["src/routers/*"]
+            "@routers/*": ["src/routers/*"],
+            "@public/*": ["public/*"]
         },
         "strict": true,
         "skipLibCheck": true,
