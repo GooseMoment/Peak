@@ -27,5 +27,7 @@
     },
     "include": ["src/**/*"],
     "exclude": ["**/dist/*", "**/public/*"],
-    "typeAcquisition": { "enable": true }
+    "typeAcquisition": {
+        "enable": true
+    }
 }

@@ -32,7 +32,10 @@ const Account = () => {
         data: user,
         isPending,
         isError,
-    } = useQuery({ queryKey: ["users", "me"], queryFn: () => getMe() })
+    } = useQuery({
+        queryKey: ["users", "me"],
+        queryFn: () => getMe(),
+    })
 
     const [headerColor, setHeaderColor] = useState({
         color: user?.header_color,
