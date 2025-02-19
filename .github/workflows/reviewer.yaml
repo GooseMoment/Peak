@@ -2,8 +2,14 @@ name: Random Reviewer Discord
 
 on:
   pull_request:
-    branches:
-      - main
+    types:
+      - opened
+      - review_requested
+      - ready_for_review
+  pull_request_review:
+    types:
+      - submitted
+  workflow_dispatch:
 
 permissions:
   pull-requests: write
@@ -12,11 +18,61 @@ jobs:
   assign-reviewer:
     runs-on: ubuntu-latest
     steps:
-      - name: Assign random reviewer
-        uses: JedBeom/random-reviewer-discord@main
+      - name: Run random-reviewer-discord
+        uses: JedBeom/random-reviewer-discord@v0.2.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          candidates: ${{ secrets.CANDIDATES }}
+          usernames: ${{ secrets.USERNAMES }}
           webhook_url: ${{ secrets.WEBHOOK_URL }}
-          template: "🎉 <@{userID}> 님이 [#{prNumber} PR]({prURL}) 리뷰어로 당첨!"
+          schedule_prs_min_age: 36
+          template_opened: |-
+            🆕 {mention} 님이 #{prNumber} 리뷰어로 당첨!
+            
+            - 풀 리퀘스트: [{prTitle} (#{prNumber})]({prURL})
+          template_ready_for_review_assigned: |-
+            🎲 {mention} 님이 #{prNumber} 리뷰어로 당첨!
+
+            - 풀 리퀘스트: [{prTitle} (#{prNumber})]({prURL})
+            - 초안 상태였다가 리뷰 받을 준비가 되었어요
+          template_ready_for_review_exist_one: |-
+            🔔 {mention} 님, #{prNumber} 풀 리퀘스트가 준비 되었어요.
+
+            - 풀 리퀘스트: [{prTitle} (#{prNumber})]({prURL})
+            - 초안 상태였다가 리뷰 받을 준비가 되었어요
+            - 전에 무작위 당첨되었거나 수동으로 지정되었어요
+          template_ready_for_review_exist_plural: |-
+            🔔 #{prNumber} 풀 리퀘스트가 준비 되었어요.
+
+            - 리뷰어 목록: {mention}
+            - 풀 리퀘스트: [{prTitle} (#{prNumber})]({prURL})
+            - 초안 상태였다가 리뷰 받을 준비가 되었어요
+            - 전에 무작위 당첨되었거나 수동으로 지정되었어요
+          template_review_requested_one: |-
+            🔄 {mention} 님, #{prNumber} 리뷰 요청을 받았어요.
+
+            - 요청한 사람: {sender}
+            - 풀 리퀘스트: [{prTitle} (#{prNumber})]({prURL})
+          template_review_requested_plural: |-
+            🔄 #{prNumber}의 리뷰어로 지정되었어요.
+
+            - 요청한 사람: {sender}
+            - 리뷰어 목록: {mention}
+            - 풀 리퀘스트: [{prTitle} (#{prNumber})]({prURL})
+          template_schedule: |-
+            ⏳ 리뷰를 기다리는 풀 리퀘스트가 있어요!
+          template_review_submitted_commented: |-
+            💬 {mention} 님, 피드백이 도착했어요.
+
+            - 리뷰어: {reviewer}
+            - 풀 리퀘스트: [{prTitle} (#{prNumber})]({prURL})
+          template_review_submitted_changes_requested: |-
+            ⚠️ {mention} 님, 수정 요청을 받았어요.
+
+            - 리뷰어: {reviewer}
+            - 풀 리퀘스트: [{prTitle} (#{prNumber})]({prURL})
+          template_review_submitted_approved: |-
+            ✅ {mention} 님, 승인을 받았어요.
+
+            - 리뷰어: {reviewer}
+            - 풀 리퀘스트: [{prTitle} (#{prNumber})]({prURL})

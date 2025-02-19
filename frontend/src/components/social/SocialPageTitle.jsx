@@ -38,6 +38,7 @@ const PageTitleGroup = styled.div`
     display: flex;
     gap: 0.7em;
     user-select: none;
+    -webkit-user-select: none;
 `
 
 const PageTitleButton = ({ $color, to, children }) => {

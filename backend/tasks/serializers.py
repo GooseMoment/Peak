@@ -75,7 +75,6 @@ class TaskSerializer(serializers.ModelSerializer):
             "reminders",
             "user",
             "order",
-            "repeat",
             "created_at",
             "updated_at",
             "deleted_at",

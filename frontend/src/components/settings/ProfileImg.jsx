@@ -77,7 +77,7 @@ const ProfileImg = ({ profile_img, username }) => {
 
     return (
         <ProfileImgContainer>
-            <Img src={profile_img} />
+            <Img src={profile_img} draggable="false" />
             <ProfileImgOverlay onClick={clickInput}>
                 <ImageIcon />
             </ProfileImgOverlay>
@@ -102,6 +102,9 @@ const ProfileImg = ({ profile_img, username }) => {
 
 const ProfileImgContainer = styled.div`
     position: relative;
+
+    user-select: none;
+    -webkit-user-select: none;
 `
 
 const ProfileImgOverlay = styled.div`
