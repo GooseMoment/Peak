@@ -21,7 +21,6 @@ class TaskAdmin(admin.ModelAdmin):
                     "privacy",
                     "order",
                     "memo",
-                    "repeat",
                 ],
             },
         ),
