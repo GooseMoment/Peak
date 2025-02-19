@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 
-import sleep from "@utils/sleep"
 import { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
@@ -44,19 +43,15 @@ const Navbar = () => {
     const [activeItemVisible, setActiveItemVisible] = useState(false)
     const [transition, setTransition] = useState(false)
 
-    useEffect(() => {
-        async function enableTransitionLate() {
-            await sleep(250)
-            setTransition(true)
-        }
-        enableTransitionLate()
-    }, [])
-
     const onRefChange = useCallback(
         (node) => {
             if (!node) {
                 setActiveItemVisible(false)
                 return
+            }
+
+            if (!transition) {
+                setTimeout(() => setTransition(true), 250)
             }
 
             setActiveItemVisible(true)
