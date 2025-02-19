@@ -80,13 +80,13 @@ const light: DefaultTheme = {
     search: {
         borderColor: black,
         buttonColor: black,
-        activatedColor: "#white",
+        activatedColor: white,
         activatedBackgroundColor: "#F78457",
     },
     toastTheme: "light",
 }
 
-const dark = {
+const dark: DefaultTheme = {
     type: "dark",
     primaryColors: {
         text: white,
@@ -160,9 +160,13 @@ const dark = {
     search: {
         borderColor: white,
         buttonColor: white,
+        activatedColor: black,
         activatedBackgroundColor: "#F78457",
     },
     toastTheme: "dark",
 }
 
-export default { system: null, light: light, dark: dark }
+export default { system: null, light: light, dark: dark } as Record<
+    "system" | "light" | "dark",
+    DefaultTheme | null
+>
