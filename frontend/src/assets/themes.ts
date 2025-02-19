@@ -1,3 +1,5 @@
+import type { DefaultTheme } from "styled-components"
+
 export const states = {
     text: "text",
     link: "link",
@@ -13,7 +15,7 @@ const black = "#222222"
 const white = "#FEFDFC"
 const goose = "#ff4a03"
 
-export const light = {
+const light: DefaultTheme = {
     type: "light",
     primaryColors: {
         text: black,
@@ -61,13 +63,8 @@ export const light = {
         reminderColor: "#7B2CBF",
         danger: "#FF0000",
     },
-    skeleton: {
-        defaultColor: "#ddd",
-        shineColor: "#e8e8e8",
-    },
-    notifications: {
-        boxShadowColor: "rgba(149, 157, 165, 0.2)",
-    },
+    skeleton: { defaultColor: "#ddd", shineColor: "#e8e8e8" },
+    notifications: { boxShadowColor: "rgba(149, 157, 165, 0.2)" },
     social: {
         borderColor: black,
         activeBackgroundColor: "rgb(255 74 3 / 0.35)",
@@ -81,9 +78,7 @@ export const light = {
         todayColor: white,
         hoverColor: "#FFC6C6",
     },
-    help: {
-        addressBarShadowColor: "rgba(0, 0, 0, 0.4)",
-    },
+    help: { addressBarShadowColor: "rgba(0, 0, 0, 0.4)" },
     search: {
         borderColor: black,
         buttonColor: black,
@@ -93,7 +88,7 @@ export const light = {
     toastTheme: "light",
 }
 
-export const dark = {
+const dark = {
     type: "dark",
     primaryColors: {
         text: white,
@@ -141,13 +136,8 @@ export const dark = {
         reminderColor: "#9D4EEE",
         danger: "#E05153",
     },
-    skeleton: {
-        defaultColor: "#2A2A2A",
-        shineColor: "#3A3A3A",
-    },
-    notifications: {
-        boxShadowColor: "rgba(0, 0, 0, 0.4)",
-    },
+    skeleton: { defaultColor: "#2A2A2A", shineColor: "#3A3A3A" },
+    notifications: { boxShadowColor: "rgba(0, 0, 0, 0.4)" },
     social: {
         borderColor: white,
         activeBackgroundColor: "rgb(255 74 3 / 0.35)",
@@ -161,9 +151,7 @@ export const dark = {
         todayColor: white,
         hoverColor: "#804A30",
     },
-    help: {
-        addressBarShadowColor: "rgba(0, 0, 0, 0.8)",
-    },
+    help: { addressBarShadowColor: "rgba(0, 0, 0, 0.8)" },
     search: {
         borderColor: white,
         buttonColor: white,
@@ -172,10 +160,4 @@ export const dark = {
     toastTheme: "dark",
 }
 
-const themes = {
-    system: null,
-    light: light,
-    dark: dark,
-}
-
-export default themes
+export default { system: null, light: light, dark: dark }
