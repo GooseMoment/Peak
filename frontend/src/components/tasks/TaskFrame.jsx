@@ -39,7 +39,9 @@ const TaskFrame = ({
         <TaskNameBox
             $completed={completedAt}
             onClick={() => {
-                showTaskDetail && setDetailOpen(true)
+                if (showTaskDetail) {
+                    setDetailOpen(true)
+                }
             }}>
             {task?.name}
         </TaskNameBox>
