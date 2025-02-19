@@ -189,26 +189,6 @@
                 "acceptable_numbers": "입력 가능한 최대 숫자는 {{max}}입니다.",
                 "time_change_success": "시간을 변경했습니다.",
                 "time_remove": "시간을 삭제했습니다."
-            },
-            "repeat": {
-                "title": "반복 설정",
-                "button_add": "추가하기",
-                "acceptable_numbers": "입력 가능한 최대 숫자는 {{max}}입니다.",
-                "every_few_weeks_front": "",
-                "every_few_weeks_back": "주 마다",
-                "everyday": "매일",
-                "everyweek": "매주",
-                "everymonth": "매달",
-                "everyyear": "매년",
-                "weekday": "평일",
-                "weekend": "주말",
-                "sun": "일",
-                "mon": "월",
-                "tue": "화",
-                "wed": "수",
-                "thu": "목",
-                "fri": "금",
-                "sat": "토"
             }
         },
         "reminder": {
