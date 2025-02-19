@@ -1,4 +1,4 @@
-import { HTMLProps, ReactNode } from "react"
+import { ElementType, HTMLProps, ReactNode } from "react"
 
 import styled from "styled-components"
 
@@ -7,16 +7,7 @@ import LoaderCircle from "@components/common/LoaderCircle"
 import MildButton from "./MildButton"
 
 import { cubicBeizer } from "@assets/keyframes"
-
-type State =
-    | "text"
-    | "link"
-    | "primary"
-    | "secondary"
-    | "info"
-    | "success"
-    | "warning"
-    | "danger"
+import type { State } from "@assets/themes"
 
 export interface ButtonProp extends HTMLProps<HTMLButtonElement> {
     form: "filled" | "outlined"
@@ -29,14 +20,13 @@ export default function Button({
     form = "outlined",
     state = "text",
     loading = false,
-    className,
     children,
-    ...others
+    ...htmlProps
 }: ButtonProp) {
     const SelectedButton = buttons[form]
 
     return (
-        <SelectedButton {...others} $state={state} className={className}>
+        <SelectedButton {...htmlProps} $state={state}>
             {loading && <ButtonLoader />} {children}
         </SelectedButton>
     )
@@ -96,19 +86,26 @@ const CommonButton = styled(MildButton)`
         color 0.5s ${cubicBeizer};
 `
 
-const FilledButton = styled(CommonButton)`
+interface StyledButtonProp {
+    $state: State
+}
+
+const FilledButton = styled(CommonButton)<StyledButtonProp>`
     background-color: ${(p) => p.theme.primaryColors[p.$state]};
     border-color: ${(p) => p.theme.backgroundColor};
     color: ${(p) => p.theme.backgroundColor};
 `
 
-const OutlinedButton = styled(CommonButton)`
+const OutlinedButton = styled(CommonButton)<StyledButtonProp>`
     background-color: ${(p) => p.theme.backgroundColor};
     border-color: ${(p) => p.theme.primaryColors[p.$state]};
     color: ${(p) => p.theme.primaryColors[p.$state]};
 `
 
-const buttons = { filled: FilledButton, outlined: OutlinedButton }
+const buttons: Record<
+    ButtonProp["form"],
+    ElementType<StyledButtonProp | HTMLProps<HTMLButtonElement>>
+> = { filled: FilledButton, outlined: OutlinedButton }
 
 const ButtonLoader = styled(LoaderCircle)`
     margin-right: 0.25em;

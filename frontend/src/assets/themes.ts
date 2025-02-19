@@ -1,15 +1,6 @@
 import type { DefaultTheme } from "styled-components"
 
-export const states = {
-    text: "text",
-    link: "link",
-    primary: "primary",
-    secondary: "secondary",
-    info: "info",
-    success: "success",
-    warning: "warning",
-    danger: "danger",
-}
+export type State = keyof DefaultTheme["primaryColors"]
 
 const black = "#222222"
 const white = "#FEFDFC"
