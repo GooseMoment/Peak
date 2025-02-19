@@ -111,9 +111,7 @@ const Drawer = ({ project, drawer, color }) => {
     }
 
     useEffect(() => {
-        const cleanupMonitor = monitorForElements({
-            onDrop: onDrop,
-        })
+        const cleanupMonitor = monitorForElements({ onDrop: onDrop })
 
         return () => {
             cleanupMonitor()
@@ -343,10 +341,7 @@ const MoreButton = styled(Button)`
 const makeSortMenuItems = (t) => [
     { display: t("sort.-priority"), context: "-priority" },
     { display: t("sort.due_date"), context: "due_date" },
-    {
-        display: t("sort.-due_date"),
-        context: "-due_date",
-    },
+    { display: t("sort.-due_date"), context: "-due_date" },
     { display: t("sort.name"), context: "name" },
     { display: t("sort.-name"), context: "-name" },
     { display: t("sort.created_at"), context: "created_at" },

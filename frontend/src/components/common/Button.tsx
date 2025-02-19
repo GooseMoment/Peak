@@ -1,3 +1,5 @@
+import { HTMLProps, ReactNode } from "react"
+
 import styled from "styled-components"
 
 import LoaderCircle from "@components/common/LoaderCircle"
@@ -5,21 +7,32 @@ import LoaderCircle from "@components/common/LoaderCircle"
 import MildButton from "./MildButton"
 
 import { cubicBeizer } from "@assets/keyframes"
-import { states } from "@assets/themes"
 
-export const buttonForms = {
-    filled: "filled",
-    outlined: "outlined",
+type State =
+    | "text"
+    | "link"
+    | "primary"
+    | "secondary"
+    | "info"
+    | "success"
+    | "warning"
+    | "danger"
+
+export interface ButtonProp extends HTMLProps<HTMLButtonElement> {
+    form: "filled" | "outlined"
+    state: State
+    loading: boolean
+    children: ReactNode
 }
 
-const Button = ({
-    form = buttonForms.outlined,
-    state = states.text,
+export default function Button({
+    form = "outlined",
+    state = "text",
     loading = false,
     className,
     children,
     ...others
-}) => {
+}: ButtonProp) {
     const SelectedButton = buttons[form]
 
     return (
@@ -29,7 +42,10 @@ const Button = ({
     )
 }
 
-export const ButtonGroup = styled.div`
+export const ButtonGroup = styled.div<{
+    $justifyContent: string
+    $margin: string
+}>`
     display: flex;
     gap: 1em;
     justify-content: ${(p) => p.$justifyContent || "center"};
@@ -92,10 +108,7 @@ const OutlinedButton = styled(CommonButton)`
     color: ${(p) => p.theme.primaryColors[p.$state]};
 `
 
-const buttons = {
-    filled: FilledButton,
-    outlined: OutlinedButton,
-}
+const buttons = { filled: FilledButton, outlined: OutlinedButton }
 
 const ButtonLoader = styled(LoaderCircle)`
     margin-right: 0.25em;
@@ -103,5 +116,3 @@ const ButtonLoader = styled(LoaderCircle)`
     border-color: inherit;
     border-left-color: transparent;
 `
-
-export default Button

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
-import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
+import Button, { ButtonGroup } from "@components/common/Button"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import ModalWindow from "@components/common/ModalWindow"
 import { getProjectColor } from "@components/project/common/palettes"
@@ -32,10 +32,7 @@ const Account = () => {
         data: user,
         isPending,
         isError,
-    } = useQuery({
-        queryKey: ["users", "me"],
-        queryFn: () => getMe(),
-    })
+    } = useQuery({ queryKey: ["users", "me"], queryFn: () => getMe() })
 
     const [headerColor, setHeaderColor] = useState({
         color: user?.header_color,
@@ -150,7 +147,7 @@ const Account = () => {
                         <Button
                             disabled={mutation.isPending}
                             loading={mutation.isPending}
-                            form={buttonForms.filled}
+                            form="filled"
                             type="submit">
                             {t("button_submit")}
                         </Button>
