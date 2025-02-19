@@ -1,4 +1,5 @@
 from rest_framework import mixins, generics, permissions, status
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.pagination import CursorPagination
 
@@ -17,6 +18,7 @@ from .serializers import (
     TaskReminderSerializer,
 )
 from .utils import caculateScheduled
+from . import exceptions
 
 
 class IsUserMatchInReminder(permissions.IsAuthenticated):
@@ -135,11 +137,48 @@ class WebPushSubscriptionCreate(mixins.CreateModelMixin, generics.GenericAPIView
         return self.create(request, *args, **kwargs)
 
 
-class WebPushSubscriptionDelete(mixins.DestroyModelMixin, generics.GenericAPIView):
+class WebPushSubscriptionDetail(
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView,
+):
     queryset = WebPushSubscription.objects.all()
     serializer_class = WebPushSubscriptionSerializer
     lookup_field = "id"
     permission_classes = [IsUserOwner]
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    # Only accepts updating excluded_types for now
+    def patch(self, request: Request, *args, **kwargs):
+        try:
+            excluded_types = request.data["excluded_types"]
+        except KeyError:
+            raise exceptions.ExcludedTypesMissing
+
+        notification_types = Notification.SOCIAL_TYPES + (
+            Notification.FOR_TASK_REMINDER,
+        )
+
+        if type(excluded_types) is not list or len(excluded_types) > len(
+            notification_types
+        ):
+            raise exceptions.InvalidNotificationType
+
+        # check all types are valid
+        for t in excluded_types:
+            if t not in notification_types:
+                raise exceptions.InvalidNotificationType
+
+        subscription: WebPushSubscription = self.get_object()
+        serializer = WebPushSubscriptionSerializer(
+            subscription, data={"excluded_types": excluded_types}, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)

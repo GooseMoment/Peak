@@ -9,3 +9,4 @@ ignores:
     - \@types/react-dom
     - eslint
     - prettier
+    - typescript

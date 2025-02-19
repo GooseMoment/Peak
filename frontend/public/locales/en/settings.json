@@ -13,8 +13,7 @@
         "appearance": "Appearance",
         "reactions": "Reactions",
         "blocks": "Blocks",
-        "info": "Info",
-        "sign_out": "Sign out"
+        "info": "Info"
     },
     "account": {
         "display_name": "Display name",
@@ -53,6 +52,12 @@
         "delete_task_after_alert": {
             "name": "Alert before task deletion",
             "description": "Show an alert before deleting tasks."
+        },
+        "sign_out": {
+            "name": "Sign out",
+            "values": {
+                "button_sign_out": "Sign out"
+            }
         }
     },
     "security": {
@@ -125,8 +130,21 @@
             "enabled_push_notification": "Now you can receive notifications from Peak.",
             "enabled_push_notification_error": "An error is occured while enabling a push notification."
         },
-        "play_notification_sound": {
-            "name": "Play notification sound"
+        "allowed_types": {
+            "name": "Types of notifications",
+            "description": "Choose which types you want to receive on this device.",
+            "values": {
+                "comment": "When you get a comment",
+                "follow": "When someone follows you",
+                "follow_request": "When you receive a follow request",
+                "follow_request_accepted": "When your follow request is accepted",
+                "peck": "When you get pecked",
+                "reaction": "When you receive a reaction",
+                "task_reminder": "When it's a time to remind a task",
+                "button_save": "Save"
+            },
+            "success": "Saved the preference of notification types.",
+            "failed": "Failed to save the preference. Try again."
         }
     },
     "appearance": {

@@ -13,8 +13,7 @@
         "appearance": "테마",
         "reactions": "리액션",
         "blocks": "차단",
-        "info": "정보",
-        "sign_out": "로그아웃"
+        "info": "정보"
     },
     "account": {
         "display_name": "이름",
@@ -53,6 +52,12 @@
         "delete_task_after_alert": {
             "name": "작업 삭제 시 경고",
             "description": "작업을 삭제할 때 되묻는 경고창을 띄웁니다."
+        },
+        "sign_out": {
+            "name": "여기서 로그아웃",
+            "values": {
+                "button_sign_out": "로그아웃"
+            }
         }
     },
     "security": {
@@ -125,8 +130,21 @@
             "enabled_push_notification": "이제 Peak에서 보내는 알림을 받을 수 있습니다.",
             "enabled_push_notification_error": "알림 활성화 중 오류가 발생했습니다."
         },
-        "play_notification_sound": {
-            "name": "알림음 재생하기"
+        "allowed_types": {
+            "name": "알림 유형",
+            "description": "이 기기에서 받을 알림 유형을 선택합니다.",
+            "values": {
+                "comment": "댓글이 달렸을 때",
+                "follow": "남이 팔로우했을 때",
+                "follow_request": "팔로우 요청을 받았을 때",
+                "follow_request_accepted": "내 팔로우 요청이 승낙되었을 때",
+                "peck": "콕 쪼였을 때",
+                "reaction": "리액션을 받았을 때",
+                "task_reminder": "작업의 리마인더 시간일 때",
+                "button_save": "저장"
+            },
+            "success": "알림 유형 설정을 저장했습니다.",
+            "failed": "알림 유형 설정 저장 중 오류가 발생했습니다. 다시 시도해주세요."
         }
     },
     "appearance": {

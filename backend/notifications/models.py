@@ -108,6 +108,7 @@ class WebPushSubscription(Base):
     device = models.CharField(max_length=128)
     user_agent = models.CharField(max_length=500, blank=True)
     fail_cnt = models.IntegerField(default=0)
+    excluded_types = models.JSONField(default=list)
 
     def __str__(self) -> str:
         return f"Subscription of {self.user} for {self.device}"
