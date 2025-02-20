@@ -47,9 +47,6 @@ importers:
       moment:
         specifier: ^2.30.1
         version: 2.30.1
-      pnpm:
-        specifier: ^9.15.0
-        version: 9.15.0
       qrcode:
         specifier: ^1.5.4
         version: 1.5.4
@@ -1913,11 +1910,6 @@ packages:
   pngjs@5.0.0:
     resolution: {integrity: sha512-40QW5YalBNfQo5yRYmiw7Yz6TKKVr3h6970B2YE+3fQpsWcrbj1PzJgxeJ19DRQjhMbKPIuMY8rFaXc8moolVw==}
     engines: {node: '>=10.13.0'}
-
-  pnpm@9.15.0:
-    resolution: {integrity: sha512-duI3l2CkMo7EQVgVvNZije5yevN3mqpMkU45RBVsQpmSGon5djge4QfUHxLPpLZmgcqccY8GaPoIMe1MbYulbA==}
-    engines: {node: '>=18.12'}
-    hasBin: true
 
   possible-typed-array-names@1.0.0:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
@@ -4468,8 +4460,6 @@ snapshots:
   picomatch@2.3.1: {}
 
   pngjs@5.0.0: {}
-
-  pnpm@9.15.0: {}
 
   possible-typed-array-names@1.0.0: {}
 
