@@ -54,12 +54,13 @@ const NotificationsPage = () => {
         node?.scrollIntoView({ block: "center", scrollBehavior: "smooth" })
     })
 
-    const { data, isError, fetchNextPage, isFetching, isFetchingNextPage } =
+    const { data, isError, fetchNextPage, isPending, isFetchingNextPage } =
         useInfiniteQuery({
             queryKey: ["notifications", { types: filters[activeFilter] }],
             queryFn: getNotifications,
             initialPageParam: "",
             getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
+            gcTime: 15 * 1000,
         })
 
     // useInfiniteQuery에서 제공하는 hasNextPage가 제대로 작동 안함. 어째서?
@@ -99,9 +100,6 @@ const NotificationsPage = () => {
     return (
         <>
             {header}
-            {isFetching && !isFetchingNextPage
-                ? [...Array(10)].map((e, i) => <Box key={i} skeleton />)
-                : null}
             {data?.pages.map((group, i) => (
                 <Fragment key={i}>
                     {group.results.map((notification, j) => {
@@ -137,6 +135,9 @@ const NotificationsPage = () => {
                     })}
                 </Fragment>
             ))}
+            {isPending && !isFetchingNextPage
+                ? [...Array(10)].map((e, i) => <Box key={i} skeleton />)
+                : null}
             <ImpressionArea
                 onImpressionStart={() => fetchNextPage()}
                 timeThreshold={200}>
