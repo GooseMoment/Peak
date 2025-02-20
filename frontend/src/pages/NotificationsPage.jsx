@@ -60,7 +60,7 @@ const NotificationsPage = () => {
             queryFn: getNotifications,
             initialPageParam: "",
             getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
-            gcTime: 15 * 1000,
+            gcTime: 30 * 1000,
         })
 
     // useInfiniteQuery에서 제공하는 hasNextPage가 제대로 작동 안함. 어째서?
