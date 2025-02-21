@@ -191,8 +191,8 @@
     },
     "info": {
         "built_at": {
-            "name": "Build At",
-            "for_dev": "This is not shown at DEV mode."
+            "name": "This app was updated at",
+            "for_dev": "This is not shown in the development mode."
         }
     },
     "sign_out": {
