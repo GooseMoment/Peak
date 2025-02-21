@@ -41,15 +41,13 @@ const Task = ({ task, color }) => {
         mutation.mutate({ completed_at })
     }
 
-    const taskDetailPath = `/app/projects/${task.project_id}/tasks/${task.id}/detail`
-
     return (
         <TaskFrame
             task={task}
             color={color}
             isLoading={mutation.isPending}
             toComplete={toComplete}
-            taskDetailPath={taskDetailPath}
+            showTaskDetail
         />
     )
 }
