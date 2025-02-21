@@ -2,6 +2,7 @@ export default {
     tabWidth: 4,
     semi: false,
     bracketSameLine: true,
+    objectWrap: "preserve",
 
     plugins: ["@trivago/prettier-plugin-sort-imports"],
 
@@ -18,6 +19,7 @@ export default {
         "^@utils/(.*)$",
         "^@queries/(.*)$",
         "^@assets/(.*)$",
+        "^@public/(.*)$",
         "<THIRD_PARTY_MODULES>",
     ],
     importOrderSeparation: true,

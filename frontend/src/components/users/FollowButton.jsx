@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 
-import Button, { buttonForms } from "@components/common/Button"
+import Button from "@components/common/Button"
 import Confirmation from "@components/common/Confirmation"
 
 import { getCurrentUsername } from "@api/client"
@@ -13,8 +13,6 @@ import {
 } from "@api/social.api"
 
 import queryClient from "@queries/queryClient"
-
-import { states } from "@assets/themes"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -113,14 +111,12 @@ const FollowButton = ({ user, disabled = false }) => {
                 loading={followButtonLoading}
                 disabled={followButtonLoading || disabled}
                 state={
-                    (following?.status === "accepted" && states.success) ||
-                    (following?.status === "requested" && states.link) ||
-                    states.text
+                    (following?.status === "accepted" && "success") ||
+                    (following?.status === "requested" && "link") ||
+                    "text"
                 }
                 form={
-                    isHover && followAccpetedOrRequested
-                        ? buttonForms.filled
-                        : buttonForms.outlined
+                    isHover && followAccpetedOrRequested ? "filled" : "outlined"
                 }
                 onMouseEnter={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}>
@@ -140,7 +136,7 @@ const FollowButton = ({ user, disabled = false }) => {
                         <Button
                             key="confirm"
                             onClick={handleConfirmation}
-                            $state={states.danger}>
+                            state="danger">
                             {t("button_sure")}
                         </Button>,
                     ]}

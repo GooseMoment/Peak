@@ -1,19 +1,12 @@
-export const states = {
-    text: "text",
-    link: "link",
-    primary: "primary",
-    secondary: "secondary",
-    info: "info",
-    success: "success",
-    warning: "warning",
-    danger: "danger",
-}
+import type { DefaultTheme } from "styled-components"
+
+export type State = keyof DefaultTheme["primaryColors"]
 
 const black = "#222222"
 const white = "#FEFDFC"
 const goose = "#ff4a03"
 
-export const light = {
+const light: DefaultTheme = {
     type: "light",
     primaryColors: {
         text: black,
@@ -32,8 +25,8 @@ export const light = {
     textColor: black,
     secondTextColor: "#9c9c9c",
     backgroundColor: white,
-    secondBackgroundColor: "#F3F3F3",
-    thirdBackgroundColor: "#F3F3F3", // 원래 second랑 똑같은 건 의도된건가...?
+    secondBackgroundColor: "#F8F8F8",
+    thirdBackgroundColor: "#F2F2F2",
     accentColor: goose,
     accentBackgroundColor: "#E8EEFF",
     scrollbarColor: "#FFC6C6",
@@ -87,13 +80,13 @@ export const light = {
     search: {
         borderColor: black,
         buttonColor: black,
-        activatedColor: "#white",
+        activatedColor: white,
         activatedBackgroundColor: "#F78457",
     },
     toastTheme: "light",
 }
 
-export const dark = {
+const dark: DefaultTheme = {
     type: "dark",
     primaryColors: {
         text: white,
@@ -112,8 +105,8 @@ export const dark = {
     textColor: white,
     secondTextColor: "#cccccc",
     backgroundColor: black,
-    secondBackgroundColor: "#323232",
-    thirdBackgroundColor: "#2A2A2A",
+    secondBackgroundColor: "#2A2A2A",
+    thirdBackgroundColor: "#323232",
     accentColor: goose,
     accentBackgroundColor: "#0c4a6e",
     scrollbarColor: "#4A4A4A",
@@ -167,15 +160,13 @@ export const dark = {
     search: {
         borderColor: white,
         buttonColor: white,
+        activatedColor: black,
         activatedBackgroundColor: "#F78457",
     },
     toastTheme: "dark",
 }
 
-const themes = {
-    system: null,
-    light: light,
-    dark: dark,
-}
-
-export default themes
+export default { system: null, light: light, dark: dark } as Record<
+    "system" | "light" | "dark",
+    DefaultTheme | null
+>

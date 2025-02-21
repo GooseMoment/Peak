@@ -19,8 +19,6 @@ import {
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
-import { states } from "@assets/themes"
-
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import QRCode from "qrcode"
@@ -142,9 +140,7 @@ const Security = () => {
                                 )}
                             </Button>
                             {totpQuery.data.enabled && (
-                                <Button
-                                    onClick={deleteTOTP}
-                                    state={states.danger}>
+                                <Button onClick={deleteTOTP} state="danger">
                                     {t("totp.delete")}
                                 </Button>
                             )}
@@ -199,7 +195,7 @@ const Security = () => {
                     buttons={[
                         <Button
                             key="delete"
-                            state={states.danger}
+                            state="danger"
                             onClick={() => totpMut.mutate({ method: "delete" })}
                             disabled={totpMut.isPending}
                             loading={totpMut.isPending}>

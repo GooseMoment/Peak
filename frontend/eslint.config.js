@@ -49,6 +49,7 @@ export default [
                         "@/assets/*",
                         "@/queries/*",
                         "@/routers/*",
+                        "@/public/*",
                     ],
                 },
             ],

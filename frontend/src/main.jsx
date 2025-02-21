@@ -10,7 +10,7 @@ import {
     ClientSettingProvider,
     initClientSettings,
 } from "@utils/clientSettings"
-import i18n, { I18nSetLocale } from "@utils/i18n.js"
+import i18n, { I18nSetLocale } from "@utils/i18n"
 
 import queryClient from "@queries/queryClient"
 
