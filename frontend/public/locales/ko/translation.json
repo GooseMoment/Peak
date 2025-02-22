@@ -37,15 +37,19 @@
     },
     "today": {
         "title": "오늘",
-        "overdue_title": "놓친 작업",
-        "filter_due_date": "지난 기한",
-        "filter_assigned_at": "지난 할당",
+        "important_title": "오늘의 중요한 작업",
+        "filter_todayDue": "오늘 기한",
+        "filter_overDue": "지난 기한",
+        "filter_pastAssigned": "지난 할당",
         "no_today_assignment": "오늘 할 작업들을 추가하세요.",
         "error_load_task": "작업을 불러오지 못했어요 😢",
         "button_load_more": "더보기",
         "due_change_today_success": "작업을 오늘로 할당했습니다.",
         "due_change_tomorrow_success": "작업을 내일로 할당했습니다.",
-        "due_change_error": "기한 변경에 실패했습니다."
+        "due_change_error": "기한 변경에 실패했습니다.",
+        "no_tasks_todayDue": "오늘 기한인 작업이 없습니다.",
+        "no_tasks_overDue": "기한이 지난 작업이 없습니다.",
+        "no_tasks_pastAssigned": "할당이 지난 작업이 없습니다."
     },
     "project": {
         "no_drawer": "+ 버튼을 눌러서 서랍을 추가하세요.",
