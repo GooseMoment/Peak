@@ -54,21 +54,27 @@ cp .env.example .env
 
 ### 개발 환경일시
 
-다른 터미널(또는 VSCode +버튼 눌러서 터미널 탭 추가)에서 `frontend`에서 `pnpm run dev` 실행 
+다른 터미널(또는 VSCode +버튼 눌러서 터미널 탭 추가)에서 `./frontend`에서
+
+```bash
+npm install -g pnpm@9 # install pnpm v9
+pnpm i # install dependencies
+pnpm dev # start dev server
+```
 
 ```bash
 # Peak 디렉터리에서 실행
-docker-compose build # 도커 이미지 빌드
-docker-compose create # 컨테이너 제작 (이미지 다운로드 진행)
-docker-compose run api python3 manage.py migrate # 마이그레이션 실행
-docker-compose start # 컨테이너 실행 (서비스 시작)
+docker compose build # 도커 이미지 빌드
+docker compose create # 컨테이너 제작 (이미지 다운로드 진행)
+docker compose run api python3 manage.py migrate # 마이그레이션 실행
+docker compose start # 컨테이너 실행 (서비스 시작)
 
-docker-compose up # create & start
-docker-compose stop # 종료
-docker-compose down # 종료 및 컨테이너 내리기 
+docker compose up # create & start
+docker compose stop # 종료
+docker compose down # 종료 및 컨테이너 내리기 
 ```
 
-그 후, 프론트엔드는 [:8080](http://127.0.0.1:8080) 포트에, 백엔드는 [:8888](http://127.0.0.1:8888) 포트에서 확인할 수 있습니다.
+그 후, 프론트엔드는 [:8080](http://127.0.0.1:8080) 포트에서, 백엔드는 [:8888](http://127.0.0.1:8888) 포트에서 확인할 수 있습니다.
 
 ### 프로덕션일시
 
@@ -78,7 +84,7 @@ docker-compose down # 종료 및 컨테이너 내리기
 ./deploy/run-builder.sh
 ```
 
-(이후 `frontend`에 변경사항이 있으면 `docker-compose` 실행할 필요없이 해당 부분만 스크립트 돌리면 됩니다)
+(이후 `frontend`에 변경사항이 있으면 `docker compose` 실행할 필요없이 `run-builder.sh`만 실행해도 됩니다)
 
 그 후, 아래와 같이 docker-compose를 실행합니다.
 
@@ -87,7 +93,9 @@ docker-compose down # 종료 및 컨테이너 내리기
 ./deploy/compose-prod.sh create
 ./deploy/compose-prod.sh run api python3 manage.py migrate
 ./deploy/compose-prod.sh start
-./deploy/compose-prod.sh stop # 종료
+
+# 종료 시
+./deploy/compose-prod.sh stop
 ```
 
 ## Trouble Shooting
@@ -110,17 +118,17 @@ FATAL:  role "peakuser" does not exist
 데이터베이스 볼륨 설정이 완료되지 않아 생긴 오류입니다. 볼륨과 컨테이너를 모두 내리고 다시 실행해주세요.
 
 ```bash
-docker-compose down -v
+docker compose down -v
 docker volume remove db_data
 
-docker-volume create db_data
-docker-compose up
+docker volume create db_data
+docker compose up
 ```
 
 ### `Caddyfile(.prod)`를 변경했을 때
 
 ```bash
-docker-compose exec web caddy reload --config /etc/caddy/Caddyfile
+docker compose exec web caddy reload --config /etc/caddy/Caddyfile
 ```
 
 를 입력하면 Caddyfile이 다시 로드 됩니다.

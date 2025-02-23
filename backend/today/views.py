@@ -7,7 +7,7 @@ from tasks.serializers import TaskSerializer, TaskGroupedSerializer
 from tasks.models import Task
 
 import datetime
-from django.db.models import Q, Count
+from django.db.models import Count
 
 
 class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
@@ -31,68 +31,65 @@ class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class TaskTodayDueListPagination(PageNumberPagination):
+class ImportantTaskListPagination(PageNumberPagination):
     page_size = 4
 
 
-class TaskTodayDueList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIView):
+class TodayDueTaskList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
-    pagination_class = TaskTodayDueListPagination
+    pagination_class = ImportantTaskListPagination
 
     def get_queryset(self):
-        date_isoformat = self.request.GET.get("date")  # e.g. "2024-09-28"
-        date = datetime.date.fromisoformat(date_isoformat)
-        datetime_range = self.get_datetime_range(date)
-
-        today_due_tasks = (
+        today = self.get_today()
+        return (
             Task.objects.filter(
-                Q(due_date=date) | Q(due_datetime__range=datetime_range),
                 user=self.request.user,
+                due_date=today,
                 completed_at__isnull=True,
             )
+            .exclude(assigned_at=today)
             .order_by("due_date")
-            .all()
         )
-
-        return today_due_tasks
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
 
-class TaskOverdueListPagination(PageNumberPagination):
-    page_size = 4
-
-
-class TaskOverdueList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIView):
+class OverDueTaskList(mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
-    pagination_class = TaskOverdueListPagination
+    pagination_class = ImportantTaskListPagination
 
     def get_queryset(self):
-        filter_field = self.request.GET.get("filter_field", "due_date")
-
         now = self.get_now()
         today = self.get_today()
+        return Task.objects.filter(
+            user=self.request.user,
+            due_date__lt=today,
+            due_datetime__lt=now,
+            completed_at__isnull=True,
+        ).order_by("due_date")
 
-        if filter_field == "assigned_at":
-            filter_condition = {"assigned_at__lt": today}
-        if filter_field == "due_date":
-            filter_condition = {"due_date__lt": today, "due_datetime__lt": now}
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
-        overdue_tasks = (
+
+class PastAssignedTaskList(
+    mixins.ListModelMixin, TimezoneMixin, generics.GenericAPIView
+):
+    serializer_class = TaskSerializer
+    pagination_class = ImportantTaskListPagination
+
+    def get_queryset(self):
+        today = self.get_today()
+        return (
             Task.objects.filter(
                 user=self.request.user,
-                **filter_condition,
+                assigned_at__lt=today,
                 completed_at__isnull=True,
             )
-            .exclude(
-                assigned_at=today,
-            )
-            .order_by(filter_field)
-            .all()
+            .exclude(assigned_at=today)
+            .order_by("assigned_at")
         )
-
-        return overdue_tasks
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
