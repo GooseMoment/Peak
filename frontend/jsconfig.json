@@ -10,7 +10,8 @@
             "@containers/*": ["src/containers/*"],
             "@assets/*": ["src/assets/*"],
             "@queries/*": ["src/queries/*"],
-            "@routers/*": ["src/routers/*"]
+            "@routers/*": ["src/routers/*"],
+            "@public/*": ["public/*"]
         }
     }
 }

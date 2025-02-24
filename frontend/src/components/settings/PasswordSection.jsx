@@ -3,13 +3,11 @@ import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
+import Button, { ButtonGroup } from "@components/common/Button"
 import Section, { Name, Value } from "@components/settings/Section"
 import Input from "@components/sign/Input"
 
 import { patchPassword } from "@api/users.api"
-
-import { states } from "@assets/themes"
 
 import { Key, RotateCw } from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -109,8 +107,8 @@ const PasswordSection = () => {
                         <Button
                             disabled={mutation.isPending}
                             loading={mutation.isPending}
-                            form={buttonForms.filled}
-                            state={states.danger}
+                            form="filled"
+                            state="danger"
                             type="submit">
                             {t("button_change")}
                         </Button>
