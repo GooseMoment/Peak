@@ -56,6 +56,9 @@ jobs:
       - name: Run ESLint
         run: pnpm lint
         working-directory: ./frontend
+      - name: Run type check
+        run: pnpm type:check
+        working-directory: ./frontend
   depcheck:
     runs-on: ubuntu-latest
     steps:
