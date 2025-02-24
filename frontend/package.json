@@ -3,7 +3,7 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "packageManager": "pnpm@9.1.2",
+    "packageManager": "pnpm@9.15.5",
     "scripts": {
         "preinstall": "npx only-allow pnpm",
         "dev": "vite",
@@ -28,7 +28,6 @@
         "i18next-http-backend": "^2.5.2",
         "luxon": "^3.4.4",
         "moment": "^2.30.1",
-        "pnpm": "^9.15.0",
         "qrcode": "^1.5.4",
         "react": "^18.2.0",
         "react-calendar": "^4.8.0",
@@ -54,7 +53,7 @@
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-react": "^7.35.0",
         "globals": "^15.9.0",
-        "prettier": "^3.3.3",
+        "prettier": "^3.5.2",
         "typescript": "^5.7.3",
         "typescript-eslint": "^8.23.0",
         "vite": "^5.2.14"

@@ -19,7 +19,7 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
     const theme = useTheme()
 
     const followButton = isMine ? (
-        <Link to="/app/settings/account">
+        <Link to="/app/settings/profile">
             <Button>{t("button_edit_profile")}</Button>
         </Link>
     ) : (
