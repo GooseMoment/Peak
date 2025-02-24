@@ -37,7 +37,7 @@ const Header = () => {
                 <Link to="/app/notifications">
                     <FeatherIcon icon="bell" />
                 </Link>
-                <Link to="/app/settings/account">
+                <Link to="/app/settings/profile">
                     <FeatherIcon icon="settings" />
                 </Link>
             </HeaderIcons>

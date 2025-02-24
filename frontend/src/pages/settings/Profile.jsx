@@ -22,8 +22,8 @@ import queryClient from "@queries/queryClient"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const Account = () => {
-    const { t } = useTranslation("settings", { keyPrefix: "account" })
+const Profile = () => {
+    const { t } = useTranslation("settings", { keyPrefix: "profile" })
     const theme = useTheme()
 
     const { isDesktop } = useScreenType()
@@ -51,10 +51,10 @@ const Account = () => {
             queryClient.invalidateQueries({
                 queryKey: ["users", user.username],
             })
-            toast.success(t("account_edited"))
+            toast.success(t("profile_edited"))
         },
         onError: () => {
-            toast.error(t("account_fail"))
+            toast.error(t("profile_fail"))
         },
     })
 
@@ -227,4 +227,4 @@ const ColorButton = styled.div`
     background-color: ${(p) => p.$color};
 `
 
-export default Account
+export default Profile
