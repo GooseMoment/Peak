@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
+import Input from "@components/common/Input"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import ModalWindow from "@components/common/ModalWindow"
 import { getProjectColor } from "@components/project/common/palettes"
@@ -11,7 +12,6 @@ import Color from "@components/project/edit/Color"
 import Error from "@components/settings/Error"
 import ProfileImg from "@components/settings/ProfileImg"
 import Section, { Name, Value } from "@components/settings/Section"
-import Input from "@components/sign/Input"
 
 import { getMe, patchUser } from "@api/users.api"
 
