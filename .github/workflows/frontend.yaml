@@ -23,6 +23,8 @@ jobs:
         working-directory: ./frontend
   format:
     runs-on: ubuntu-latest
+    env:
+      TERM: xterm-color
     steps:
       - uses: actions/checkout@v4
       - name: Install pnpm
@@ -32,8 +34,15 @@ jobs:
       - name: Install modules
         run: pnpm i
         working-directory: ./frontend
-      - name: Run Prettier Check
-        run: pnpm format:check || (pnpm format:write>/dev/null && git diff && return 1;)
+      - name: Run Prettier Check and Show Diff
+        run: >-
+          pnpm format:check 
+          || (
+            echo;
+            pnpm prettier --version;
+            pnpm format:write>/dev/null;
+            git diff --exit-code;
+          )
         working-directory: ./frontend
   lint:
     runs-on: ubuntu-latest

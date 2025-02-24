@@ -2,6 +2,8 @@ export default {
     tabWidth: 4,
     semi: false,
     bracketSameLine: true,
+    printWidth: 80,
+    objectWrap: "preserve",
 
     plugins: ["@trivago/prettier-plugin-sort-imports"],
 
