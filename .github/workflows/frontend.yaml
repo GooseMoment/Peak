@@ -32,8 +32,15 @@ jobs:
       - name: Install modules
         run: pnpm i
         working-directory: ./frontend
-      - name: Run Prettier Check
-        run: pnpm format:check
+      - name: Run Prettier Check and Show Diff
+        run: >-
+          pnpm format:check 
+          || (
+            echo;
+            pnpm prettier --version;
+            pnpm format:write>/dev/null;
+            git diff --exit-code;
+          )
         working-directory: ./frontend
   lint:
     runs-on: ubuntu-latest
@@ -66,3 +73,19 @@ jobs:
       - name: Compare ${{ matrix.file }}
         working-directory: ./frontend/public/locales
         run: npx compare-json ./ko/${{ matrix.file }}.json ./en/${{ matrix.file }}.json
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the frontend Docker image 
+        run: >-
+          docker build
+          -f ./frontend/Dockerfile
+          --build-arg "BUILD_DATE=$(date '+%Y-%m-%dT%H:%M:%S%z')"
+          -t frontend-build ./frontend
+      - name: Build frontend using the frontend image
+        run: >-
+          docker run
+          -v ./build:/frontend/dist
+          -v ./.env.example:/.env:ro
+          -t frontend-build
