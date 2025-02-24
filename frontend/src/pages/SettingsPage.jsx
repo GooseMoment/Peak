@@ -83,7 +83,7 @@ const getMenuItems = (t) => [
     //     to: "reactions",
     // },
     {
-        icon: "shield",
+        icon: "slash",
         display: t("blocks"),
         to: "blocks",
     },
