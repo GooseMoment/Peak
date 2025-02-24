@@ -36,6 +36,7 @@ jobs:
         working-directory: ./backend
       - name: Check makemigrations
         run: python manage.py makemigrations --check
+        working-directory: ./backend
   build:
     runs-on: ubuntu-latest
     steps:
