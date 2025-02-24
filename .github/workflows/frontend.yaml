@@ -33,7 +33,7 @@ jobs:
         run: pnpm i
         working-directory: ./frontend
       - name: Run Prettier Check
-        run: pnpm format:check
+        run: pnpm format:check || (pnpm format:write && git diff && return 1;)
         working-directory: ./frontend
   lint:
     runs-on: ubuntu-latest
