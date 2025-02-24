@@ -21,10 +21,22 @@ jobs:
       - name: Check for pnpm-lock.yaml Changes
         run: git diff --exit-code pnpm-lock.yaml
         working-directory: ./frontend
+  format-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Install modules
+        run: pnpm i
+        working-directory: ./frontend
+      - name: Version
+        run: pnpm prettier --version
+        working-directory: ./frontend
   format:
     runs-on: ubuntu-latest
-    env:
-      TERM: xterm-color
     steps:
       - uses: actions/checkout@v4
       - name: Install pnpm
