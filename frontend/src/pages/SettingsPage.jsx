@@ -44,8 +44,8 @@ const SettingsPage = () => {
 const getMenuItems = (t) => [
     {
         icon: "user",
-        display: t("account"),
-        to: "account",
+        display: t("profile"),
+        to: "profile",
     },
     {
         icon: "settings",
