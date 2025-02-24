@@ -21,7 +21,7 @@ const ImageCropper = ({
     const [crop, setCrop] = useState({ x: 0, y: 0 })
     const [zoom, setZoom] = useState(1)
 
-    const { t } = useTranslation("settings", { keyPrefix: "account" })
+    const { t } = useTranslation("settings", { keyPrefix: "profile" })
 
     const onCropComplete = (croppedArea, croppedAreaPixels) => {
         setCroppedAreaPixels(croppedAreaPixels)

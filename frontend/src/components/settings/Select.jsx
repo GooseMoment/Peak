@@ -70,6 +70,8 @@ const StyledSelect = styled.select`
         1px 1.5em;
     background-repeat: no-repeat;
 
+    cursor: pointer;
+
     &:focus {
         background-repeat: no-repeat;
         border-color: green;

@@ -16,7 +16,9 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const PasswordSection = () => {
-    const { t } = useTranslation("settings", { keyPrefix: "account" })
+    const { t } = useTranslation("settings", {
+        keyPrefix: "security.password_change",
+    })
 
     const [currentPassword, setCurrentPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
@@ -68,7 +70,7 @@ const PasswordSection = () => {
 
     return (
         <Section>
-            <Name>{t("change_password")}</Name>
+            <Name>{t("name")}</Name>
             <Value>
                 <PasswordChangeForm onSubmit={changePassword}>
                     <Input
