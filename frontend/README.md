@@ -13,24 +13,24 @@ pnpm dev
 
 ## Commands
 
--   `pnpm dev`: start live dev server.
--   `pnpm build`: build
--   `pnpm lint`: Run ESLint
--   `pnpm format:check`: Run prettier check
--   `pnpm format:write`: Run prettier overwrite
+- `pnpm dev`: start live dev server.
+- `pnpm build`: build
+- `pnpm lint`: Run ESLint
+- `pnpm format:check`: Run prettier check
+- `pnpm format:write`: Run prettier overwrite
 
 ## Structure
 
--   `src/`
-    -   `api/`: API 콜백 함수
-    -   `assets/`: 소스 코드에서 참조해야 하는 데이터 및 미디어
-    -   `components/`: 페이지별 컴포넌트
-    -   `containers`: Layout
-    -   `pages/`: 페이지
-    -   `queries/`: react-query 관련
-    -   `utils/`: 유틸성 함수
-    -   `routers/`: 라우터 관련
-    -   `main.jsx`: 소스코드 시작 부분
+- `src/`
+    - `api/`: API 콜백 함수
+    - `assets/`: 소스 코드에서 참조해야 하는 데이터 및 미디어
+    - `components/`: 페이지별 컴포넌트
+    - `containers`: Layout
+    - `pages/`: 페이지
+    - `queries/`: react-query 관련
+    - `utils/`: 유틸성 함수
+    - `routers/`: 라우터 관련
+    - `main.jsx`: 소스코드 시작 부분
 
 ## PWA
 
