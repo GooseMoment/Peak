@@ -4,7 +4,8 @@ import styled, { css, useTheme } from "styled-components"
 
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
-import { getProjectColor, palettes } from "@components/project/common/palettes"
+
+import { getPaletteColor, palettes } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -15,7 +16,7 @@ const Color = ({ setColor }) => {
     })
     const theme = useTheme()
 
-    const [activeTab, setActiveTab] = useState("theme1")
+    const [activeTab, setActiveTab] = useState("palette1")
 
     const { closeModal } = useModalWindowCloseContext()
 
@@ -26,26 +27,26 @@ const Color = ({ setColor }) => {
         }
     }
 
-    const themes = [{ id: "theme1", themeName: t("theme1") }]
+    const paletteChoices = [{ id: "palette1", themeName: t("palette1") }]
 
     return (
         <Detail title={t("title")} onClose={closeModal}>
             <TabBox>
-                {themes.map((theme) => (
+                {paletteChoices.map((choice) => (
                     <TabButton
-                        key={theme.themeName}
-                        $isActive={activeTab === theme.id}
-                        onClick={() => setActiveTab(theme.id)}>
-                        {theme.themeName}
+                        key={choice.themeName}
+                        $isActive={activeTab === choice.id}
+                        onClick={() => setActiveTab(choice.id)}>
+                        {choice.themeName}
                     </TabButton>
                 ))}
             </TabBox>
-            {palettes[activeTab]?.map((palette) => (
-                <ItemBlock key={palette}>
+            {palettes[activeTab]?.map((colorName) => (
+                <ItemBlock key={colorName}>
                     <FeatherIcon
                         icon="circle"
-                        fill={getProjectColor(theme.type, palette)}
-                        onClick={changeColor(palette)}
+                        fill={getPaletteColor(theme.type, colorName)}
+                        onClick={changeColor(colorName)}
                     />
                 </ItemBlock>
             ))}

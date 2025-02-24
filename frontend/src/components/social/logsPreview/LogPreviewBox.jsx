@@ -1,6 +1,5 @@
 import styled, { useTheme } from "styled-components"
 
-import { getProjectColor } from "@components/project/common/palettes"
 import SimpleProfile from "@components/social/common/SimpleProfile"
 import LogDetails from "@components/social/logDetails/LogDetails"
 
@@ -8,6 +7,8 @@ import { getCurrentUsername } from "@api/client"
 
 import { useClientLocale } from "@utils/clientSettings"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
+
+import { getPaletteColor } from "@assets/palettes"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
@@ -48,7 +49,7 @@ const LogPreviewBox = ({
         return log.recent_task
             ? log.recent_task.is_read
                 ? theme.grey
-                : getProjectColor(theme.type, log.recent_task.project_color)
+                : getPaletteColor(theme.type, log.recent_task.project_color)
             : null
     }
 

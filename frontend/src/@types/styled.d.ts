@@ -1,8 +1,10 @@
 import "styled-components"
 
 declare module "styled-components" {
+    export type LightDark = "light" | "dark"
+
     export interface DefaultTheme {
-        type: "light" | "dark"
+        type: LightDark
         primaryColors: {
             text: string
             primary: string
@@ -68,6 +70,6 @@ declare module "styled-components" {
             activatedColor: string
             activatedBackgroundColor: string
         }
-        toastTheme: "light" | "dark"
+        toastTheme: LightDark
     }
 }

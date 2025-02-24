@@ -2,9 +2,9 @@ import { Link } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
 
-import { getProjectColor } from "@components/project/common/palettes"
-
 import { ifMobile } from "@utils/useScreenType"
+
+import { getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -28,7 +28,7 @@ const ProjectName = ({ project, demo = false }) => {
             <FlexBox>
                 <FeatherIcon
                     icon="circle"
-                    fill={getProjectColor(theme.type, project.color)}
+                    fill={getPaletteColor(theme.type, project.color)}
                 />
                 {nameParts}
                 <TypeText>

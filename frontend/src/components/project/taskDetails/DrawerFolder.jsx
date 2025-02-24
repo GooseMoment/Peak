@@ -2,9 +2,9 @@ import { useState } from "react"
 
 import styled, { useTheme } from "styled-components"
 
-import { getProjectColor } from "@components/project/common/palettes"
-
 import { ifMobile } from "@utils/useScreenType"
+
+import { getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -25,7 +25,7 @@ const DrawerFolder = ({ project, changeDrawer }) => {
                           )
                         : () => setCollapsed((prev) => !prev)
                 }>
-                <Circle $color={getProjectColor(theme.type, project.color)} />
+                <Circle $color={getPaletteColor(theme.type, project.color)} />
                 <ItemText $is_project={true}>{project.name}</ItemText>
             </ItemBox>
             {project.type === "inbox" || collapsed

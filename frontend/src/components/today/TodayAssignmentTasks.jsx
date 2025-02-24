@@ -5,7 +5,6 @@ import styled, { useTheme } from "styled-components"
 
 import Button from "@components/common/Button"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
-import { getProjectColor } from "@components/project/common/palettes"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
 import Task from "@components/tasks/Task"
 
@@ -13,6 +12,8 @@ import { getTasksAssignedToday } from "@api/today.api"
 
 import { useClientTimezone } from "@utils/clientSettings"
 import { getPageFromURL } from "@utils/pagination"
+
+import { getPaletteColor } from "@assets/palettes"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
@@ -66,7 +67,7 @@ const TodayAssignmentTasks = () => {
                             <Task
                                 key={task.id}
                                 task={task}
-                                color={getProjectColor(
+                                color={getPaletteColor(
                                     theme.type,
                                     task.project_color,
                                 )}

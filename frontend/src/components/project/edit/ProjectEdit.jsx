@@ -5,7 +5,6 @@ import { useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
-import { getProjectColor } from "@components/project/common/palettes"
 import Color from "@components/project/edit/Color"
 import EditBox from "@components/project/edit/EditBox"
 import Middle from "@components/project/edit/Middle"
@@ -18,6 +17,8 @@ import { patchProject, postProject } from "@api/projects.api"
 import useScreenType from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
+
+import { getPaletteColor } from "@assets/palettes"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -139,7 +140,7 @@ const makeItems = (t, theme, project, setFunc) => [
     {
         id: "color",
         icon: "circle",
-        color: getProjectColor(theme.type, project.color),
+        color: getPaletteColor(theme.type, project.color),
         display: t("color." + project.color),
         component: <Color setColor={setFunc} />,
     },
