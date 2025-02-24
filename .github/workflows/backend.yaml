@@ -22,6 +22,20 @@ jobs:
       - uses: astral-sh/ruff-action@v3
         with:
           src: "./backend"
+  makemigrations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip' # caching pip dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+        working-directory: ./backend
+      - name: Check makemigrations
+        run: python manage.py makemigrations --check
   build:
     runs-on: ubuntu-latest
     steps:
