@@ -1,13 +1,13 @@
-import { Suspense, useEffect, useMemo, useState } from "react"
+import { Suspense, useMemo, useState } from "react"
 import { Outlet, useNavigate, useParams } from "react-router-dom"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
-import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
 import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
+import OptionsMenu from "@components/common/OptionsMenu"
 import PageTitle from "@components/common/PageTitle"
 import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
@@ -18,13 +18,14 @@ import DrawerEdit from "@components/project/edit/DrawerEdit"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
-import SortMenuSelector from "@components/project/sorts/SortMenuSelector"
+import SortMenu from "@components/project/sorts/SortMenu"
+import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 
 import { getDrawersByProject } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
 
-import handleToggleContextMenu from "@utils/handleToggleContextMenu"
 import { ifMobile } from "@utils/useScreenType"
+import useScreenType from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
@@ -39,20 +40,15 @@ const ProjectPage = () => {
 
     const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
     const [ordering, setOrdering] = useState("created_at")
-    const [isSortMenuOpen, setIsSortMenuOpen] = useState(false)
-    const [selectedSortMenuPosition, setSelectedSortMenuPosition] = useState({
-        top: 0,
-        left: 0,
-    })
-    const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
-    const [selectedButtonPosition, setSelectedButtonPosition] = useState({
-        top: 0,
-        left: 0,
-    })
     const [isProjectEditOpen, setIsProjectEditOpen] = useState(false)
+    const [isSortMenMobileOpen, setSortMenuMobileOpen] = useState(false)
+
+    const { isMobile } = useScreenType()
 
     const { t } = useTranslation(null, { keyPrefix: "project" })
+
+    const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
 
     const {
         isLoading: isProjectLoading,
@@ -73,11 +69,6 @@ const ProjectPage = () => {
         queryKey: ["drawers", { projectID: id, ordering: ordering }],
         queryFn: () => getDrawersByProject(id, ordering),
     })
-
-    useEffect(() => {
-        setIsContextMenuOpen(false)
-        setIsSortMenuOpen(false)
-    }, [project])
 
     const deleteMutation = useMutation({
         mutationFn: () => {
@@ -101,20 +92,12 @@ const ProjectPage = () => {
     })
 
     const handleEdit = () => {
-        setIsContextMenuOpen(false)
         setIsProjectEditOpen(true)
     }
 
     const handleAlert = () => {
-        setIsContextMenuOpen(false)
         setIsAlertOpen(true)
     }
-
-    const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
-    const contextMenuItems = useMemo(
-        () => makeContextMenuItems(t, theme, handleEdit, handleAlert),
-        [t, theme],
-    )
 
     const handleDelete = () => {
         navigate(`/app/projects`)
@@ -175,21 +158,26 @@ const ProjectPage = () => {
                     />
                     {project?.type === "inbox" || (
                         <>
-                            <SortIconBox
-                                onClick={handleToggleContextMenu(
-                                    setSelectedSortMenuPosition,
-                                    setIsSortMenuOpen,
-                                    setIsContextMenuOpen,
-                                )}>
-                                <SortIcon color={theme.textColor} />
-                            </SortIconBox>
-                            <FeatherIcon
-                                icon="more-horizontal"
-                                onClick={handleToggleContextMenu(
-                                    setSelectedButtonPosition,
-                                    setIsContextMenuOpen,
-                                    setIsSortMenuOpen,
+                            <SortIconBox>
+                                {isMobile ? (
+                                    <div
+                                        onClick={() =>
+                                            setSortMenuMobileOpen(true)
+                                        }>
+                                        <SortIcon color={theme.textColor} />
+                                    </div>
+                                ) : (
+                                    <SortMenu
+                                        color={theme.textColor}
+                                        items={sortMenuItems}
+                                        ordering={ordering}
+                                        setOrdering={setOrdering}
+                                    />
                                 )}
+                            </SortIconBox>
+                            <OptionsMenu
+                                handleEdit={handleEdit}
+                                handleAlert={handleAlert}
                             />
                         </>
                     )}
@@ -210,22 +198,6 @@ const ProjectPage = () => {
                     />
                 ))
             )}
-            {isSortMenuOpen && (
-                <SortMenuSelector
-                    title={t("sort.drawer_title")}
-                    items={sortMenuItems}
-                    selectedButtonPosition={selectedSortMenuPosition}
-                    onClose={() => setIsSortMenuOpen(false)}
-                    ordering={ordering}
-                    setOrdering={setOrdering}
-                />
-            )}
-            {isContextMenuOpen && (
-                <ContextMenu
-                    items={contextMenuItems}
-                    selectedButtonPosition={selectedButtonPosition}
-                />
-            )}
             {isAlertOpen && (
                 <DeleteAlert
                     title={t("delete.alert_project_title", {
@@ -235,6 +207,15 @@ const ProjectPage = () => {
                         setIsAlertOpen(false)
                     }}
                     func={handleDelete}
+                />
+            )}
+            {isSortMenMobileOpen && (
+                <SortMenuMobile
+                    title={t("sort.drawer_title")}
+                    items={sortMenuItems}
+                    onClose={() => setSortMenuMobileOpen(false)}
+                    ordering={ordering}
+                    setOrdering={setOrdering}
                 />
             )}
             {isDrawerCreateOpen && (
@@ -318,21 +299,6 @@ const makeSortMenuItems = (t) => [
     {
         display: t("sort.completed_task_count"),
         context: "completed_task_count",
-    },
-]
-
-const makeContextMenuItems = (t, theme, handleEdit, handleAlert) => [
-    {
-        icon: "edit",
-        display: t("edit.display"),
-        color: theme.textColor,
-        func: handleEdit,
-    },
-    {
-        icon: "trash-2",
-        display: t("delete.display"),
-        color: theme.project.danger,
-        func: handleAlert,
     },
 ]
 
