@@ -2,11 +2,11 @@ import { Link } from "react-router-dom"
 
 import styled, { css, useTheme } from "styled-components"
 
-import { getProjectColor } from "@components/project/common/palettes"
 import { Section, SectionTitle } from "@components/users/Section"
 
 import { ifMobile } from "@utils/useScreenType"
 
+import { getPaletteColor } from "@assets/palettes"
 import { skeletonCSS } from "@assets/skeleton"
 
 import { useTranslation } from "react-i18next"
@@ -27,7 +27,7 @@ const ProjectList = ({ projects, isMine, isPending }) => {
                     const projectCompo = (
                         <Project key={project.id}>
                             <Circle
-                                $color={getProjectColor(
+                                $color={getPaletteColor(
                                     theme.type,
                                     project.color,
                                 )}

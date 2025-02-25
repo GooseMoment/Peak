@@ -110,7 +110,7 @@
         "name_required": "A name is required.",
         "color": {
             "title": "Color Settings",
-            "theme1": "Basic",
+            "palette1": "Basic",
             "red": "red",
             "red_orange": "red orange",
             "orange": "orange",

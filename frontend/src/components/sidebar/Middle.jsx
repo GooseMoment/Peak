@@ -3,13 +3,13 @@ import { useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import styled, { css, useTheme } from "styled-components"
 
-import { getProjectColor } from "@components/project/common/palettes"
 import { useSidebarContext } from "@components/sidebar/SidebarContext"
 import SidebarLink from "@components/sidebar/SidebarLink"
 
 import { getProjectList } from "@api/projects.api"
 
 import { cubicBeizer } from "@assets/keyframes"
+import { getPaletteColor } from "@assets/palettes"
 import { skeletonCSS } from "@assets/skeleton"
 
 import FeatherIcon from "feather-icons-react"
@@ -87,7 +87,7 @@ const Middle = () => {
                         <ProjectItemBox $collapsed={isCollapsed}>
                             <FeatherIcon
                                 icon="circle"
-                                fill={getProjectColor(
+                                fill={getPaletteColor(
                                     theme.type,
                                     project.color,
                                 )}

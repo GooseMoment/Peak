@@ -15,8 +15,6 @@ import {
 
 import { useClientSetting } from "@utils/clientSettings"
 
-import { states } from "@assets/themes"
-
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -119,8 +117,8 @@ const SectionNotification = () => {
                     disabled={isPending}
                     state={
                         setting.push_notification_subscription
-                            ? states.danger
-                            : states.text
+                            ? "danger"
+                            : "text"
                     }>
                     {setting.push_notification_subscription
                         ? t(
@@ -225,34 +223,16 @@ const Notifications = () => {
 }
 
 const makeAllowlistItems = (t) => [
-    {
-        name: "comment",
-        display: t("values.comment"),
-    },
-    {
-        name: "follow",
-        display: t("values.follow"),
-    },
-    {
-        name: "follow_request",
-        display: t("values.follow_request"),
-    },
+    { name: "comment", display: t("values.comment") },
+    { name: "follow", display: t("values.follow") },
+    { name: "follow_request", display: t("values.follow_request") },
     {
         name: "follow_request_accepted",
         display: t("values.follow_request_accepted"),
     },
-    {
-        name: "peck",
-        display: t("values.peck"),
-    },
-    {
-        name: "reaction",
-        display: t("values.reaction"),
-    },
-    {
-        name: "task_reminder",
-        display: t("values.task_reminder"),
-    },
+    { name: "peck", display: t("values.peck") },
+    { name: "reaction", display: t("values.reaction") },
+    { name: "task_reminder", display: t("values.task_reminder") },
 ]
 
 export default Notifications

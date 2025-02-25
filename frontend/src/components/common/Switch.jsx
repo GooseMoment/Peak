@@ -30,6 +30,8 @@ const Label = styled.label`
     --toggle-wider: 3em;
     --color-grey: ${(p) => p.theme.grey};
     --color-green: ${(p) => p.theme.accentColor};
+
+    cursor: pointer;
 `
 
 const Checkbox = styled.input`

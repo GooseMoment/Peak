@@ -59,7 +59,7 @@ const Footer = () => {
             {!isCollapsed && (
                 <SmallIcons>
                     <SidebarLink
-                        to="/app/settings/account"
+                        to="/app/settings/profile"
                         activePath="/app/settings"
                         end={false}
                         key="settings">

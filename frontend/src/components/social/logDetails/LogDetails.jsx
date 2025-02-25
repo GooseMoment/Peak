@@ -4,7 +4,6 @@ import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
-import { getProjectColor } from "@components/project/common/palettes"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import InteractionBox from "@components/social/interaction/InteractionBox"
 import Quote from "@components/social/logDetails/Quote"
@@ -18,6 +17,8 @@ import { getDailyLogDetails, getQuote, postQuote } from "@api/social.api"
 import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
+
+import { getPaletteColor } from "@assets/palettes"
 
 import { ImpressionArea } from "@toss/impression-area"
 import { useTranslation } from "react-i18next"
@@ -113,7 +114,7 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
 
                 {logDetailsPage?.pages.map((group) =>
                     group.results.map((task, index, array) => {
-                        const color = getProjectColor(
+                        const color = getPaletteColor(
                             theme.type,
                             task.project_color,
                         )

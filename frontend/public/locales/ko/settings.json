@@ -4,7 +4,7 @@
     },
     "menus": {
         "title": "설정",
-        "account": "계정",
+        "profile": "프로필",
         "general": "일반",
         "security": "보안",
         "privacy": "공개 범위",
@@ -15,28 +15,15 @@
         "blocks": "차단",
         "info": "정보"
     },
-    "account": {
+    "profile": {
         "display_name": "이름",
         "display_name_placeholder": "남에게 보일 이름",
         "bio": "바이오",
         "header_color": "헤더 색상",
         "bio_placeholder": "자신을 소개하세요.",
         "button_submit": "저장",
-        "change_password": "암호 변경",
-        "section_open": "열기",
-        "section_close": "닫기",
-        "current_password": "현재 암호",
-        "new_password": "새로운 암호",
-        "new_password_again": "새로운 암호 (다시 입력)",
-        "button_change": "변경",
-        "account_edited": "변경사항을 저장했습니다.",
-        "account_fail": "저장할 수 없습니다. 다시 시도하세요.",
-        "password_too_short": "암호는 8자 이상이어야 합니다.",
-        "password_is_same": "현재 암호와 새로운 암호가 동일합니다.",
-        "password_not_match": "새로운 암호가 서로 일치하지 않습니다.",
-        "password_wrong": "현재 암호가 틀렸습니다.",
-        "password_change_success": "암호를 변경했습니다.",
-        "password_change_error": "암호 변경 중 문제가 발생했습니다.",
+        "profile_edited": "변경사항을 저장했습니다.",
+        "profile_fail": "저장할 수 없습니다. 다시 시도하세요.",
         "button_apply": "자르기",
         "button_cancel": "취소"
     },
@@ -61,6 +48,19 @@
         }
     },
     "security": {
+        "password_change": {
+            "name": "암호 변경",
+            "current_password": "현재 암호",
+            "new_password": "새로운 암호",
+            "new_password_again": "새로운 암호 (다시 입력)",
+            "button_change": "변경",
+            "password_too_short": "암호는 8자 이상이어야 합니다.",
+            "password_is_same": "현재 암호와 새로운 암호가 동일합니다.",
+            "password_not_match": "새로운 암호가 서로 일치하지 않습니다.",
+            "password_wrong": "현재 암호가 틀렸습니다.",
+            "password_change_success": "암호를 변경했습니다.",
+            "password_change_error": "암호 변경 중 문제가 발생했습니다."
+        },
         "totp": {
             "name": "2단계 인증: 일회용 코드",
             "description": "일회용 코드(TOTP)를 사용하면 보안을 향상할 수 있습니다.",

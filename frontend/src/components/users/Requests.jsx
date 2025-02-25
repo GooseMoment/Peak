@@ -9,8 +9,6 @@ import { patchFollowRequest } from "@api/social.api"
 
 import queryClient from "@queries/queryClient"
 
-import { states } from "@assets/themes"
-
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -63,14 +61,14 @@ const Requests = ({ user }) => {
                     {t("follow_request_sent_to_me")}
                     <ButtonGroup $justifyContent="right">
                         <Button
-                            state={states.danger}
+                            state="danger"
                             onClick={rejection.mutate}
                             loading={rejection.isPending}
                             disabled={isPending}>
                             {t("button_follow_request_reject")}
                         </Button>
                         <Button
-                            state={states.success}
+                            state="success"
                             onClick={acceptance.mutate}
                             loading={acceptance.isPending}
                             disabled={isPending}>

@@ -6,7 +6,6 @@ import styled, { css, useTheme } from "styled-components"
 
 import CollapseButton from "@components/common/CollapseButton"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
-import { getProjectColor } from "@components/project/common/palettes"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
 import Task from "@components/tasks/Task"
 
@@ -22,6 +21,8 @@ import { getPageFromURL } from "@utils/pagination"
 import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
+
+import { getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
@@ -166,7 +167,7 @@ const ImportantTasks = () => {
                                     <ImportantTaskBox key={task.id}>
                                         <Task
                                             task={task}
-                                            color={getProjectColor(
+                                            color={getPaletteColor(
                                                 theme.type,
                                                 task.project_color,
                                             )}

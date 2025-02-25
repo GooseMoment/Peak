@@ -110,7 +110,7 @@
         "name_required": "이름을 지어주세요.",
         "color": {
             "title": "색깔 설정",
-            "theme1": "기본",
+            "palette1": "기본",
             "red": "빨간색",
             "red_orange": "레드오렌지",
             "orange": "주황색",

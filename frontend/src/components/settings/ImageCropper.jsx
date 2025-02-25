@@ -2,9 +2,7 @@ import { useState } from "react"
 
 import styled from "styled-components"
 
-import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
-
-import { states } from "@assets/themes"
+import Button, { ButtonGroup } from "@components/common/Button"
 
 import { createPortal } from "react-dom"
 import Cropper from "react-easy-crop"
@@ -21,7 +19,7 @@ const ImageCropper = ({
     const [crop, setCrop] = useState({ x: 0, y: 0 })
     const [zoom, setZoom] = useState(1)
 
-    const { t } = useTranslation("settings", { keyPrefix: "account" })
+    const { t } = useTranslation("settings", { keyPrefix: "profile" })
 
     const onCropComplete = (croppedArea, croppedAreaPixels) => {
         setCroppedAreaPixels(croppedAreaPixels)
@@ -39,16 +37,10 @@ const ImageCropper = ({
                 onZoomChange={setZoom}
             />
             <StyledButtonGroup>
-                <Button
-                    form={buttonForms.outlined}
-                    state={states.danger}
-                    onClick={onClickCancel}>
+                <Button form="outlined" state="danger" onClick={onClickCancel}>
                     {t("button_cancel")}
                 </Button>
-                <Button
-                    form={buttonForms.filled}
-                    state={states.success}
-                    onClick={onClickOk}>
+                <Button form="filled" state="danger" onClick={onClickOk}>
                     {t("button_apply")}
                 </Button>
             </StyledButtonGroup>
