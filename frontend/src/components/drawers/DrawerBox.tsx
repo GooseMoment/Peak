@@ -2,7 +2,12 @@ import styled, { css } from "styled-components"
 
 import { ifMobile } from "@utils/useScreenType"
 
-const DrawerBox = styled.div`
+interface DrawerStyledProp {
+    $color: string
+    $demo?: boolean
+}
+
+const DrawerBox = styled.div<DrawerStyledProp>`
     height: 3em;
     display: flex;
     align-items: center;
@@ -28,7 +33,7 @@ const DrawerBox = styled.div`
 
 export default DrawerBox
 
-export const DrawerName = styled.h1`
+export const DrawerName = styled.h1<DrawerStyledProp>`
     max-width: 35em;
     font-size: 1.4em;
     line-height: 1.2em;
@@ -52,7 +57,7 @@ export const DrawerName = styled.h1`
     }
 `
 
-export const DrawerIcon = styled.div`
+export const DrawerIcon = styled.div<DrawerStyledProp>`
     display: flex;
     align-items: center;
     margin-right: 1.45em;

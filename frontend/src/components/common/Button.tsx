@@ -9,11 +9,13 @@ import MildButton from "./MildButton"
 import { cubicBeizer } from "@assets/keyframes"
 import type { State } from "@assets/themes"
 
+type ButtonForm = "filled" | "outlined"
+
 export interface ButtonProp extends HTMLProps<HTMLButtonElement> {
-    form: "filled" | "outlined"
-    state: State
-    loading: boolean
-    children: ReactNode
+    form?: ButtonForm
+    state?: State
+    loading?: boolean
+    children?: ReactNode
 }
 
 export default function Button({
@@ -103,7 +105,7 @@ const OutlinedButton = styled(CommonButton)<StyledButtonProp>`
 `
 
 const buttons: Record<
-    ButtonProp["form"],
+    ButtonForm,
     ElementType<StyledButtonProp | HTMLProps<HTMLButtonElement>>
 > = { filled: FilledButton, outlined: OutlinedButton }
 
