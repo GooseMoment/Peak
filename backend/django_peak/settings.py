@@ -41,12 +41,12 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("DEBUG", "1") == "1"
 
-SCHEME = os.environ.get("SCHEME")
-WEB_HOSTNAME = os.environ.get("WEB_HOSTNAME")
-API_HOSTNAME = os.environ.get("API_HOSTNAME")
+SCHEME = os.environ.get("SCHEME", "http://")
+WEB_HOSTNAME = os.environ.get("WEB_HOSTNAME", "localhost:8080")
+API_HOSTNAME = os.environ.get("API_HOSTNAME", "localhost:8888")
 
 API_HOSTNAME_NO_PORT = API_HOSTNAME.split(":")[0]
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ") + [
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(" ") + [
     API_HOSTNAME_NO_PORT
 ]
 
@@ -135,6 +135,13 @@ DATABASES = {
     }
 }
 
+if os.environ.get("DJANGO_DUMMYDB", "false") == "true":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.dummy",
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -170,7 +177,7 @@ AUTHENTICATION_BACKENDS = [
 
 # CORS
 # https://github.com/adamchainz/django-cors-headers?tab=readme-ov-file#configuration
-CORS_ALLOWED_ORIGINS = os.environ.get("DJANGO_CORS_ALLOWED_ORIGINS").split() + [
+CORS_ALLOWED_ORIGINS = os.environ.get("DJANGO_CORS_ALLOWED_ORIGINS", "").split() + [
     SCHEME + WEB_HOSTNAME
 ]
 
