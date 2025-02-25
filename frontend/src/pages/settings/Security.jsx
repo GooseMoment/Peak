@@ -5,10 +5,10 @@ import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import Confirmation from "@components/common/Confirmation"
+import Input from "@components/common/Input"
 import Error from "@components/settings/Error"
 import PasswordSection from "@components/settings/PasswordSection"
 import Section, { Description, Name, Value } from "@components/settings/Section"
-import Input from "@components/sign/Input"
 
 import {
     confirmRegistrationTOTP,
@@ -19,7 +19,6 @@ import {
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
-import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import QRCode from "qrcode"
 import { useTranslation } from "react-i18next"
@@ -156,7 +155,7 @@ const Security = () => {
                                 {totpSecret}
                             </Secret>
                             <Input
-                                icon={<FeatherIcon icon="hash" />}
+                                icon="hash"
                                 name="totp_code"
                                 type="text"
                                 maxLength="6"
