@@ -5310,6 +5310,11 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
+  react-transition-state@2.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   react-uid@2.3.3(@types/react@18.3.18)(react@18.3.1):
     dependencies:
       react: 18.3.1
