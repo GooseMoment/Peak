@@ -1,5 +1,26 @@
+import type { LightDark } from "styled-components"
+
+export type PaletteColorName =
+    | "grey"
+    | "red"
+    | "red_orange"
+    | "orange"
+    | "yellow"
+    | "bright_sky_blue"
+    | "blue"
+    | "magenta"
+    | "violet"
+    | "pink"
+    | "hot_pink"
+    | "light_green"
+    | "mint"
+    | "olive"
+    | "dark_violet"
+    | "deep_blue"
+    | "deep_indigo"
+
 export const palettes = {
-    theme1: [
+    palette1: [
         "red",
         "red_orange",
         "orange",
@@ -16,10 +37,12 @@ export const palettes = {
         "dark_violet",
         "deep_blue",
         "deep_indigo",
-    ],
+    ] as PaletteColorName[],
 }
 
-const light = {
+type Palette = Record<PaletteColorName, string>
+
+const light: Palette = {
     grey: "#CCCCCC",
     red: "#FF3B3B",
     red_orange: "#F05A29",
@@ -39,7 +62,7 @@ const light = {
     deep_indigo: "#0C0CB2",
 }
 
-const dark = {
+const dark: Palette = {
     grey: "#858585",
     red: "#FF3B3B",
     red_orange: "#F05A29",
@@ -64,6 +87,9 @@ const themes = {
     dark: dark,
 }
 
-export const getProjectColor = (theme, color) => {
-    return themes[theme][color]
+export const getPaletteColor = (
+    theme: LightDark,
+    colorName: PaletteColorName,
+) => {
+    return themes[theme][colorName]
 }

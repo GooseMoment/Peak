@@ -1,4 +1,4 @@
-import type { DefaultTheme } from "styled-components"
+import type { DefaultTheme, LightDark } from "styled-components"
 
 export type State = keyof DefaultTheme["primaryColors"]
 
@@ -166,7 +166,7 @@ const dark: DefaultTheme = {
     toastTheme: "dark",
 }
 
-export default { system: null, light: light, dark: dark } as Record<
-    "system" | "light" | "dark",
+export default { system: null, light, dark } as Record<
+    "system" | LightDark,
     DefaultTheme | null
 >

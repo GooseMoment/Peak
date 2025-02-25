@@ -6,7 +6,6 @@ import styled, { useTheme } from "styled-components"
 import Button, { ButtonGroup } from "@components/common/Button"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import ModalWindow from "@components/common/ModalWindow"
-import { getProjectColor } from "@components/project/common/palettes"
 import Color from "@components/project/edit/Color"
 import Error from "@components/settings/Error"
 import ProfileImg from "@components/settings/ProfileImg"
@@ -18,6 +17,8 @@ import { getMe, patchUser } from "@api/users.api"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
+
+import { getPaletteColor } from "@assets/palettes"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -128,7 +129,7 @@ const Profile = () => {
                     <Value>
                         <ColorButton
                             onClick={onClickOpenPalette}
-                            $color={getProjectColor(
+                            $color={getPaletteColor(
                                 theme.type,
                                 headerColor.color,
                             )}
