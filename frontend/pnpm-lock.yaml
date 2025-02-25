@@ -20,6 +20,9 @@ importers:
       '@atlaskit/pragmatic-drag-and-drop-react-accessibility':
         specifier: ^1.3.0
         version: 1.3.1(@babel/core@7.26.8)(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@szhsin/react-menu':
+        specifier: ^4.3.0
+        version: 4.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query':
         specifier: ^5.66.0
         version: 5.66.0(react@18.3.1)
@@ -739,6 +742,12 @@ packages:
     resolution: {integrity: sha512-0PVwmgzZ8+TZ9oGBmdZoQVXflbvuwzN/HRclujpl4N/q3i+y0lqLw8n1bXA8ru3sApDjlmONaNAuYr38y1Kr9w==}
     cpu: [x64]
     os: [win32]
+
+  '@szhsin/react-menu@4.3.0':
+    resolution: {integrity: sha512-TklTnPT6cYZcOO0GYnBQX6qVvpsdHvI0GkWsL90/fisIMlFfv+rpEPy4YNm+qNTUuCPeOkcRYVU7ooH0yUFTgQ==}
+    peerDependencies:
+      react: '>=16.14.0'
+      react-dom: '>=16.14.0'
 
   '@tanstack/eslint-plugin-query@5.66.1':
     resolution: {integrity: sha512-pYMVTGgJ7yPk9Rm6UWEmbY6TX0EmMmxJqYkthgeDCwEznToy2m+W928nUODFirtZBZlhBsqHy33LO0kyTlgf0w==}
@@ -2302,6 +2311,12 @@ packages:
       react: ^18 || ^19
       react-dom: ^18 || ^19
 
+  react-transition-state@2.3.0:
+    resolution: {integrity: sha512-OucQRyIpeq5g1/5qSBJH4p4U+SzYEoB3MsAXXz3ty116rPqG4jhwrzInImZ2gFi4XOffeLu6HNCZvkCM3DKaeg==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
   react-uid@2.3.3:
     resolution: {integrity: sha512-iNpDovcb9qBpBTo8iUgqRSQOS8GV3bWoNaTaUptHkXtAooXSo0OWe7vN6TqqB8x3x0bNBbQx96kkmSltQ5h9kQ==}
     engines: {node: '>=10'}
@@ -3470,6 +3485,12 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.34.6':
     optional: true
+
+  '@szhsin/react-menu@4.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-transition-state: 2.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   '@tanstack/eslint-plugin-query@5.66.1(eslint@9.20.1(jiti@1.21.0))(typescript@5.7.3)':
     dependencies:
@@ -5286,6 +5307,11 @@ snapshots:
   react-toastify@11.0.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       clsx: 2.1.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  react-transition-state@2.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
