@@ -27,8 +27,8 @@ COPY . .
 
 # copy static files
 WORKDIR /static
-RUN cp -r /usr/local/lib/python3.12/site-packages/django/contrib/admin/static/ /static
-RUN cp -r /usr/local/lib/python3.12/site-packages/rest_framework/static/ /static
+RUN cp -r /usr/local/lib/python3.13/site-packages/django/contrib/admin/static/ /static
+RUN cp -r /usr/local/lib/python3.13/site-packages/rest_framework/static/ /static
 
 WORKDIR /backend
 
