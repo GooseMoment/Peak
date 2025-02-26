@@ -4,7 +4,7 @@
     },
     "menus": {
         "title": "Settings",
-        "account": "Account",
+        "profile": "Profile",
         "general": "General",
         "security": "Security",
         "privacy": "Privacy",
@@ -15,28 +15,15 @@
         "blocks": "Blocks",
         "info": "Info"
     },
-    "account": {
+    "profile": {
         "display_name": "Display name",
         "display_name_placeholder": "Your awesome name",
         "bio": "Bio",
         "header_color": "Header Color",
         "bio_placeholder": "Tell me who you are",
         "button_submit": "Save",
-        "change_password": "Change password",
-        "section_open": "Open",
-        "section_close": "Close",
-        "current_password": "Current password",
-        "new_password": "New password",
-        "new_password_again": "New password (Type again)",
-        "button_change": "Change",
-        "account_edited": "Account was edited.",
-        "account_fail": "Couldn't save. Try again.",
-        "password_too_short": "Password should be more than 8 characters.",
-        "password_is_same": "New password should be different with current password.",
-        "password_not_match": "New password does not match.",
-        "password_wrong": "Current password is wrong.",
-        "password_change_success": "Password was changes.",
-        "password_change_error": "Error occured while changing password.",
+        "profile_edited": "Changes were saved.",
+        "profile_fail": "Couldn't save. Try again.",
         "button_apply": "Crop",
         "button_cancel": "Cancel"
     },
@@ -61,6 +48,19 @@
         }
     },
     "security": {
+        "password_change": {
+            "name": "Change password",
+            "current_password": "Current password",
+            "new_password": "New password",
+            "new_password_again": "New password (Type again)",
+            "button_change": "Change",
+            "password_too_short": "Password should be more than 8 characters.",
+            "password_is_same": "New password should be different with current password.",
+            "password_not_match": "New password does not match.",
+            "password_wrong": "Current password is wrong.",
+            "password_change_success": "Password was changes.",
+            "password_change_error": "Error occured while changing password."
+        },
         "totp": {
             "name": "Two-Factor Authentication: One-Time Passcode",
             "description": "Using one-time passcode(TOTP) enhances security.",
@@ -191,8 +191,8 @@
     },
     "info": {
         "built_at": {
-            "name": "Build At",
-            "for_dev": "This is not shown at DEV mode."
+            "name": "This app was updated at",
+            "for_dev": "This is not shown in the development mode."
         }
     },
     "sign_out": {

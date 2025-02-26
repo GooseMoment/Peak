@@ -12,7 +12,6 @@ import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import Progress from "@components/project/common/Progress"
-import { getProjectColor } from "@components/project/common/palettes"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
@@ -27,6 +26,8 @@ import handleToggleContextMenu from "@utils/handleToggleContextMenu"
 import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
+
+import { getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -144,7 +145,7 @@ const ProjectPage = () => {
         )
     }
 
-    const color = getProjectColor(theme.type, project?.color)
+    const color = getPaletteColor(theme.type, project?.color)
 
     return (
         <>
@@ -153,7 +154,7 @@ const ProjectPage = () => {
                     <PageTitle $color={color}>{project.name}</PageTitle>
                     <PrivacyIcon
                         privacy={project.privacy}
-                        color={getProjectColor(theme.type, project.color)}
+                        color={getPaletteColor(theme.type, project.color)}
                         isProject
                     />
                 </PageTitleBox>

@@ -3,13 +3,13 @@ import { Link } from "react-router-dom"
 import styled, { css, useTheme } from "styled-components"
 
 import Button from "@components/common/Button"
-import { getProjectColor } from "@components/project/common/palettes"
 import FollowButton from "@components/users/FollowButton"
 import FollowsCount from "@components/users/FollowsCount"
 
 import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
+import { getPaletteColor } from "@assets/palettes"
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import { useTranslation } from "react-i18next"
@@ -19,7 +19,7 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
     const theme = useTheme()
 
     const followButton = isMine ? (
-        <Link to="/app/settings/account">
+        <Link to="/app/settings/profile">
             <Button>{t("button_edit_profile")}</Button>
         </Link>
     ) : (
@@ -29,7 +29,7 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
     return (
         <>
             <Banner
-                $headerColor={getProjectColor(theme.type, user?.header_color)}>
+                $headerColor={getPaletteColor(theme.type, user?.header_color)}>
                 {followingYou?.status === "accepted" ? (
                     <FollowsYou>{t("follows_you")}</FollowsYou>
                 ) : (

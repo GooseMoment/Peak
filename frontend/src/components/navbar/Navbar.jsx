@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 import { ifMobile } from "@utils/useScreenType"
 
@@ -41,12 +41,17 @@ const Navbar = () => {
 
     const [activeItemLeft, setActiveItemLeft] = useState(0)
     const [activeItemVisible, setActiveItemVisible] = useState(false)
+    const [transition, setTransition] = useState(false)
 
     const onRefChange = useCallback(
         (node) => {
             if (!node) {
                 setActiveItemVisible(false)
                 return
+            }
+
+            if (!transition) {
+                setTimeout(() => setTransition(true), 250)
             }
 
             setActiveItemVisible(true)
@@ -61,6 +66,7 @@ const Navbar = () => {
                 <ActiveItemBackground
                     $left={activeItemLeft}
                     $visible={activeItemVisible}
+                    $transition={transition}
                 />
                 {items.map((item) => (
                     <Item
@@ -177,9 +183,12 @@ const ActiveItemBackground = styled.div`
 
     opacity: ${(p) => (p.$visible ? 1 : 0)};
 
-    transition:
+    transition: ${(p) =>
+        p.$transition
+            ? css`
         left 0.25s var(--cubic),
-        opacity 0.25s var(--cubic);
+        opacity 0.25s var(--cubic)`
+            : css`unset`};
 
     border-radius: 50px;
 `

@@ -1,19 +1,22 @@
 import client from "@api/client"
 
-export const getTasksOverdue = async (filter_field, page) => {
-    const res = await client.get(`today/overdue`, {
-        params: { filter_field, page },
-    })
-    return res.data
-}
-
 export const getTasksAssignedToday = async (date, page) => {
     const res = await client.get(`today/assigned`, { params: { date, page } })
     return res.data
 }
 
-export const getTasksDueToday = async (date, page) => {
-    const res = await client.get(`today/due`, { params: { date, page } })
+export const getTasksTodayDue = async (page) => {
+    const res = await client.get(`today/todayDue`, { params: { page } })
+    return res.data
+}
+
+export const getTasksOverDue = async (page) => {
+    const res = await client.get(`today/overDue`, { params: { page } })
+    return res.data
+}
+
+export const getTasksPastAssigned = async (page) => {
+    const res = await client.get(`today/pastAssigned`, { params: { page } })
     return res.data
 }
 

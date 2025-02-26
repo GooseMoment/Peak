@@ -1,7 +1,7 @@
 import { lazily } from "react-lazily"
 
 const {
-    Account,
+    Profile,
     General,
     Security,
     Privacy,
@@ -19,8 +19,8 @@ const settingsChildren = [
         element: null,
     },
     {
-        path: "account",
-        element: <Account />,
+        path: "profile",
+        element: <Profile />,
     },
     {
         path: "general",
