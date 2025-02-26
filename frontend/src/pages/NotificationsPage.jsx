@@ -76,7 +76,7 @@ const NotificationsPage = () => {
 
     const header = (
         <>
-            <TitleWrapper onClick={!isFetching && refetch}>
+            <TitleWrapper onClick={!isFetching ? refetch : undefined}>
                 <PageTitle>{t("title")}</PageTitle>
                 <RefetchIcon $loading={isFetching}>
                     <FeatherIcon icon="rotate-cw" />
