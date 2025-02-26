@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { Suspense, lazy, useState } from "react"
 
 import styled from "styled-components"
 
-import TaskDetailElement from "@components/project/taskDetails/TaskDetailElement"
+import ModalLoader from "@components/common/ModalLoader"
 import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"
 import taskCalculation from "@components/tasks/utils/taskCalculation"
@@ -13,6 +13,10 @@ import AlarmClock from "@assets/project/AlarmClock"
 import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
+
+const TaskDetailElement = lazy(
+    () => import("@components/project/taskDetails/TaskDetailElement"),
+)
 
 const TaskFrame = ({
     task,
@@ -104,14 +108,18 @@ const TaskFrame = ({
                     </Dates>
                 )}
             </Content>
-            {isDetailOpen ? (
-                <TaskDetailElement
-                    onClose={() => setDetailOpen(false)}
-                    projectType={task.projectType}
-                    color={color}
-                    task={task}
-                />
-            ) : null}
+            {isDetailOpen && (
+                <Suspense
+                    key="task-detail-task-frame"
+                    fallback={<ModalLoader />}>
+                    <TaskDetailElement
+                        onClose={() => setDetailOpen(false)}
+                        projectType={task.projectType}
+                        color={color}
+                        task={task}
+                    />
+                </Suspense>
+            )}
         </Box>
     )
 }

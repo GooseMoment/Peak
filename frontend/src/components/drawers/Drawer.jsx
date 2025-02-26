@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { Suspense, lazy, useEffect, useMemo, useState } from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -6,6 +6,7 @@ import styled, { useTheme } from "styled-components"
 import Button, { ButtonGroup } from "@components/common/Button"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
+import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
@@ -18,7 +19,6 @@ import {
     SkeletonInboxDrawer,
 } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenuSelector from "@components/project/sorts/SortMenuSelector"
-import TaskCreateElement from "@components/project/taskDetails/TaskCreateElement"
 import DrawerTask from "@components/tasks/DrawerTask"
 
 import { deleteDrawer } from "@api/drawers.api"
@@ -33,6 +33,10 @@ import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/ad
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+
+const TaskCreateElement = lazy(
+    () => import("@components/project/taskDetails/TaskCreateElement"),
+)
 
 const Drawer = ({ project, drawer, color }) => {
     const theme = useTheme()
@@ -295,12 +299,14 @@ const Drawer = ({ project, drawer, color }) => {
                 </ModalWindow>
             )}
             {isCreateOpen && (
-                <TaskCreateElement
-                    onClose={() => setCreateOpen(false)}
-                    project={project}
-                    drawer={drawer}
-                    color={color}
-                />
+                <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
+                    <TaskCreateElement
+                        onClose={() => setCreateOpen(false)}
+                        project={project}
+                        drawer={drawer}
+                        color={color}
+                    />
+                </Suspense>
             )}
         </>
     )
