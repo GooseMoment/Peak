@@ -38,7 +38,7 @@ const Drawer = ({ project, drawer, color }) => {
 
     const [collapsed, setCollapsed] = useState(false)
     const [ordering, setOrdering] = useState(null)
-    const [isSortMenMobileOpen, setSortMenuMobileOpen] = useState(false)
+    const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
     const [isDrawerEditOpen, setIsDrawerEditOpen] = useState(false)
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
@@ -184,7 +184,7 @@ const Drawer = ({ project, drawer, color }) => {
                         handleCollapsed={handleCollapsed}
                         clickPlus={clickPlus}
                         items={sortMenuItems}
-                        openSortMenMobile={() => setSortMenuMobileOpen(true)}
+                        openSortMenuMobile={() => setSortMenuMobileOpen(true)}
                         ordering={ordering}
                         setOrdering={setOrdering}
                         handleEdit={() => setIsDrawerEditOpen(true)}
@@ -245,7 +245,7 @@ const Drawer = ({ project, drawer, color }) => {
                     onClose={() => setIsSimpleOpen(false)}
                 />
             )}
-            {isSortMenMobileOpen && (
+            {isSortMenuMobileOpen && (
                 <SortMenuMobile
                     title={t("sort.task_title")}
                     items={sortMenuItems}
