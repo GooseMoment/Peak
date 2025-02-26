@@ -4,7 +4,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     ignore:
       - dependency-name: "react"
         versions: 
@@ -21,10 +21,30 @@ updates:
       - dependency-name: "react-router-dom"
         versions: 
           - ">=7.0.0"
+    groups:
+      npm-minor-patch:
+        applies-to: version-updates 
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
   - package-ecosystem: "pip"
     directory: "/backend"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+    groups:
+      pip-minor-patch:
+        applies-to: version-updates 
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      - dependency-name: "django"
+        versions: 
+          - ">=5.0.0"
   - package-ecosystem: "docker"
     directories:
       - "/frontend"
