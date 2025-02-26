@@ -147,7 +147,7 @@ export const TOTPAuthForm = () => {
             e?.preventDefault()
 
             if (totpCode.length < 6) {
-                return toast.error("Enter more than 6")
+                return toast.error(t("enter_6_digits"))
             }
 
             return authTOTP("totp", totpCode)

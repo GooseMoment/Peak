@@ -318,6 +318,7 @@
         "button_cancel": "취소",
         "button_email_authentication": "이메일 인증",
         "6-digit_code": "6자리 코드",
+        "enter_6_digit": "6자리 숫자를 입력하세요.",
         "session_invalid": "다시 로그인하세요.",
         "try_count_exceed": "2단계 인증 시도 횟수를 초과했습니다. 다시 로그인하세요.",
         "wrong_code": "잘못된 코드입니다. 다시 시도하세요.",
