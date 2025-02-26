@@ -11,7 +11,6 @@ const SortMenu = ({ color, items, ordering, setOrdering }) => {
     const theme = useTheme()
 
     const textColor = theme.textColor
-    const thirdBackgroundColor = theme.thirdBackgroundColor
     const secondBackgroundColor = theme.secondBackgroundColor
 
     return (
@@ -33,21 +32,14 @@ const SortMenu = ({ color, items, ordering, setOrdering }) => {
                 fontSize: "13px",
             }}>
             {items.map((item) => (
-                <MenuItem
+                <StyledMenuItem
                     key={item.display}
-                    onClick={() => setOrdering(item.context)}
-                    onMouseEnter={(e) =>
-                        (e.currentTarget.style.backgroundColor =
-                            thirdBackgroundColor)
-                    }
-                    onMouseLeave={(e) =>
-                        (e.currentTarget.style.backgroundColor = "transparent")
-                    }>
+                    onClick={() => setOrdering(item.context)}>
                     <EmptyBox $isSelected={item.context === ordering}>
                         <FeatherIcon icon="check" />
                     </EmptyBox>
                     {item.display}
-                </MenuItem>
+                </StyledMenuItem>
             ))}
         </Menu>
     )
@@ -68,6 +60,12 @@ const EmptyBox = styled.div`
             props.$isSelected
                 ? props.theme.primaryColors.success
                 : "transparent"};
+    }
+`
+
+const StyledMenuItem = styled(MenuItem)`
+    &:hover {
+        background-color: ${(p) => p.theme.thirdBackgroundColor};
     }
 `
 
