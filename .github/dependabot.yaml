@@ -5,6 +5,22 @@ updates:
     directory: "/frontend"
     schedule:
       interval: "daily"
+    ignore:
+      - dependency-name: "react"
+        versions: 
+          - ">=19.0.0"
+      - dependency-name: "react-dom"
+        versions: 
+          - ">=19.0.0"
+      - dependency-name: "@types/react"
+        versions: 
+          - ">=19.0.0"
+      - dependency-name: "@types/react-dom"
+        versions: 
+          - ">=19.0.0"
+      - dependency-name: "react-router-dom"
+        versions: 
+          - ">=7.0.0"
   - package-ecosystem: "pip"
     directory: "/backend"
     schedule:
@@ -19,20 +35,3 @@ updates:
     directory: "/.github/workflows"
     schedule:
       interval: "weekly"
-
-ignore:
-  - dependency-name: "react"
-    versions: 
-      - ">=19.0.0"
-  - dependency-name: "react-dom"
-    versions: 
-      - ">=19.0.0"
-  - dependency-name: "@types/react"
-    versions: 
-      - ">=19.0.0"
-  - dependency-name: "@types/react-dom"
-    versions: 
-      - ">=19.0.0"
-  - dependency-name: "react-router-dom"
-    versions: 
-      - ">=7.0.0"
