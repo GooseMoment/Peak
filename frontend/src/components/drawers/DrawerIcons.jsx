@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 import CollapseButton from "@components/common/CollapseButton"
-import OptionsMenu from "@components/common/OptionsMenu"
+import OptionsMenu from "@components/project/common/OptionsMenu"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
 
@@ -17,7 +17,7 @@ const DrawerIcons = ({
     handleCollapsed,
     clickPlus,
     items,
-    openSortMenMobile,
+    openSortMenuMobile,
     ordering,
     setOrdering,
     handleEdit,
@@ -29,7 +29,7 @@ const DrawerIcons = ({
         { icon: <FeatherIcon icon="plus" onClick={clickPlus} /> },
         {
             icon: isMobile ? (
-                <div onClick={openSortMenMobile}>
+                <div onClick={openSortMenuMobile}>
                     <SortIcon color={color} />
                 </div>
             ) : (
@@ -63,13 +63,16 @@ const DrawerIcons = ({
     return (
         <DrawerIcon $color={color}>
             {drawerIcons.map((item, i) => (
-                <Button key={i}>{item.icon}</Button>
+                <IconBox key={i}>{item.icon}</IconBox>
             ))}
         </DrawerIcon>
     )
 }
 
-const Button = styled.button`
+const IconBox = styled.div`
+    width: 1em;
+    height: 1em;
+    margin: 0.5em;
     border: 0;
     background-color: transparent;
 `
