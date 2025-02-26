@@ -10,7 +10,6 @@ const OptionsMenu = ({ color = null, handleEdit, handleAlert }) => {
 
     const textColor = theme.textColor
     const dangerColor = theme.primaryColors.danger
-    const thirdBackgroundColor = theme.thirdBackgroundColor
     const secondBackgroundColor = theme.secondBackgroundColor
 
     return (
@@ -34,27 +33,11 @@ const OptionsMenu = ({ color = null, handleEdit, handleAlert }) => {
                 padding: "13px 0px !important",
                 fontSize: "13px",
             }}>
-            <StyledMenuItem
-                onClick={handleEdit}
-                onMouseEnter={(e) =>
-                    (e.currentTarget.style.backgroundColor =
-                        thirdBackgroundColor)
-                }
-                onMouseLeave={(e) =>
-                    (e.currentTarget.style.backgroundColor = "transparent")
-                }>
+            <StyledMenuItem onClick={handleEdit}>
                 <FeatherIcon icon="edit" stroke={textColor} />
                 {t("edit.display")}
             </StyledMenuItem>
-            <StyledMenuItem
-                onClick={handleAlert}
-                onMouseEnter={(e) =>
-                    (e.currentTarget.style.backgroundColor =
-                        thirdBackgroundColor)
-                }
-                onMouseLeave={(e) =>
-                    (e.currentTarget.style.backgroundColor = "transparent")
-                }>
+            <StyledMenuItem onClick={handleAlert}>
                 <FeatherIcon icon="trash-2" stroke={dangerColor} />
                 {t("delete.display")}
             </StyledMenuItem>
@@ -68,6 +51,10 @@ const EmptyMenuBtn = styled(MenuButton)`
 `
 
 const StyledMenuItem = styled(MenuItem)`
+    &:hover {
+        background-color: ${(p) => p.theme.thirdBackgroundColor};
+    }
+
     & svg {
         margin-right: 10px;
         margin-bottom: 3px;
