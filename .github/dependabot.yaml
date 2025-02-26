@@ -45,6 +45,9 @@ updates:
       - dependency-name: "django"
         versions: 
           - ">=5.0.0"
+      - dependency-name: "django-stubs*"
+        versions: 
+          - ">=5.0.0"
   - package-ecosystem: "docker"
     directories:
       - "/frontend"
