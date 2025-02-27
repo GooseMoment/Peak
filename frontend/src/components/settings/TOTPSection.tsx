@@ -177,10 +177,14 @@ const TOTPSection = () => {
                     <form onSubmit={onSubmit}>
                         <Text>{t("qrcode_description")}</Text>
                         <QRCodeImg src={createMut.data.imgDataURL} />
-                        <Text>{t("secret_manual")}</Text>
-                        <SecretCode onClick={onClickSecretKey}>
-                            {createMut.data.secretCode}
-                        </SecretCode>
+                        <SecretCodeDetails>
+                            <summary>{t("cannot_scan")}</summary>
+                            <Text>{t("secret_manual")}</Text>
+                            <SecretCode onClick={onClickSecretKey}>
+                                {createMut.data.secretCode}
+                            </SecretCode>
+                        </SecretCodeDetails>
+                        <Text>{t("enter_code")}</Text>
                         <Input
                             icon={<FeatherIcon icon="hash" />}
                             type="text"
@@ -249,6 +253,25 @@ const Text = styled.p`
     margin-bottom: 1em;
 `
 
+const SecretCodeDetails = styled.details`
+    border: 1px solid ${(p) => p.theme.thirdBackgroundColor};
+    border-radius: 16px;
+    padding: 0.75em;
+    margin-bottom: 1em;
+
+    & summary {
+        user-select: none;
+        -webkit-user-select: none;
+        cursor: pointer;
+    }
+
+    &[open] {
+        & summary {
+            padding-bottom: 1em;
+        }
+    }
+`
+
 const SecretCode = styled.span`
     display: block;
 
@@ -263,8 +286,6 @@ const SecretCode = styled.span`
     word-break: break-all;
 
     line-height: 1.2;
-
-    margin-bottom: 1.5em;
 `
 
 export default TOTPSection
