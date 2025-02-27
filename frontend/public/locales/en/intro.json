@@ -56,7 +56,7 @@
     },
     "section_cheer": {
         "title": "Cheer",
-        "description": "Put reactions to your friends’ tasks with fancy emojis. Make motivate and get motivated.",
+        "description": "Put reactions to your friends’ tasks with fancy emojis.",
         "demo_cheer": {
             "task_name": "Finally finished the project!!!"
         }
