@@ -1,6 +1,7 @@
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import { useQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import ModalWindow from "@components/common/ModalWindow"
@@ -10,27 +11,63 @@ import ProjectName from "@components/project/ProjectName"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
 import SkeletonProjectList from "@components/project/skeletons/SkeletonProjectList"
 
-import { getProjectList } from "@api/projects.api"
+import { getProjectList, patchProject } from "@api/projects.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
+import queryClient from "@queries/queryClient"
+
 import FeatherIcon from "feather-icons-react"
+import { DndProvider } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
 import { useTranslation } from "react-i18next"
 
 const ProjectListPage = () => {
     const { t } = useTranslation(null, { keyPrefix: "project_list" })
 
-    const {
-        isPending,
-        isError,
-        data: projects,
-        refetch,
-    } = useQuery({
+    const [projects, setProjects] = useState([])
+    const [isCreateOpen, setIsCreateOpen] = useState(false)
+
+    const { isPending, isError, data, refetch } = useQuery({
         queryKey: ["projects"],
         queryFn: () => getProjectList(),
     })
 
-    const [isCreateOpen, setIsCreateOpen] = useState(false)
+    useEffect(() => {
+        if (!data) return
+        setProjects(data)
+    }, [data])
+
+    const patchMutation = useMutation({
+        mutationFn: ({ id, order }) => {
+            return patchProject(id, { order })
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["projects"],
+            })
+            refetch()
+        },
+    })
+
+    const moveProject = useCallback((dragIndex, hoverIndex) => {
+        setProjects((prevProjects) => {
+            const updatedProjects = [...prevProjects]
+            const [moved] = updatedProjects.splice(dragIndex, 1)
+            updatedProjects.splice(hoverIndex, 0, moved)
+            return updatedProjects
+        })
+    }, [])
+
+    const dropProject = useCallback(() => {
+        const changedProjects = projects
+            .map((project, index) => ({ id: project.id, order: index }))
+            .filter((project, index) => data[index]?.id !== project.id)
+
+        changedProjects.forEach(({ id, order }) => {
+            patchMutation.mutate({ id, order })
+        })
+    }, [projects, data])
 
     return (
         <>
@@ -49,9 +86,18 @@ const ProjectListPage = () => {
             {isPending && <SkeletonProjectList />}
             {isError && <ErrorProjectList onClick={() => refetch()} />}
 
-            {projects?.map((project) => (
-                <ProjectName key={project.id} project={project} />
-            ))}
+            <DndProvider backend={HTML5Backend}>
+                {projects?.map((project, i) => (
+                    <ProjectName
+                        key={project.id}
+                        project={project}
+                        index={i}
+                        moveProject={moveProject}
+                        dropProject={dropProject}
+                    />
+                ))}
+            </DndProvider>
+
             {isPending || (
                 <ProjectCreateButton
                     onClick={() => {

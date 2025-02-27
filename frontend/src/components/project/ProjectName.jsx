@@ -1,3 +1,4 @@
+import { useRef } from "react"
 import { Link } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
@@ -7,24 +8,102 @@ import { ifMobile } from "@utils/useScreenType"
 import { getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
+import { useDrag, useDrop } from "react-dnd"
 import { useTranslation } from "react-i18next"
 
-const ProjectName = ({ project, demo = false }) => {
+const ProjectName = ({
+    project,
+    demo = false,
+    index = null,
+    moveProject = null,
+    dropProject = null,
+}) => {
     const { t } = useTranslation(null, { keyPrefix: "project_list" })
     const theme = useTheme()
 
+    if (demo) {
+        return (
+            <Box>
+                <FlexBox>
+                    <FeatherIcon
+                        icon="circle"
+                        fill={getPaletteColor(theme.type, project.color)}
+                    />
+                    <NameText>{project.name}</NameText>
+                    <TypeText>
+                        {project.type === "regular" && t("type_regular")}
+                        {project.type === "goal" && t("type_goal")}
+                    </TypeText>
+                </FlexBox>
+            </Box>
+        )
+    }
+
+    const ref = useRef(null)
+    const isInbox = project.type === "inbox"
+
+    const [{ handlerId }, drop] = useDrop({
+        accept: "Project",
+        canDrop: () => !isInbox,
+        collect(monitor) {
+            return {
+                handlerId: monitor.getHandlerId(),
+            }
+        },
+        hover: (item, monitor) => {
+            if (isInbox || !ref.current) return
+
+            const dragIndex = item.index
+            const hoverIndex = index
+
+            if (dragIndex === hoverIndex) return
+
+            const hoverBoundingRect = ref.current.getBoundingClientRect()
+            const hoverMiddleY =
+                (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+            const clientOffset = monitor.getClientOffset()
+            const hoverClientY = clientOffset.y - hoverBoundingRect.top
+
+            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return
+            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return
+
+            moveProject(dragIndex, hoverIndex)
+
+            item.index = hoverIndex
+        },
+        drop: (item) => {
+            if (isInbox) return
+            dropProject()
+            item.index = index
+        },
+    })
+
+    const [{ isDragging }, drag] = useDrag({
+        type: "Project",
+        canDrag: () => !isInbox,
+        item: () => {
+            return { project, index }
+        },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    })
+
+    if (!isInbox) drag(drop(ref))
+    drag(drop(ref))
+
     let nameParts = (
-        <Link to={`/app/projects/${project.id}`}>
+        <Link to={`/app/projects/${project.id}`} draggable="false">
             <NameText>{project.name}</NameText>
         </Link>
     )
 
-    if (demo) {
-        nameParts = <NameText>{project.name}</NameText>
-    }
-
     return (
-        <Box>
+        <Box
+            ref={ref}
+            data-handler-id={handlerId}
+            $isDragging={isDragging}
+            $isInbox={isInbox}>
             <FlexBox>
                 <FeatherIcon
                     icon="circle"
@@ -36,20 +115,14 @@ const ProjectName = ({ project, demo = false }) => {
                     {project.type === "goal" && t("type_goal")}
                 </TypeText>
             </FlexBox>
-            {!demo && (
-                <TaskCountBox>
-                    <CircleIcon>
-                        <FeatherIcon icon="check" />
-                    </CircleIcon>
-                    <TaskCountText>
-                        {project.completed_task_count}
-                    </TaskCountText>
-                    <CircleIcon />
-                    <TaskCountText>
-                        {project.uncompleted_task_count}
-                    </TaskCountText>
-                </TaskCountBox>
-            )}
+            <TaskCountBox>
+                <CircleIcon>
+                    <FeatherIcon icon="check" />
+                </CircleIcon>
+                <TaskCountText>{project.completed_task_count}</TaskCountText>
+                <CircleIcon />
+                <TaskCountText>{project.uncompleted_task_count}</TaskCountText>
+            </TaskCountBox>
         </Box>
     )
 }
@@ -59,6 +132,8 @@ const Box = styled.div`
     align-items: center;
     justify-content: space-between;
     margin: 0.8em 0em;
+    opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
+    cursor: ${(props) => (props.$isInbox ? "not-allowed" : "grab")};
 
     ${ifMobile} {
         flex-direction: column;
@@ -101,6 +176,7 @@ const NameText = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.3em;
+    user-select: none;
 
     &:hover {
         color: #ff4a03;
