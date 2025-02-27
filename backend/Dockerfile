@@ -26,5 +26,4 @@ RUN cp -r /usr/local/lib/python3.13/site-packages/rest_framework/static/ /static
 WORKDIR /backend
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=2s --retries=5 CMD \
-    wget --server-response http://127.0.0.1:8000/health/ok -O /dev/null 2>&1 \
-    | grep -c 'HTTP/1.1 200 OK'
+    wget --server-response http://127.0.0.1:8000/health/ok -O /dev/null
