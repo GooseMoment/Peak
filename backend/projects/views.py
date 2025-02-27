@@ -38,9 +38,7 @@ class ProjectList(
     pagination_class = ProjectListPagination
 
     def get_queryset(self):
-        return (
-            Project.objects.filter(user=self.request.user).order_by("order").all()
-        )
+        return Project.objects.filter(user=self.request.user).order_by("order").all()
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
