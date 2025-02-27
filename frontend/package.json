@@ -30,7 +30,6 @@
         "i18next-http-backend": "^3.0.2",
         "luxon": "^3.5.0",
         "moment": "^2.30.1",
-        "motion": "^12.4.7",
         "qrcode": "^1.5.4",
         "react": "^18.2.0",
         "react-calendar": "^4.8.0",
