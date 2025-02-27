@@ -206,6 +206,16 @@ const Drawer = ({ project, drawer, color }) => {
                             )),
                         )}
                     </TaskList>
+                    {isSimpleOpen && (
+                        <TaskCreateSimple
+                            projectID={project.id}
+                            projectName={project.name}
+                            drawerID={drawer.id}
+                            drawerName={drawer.name}
+                            color={color}
+                            onClose={() => setIsSimpleOpen(false)}
+                        />
+                    )}
                     <TaskCreateButton onClick={handleToggleSimpleCreate}>
                         {isSimpleOpen ? (
                             <>
@@ -223,27 +233,17 @@ const Drawer = ({ project, drawer, color }) => {
                             </>
                         )}
                     </TaskCreateButton>
+                    {hasNextPage ? (
+                        <ButtonGroup $justifyContent="center" $margin="1em">
+                            <MoreButton
+                                disabled={isFetchingNextPage}
+                                loading={isFetchingNextPage}
+                                onClick={() => fetchNextPage()}>
+                                {isLoading ? t("loading") : t("button_load_more")}
+                            </MoreButton>
+                        </ButtonGroup>
+                    ) : null}
                 </>
-            )}
-            {hasNextPage ? (
-                <ButtonGroup $justifyContent="center" $margin="1em">
-                    <MoreButton
-                        disabled={isFetchingNextPage}
-                        loading={isFetchingNextPage}
-                        onClick={() => fetchNextPage()}>
-                        {isLoading ? t("loading") : t("button_load_more")}
-                    </MoreButton>
-                </ButtonGroup>
-            ) : null}
-            {isSimpleOpen && (
-                <TaskCreateSimple
-                    projectID={project.id}
-                    projectName={project.name}
-                    drawerID={drawer.id}
-                    drawerName={drawer.name}
-                    color={color}
-                    onClose={() => setIsSimpleOpen(false)}
-                />
             )}
             {isSortMenuMobileOpen && (
                 <SortMenuMobile
