@@ -6,7 +6,7 @@ django-stubs-ext==4.2.7
 djangorestframework==3.15.2
 psycopg-binary==3.2.5
 psycopg==3.2.5
-gunicorn==22.0.0
+gunicorn==23.0.0
 beautifulsoup4==4.12.3
 requests==2.32.2
 lxml==5.3.1
@@ -19,5 +19,5 @@ s3transfer==0.11.2
 pillow==11.1.0 # required by models.ImageField 
 django-redis==5.4.0
 pywebpush==2.0.0
-django-rest-knox==4.2.0
+django-rest-knox==5.0.2
 marko==2.1.2

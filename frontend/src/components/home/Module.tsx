@@ -1,22 +1,48 @@
+import { type ReactNode } from "react"
 import { Link } from "react-router-dom"
 
 import styled, { css, keyframes } from "styled-components"
 
 import { skeletonCSS } from "@assets/skeleton"
 
-const Module = styled.article`
+interface TitleProp {
+    className?: string
+    children: ReactNode
+    to?: string
+}
+
+const Module = ({ children, className, to }: TitleProp) => {
+    const module = <ModuleBox className={className}>{children}</ModuleBox>
+
+    if (to === undefined) {
+        return module
+    }
+
+    return <Link to={to}>{module}</Link>
+}
+
+const ModuleBox = styled.article`
     position: relative;
     margin-bottom: 2em;
-
-    ${(p) =>
-        p.$skeleton &&
-        css`
-            height: ${p.$height};
-            ${skeletonCSS}
-        `}
 `
 
-export const Title = ({ className, children, to, underline, loading }) => {
+interface TitleProp {
+    className?: string
+    children: ReactNode
+    to?: string
+    displayArrow?: boolean
+    underline?: boolean
+    loading?: boolean
+}
+
+export const Title = ({
+    className,
+    children,
+    to,
+    displayArrow = false,
+    underline,
+    loading = false,
+}: TitleProp) => {
     if (loading) {
         return <StyledH2 className={className} $loading />
     }
@@ -24,7 +50,7 @@ export const Title = ({ className, children, to, underline, loading }) => {
     const title = (
         <StyledH2 className={className}>
             <TitleText $underline={underline}>{children}</TitleText>{" "}
-            {to && "〉"}
+            {(to || displayArrow) && "〉"}
         </StyledH2>
     )
 
@@ -39,7 +65,7 @@ export const Title = ({ className, children, to, underline, loading }) => {
     return title
 }
 
-const StyledH2 = styled.h2`
+const StyledH2 = styled.h2<{ $loading?: boolean }>`
     font-weight: 600;
     font-size: 1em;
     margin-bottom: 0.75em;
@@ -50,7 +76,7 @@ const StyledH2 = styled.h2`
             height: 1.25em;
             width: 15em;
             max-width: 100%;
-            ${skeletonCSS}
+            ${skeletonCSS()}
         `}
 `
 
@@ -63,7 +89,7 @@ const mark = keyframes`
     }
 `
 
-const TitleText = styled.span`
+const TitleText = styled.span<{ $underline?: boolean }>`
     ${(p) =>
         p.$underline &&
         css`
@@ -78,6 +104,16 @@ export const CenteredText = styled.div`
     text-align: center;
     width: 100%;
     font-size: 0.75em;
+    word-break: keep-all;
+`
+
+export const Center = styled.div`
+    display: flex;
+    justify-content: center;
+
+    width: 100%;
+
+    margin: 1em 0;
 `
 
 export default Module

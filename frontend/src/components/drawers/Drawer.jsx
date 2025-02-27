@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Suspense, lazy, useEffect, useMemo, useState } from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
+import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
@@ -33,15 +33,18 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const Drawer = ({ project, drawer, color }) => {
-    const navigate = useNavigate()
+const TaskCreateElement = lazy(
+    () => import("@components/project/taskDetails/TaskCreateElement"),
+)
 
+const Drawer = ({ project, drawer, color }) => {
     const [collapsed, setCollapsed] = useState(false)
     const [ordering, setOrdering] = useState(null)
     const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
     const [isDrawerEditOpen, setIsDrawerEditOpen] = useState(false)
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
+    const [isCreateOpen, setCreateOpen] = useState(false)
 
     const { t } = useTranslation(null, { keyPrefix: "project" })
 
@@ -145,14 +148,7 @@ const Drawer = ({ project, drawer, color }) => {
     }
 
     const clickPlus = () => {
-        navigate(`/app/projects/${project.id}/tasks/create/`, {
-            state: {
-                project_id: project.id,
-                project_name: project.name,
-                drawer_id: drawer.id,
-                drawer_name: drawer.name,
-            },
-        })
+        setCreateOpen(true)
     }
 
     if (isLoading) {
@@ -274,6 +270,16 @@ const Drawer = ({ project, drawer, color }) => {
                     }}>
                     <DrawerEdit projectID={project.id} drawer={drawer} />
                 </ModalWindow>
+            )}
+            {isCreateOpen && (
+                <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
+                    <TaskCreateElement
+                        onClose={() => setCreateOpen(false)}
+                        project={project}
+                        drawer={drawer}
+                        color={color}
+                    />
+                </Suspense>
             )}
         </>
     )
