@@ -39,7 +39,7 @@ class ProjectList(
 
     def get_queryset(self):
         return (
-            Project.objects.filter(user=self.request.user).order_by("created_at").all()
+            Project.objects.filter(user=self.request.user).order_by("order").all()
         )
 
     def get(self, request, *args, **kwargs):
