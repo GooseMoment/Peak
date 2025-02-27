@@ -1,6 +1,7 @@
 {
     "error": {
-        "text": "Something went wrong."
+        "text": "Failed to load the data of this section.",
+        "retry": "Retry"
     },
     "menus": {
         "title": "Settings",

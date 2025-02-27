@@ -6,7 +6,12 @@ import styled from "styled-components"
 import Button, { ButtonGroup } from "@components/common/Button"
 import Confirmation from "@components/common/Confirmation"
 import { LoaderCircleBold } from "@components/common/LoaderCircle"
-import Section, { Description, Name, Value } from "@components/settings/Section"
+import Section, {
+    Description,
+    Name,
+    Value,
+    ValueError,
+} from "@components/settings/Section"
 import Input from "@components/sign/Input"
 
 import { createTOTP, deleteTOTP, getTOTP, verifyTOTP } from "@api/auth.api"
@@ -130,7 +135,7 @@ const TOTPSection = () => {
                 <Name>{t("name")}</Name>
                 <Description>{t("description")}</Description>
                 {enabledQuery.isError ? (
-                    <Value>error</Value>
+                    <ValueError onClickRetry={enabledQuery.refetch} />
                 ) : (
                     <Value>
                         <LoaderCircleBold />
