@@ -1,23 +1,25 @@
 import styled, { useTheme } from "styled-components"
 
-import SortIcon from "@components/project/sorts/SortIcon"
-
 import { Menu, MenuButton, MenuItem } from "@szhsin/react-menu"
-import "@szhsin/react-menu/dist/index.css"
-import "@szhsin/react-menu/dist/transitions/zoom.css"
 import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
-const SortMenu = ({ color, items, ordering, setOrdering }) => {
+const OptionsMenu = ({ color = null, handleEdit, handleAlert }) => {
+    const { t } = useTranslation(null, { keyPrefix: "project" })
     const theme = useTheme()
 
     const textColor = theme.textColor
+    const dangerColor = theme.primaryColors.danger
     const secondBackgroundColor = theme.secondBackgroundColor
 
     return (
         <Menu
             menuButton={
                 <EmptyMenuBtn>
-                    <SortIcon color={color} />
+                    <FeatherIcon
+                        icon="more-horizontal"
+                        stroke={color || textColor}
+                    />
                 </EmptyMenuBtn>
             }
             transition
@@ -28,19 +30,17 @@ const SortMenu = ({ color, items, ordering, setOrdering }) => {
                 color: textColor,
                 borderRadius: "10px",
                 boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-                paddingRight: "13px !important",
+                padding: "13px 0px !important",
                 fontSize: "13px",
             }}>
-            {items.map((item) => (
-                <StyledMenuItem
-                    key={item.display}
-                    onClick={() => setOrdering(item.context)}>
-                    <EmptyBox $isSelected={item.context === ordering}>
-                        <FeatherIcon icon="check" />
-                    </EmptyBox>
-                    {item.display}
-                </StyledMenuItem>
-            ))}
+            <StyledMenuItem onClick={handleEdit}>
+                <FeatherIcon icon="edit" stroke={textColor} />
+                {t("edit.display")}
+            </StyledMenuItem>
+            <StyledMenuItem onClick={handleAlert}>
+                <FeatherIcon icon="trash-2" stroke={dangerColor} />
+                {t("delete.display")}
+            </StyledMenuItem>
         </Menu>
     )
 }
@@ -50,23 +50,15 @@ const EmptyMenuBtn = styled(MenuButton)`
     border: 0;
 `
 
-const EmptyBox = styled.div`
-    width: 16px;
-    height: 16px;
-    margin-right: 0.5em;
-
-    & svg {
-        stroke: ${(props) =>
-            props.$isSelected
-                ? props.theme.primaryColors.success
-                : "transparent"};
-    }
-`
-
 const StyledMenuItem = styled(MenuItem)`
     &:hover {
         background-color: ${(p) => p.theme.thirdBackgroundColor};
     }
+
+    & svg {
+        margin-right: 10px;
+        margin-bottom: 3px;
+    }
 `
 
-export default SortMenu
+export default OptionsMenu

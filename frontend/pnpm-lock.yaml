@@ -20,6 +20,9 @@ importers:
       '@atlaskit/pragmatic-drag-and-drop-react-accessibility':
         specifier: ^2.0.0
         version: 2.0.0(@babel/core@7.26.8)(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@szhsin/react-menu':
+        specifier: ^4.3.0
+        version: 4.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/query-sync-storage-persister':
         specifier: ^5.66.4
         version: 5.66.4
@@ -773,6 +776,12 @@ packages:
     resolution: {integrity: sha512-0PVwmgzZ8+TZ9oGBmdZoQVXflbvuwzN/HRclujpl4N/q3i+y0lqLw8n1bXA8ru3sApDjlmONaNAuYr38y1Kr9w==}
     cpu: [x64]
     os: [win32]
+
+  '@szhsin/react-menu@4.3.0':
+    resolution: {integrity: sha512-TklTnPT6cYZcOO0GYnBQX6qVvpsdHvI0GkWsL90/fisIMlFfv+rpEPy4YNm+qNTUuCPeOkcRYVU7ooH0yUFTgQ==}
+    peerDependencies:
+      react: '>=16.14.0'
+      react-dom: '>=16.14.0'
 
   '@statsig/client-core@3.12.1':
     resolution: {integrity: sha512-99FOEBq7M3Jnkvk0DWRAklvCE1J26HLmYsFGJAo+LQ7382DYBY3X6fvdZeaNGa5KDSIdyZEpeLQxkHw2PpVpGw==}
@@ -2315,6 +2324,12 @@ packages:
       react: ^18 || ^19
       react-dom: ^18 || ^19
 
+  react-transition-state@2.3.0:
+    resolution: {integrity: sha512-OucQRyIpeq5g1/5qSBJH4p4U+SzYEoB3MsAXXz3ty116rPqG4jhwrzInImZ2gFi4XOffeLu6HNCZvkCM3DKaeg==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
   react-uid@2.4.0:
     resolution: {integrity: sha512-+MVs/25NrcZuGrmlVRWPOSsbS8y72GJOBsR7d68j3/wqOrRBF52U29XAw4+XSelw0Vm6s5VmGH5mCbTCPGVCVg==}
     engines: {node: '>=10'}
@@ -3524,6 +3539,12 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.34.6':
     optional: true
+
+  '@szhsin/react-menu@4.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-transition-state: 2.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   '@statsig/client-core@3.12.1': {}
 
@@ -5326,6 +5347,11 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
+  react-transition-state@2.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      
   react-uid@2.4.0(@types/react@18.3.18)(react@18.3.1):
     dependencies:
       react: 18.3.1
