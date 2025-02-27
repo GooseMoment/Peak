@@ -1,5 +1,5 @@
 export const getPageFromURL = (url: null | string | URL): null | string => {
-    if (url === null || url === "") {
+    if (!url) {
         return url
     }
 
@@ -9,7 +9,7 @@ export const getPageFromURL = (url: null | string | URL): null | string => {
 }
 
 export const getCursorFromURL = (url: null | string | URL): null | string => {
-    if (url === null || url === "") {
+    if (!url) {
         return url
     }
 
