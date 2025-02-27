@@ -23,12 +23,16 @@ const IntroPage = () => {
 
     return (
         <>
-            <Nav>
-                <Brand />
-                <Link to="/sign/in">
-                    <Button>{t("section_top.button_sign_in")}</Button>
-                </Link>
-            </Nav>
+            <NavContainer>
+                <Nav>
+                    <Brand />
+                    <Link to="/sign/in">
+                        <SignInButton>
+                            {t("section_top.button_sign_in")}
+                        </SignInButton>
+                    </Link>
+                </Nav>
+            </NavContainer>
             <TopHero>
                 <TopTitle>
                     {t("section_top.title1")}
@@ -96,17 +100,31 @@ const IntroPage = () => {
     )
 }
 
-const Nav = styled.nav`
+const NavContainer = styled.div`
     position: fixed;
-    padding: 2rem;
-    padding-bottom: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
+    padding: 1.25rem;
+
     width: 100%;
     box-sizing: border-box;
 
     z-index: 10;
+`
+
+const Nav = styled.nav`
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding: 0.75rem;
+
+    border-radius: 16px;
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+
+    background-color: ${(p) => p.theme.introBackgroundColor};
+`
+
+const SignInButton = styled(Button)`
+    height: 2em;
 `
 
 const TopHero = styled(Section)`
