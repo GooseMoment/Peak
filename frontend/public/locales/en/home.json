@@ -6,6 +6,12 @@
         "title": "Add a task",
         "tap_to_open": "Tap to open..."
     },
+    "allow_notification": {
+        "title": "Turn on the push notification",
+        "description": "Receive notifications from Peak.",
+        "noti_title": "⏰ Submit the assignment",
+        "noti_body": "10 mins left."
+    },
     "install_peak": {
         "title": "Install Peak as an app",
         "description": "Here's how to."

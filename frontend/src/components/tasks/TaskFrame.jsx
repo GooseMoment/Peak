@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom"
+import { Suspense, lazy, useState } from "react"
 
 import styled from "styled-components"
 
+import ModalLoader from "@components/common/ModalLoader"
 import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"
 import taskCalculation from "@components/tasks/utils/taskCalculation"
@@ -13,14 +14,20 @@ import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
 
+const TaskDetailElement = lazy(
+    () => import("@components/project/taskDetails/TaskDetailElement"),
+)
+
 const TaskFrame = ({
     task,
     color,
-    taskDetailPath,
+    showTaskDetail,
     isLoading,
     toComplete,
     isSocial,
 }) => {
+    const [isDetailOpen, setDetailOpen] = useState(false)
+
     const completedAt = isSocial ? null : task.completed_at
 
     const {
@@ -33,7 +40,15 @@ const TaskFrame = ({
     } = taskCalculation(task, isSocial)
 
     const TaskName = (
-        <TaskNameBox $completed={completedAt}>{task?.name}</TaskNameBox>
+        <TaskNameBox
+            $completed={completedAt}
+            onClick={() => {
+                if (showTaskDetail) {
+                    setDetailOpen(true)
+                }
+            }}>
+            {task?.name}
+        </TaskNameBox>
     )
 
     const hasDate = task.due_type || task.assigned_at
@@ -56,13 +71,7 @@ const TaskFrame = ({
                             onClick={toComplete}
                         />
                     </Icons>
-                    {taskDetailPath ? (
-                        <NameLink draggable="false" to={taskDetailPath}>
-                            {TaskName}
-                        </NameLink>
-                    ) : (
-                        TaskName
-                    )}
+                    {TaskName}
                 </CircleName>
 
                 {hasDate && (
@@ -99,6 +108,18 @@ const TaskFrame = ({
                     </Dates>
                 )}
             </Content>
+            {isDetailOpen && (
+                <Suspense
+                    key="task-detail-task-frame"
+                    fallback={<ModalLoader />}>
+                    <TaskDetailElement
+                        onClose={() => setDetailOpen(false)}
+                        projectType={task.projectType}
+                        color={color}
+                        task={task}
+                    />
+                </Suspense>
+            )}
         </Box>
     )
 }
@@ -113,11 +134,6 @@ const Box = styled.div`
 `
 
 const Content = styled.div`
-    min-width: 0;
-`
-
-const NameLink = styled(Link)`
-    display: flex;
     min-width: 0;
 `
 
