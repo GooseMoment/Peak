@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 interface Secret {
-    secretKey: string
+    secretCode: string
     imgDataURL: string
 }
 
@@ -49,7 +49,7 @@ const TOTPSection = () => {
         async mutationFn() {
             const data = await createTOTP()
             return {
-                secretKey: data.secret,
+                secretCode: data.secret,
                 imgDataURL: await QRCode.toDataURL(data.uri),
             }
         },
@@ -101,7 +101,7 @@ const TOTPSection = () => {
             return
         }
 
-        navigator.clipboard.writeText(createMut.data.secretKey)
+        navigator.clipboard.writeText(createMut.data.secretCode)
         toast.success(t("copy_success"), { toastId: "totp.copy_success" })
     }
 
@@ -175,12 +175,12 @@ const TOTPSection = () => {
 
                 {createMut.data !== undefined && (
                     <form onSubmit={onSubmit}>
-                        <QRCodeImg src={createMut.data.imgDataURL} />
                         <Text>{t("qrcode_description")}</Text>
+                        <QRCodeImg src={createMut.data.imgDataURL} />
                         <Text>{t("secret_manual")}</Text>
-                        <SecretKey onClick={onClickSecretKey}>
-                            {createMut.data.secretKey}
-                        </SecretKey>
+                        <SecretCode onClick={onClickSecretKey}>
+                            {createMut.data.secretCode}
+                        </SecretCode>
                         <Input
                             icon={<FeatherIcon icon="hash" />}
                             type="text"
@@ -249,7 +249,7 @@ const Text = styled.p`
     margin-bottom: 1em;
 `
 
-const SecretKey = styled.span`
+const SecretCode = styled.span`
     display: block;
 
     padding: 1em;
@@ -264,7 +264,7 @@ const SecretKey = styled.span`
 
     line-height: 1.2;
 
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
 `
 
 export default TOTPSection
