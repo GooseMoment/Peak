@@ -66,20 +66,24 @@ const TOTPSection = () => {
             createMut.reset()
             setInputCode("")
             client.invalidateQueries({ queryKey })
-            return toast.success(t("register_success"))
+            toast.success(t("register_success"))
         },
         onError() {
             toast.error(t("wrong_code"))
-            return
         },
     })
 
     const deleteMut = useMutation({
         mutationFn: deleteTOTP,
-        onSuccess() {
+        onSettled() {
             setDeleteConfirmationOpen(false)
             client.invalidateQueries({ queryKey })
-            return toast.info(t("delete_success"))
+        },
+        onSuccess() {
+            toast.info(t("delete_success"))
+        },
+        onError() {
+            toast.error(t("delete_error"))
         },
     })
 

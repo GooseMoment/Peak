@@ -79,8 +79,9 @@
             "cancel": "Cancel",
             "enter_6_digit": "Enter 6 digits.",
             "register_success": "One-Time Passcode is enabled.",
-            "register_error": "Can't enable. Try again.",
+            "register_error": "Failed to enable. Try again.",
             "delete_success": "Disabled One-Time Passcode.",
+            "delete_error": "Failed to delete. Try again.",
             "wrong_code": "Wrong code. Please try again."
         }
     },
