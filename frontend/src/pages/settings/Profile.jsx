@@ -3,10 +3,9 @@ import { useEffect, useState } from "react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
-import Button, { ButtonGroup, buttonForms } from "@components/common/Button"
+import Button, { ButtonGroup } from "@components/common/Button"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import ModalWindow from "@components/common/ModalWindow"
-import { getProjectColor } from "@components/project/common/palettes"
 import Color from "@components/project/edit/Color"
 import Error from "@components/settings/Error"
 import ProfileImg from "@components/settings/ProfileImg"
@@ -19,11 +18,13 @@ import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
+import { getPaletteColor } from "@assets/palettes"
+
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const Account = () => {
-    const { t } = useTranslation("settings", { keyPrefix: "account" })
+const Profile = () => {
+    const { t } = useTranslation("settings", { keyPrefix: "profile" })
     const theme = useTheme()
 
     const { isDesktop } = useScreenType()
@@ -51,10 +52,10 @@ const Account = () => {
             queryClient.invalidateQueries({
                 queryKey: ["users", user.username],
             })
-            toast.success(t("account_edited"))
+            toast.success(t("profile_edited"))
         },
         onError: () => {
-            toast.error(t("account_fail"))
+            toast.error(t("profile_fail"))
         },
     })
 
@@ -128,7 +129,7 @@ const Account = () => {
                     <Value>
                         <ColorButton
                             onClick={onClickOpenPalette}
-                            $color={getProjectColor(
+                            $color={getPaletteColor(
                                 theme.type,
                                 headerColor.color,
                             )}
@@ -150,7 +151,7 @@ const Account = () => {
                         <Button
                             disabled={mutation.isPending}
                             loading={mutation.isPending}
-                            form={buttonForms.filled}
+                            form="filled"
                             type="submit">
                             {t("button_submit")}
                         </Button>
@@ -227,4 +228,4 @@ const ColorButton = styled.div`
     background-color: ${(p) => p.$color};
 `
 
-export default Account
+export default Profile

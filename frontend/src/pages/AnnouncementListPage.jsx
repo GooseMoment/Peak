@@ -9,16 +9,9 @@ import PageTitle from "@components/common/PageTitle"
 import { getAnnouncements } from "@api/announcements.api"
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
+import { getPageFromURL } from "@utils/pagination"
 
 import { DateTime } from "luxon"
-
-const getPageFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const cursor = u.searchParams.get("page")
-    return cursor
-}
 
 const AnnouncementListPage = () => {
     const locale = useClientLocale()

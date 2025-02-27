@@ -5,13 +5,14 @@ import styled, { useTheme } from "styled-components"
 
 import SubSection from "@components/intro/SubSection"
 import { today } from "@components/intro/todays"
-import { getProjectColor } from "@components/project/common/palettes"
 import { Modal as EmojiModalWindow } from "@components/social/interaction/reaction/EmojiModal"
 import EmojiPickerButton from "@components/social/interaction/reaction/EmojiPickerButton"
 import ReactionButton from "@components/social/interaction/reaction/ReactionButton"
 import TaskFrame from "@components/tasks/TaskFrame"
 
 import { getEmojis } from "@api/social.api"
+
+import { getPaletteColor } from "@assets/palettes"
 
 import { useTranslation } from "react-i18next"
 
@@ -107,7 +108,7 @@ const DemoCheer = () => {
 const makeTask = (t, theme) => ({
     name: t("task_name"),
     completed_at: today,
-    color: getProjectColor(theme.type, "green"),
+    color: getPaletteColor(theme.type, "green"),
 })
 
 const CustomizedPickerButton = styled(EmojiPickerButton)`

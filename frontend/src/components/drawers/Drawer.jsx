@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Suspense, lazy, useEffect, useMemo, useState } from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -7,6 +6,7 @@ import styled, { useTheme } from "styled-components"
 import Button, { ButtonGroup } from "@components/common/Button"
 import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
+import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
@@ -18,7 +18,7 @@ import {
     SkeletonDrawer,
     SkeletonInboxDrawer,
 } from "@components/project/skeletons/SkeletonProjectPage"
-import SortMenu from "@components/project/sorts/SortMenu"
+import SortMenuSelector from "@components/project/sorts/SortMenuSelector"
 import DrawerTask from "@components/tasks/DrawerTask"
 
 import { deleteDrawer } from "@api/drawers.api"
@@ -34,9 +34,12 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
+const TaskCreateElement = lazy(
+    () => import("@components/project/taskDetails/TaskCreateElement"),
+)
+
 const Drawer = ({ project, drawer, color }) => {
     const theme = useTheme()
-    const navigate = useNavigate()
 
     const [collapsed, setCollapsed] = useState(false)
     const [ordering, setOrdering] = useState(null)
@@ -53,6 +56,7 @@ const Drawer = ({ project, drawer, color }) => {
     })
     const [isDrawerEditOpen, setIsDrawerEditOpen] = useState(false)
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
+    const [isCreateOpen, setCreateOpen] = useState(false)
 
     const { t } = useTranslation(null, { keyPrefix: "project" })
 
@@ -170,14 +174,7 @@ const Drawer = ({ project, drawer, color }) => {
     }
 
     const clickPlus = () => {
-        navigate(`/app/projects/${project.id}/tasks/create/`, {
-            state: {
-                project_id: project.id,
-                project_name: project.name,
-                drawer_id: drawer.id,
-                drawer_name: drawer.name,
-            },
-        })
+        setCreateOpen(true)
     }
 
     if (isLoading) {
@@ -267,10 +264,11 @@ const Drawer = ({ project, drawer, color }) => {
                 />
             )}
             {isSortMenuOpen && (
-                <SortMenu
+                <SortMenuSelector
                     title={t("sort.task_title")}
                     items={sortMenuItems}
                     selectedButtonPosition={selectedSortMenuPosition}
+                    onClose={() => setIsSortMenuOpen(false)}
                     ordering={ordering}
                     setOrdering={setOrdering}
                 />
@@ -299,6 +297,16 @@ const Drawer = ({ project, drawer, color }) => {
                     }}>
                     <DrawerEdit projectID={project.id} drawer={drawer} />
                 </ModalWindow>
+            )}
+            {isCreateOpen && (
+                <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
+                    <TaskCreateElement
+                        onClose={() => setCreateOpen(false)}
+                        project={project}
+                        drawer={drawer}
+                        color={color}
+                    />
+                </Suspense>
             )}
         </>
     )

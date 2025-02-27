@@ -4,7 +4,7 @@
     },
     "menus": {
         "title": "설정",
-        "account": "계정",
+        "profile": "프로필",
         "general": "일반",
         "security": "보안",
         "privacy": "공개 범위",
@@ -13,31 +13,17 @@
         "appearance": "테마",
         "reactions": "리액션",
         "blocks": "차단",
-        "info": "정보",
-        "sign_out": "로그아웃"
+        "info": "정보"
     },
-    "account": {
+    "profile": {
         "display_name": "이름",
         "display_name_placeholder": "남에게 보일 이름",
         "bio": "바이오",
         "header_color": "헤더 색상",
         "bio_placeholder": "자신을 소개하세요.",
         "button_submit": "저장",
-        "change_password": "암호 변경",
-        "section_open": "열기",
-        "section_close": "닫기",
-        "current_password": "현재 암호",
-        "new_password": "새로운 암호",
-        "new_password_again": "새로운 암호 (다시 입력)",
-        "button_change": "변경",
-        "account_edited": "변경사항을 저장했습니다.",
-        "account_fail": "저장할 수 없습니다. 다시 시도하세요.",
-        "password_too_short": "암호는 8자 이상이어야 합니다.",
-        "password_is_same": "현재 암호와 새로운 암호가 동일합니다.",
-        "password_not_match": "새로운 암호가 서로 일치하지 않습니다.",
-        "password_wrong": "현재 암호가 틀렸습니다.",
-        "password_change_success": "암호를 변경했습니다.",
-        "password_change_error": "암호 변경 중 문제가 발생했습니다.",
+        "profile_edited": "변경사항을 저장했습니다.",
+        "profile_fail": "저장할 수 없습니다. 다시 시도하세요.",
         "button_apply": "자르기",
         "button_cancel": "취소"
     },
@@ -53,9 +39,28 @@
         "delete_task_after_alert": {
             "name": "작업 삭제 시 경고",
             "description": "작업을 삭제할 때 되묻는 경고창을 띄웁니다."
+        },
+        "sign_out": {
+            "name": "여기서 로그아웃",
+            "values": {
+                "button_sign_out": "로그아웃"
+            }
         }
     },
     "security": {
+        "password_change": {
+            "name": "암호 변경",
+            "current_password": "현재 암호",
+            "new_password": "새로운 암호",
+            "new_password_again": "새로운 암호 (다시 입력)",
+            "button_change": "변경",
+            "password_too_short": "암호는 8자 이상이어야 합니다.",
+            "password_is_same": "현재 암호와 새로운 암호가 동일합니다.",
+            "password_not_match": "새로운 암호가 서로 일치하지 않습니다.",
+            "password_wrong": "현재 암호가 틀렸습니다.",
+            "password_change_success": "암호를 변경했습니다.",
+            "password_change_error": "암호 변경 중 문제가 발생했습니다."
+        },
         "totp": {
             "name": "2단계 인증: 일회용 코드",
             "description": "일회용 코드(TOTP)를 사용하면 보안을 향상할 수 있습니다.",
@@ -66,6 +71,7 @@
             "ask_delete": "일회용 코드 인증을 삭제할까요?",
             "qrcode_description": "인증기 앱으로 QR 코드를 스캔하세요. 앱에 표시되는 숫자를 아래 입력하면 등록이 완료됩니다.",
             "secret_manual": "또는, 보안 키를 수동으로 입력할 수 있습니다:",
+            "copy_success": "수동 보안키를 클립보드로 복사했습니다.",
             "input_placeholder": "6자리 코드",
             "enter": "입력",
             "cancel": "취소",
@@ -124,8 +130,21 @@
             "enabled_push_notification": "이제 Peak에서 보내는 알림을 받을 수 있습니다.",
             "enabled_push_notification_error": "알림 활성화 중 오류가 발생했습니다."
         },
-        "play_notification_sound": {
-            "name": "알림음 재생하기"
+        "allowed_types": {
+            "name": "알림 유형",
+            "description": "이 기기에서 받을 알림 유형을 선택합니다.",
+            "values": {
+                "comment": "댓글이 달렸을 때",
+                "follow": "남이 팔로우했을 때",
+                "follow_request": "팔로우 요청을 받았을 때",
+                "follow_request_accepted": "내 팔로우 요청이 승낙되었을 때",
+                "peck": "콕 쪼였을 때",
+                "reaction": "리액션을 받았을 때",
+                "task_reminder": "작업의 리마인더 시간일 때",
+                "button_save": "저장"
+            },
+            "success": "알림 유형 설정을 저장했습니다.",
+            "failed": "알림 유형 설정 저장 중 오류가 발생했습니다. 다시 시도해주세요."
         }
     },
     "appearance": {
@@ -172,7 +191,7 @@
     },
     "info": {
         "built_at": {
-            "name": "빌드 일시",
+            "name": "앱 업데이트",
             "for_dev": "개발 모드에서는 표시되지 않습니다."
         }
     },

@@ -2,14 +2,22 @@ import { useNavigate } from "react-router-dom"
 
 import styled, { css, useTheme } from "styled-components"
 
-import { getProjectColor } from "@components/project/common/palettes"
 import SimpleProfile from "@components/social/common/SimpleProfile"
 
 import { getCurrentUsername } from "@api/client"
 
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
-import FeatherIcon from "feather-icons-react"
+import { getPaletteColor } from "@assets/palettes"
+
+import { DateTime } from "luxon"
+import { useTranslation } from "react-i18next"
+
+const putEllipsis = (text, maxLength) => {
+    return text.length > maxLength
+        ? text.substring(0, maxLength - 3) + "..."
+        : text
+}
 
 const LogPreviewBox = ({
     log,

@@ -4,7 +4,7 @@
     },
     "menus": {
         "title": "Settings",
-        "account": "Account",
+        "profile": "Profile",
         "general": "General",
         "security": "Security",
         "privacy": "Privacy",
@@ -13,31 +13,17 @@
         "appearance": "Appearance",
         "reactions": "Reactions",
         "blocks": "Blocks",
-        "info": "Info",
-        "sign_out": "Sign out"
+        "info": "Info"
     },
-    "account": {
+    "profile": {
         "display_name": "Display name",
         "display_name_placeholder": "Your awesome name",
         "bio": "Bio",
         "header_color": "Header Color",
         "bio_placeholder": "Tell me who you are",
         "button_submit": "Save",
-        "change_password": "Change password",
-        "section_open": "Open",
-        "section_close": "Close",
-        "current_password": "Current password",
-        "new_password": "New password",
-        "new_password_again": "New password (Type again)",
-        "button_change": "Change",
-        "account_edited": "Account was edited.",
-        "account_fail": "Couldn't save. Try again.",
-        "password_too_short": "Password should be more than 8 characters.",
-        "password_is_same": "New password should be different with current password.",
-        "password_not_match": "New password does not match.",
-        "password_wrong": "Current password is wrong.",
-        "password_change_success": "Password was changes.",
-        "password_change_error": "Error occured while changing password.",
+        "profile_edited": "Changes were saved.",
+        "profile_fail": "Couldn't save. Try again.",
         "button_apply": "Crop",
         "button_cancel": "Cancel"
     },
@@ -53,9 +39,28 @@
         "delete_task_after_alert": {
             "name": "Alert before task deletion",
             "description": "Show an alert before deleting tasks."
+        },
+        "sign_out": {
+            "name": "Sign out",
+            "values": {
+                "button_sign_out": "Sign out"
+            }
         }
     },
     "security": {
+        "password_change": {
+            "name": "Change password",
+            "current_password": "Current password",
+            "new_password": "New password",
+            "new_password_again": "New password (Type again)",
+            "button_change": "Change",
+            "password_too_short": "Password should be more than 8 characters.",
+            "password_is_same": "New password should be different with current password.",
+            "password_not_match": "New password does not match.",
+            "password_wrong": "Current password is wrong.",
+            "password_change_success": "Password was changes.",
+            "password_change_error": "Error occured while changing password."
+        },
         "totp": {
             "name": "Two-Factor Authentication: One-Time Passcode",
             "description": "Using one-time passcode(TOTP) enhances security.",
@@ -66,6 +71,7 @@
             "ask_delete": "Delete the one-time passcode authentication?",
             "qrcode_description": "Scan this QR code with your preferred authentication app. Enter the numbers from the app below to complete TOTP registration.",
             "secret_manual": "Or, you can enter the secret code manually:",
+            "copy_success": "Copied the secret code to the clipboard.",
             "input_placeholder": "6-digit code",
             "enter": "Enter",
             "cancel": "Cancel",
@@ -124,8 +130,21 @@
             "enabled_push_notification": "Now you can receive notifications from Peak.",
             "enabled_push_notification_error": "An error is occured while enabling a push notification."
         },
-        "play_notification_sound": {
-            "name": "Play notification sound"
+        "allowed_types": {
+            "name": "Types of notifications",
+            "description": "Choose which types you want to receive on this device.",
+            "values": {
+                "comment": "When you get a comment",
+                "follow": "When someone follows you",
+                "follow_request": "When you receive a follow request",
+                "follow_request_accepted": "When your follow request is accepted",
+                "peck": "When you get pecked",
+                "reaction": "When you receive a reaction",
+                "task_reminder": "When it's a time to remind a task",
+                "button_save": "Save"
+            },
+            "success": "Saved the preference of notification types.",
+            "failed": "Failed to save the preference. Try again."
         }
     },
     "appearance": {
@@ -172,8 +191,8 @@
     },
     "info": {
         "built_at": {
-            "name": "Build At",
-            "for_dev": "This is not shown at DEV mode."
+            "name": "This app was updated at",
+            "for_dev": "This is not shown in the development mode."
         }
     },
     "sign_out": {

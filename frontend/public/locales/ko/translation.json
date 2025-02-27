@@ -37,22 +37,26 @@
     },
     "today": {
         "title": "오늘",
-        "overdue_title": "놓친 작업",
-        "filter_due_date": "지난 기한",
-        "filter_assigned_at": "지난 할당",
+        "important_title": "오늘의 중요한 작업",
+        "filter_todayDue": "오늘 기한",
+        "filter_overDue": "지난 기한",
+        "filter_pastAssigned": "지난 할당",
         "no_today_assignment": "오늘 할 작업들을 추가하세요.",
         "error_load_task": "작업을 불러오지 못했어요 😢",
         "button_load_more": "더보기",
         "due_change_today_success": "작업을 오늘로 할당했습니다.",
         "due_change_tomorrow_success": "작업을 내일로 할당했습니다.",
-        "due_change_error": "기한 변경에 실패했습니다."
+        "due_change_error": "기한 변경에 실패했습니다.",
+        "no_tasks_todayDue": "오늘 기한인 작업이 없습니다.",
+        "no_tasks_overDue": "기한이 지난 작업이 없습니다.",
+        "no_tasks_pastAssigned": "할당이 지난 작업이 없습니다."
     },
     "project": {
         "no_drawer": "+ 버튼을 눌러서 서랍을 추가하세요.",
         "progress": "진행 상황",
         "button_load_more": "더보기",
         "button_add_task": "새 작업 추가",
-        "button_close_add_task": "닫힘",
+        "button_close_add_task": "닫기",
         "button_add": "추가하기",
         "button_save": "수정",
         "loading": "로딩 중",
@@ -106,7 +110,7 @@
         "name_required": "이름을 지어주세요.",
         "color": {
             "title": "색깔 설정",
-            "theme1": "기본",
+            "palette1": "기본",
             "red": "빨간색",
             "red_orange": "레드오렌지",
             "orange": "주황색",
@@ -189,26 +193,6 @@
                 "acceptable_numbers": "입력 가능한 최대 숫자는 {{max}}입니다.",
                 "time_change_success": "시간을 변경했습니다.",
                 "time_remove": "시간을 삭제했습니다."
-            },
-            "repeat": {
-                "title": "반복 설정",
-                "button_add": "추가하기",
-                "acceptable_numbers": "입력 가능한 최대 숫자는 {{max}}입니다.",
-                "every_few_weeks_front": "",
-                "every_few_weeks_back": "주 마다",
-                "everyday": "매일",
-                "everyweek": "매주",
-                "everymonth": "매달",
-                "everyyear": "매년",
-                "weekday": "평일",
-                "weekend": "주말",
-                "sun": "일",
-                "mon": "월",
-                "tue": "화",
-                "wed": "수",
-                "thu": "목",
-                "fri": "금",
-                "sat": "토"
             }
         },
         "reminder": {

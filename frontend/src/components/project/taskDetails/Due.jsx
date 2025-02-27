@@ -4,7 +4,6 @@ import styled, { css } from "styled-components"
 
 import CommonCalendar from "@components/common/CommonCalendar"
 import QuickDue from "@components/project/due/QuickDue"
-import RepeatDetail from "@components/project/due/RepeatDetail"
 import TimeDetail from "@components/project/due/TimeDetail"
 
 import { useClientTimezone } from "@utils/clientSettings"
@@ -61,10 +60,6 @@ const Due = ({ task, setFunc }) => {
                     })
                     return
                 }
-            }
-            if (name === "repeat") {
-                toast.error("coming soon...", { toastId: "coming_soon" })
-                return
             }
             setIsAdditionalComp(name)
         }
@@ -127,12 +122,6 @@ const Due = ({ task, setFunc }) => {
             icon: "clock",
             component: <TimeDetail task={task} setFunc={setFunc} />,
         },
-        {
-            name: "repeat",
-            display: t("repeat.title"),
-            icon: "refresh-cw",
-            component: <RepeatDetail />,
-        },
     ]
 
     return addComponent.map((comp, i) => (
@@ -140,7 +129,7 @@ const Due = ({ task, setFunc }) => {
             <FlexCenterBox>
                 <IndexBox
                     $start={i === 0}
-                    $end={i === 3}
+                    $end={isAdditionalComp !== comp.name && i === 2}
                     onClick={() => handleAdditionalComp(comp.name)}>
                     <EmptyBlock />
                     <Box>
@@ -153,7 +142,7 @@ const Due = ({ task, setFunc }) => {
                 </IndexBox>
             </FlexCenterBox>
             {isAdditionalComp === comp.name && comp.component}
-            {i !== 3 && <CLine />}
+            {i !== 2 && <CLine />}
         </FlexCenterBox>
     ))
 }

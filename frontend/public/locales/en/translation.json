@@ -37,15 +37,19 @@
     },
     "today": {
         "title": "Today",
-        "overdue_title": "Missed Tasks",
-        "filter_due_date": "Overdue",
-        "filter_assigned_at": "Missed",
+        "important_title": "Today's Important Tasks",
+        "filter_todayDue": "Today",
+        "filter_overDue": "Overdue",
+        "filter_pastAssigned": "Missed",
         "no_today_assignment": "Add tasks to do today",
         "error_load_task": "Couldn't load tasks 😢",
         "button_load_more": "Load more",
         "due_change_today_success": "Assigned the task to today.",
         "due_change_tomorrow_success": "Assigned the task to tomorrow.",
-        "due_change_error": "The due date change failed."
+        "due_change_error": "The due date change failed.",
+        "no_tasks_todayDue": "No tasks are due today.",
+        "no_tasks_overDue": "No tasks are overdue.",
+        "no_tasks_pastAssigned": "No tasks are past assignment."
     },
     "project": {
         "no_drawer": "Press + to add drawers",
@@ -106,7 +110,7 @@
         "name_required": "A name is required.",
         "color": {
             "title": "Color Settings",
-            "theme1": "Basic",
+            "palette1": "Basic",
             "red": "red",
             "red_orange": "red orange",
             "orange": "orange",
@@ -189,26 +193,6 @@
                 "acceptable_numbers": "The maximum number you can enter is {{max}}.",
                 "time_change_success": "The time has changed.",
                 "time_remove": "Deleted the time."
-            },
-            "repeat": {
-                "title": "Recurrence Settings",
-                "button_add": "Add",
-                "acceptable_numbers": "The maximum number you can enter is {{max}}.",
-                "every_few_weeks_front": "Every",
-                "every_few_weeks_back": "weeks",
-                "everyday": "Daily",
-                "everyweek": "Weekly",
-                "everymonth": "Monthly",
-                "everyyear": "Yearly",
-                "weekday": "Weekdays",
-                "weekend": "Weekends",
-                "sun": "S",
-                "mon": "M",
-                "tue": "T",
-                "wed": "W",
-                "thu": "T",
-                "fri": "F",
-                "sat": "S"
             }
         },
         "reminder": {

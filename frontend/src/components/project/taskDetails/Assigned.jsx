@@ -4,7 +4,6 @@ import styled, { css } from "styled-components"
 
 import CommonCalendar from "@components/common/CommonCalendar"
 import QuickDue from "@components/project/due/QuickDue"
-import RepeatDetail from "@components/project/due/RepeatDetail"
 
 import { useClientTimezone } from "@utils/clientSettings"
 import { ifMobile } from "@utils/useScreenType"
@@ -15,7 +14,6 @@ import { rotateToUnder, rotateToUp } from "@assets/keyframes"
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
-import { toast } from "react-toastify"
 
 const Assigned = ({ setFunc, onClose }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
@@ -27,12 +25,9 @@ const Assigned = ({ setFunc, onClose }) => {
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
     const handleAdditionalComp = (name) => {
-        if (isAdditionalComp === name) setIsAdditionalComp("")
-        else {
-            if (name === "repeat") {
-                toast.error("coming soon...", { toastId: "coming_soon" })
-                return
-            }
+        if (isAdditionalComp === name) {
+            setIsAdditionalComp("")
+        } else {
             setIsAdditionalComp(name)
         }
     }
@@ -79,12 +74,6 @@ const Assigned = ({ setFunc, onClose }) => {
                 </CalendarWrapper>
             ),
         },
-        {
-            name: "repeat",
-            display: t("due.repeat.title"),
-            icon: "refresh-cw",
-            component: <RepeatDetail />,
-        },
     ]
 
     return addComponent.map((comp, i) => (
@@ -92,7 +81,7 @@ const Assigned = ({ setFunc, onClose }) => {
             <FlexCenterBox>
                 <IndexBox
                     $start={i === 0}
-                    $end={i === 2}
+                    $end={i === 1}
                     onClick={() => handleAdditionalComp(comp.name)}>
                     <EmptyBlock />
                     <Box>
@@ -105,7 +94,7 @@ const Assigned = ({ setFunc, onClose }) => {
                 </IndexBox>
             </FlexCenterBox>
             {isAdditionalComp === comp.name && comp.component}
-            {i !== 2 && <CLine />}
+            {i !== 1 && <CLine />}
         </Fragment>
     ))
 }

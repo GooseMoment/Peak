@@ -9,7 +9,7 @@ import {
 import { useSearchParams } from "react-router-dom"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { css, keyframes } from "styled-components"
 
 import FilterButtonGroup from "@components/common/FilterButtonGroup"
 import PageTitle from "@components/common/PageTitle"
@@ -18,19 +18,13 @@ import Box from "@components/notifications/Box"
 import { getNotifications } from "@api/notifications.api"
 
 import { useClientLocale } from "@utils/clientSettings"
+import { getCursorFromURL } from "@utils/pagination"
 
 import { ImpressionArea } from "@toss/impression-area"
+import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-
-const getCursorFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const cursor = u.searchParams.get("cursor")
-    return cursor
-}
 
 const defaultFilter = "all"
 
@@ -54,13 +48,21 @@ const NotificationsPage = () => {
         node?.scrollIntoView({ block: "center", scrollBehavior: "smooth" })
     })
 
-    const { data, isError, fetchNextPage, isFetching, isFetchingNextPage } =
-        useInfiniteQuery({
-            queryKey: ["notifications", { types: filters[activeFilter] }],
-            queryFn: getNotifications,
-            initialPageParam: "",
-            getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
-        })
+    const {
+        data,
+        isError,
+        refetch,
+        fetchNextPage,
+        isPending,
+        isFetching,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
+        queryKey: ["notifications", { types: filters[activeFilter] }],
+        queryFn: getNotifications,
+        initialPageParam: "",
+        getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
+        gcTime: 30 * 1000,
+    })
 
     // useInfiniteQuery에서 제공하는 hasNextPage가 제대로 작동 안함. 어째서?
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
@@ -74,7 +76,12 @@ const NotificationsPage = () => {
 
     const header = (
         <>
-            <PageTitle>{t("title")}</PageTitle>
+            <TitleWrapper onClick={!isFetching ? refetch : undefined}>
+                <PageTitle>{t("title")}</PageTitle>
+                <RefetchIcon $loading={isFetching}>
+                    <FeatherIcon icon="rotate-cw" />
+                </RefetchIcon>
+            </TitleWrapper>
             <FilterButtonGroup
                 filters={filters}
                 active={activeFilter}
@@ -85,7 +92,9 @@ const NotificationsPage = () => {
     )
 
     if (isError) {
-        toast.error(t("fail_to_load"))
+        toast.error(t("fail_to_load"), {
+            toastId: "notifications_fail_to_load",
+        })
         return (
             <>
                 {header}
@@ -99,9 +108,6 @@ const NotificationsPage = () => {
     return (
         <>
             {header}
-            {isFetching && !isFetchingNextPage
-                ? [...Array(10)].map((e, i) => <Box key={i} skeleton />)
-                : null}
             {data?.pages.map((group, i) => (
                 <Fragment key={i}>
                     {group.results.map((notification, j) => {
@@ -137,6 +143,14 @@ const NotificationsPage = () => {
                     })}
                 </Fragment>
             ))}
+            {isPending && !isFetchingNextPage ? (
+                <>
+                    <Date $loading />
+                    {[...Array(10)].map((e, i) => (
+                        <Box key={i} skeleton />
+                    ))}
+                </>
+            ) : null}
             <ImpressionArea
                 onImpressionStart={() => fetchNextPage()}
                 timeThreshold={200}>
@@ -149,6 +163,40 @@ const NotificationsPage = () => {
         </>
     )
 }
+
+const TitleWrapper = styled.div`
+    display: flex;
+`
+
+const rotate = keyframes`
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+`
+
+const RefetchIcon = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1.75em;
+    padding: 0 0.5em;
+
+    & svg {
+        stroke-width: 3px;
+        top: 0;
+        margin-right: 0;
+        height: 1.25em;
+        ${(p) =>
+            p.$loading &&
+            css`
+                animation: ${rotate} 0.75s linear 0.1s infinite;
+            `}
+    }
+`
 
 const Blank = styled.div`
     height: 3em;
@@ -169,6 +217,14 @@ const NoMore = styled.div`
 
 const Date = styled.h2`
     font-weight: bold;
+
+    ${(p) =>
+        p.$loading &&
+        css`
+            width: 5em;
+            height: 1em;
+            background-color: ${(p) => p.theme.skeleton.defaultColor};
+        `}
 `
 
 const makeFilters = (t) => ({

@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom"
 import styled, { useTheme } from "styled-components"
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
-import { getProjectColor } from "@components/project/common/palettes"
 import TaskFrame from "@components/tasks/TaskFrame"
+
+import { getPaletteColor } from "@assets/palettes"
 
 import { ImpressionArea } from "@toss/impression-area"
 import { useTranslation } from "react-i18next"
@@ -34,7 +35,7 @@ const SearchResults = ({ resultPage, fetchNextResultPage }) => {
 
             {resultPage?.pages.map((page) =>
                 page.results.map((task) => {
-                    const color = getProjectColor(
+                    const color = getPaletteColor(
                         theme.type,
                         task.project_color,
                     )

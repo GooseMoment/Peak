@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom"
 import Button from "@components/common/Button"
 import Confirmation from "@components/common/Confirmation"
 
-import { states } from "@assets/themes"
-
 import { useTranslation } from "react-i18next"
 
 const ConfirmationSignOut = ({ onClose }) => {
@@ -22,7 +20,7 @@ const ConfirmationSignOut = ({ onClose }) => {
         "close",
         <Button
             key="sign_out"
-            state={states.danger}
+            state="danger"
             onClick={onClickSignOut}
             disabled={loading}
             loading={loading}>

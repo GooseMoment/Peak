@@ -9,7 +9,7 @@ import "react-spring-bottom-sheet/dist/style.css"
 export const Header = ({
     title = null,
     icon = null,
-    handleBack = () => {},
+    handleBack = null,
     closeSheet,
 }) => {
     return (

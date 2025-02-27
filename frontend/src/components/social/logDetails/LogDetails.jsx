@@ -4,7 +4,6 @@ import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
-import { getProjectColor } from "@components/project/common/palettes"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import InteractionBox from "@components/social/interaction/InteractionBox"
 import Quote from "@components/social/logDetails/Quote"
@@ -15,21 +14,16 @@ import TaskBox from "./TaskBox"
 import { getCurrentUsername } from "@api/client"
 import { getDailyLogDetails, getQuote, postQuote } from "@api/social.api"
 
+import { getCursorFromURL } from "@utils/pagination"
 import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
+import { getPaletteColor } from "@assets/palettes"
+
 import { ImpressionArea } from "@toss/impression-area"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-
-const getCursorFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const cursor = u.searchParams.get("cursor")
-    return cursor
-}
 
 const LogDetails = ({ pageType = "following", username, selectedDate }) => {
     const { t } = useTranslation("", { keyPrefix: "social.log_details" })
@@ -113,7 +107,7 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
 
                 {logDetailsPage?.pages.map((group) =>
                     group.results.map((task, index, array) => {
-                        const color = getProjectColor(
+                        const color = getPaletteColor(
                             theme.type,
                             task.project_color,
                         )

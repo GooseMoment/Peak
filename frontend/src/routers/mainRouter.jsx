@@ -25,9 +25,6 @@ const TodayPage = lazy(() => import("@pages/TodayPage"))
 const ProjectPage = lazy(() => import("@pages/ProjectPage"))
 const ProjectListPage = lazy(() => import("@pages/ProjectListPage"))
 const SettingsPage = lazy(() => import("@pages/SettingsPage"))
-const { TaskCreateElement, TaskDetailElement } = lazily(
-    () => import("@components/project/taskDetails/TaskElements"),
-)
 
 const {
     SocialRedirector,
@@ -168,17 +165,6 @@ const routes = [
             {
                 path: "projects/:id",
                 element: <ProjectPage />,
-                children: [
-                    {
-                        path: "tasks/create/",
-                        element: <TaskCreateElement />,
-                    },
-                    {
-                        path: "tasks/:task_id/detail/",
-                        id: "task",
-                        element: <TaskDetailElement />,
-                    },
-                ],
             },
             {
                 path: "users/:username",
