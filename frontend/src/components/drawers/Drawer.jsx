@@ -239,7 +239,9 @@ const Drawer = ({ project, drawer, color }) => {
                                 disabled={isFetchingNextPage}
                                 loading={isFetchingNextPage}
                                 onClick={() => fetchNextPage()}>
-                                {isLoading ? t("loading") : t("button_load_more")}
+                                {isLoading
+                                    ? t("loading")
+                                    : t("button_load_more")}
                             </MoreButton>
                         </ButtonGroup>
                     ) : null}
