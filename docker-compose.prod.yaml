@@ -17,8 +17,7 @@ services:
       - 443:443/udp
     volumes:
       - django_admin_static:/srv/django_static
-      - ./web/Caddyfile.prod:/etc/caddy/Caddyfile
-      - ./web/:/web/
+      - ./web/caddy.prod/:/etc/caddy/
       - caddy_data:/data
       - caddy_config:/config
       - frontend-dist:/srv/frontend:ro

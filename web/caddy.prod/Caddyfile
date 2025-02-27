@@ -1,0 +1,52 @@
+{$WEB_HOSTNAME} {
+	encode zstd gzip
+	root * /srv/frontend
+
+	log {
+		level info
+		format console
+	}
+
+	handle /assets/* {
+		header Cache-Control max-age=604800
+		file_server
+	}
+
+	@public path *.*
+	handle @public {
+		header Cache-Control max-age=86400
+		file_server
+	}
+
+	handle {
+		header Cache-Control no-cache
+		try_files {path} /
+		file_server
+	}
+
+	handle_errors 404 {
+		respond "Not found"
+	}
+
+	handle_errors {
+		respond "Internal Server Error"
+	}
+}
+
+{$API_HOSTNAME} {
+	handle_path /static/* {
+		root * /srv/django_static/static
+		file_server
+	}
+
+	@denied_admin not client_ip private_ranges {$ADMIN_ACCESS_ALLOWED_IP_RANGES}
+
+	handle /admin/* {
+		respond @denied_admin "Access Denied" 403
+		reverse_proxy api:8000
+	}
+
+	handle {
+		reverse_proxy api:8000
+	}
+}

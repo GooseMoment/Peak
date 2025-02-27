@@ -14,8 +14,7 @@ services:
       - 2019:2019
     volumes:
       - django_admin_static:/srv/django_static
-      - ./web/Caddyfile:/etc/caddy/Caddyfile
-      - ./web/:/web/
+      - ./web/caddy.dev/:/etc/caddy/
       - caddy_data:/data
       - caddy_config:/config
     extra_hosts:
