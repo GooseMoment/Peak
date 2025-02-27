@@ -40,7 +40,7 @@ const ImageCropper = ({
                 <Button form="outlined" state="danger" onClick={onClickCancel}>
                     {t("button_cancel")}
                 </Button>
-                <Button form="filled" state="danger" onClick={onClickOk}>
+                <Button form="filled" state="success" onClick={onClickOk}>
                     {t("button_apply")}
                 </Button>
             </StyledButtonGroup>
