@@ -1,5 +1,5 @@
-import { Suspense, useEffect, useMemo, useState } from "react"
-import { Outlet, useNavigate, useParams } from "react-router-dom"
+import { Suspense, lazy, useEffect, useMemo, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -33,6 +33,10 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
+const TaskCreateElement = lazy(
+    () => import("@components/project/taskDetails/TaskCreateElement"),
+)
+
 const ProjectPage = () => {
     const { id } = useParams()
     const theme = useTheme()
@@ -52,6 +56,7 @@ const ProjectPage = () => {
         left: 0,
     })
     const [isProjectEditOpen, setIsProjectEditOpen] = useState(false)
+    const [isCreateOpen, setCreateOpen] = useState(false)
 
     const { t } = useTranslation(null, { keyPrefix: "project" })
 
@@ -123,13 +128,7 @@ const ProjectPage = () => {
     }
 
     const openInboxTaskCreate = () => {
-        navigate(`/app/projects/${project.id}/tasks/create/`, {
-            state: {
-                project_name: project.name,
-                drawer_id: project.drawers[0].id,
-                drawer_name: project.drawers[0].name,
-            },
-        })
+        setCreateOpen(true)
     }
 
     const onClickProjectErrorBox = () => {
@@ -254,9 +253,18 @@ const ProjectPage = () => {
                     <ProjectEdit project={project} />
                 </ModalWindow>
             )}
-            <Suspense key="project-page" fallback={<ModalLoader />}>
-                <Outlet context={[id, project.type, color]} />
-            </Suspense>
+            {isCreateOpen && (
+                <Suspense
+                    key="task-create-project-page"
+                    fallback={<ModalLoader />}>
+                    <TaskCreateElement
+                        onClose={() => setCreateOpen(false)}
+                        project={project}
+                        drawer={project.drawers[0]}
+                        color={color}
+                    />
+                </Suspense>
+            )}
         </>
     )
 }

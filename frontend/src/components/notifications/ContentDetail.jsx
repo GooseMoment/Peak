@@ -134,7 +134,7 @@ const getDisplayDateFromQuote = (quote, locale, tz) => {
 }
 
 const getPathToTaskDetail = (task) => {
-    return `/app/projects/${task.project_id}/tasks/${task.id}/detail`
+    return `/app/projects/${task.project_id}`
 }
 
 const ellipsis = css`
