@@ -144,21 +144,21 @@ class TOTPRegisterView(GenericAPIView):
     key_prefix = "totp-secret-pending"
     cache_timeout = 60 * 30  # 30 minutes
 
-    def get_cahce_key(self) -> str:
+    def get_cache_key(self) -> str:
         return self.key_prefix + "-" + self.request.user.username
 
     def get_cached_secret(self) -> str | None:
-        key = self.get_cahce_key()
+        key = self.get_cache_key()
         return cache.get(key)
 
     def create_and_set_secret(self) -> str:
-        key = self.get_cahce_key()
+        key = self.get_cache_key()
         secret = create_totp_secret()
         cache.set(key, secret, self.cache_timeout)
         return secret
 
     def clear_cached_secret(self):
-        key = self.get_cahce_key()
+        key = self.get_cache_key()
         cache.delete(key)
 
     # get wheter TOTP is enabled or not and its created_at if exists
@@ -169,6 +169,7 @@ class TOTPRegisterView(GenericAPIView):
             return Response(
                 {
                     "enabled": False,
+                    "created_at": None,
                 }
             )
 
