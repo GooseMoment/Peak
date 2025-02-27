@@ -18,6 +18,7 @@ import { createTOTP, deleteTOTP, getTOTP, verifyTOTP } from "@api/auth.api"
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
+import type { AxiosError } from "axios"
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import QRCode from "qrcode"
@@ -63,18 +64,35 @@ const TOTPSection = () => {
         },
     })
 
+    const cancelRegistration = () => {
+        createMut.reset()
+        setInputCode("")
+    }
+
     const verifyMut = useMutation({
         async mutationFn() {
             return verifyTOTP(inputCode)
         },
         onSuccess() {
-            createMut.reset()
-            setInputCode("")
+            cancelRegistration()
             client.invalidateQueries({ queryKey })
             toast.success(t("register_success"))
         },
-        onError() {
-            toast.error(t("wrong_code"))
+        onError(error) {
+            if ("response" in error) {
+                const data = (error as AxiosError<{ code: string }>).response
+                    ?.data
+
+                if (data?.code === "NO_PENDING_TOTP_REGISTRATION") {
+                    cancelRegistration()
+                    return toast.error(t("expired"))
+                } else if (data?.code === "CREDENTIAL_INVALID") {
+                    return toast.error(t("wrong_code"))
+                }
+            }
+
+            cancelRegistration()
+            toast.error(t("register_error"))
         },
     })
 
@@ -212,10 +230,7 @@ const TOTPSection = () => {
                         <ButtonGroup $justifyContent="left" $margin="1em 0">
                             <Button
                                 state="danger"
-                                onClick={() => {
-                                    createMut.reset()
-                                    setInputCode("")
-                                }}
+                                onClick={cancelRegistration}
                                 disabled={verifyMut.isPending}>
                                 {t("cancel")}
                             </Button>
