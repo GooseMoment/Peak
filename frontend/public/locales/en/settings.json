@@ -83,7 +83,8 @@
             "register_error": "Failed to enable. Try again.",
             "delete_success": "Disabled One-Time Passcode.",
             "delete_error": "Failed to delete. Try again.",
-            "wrong_code": "Wrong code. Please try again."
+            "expired": "The QR code was expired. Try again.",
+            "wrong_code": "Wrong code. Try again."
         }
     },
     "privacy": {
