@@ -1,4 +1,4 @@
-import { Suspense } from "react"
+import { StrictMode, Suspense } from "react"
 import { Outlet } from "react-router-dom"
 
 import Layout from "@containers/Layout"
@@ -8,15 +8,17 @@ import { SidebarContextProvider } from "@components/sidebar/SidebarContext"
 
 const AppLayout = () => {
     return (
-        <SidebarContextProvider>
-            <Layout>
-                <Suspense
-                    key="app-layout"
-                    fallback={<LoaderCircleFull height="100dvh" />}>
-                    <Outlet />
-                </Suspense>
-            </Layout>
-        </SidebarContextProvider>
+        <StrictMode>
+            <SidebarContextProvider>
+                <Layout>
+                    <Suspense
+                        key="app-layout"
+                        fallback={<LoaderCircleFull height="100dvh" />}>
+                        <Outlet />
+                    </Suspense>
+                </Layout>
+            </SidebarContextProvider>
+        </StrictMode>
     )
 }
 
