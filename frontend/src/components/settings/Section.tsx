@@ -54,9 +54,8 @@ export const ValueError = ({ onClickRetry }: { onClickRetry: () => void }) => {
 }
 
 const ValueErrorContainer = styled(Value)`
-    border: 2px solid ${(p) => p.theme.primaryColors.warning};
+    border-left: 3px solid ${(p) => p.theme.primaryColors.warning};
     padding: 1em;
-    border-radius: 16px;
     width: fit-content;
 `
 
