@@ -17,6 +17,7 @@ permissions:
 jobs:
   assign-reviewer:
     runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
     steps:
       - name: Run random-reviewer-discord
         uses: JedBeom/random-reviewer-discord@v0.2.1
