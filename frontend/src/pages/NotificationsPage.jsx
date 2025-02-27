@@ -18,20 +18,13 @@ import Box from "@components/notifications/Box"
 import { getNotifications } from "@api/notifications.api"
 
 import { useClientLocale } from "@utils/clientSettings"
+import { getCursorFromURL } from "@utils/pagination"
 
 import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-
-const getCursorFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const cursor = u.searchParams.get("cursor")
-    return cursor
-}
 
 const defaultFilter = "all"
 
@@ -83,7 +76,7 @@ const NotificationsPage = () => {
 
     const header = (
         <>
-            <TitleWrapper onClick={!isFetching && refetch}>
+            <TitleWrapper onClick={!isFetching ? refetch : undefined}>
                 <PageTitle>{t("title")}</PageTitle>
                 <RefetchIcon $loading={isFetching}>
                     <FeatherIcon icon="rotate-cw" />

@@ -9,6 +9,8 @@ import SearchResults from "@components/search/SearchResults"
 
 import { getSearchResults } from "@api/search.api"
 
+import { getCursorFromURL } from "@utils/pagination"
+
 import queryClient from "@queries/queryClient"
 
 import { useTranslation } from "react-i18next"
@@ -50,14 +52,6 @@ const initialFilterGroup = (t) => ({
         value: null,
     },
 })
-
-const getCursorFromURL = (url) => {
-    if (!url) return null
-
-    const u = new URL(url)
-    const cursor = u.searchParams.get("cursor")
-    return cursor
-}
 
 const SearchPage = () => {
     const { t } = useTranslation("", { keyPrefix: "search" })
