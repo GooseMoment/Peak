@@ -255,6 +255,8 @@ const QRCodeImg = styled.img`
 const Text = styled.p`
     line-height: 1.3;
     margin-bottom: 1em;
+    user-select: none;
+    -webkit-user-select: none;
 `
 
 const SecretCodeDetails = styled.details`
