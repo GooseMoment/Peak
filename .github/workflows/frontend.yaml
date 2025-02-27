@@ -73,7 +73,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           cache: npm
-          cache-dependency-path: '**/.github/workflows/*.yml'
+          cache-dependency-path: '**/.github/workflows/*.yaml'
       - name: Compare keys of ${{ matrix.file }}.json
         working-directory: ./frontend/public/locales
         run: npx json-diff -k ./ko/${{ matrix.file }}.json ./en/${{ matrix.file }}.json
