@@ -26,7 +26,8 @@ const SortMenuMobile = ({ title, items, onClose, ordering, setOrdering }) => {
                     closeSheet={handleClose}
                 />
             }
-            onClose={onClose}>
+            onClose={handleClose}
+            initialSnap={1}>
             <ContentBox>
                 <CLine />
                 {items.map((item) => (

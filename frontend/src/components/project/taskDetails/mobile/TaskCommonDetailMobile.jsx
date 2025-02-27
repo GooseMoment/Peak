@@ -15,6 +15,8 @@ import { patchTask, postTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
 
+import { opacityUp } from "@assets/keyframes"
+
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -145,7 +147,6 @@ const TaskCommonDetailMobile = ({
                     }
                 />
             }
-            blocking={!isAlertOpen}
             onClose={onClose}>
             <TaskCommonDetailMobileBox>
                 <TaskNameInput
@@ -157,12 +158,14 @@ const TaskCommonDetailMobile = ({
                     setFunc={handleChange}
                     isCreate
                 />
-                <ContentsMobile
-                    newTask={newTask}
-                    editNewTask={handleChange}
-                    activeContent={activeContent}
-                    setActiveContent={setActiveContent}
-                />
+                <AnimatedContent $active={activeContent}>
+                    <ContentsMobile
+                        newTask={newTask}
+                        editNewTask={handleChange}
+                        activeContent={activeContent}
+                        setActiveContent={setActiveContent}
+                    />
+                </AnimatedContent>
                 {!activeContent && (
                     <ButtonGroup
                         $justifyContent="flex-end"
@@ -198,6 +201,10 @@ const TaskCommonDetailMobile = ({
 const TaskCommonDetailMobileBox = styled.div`
     width: 90%;
     margin: 1.2em;
+`
+
+const AnimatedContent = styled.div`
+    animation: ${(props) => props.$active && opacityUp} 0.3s ease-in-out;
 `
 
 export default TaskCommonDetailMobile
