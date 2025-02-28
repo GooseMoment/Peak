@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 import styled from "styled-components"
 
-import Button from "@components/common/Button"
+import Button, { ButtonGroup } from "@components/common/Button"
 import DemoCheer from "@components/intro/DemoCheer"
 import DemoDrawer from "@components/intro/DemoDrawer"
 import DemoPlan from "@components/intro/DemoPlan"
@@ -16,10 +16,18 @@ import Section, {
 import { SubGroup } from "@components/intro/SubSection"
 import Brand from "@components/sign/Brand"
 
+import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const IntroPage = () => {
     const { t } = useTranslation("intro")
+
+    const goToTop = () => {
+        window.scroll({
+            top: 0,
+            behavior: "smooth",
+        })
+    }
 
     return (
         <>
@@ -96,6 +104,15 @@ const IntroPage = () => {
                     <DemoTheme />
                 </SubGroup>
             </Section>
+
+            <Section>
+                <ButtonGroup $justifyContent="center" $margin="7em 0">
+                    <Button onClick={goToTop}>
+                        <NoTopIcon icon="arrow-up-circle" />
+                        {t("section_footer.back_to_top")}
+                    </Button>
+                </ButtonGroup>
+            </Section>
         </>
     )
 }
@@ -147,6 +164,10 @@ const TopHeroButton = styled(Button)`
     background-color: ${(p) => p.theme.introBackgroundColor};
     border-color: ${(p) => p.theme.introTextColor};
     border-width: 0.15em;
+`
+
+const NoTopIcon = styled(FeatherIcon)`
+    top: 0;
 `
 
 export default IntroPage

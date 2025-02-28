@@ -121,5 +121,8 @@
             "theme_light": "Light",
             "theme_dark": "Dark"
         }
+    },
+    "section_footer": {
+        "back_to_top": "Back to Top"
     }
 }
