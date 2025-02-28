@@ -35,8 +35,8 @@ export default function Button({
 }
 
 export const ButtonGroup = styled.div<{
-    $justifyContent: string
-    $margin: string
+    $justifyContent?: string
+    $margin?: string
 }>`
     display: flex;
     gap: 1em;

@@ -214,11 +214,6 @@ body {
     vertical-align: auto;
 }
 
-.reactEasyCrop_Container {
-    position: fixed !important;
-    z-index: 999;
-}
-
 .Toastify__toast {
     line-height: 1.3 !important;
 }
