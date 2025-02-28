@@ -42,6 +42,7 @@ export const authTOTP = async (type, code) => {
         })
         setToken(res.data.token)
         setCurrentUsername(res.data.user.username)
+        localStorage.removeItem(TwoFactorAuthTokenKey)
     } catch (e) {
         if (e?.response?.status === 403) {
             localStorage.removeItem(TwoFactorAuthTokenKey)
