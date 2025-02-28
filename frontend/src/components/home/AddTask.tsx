@@ -1,0 +1,75 @@
+import { Suspense, lazy, useState } from "react"
+
+import { useQuery } from "@tanstack/react-query"
+import styled from "styled-components"
+
+import MildButton from "@components/common/MildButton"
+import ModalLoader from "@components/common/ModalLoader"
+import Module, { Title } from "@components/home/Module"
+
+import { getProject } from "@api/projects.api"
+
+import PlusCircle from "@assets/home/PlusCircle"
+
+import { useTranslation } from "react-i18next"
+
+const TaskCreateElement = lazy(
+    () => import("@components/project/taskDetails/TaskCreateElement"),
+)
+
+const AddTask = () => {
+    const { t } = useTranslation("home", { keyPrefix: "add_task" })
+    const [isOpen, setOpen] = useState(false)
+
+    const onClick = () => {
+        setOpen(true)
+    }
+
+    const inboxQuery = useQuery({
+        queryKey: ["projects", "inbox"],
+        async queryFn() {
+            return getProject("inbox")
+        },
+    })
+
+    return (
+        <Module>
+            <Title>{t("title")}</Title>
+            <ButtonOpen onClick={onClick}>
+                <div>{t("tap_to_open")}</div> <PlusCircle />
+            </ButtonOpen>
+            {isOpen && inboxQuery.isLoading && <ModalLoader />}
+            {isOpen && inboxQuery.isSuccess && (
+                <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
+                    <TaskCreateElement
+                        onClose={() => setOpen(false)}
+                        project={inboxQuery.data}
+                        drawer={inboxQuery.data.drawers[0]}
+                        color={inboxQuery.data.color}
+                    />
+                </Suspense>
+            )}
+        </Module>
+    )
+}
+
+const ButtonOpen = styled(MildButton)`
+    background-color: ${(p) => p.theme.accentBackgroundColor};
+    color: ${(p) => p.theme.secondTextColor};
+    width: 100%;
+    padding: 0.5em 0.75em;
+    border-radius: 16px;
+    text-align: left;
+    font-size: 1em;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & svg {
+        top: 0;
+        margin-right: 0;
+    }
+`
+
+export default AddTask
