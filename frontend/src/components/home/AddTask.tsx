@@ -30,13 +30,15 @@ const AddTask = () => {
         async queryFn() {
             return getProject("inbox")
         },
+        refetchOnWindowFocus: false,
     })
 
     return (
         <Module>
             <Title>{t("title")}</Title>
-            <ButtonOpen onClick={onClick}>
-                <div>{t("tap_to_open")}</div> <PlusCircle />
+            <ButtonOpen onClick={onClick} $error={inboxQuery.isError}>
+                <div>{t(inboxQuery.isError ? "error" : "tap_to_open")}</div>{" "}
+                <PlusCircle />
             </ButtonOpen>
             {isOpen && inboxQuery.isLoading && <ModalLoader />}
             {isOpen && inboxQuery.isSuccess && (
@@ -53,9 +55,12 @@ const AddTask = () => {
     )
 }
 
-const ButtonOpen = styled(MildButton)`
-    background-color: ${(p) => p.theme.accentBackgroundColor};
-    color: ${(p) => p.theme.secondTextColor};
+const ButtonOpen = styled(MildButton)<{ $error: boolean }>`
+    background-color: ${(p) =>
+        p.$error
+            ? p.theme.primaryColors.danger
+            : p.theme.accentBackgroundColor};
+    color: ${(p) => (p.$error ? p.theme.white : p.theme.secondTextColor)};
     width: 100%;
     padding: 0.5em 0.75em;
     border-radius: 16px;
