@@ -1,17 +1,28 @@
 import { useEffect } from "react"
 
-import { useClientLocale } from "./clientSettings"
+import { useClientLocale } from "@utils/clientSettings"
 
-import i18n, { type i18n as i18nType } from "i18next"
-import Backend, { type HttpBackendOptions } from "i18next-http-backend"
+import i18n, { type CustomTypeOptions, type i18n as i18nType } from "i18next"
+import resourcesToBackend from "i18next-resources-to-backend"
 import { initReactI18next } from "react-i18next"
 
+type TranslationLanguage = "en" | "ko"
+
 i18n.use(initReactI18next) // passes i18n down to react-i18next
-    .use(Backend)
-    .init<HttpBackendOptions>({
-        fallbackLng: "en", // language to use, more information here: https://www.i18next.com/overview/configuration-options#languages-namespaces-resources
+    .use(
+        resourcesToBackend(
+            (
+                language: TranslationLanguage,
+                namespace: keyof CustomTypeOptions["resources"],
+            ) => import(`@assets/locales/${language}/${namespace}.json`),
+        ),
+    )
+    .init({
+        // language to use, more information here: https://www.i18next.com/overview/configuration-options#languages-namespaces-resources
+        fallbackLng: "en",
         interpolation: {
-            escapeValue: false, // react already safes from xss
+            // react already safes from xss
+            escapeValue: false,
         },
     })
 
