@@ -1,8 +1,4 @@
-import client, {
-    clearUserCredentials,
-    setCurrentUsername,
-    setToken,
-} from "@api/client"
+import client, { setCurrentUsername, setToken } from "@api/client"
 import { deleteSubscription } from "@api/notifications.api"
 
 import { getClientSettings } from "@utils/clientSettings"
@@ -142,7 +138,7 @@ export const signOut = async () => {
         // ignore error
     }
 
-    clearUserCredentials()
+    localStorage.clear()
     window.location = "/"
 
     return null // this function is being used as 'loader'

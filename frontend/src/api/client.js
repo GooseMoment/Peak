@@ -33,12 +33,6 @@ export const setCurrentUsername = (username) => {
     return localStorage.setItem("username", username)
 }
 
-export const clearUserCredentials = () => {
-    setToken(null)
-    setCurrentUsername(null)
-    setClientSettingsByName("push_notification_subscription", null)
-}
-
 const client = axios.create({
     baseURL: baseURL,
     withCredentials: true,
