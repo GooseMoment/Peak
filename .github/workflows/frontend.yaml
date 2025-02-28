@@ -71,7 +71,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Compare ${{ matrix.file }}
-        working-directory: ./frontend/public/locales
+        working-directory: ./frontend/src/assets/locales
         run: npx compare-json ./ko/${{ matrix.file }}.json ./en/${{ matrix.file }}.json
   build:
     runs-on: ubuntu-latest
