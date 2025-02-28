@@ -1,10 +1,10 @@
-import { HTMLProps } from "react"
+import { type InputHTMLAttributes } from "react"
 
 import styled, { css } from "styled-components"
 
 import FeatherIcon, { type FeatherIconName } from "feather-icons-react"
 
-interface InputProp extends HTMLProps<HTMLInputElement> {
+interface InputProp extends InputHTMLAttributes<HTMLInputElement> {
     icon?: FeatherIconName
 }
 
