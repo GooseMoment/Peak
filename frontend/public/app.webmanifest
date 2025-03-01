@@ -1,4 +1,5 @@
 {
+    "$schema": "https://json.schemastore.org/web-manifest-combined.json",
     "name": "Peak",
     "short_name": "Peak",
     "description": "Pick, Peek, Peck, and Peak.",
