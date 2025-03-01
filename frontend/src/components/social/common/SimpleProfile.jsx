@@ -36,7 +36,7 @@ const ProfileImgWrapper = styled.div`
     align-items: center;
 
     & svg {
-        stroke: 0.5em;
+        stroke: 3px;
     }
 
     & img,

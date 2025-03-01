@@ -55,6 +55,7 @@ const SocialFollowingPage = () => {
                             />
                         </CalendarWrapper>
                     )}
+                    
                     {dailyLogs && (
                         <LogsPreview
                             logs={dailyLogs}
@@ -80,19 +81,22 @@ const SocialFollowingPage = () => {
 }
 
 const Wrapper = styled.div`
-    max-width: 60rem;
+    width: 90%;
 
     display: flex;
     justify-content: space-between;
 
     ${ifMobile} {
+        width: 100%;
+
         flex-direction: column;
     }
 `
 
 const Container = styled.div`
-    width: 35%;
+    width: 40%;
     min-width: 22.5rem;
+    max-width: 28rem;
     margin-bottom: auto;
 
     padding: 0 1em 0;
@@ -117,11 +121,12 @@ const Container = styled.div`
 `
 
 const StickyContainer = styled(Container)`
-    position: sticky;
     top: 2.5rem;
+    margin-left: auto;
     gap: 0rem;
+    position: sticky;
     flex-grow: 1;
-    max-width: 28rem;
+    max-width: 30rem;
 `
 
 const CalendarWrapper = styled.div`
