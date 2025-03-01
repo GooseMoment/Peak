@@ -10,14 +10,7 @@ import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import { getPaletteColor } from "@assets/palettes"
 
-import { DateTime } from "luxon"
-import { useTranslation } from "react-i18next"
-
-const putEllipsis = (text, maxLength) => {
-    return text.length > maxLength
-        ? text.substring(0, maxLength - 3) + "..."
-        : text
-}
+import FeatherIcon from "feather-icons-react"
 
 const LogPreviewBox = ({
     log,
@@ -49,47 +42,57 @@ const LogPreviewBox = ({
     }
 
     const boxColor =
-        getProjectColor(theme.type, log?.header_color) || theme.grey
+        getPaletteColor(theme.type, log?.header_color) || theme.grey
 
     return (
-        <Frame
+        <Box
             $isMe={log.username === me}
             $bgColor={boxColor}
             $isSelected={log.username === selectedUser}
+            $isMobile={isMobile}
             onClick={handleSelect}>
-            <FrameRow>
-                <ProfileWrapper $isMe={log.username === me}>
-                    <SimpleProfile user={log} />
-                </ProfileWrapper>
-            </FrameRow>
-            <Username>@{log.username}</Username>
-            
-            <SimpleStats>
-                <StatsUnit>
-                    <StatusIconWrapper $type={"completedTask"}>
-                        <FeatherIcon icon="check" />
-                    </StatusIconWrapper>
-                    <StatusCount>12</StatusCount>
-                </StatsUnit>
-                <StatsUnit>
-                    <StatusIconWrapper $type={"reaction"}>
-                        <FeatherIcon icon="heart" />
-                    </StatusIconWrapper>
-                    <StatusCount>12</StatusCount>
-                </StatsUnit>
-            </SimpleStats>
-        </Frame>
+                <FrameRow>
+                    <ProfileWrapper $isMe={log.username === me}>
+                        <SimpleProfile user={log} />
+                    </ProfileWrapper>
+                </FrameRow>
+                <Username>@{log.username}</Username>
+
+                <SimpleStats>
+                    <StatsUnit>
+                        <StatusIconWrapper $type={"completedTask"}>
+                            <FeatherIcon icon="check" />
+                        </StatusIconWrapper>
+                        <StatusCount>12</StatusCount>
+                    </StatsUnit>
+                    <StatsUnit>
+                        <StatusIconWrapper $type={"reaction"}>
+                            <FeatherIcon icon="heart" />
+                        </StatusIconWrapper>
+                        <StatusCount>12</StatusCount>
+                    </StatsUnit>
+                </SimpleStats>
+        </Box>
     )
 }
 
-const Frame = styled.div`
+const Box = styled.div`
+    box-sizing: border-box;
     /* xa : xa/k     xb = 0.47xa */
     /* xb : xb/1.1  xb/1.1 = xa/k*/
-    aspect-ratio: ${(props) => (props.$isMe ? 1.1 / 0.45 : 1.1)};
-    width: ${(props) => (props.$isMe ? 100 : 45)}%;
+    aspect-ratio: ${(props) => (props.$isMe ? 1.0 / 0.45 : 1.0)};
+    ${(props) =>
+        props.$isMe
+            ? css`
+                  width: 100%;
+              `
+            : css`
+                  width: calc(50% - 0.5em);
+              `}
+    padding: max(7.5%, 16px);
 
+    background-color: ${(props) => props.$bgColor};
     border-radius: 16px;
-    box-sizing: border-box;
     ${(props) =>
         props.$isSelected &&
         css`
@@ -97,14 +100,14 @@ const Frame = styled.div`
                 0 0 0 0.15em ${(p) => p.theme.backgroundColor},
                 0 0 0 0.3em ${(p) => p.theme.textColor} !important;
         `}
-    background-color: ${(props) => props.$bgColor};
-    padding: 1.5em 1.2em 1.2em 1.2em;
 
     display: flex;
     flex-direction: column;
-    row-gap: 0.1em;
+    align-content: space-between;
+    justify-content: center;
+    gap: 0.7em;
 
-    transition: all 0.5s ease;
+    transition: all 0.25s ease;
 
     &:hover {
         box-shadow:
@@ -113,8 +116,9 @@ const Frame = styled.div`
     }
 
     ${ifMobile} {
-        aspect-ratio: ${(props) => (props.$isMe ? 1 / 0.45 : 1)};
-        padding: 1em;
+        &:hover {
+            box-shadow: none;
+        }
     }
 `
 
@@ -125,36 +129,26 @@ const FrameRow = styled.div`
 
 const ProfileWrapper = styled.div`
     aspect-ratio: 1;
-    max-width: 2.1rem;
-
-    ${(props) =>
-        props.$isMe
-            ? css`
-                  /* ((100% + padding) * box_width - padding) * width */
-                  width: calc(((100% + 2.4em) * 0.45 - 2.4em) * 0.5);
-              `
-            : css`
-                  width: 50%;
-              `}
+    min-width: 50px;
+    width: 50px;
 
     ${ifMobile} {
-        max-width: 3.2rem;
+        max-width: 50px;
     }
 `
 
 const Username = styled.div`
     /* display: inline; */
-    line-height: 1.3em;
+    font-size: 1.1em;
     overflow-x: clip;
     text-overflow: ellipsis;
 
-    font-size: 1.1em;
     text-align: left;
     white-space: nowrap;
 `
 
 const SimpleStats = styled.div`
-    flex-grow: 1;
+    height: 20px;
 
     display: flex;
     flex-direction: row;
@@ -170,8 +164,10 @@ const StatsUnit = styled.div`
 `
 
 const StatusIconWrapper = styled.div`
+    box-sizing: border-box;
     aspect-ratio: 1;
-    width: 1.2em;
+    width: 18px;
+    padding: 0;
 
     ${(props) =>
         props.$type === "completedTask" &&
@@ -182,15 +178,16 @@ const StatusIconWrapper = styled.div`
 
     display: flex;
     justify-content: center;
+    align-items: center;
 
     & svg {
-        aspect-ratio: 1;
-        width: ${(props) => (props.$type === "completedTask" ? 83 : 100)}%;
         top: 0;
-        margin: 0.1em 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
 
         stroke: ${(p) => p.theme.black};
-        stroke-width: 0.2em;
+        stroke-width: 3px;
         ${(props) =>
             props.$type === "reaction" &&
             css`
@@ -200,15 +197,8 @@ const StatusIconWrapper = styled.div`
 `
 
 const StatusCount = styled.div`
-    line-height: 1.2em;
     overflow-x: clip;
     text-overflow: ellipsis;
-
-    font-size: 1.1em;
-
-    ${ifMobile} {
-        font-size: 1em;
-    }
 `
 
 export default LogPreviewBox

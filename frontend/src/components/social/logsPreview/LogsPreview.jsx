@@ -44,16 +44,16 @@ const LogsPreview = ({ logs, selectedUser, setSelectedUser, selectedDate }) => {
 }
 
 const LogsPreviewContainer = styled.div`
+    width: 100%;
     min-width: auto;
     max-width: 25rem;
-    width: 100%;
     margin: 0 auto;
 
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
-    row-gap: 1.2em;
+    row-gap: 1em;
 `
 
 export default LogsPreview

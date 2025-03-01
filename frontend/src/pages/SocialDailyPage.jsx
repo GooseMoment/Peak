@@ -6,6 +6,7 @@ import styled from "styled-components"
 
 import PageBack from "@components/common/PageBack"
 import PageTitle from "@components/common/PageTitle"
+import DateBar from "@components/social/common/DateBar"
 import SimpleProfile from "@components/social/common/SimpleProfile"
 import LogDetails from "@components/social/logDetails/LogDetails"
 
@@ -50,9 +51,15 @@ const SocialDailyPage = () => {
                 </ProfileWrapper>
             </Header>
 
+            <DateBar
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+            />
+
             <LogDetails
                 username={username.slice(1)}
                 selectedDate={selectedDate}
+                needProfile={false}
             />
         </Frame>
     )
@@ -86,7 +93,8 @@ const UsernameTitle = styled(PageTitle)`
 `
 
 const ProfileWrapper = styled.div`
-    width: 20%;
+    width: 50px;
+    /* width: 4em; */
 `
 
 export default SocialDailyPage
