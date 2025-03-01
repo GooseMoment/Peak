@@ -1,6 +1,10 @@
 /// <reference lib="webworker" />
+import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching"
 
 declare const self: ServiceWorkerGlobalScope
+
+cleanupOutdatedCaches()
+precacheAndRoute(self.__WB_MANIFEST)
 
 self.addEventListener("push", function (event) {
     const data = event.data?.json()

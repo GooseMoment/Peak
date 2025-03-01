@@ -1,6 +1,7 @@
 import react from "@vitejs/plugin-react"
 import path from "path"
 import { defineConfig } from "vite"
+import { VitePWA } from "vite-plugin-pwa"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,7 +11,19 @@ export default defineConfig({
         port: 3000,
         host: "0.0.0.0",
     },
-    plugins: [react()],
+    plugins: [
+        react(),
+        VitePWA({
+            registerType: "prompt",
+            manifest: false,
+            strategies: "injectManifest",
+            srcDir: "src",
+            filename: "sw.ts",
+            devOptions: {
+                enabled: true,
+            },
+        }),
+    ],
     resolve: {
         alias: [
             { find: "@", replacement: path.resolve(__dirname, "src") },
