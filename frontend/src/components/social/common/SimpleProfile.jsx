@@ -1,6 +1,6 @@
 import { styled } from "styled-components"
 
-const SimpleProfile = ({ user, showUsername=false }) => {
+const SimpleProfile = ({ user, showUsername = false }) => {
     return user && showUsername ? (
         <Profile>
             <ProfileImgWrapper $ratio={75}>
@@ -8,14 +8,14 @@ const SimpleProfile = ({ user, showUsername=false }) => {
             </ProfileImgWrapper>
             <Username>@{user?.username}</Username>
         </Profile>
-    ) :  (
+    ) : (
         <ProfileImgWrapper $ratio={100}>
             <img src={user?.profile_img} />
         </ProfileImgWrapper>
     )
 }
 
-const Profile = styled.div`    
+const Profile = styled.div`
     height: 5em;
     width: 5em;
 
@@ -27,7 +27,7 @@ const Profile = styled.div`
 
 const ProfileImgWrapper = styled.div`
     aspect-ratio: 1;
-    width: ${props => props.$ratio}%;
+    width: ${(props) => props.$ratio}%;
 
     border-radius: 100%;
 

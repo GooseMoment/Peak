@@ -51,27 +51,27 @@ const LogPreviewBox = ({
             $isSelected={log.username === selectedUser}
             $isMobile={isMobile}
             onClick={handleSelect}>
-                <FrameRow>
-                    <ProfileWrapper $isMe={log.username === me}>
-                        <SimpleProfile user={log} />
-                    </ProfileWrapper>
-                </FrameRow>
-                <Username>@{log.username}</Username>
+            <FrameRow>
+                <ProfileWrapper $isMe={log.username === me}>
+                    <SimpleProfile user={log} />
+                </ProfileWrapper>
+            </FrameRow>
+            <Username>@{log.username}</Username>
 
-                <SimpleStats>
-                    <StatsUnit>
-                        <StatusIconWrapper $type={"completedTask"}>
-                            <FeatherIcon icon="check" />
-                        </StatusIconWrapper>
-                        <StatusCount>12</StatusCount>
-                    </StatsUnit>
-                    <StatsUnit>
-                        <StatusIconWrapper $type={"reaction"}>
-                            <FeatherIcon icon="heart" />
-                        </StatusIconWrapper>
-                        <StatusCount>12</StatusCount>
-                    </StatsUnit>
-                </SimpleStats>
+            <SimpleStats>
+                <StatsUnit>
+                    <StatusIconWrapper $type={"completedTask"}>
+                        <FeatherIcon icon="check" />
+                    </StatusIconWrapper>
+                    <StatusCount>12</StatusCount>
+                </StatsUnit>
+                <StatsUnit>
+                    <StatusIconWrapper $type={"reaction"}>
+                        <FeatherIcon icon="heart" />
+                    </StatusIconWrapper>
+                    <StatusCount>12</StatusCount>
+                </StatsUnit>
+            </SimpleStats>
         </Box>
     )
 }

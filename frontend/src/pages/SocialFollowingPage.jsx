@@ -55,7 +55,7 @@ const SocialFollowingPage = () => {
                             />
                         </CalendarWrapper>
                     )}
-                    
+
                     {dailyLogs && (
                         <LogsPreview
                             logs={dailyLogs}
