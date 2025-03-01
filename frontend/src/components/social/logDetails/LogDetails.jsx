@@ -25,7 +25,7 @@ import { ImpressionArea } from "@toss/impression-area"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const LogDetails = ({ pageType = "following", username, selectedDate }) => {
+const LogDetails = ({ pageType = "following", username, selectedDate, needProfile = true }) => {
     const { t } = useTranslation("", { keyPrefix: "social.log_details" })
     const theme = useTheme()
 
@@ -86,6 +86,7 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
                             user={quote.user}
                             quote={quote}
                             saveQuote={saveQuote || null}
+                            needProfile={needProfile}
                         />
                         {pageType === "following" ? (
                             quote?.id && (
