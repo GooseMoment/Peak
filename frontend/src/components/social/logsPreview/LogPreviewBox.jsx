@@ -17,7 +17,7 @@ const LogPreviewBox = ({
     selectedUser,
     setSelectedUser,
     selectedDate,
-    pageType = "following",
+    // pageType = "following",
 }) => {
     const theme = useTheme()
     const { isMobile } = useScreenType()
@@ -30,9 +30,9 @@ const LogPreviewBox = ({
     // TODO: explore feed용 view 추가하면 삭제
     const initial_date = new Date()
     initial_date.setHours(0, 0, 0, 0)
-    const tempSelectedDate = initial_date.toISOString()
+    // const tempSelectedDate = initial_date.toISOString()
 
-    const handleSelect = (e) => {
+    const handleSelect = () => {
         setSelectedUser(log.username === selectedUser ? null : log.username)
 
         if (isMobile)
