@@ -13,24 +13,19 @@ self.addEventListener("push", function (event) {
     }
 })
 
-self.addEventListener("notificationclick", function (event) {
+self.addEventListener("notificationclick", async function (event) {
     const url = event.notification.data?.click_url
 
-    event.waitUntil(
-        self.clients.matchAll({ type: "window" }).then((clients) => {
-            if (clients.length > 0) {
-                for (let i = 0; i < clients.length; i++) {
-                    if (clients[i].url.includes("/notifications")) {
-                        clients[i].navigate(url)
-                        clients[i].focus()
-                        return
-                    }
-                }
-            }
+    const matchedClients = await self.clients.matchAll({ type: "window" })
+    for (const client of matchedClients) {
+        if (client.url.includes("/notifications")) {
+            client.navigate(url)
+            client.focus()
+            return
+        }
+    }
 
-            self.clients.openWindow(url)
-        }),
-    )
+    self.clients.openWindow(url)
 })
 
 // https://github.com/microsoft/TypeScript/issues/14877#issuecomment-402743582
