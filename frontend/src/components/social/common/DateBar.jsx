@@ -117,7 +117,7 @@ const CalendarWrapper = styled.div`
     max-width: 35rem;
 
     ${ifMobile} {
-        min-width: 20rem;
+        min-width: 310px;
 
         font-size: 0.9em;
     }
