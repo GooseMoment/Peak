@@ -37,7 +37,7 @@ const AddTask = () => {
         <Module>
             <Title>{t("title")}</Title>
             <ButtonOpen onClick={onClick} $error={inboxQuery.isError}>
-                <div>{t(inboxQuery.isError ? "error" : "tap_to_open")}</div>{" "}
+                <div>{t(inboxQuery.isError ? "error" : "tap_to_open")}</div>
                 <PlusCircle />
             </ButtonOpen>
             {isOpen && inboxQuery.isLoading && <ModalLoader />}
