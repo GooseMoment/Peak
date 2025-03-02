@@ -248,7 +248,7 @@ body {
         width: calc(100dvw - 2em) !important;
     }
 
-    .Toastify__toast--stacked[data-pos=bot].Toastify__toast--stacked:before {
+    .Toastify__toast--stacked[data-pos="bot"].Toastify__toast--stacked:before {
         bottom: calc(max(env(safe-area-inset-bottom), 10px) + 6.5em) !important;
     }
 
