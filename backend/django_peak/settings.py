@@ -158,6 +158,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = [
     "users.auth.UserBackend",
     "users.auth.UserTOTPBackend",
+    "users.auth.AdminBackend",
 ]
 
 # CSRF
