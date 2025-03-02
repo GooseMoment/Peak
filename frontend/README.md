@@ -30,7 +30,7 @@ pnpm dev
     - `queries/`: react-query 관련
     - `utils/`: 유틸성 함수
     - `routers/`: 라우터 관련
-    - `main.jsx`: 소스코드 시작 부분
+    - `main.tsx`: 엔트리포인트
 
 ## PWA
 
