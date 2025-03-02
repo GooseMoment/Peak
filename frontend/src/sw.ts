@@ -6,6 +6,17 @@ declare const self: ServiceWorkerGlobalScope
 cleanupOutdatedCaches()
 precacheAndRoute(self.__WB_MANIFEST)
 
+self.addEventListener("message", (event) => {
+    if (event.data && event.data.type === "SKIP_WAITING") {
+        // immediately update the SW
+        self.skipWaiting()
+    }
+})
+
+self.addEventListener("activate", (event) => {
+    event.waitUntil(self.clients.claim())
+})
+
 self.addEventListener("push", function (event) {
     const data = event.data?.json()
     if (data) {
