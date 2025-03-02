@@ -1,8 +1,12 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import Error from "@components/settings/Error"
-import Section, { Description, Name, Value } from "@components/settings/Section"
+import Section, {
+    Description,
+    Name,
+    Value,
+    ValueError,
+} from "@components/settings/Section"
 import UnblockButton from "@components/settings/UnblockButton"
 import ListUserProfile from "@components/users/ListUserProfile"
 
@@ -19,6 +23,7 @@ const Blocks = () => {
         isFetching,
         isFetchingNextPage,
         hasNextPage,
+        refetch,
         fetchNextPage,
         isError,
     } = useInfiniteQuery({
@@ -32,15 +37,11 @@ const Blocks = () => {
 
     const { t } = useTranslation("settings", { keyPrefix: "blocks" })
 
-    if (isError) {
-        return <Error />
-    }
-
     return (
-        <>
-            <Section>
-                <Name>{t("blockees.name")}</Name>
-                <Description>{t("blockees.description")}</Description>
+        <Section>
+            <Name>{t("blockees.name")}</Name>
+            <Description>{t("blockees.description")}</Description>
+            {!isError ? (
                 <Value>
                     {isFetching &&
                         !isFetchingNextPage &&
@@ -63,8 +64,10 @@ const Blocks = () => {
                         </ImpressionArea>
                     )}
                 </Value>
-            </Section>
-        </>
+            ) : (
+                <ValueError onClickRetry={refetch} />
+            )}
+        </Section>
     )
 }
 

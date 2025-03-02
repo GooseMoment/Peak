@@ -7,9 +7,8 @@ import Button, { ButtonGroup } from "@components/common/Button"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import ModalWindow from "@components/common/ModalWindow"
 import Color from "@components/project/edit/Color"
-import Error from "@components/settings/Error"
 import ProfileImg from "@components/settings/ProfileImg"
-import Section, { Name, Value } from "@components/settings/Section"
+import Section, { Name, Value, ValueError } from "@components/settings/Section"
 import Input from "@components/sign/Input"
 
 import { getMe, patchUser } from "@api/users.api"
@@ -33,9 +32,10 @@ const Profile = () => {
         data: user,
         isPending,
         isError,
+        refetch,
     } = useQuery({
         queryKey: ["users", "me"],
-        queryFn: () => getMe(),
+        queryFn: getMe,
     })
 
     const [headerColor, setHeaderColor] = useState({
@@ -79,7 +79,11 @@ const Profile = () => {
     }
 
     if (isError) {
-        return <Error />
+        return (
+            <Section>
+                <ValueError onClickRetry={refetch} />
+            </Section>
+        )
     }
 
     return (

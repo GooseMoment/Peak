@@ -1,6 +1,7 @@
 {
     "error": {
-        "text": "Something went wrong."
+        "text": "Failed to load the data of this section.",
+        "retry": "Retry"
     },
     "menus": {
         "title": "Settings",
@@ -62,22 +63,28 @@
             "password_change_error": "Error occured while changing password."
         },
         "totp": {
-            "name": "Two-Factor Authentication: One-Time Passcode",
-            "description": "Using one-time passcode(TOTP) enhances security.",
+            "name": "Two-Factor Authentication: Time-based One-Time Passcode",
+            "description": "This adds additional security to your account more than just a password to sign in.",
             "activated_at": "Activated at {{date}}",
             "enable": "Enable",
             "edit": "Edit",
             "delete": "Delete",
-            "ask_delete": "Delete the one-time passcode authentication?",
-            "qrcode_description": "Scan this QR code with your preferred authentication app. Enter the numbers from the app below to complete TOTP registration.",
-            "secret_manual": "Or, you can enter the secret code manually:",
+            "ask_delete": "Delete the One-Time Passcode?",
+            "qrcode_description": "Scan this QR code with your preferred authentication app.",
+            "cannot_scan": "Can't scan the QR code?",
+            "secret_manual": "Instead of scanning the QR code, you can enter the secret code(aka setup key) manually.",
             "copy_success": "Copied the secret code to the clipboard.",
+            "enter_code": "Enter the numbers from the app below to complete.",
             "input_placeholder": "6-digit code",
             "enter": "Enter",
             "cancel": "Cancel",
-            "register_success": "Two-factor authentication is enabled.",
-            "delete_success": "Disabled two-factor authentication.",
-            "wrong_code": "Wrong code. Please try again."
+            "enter_6_digit": "Enter 6 digits.",
+            "register_success": "One-Time Passcode is enabled.",
+            "register_error": "Failed to enable. Try again.",
+            "delete_success": "Disabled One-Time Passcode.",
+            "delete_error": "Failed to delete. Try again.",
+            "expired": "The QR code was expired. Try again.",
+            "wrong_code": "Wrong code. Try again."
         }
     },
     "privacy": {
