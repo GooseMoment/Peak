@@ -58,7 +58,7 @@ const Prompt = ({ onClickUpdate, onClickIgnore }: PromptProp) => {
 
     return (
         <PromptBox>
-            <p>{t("update.message")}</p>
+            <Message>{t("update.message")}</Message>
             <ButtonWrapper>
                 <Button onClick={onClickIgnore}>{t("update.no")}</Button>
                 <Button onClick={onClickUpdate}>{t("update.yes")}</Button>
@@ -74,12 +74,18 @@ const PromptBox = styled.div`
     width: 100%;
 `
 
+const Message = styled.p`
+    word-break: keep-all;
+`
+
 const ButtonWrapper = styled.div`
     display: flex;
 `
 
 const Button = styled(MildButton)`
     text-decoration: underline;
-    padding: 0.5em;
     font-weight: 600;
+    word-break: keep-all;
+
+    padding: 0.5em;
 `
