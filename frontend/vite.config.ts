@@ -19,10 +19,6 @@ export default defineConfig({
             strategies: "injectManifest",
             srcDir: "src",
             filename: "sw.ts",
-            devOptions: {
-                enabled: true,
-                type: "module",
-            },
         }),
     ],
     resolve: {
