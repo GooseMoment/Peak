@@ -5,7 +5,9 @@
     "description": "Pick, Peek, Peck, and Peak.",
     "theme_color": "#ff4a03",
     "background_color": "#ffffff",
-    "start_url": "/",
+    "start_url": "/app",
+    "id": "/",
+    "scope": "/",
     "display": "standalone",
     "orientation": "portrait",
     "icons": [
@@ -41,22 +43,22 @@
     "shortcuts:": [
         {
             "name": "Notifications",
-            "url": "http://localhost:8080/app/notifications",
+            "url": "/app/notifications",
             "short_name": "Noti"
         },
         {
             "name": "Today",
-            "url": "http://localhost:8080/app/today",
+            "url": "/app/today",
             "short_name": "Today"
         },
         {
             "name": "Social",
-            "url": "http://localhost:8080/app/social/following",
+            "url": "/app/social/following",
             "short_name": "Social"
         },
         {
             "name": "Projects",
-            "url": "http://localhost:8080/app/projects/",
+            "url": "/app/projects/",
             "short_name": "Projects"
         }
     ]
