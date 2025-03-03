@@ -27,16 +27,22 @@ self.addEventListener("push", function (event) {
 self.addEventListener("notificationclick", async function (event) {
     const url = event.notification.data?.click_url
 
-    const matchedClients = await self.clients.matchAll({ type: "window" })
-    for (const client of matchedClients) {
-        if (client.url.includes("/notifications")) {
-            client.navigate(url)
-            client.focus()
-            return
+    const openWindow = async () => {
+        const matchedClients = await self.clients.matchAll({ type: "window" })
+        for (const client of matchedClients) {
+            // client.url is a full url e.g. http://localhost:8080/app/notifications?active=all
+            if (client.url.includes("/app/notifications")) {
+                client.navigate(url)
+                client.focus()
+                return
+            }
         }
+
+        await self.clients.openWindow(url)
     }
 
-    self.clients.openWindow(url)
+    // clients.openWindow throws InvalidAccess without waitUntil
+    event.waitUntil(openWindow())
 })
 
 // https://github.com/microsoft/TypeScript/issues/14877#issuecomment-402743582
