@@ -53,8 +53,12 @@ const Prompt = ({ onClickUpdate, onClickIgnore }: PromptProp) => {
         <PromptBox>
             <Message>{t("update.message")}</Message>
             <ButtonWrapper>
-                <Button onClick={onClickIgnore}>{t("update.no")}</Button>
-                <Button onClick={onClickUpdate}>{t("update.yes")}</Button>
+                <IgnoreButton onClick={onClickIgnore}>
+                    {t("update.no")}
+                </IgnoreButton>
+                <UpdateButton onClick={onClickUpdate}>
+                    {t("update.yes")}
+                </UpdateButton>
             </ButtonWrapper>
         </PromptBox>
     )
@@ -69,16 +73,29 @@ const PromptBox = styled.div`
 
 const Message = styled.p`
     word-break: keep-all;
+    user-select: none;
+    -webkit-user-select: none;
 `
 
 const ButtonWrapper = styled.div`
     display: flex;
+    gap: 0.5em;
 `
 
-const Button = styled(MildButton)`
-    text-decoration: underline;
+const UpdateButton = styled(MildButton)`
     font-weight: 600;
     word-break: keep-all;
+    padding: 0.35em 0.65em;
 
-    padding: 0.5em;
+    background-color: ${(p) => p.theme.thirdBackgroundColor};
+
+    border: 1px solid ${(p) => p.theme.textColor};
+    border-radius: 8px;
+`
+
+const IgnoreButton = styled(UpdateButton)`
+    color: ${(p) => p.theme.secondTextColor};
+    border-color: ${(p) => p.theme.secondTextColor};
+    background-color: transparent;
+    font-weight: normal;
 `
