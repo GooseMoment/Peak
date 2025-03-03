@@ -401,7 +401,7 @@
     },
     "update": {
         "message": "New update available.",
-        "yes": "Update",
-        "no": "Later"
+        "update": "Update",
+        "later": "Later"
     }
 }

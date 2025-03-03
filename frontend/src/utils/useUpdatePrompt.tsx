@@ -29,7 +29,7 @@ export default function useUpdatePrompt() {
             <Suspense key="use-update-prompt" fallback={null}>
                 <Prompt
                     onClickUpdate={() => updateServiceWorker()}
-                    onClickIgnore={() => setNeedRefresh(false)}
+                    onClickLater={() => setNeedRefresh(false)}
                 />
             </Suspense>,
             {
@@ -43,21 +43,21 @@ export default function useUpdatePrompt() {
 
 interface PromptProp {
     onClickUpdate: () => void
-    onClickIgnore: () => void
+    onClickLater: () => void
 }
 
-const Prompt = ({ onClickUpdate, onClickIgnore }: PromptProp) => {
+const Prompt = ({ onClickUpdate, onClickLater }: PromptProp) => {
     const { t } = useTranslation("translation")
 
     return (
         <PromptBox>
             <Message>{t("update.message")}</Message>
             <ButtonWrapper>
-                <IgnoreButton onClick={onClickIgnore}>
-                    {t("update.no")}
-                </IgnoreButton>
+                <LaterButton onClick={onClickLater}>
+                    {t("update.later")}
+                </LaterButton>
                 <UpdateButton onClick={onClickUpdate}>
-                    {t("update.yes")}
+                    {t("update.update")}
                 </UpdateButton>
             </ButtonWrapper>
         </PromptBox>
@@ -93,7 +93,7 @@ const UpdateButton = styled(MildButton)`
     border-radius: 8px;
 `
 
-const IgnoreButton = styled(UpdateButton)`
+const LaterButton = styled(UpdateButton)`
     color: ${(p) => p.theme.secondTextColor};
     border-color: ${(p) => p.theme.secondTextColor};
     background-color: transparent;
