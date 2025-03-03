@@ -402,6 +402,6 @@
     "update": {
         "message": "New update available.",
         "yes": "Update",
-        "no": "Not now"
+        "no": "Later"
     }
 }
