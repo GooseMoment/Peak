@@ -87,8 +87,8 @@ const UpdateButton = styled(MildButton)`
     word-break: keep-all;
     padding: 0.35em 0.65em;
 
+    color: ${(p) => p.theme.textColor};
     background-color: ${(p) => p.theme.thirdBackgroundColor};
-
     border: 1px solid ${(p) => p.theme.textColor};
     border-radius: 8px;
 `
