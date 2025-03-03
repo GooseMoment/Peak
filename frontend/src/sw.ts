@@ -24,7 +24,7 @@ self.addEventListener("push", function (event) {
     }
 })
 
-self.addEventListener("notificationclick", async function (event) {
+self.addEventListener("notificationclick", function (event) {
     const url = event.notification.data?.click_url
 
     const openWindow = async () => {
