@@ -3,7 +3,6 @@
         "alwaysStrict": true,
         "allowJs": true,
         "baseUrl": ".",
-        "composite": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "outDir": "dist",
