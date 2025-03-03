@@ -11,32 +11,25 @@ import { useRegisterSW } from "virtual:pwa-register/react"
 export default function useUpdatePrompt() {
     const toastID = useRef<null | Id>(null)
     const {
-        needRefresh: [needRefresh],
+        needRefresh: [needRefresh, setNeedRefresh],
         updateServiceWorker,
-    } = useRegisterSW({
-        onOfflineReady() {
-            toast.info("app ready to work offline!")
-        },
-    })
-
-    const hide = () => {
-        if (!toastID.current) {
-            return
-        }
-
-        toast.dismiss(toastID.current)
-    }
+    } = useRegisterSW()
 
     useEffect(() => {
         if (!needRefresh) {
+            if (toastID.current) {
+                toast.dismiss(toastID.current)
+                toastID.current = null
+            }
+
             return
         }
 
-        toastID.current = toast.info(
+        toastID.current = toast(
             <Suspense key="use-update-prompt" fallback={null}>
                 <Prompt
                     onClickUpdate={() => updateServiceWorker()}
-                    onClickIgnore={hide}
+                    onClickIgnore={() => setNeedRefresh(false)}
                 />
             </Suspense>,
             {
