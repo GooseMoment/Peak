@@ -6,6 +6,17 @@ declare const self: ServiceWorkerGlobalScope
 cleanupOutdatedCaches()
 precacheAndRoute(self.__WB_MANIFEST)
 
+// This listener sends requests heading to the API server including
+// credentials (e.g. the 'Authorization' header)
+// Safari seems to send redirected requests omitting
+// the Authorization header without this event listener
+self.addEventListener("fetch", function (event) {
+    const url = new URL(event.request.url)
+    if (url.origin === import.meta.env.VITE_API_BASEURL) {
+        event.respondWith(fetch(event.request, { credentials: "include" }))
+    }
+})
+
 self.addEventListener("message", function (event) {
     if (event.data && event.data.type === "SKIP_WAITING") {
         // immediately update the SW
