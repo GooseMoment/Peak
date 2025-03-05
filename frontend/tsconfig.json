@@ -3,6 +3,7 @@
         "alwaysStrict": true,
         "allowJs": true,
         "baseUrl": ".",
+        "composite": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "outDir": "dist",
@@ -25,7 +26,7 @@
         "target": "ES2016",
         "jsx": "react-jsx"
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "src/**/*.json"],
     "exclude": ["**/dist/*", "**/public/*"],
     "typeAcquisition": {
         "enable": true
