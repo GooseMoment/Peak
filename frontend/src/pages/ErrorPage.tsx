@@ -25,7 +25,7 @@ const ErrorPage = ({ is404 = false }: ErrorPageProp) => {
             code={t("unknown_error_code")}
             text={t("unknown_error_text")}
             error={error}>
-            <Link reloadDocument to="/app/home/">
+            <Link reloadDocument to="/app/">
                 {t("unknown_error_bottom")}
             </Link>
         </ErrorLayout>
