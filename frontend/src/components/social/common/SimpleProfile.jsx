@@ -1,13 +1,17 @@
-import { css, styled } from "styled-components"
+import { styled } from "styled-components"
 
-const SimpleProfile = ({ user, ringColor }) => {
-    return (
+const SimpleProfile = ({ user, showUsername = false }) => {
+    return user && showUsername ? (
         <Profile>
-            <ProfileImgWrapper $color={ringColor}>
-                <img src={user.profile_img} />
+            <ProfileImgWrapper $ratio={75}>
+                <img src={user?.profile_img} />
             </ProfileImgWrapper>
-            <Username>@{user.username}</Username>
+            <Username>@{user?.username}</Username>
         </Profile>
+    ) : (
+        <ProfileImgWrapper $ratio={100}>
+            <img src={user?.profile_img} />
+        </ProfileImgWrapper>
     )
 }
 
@@ -23,29 +27,23 @@ const Profile = styled.div`
 
 const ProfileImgWrapper = styled.div`
     aspect-ratio: 1;
-    width: 3.7em;
+    width: ${(props) => props.$ratio}%;
 
     border-radius: 100%;
-    ${(props) =>
-        props.$color
-            ? css`
-                  outline: solid 0.2em ${(props) => props.$color};
-              `
-            : null}
 
     display: flex;
     justify-content: center;
     align-items: center;
 
     & svg {
-        stroke: 0.5em;
+        stroke: 3px;
     }
 
     & img,
     & svg {
         border-radius: 100%;
         aspect-ratio: 1;
-        width: ${(props) => (props.$color ? 3.3 : 3.5)}em;
+        width: 100%;
     }
 `
 
