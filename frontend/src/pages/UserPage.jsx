@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
 
-import Error from "@components/errors/ErrorLayout"
+import ErrorLayout from "@components/errors/ErrorLayout"
 import Bio from "@components/users/Bio"
 import ProjectList from "@components/users/ProjectList"
 import Requests from "@components/users/Requests"
@@ -54,7 +54,11 @@ const UserPage = () => {
 
     if (userError) {
         return (
-            <Error height="100%" code="404" text={t("error_user_not_found")} />
+            <ErrorLayout
+                height="100%"
+                code="404"
+                text={t("error_user_not_found")}
+            />
         )
     }
 

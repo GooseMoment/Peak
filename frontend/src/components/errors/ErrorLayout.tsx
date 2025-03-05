@@ -1,22 +1,24 @@
-import { Link } from "react-router-dom"
+import type { ReactNode } from "react"
 
 import styled from "styled-components"
+
+import { ifMobile } from "@utils/useScreenType"
 
 import RoadSign from "@assets/errors/RoadSign"
 
 export interface ErrorProp {
     code: string
     text?: string
-    bottomText?: string
-    bottomLinkTo?: string
+    error?: Error
     height?: string
+    children?: ReactNode
 }
 
 const ErrorLayout = ({
     code,
     text,
-    bottomText,
-    bottomLinkTo,
+    error,
+    children,
     height = "100dvh",
 }: ErrorProp) => {
     return (
@@ -25,13 +27,13 @@ const ErrorLayout = ({
                 <RoadSign text={code} />
                 <Text>{text}</Text>
             </Main>
-            <BottomText>
-                {bottomLinkTo ? (
-                    <Link to={bottomLinkTo}>{bottomText}</Link>
-                ) : (
-                    bottomText
-                )}
-            </BottomText>
+            <ChildrenWrapper>{children}</ChildrenWrapper>
+            {error && (
+                <ErrorMessage>
+                    <ErrorType>{error.name} </ErrorType>
+                    {error.message}
+                </ErrorMessage>
+            )}
         </Container>
     )
 }
@@ -56,7 +58,7 @@ const Main = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 5em;
+    gap: 2.5em;
 `
 
 const Text = styled.h1`
@@ -64,7 +66,23 @@ const Text = styled.h1`
     font-weight: bold;
 `
 
-const BottomText = styled.div`
+const ErrorMessage = styled.div`
+    overflow-x: auto;
+    padding: 0.75em;
+    background-color: ${(p) => p.theme.thirdBackgroundColor};
+    max-width: 500px;
+    line-height: 1.2;
+
+    ${ifMobile} {
+        max-width: 300px;
+    }
+`
+
+const ErrorType = styled.span`
+    font-weight: 600;
+`
+
+const ChildrenWrapper = styled.div`
     font-size: 1em;
 `
 
