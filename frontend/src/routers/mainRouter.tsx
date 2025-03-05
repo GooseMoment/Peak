@@ -1,5 +1,10 @@
 import { Suspense, lazy } from "react"
-import { Outlet, createBrowserRouter, redirect } from "react-router-dom"
+import {
+    Outlet,
+    type RouteObject,
+    createBrowserRouter,
+    redirect,
+} from "react-router-dom"
 
 import settingsChildren from "@routers/settingsChildren"
 import signChildren from "@routers/signChildren"
@@ -56,7 +61,7 @@ const redirectIfSignedIn = () => {
  * 세 가지 다 특징이 있으니, 적합하게 사용하자
  */
 
-const routes = [
+const routes: RouteObject[] = [
     {
         path: "/",
         errorElement: <ErrorPage />,
@@ -98,8 +103,8 @@ const routes = [
         },
         loader: async () => {
             if (!getToken()) {
-                window.location = "/"
                 // The function 'redirect' can't be used here; redirect("/") redirects to "/app/".
+                window.location.replace("/")
             }
 
             return null
