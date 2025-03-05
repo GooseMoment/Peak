@@ -4,14 +4,21 @@ import styled from "styled-components"
 
 import RoadSign from "@assets/errors/RoadSign"
 
-const Error = ({
+export interface ErrorProp {
+    code: string
+    text?: string
+    bottomText?: string
+    bottomLinkTo?: string
+    height?: string
+}
+
+const ErrorLayout = ({
     code,
     text,
     bottomText,
     bottomLinkTo,
-    bottomA = false,
     height = "100dvh",
-}) => {
+}: ErrorProp) => {
     return (
         <Container $height={height}>
             <Main>
@@ -20,11 +27,7 @@ const Error = ({
             </Main>
             <BottomText>
                 {bottomLinkTo ? (
-                    bottomA ? (
-                        <a href={bottomLinkTo}>{bottomText}</a>
-                    ) : (
-                        <Link to={bottomLinkTo}>{bottomText}</Link>
-                    )
+                    <Link to={bottomLinkTo}>{bottomText}</Link>
                 ) : (
                     bottomText
                 )}
@@ -33,7 +36,7 @@ const Error = ({
     )
 }
 
-const Container = styled.div`
+const Container = styled.div<{ $height: string }>`
     width: 100%;
     height: ${(p) => p.$height};
     padding: 5em 0;
@@ -65,4 +68,4 @@ const BottomText = styled.div`
     font-size: 1em;
 `
 
-export default Error
+export default ErrorLayout
