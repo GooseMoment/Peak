@@ -63,6 +63,10 @@ const redirectIfSignedIn = () => {
 
 const routes: RouteObject[] = [
     {
+        path: "*",
+        element: <ErrorPage is404 />,
+    },
+    {
         path: "/",
         errorElement: <ErrorPage />,
         loader: redirectIfSignedIn,
