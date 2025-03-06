@@ -1,5 +1,6 @@
-import { Link, useRouteError } from "react-router-dom"
+import { Link, useNavigate, useRouteError } from "react-router-dom"
 
+import MildButton from "@components/common/MildButton"
 import ErrorLayout from "@components/errors/ErrorLayout"
 
 import { useTranslation } from "react-i18next"
@@ -11,11 +12,14 @@ interface ErrorPageProp {
 const ErrorPage = ({ is404 = false }: ErrorPageProp) => {
     const error = useRouteError() as Error
     const { t } = useTranslation("translation", { keyPrefix: "error-page" })
+    const navigate = useNavigate()
 
     if (is404) {
         return (
             <ErrorLayout code="404" text={t("404_error_text")}>
-                <Link to="..">{t("404_error_bottom")}</Link>
+                <MildButton onClick={() => navigate(-1)}>
+                    {t("404_error_bottom")}
+                </MildButton>
             </ErrorLayout>
         )
     }
