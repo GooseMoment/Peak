@@ -3,7 +3,7 @@ import {
     setClientSettingsByName,
 } from "@utils/clientSettings"
 
-import axios from "axios"
+import axios, { type AxiosError } from "axios"
 
 const baseURL = import.meta.env.VITE_API_BASEURL
 
@@ -16,8 +16,8 @@ export const getToken = () => {
     return token
 }
 
-export const setToken = (token) => {
-    return localStorage.setItem("token", token)
+export const setToken = (token: string | null) => {
+    return localStorage.setItem("token", token || "null")
 }
 
 export const getCurrentUsername = () => {
@@ -29,8 +29,8 @@ export const getCurrentUsername = () => {
     return token
 }
 
-export const setCurrentUsername = (username) => {
-    return localStorage.setItem("username", username)
+export const setCurrentUsername = (username: string | null) => {
+    return localStorage.setItem("username", username || "null")
 }
 
 export const clearUserCredentials = () => {
@@ -67,10 +67,10 @@ client.interceptors.request.use(
 
 client.interceptors.response.use(
     (res) => res,
-    (err) => {
+    (err: AxiosError) => {
         if (err.response && err.response.status === 401) {
             clearUserCredentials()
-            window.location = "/sign/in?flag=401"
+            window.location.href = "/sign/in?flag=401"
             return
         }
         throw err
