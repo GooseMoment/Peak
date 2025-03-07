@@ -12,7 +12,7 @@ import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
 import { getPaletteColor } from "@assets/palettes"
-import { skeletonBreathingCSS } from "@assets/skeleton"
+import { skeletonBreathingCSS, skeletonCSS } from "@assets/skeleton"
 
 import { useTranslation } from "react-i18next"
 
@@ -32,20 +32,12 @@ const UserProfileHeader = ({
     const { t } = useTranslation("translation", { keyPrefix: "users" })
     const theme = useTheme()
 
-    const followButton = isMine ? (
-        <Link to="/app/settings/profile">
-            <Button>{t("button_edit_profile")}</Button>
-        </Link>
-    ) : (
-        <FollowButton disabled={!user} user={user} />
-    )
-
     if (!user || isLoading) {
         return (
             <>
                 <Banner $headerColor={getPaletteColor(theme.type, "grey")} />
                 <Profile>
-                    <ProfileImgEmpty />
+                    <ProfileImgSkeleton />
                     <ProfileTexts>
                         <Names>
                             <DisplayName $loading />
@@ -60,6 +52,14 @@ const UserProfileHeader = ({
         )
     }
 
+    const followButton = isMine ? (
+        <Link to="/app/settings/profile">
+            <Button>{t("button_edit_profile")}</Button>
+        </Link>
+    ) : (
+        <FollowButton disabled={!user} user={user} />
+    )
+
     return (
         <>
             <Banner
@@ -72,15 +72,13 @@ const UserProfileHeader = ({
                 {followButton}
             </Banner>
             <Profile>
-                <ProfileImg src={user?.profile_img} />
+                <ProfileImg src={user.profile_img} />
                 <ProfileTexts>
                     <Names>
-                        <DisplayName $loading={isLoading}>
+                        <DisplayName>
                             {user.display_name || user.username}
                         </DisplayName>
-                        <Username $loading={isLoading}>
-                            {"@" + user.username}
-                        </Username>
+                        <Username>{"@" + user.username}</Username>
                     </Names>
                     <Datas>
                         <FollowsCount user={user} />
@@ -141,14 +139,12 @@ const Profile = styled.div`
     }
 `
 
-const ProfileImg = styled.img`
+const ProfileImgStyle = css`
     background-color: ${(p) => p.theme.thirdBackgroundColor};
 
     border-radius: 50%;
     height: 10em;
     aspect-ratio: 1/1;
-
-    transition: opcity 0.5s ${cubicBeizer};
 
     ${ifTablet} {
         height: 8em;
@@ -156,19 +152,14 @@ const ProfileImg = styled.img`
     }
 `
 
-const ProfileImgEmpty = styled.div`
-    background-color: ${(p) => p.theme.thirdBackgroundColor};
+const ProfileImg = styled.img`
+    ${ProfileImgStyle}
+    transition: opcity 0.5s ${cubicBeizer};
+`
 
-    border-radius: 50%;
-    height: 10em;
-    aspect-ratio: 1/1;
-
+const ProfileImgSkeleton = styled.div`
+    ${ProfileImgStyle}
     ${skeletonBreathingCSS}
-
-    ${ifTablet} {
-        height: 8em;
-        width: 8em;
-    }
 `
 
 const ProfileTexts = styled.div`
@@ -219,6 +210,7 @@ const DisplayName = styled.h1<{ $loading?: boolean }>`
         css`
             height: 1em;
             width: 5em;
+            ${skeletonCSS()}
         `}
 `
 
@@ -230,6 +222,8 @@ const Username = styled.div<{ $loading?: boolean }>`
         css`
             height: 1em;
             width: 5em;
+            margin-left: -10px;
+            ${skeletonCSS()}
         `}
 `
 
