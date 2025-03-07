@@ -4,12 +4,11 @@ import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
+import Input from "@components/common/Input"
 import Section, { Name, Value } from "@components/settings/Section"
-import Input from "@components/sign/Input"
 
 import { patchPassword } from "@api/users.api"
 
-import { Key, RotateCw } from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -72,7 +71,7 @@ const PasswordSection = () => {
             <Value>
                 <PasswordChangeForm onSubmit={changePassword}>
                     <Input
-                        icon={<Key />}
+                        icon="key"
                         name="password"
                         type="password"
                         placeholder={t("current_password")}
@@ -82,7 +81,7 @@ const PasswordSection = () => {
                         onChange={(e) => setCurrentPassword(e.target.value)}
                     />
                     <Input
-                        icon={<Key />}
+                        icon="key"
                         name="new_password"
                         type="password"
                         placeholder={t("new_password")}
@@ -92,7 +91,7 @@ const PasswordSection = () => {
                         onChange={(e) => setNewPassword(e.target.value)}
                     />
                     <Input
-                        icon={<RotateCw />}
+                        icon="rotate-cw"
                         name="new_password_again"
                         type="password"
                         autoComplete="new-password"
