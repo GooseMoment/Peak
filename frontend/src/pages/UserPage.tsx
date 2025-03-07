@@ -21,12 +21,13 @@ const UserPage = () => {
     const { username: usernameWithAt } = useParams()
 
     useEffect(() => {
-        if (usernameWithAt.at(0) !== "@") {
+        if (usernameWithAt!.at(0) !== "@") {
             navigate("/app/users/@" + usernameWithAt)
         }
     }, [usernameWithAt])
 
-    const username = usernameWithAt.slice(1)
+    // usernameWithAt shouldn't be undefined
+    const username = usernameWithAt!.slice(1)
     const currentUsername = getCurrentUsername()
     const isMine = currentUsername === username
 
@@ -38,19 +39,19 @@ const UserPage = () => {
 
     const {
         data: user,
-        isPending: userPending,
+        isLoading: userLoading,
         isError: userError,
     } = useQuery({
         queryKey: ["users", username],
         queryFn: () => getUserByUsername(username),
     })
 
-    const { data: projects, isPending: projectPending } = useQuery({
+    const { data: projects, isLoading: projectLoading } = useQuery({
         queryKey: ["userProjects", username],
         queryFn: () => getProjectListByUser(username),
     })
 
-    const { t } = useTranslation(null, { keyPrefix: "users" })
+    const { t } = useTranslation("translation", { keyPrefix: "users" })
 
     if (userError) {
         return (
@@ -63,16 +64,16 @@ const UserPage = () => {
             <UserProfileHeader
                 user={user}
                 followingYou={followingYou}
-                isPending={userPending}
+                isLoading={userLoading}
                 isMine={isMine}
             />
             {user && followingYou?.status === "requested" && (
                 <Requests user={user} />
             )}
-            <Bio bio={user?.bio} isPending={userPending} isMine={isMine} />
+            <Bio bio={user?.bio} isLoading={userLoading} isMine={isMine} />
             <ProjectList
                 projects={projects}
-                isPending={projectPending}
+                isLoading={projectLoading}
                 isMine={isMine}
             />
         </>

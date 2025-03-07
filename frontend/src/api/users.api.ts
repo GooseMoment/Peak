@@ -1,5 +1,7 @@
 import client, { getCurrentUsername, setCurrentUsername } from "@api/client"
 
+import { type PaletteColorName } from "@assets/palettes"
+
 export interface User {
     username: string
     display_name: string
@@ -8,7 +10,7 @@ export interface User {
     profile_img: string
     bio: string
     email: string
-    header_color: string
+    header_color: PaletteColorName
     is_me: boolean
 }
 

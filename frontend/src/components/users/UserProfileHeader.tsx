@@ -6,6 +6,8 @@ import Button from "@components/common/Button"
 import FollowButton from "@components/users/FollowButton"
 import FollowsCount from "@components/users/FollowsCount"
 
+import { type User } from "@api/users.api"
+
 import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
@@ -14,8 +16,20 @@ import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import { useTranslation } from "react-i18next"
 
-const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
-    const { t } = useTranslation(null, { keyPrefix: "users" })
+interface UserProfileHeaderProp {
+    user?: User
+    followingYou: { status: "accepted" } // TODO: replace object to Following
+    isMine: boolean
+    isLoading: boolean
+}
+
+const UserProfileHeader = ({
+    user,
+    followingYou,
+    isMine,
+    isLoading,
+}: UserProfileHeaderProp) => {
+    const { t } = useTranslation("translation", { keyPrefix: "users" })
     const theme = useTheme()
 
     const followButton = isMine ? (
@@ -26,10 +40,30 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
         <FollowButton disabled={!user} user={user} />
     )
 
+    if (!user || isLoading) {
+        return (
+            <>
+                <Banner $headerColor={getPaletteColor(theme.type, "grey")} />
+                <Profile>
+                    <ProfileImgEmpty />
+                    <ProfileTexts>
+                        <Names>
+                            <DisplayName $loading />
+                            <Username $loading />
+                        </Names>
+                        <Datas>
+                            <FollowsCount isLoading />
+                        </Datas>
+                    </ProfileTexts>
+                </Profile>
+            </>
+        )
+    }
+
     return (
         <>
             <Banner
-                $headerColor={getPaletteColor(theme.type, user?.header_color)}>
+                $headerColor={getPaletteColor(theme.type, user.header_color)}>
                 {followingYou?.status === "accepted" ? (
                     <FollowsYou>{t("follows_you")}</FollowsYou>
                 ) : (
@@ -38,19 +72,18 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
                 {followButton}
             </Banner>
             <Profile>
-                <ProfileImg $display={!isPending} src={user?.profile_img} />
-                <ProfileImgEmpty $display={isPending} />
+                <ProfileImg src={user?.profile_img} />
                 <ProfileTexts>
                     <Names>
-                        <DisplayName $skeleton={isPending}>
-                            {user?.display_name || user?.username}
+                        <DisplayName $loading={isLoading}>
+                            {user.display_name || user.username}
                         </DisplayName>
-                        <Username $skeleton={isPending}>
-                            {user && "@" + user.username}
+                        <Username $loading={isLoading}>
+                            {"@" + user.username}
                         </Username>
                     </Names>
                     <Datas>
-                        <FollowsCount user={user} isPending={isPending} />
+                        <FollowsCount user={user} />
                     </Datas>
                 </ProfileTexts>
             </Profile>
@@ -58,7 +91,7 @@ const UserProfileHeader = ({ user, followingYou, isMine, isPending }) => {
     )
 }
 
-const Banner = styled.div`
+const Banner = styled.div<{ $headerColor: string }>`
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -115,9 +148,6 @@ const ProfileImg = styled.img`
     height: 10em;
     aspect-ratio: 1/1;
 
-    display: ${(p) => (p.$display ? "unset" : "none")};
-    opacity: ${(p) => (p.$display ? 1 : 0)};
-
     transition: opcity 0.5s ${cubicBeizer};
 
     ${ifTablet} {
@@ -132,8 +162,6 @@ const ProfileImgEmpty = styled.div`
     border-radius: 50%;
     height: 10em;
     aspect-ratio: 1/1;
-
-    display: ${(p) => (p.$display ? "unset" : "none")};
 
     ${skeletonBreathingCSS}
 
@@ -163,7 +191,7 @@ const Names = styled.div`
     gap: 0.5em;
 `
 
-const DisplayName = styled.h1`
+const DisplayName = styled.h1<{ $loading?: boolean }>`
     color: ${(p) => p.theme.textColor};
     text-shadow: none;
 
@@ -187,18 +215,18 @@ const DisplayName = styled.h1`
     }
 
     ${(p) =>
-        p.$skeleton &&
+        p.$loading &&
         css`
             height: 1em;
             width: 5em;
         `}
 `
 
-const Username = styled.div`
+const Username = styled.div<{ $loading?: boolean }>`
     color: ${(p) => p.theme.textColor};
 
     ${(p) =>
-        p.$skeleton &&
+        p.$loading &&
         css`
             height: 1em;
             width: 5em;
