@@ -276,7 +276,7 @@
         "error_unfollow": "Failed to unfollow @{{username}}.",
         "error_cancel": "Failed to cancel a follow request to @{{username}}.",
         "cancel_accepted": "Unfollow @{{username}}?",
-        "button_sure": "Sure"
+        "button_unfollow": "Unfollow"
     },
     "error-page": {
         "unknown_error_code": "X_X",

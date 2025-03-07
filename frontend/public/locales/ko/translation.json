@@ -276,7 +276,7 @@
         "error_unfollow": "@{{username}} 님을 언팔로우 하지 못했습니다.",
         "error_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소하지 못했습니다.",
         "cancel_accepted": "@{{username}} 님을 언팔로우 할까요?",
-        "button_sure": "네"
+        "button_unfollow": "언팔로우"
     },
     "error-page": {
         "unknown_error_code": "ㅠ_ㅠ",
