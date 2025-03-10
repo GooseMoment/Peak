@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { type ReactNode, useEffect, useState } from "react"
 
 import styled, { css } from "styled-components"
 
@@ -11,10 +11,16 @@ import { cubicBeizer, slideDown, slideUp } from "@assets/keyframes"
 import { createPortal } from "react-dom"
 import { useTranslation } from "react-i18next"
 
-const el = document.querySelector("#confirmation")
+const el = document.querySelector("#confirmation")!
 
-const Confirmation = ({ question, buttons, onClose }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.delete" })
+interface ConfirmationProp {
+    question: string
+    buttons: ("close" | ReactNode)[]
+    onClose: () => void
+}
+
+const Confirmation = ({ question, buttons, onClose }: ConfirmationProp) => {
+    const { t } = useTranslation("translation")
 
     const [visible, setVisible] = useState(true)
     const [closing, setClosing] = useState(false)
@@ -29,7 +35,7 @@ const Confirmation = ({ question, buttons, onClose }) => {
         }
     }, [])
 
-    const handleOutsideClick = (e) => {
+    const handleOutsideClick = (e: Event) => {
         if (e.target !== el) {
             return
         }
@@ -50,13 +56,15 @@ const Confirmation = ({ question, buttons, onClose }) => {
 
     return createPortal(
         visible && (
-            <Frame $closing={closing} className={closing && "closing"}>
+            <Frame
+                $closing={closing}
+                className={closing ? "closing" : undefined}>
                 <Question>{question}</Question>
-                <ButtonGroup>
+                <ButtonGroup $margin="none" $justifyContent="">
                     {buttons?.map((button) =>
                         button === "close" ? (
                             <Button key="close" onClick={closeWithDelay}>
-                                {t("button_done")}
+                                {t("common.button_no")}
                             </Button>
                         ) : (
                             button
@@ -69,7 +77,7 @@ const Confirmation = ({ question, buttons, onClose }) => {
     )
 }
 
-const Frame = styled.div`
+const Frame = styled.div<{ $closing?: boolean }>`
     height: fit-content;
     width: fit-content;
 

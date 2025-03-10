@@ -69,7 +69,6 @@
         "delete": {
             "display": "삭제",
             "button_delete": "삭제",
-            "button_done": "닫기",
             "alert_project_title": "\"{{project_name}}\" 프로젝트를",
             "alert_drawer_title": "\"{{drawer_name}}\" 서랍을",
             "alert_question": "{{title}} 삭제하시겠습니까?",
@@ -252,6 +251,7 @@
         "projects": "프로젝트",
         "projects_empty": "프로젝트가 없습니다.",
         "button_edit_profile": "프로필 수정",
+        "button_block": "차단하기",
         "error_user_not_found": "찾을 수 없는 유저입니다.",
         "followings_list": {
             "title": "@{{username}} 님의 팔로잉 목록",
@@ -397,5 +397,8 @@
             "memo": "메모"
         },
         "no_result": "조건에 맞는 결과를 찾을 수 없습니다 🤔"
+    },
+    "common": {
+        "button_no": "아니요"
     }
 }
