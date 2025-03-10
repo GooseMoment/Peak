@@ -201,7 +201,6 @@ const Security = () => {
                             loading={totpMut.isPending}>
                             {t("totp.delete")}
                         </Button>,
-                        "close",
                     ]}
                     onClose={() => setTOTPConfirmationOpen(false)}
                 />

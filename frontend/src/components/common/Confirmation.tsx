@@ -15,11 +15,17 @@ const el = document.querySelector("#confirmation")!
 
 interface ConfirmationProp {
     question: string
-    buttons: ("close" | ReactNode)[]
+    buttons: ReactNode[]
+    hideButtonNo?: boolean
     onClose: () => void
 }
 
-const Confirmation = ({ question, buttons, onClose }: ConfirmationProp) => {
+const Confirmation = ({
+    question,
+    buttons,
+    hideButtonNo = false,
+    onClose,
+}: ConfirmationProp) => {
     const { t } = useTranslation("translation")
 
     const [visible, setVisible] = useState(true)
@@ -61,15 +67,12 @@ const Confirmation = ({ question, buttons, onClose }: ConfirmationProp) => {
                 className={closing ? "closing" : undefined}>
                 <Question>{question}</Question>
                 <ButtonGroup $margin="none" $justifyContent="">
-                    {buttons?.map((button) =>
-                        button === "close" ? (
-                            <Button key="close" onClick={closeWithDelay}>
-                                {t("common.button_no")}
-                            </Button>
-                        ) : (
-                            button
-                        ),
+                    {!hideButtonNo && (
+                        <Button key="no" onClick={closeWithDelay}>
+                            {t("common.button_no")}
+                        </Button>
                     )}
+                    {buttons}
                 </ButtonGroup>
             </Frame>
         ),

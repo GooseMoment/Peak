@@ -132,7 +132,6 @@ const FollowButton = ({ user, disabled = false }: FollowButtonProp) => {
                         username: user.username,
                     })}
                     buttons={[
-                        "close",
                         <Button
                             key="confirm"
                             onClick={handleConfirmation}
