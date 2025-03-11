@@ -8,3 +8,11 @@ export interface Following {
     updated_at: string
     deleted_at: string
 }
+
+export interface Block {
+    blocker: User
+    blockee: User
+    created_at: string
+    updated_at: string
+    deleted_at: string
+}
