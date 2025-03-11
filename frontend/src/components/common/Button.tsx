@@ -1,4 +1,4 @@
-import { ElementType, HTMLProps, ReactNode } from "react"
+import type { ButtonHTMLAttributes, ElementType, ReactNode } from "react"
 
 import styled from "styled-components"
 
@@ -11,7 +11,7 @@ import type { State } from "@assets/themes"
 
 type ButtonForm = "filled" | "outlined"
 
-export interface ButtonProp extends HTMLProps<HTMLButtonElement> {
+export interface ButtonProp extends ButtonHTMLAttributes<HTMLButtonElement> {
     form?: ButtonForm
     state?: State
     loading?: boolean
@@ -106,7 +106,7 @@ const OutlinedButton = styled(CommonButton)<StyledButtonProp>`
 
 const buttons: Record<
     ButtonForm,
-    ElementType<StyledButtonProp | HTMLProps<HTMLButtonElement>>
+    ElementType<StyledButtonProp | ButtonHTMLAttributes<HTMLButtonElement>>
 > = { filled: FilledButton, outlined: OutlinedButton }
 
 const ButtonLoader = styled(LoaderCircle)`

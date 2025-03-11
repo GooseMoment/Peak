@@ -137,7 +137,7 @@ export const TOTPAuthForm = () => {
             e?.preventDefault()
 
             if (totpCode.length < 6) {
-                return toast.error("Enter more than 6")
+                return toast.error(t("enter_6_digit"))
             }
 
             return authTOTP("totp", totpCode)
@@ -171,12 +171,14 @@ export const TOTPAuthForm = () => {
             <Form onSubmit={mut.mutate}>
                 <Input
                     icon="hash"
-                    name="totp_code"
                     value={totpCode}
                     onChange={onChange}
                     type="text"
+                    inputMode="numeric"
                     maxLength="6"
                     pattern="^\d{6}$"
+                    id="totp"
+                    name="totp"
                     autoComplete="one-time-code"
                     placeholder={t("6-digit_code")}
                     required

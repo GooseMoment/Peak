@@ -318,7 +318,7 @@
         "button_cancel": "Cancel",
         "button_email_authentication": "Email Authentication",
         "6-digit_code": "6-digit code",
-        "enter_6_digits": "Please enter 6 digits.",
+        "enter_6_digit": "Please enter 6 digits.",
         "session_invalid": "Please sign in again.",
         "try_count_exceed": "The try count for the authentication is exceeded. Please sign in again.",
         "wrong_code": "Wrong code. Please try again.",
