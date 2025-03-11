@@ -9,9 +9,6 @@ on:
 jobs:
   format:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        caddyfile: [Caddyfile, Caddyfile.prod]
     steps:
       - uses: actions/checkout@v4
       - name: Install Caddy from Github Releases
@@ -20,5 +17,7 @@ jobs:
         run: |
           gh release -R caddyserver/caddy download --pattern 'caddy_*_linux_amd64.tar.gz' -O - | sudo tar -xz caddy
           chmod +x caddy
-      - name: Run caddy fmt
-        run: ./caddy fmt --config ./web/${{ matrix.caddyfile }} > /dev/null
+      - name: Run caddy fmt for dev
+        run: ./caddy fmt --config ./web/caddy.dev/Caddyfile > /dev/null
+      - name: Run caddy fmt for prod
+        run: ./caddy fmt --config ./web/caddy.prod/Caddyfile > /dev/null

@@ -74,7 +74,6 @@ INSTALLED_APPS = [
     "announcements",
     "rest_framework",
     "corsheaders",
-    "dummies",
     "storages",
 ]
 
