@@ -1,12 +1,11 @@
-import { useEffect, useMemo, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Suspense, lazy, useEffect, useMemo, useState } from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
-import styled, { useTheme } from "styled-components"
+import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
-import ContextMenu from "@components/common/ContextMenu"
 import DeleteAlert from "@components/common/DeleteAlert"
+import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
@@ -18,7 +17,7 @@ import {
     SkeletonDrawer,
     SkeletonInboxDrawer,
 } from "@components/project/skeletons/SkeletonProjectPage"
-import SortMenuSelector from "@components/project/sorts/SortMenuSelector"
+import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 import DrawerTask from "@components/tasks/DrawerTask"
 
 import { deleteDrawer } from "@api/drawers.api"
@@ -34,27 +33,22 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const Drawer = ({ project, drawer, color }) => {
-    const theme = useTheme()
-    const navigate = useNavigate()
+const TaskCreateElement = lazy(
+    () => import("@components/project/taskDetails/TaskCreateElement"),
+)
 
+const Drawer = ({ project, drawer, color }) => {
     const [collapsed, setCollapsed] = useState(false)
     const [ordering, setOrdering] = useState(null)
-    const [isSortMenuOpen, setIsSortMenuOpen] = useState(false)
-    const [selectedSortMenuPosition, setSelectedSortMenuPosition] = useState({
-        top: 0,
-        left: 0,
-    })
-    const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+    const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
-    const [selectedContextPosition, setSelectedContextPosition] = useState({
-        top: 0,
-        left: 0,
-    })
     const [isDrawerEditOpen, setIsDrawerEditOpen] = useState(false)
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
+    const [isCreateOpen, setCreateOpen] = useState(false)
 
     const { t } = useTranslation(null, { keyPrefix: "project" })
+
+    const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
 
     const {
         data,
@@ -142,22 +136,6 @@ const Drawer = ({ project, drawer, color }) => {
         },
     })
 
-    const handleEdit = () => {
-        setIsContextMenuOpen(false)
-        setIsDrawerEditOpen(true)
-    }
-
-    const handleAlert = () => {
-        setIsContextMenuOpen(false)
-        setIsAlertOpen(true)
-    }
-
-    const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
-    const contextMenuItems = useMemo(
-        () => makeContextMenuItems(t, theme, handleEdit, handleAlert),
-        [t, theme],
-    )
-
     const handleToggleSimpleCreate = () => {
         setIsSimpleOpen((prev) => !prev)
     }
@@ -170,14 +148,7 @@ const Drawer = ({ project, drawer, color }) => {
     }
 
     const clickPlus = () => {
-        navigate(`/app/projects/${project.id}/tasks/create/`, {
-            state: {
-                project_id: project.id,
-                project_name: project.name,
-                drawer_id: drawer.id,
-                drawer_name: drawer.name,
-            },
-        })
+        setCreateOpen(true)
     }
 
     if (isLoading) {
@@ -208,78 +179,77 @@ const Drawer = ({ project, drawer, color }) => {
                         collapsed={collapsed}
                         handleCollapsed={handleCollapsed}
                         clickPlus={clickPlus}
-                        setIsSortMenuOpen={setIsSortMenuOpen}
-                        setSelectedSortMenuPosition={
-                            setSelectedSortMenuPosition
-                        }
-                        setIsContextMenuOpen={setIsContextMenuOpen}
-                        setSelectedContextPosition={setSelectedContextPosition}
+                        items={sortMenuItems}
+                        openSortMenuMobile={() => setSortMenuMobileOpen(true)}
+                        ordering={ordering}
+                        setOrdering={setOrdering}
+                        handleEdit={() => setIsDrawerEditOpen(true)}
+                        handleAlert={() => setIsAlertOpen(true)}
                     />
                 </DrawerBox>
             )}
             {collapsed ? null : (
-                <TaskList>
-                    {data?.pages?.map((group) =>
-                        group?.results?.map((task) => (
-                            <DrawerTask
-                                key={task.id}
-                                task={task}
-                                color={color}
-                                projectType={project.type}
-                            />
-                        )),
+                <>
+                    <TaskList>
+                        {data?.pages?.map((group) =>
+                            group?.results?.map((task) => (
+                                <DrawerTask
+                                    key={task.id}
+                                    task={task}
+                                    color={color}
+                                    projectType={project.type}
+                                />
+                            )),
+                        )}
+                    </TaskList>
+                    {isSimpleOpen && (
+                        <TaskCreateSimple
+                            projectID={project.id}
+                            projectName={project.name}
+                            drawerID={drawer.id}
+                            drawerName={drawer.name}
+                            color={color}
+                            onClose={() => setIsSimpleOpen(false)}
+                        />
                     )}
-                </TaskList>
+                    <TaskCreateButton onClick={handleToggleSimpleCreate}>
+                        {isSimpleOpen ? (
+                            <>
+                                <FeatherIcon icon="x-circle" />
+                                <TaskCreateText>
+                                    {t("button_close_add_task")}
+                                </TaskCreateText>
+                            </>
+                        ) : (
+                            <>
+                                <FeatherIcon icon="plus-circle" />
+                                <TaskCreateText>
+                                    {t("button_add_task")}
+                                </TaskCreateText>
+                            </>
+                        )}
+                    </TaskCreateButton>
+                    {hasNextPage ? (
+                        <ButtonGroup $justifyContent="center" $margin="1em">
+                            <MoreButton
+                                disabled={isFetchingNextPage}
+                                loading={isFetchingNextPage}
+                                onClick={() => fetchNextPage()}>
+                                {isLoading
+                                    ? t("loading")
+                                    : t("button_load_more")}
+                            </MoreButton>
+                        </ButtonGroup>
+                    ) : null}
+                </>
             )}
-            <TaskCreateButton onClick={handleToggleSimpleCreate}>
-                {isSimpleOpen ? (
-                    <>
-                        <FeatherIcon icon="x-circle" />
-                        <TaskCreateText>
-                            {t("button_close_add_task")}
-                        </TaskCreateText>
-                    </>
-                ) : (
-                    <>
-                        <FeatherIcon icon="plus-circle" />
-                        <TaskCreateText>{t("button_add_task")}</TaskCreateText>
-                    </>
-                )}
-            </TaskCreateButton>
-            {hasNextPage ? (
-                <ButtonGroup $justifyContent="center" $margin="1em">
-                    <MoreButton
-                        disabled={isFetchingNextPage}
-                        loading={isFetchingNextPage}
-                        onClick={() => fetchNextPage()}>
-                        {isLoading ? t("loading") : t("button_load_more")}
-                    </MoreButton>
-                </ButtonGroup>
-            ) : null}
-            {isSimpleOpen && (
-                <TaskCreateSimple
-                    projectID={project.id}
-                    projectName={project.name}
-                    drawerID={drawer.id}
-                    drawerName={drawer.name}
-                    color={color}
-                    onClose={() => setIsSimpleOpen(false)}
-                />
-            )}
-            {isSortMenuOpen && (
-                <SortMenuSelector
+            {isSortMenuMobileOpen && (
+                <SortMenuMobile
                     title={t("sort.task_title")}
                     items={sortMenuItems}
-                    selectedButtonPosition={selectedSortMenuPosition}
-                    onClose={() => setIsSortMenuOpen(false)}
+                    onClose={() => setSortMenuMobileOpen(false)}
                     ordering={ordering}
                     setOrdering={setOrdering}
-                />
-            )}
-            {isContextMenuOpen && (
-                <ContextMenu
-                    items={contextMenuItems}
-                    selectedButtonPosition={selectedContextPosition}
                 />
             )}
             {isAlertOpen && (
@@ -300,6 +270,16 @@ const Drawer = ({ project, drawer, color }) => {
                     }}>
                     <DrawerEdit projectID={project.id} drawer={drawer} />
                 </ModalWindow>
+            )}
+            {isCreateOpen && (
+                <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
+                    <TaskCreateElement
+                        onClose={() => setCreateOpen(false)}
+                        project={project}
+                        drawer={drawer}
+                        color={color}
+                    />
+                </Suspense>
             )}
         </>
     )
@@ -352,21 +332,6 @@ const makeSortMenuItems = (t) => [
     { display: t("sort.created_at"), context: "created_at" },
     { display: t("sort.-created_at"), context: "-created_at" },
     { display: t("sort.reminders"), context: "reminders" },
-]
-
-const makeContextMenuItems = (t, theme, handleEdit, handleAlert) => [
-    {
-        icon: "edit",
-        display: t("edit.display"),
-        color: theme.textColor,
-        func: handleEdit,
-    },
-    {
-        icon: "trash-2",
-        display: t("delete.display"),
-        color: theme.project.danger,
-        func: handleAlert,
-    },
 ]
 
 export default Drawer

@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import Module, { CenteredText, Title } from "@components/home/Module"
+import Module, { Center, CenteredText, Title } from "@components/home/Module"
 
 import { useTranslation } from "react-i18next"
 
@@ -8,26 +8,17 @@ const InstallPeak = () => {
     const { t } = useTranslation("home", { keyPrefix: "install_peak" })
 
     return (
-        <Module>
-            <Title to="/docs/install-instruction" underline>
+        <Module to="/docs/install-instruction">
+            <Title displayArrow underline>
                 {t("title")}
             </Title>
-            <IconWrapper>
+            <Center>
                 <AppIcon src="/logo.svg" draggable="false" />
-            </IconWrapper>
+            </Center>
             <CenteredText>{t("description")}</CenteredText>
         </Module>
     )
 }
-
-const IconWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-
-    width: 100%;
-
-    margin: 1em 0;
-`
 
 const AppIcon = styled.img`
     aspect-ratio: 1/1;

@@ -153,7 +153,7 @@ class Following(models.Model):  # Base 상속 시 id가 생기므로 models.Mode
         (CANCELED, "canceled by follower"),
     ]
 
-    status = models.CharField(choices=STATUS_TYPE)
+    status = models.CharField(choices=STATUS_TYPE, max_length=128)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
