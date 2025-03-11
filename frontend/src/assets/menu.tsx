@@ -26,7 +26,8 @@ export const MenuItem = styled(DefaultMenuItem)`
     }
 
     & svg {
-        margin-right: 10px;
-        margin-bottom: 3px;
+        top: 0;
+        bottom: 2px;
+        margin-right: 0.75em;
     }
 `
