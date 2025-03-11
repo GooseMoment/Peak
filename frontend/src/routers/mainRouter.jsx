@@ -26,9 +26,12 @@ const ProjectPage = lazy(() => import("@pages/ProjectPage"))
 const ProjectListPage = lazy(() => import("@pages/ProjectListPage"))
 const SettingsPage = lazy(() => import("@pages/SettingsPage"))
 
-const { SocialRedirector, SocialFollowingPage, SocialExplorePage } = lazily(
-    () => import("@pages/chunks/SocialPages"),
-)
+const {
+    SocialRedirector,
+    SocialFollowingPage,
+    SocialExplorePage,
+    SocialDailyPage,
+} = lazily(() => import("@pages/chunks/SocialPages"))
 
 const UserPage = lazy(() => import("@pages/UserPage"))
 
@@ -148,6 +151,10 @@ const routes = [
                     {
                         path: "explore",
                         element: <SocialExplorePage />,
+                    },
+                    {
+                        path: "daily/:username",
+                        element: <SocialDailyPage />,
                     },
                 ],
             },
