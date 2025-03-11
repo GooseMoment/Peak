@@ -5,6 +5,7 @@ import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import Confirmation from "@components/common/Confirmation"
+import Input from "@components/common/Input"
 import { LoaderCircleBold } from "@components/common/LoaderCircle"
 import Section, {
     Description,
@@ -12,14 +13,12 @@ import Section, {
     Value,
     ValueError,
 } from "@components/settings/Section"
-import Input from "@components/sign/Input"
 
 import { createTOTP, deleteTOTP, getTOTP, verifyTOTP } from "@api/auth.api"
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
 import type { AxiosError } from "axios"
-import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import QRCode from "qrcode"
 import { useTranslation } from "react-i18next"
@@ -213,10 +212,10 @@ const TOTPSection = () => {
                         </SecretCodeDetails>
                         <Text>{t("enter_code")}</Text>
                         <Input
-                            icon={<FeatherIcon icon="hash" />}
+                            icon="hash"
                             type="text"
                             inputMode="numeric"
-                            maxLength="6"
+                            maxLength={6}
                             pattern="^\d{6}$"
                             value={inputCode}
                             onChange={onChangeInput}
