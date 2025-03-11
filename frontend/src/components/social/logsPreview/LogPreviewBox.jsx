@@ -28,8 +28,8 @@ const LogPreviewBox = ({
     if (!log) return null
 
     // TODO: explore feed용 view 추가하면 삭제
-    const initial_date = new Date()
-    initial_date.setHours(0, 0, 0, 0)
+    const initialDate = new Date()
+    initialDate.setHours(0, 0, 0, 0)
     // const tempSelectedDate = initial_date.toISOString()
 
     const handleSelect = () => {
