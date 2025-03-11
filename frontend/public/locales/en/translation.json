@@ -252,6 +252,13 @@
         "projects_empty": "There are no projects.",
         "button_edit_profile": "Edit Profile",
         "button_block": "Block",
+        "button_unblock": "Unblock",
+        "confirmation_block": "Block @{{username}}?",
+        "confirmation_unblock": "Unblock @{{username}}?",
+        "success_block": "Blocked @{{username}}.",
+        "success_unblock": "Unblocked @{{username}}.",
+        "error_block": "Failed to block.",
+        "error_unblock": "Failed to unblock.",
         "error_user_not_found": "This user is not found.",
         "followings_list": {
             "title": "@{{username}}'s followings",

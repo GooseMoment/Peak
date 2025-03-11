@@ -11,7 +11,8 @@ import UserProfileHeader from "@components/users/UserProfileHeader"
 
 import { getCurrentUsername } from "@api/client"
 import { getProjectListByUser } from "@api/projects.api"
-import { getFollow } from "@api/social.api"
+import { type Block } from "@api/social"
+import { getBlock, getFollow } from "@api/social.api"
 import { getUserByUsername } from "@api/users.api"
 
 import { useTranslation } from "react-i18next"
@@ -31,9 +32,17 @@ const UserPage = () => {
     const currentUsername = getCurrentUsername()
     const isMine = currentUsername === username
 
-    const { data: followingYou } = useQuery({
+    const followingQuery = useQuery({
         queryKey: ["followings", username, currentUsername],
         queryFn: () => getFollow(username, currentUsername),
+        enabled: currentUsername !== username,
+    })
+
+    const blockQuery = useQuery<Block | null>({
+        queryKey: ["blocks", getCurrentUsername(), username],
+        queryFn() {
+            return getBlock(username)
+        },
         enabled: currentUsername !== username,
     })
 
@@ -63,11 +72,16 @@ const UserPage = () => {
         <>
             <UserProfileHeader
                 user={user}
-                followingYou={followingYou}
-                isLoading={userLoading}
+                followingYou={followingQuery.data}
+                block={blockQuery.data}
+                isLoading={
+                    userLoading ||
+                    followingQuery.isLoading ||
+                    blockQuery.isLoading
+                }
                 isMine={isMine}
             />
-            {user && followingYou?.status === "requested" && (
+            {user && followingQuery.data?.status === "requested" && (
                 <Requests user={user} />
             )}
             <Bio bio={user?.bio} isLoading={userLoading} isMine={isMine} />

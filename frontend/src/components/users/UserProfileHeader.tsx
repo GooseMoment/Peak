@@ -1,24 +1,35 @@
+import { useState } from "react"
 import { Link } from "react-router-dom"
 
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import styled, { css, useTheme } from "styled-components"
 
 import Button from "@components/common/Button"
+import Confirmation from "@components/common/Confirmation"
+import MildButton from "@components/common/MildButton"
 import FollowButton from "@components/users/FollowButton"
 import FollowsCount from "@components/users/FollowsCount"
 
+import type { Block, Following } from "@api/social"
+import { deleteBlock, putBlock } from "@api/social.api"
 import { type User } from "@api/users.api"
 
 import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
+import { Menu, MenuItem } from "@assets/menu"
 import { getPaletteColor } from "@assets/palettes"
 import { skeletonBreathingCSS, skeletonCSS } from "@assets/skeleton"
 
+import { getCurrentUsername } from "@/api/client"
+import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 interface UserProfileHeaderProp {
     user?: User
-    followingYou: { status: "accepted" } // TODO: replace object to Following
+    followingYou: Following // TODO: replace object to Following
+    block?: Block | null
     isMine: boolean
     isLoading: boolean
 }
@@ -26,11 +37,53 @@ interface UserProfileHeaderProp {
 const UserProfileHeader = ({
     user,
     followingYou,
+    block,
     isMine,
     isLoading,
 }: UserProfileHeaderProp) => {
     const { t } = useTranslation("translation", { keyPrefix: "users" })
     const theme = useTheme()
+    const client = useQueryClient()
+
+    const [isBlockConfirmationOpen, setBlockConfirmationOpen] = useState(false)
+
+    const closeConfirmation = () => {
+        setBlockConfirmationOpen(false)
+    }
+
+    const blockMut = useMutation<
+        Block | null,
+        Error,
+        { prev: boolean; user: User }
+    >({
+        mutationFn({ prev, user }) {
+            if (prev) {
+                return deleteBlock(user.username)
+            }
+            return putBlock(user.username)
+        },
+        onSuccess(_, { prev, user }) {
+            const currentUsername = getCurrentUsername()
+            client.invalidateQueries({ queryKey: ["blocks"] })
+            client.invalidateQueries({
+                queryKey: ["followings", currentUsername, user.username],
+            })
+            client.invalidateQueries({
+                queryKey: ["followings", user.username, currentUsername],
+            })
+            toast.success(
+                t(prev ? "success_unblock" : "success_block", {
+                    username: user.username,
+                }),
+            )
+        },
+        onError(_, { prev }) {
+            toast.error(t(prev ? "error_unblock" : "error_block"))
+        },
+        onSettled() {
+            closeConfirmation()
+        },
+    })
 
     if (!user || isLoading) {
         return (
@@ -52,14 +105,6 @@ const UserProfileHeader = ({
         )
     }
 
-    const followButton = isMine ? (
-        <Link to="/app/settings/profile">
-            <Button>{t("button_edit_profile")}</Button>
-        </Link>
-    ) : (
-        <FollowButton disabled={!user} user={user} />
-    )
-
     return (
         <>
             <Banner
@@ -69,7 +114,34 @@ const UserProfileHeader = ({
                 ) : (
                     <div />
                 )}
-                {followButton}
+                {isMine && (
+                    <Link to="/app/settings/profile">
+                        <Button>{t("button_edit_profile")}</Button>
+                    </Link>
+                )}
+                {!isMine && (
+                    <FollowButtonWrapper>
+                        <FollowButton user={user} />
+                        <Menu
+                            align="end"
+                            transition
+                            menuButton={
+                                <MildButton>
+                                    <FeatherIcon icon="more-horizontal" />
+                                </MildButton>
+                            }>
+                            <MenuItem
+                                onClick={() => setBlockConfirmationOpen(true)}>
+                                <FeatherIcon
+                                    icon={block ? "x-circle" : "slash"}
+                                />
+                                {block
+                                    ? t("button_unblock")
+                                    : t("button_block")}
+                            </MenuItem>
+                        </Menu>
+                    </FollowButtonWrapper>
+                )}
             </Banner>
             <Profile>
                 <ProfileImg src={user.profile_img} />
@@ -85,6 +157,29 @@ const UserProfileHeader = ({
                     </Datas>
                 </ProfileTexts>
             </Profile>
+            {isBlockConfirmationOpen && (
+                <Confirmation
+                    question={t(
+                        block ? "confirmation_unblock" : "confirmation_block",
+                        {
+                            username: user.username,
+                        },
+                    )}
+                    buttons={[
+                        <Button
+                            state="danger"
+                            key="block"
+                            loading={blockMut.isPending}
+                            disabled={blockMut.isPending}
+                            onClick={() =>
+                                blockMut.mutate({ prev: !!block, user })
+                            }>
+                            {block ? t("button_unblock") : t("button_block")}
+                        </Button>,
+                    ]}
+                    onClose={closeConfirmation}
+                />
+            )}
         </>
     )
 }
@@ -93,17 +188,18 @@ const Banner = styled.div<{ $headerColor: string }>`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    row-gap: 1em;
 
     box-sizing: border-box;
-    height: 5em;
     width: 100%;
+    height: 5em; // for loading state
 
     border-radius: 16px;
     margin-bottom: 2em;
     padding: 1em;
 
-    background-color: ${(p) =>
-        p.$headerColor ? p.$headerColor : p.theme.skeleton.defaultColor};
+    background-color: ${(p) => p.$headerColor};
     transition: background-color 0.25s ${cubicBeizer};
 `
 
@@ -121,6 +217,16 @@ const FollowsYou = styled.div`
     overflow-x: clip;
     white-space: nowrap;
     text-overflow: ellipsis;
+`
+
+const FollowButtonWrapper = styled.div`
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+
+    & svg {
+        color: ${(p) => p.theme.textColor};
+    }
 `
 
 const Profile = styled.div`
