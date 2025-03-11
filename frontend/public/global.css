@@ -253,7 +253,8 @@ body {
     }
 
     .Toastify__close-button {
-        margin: auto 10px;
+        margin-right: 10px;
+        top: unset;
     }
 }
 
