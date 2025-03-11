@@ -27,7 +27,7 @@ const Requests = ({ user }: RequestsProp) => {
         mutationFn: () => patchFollowRequest(user.username, true),
         onSuccess: (data) => {
             queryClient.setQueryData(
-                ["followings", currentUsername, user.username],
+                ["followings", user.username, currentUsername],
                 data,
             )
         },
