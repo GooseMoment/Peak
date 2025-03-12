@@ -1,0 +1,38 @@
+:8080 {
+	encode zstd gzip
+
+	log {
+		level info
+		format console
+	}
+
+	handle {
+		reverse_proxy host.docker.internal:3000
+	}
+
+	handle_errors 502 {
+		respond "Turn on the dev server."
+	}
+}
+
+:8888 {
+	handle_path /static/* {
+		root * /srv/django_static/static
+		file_server
+	}
+
+	@denied_admin not client_ip private_ranges {$ADMIN_ACCESS_ALLOWED_IP_RANGES}
+
+	handle /admin/* {
+		respond @denied_admin "Access Denied" 403
+		reverse_proxy api:8000
+	}
+
+	handle {
+		reverse_proxy api:8000
+	}
+
+	handle_errors 502 {
+		respond "Django does not respond."
+	}
+}
