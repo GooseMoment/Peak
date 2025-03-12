@@ -166,7 +166,4 @@ const dark: DefaultTheme = {
     toastTheme: "dark",
 }
 
-export default { system: null, light, dark } as Record<
-    "system" | LightDark,
-    DefaultTheme | null
->
+export default { light, dark } as Record<LightDark, DefaultTheme>

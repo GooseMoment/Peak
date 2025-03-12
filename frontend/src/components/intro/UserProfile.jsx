@@ -19,6 +19,10 @@ const Profile = styled.div`
     gap: 0.5em;
 
     align-items: center;
+
+    ${ifMobile} {
+        align-items: start;
+    }
 `
 
 const ProfileImgBorder = styled.div`

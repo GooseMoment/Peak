@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 import styled from "styled-components"
 
-import Button from "@components/common/Button"
+import Button, { ButtonGroup } from "@components/common/Button"
 import DemoCheer from "@components/intro/DemoCheer"
 import DemoDrawer from "@components/intro/DemoDrawer"
 import DemoPlan from "@components/intro/DemoPlan"
@@ -16,19 +16,31 @@ import Section, {
 import { SubGroup } from "@components/intro/SubSection"
 import Brand from "@components/sign/Brand"
 
+import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const IntroPage = () => {
     const { t } = useTranslation("intro")
 
+    const goToTop = () => {
+        window.scroll({
+            top: 0,
+            behavior: "smooth",
+        })
+    }
+
     return (
         <>
-            <Nav>
-                <Brand />
-                <Link to="/sign/in">
-                    <Button>{t("section_top.button_sign_in")}</Button>
-                </Link>
-            </Nav>
+            <NavContainer>
+                <Nav>
+                    <Brand />
+                    <Link to="/sign/in">
+                        <SignInButton>
+                            {t("section_top.button_sign_in")}
+                        </SignInButton>
+                    </Link>
+                </Nav>
+            </NavContainer>
             <TopHero>
                 <TopTitle>
                     {t("section_top.title1")}
@@ -92,21 +104,44 @@ const IntroPage = () => {
                     <DemoTheme />
                 </SubGroup>
             </Section>
+
+            <Section>
+                <ButtonGroup $justifyContent="center" $margin="7em 0">
+                    <Button onClick={goToTop}>
+                        <NoTopIcon icon="arrow-up-circle" />
+                        {t("section_footer.back_to_top")}
+                    </Button>
+                </ButtonGroup>
+            </Section>
         </>
     )
 }
 
-const Nav = styled.nav`
+const NavContainer = styled.div`
     position: fixed;
-    padding: 2rem;
-    padding-bottom: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
+    padding: 1.25rem;
+
     width: 100%;
     box-sizing: border-box;
 
     z-index: 10;
+`
+
+const Nav = styled.nav`
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding: 0.75rem;
+
+    border-radius: 16px;
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+
+    background-color: ${(p) => p.theme.introBackgroundColor};
+`
+
+const SignInButton = styled(Button)`
+    height: 2em;
 `
 
 const TopHero = styled(Section)`
@@ -129,6 +164,10 @@ const TopHeroButton = styled(Button)`
     background-color: ${(p) => p.theme.introBackgroundColor};
     border-color: ${(p) => p.theme.introTextColor};
     border-width: 0.15em;
+`
+
+const NoTopIcon = styled(FeatherIcon)`
+    top: 0;
 `
 
 export default IntroPage
