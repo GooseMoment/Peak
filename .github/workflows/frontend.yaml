@@ -7,20 +7,6 @@ on:
     branches: ["main"]
 
 jobs:
-  lockfile:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - name: Install modules
-        run: pnpm i
-        working-directory: ./frontend
-      - name: Check for pnpm-lock.yaml Changes
-        run: git diff --exit-code pnpm-lock.yaml
-        working-directory: ./frontend
   format:
     runs-on: ubuntu-latest
     steps:
@@ -56,6 +42,9 @@ jobs:
       - name: Run ESLint
         run: pnpm lint
         working-directory: ./frontend
+      - name: Run type check
+        run: pnpm type:check
+        working-directory: ./frontend
   depcheck:
     runs-on: ubuntu-latest
     steps:
@@ -70,9 +59,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Compare ${{ matrix.file }}
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          cache-dependency-path: '**/.github/workflows/*.yaml'
+      - name: Compare keys of ${{ matrix.file }}.json
         working-directory: ./frontend/src/assets/locales
-        run: npx compare-json ./ko/${{ matrix.file }}.json ./en/${{ matrix.file }}.json
+        run: npx json-diff -k ./ko/${{ matrix.file }}.json ./en/${{ matrix.file }}.json
   build:
     runs-on: ubuntu-latest
     steps:

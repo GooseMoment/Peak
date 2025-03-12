@@ -1,8 +1,4 @@
-import client, {
-    clearUserCredentials,
-    setCurrentUsername,
-    setToken,
-} from "@api/client"
+import client, { setCurrentUsername, setToken } from "@api/client"
 import { deleteSubscription } from "@api/notifications.api"
 
 import { getClientSettings } from "@utils/clientSettings"
@@ -42,6 +38,7 @@ export const authTOTP = async (type, code) => {
         })
         setToken(res.data.token)
         setCurrentUsername(res.data.user.username)
+        localStorage.removeItem(TwoFactorAuthTokenKey)
     } catch (e) {
         if (e?.response?.status === 403) {
             localStorage.removeItem(TwoFactorAuthTokenKey)
@@ -53,27 +50,26 @@ export const authTOTP = async (type, code) => {
     return true
 }
 
-export const getTOTPRegistered = async () => {
+export const getTOTP = async () => {
     const res = await client.get(`auth/two_factor/totp/register/`)
     return res.data
 }
 
-export const registerTOTP = async () => {
+export const createTOTP = async () => {
     const res = await client.post(`auth/two_factor/totp/register/`)
     return res.data
 }
 
-export const confirmRegistrationTOTP = async (code) => {
-    await client.patch(`auth/two_factor/totp/register/`, {
+export const verifyTOTP = async (code) => {
+    const res = await client.patch(`auth/two_factor/totp/register/`, {
         code,
     })
-
-    return true
+    return res.data
 }
 
-export const deleteRegistrationTOTP = async () => {
-    await client.delete(`auth/two_factor/totp/register/`)
-    return true
+export const deleteTOTP = async () => {
+    const res = await client.delete(`auth/two_factor/totp/register/`)
+    return res.data
 }
 
 export const signUp = async (email, password, username) => {
@@ -142,7 +138,7 @@ export const signOut = async () => {
         // ignore error
     }
 
-    clearUserCredentials()
+    localStorage.clear()
     window.location = "/"
 
     return null // this function is being used as 'loader'
