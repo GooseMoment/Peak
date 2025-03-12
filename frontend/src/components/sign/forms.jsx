@@ -5,10 +5,10 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
+import Input from "@components/common/Input"
 import LoaderCircle from "@components/common/LoaderCircle"
 import Error from "@components/errors/ErrorLayout"
 import Form from "@components/sign/Form"
-import Input from "@components/sign/Input"
 
 import {
     authTOTP,
@@ -22,17 +22,7 @@ import {
 
 import sleep from "@utils/sleep"
 
-import {
-    AtSign,
-    Hash,
-    HelpCircle,
-    Key,
-    LogIn,
-    Mail,
-    RotateCw,
-    UserPlus,
-    XCircle,
-} from "feather-icons-react"
+import FeatherIcon from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -82,14 +72,14 @@ export const SignInForm = () => {
             <Title>{t("sign_in")}</Title>
             <Form onSubmit={onSubmit}>
                 <Input
-                    icon={<Mail />}
+                    icon="mail"
                     name="email"
                     type="email"
                     placeholder={t("email")}
                     required
                 />
                 <Input
-                    icon={<Key />}
+                    icon="key"
                     name="password"
                     type="password"
                     placeholder={t("password")}
@@ -107,19 +97,19 @@ export const SignInForm = () => {
             <Links>
                 <Link to="/sign/up">
                     <LinkText>
-                        <UserPlus />
+                        <FeatherIcon icon="user-plus" />
                         {t("button_create_account")}
                     </LinkText>
                 </Link>
                 <Link to="/sign/request-password-recovery">
                     <LinkText>
-                        <HelpCircle />
+                        <FeatherIcon icon="help-circle" />
                         {t("button_forgot_password")}
                     </LinkText>
                 </Link>
                 <Link to="/sign/verification-resend">
                     <LinkText>
-                        <Mail />
+                        <FeatherIcon icon="mail" />
                         {t("button_resend_verification")}
                     </LinkText>
                 </Link>
@@ -147,7 +137,7 @@ export const TOTPAuthForm = () => {
             e?.preventDefault()
 
             if (totpCode.length < 6) {
-                return toast.error("Enter more than 6")
+                return toast.error(t("enter_6_digit"))
             }
 
             return authTOTP("totp", totpCode)
@@ -180,13 +170,15 @@ export const TOTPAuthForm = () => {
             </div>
             <Form onSubmit={mut.mutate}>
                 <Input
-                    icon={<Hash />}
-                    name="totp_code"
+                    icon="hash"
                     value={totpCode}
                     onChange={onChange}
                     type="text"
+                    inputMode="numeric"
                     maxLength="6"
                     pattern="^\d{6}$"
+                    id="totp"
+                    name="totp"
                     autoComplete="one-time-code"
                     placeholder={t("6-digit_code")}
                     required
@@ -203,13 +195,13 @@ export const TOTPAuthForm = () => {
             <Links>
                 <Link to="/sign/in">
                     <LinkText>
-                        <XCircle />
+                        <FeatherIcon icon="x-circle" />
                         {t("button_cancel")}
                     </LinkText>
                 </Link>
                 <Link to="/sign/two_factor/email">
                     <LinkText>
-                        <Mail />
+                        <FeatherIcon icon="mail" />
                         {t("button_email_authentication")}
                     </LinkText>
                 </Link>
@@ -247,14 +239,14 @@ export const SignUpForm = () => {
             <Title>{t("sign_up")}</Title>
             <Form onSubmit={onSubmit}>
                 <Input
-                    icon={<Mail />}
+                    icon="mail"
                     name="email"
                     type="email"
                     placeholder={t("email")}
                     required
                 />
                 <Input
-                    icon={<Key />}
+                    icon="key"
                     name="password"
                     type="password"
                     placeholder={t("password")}
@@ -262,7 +254,7 @@ export const SignUpForm = () => {
                     required
                 />
                 <Input
-                    icon={<AtSign />}
+                    icon="at-sign"
                     name="username"
                     type="text"
                     placeholder={t("username")}
@@ -289,7 +281,7 @@ export const SignUpForm = () => {
             <Links>
                 <Link to="/sign/in">
                     <LinkText>
-                        <LogIn />
+                        <FeatherIcon icon="log-in" />
                         {t("button_already_have_account")}
                     </LinkText>
                 </Link>
@@ -310,13 +302,13 @@ export const SignUpComplete = () => {
             <Links>
                 <Link to="/sign/in">
                     <LinkText>
-                        <LogIn />
+                        <FeatherIcon icon="log-in" />
                         {t("link_sign_in")}
                     </LinkText>
                 </Link>
                 <Link to="/sign/verification-resend">
                     <LinkText>
-                        <Mail />
+                        <FeatherIcon icon="mail" />
                         {t("button_resend_verification")}
                     </LinkText>
                 </Link>
@@ -359,7 +351,7 @@ export const EmailVerificationResendForm = () => {
             <Content>
                 <form onSubmit={onSubmit}>
                     <Input
-                        icon={<Mail />}
+                        icon="mail"
                         name="email"
                         placeholder={t("placeholder_email")}
                         type="email"
@@ -380,7 +372,7 @@ export const EmailVerificationResendForm = () => {
                 <Links>
                     <Link to="/sign/in">
                         <LinkText>
-                            <LogIn />
+                            <FeatherIcon icon="log-in" />
                             {t("link_sign")}
                         </LinkText>
                     </Link>
@@ -424,7 +416,7 @@ export const EmailVerificationForm = () => {
                 <Links>
                     <Link to="/sign/in">
                         <LinkText>
-                            <LogIn />
+                            <FeatherIcon icon="log-in" />
                             {t("link_sign")}
                         </LinkText>
                     </Link>
@@ -466,7 +458,7 @@ export const PasswordRecoveryRequestForm = () => {
                 <Text>{t("request_description")}</Text>
                 <form onSubmit={onSubmit}>
                     <Input
-                        icon={<Mail />}
+                        icon="mail"
                         name="email"
                         placeholder={t("placeholder_email")}
                         type="email"
@@ -485,7 +477,7 @@ export const PasswordRecoveryRequestForm = () => {
                 <Links>
                     <Link to="/sign/in">
                         <LinkText>
-                            <LogIn />
+                            <FeatherIcon icon="log-in" />
                             {t("link_sign_in")}
                         </LinkText>
                     </Link>
@@ -536,7 +528,7 @@ export const PasswordRecoveryForm = () => {
             <Form onSubmit={onSubmit}>
                 <Text>{t("recovery_description")}</Text>
                 <Input
-                    icon={<Key />}
+                    icon="key"
                     name="password"
                     placeholder={t("placeholder_password")}
                     type="password"
@@ -545,7 +537,7 @@ export const PasswordRecoveryForm = () => {
                     disabled={mutation.isPending}
                 />
                 <Input
-                    icon={<RotateCw />}
+                    icon="rotate-cw"
                     name="password_again"
                     placeholder={t("placeholder_password_again")}
                     type="password"

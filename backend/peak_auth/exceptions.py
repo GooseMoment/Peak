@@ -58,9 +58,15 @@ class EmailNotVerified(APIException):
 
 
 class TokenInvalid(APIException):
-    status_code = status.HTTP_400_BAD_REQUEST
+    status_code = status.HTTP_403_FORBIDDEN
     default_detail = "The given token is expired or not found."
     default_code = "TOKEN_INVALID"
+
+
+class TokenOutOfCounts(APIException):
+    status_code = status.HTTP_403_FORBIDDEN
+    default_detail = "Out of try counts."
+    default_code = "TOKEN_OUT_OF_COUNTS"
 
 
 class UnknownError(APIException):
@@ -73,3 +79,9 @@ class EmailNotSent(APIException):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
     default_detail = "The requested email was not sent."
     default_code = "EMAIL_NOT_SENT"
+
+
+class NoPendingTOTPRegistration(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "No pending TOTP registration."
+    default_code = "NO_PENDING_TOTP_REGISTRATION"

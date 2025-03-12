@@ -16,8 +16,7 @@
             "@containers/*": ["src/containers/*"],
             "@assets/*": ["src/assets/*"],
             "@queries/*": ["src/queries/*"],
-            "@routers/*": ["src/routers/*"],
-            "@public/*": ["public/*"]
+            "@routers/*": ["src/routers/*"]
         },
         "strict": true,
         "skipLibCheck": true,
