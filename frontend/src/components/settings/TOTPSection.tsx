@@ -248,7 +248,6 @@ const TOTPSection = () => {
                 <Confirmation
                     question={t("ask_delete")}
                     buttons={[
-                        "close",
                         <Button
                             key="delete"
                             state="danger"
