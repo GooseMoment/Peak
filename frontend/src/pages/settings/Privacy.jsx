@@ -3,8 +3,12 @@ import { useMemo } from "react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
-import Error from "@components/settings/Error"
-import Section, { Description, Name, Value } from "@components/settings/Section"
+import Section, {
+    Description,
+    Name,
+    Value,
+    ValueError,
+} from "@components/settings/Section"
 import Select from "@components/settings/Select"
 import Switch from "@components/settings/SettingSwitch"
 
@@ -20,6 +24,7 @@ const Privacy = () => {
         data: settings,
         isPending,
         isError,
+        refetch,
     } = useQuery({
         queryKey: ["settings"],
         queryFn: () => getSettings(),
@@ -46,7 +51,11 @@ const Privacy = () => {
     }
 
     if (isError) {
-        return <Error />
+        return (
+            <Section>
+                <ValueError onClickRetry={refetch} />
+            </Section>
+        )
     }
 
     return (

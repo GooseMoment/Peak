@@ -1,7 +1,4 @@
-import {
-    getClientTimezone,
-    setClientSettingsByName,
-} from "@utils/clientSettings"
+import { getClientTimezone } from "@utils/clientSettings"
 
 import axios, { type AxiosError } from "axios"
 
@@ -39,12 +36,6 @@ export const setCurrentUsername = (username: string | null) => {
     return localStorage.setItem("username", username || "null")
 }
 
-export const clearUserCredentials = () => {
-    setToken(null)
-    setCurrentUsername(null)
-    setClientSettingsByName("push_notification_subscription", null)
-}
-
 const client = axios.create({
     baseURL: baseURL,
     withCredentials: true,
@@ -75,7 +66,7 @@ client.interceptors.response.use(
     (res) => res,
     (err: AxiosError) => {
         if (err.response && err.response.status === 401) {
-            clearUserCredentials()
+            localStorage.clear()
             window.location.href = "/sign/in?flag=401"
             return
         }
