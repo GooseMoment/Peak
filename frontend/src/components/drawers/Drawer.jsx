@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useMemo, useState } from "react"
+import { Suspense, lazy, useMemo, useState } from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
@@ -28,7 +28,6 @@ import { getPageFromURL } from "@utils/pagination"
 
 import queryClient from "@queries/queryClient"
 
-import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -77,42 +76,6 @@ const Drawer = ({ project, drawer, color }) => {
             })
         },
     })
-
-    const onDrop = ({ location, source }) => {
-        const targetData = location.current.dropTargets[0]?.data
-        const draggedOrder = source?.data.order
-
-        if (targetData === undefined || draggedOrder === undefined) {
-            return
-        }
-
-        const targetOrder = targetData?.order
-        const symbolProperties = Object.getOwnPropertySymbols(targetData)
-        const closestEdge = targetData[symbolProperties[0]]
-        const taskID = source?.data.id
-
-        if (typeof targetOrder !== "number" || draggedOrder === targetOrder) {
-            return
-        }
-
-        patchMutation.mutate({
-            task_id: taskID,
-            dragged_order: draggedOrder,
-            target_order: targetOrder,
-            closest_edge: closestEdge,
-        })
-        setOrdering(null)
-    }
-
-    useEffect(() => {
-        const cleanupMonitor = monitorForElements({
-            onDrop: onDrop,
-        })
-
-        return () => {
-            cleanupMonitor()
-        }
-    }, [])
 
     const deleteMutation = useMutation({
         mutationFn: () => {

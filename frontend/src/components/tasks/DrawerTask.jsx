@@ -4,7 +4,6 @@ import styled from "styled-components"
 
 import DeleteAlert from "@components/common/DeleteAlert"
 import { useDeleteTask } from "@components/project/common/useDeleteTask"
-import DragAndDownBox from "@components/project/dragAndDown/DragAndDownBox"
 import Task from "@components/tasks/Task"
 
 import useScreenType from "@utils/useScreenType"
@@ -25,7 +24,7 @@ const DrawerTask = ({ task, color, projectType }) => {
     })
 
     return (
-        <DragAndDownBox task={task} color={color}>
+        <>
             <TaskBox>
                 <Task task={task} color={color} />
                 {isMobile ? null : (
@@ -45,7 +44,7 @@ const DrawerTask = ({ task, color, projectType }) => {
                     func={handleDelete}
                 />
             )}
-        </DragAndDownBox>
+        </>
     )
 }
 
