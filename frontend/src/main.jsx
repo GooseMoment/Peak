@@ -1,3 +1,4 @@
+import React from "react"
 import ReactDOM from "react-dom/client"
 
 import { QueryClientProvider } from "@tanstack/react-query"
@@ -22,15 +23,17 @@ import registerSW from "@/registerSW"
 initClientSettings()
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <ClientSettingProvider>
-        <ClientThemeProvider>
-            <GlobalStyle />
-            <QueryClientProvider client={queryClient}>
-                <Root />
-            </QueryClientProvider>
-            <I18nSetLocale i18n={i18n} />
-        </ClientThemeProvider>
-    </ClientSettingProvider>,
+    <React.StrictMode>
+        <ClientSettingProvider>
+            <ClientThemeProvider>
+                <GlobalStyle />
+                <QueryClientProvider client={queryClient}>
+                    <Root />
+                </QueryClientProvider>
+                <I18nSetLocale i18n={i18n} />
+            </ClientThemeProvider>
+        </ClientSettingProvider>
+    </React.StrictMode>,
 )
 
 registerSW()
