@@ -29,7 +29,7 @@
         "github-markdown-css": "^5.8.1",
         "grapheme-splitter": "^1.0.4",
         "i18next": "^24.2.2",
-        "i18next-http-backend": "^3.0.2",
+        "i18next-resources-to-backend": "^1.2.1",
         "luxon": "^3.5.0",
         "moment": "^2.30.1",
         "qrcode": "^1.5.4",

@@ -1,8 +1,8 @@
-import type docs from "@public/locales/en/docs.json"
-import type home from "@public/locales/en/home.json"
-import type intro from "@public/locales/en/intro.json"
-import type settings from "@public/locales/en/settings.json"
-import type translation from "@public/locales/en/translation.json"
+import type docs from "@assets/locales/en/docs.json"
+import type home from "@assets/locales/en/home.json"
+import type intro from "@assets/locales/en/intro.json"
+import type settings from "@assets/locales/en/settings.json"
+import type translation from "@assets/locales/en/translation.json"
 
 import "i18next"
 
