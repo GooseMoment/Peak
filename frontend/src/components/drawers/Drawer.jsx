@@ -1,4 +1,4 @@
-import { Suspense, lazy, useMemo, useState } from "react"
+import { Suspense, lazy, useMemo, useRef, useState } from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
@@ -29,6 +29,7 @@ import { getPageFromURL } from "@utils/pagination"
 import queryClient from "@queries/queryClient"
 
 import FeatherIcon from "feather-icons-react"
+import { useDrag, useDrop } from "react-dnd"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -36,7 +37,7 @@ const TaskCreateElement = lazy(
     () => import("@components/project/taskDetails/TaskCreateElement"),
 )
 
-const Drawer = ({ project, drawer, color }) => {
+const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
     const [collapsed, setCollapsed] = useState(false)
     const [ordering, setOrdering] = useState(null)
     const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
@@ -76,6 +77,56 @@ const Drawer = ({ project, drawer, color }) => {
             })
         },
     })
+
+    /// Drawer Drag and Drop
+    const ref = useRef(null)
+
+    const [{ handlerId }, drop] = useDrop({
+        accept: "Drawer",
+        collect(monitor) {
+            return {
+                handlerId: monitor.getHandlerId(),
+            }
+        },
+        hover: (item, monitor) => {
+            if (!ref.current) return
+
+            const dragOrder = item.order
+            const hoverOrder = drawer.order
+
+            if (dragOrder === hoverOrder) return
+
+            const hoverBoundingRect = ref.current.getBoundingClientRect()
+            const hoverMiddleY =
+                (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+            const clientOffset = monitor.getClientOffset()
+            const hoverClientY = clientOffset.y - hoverBoundingRect.top
+
+            if (dragOrder < hoverOrder && hoverClientY < hoverMiddleY) return
+            if (dragOrder > hoverOrder && hoverClientY > hoverMiddleY) return
+
+            moveDrawer(dragOrder, hoverOrder)
+
+            item.order = hoverOrder
+        },
+        drop: (item) => {
+            dropDrawer()
+            item.order = drawer.order
+        },
+    })
+
+    const [{ isDragging }, drag] = useDrag({
+        type: "Drawer",
+        item: () => {
+            return { id: drawer.id, order: drawer.order }
+        },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    })
+
+    drag(drop(ref))
+    /// ---
 
     const deleteMutation = useMutation({
         mutationFn: () => {
@@ -132,7 +183,11 @@ const Drawer = ({ project, drawer, color }) => {
     return (
         <>
             {project.type === "inbox" ? null : (
-                <DrawerBox $color={color}>
+                <DrawerBox
+                    ref={ref}
+                    data-handler-id={handlerId}
+                    $color={color}
+                    $isDragging={isDragging}>
                     <DrawerTitleBox>
                         <DrawerName $color={color}>{drawer.name}</DrawerName>
                         <PrivacyIcon privacy={drawer.privacy} color={color} />

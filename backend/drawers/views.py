@@ -49,16 +49,17 @@ class DrawerList(
     permission_classes = [IsUserOwner]
     filter_backends = [OrderingFilter]
     ordering_fields = [
+        "order",
         "name",
         "created_at",
         "uncompleted_task_count",
         "completed_task_count",
     ]
-    ordering = ["created_at"]
+    ordering = ["order"]
 
     def get_queryset(self):
         queryset = (
-            Drawer.objects.filter(user=self.request.user).order_by("created_at").all()
+            Drawer.objects.filter(user=self.request.user).all()
         )
         project_id = self.request.query_params.get("project", None)
         if project_id is not None:

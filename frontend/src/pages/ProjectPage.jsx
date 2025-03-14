@@ -1,4 +1,11 @@
-import { Suspense, lazy, useMemo, useState } from "react"
+import {
+    Suspense,
+    lazy,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -20,7 +27,7 @@ import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
 import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 
-import { getDrawersByProject } from "@api/drawers.api"
+import { getDrawersByProject, patchDrawer } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
 
 import { ifMobile } from "@utils/useScreenType"
@@ -31,6 +38,8 @@ import queryClient from "@queries/queryClient"
 import { getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
+import { DndProvider } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -44,8 +53,10 @@ const ProjectPage = () => {
     const navigate = useNavigate()
     const { isMobile } = useScreenType()
 
+    const [drawers, setDrawers] = useState([])
+
     const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
-    const [ordering, setOrdering] = useState("created_at")
+    const [ordering, setOrdering] = useState("order")
     const [isAlertOpen, setIsAlertOpen] = useState(false)
     const [isProjectEditOpen, setIsProjectEditOpen] = useState(false)
     const [isSortMenMobileOpen, setSortMenuMobileOpen] = useState(false)
@@ -68,12 +79,50 @@ const ProjectPage = () => {
     const {
         isLoading: isDrawersLoading,
         isError: isDrawersError,
-        data: drawers,
+        data,
         refetch: drawersRefetch,
     } = useQuery({
         queryKey: ["drawers", { projectID: id, ordering: ordering }],
         queryFn: () => getDrawersByProject(id, ordering),
     })
+
+    /// Drawers Drag And Drop
+    useEffect(() => {
+        if (!data) return
+        setDrawers(data)
+    }, [data])
+
+    const patchMutation = useMutation({
+        mutationFn: ({ id, order }) => {
+            return patchDrawer(id, { order })
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["drawers", { projectID: id, ordering: ordering }],
+            })
+            drawersRefetch()
+        },
+    })
+
+    const moveDrawer = useCallback((dragIndex, hoverIndex) => {
+        setDrawers((prevDrawers) => {
+            const updatedDrawers = [...prevDrawers]
+            const [moved] = updatedDrawers.splice(dragIndex, 1)
+            updatedDrawers.splice(hoverIndex, 0, moved)
+            return updatedDrawers
+        })
+    }, [])
+
+    const dropDrawer = useCallback(() => {
+        const changedProjects = drawers
+            .map((drawer, index) => ({ id: drawer.id, order: index }))
+            .filter((drawer, index) => data[index]?.id !== drawer.id)
+
+        changedProjects.forEach(({ id, order }) => {
+            patchMutation.mutate({ id, order })
+        })
+    }, [drawers, data])
+    /// ---
 
     const deleteMutation = useMutation({
         mutationFn: () => {
@@ -188,14 +237,18 @@ const ProjectPage = () => {
             {drawers && drawers.length === 0 ? (
                 <NoDrawerText>{t("no_drawer")}</NoDrawerText>
             ) : (
-                drawers?.map((drawer) => (
-                    <Drawer
-                        key={drawer.id}
-                        project={project}
-                        drawer={drawer}
-                        color={color}
-                    />
-                ))
+                <DndProvider backend={HTML5Backend}>
+                    {drawers?.map((drawer) => (
+                        <Drawer
+                            key={drawer.id}
+                            project={project}
+                            drawer={drawer}
+                            color={color}
+                            moveDrawer={moveDrawer}
+                            dropDrawer={dropDrawer}
+                        />
+                    ))}
+                </DndProvider>
             )}
             {isAlertOpen && (
                 <DeleteAlert
