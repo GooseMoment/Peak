@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 import styled from "styled-components"
 
@@ -9,9 +9,17 @@ import Task from "@components/tasks/Task"
 import useScreenType from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
+import { useDrag, useDrop } from "react-dnd"
 import { useTranslation } from "react-i18next"
 
-const DrawerTask = ({ task, color, projectType }) => {
+const DrawerTask = ({
+    task,
+    color,
+    projectType,
+    moveTask,
+    dropTask,
+    isPending,
+}) => {
     const { t } = useTranslation(null, { keyPrefix: "task.delete" })
     const { isMobile } = useScreenType()
 
@@ -23,9 +31,65 @@ const DrawerTask = ({ task, color, projectType }) => {
         setIsAlertOpen,
     })
 
+    /// Task Drag and Drop
+    const ref = useRef(null)
+
+    const [{ handlerId }, drop] = useDrop({
+        accept: "Task",
+        canDrop: (item) => !isPending && item.drawerId === task.drawer,
+        collect(monitor) {
+            return {
+                handlerId: monitor.getHandlerId(),
+            }
+        },
+        hover: (item, monitor) => {
+            if (!ref.current || item.drawerId !== task.drawer) return
+
+            const dragOrder = item.order
+            const hoverOrder = task.order
+
+            if (dragOrder === hoverOrder) return
+
+            const hoverBoundingRect = ref.current.getBoundingClientRect()
+            const hoverMiddleY =
+                (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+            const clientOffset = monitor.getClientOffset()
+            const hoverClientY = clientOffset.y - hoverBoundingRect.top
+
+            if (dragOrder < hoverOrder && hoverClientY < hoverMiddleY) return
+            if (dragOrder > hoverOrder && hoverClientY > hoverMiddleY) return
+
+            if (item.order !== hoverOrder) {
+                moveTask(dragOrder, hoverOrder)
+                item.order = hoverOrder
+            }
+        },
+        drop: (item) => {
+            if (isPending) return
+            dropTask()
+            item.order = task.order
+        },
+    })
+
+    const [{ isDragging }, drag] = useDrag({
+        type: "Task",
+        item: () => {
+            return { id: task.id, order: task.order, drawerId: task.drawer }
+        },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    })
+
+    drag(drop(ref))
+    /// ---
+
     return (
         <>
-            <TaskBox>
+            <TaskBox
+                ref={ref}
+                data-handler-id={handlerId}
+                $isDragging={isDragging}>
                 <Task task={task} color={color} />
                 {isMobile ? null : (
                     <DeleteIcon>
@@ -62,6 +126,8 @@ const DeleteIcon = styled.div`
 const TaskBox = styled.div`
     display: flex;
     align-items: center;
+    cursor: grab;
+    opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
 
     &:hover {
         ${DeleteIcon} {
