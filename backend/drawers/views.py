@@ -58,9 +58,7 @@ class DrawerList(
     ordering = ["order"]
 
     def get_queryset(self):
-        queryset = (
-            Drawer.objects.filter(user=self.request.user).all()
-        )
+        queryset = Drawer.objects.filter(user=self.request.user).all()
         project_id = self.request.query_params.get("project", None)
         if project_id is not None:
             queryset = queryset.filter(project__id=project_id)

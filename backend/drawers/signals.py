@@ -29,7 +29,7 @@ def delete_task_count_for_Task(sender, instance: Task = None, **kwargs):
 
 
 @receiver(post_save, sender=Drawer)
-def set_new_task_order(sender, instance: Drawer = None, created=False, **kwargs):
+def set_new_drawer_order(sender, instance: Drawer = None, created=False, **kwargs):
     if not created:
         return
 
@@ -37,4 +37,3 @@ def set_new_task_order(sender, instance: Drawer = None, created=False, **kwargs)
     instance.order = (last_order.order + 1) if last_order else 0
 
     instance.save()
-    
