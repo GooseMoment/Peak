@@ -1,4 +1,3 @@
-
 def normalize_tasks_order(drawer_tasks, ordering):
     if ordering == "due_date":
         ordered_tasks = drawer_tasks.order_by("assigned_at", "due_date", "due_datetime")

@@ -1,10 +1,8 @@
 from rest_framework import mixins, generics
-from rest_framework.filters import OrderingFilter
 
 from .models import Drawer
 from .serializers import DrawerSerializer
 from .utils import normalize_drawers_order
-from tasks.models import Task
 from api.permissions import IsUserOwner
 
 
