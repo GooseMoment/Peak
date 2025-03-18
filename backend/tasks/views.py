@@ -6,7 +6,7 @@ from api.permissions import IsUserOwner
 from .models import Task
 from .serializers import TaskSerializer
 from notifications.serializers import TaskReminderSerializer
-from drawers.utils import normalize_drawer_order
+from drawers.utils import normalize_tasks_order
 
 
 class TaskDetail(
@@ -62,6 +62,7 @@ class TaskList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
             queryset = queryset.filter(drawer__id=drawer_id)
 
         ordering_fields = [
+            "order",
             "name",
             "assigned_at",
             "due_date",
@@ -73,7 +74,7 @@ class TaskList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
         ordering = self.request.GET.get("ordering", None)
 
         if ordering.lstrip("-") in ordering_fields:
-            normalize_drawer_order(queryset, ordering)
+            normalize_tasks_order(queryset, ordering)
 
         return queryset
 
