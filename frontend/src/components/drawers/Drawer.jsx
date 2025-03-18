@@ -250,8 +250,7 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
             )}
             {collapsed ? null : (
                 <>
-                    <TaskList
-                        $isDragging={isDragging}>
+                    <TaskList $isDragging={isDragging}>
                         <DndProvider backend={HTML5Backend}>
                             {tasks?.map((task) => (
                                 <DrawerTask
