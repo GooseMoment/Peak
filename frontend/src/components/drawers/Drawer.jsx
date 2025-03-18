@@ -47,7 +47,7 @@ const TaskCreateElement = lazy(
 
 const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
     const [collapsed, setCollapsed] = useState(false)
-    const [ordering, setOrdering] = useState(null)
+    const [ordering, setOrdering] = useState("order")
     const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
     const [isDrawerEditOpen, setIsDrawerEditOpen] = useState(false)
@@ -130,7 +130,7 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
     // Task Drag and Drop
     useEffect(() => {
         if (!data) return
-        const results = data?.pages?.flatMap((page) => page.results) || []
+        const results = data?.pages?.flatMap((page) => page.results ?? []) || []
         setTasks(results)
     }, [data])
 
@@ -166,6 +166,7 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
         changedTasks.forEach(({ id, order }) => {
             patchMutation.mutate({ id, order })
         })
+        setOrdering("order")
     }, [tasks, data])
     // ---
 
@@ -249,7 +250,8 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
             )}
             {collapsed ? null : (
                 <>
-                    <TaskList>
+                    <TaskList
+                        $isDragging={isDragging}>
                         <DndProvider backend={HTML5Backend}>
                             {tasks?.map((task) => (
                                 <DrawerTask
@@ -354,6 +356,7 @@ const DrawerTitleBox = styled.div`
 
 const TaskList = styled.div`
     margin-top: 1em;
+    opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
 `
 
 const TaskCreateButton = styled.div`
@@ -383,6 +386,7 @@ const MoreButton = styled(Button)`
 `
 
 const makeSortMenuItems = (t) => [
+    { display: t("sort.my"), context: "order" },
     { display: t("sort.-priority"), context: "-priority" },
     { display: t("sort.due_date"), context: "due_date" },
     {

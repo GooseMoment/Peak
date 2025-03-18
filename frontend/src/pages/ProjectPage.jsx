@@ -114,13 +114,14 @@ const ProjectPage = () => {
     }, [])
 
     const dropDrawer = useCallback(() => {
-        const changedProjects = drawers
+        const changedDrawers = drawers
             .map((drawer, index) => ({ id: drawer.id, order: index }))
             .filter((drawer, index) => data[index]?.id !== drawer.id)
 
-        changedProjects.forEach(({ id, order }) => {
+        changedDrawers.forEach(({ id, order }) => {
             patchMutation.mutate({ id, order })
         })
+        setOrdering("order")
     }, [drawers, data])
     /// ---
 
@@ -345,6 +346,7 @@ const NoDrawerText = styled.div`
 `
 
 const makeSortMenuItems = (t) => [
+    { display: t("sort.my"), context: "order" },
     { display: t("sort.name"), context: "name" },
     { display: t("sort.-name"), context: "-name" },
     { display: t("sort.created_at"), context: "created_at" },
