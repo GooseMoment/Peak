@@ -10,16 +10,20 @@ import { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
-import { useTranslation } from "react-i18next"
 
 const DateBar = ({ selectedDate, setSelectedDate }) => {
     const locale = useClientLocale()
-    const { t } = useTranslation("", { keyPrefix: "social.date_bar" })
 
     // TODO: selectedDate를 Datetime형으로 바꾼 이후 다시 수정
     const displayDate = () => {
         const date = DateTime.fromISO(selectedDate)
-        return date.setLocale(locale).toFormat(t("date_format"))
+        return date  
+        .setLocale(locale)  
+        .toLocaleString({  
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+        })
     }
 
     const handleDate = (diff) => {
