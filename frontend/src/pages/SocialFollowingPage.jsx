@@ -100,7 +100,6 @@ const Container = styled.div`
     margin-bottom: auto;
 
     padding: 0 1em 0;
-    overflow: hidden;
 
     display: flex;
     flex-direction: column;

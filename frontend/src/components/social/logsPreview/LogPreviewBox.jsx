@@ -77,16 +77,17 @@ const LogPreviewBox = ({
 
 const Box = styled.div`
     box-sizing: border-box;
-    aspect-ratio: ${(props) => (props.$isMe ? 1.0 / 0.45 : 1.0)};
     ${(props) =>
         props.$isMe
             ? css`
                   width: 100%;
+                  aspect-ratio: 2 / 0.9;
               `
             : css`
                   width: calc(50% - 0.5em);
+                  aspect-ratio: 1/1;
               `}
-    padding: max(7.5%, 16px);
+    padding: max(5%, 12px);
 
     background-color: ${(props) => props.$bgColor};
     border-radius: 16px;
@@ -100,8 +101,7 @@ const Box = styled.div`
 
     display: flex;
     flex-direction: column;
-    align-content: space-between;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.7em;
 
     transition: all 0.25s ease;
@@ -127,15 +127,11 @@ const FrameRow = styled.div`
 const ProfileWrapper = styled.div`
     aspect-ratio: 1;
     width: 60px;
-
-    ${ifMobile} {
-        max-width: 60px;
-    }
 `
 
 const Username = styled.div`
-    /* display: inline; */
-    font-size: 1.1em;
+    font-size: 1em;
+    font-weight: 600;
     overflow-x: clip;
     text-overflow: ellipsis;
 
@@ -148,11 +144,10 @@ const SimpleStats = styled.div`
 
     display: flex;
     flex-direction: row;
+    gap: 1em;
 `
 
 const StatsUnit = styled.div`
-    width: 50%;
-
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -168,7 +163,7 @@ const StatusIconWrapper = styled.div`
     ${(props) =>
         props.$type === "completedTask" &&
         css`
-            border: 3px solid ${(p) => p.theme.black};
+            border: 2px solid ${(p) => p.theme.black};
             border-radius: 50%;
         `}
 
