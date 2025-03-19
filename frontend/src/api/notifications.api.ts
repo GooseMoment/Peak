@@ -82,6 +82,7 @@ export const deleteNotification = async (id: string) => {
 }
 
 export interface WebPushSubscription {
+    id: string
     user: object
     subscription_info: PushSubscription
     locale: string
@@ -111,7 +112,10 @@ export const postSubscription = async (subscription: PushSubscription) => {
         user_agent: navigator.userAgent,
     }
 
-    const res = await client.post(`notifications/subscribe`, data)
+    const res = await client.post<WebPushSubscription>(
+        `notifications/subscribe`,
+        data,
+    )
     return res.data
 }
 
@@ -119,7 +123,10 @@ export const patchSubscription = async (
     id: string,
     data: Partial<WebPushSubscription>,
 ) => {
-    const res = await client.patch(`notifications/subscribe/${id}`, data)
+    const res = await client.patch<WebPushSubscription>(
+        `notifications/subscribe/${id}`,
+        data,
+    )
     return res.data
 }
 
@@ -133,8 +140,7 @@ export const deleteSubscription = async (id: string) => {
         // ignore errors
     }
 
-    setClientSettingsByName("push_notification_subscription", null)
+    setClientSettingsByName("push_notification_subscription", undefined)
 
-    const res = await client.delete(`notifications/subscribe/${id}`)
-    return res.status
+    await client.delete(`notifications/subscribe/${id}`)
 }

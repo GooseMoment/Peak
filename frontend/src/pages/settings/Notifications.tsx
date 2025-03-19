@@ -3,10 +3,14 @@ import { useEffect, useMemo, useState } from "react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
 import Button, { ButtonGroup } from "@components/common/Button"
-import CheckboxGroup from "@components/settings/CheckboxGroup"
+import CheckboxGroup, {
+    ICheckboxItem,
+} from "@components/settings/CheckboxGroup"
 import Section, { Description, Name, Value } from "@components/settings/Section"
 
 import {
+    NotificationType,
+    WebPushSubscription,
     deleteSubscription,
     getSubscription,
     patchSubscription,
@@ -15,12 +19,13 @@ import {
 
 import { useClientSetting } from "@utils/clientSettings"
 
+import { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
 
-const urlB64ToUint8Array = (base64String) => {
+const urlB64ToUint8Array = (base64String: string) => {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4)
     const base64 = (base64String + padding)
         .replace(/-/g, "+")
@@ -64,9 +69,8 @@ const SectionNotification = () => {
         },
     })
 
-    const disableMutation = useMutation({
-        mutationFn: () =>
-            deleteSubscription(setting.push_notification_subscription),
+    const disableMutation = useMutation<void, Error, string>({
+        mutationFn: (subscriptionID) => deleteSubscription(subscriptionID),
         onSuccess: () => {
             toast.info(
                 t("push_notification_subscription.disabled_push_notification"),
@@ -80,13 +84,13 @@ const SectionNotification = () => {
             )
         },
         onSettled: async () => {
-            updateSetting("push_notification_subscription", null)
+            updateSetting("push_notification_subscription", undefined)
         },
     })
 
     const toggleWebPush = async () => {
         if (setting.push_notification_subscription) {
-            disableMutation.mutate()
+            disableMutation.mutate(setting.push_notification_subscription)
             return
         }
 
@@ -139,24 +143,33 @@ const SectionAllowList = () => {
         keyPrefix: "notifications.allowed_types",
     })
 
-    const [selectedItems, setSelectedItems] = useState([])
+    const [selectedItems, setSelectedItems] = useState<ICheckboxItem[]>([])
     const items = useMemo(() => makeAllowlistItems(t), [t])
 
-    const query = useQuery({
+    const query = useQuery<
+        WebPushSubscription,
+        Error,
+        WebPushSubscription["excluded_types"]
+    >({
         placeholderData: {
             excluded_types: setting.push_notification_excluded_types || [],
-        },
+        } as WebPushSubscription,
         queryKey: [
             "subscriptions",
             setting.push_notification_subscription,
             "excluded_types",
         ],
-        queryFn: () => getSubscription(setting.push_notification_subscription),
+        // This component is loaded if setting.push_notification_subscription is present
+        queryFn: () => getSubscription(setting.push_notification_subscription!),
         select: (data) => data.excluded_types,
         refetchOnWindowFocus: false,
     })
 
     useEffect(() => {
+        if (!query.data) {
+            return
+        }
+
         setSelectedItems(
             items.filter((item) => !query.data.includes(item.name)),
         )
@@ -172,7 +185,8 @@ const SectionAllowList = () => {
                         ),
                 )
                 .map((item) => item.name)
-            return patchSubscription(setting.push_notification_subscription, {
+            // This component is rendered if push_notification_subscription is present
+            return patchSubscription(setting.push_notification_subscription!, {
                 excluded_types: data,
             })
         },
@@ -200,7 +214,7 @@ const SectionAllowList = () => {
                 />
                 <ButtonGroup $justifyContent="right" $margin="1em 0">
                     <Button
-                        onClick={mut.mutate}
+                        onClick={() => mut.mutate()}
                         disabled={mut.isPending}
                         loading={mut.isPending}>
                         {t("values.button_save")}
@@ -222,17 +236,20 @@ const Notifications = () => {
     )
 }
 
-const makeAllowlistItems = (t) => [
-    { name: "comment", display: t("values.comment") },
-    { name: "follow", display: t("values.follow") },
-    { name: "follow_request", display: t("values.follow_request") },
-    {
-        name: "follow_request_accepted",
-        display: t("values.follow_request_accepted"),
-    },
-    { name: "peck", display: t("values.peck") },
-    { name: "reaction", display: t("values.reaction") },
-    { name: "task_reminder", display: t("values.task_reminder") },
-]
+const makeAllowlistItems = (
+    t: TFunction<"settings", "notifications.allowed_types">,
+) =>
+    [
+        { name: "comment", display: t("values.comment") },
+        { name: "follow", display: t("values.follow") },
+        { name: "follow_request", display: t("values.follow_request") },
+        {
+            name: "follow_request_accepted",
+            display: t("values.follow_request_accepted"),
+        },
+        { name: "peck", display: t("values.peck") },
+        { name: "reaction", display: t("values.reaction") },
+        { name: "task_reminder", display: t("values.task_reminder") },
+    ] as { name: NotificationType; display: string }[]
 
 export default Notifications
