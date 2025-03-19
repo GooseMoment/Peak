@@ -12,14 +12,10 @@ import LogDetails from "@components/social/logDetails/LogDetails"
 
 import { getUserByUsername } from "@api/users.api"
 
-import { useTranslation } from "react-i18next"
-
 const SocialDailyPage = () => {
     const { username } = useParams()
     const location = useLocation()
     const { selectedDate: receivedDate } = location.state || {}
-
-    const { t } = useTranslation("", { keyPrefix: "common.header" })
 
     const {
         data: user,
@@ -94,7 +90,6 @@ const UsernameTitle = styled(PageTitle)`
 
 const ProfileWrapper = styled.div`
     width: 50px;
-    /* width: 4em; */
 `
 
 export default SocialDailyPage
