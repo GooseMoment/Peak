@@ -26,7 +26,7 @@ const SocialDailyPage = () => {
         // isPending: userPending,
         // isError: userError,
     } = useQuery({
-        queryKey: ["users", username],
+        queryKey: ["users", username.slice(1)],
         queryFn: () => getUserByUsername(username.slice(1)),
     })
 
