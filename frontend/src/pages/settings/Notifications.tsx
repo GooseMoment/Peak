@@ -215,7 +215,7 @@ const SectionAllowList = () => {
                 <ButtonGroup $justifyContent="right" $margin="1em 0">
                     <Button
                         onClick={() => mut.mutate()}
-                        disabled={mut.isPending}
+                        disabled={selectedItems.length === 0 || mut.isPending}
                         loading={mut.isPending}>
                         {t("values.button_save")}
                     </Button>
