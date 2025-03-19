@@ -59,13 +59,13 @@ const LogPreviewBox = ({
 
             <SimpleStats>
                 <StatsUnit>
-                    <StatusIconWrapper $type={"completedTask"}>
+                    <StatusIconWrapper $type="completedTask">
                         <FeatherIcon icon="check" />
                     </StatusIconWrapper>
                     <StatusCount>12</StatusCount>
                 </StatsUnit>
                 <StatsUnit>
-                    <StatusIconWrapper $type={"reaction"}>
+                    <StatusIconWrapper $type="reaction">
                         <FeatherIcon icon="heart" />
                     </StatusIconWrapper>
                     <StatusCount>12</StatusCount>
@@ -77,8 +77,6 @@ const LogPreviewBox = ({
 
 const Box = styled.div`
     box-sizing: border-box;
-    /* xa : xa/k     xb = 0.47xa */
-    /* xb : xb/1.1  xb/1.1 = xa/k*/
     aspect-ratio: ${(props) => (props.$isMe ? 1.0 / 0.45 : 1.0)};
     ${(props) =>
         props.$isMe
@@ -128,11 +126,10 @@ const FrameRow = styled.div`
 
 const ProfileWrapper = styled.div`
     aspect-ratio: 1;
-    min-width: 50px;
-    width: 50px;
+    width: 60px;
 
     ${ifMobile} {
-        max-width: 50px;
+        max-width: 60px;
     }
 `
 
