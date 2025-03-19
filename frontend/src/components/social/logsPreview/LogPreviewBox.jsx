@@ -49,7 +49,6 @@ const LogPreviewBox = ({
             $isMe={log.username === me}
             $bgColor={boxColor}
             $isSelected={log.username === selectedUser}
-            $isMobile={isMobile}
             onClick={handleSelect}>
             <FrameRow>
                 <ProfileWrapper $isMe={log.username === me}>
