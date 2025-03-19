@@ -59,7 +59,7 @@ const SocialDailyPage = () => {
             <LogDetails
                 username={username.slice(1)}
                 selectedDate={selectedDate}
-                needProfile={false}
+                displayProfile={false}
             />
         </Frame>
     )

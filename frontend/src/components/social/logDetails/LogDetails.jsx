@@ -29,7 +29,7 @@ const LogDetails = ({
     pageType = "following",
     username,
     selectedDate,
-    needProfile = true,
+    displayProfile = true,
 }) => {
     const { t } = useTranslation("", { keyPrefix: "social.log_details" })
     const theme = useTheme()
@@ -91,7 +91,7 @@ const LogDetails = ({
                             user={quote.user}
                             quote={quote}
                             saveQuote={saveQuote || null}
-                            needProfile={needProfile}
+                            displayProfile={displayProfile}
                         />
                         {pageType === "following" ? (
                             quote?.id && (

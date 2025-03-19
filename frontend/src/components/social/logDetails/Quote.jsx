@@ -8,7 +8,7 @@ import { getCurrentUsername } from "@api/client"
 
 import { useTranslation } from "react-i18next"
 
-const Quote = ({ user, quote, saveQuote, needProfile = true }) => {
+const Quote = ({ user, quote, saveQuote, displayProfile = true }) => {
     const { t } = useTranslation("", { keyPrefix: "social.quote" })
 
     const [inputState, setInputState] = useState(false)
@@ -47,9 +47,9 @@ const Quote = ({ user, quote, saveQuote, needProfile = true }) => {
 
     return (
         <Box>
-            {needProfile && <SimpleProfile user={user} showUsername />}
+            {displayProfile && <SimpleProfile user={user} showUsername />}
 
-            <Wrapper onClick={handleInputState} $isProfileExist={needProfile}>
+            <Wrapper onClick={handleInputState} $displayProfile={displayProfile}>
                 {inputState ? (
                     <QuoteInput
                         type="text"
@@ -84,9 +84,9 @@ const Box = styled.div`
 `
 
 const Wrapper = styled.div`
-    width: ${(props) => (props.$isProfileExist ? 72 : 100)}%;
+    width: ${(props) => (props.$displayProfile ? 72 : 100)}%;
     ${(props) =>
-        !props.$isProfileExist &&
+        !props.$displayProfile &&
         css`
             height: 4em;
         `}
