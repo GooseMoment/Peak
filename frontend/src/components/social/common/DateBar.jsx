@@ -41,10 +41,10 @@ const DateBar = ({ selectedDate, setSelectedDate }) => {
     return (
         <Frame>
             <NavBar>
-                <NavButton $buttonSize={1.5} onClick={() => handleDate(-7)}>
+                <NavButton onClick={() => handleDate(-7)}>
                     <FeatherIcon icon="chevrons-left" />
                 </NavButton>
-                <NavButton $buttonSize={2.5} onClick={() => handleDate(-1)}>
+                <NavButton onClick={() => handleDate(-1)}>
                     <FeatherIcon icon="chevron-left" />
                 </NavButton>
                 <DateBox
@@ -53,10 +53,10 @@ const DateBar = ({ selectedDate, setSelectedDate }) => {
                     }}>
                     {displayDate()}
                 </DateBox>
-                <NavButton $buttonSize={2.5} onClick={() => handleDate(1)}>
+                <NavButton onClick={() => handleDate(1)}>
                     <FeatherIcon icon="chevron-right" />
                 </NavButton>
-                <NavButton $buttonSize={1.5} onClick={() => handleDate(7)}>
+                <NavButton onClick={() => handleDate(7)}>
                     <FeatherIcon icon="chevrons-right" />
                 </NavButton>
             </NavBar>
@@ -95,7 +95,7 @@ const NavBar = styled.div`
 
 const NavButton = styled(MildButton)`
     height: 100%;
-    min-width: ${(props) => props.$buttonSize}em;
+    min-width: 1.5em;
 
     display: flex;
     justify-content: center;
