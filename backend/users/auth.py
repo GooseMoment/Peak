@@ -1,6 +1,17 @@
-from django.contrib.auth.backends import BaseBackend
+from django.http.request import HttpRequest
+from django.contrib.auth.backends import BaseBackend, ModelBackend
 from .models import User
 from peak_auth.models import TOTPSecret
+
+
+class AdminBackend(ModelBackend):
+    def authenticate(
+        self, request: HttpRequest, username=None, password=None, **kwargs
+    ):
+        if not request.path.startswith("/admin/"):
+            return None
+
+        return super().authenticate(request, username, password, **kwargs)
 
 
 class UserBackend(BaseBackend):
