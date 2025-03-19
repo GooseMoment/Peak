@@ -40,7 +40,7 @@ const DateBar = ({ selectedDate, setSelectedDate }) => {
 
     return (
         <Frame>
-            <NavBar>
+            <CalendarNavigator>
                 <NavButton onClick={() => handleDate(-7)}>
                     <FeatherIcon icon="chevrons-left" />
                 </NavButton>
@@ -59,7 +59,7 @@ const DateBar = ({ selectedDate, setSelectedDate }) => {
                 <NavButton onClick={() => handleDate(7)}>
                     <FeatherIcon icon="chevrons-right" />
                 </NavButton>
-            </NavBar>
+            </CalendarNavigator>
 
             {isCalendarOpen && (
                 <CalendarWrapper>
@@ -82,7 +82,7 @@ const Frame = styled.div`
     align-items: center;
 `
 
-const NavBar = styled.div`
+const CalendarNavigator = styled.div`
     margin: 0.5em 1em 0.5em;
     width: 100%;
     max-width: 35rem;
