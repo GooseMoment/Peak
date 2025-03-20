@@ -30,7 +30,7 @@ const ClientThemeProvider = ({ children }: { children: ReactNode }) => {
     }, [])
 
     useEffect(() => {
-        document.body.style = `background-color: ${theme.backgroundColor}`
+        document.body.style.backgroundColor = theme.backgroundColor
         metaThemeColor?.setAttribute("content", theme.backgroundColor)
     }, [theme])
 
