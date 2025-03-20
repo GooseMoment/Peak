@@ -58,7 +58,8 @@ const NotificationsPage = () => {
         isFetchingNextPage,
     } = useInfiniteQuery({
         queryKey: ["notifications", { types: filters[activeFilter] }],
-        queryFn: getNotifications,
+        queryFn: (context) =>
+            getNotifications(context.pageParam, context.queryKey[1]),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
         gcTime: 30 * 1000,
