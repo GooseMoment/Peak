@@ -5,7 +5,7 @@ export const getAnnouncements = async (
     pinned_only = false,
     page = "",
 ) => {
-    const res = await client.get(`announcements`, {
+    const res = await client.get(`announcements/`, {
         params: { lang, page, pinned_only },
     })
     return res.data

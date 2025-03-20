@@ -1,7 +1,7 @@
 import client, { getCurrentUsername, setCurrentUsername } from "@api/client"
 
 export const getMe = async () => {
-    const res = await client.get("users/me")
+    const res = await client.get("users/me/")
     setCurrentUsername(res.data.username)
     return res.data
 }

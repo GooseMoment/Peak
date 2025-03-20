@@ -7,7 +7,7 @@ import {
 import getDeviceType from "@utils/getDeviceType"
 
 export const getReminder = async (id) => {
-    const res = await client.get(`notifications/reminders/${id}`)
+    const res = await client.get(`notifications/reminders/${id}/`)
     return res.data
 }
 
@@ -17,12 +17,12 @@ export const postReminder = async (reminders) => {
 }
 
 export const patchReminder = async (id, edit) => {
-    const res = await client.patch(`notifications/reminders/${id}`, edit)
+    const res = await client.patch(`notifications/reminders/${id}/`, edit)
     return res.data
 }
 
 export const deleteReminder = async (id) => {
-    const res = await client.delete(`notifications/reminders/${id}`)
+    const res = await client.delete(`notifications/reminders/${id}/`)
     return res.data
 }
 
@@ -31,23 +31,23 @@ export const getNotifications = async (query) => {
     const cursor = query.pageParam
     const types = params.types.types.join("|")
 
-    const res = await client.get(
-        `notifications/?types=${types}&cursor=${cursor}`,
-    )
+    const res = await client.get(`notifications/`, {
+        params: { types, cursor },
+    })
     return res.data
 }
 
 export const getNotification = async (id) => {
-    const res = await client.get(`notifications/${id}`)
+    const res = await client.get(`notifications/${id}/`)
     return res.data
 }
 
 export const deleteNotification = async (id) => {
-    return client.delete(`notifications/${id}`)
+    return client.delete(`notifications/${id}/`)
 }
 
 export const getSubscription = async (id) => {
-    const res = await client.get(`notifications/subscribe/${id}`)
+    const res = await client.get(`notifications/subscribe/${id}/`)
     return res.data
 }
 
@@ -64,12 +64,12 @@ export const postSubscription = async (subscription) => {
         user_agent: navigator.userAgent,
     }
 
-    const res = await client.post(`notifications/subscribe`, data)
+    const res = await client.post(`notifications/subscribe/`, data)
     return res.data
 }
 
 export const patchSubscription = async (id, data) => {
-    const res = await client.patch(`notifications/subscribe/${id}`, data)
+    const res = await client.patch(`notifications/subscribe/${id}/`, data)
     return res.data
 }
 
@@ -84,6 +84,6 @@ export const deleteSubscription = async (id) => {
 
     setClientSettingsByName("push_notification_subscription", null)
 
-    const res = await client.delete(`notifications/subscribe/${id}`)
+    const res = await client.delete(`notifications/subscribe/${id}/`)
     return res.status
 }
