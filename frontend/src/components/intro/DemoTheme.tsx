@@ -1,6 +1,10 @@
 import { useMemo, useState } from "react"
 
-import styled, { ThemeProvider } from "styled-components"
+import styled, {
+    type LightDark,
+    ThemeProvider,
+    useTheme,
+} from "styled-components"
 
 import FilterButtonGroup from "@components/common/FilterButtonGroup"
 import SubSection from "@components/intro/SubSection"
@@ -10,15 +14,20 @@ import SkeletonSidebar from "@components/intro/skeletons/SkeletonSidebar"
 import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import { cubicBeizer } from "@assets/keyframes"
+import { getPaletteColor } from "@assets/palettes"
 import themes from "@assets/themes"
 
+import { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const DemoTheme = () => {
     const { t } = useTranslation("intro", {
         keyPrefix: "section_customize.demo",
     })
-    const [activeTheme, setActiveTheme] = useState("light")
+    const theme = useTheme()
+    const [activeTheme, setActiveTheme] = useState<LightDark>(
+        theme.type === "light" ? "dark" : "light",
+    )
     const filters = useMemo(() => makeFilters(t), [t])
 
     return (
@@ -33,7 +42,12 @@ const DemoTheme = () => {
                     <SkeletonFrame>
                         <SkeletonSidebar />
                         <SkeletonPage>
-                            <SkeletonProjectName />
+                            <SkeletonProjectName
+                                $projectColor={getPaletteColor(
+                                    activeTheme,
+                                    "yellow",
+                                )}
+                            />
                             <SkeletonDrawer />
                             <SkeletonDrawer />
                         </SkeletonPage>
@@ -44,7 +58,7 @@ const DemoTheme = () => {
     )
 }
 
-const makeFilters = (t) => ({
+const makeFilters = (t: TFunction<"intro", "section_customize.demo">) => ({
     light: {
         display: t("theme_light"),
     },
@@ -109,13 +123,13 @@ const SkeletonPage = styled.div`
     }
 `
 
-const SkeletonProjectName = styled.div`
+const SkeletonProjectName = styled.div<{ $projectColor: string }>`
     border-radius: 4px;
 
     width: 100%;
     height: 2em;
 
-    background-color: #74d548;
+    background-color: ${(p) => p.$projectColor};
 `
 
 export default DemoTheme
