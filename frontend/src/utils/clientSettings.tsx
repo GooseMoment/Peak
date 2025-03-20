@@ -133,7 +133,7 @@ const getTimezone = (settingTz: string) => {
 }
 
 export const useClientLocale = () => {
-    const [setting] = useContext(ClientSettingContext)
+    const [setting] = useClientSetting()
 
     const settingLocale = setting?.locale
     let locale = settingLocale
@@ -145,7 +145,7 @@ export const useClientLocale = () => {
 }
 
 export const useClientTimezone = () => {
-    const [setting] = useContext(ClientSettingContext)
+    const [setting] = useClientSetting()
 
     const settingTz = setting?.timezone
     const tz = getTimezone(settingTz)
@@ -154,7 +154,7 @@ export const useClientTimezone = () => {
 }
 
 export const getClientTimezone = () => {
-    const setting = getClientSettings()
+    const [setting] = useClientSetting()
 
     const settingTz = setting?.timezone
     const tz = getTimezone(settingTz)
@@ -162,8 +162,8 @@ export const getClientTimezone = () => {
     return tz
 }
 
-export const useClientTheme = (systemTheme: "system" | LightDark) => {
-    const [setting] = useContext(ClientSettingContext)
+export const useClientTheme = (systemTheme: LightDark) => {
+    const [setting] = useClientSetting()
     const theme = setting?.theme === "system" ? systemTheme : setting?.theme
 
     return themes[theme]
