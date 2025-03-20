@@ -6,7 +6,7 @@ import SimpleProfile from "@components/social/common/SimpleProfile"
 
 import { getCurrentUsername } from "@api/client"
 
-import useScreenType, { ifMobile } from "@utils/useScreenType"
+import useScreenType, { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import { getPaletteColor } from "@assets/palettes"
 
@@ -20,7 +20,7 @@ const LogPreviewBox = ({
     // pageType = "following",
 }) => {
     const theme = useTheme()
-    const { isMobile } = useScreenType()
+    const { isMobile, isTablet } = useScreenType()
     const navigate = useNavigate()
 
     const me = getCurrentUsername()
@@ -49,28 +49,32 @@ const LogPreviewBox = ({
             $isMe={log.username === me}
             $bgColor={boxColor}
             $isSelected={log.username === selectedUser}
+            $isDesktop={!(isMobile || isTablet)}
             onClick={handleSelect}>
             <FrameRow>
                 <ProfileWrapper $isMe={log.username === me}>
                     <SimpleProfile user={log} />
                 </ProfileWrapper>
             </FrameRow>
-            <Username>@{log.username}</Username>
 
-            <SimpleStats>
-                <StatsUnit>
-                    <StatusIconWrapper $type="completedTask">
-                        <FeatherIcon icon="check" />
-                    </StatusIconWrapper>
-                    <StatusCount>12</StatusCount>
-                </StatsUnit>
-                <StatsUnit>
-                    <StatusIconWrapper $type="reaction">
-                        <FeatherIcon icon="heart" />
-                    </StatusIconWrapper>
-                    <StatusCount>12</StatusCount>
-                </StatsUnit>
-            </SimpleStats>
+            <InfoContainer>
+                <Username>@{log.username}</Username>
+
+                <SimpleStats>
+                    <StatsUnit>
+                        <StatusIconWrapper $type="completedTask">
+                            <FeatherIcon icon="check" />
+                        </StatusIconWrapper>
+                        <StatusCount>12</StatusCount>
+                    </StatsUnit>
+                    <StatsUnit>
+                        <StatusIconWrapper $type="reaction">
+                            <FeatherIcon icon="heart" />
+                        </StatusIconWrapper>
+                        <StatusCount>12</StatusCount>
+                    </StatsUnit>
+                </SimpleStats>
+            </InfoContainer>
         </Box>
     )
 }
@@ -81,13 +85,13 @@ const Box = styled.div`
         props.$isMe
             ? css`
                   width: 100%;
-                  aspect-ratio: 2 / 0.9;
+                  aspect-ratio: 2 / 1;
               `
             : css`
-                  width: calc(50% - 0.5em);
+                  width: calc(50% - ${props => props.$isDesktop ? 0.75 : 0.5}em);
                   aspect-ratio: 1/1;
               `}
-    padding: max(5%, 12px);
+    padding: 7.5%;
 
     background-color: ${(props) => props.$bgColor};
     border-radius: 16px;
@@ -101,8 +105,7 @@ const Box = styled.div`
 
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    gap: 0.7em;
+    justify-content: space-between;
 
     transition: all 0.25s ease;
 
@@ -113,9 +116,15 @@ const Box = styled.div`
     }
 
     ${ifMobile} {
+        padding: 1.5em !important;
+
         &:hover {
             box-shadow: none;
         }
+    }
+
+    ${ifTablet} {
+        padding: 1.5em !important;
     }
 `
 
@@ -126,11 +135,34 @@ const FrameRow = styled.div`
 
 const ProfileWrapper = styled.div`
     aspect-ratio: 1;
-    width: 60px;
+    ${(props) =>
+        props.$isMe
+            ? css`
+                  width: calc((50% - 1.5em) * 0.45);
+              `
+            : css`
+                  width: 45%;
+              `};
+
+    ${ifMobile} {
+        max-width: 64px;
+    }
+
+    ${ifTablet} {
+        max-width: 64px;
+    }
+`
+
+const InfoContainer = styled.div`
+    flex-grow: 1;
+    max-height: 3em;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 `
 
 const Username = styled.div`
-    font-size: 1em;
     font-weight: 600;
     overflow-x: clip;
     text-overflow: ellipsis;
@@ -140,7 +172,7 @@ const Username = styled.div`
 `
 
 const SimpleStats = styled.div`
-    height: 20px;
+    height: 1.5em;
 
     display: flex;
     flex-direction: row;

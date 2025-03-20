@@ -18,7 +18,7 @@ const SocialFollowingPage = () => {
     const initialDate = new Date()
     initialDate.setHours(0, 0, 0, 0)
 
-    const { isTablet } = useScreenType()
+    const { isMobile, isTablet } = useScreenType()
 
     const me = getCurrentUsername()
 
@@ -39,13 +39,13 @@ const SocialFollowingPage = () => {
 
             <Wrapper>
                 <Container>
-                    {isTablet && (
+                    {(isMobile || isTablet) && (
                         <DateBar
                             selectedDate={selectedDate}
                             setSelectedDate={setSelectedDate}
                         />
                     )}
-                    {!isTablet && (
+                    {!(isMobile || isTablet) && (
                         <CalendarWrapper>
                             <CommonCalendar
                                 isRangeSelectMode={false}
@@ -67,7 +67,7 @@ const SocialFollowingPage = () => {
                 </Container>
 
                 {/* TODO: 날짜가 선택되지 않았을 때 */}
-                {!isTablet && (
+                {!(isMobile || isTablet) && (
                     <StickyContainer>
                         <LogDetails
                             username={targetUser}
