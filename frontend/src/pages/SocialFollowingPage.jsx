@@ -88,8 +88,14 @@ const Wrapper = styled.div`
 
     ${ifMobile} {
         width: 100%;
-
-        flex-direction: column;
+        
+        justify-content: center;
+    }
+    
+    ${ifTablet} {
+        width: 100%;
+        
+        justify-content: center;
     }
 `
 

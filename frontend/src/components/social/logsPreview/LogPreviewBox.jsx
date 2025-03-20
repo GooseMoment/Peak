@@ -35,7 +35,7 @@ const LogPreviewBox = ({
     const handleSelect = () => {
         setSelectedUser(log.username === selectedUser ? null : log.username)
 
-        if (isMobile)
+        if (isMobile || isTablet)
             navigate(`../daily/@${log.username}`, {
                 state: { selectedDate: selectedDate },
             })
