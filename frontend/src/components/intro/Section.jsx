@@ -27,4 +27,5 @@ export const SectionTitle = styled.h2`
 export const SectionDescription = styled.p`
     font-size: 1em;
     margin-top: 0.75em;
+    line-height: 1.25;
 `
