@@ -105,21 +105,22 @@ export const postQuote = async (date, quote) => {
 
 export const getDailyLogDetails = async (username, day, cursor) => {
     const res = await client.get(
-        `social/daily/log/details/@${username}/${day}/?cursor=${cursor}`,
+        `social/daily/log/details/@${username}/${day}/`,
+        { params: { cursor } },
     )
 
     return res.data
 }
 
 export const getExploreRecommend = async (cursor) => {
-    const res = await client.get(`social/explore/?cursor=${cursor}`)
+    const res = await client.get(`social/explore/`, { params: { cursor } })
 
     return res.data
 }
 
 export const getExploreFound = async (query, cursor) => {
     const params = new URLSearchParams({ query: query, cursor: cursor })
-    const res = await client.get(`social/explore/search/?${params.toString()}`)
+    const res = await client.get(`social/explore/search/`, { params })
     return res.data
 }
 
@@ -150,7 +151,8 @@ export const deleteReaction = async (parentType, parentID, emoji) => {
     const params = new URLSearchParams({ emoji: emoji })
 
     const res = await client.delete(
-        `social/reaction/${parentType}/${parentID}/?${params.toString()}`,
+        `social/reaction/${parentType}/${parentID}/`,
+        { params },
     )
 
     return res.status
