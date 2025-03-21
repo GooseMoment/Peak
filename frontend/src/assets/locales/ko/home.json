@@ -4,7 +4,8 @@
     },
     "add_task": {
         "title": "작업 추가",
-        "tap_to_open": "눌러서 열기"
+        "tap_to_open": "눌러서 열기",
+        "error": "불러오지 못했습니다. 앱을 재실행해 보세요."
     },
     "allow_notification": {
         "title": "푸시 알림 켜기",

@@ -4,7 +4,8 @@
     },
     "add_task": {
         "title": "Add a task",
-        "tap_to_open": "Tap to open..."
+        "tap_to_open": "Tap to open...",
+        "error": "Failed to load. Try to reopen the app."
     },
     "allow_notification": {
         "title": "Turn on the push notification",
