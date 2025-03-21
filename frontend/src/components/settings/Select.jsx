@@ -4,7 +4,12 @@ import styled from "styled-components"
 
 import { useClientSetting } from "@utils/clientSettings"
 
-const Select = ({ name, submit, choices, onlineSetting }) => {
+const Select = ({
+    name,
+    choices,
+    submit = () => {},
+    onlineSetting = undefined,
+}) => {
     const [clientSetting, setClientSetting] = useClientSetting()
     const [value, setValue] = useState(
         onlineSetting ? onlineSetting[name] : clientSetting[name],
