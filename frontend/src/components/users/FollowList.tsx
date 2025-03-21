@@ -4,7 +4,9 @@ import styled from "styled-components"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import ListUserProfile from "@components/users/ListUserProfile"
 
+import { type PaginationData } from "@api/client"
 import { getFollowersByUser, getFollowingsByUser } from "@api/social.api"
+import { type User } from "@api/users.api"
 
 import { getPageFromURL } from "@utils/pagination"
 import { ifMobile } from "@utils/useScreenType"
@@ -13,34 +15,31 @@ import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 
-const FollowList = ({ user, list = "followers" }) => {
-    if (list !== "followers" && list !== "followings") {
-        throw Error(`Expected "followers" or "followings", but got "${list}".`)
-    }
+interface FollowListProp {
+    user: User
+    list: "followers" | "followings"
+}
 
-    const { t } = useTranslation(null, { keyPrefix: `users.${list}_list` })
+const FollowList = ({ user, list }: FollowListProp) => {
+    const { t } = useTranslation("translation", {
+        keyPrefix: `users.${list}_list`,
+    })
 
     const { closeModal } = useModalWindowCloseContext()
 
-    const {
-        data,
-        isFetching,
-        isFetchingNextPage,
-        hasNextPage,
-        fetchNextPage,
-        isError,
-    } = useInfiniteQuery({
-        queryKey: ["users", user.username, list],
-        queryFn: ({ pageParam }) => {
-            if (list === "followers") {
-                return getFollowersByUser(user.username, pageParam)
-            } else if (list == "followings") {
-                return getFollowingsByUser(user.username, pageParam)
-            }
-        },
-        initialPageParam: 1,
-        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
-    })
+    const { data, isLoading, hasNextPage, fetchNextPage, isError } =
+        useInfiniteQuery<PaginationData<User>>({
+            queryKey: ["users", user.username, list],
+            queryFn: ({ pageParam }) => {
+                if (list === "followers") {
+                    return getFollowersByUser(user.username, pageParam)
+                } else {
+                    return getFollowingsByUser(user.username, pageParam)
+                }
+            },
+            initialPageParam: "1",
+            getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
+        })
     const isEmpty = data?.pages[0]?.results?.length === 0
 
     return (
@@ -58,11 +57,8 @@ const FollowList = ({ user, list = "followers" }) => {
                 </CloseButton>
             </TitleBar>
             <List>
-                {isFetching &&
-                    !isFetchingNextPage &&
-                    [...Array(10)].map((_, i) => (
-                        <ListUserProfile key={i} skeleton />
-                    ))}
+                {isLoading &&
+                    [...Array(10)].map((_, i) => <ListUserProfile key={i} />)}
                 {isError && <Message>{t("error")}</Message>}
                 {isEmpty && <Message>{t("empty")}</Message>}
                 {data?.pages.map((group) =>
@@ -74,7 +70,7 @@ const FollowList = ({ user, list = "followers" }) => {
                     <ImpressionArea
                         onImpressionStart={() => fetchNextPage()}
                         timeThreshold={200}>
-                        <ListUserProfile skeleton />
+                        <ListUserProfile />
                     </ImpressionArea>
                 )}
             </List>

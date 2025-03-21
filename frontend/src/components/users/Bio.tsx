@@ -2,18 +2,26 @@ import styled, { css } from "styled-components"
 
 import { Section, SectionTitle } from "./Section"
 
+import { type User } from "@api/users.api"
+
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import { useTranslation } from "react-i18next"
 
-const Bio = ({ bio, isMine, isPending }) => {
-    const { t } = useTranslation(null, { keyPrefix: "users" })
+interface BioProp {
+    bio?: User["bio"]
+    isMine?: boolean
+    isLoading?: boolean
+}
+
+const Bio = ({ bio, isMine = false, isLoading = false }: BioProp) => {
+    const { t } = useTranslation("translation", { keyPrefix: "users" })
 
     return (
         <Section>
             <SectionTitle>{t("bio")}</SectionTitle>
-            <BioBox $empty={!bio} $skeleton={isPending}>
-                {(isPending && " ") ||
+            <BioBox $empty={!bio} $loading={isLoading}>
+                {(isLoading && " ") ||
                     bio ||
                     (isMine ? t("bio_empty_mine") : t("bio_empty"))}
             </BioBox>
@@ -21,7 +29,7 @@ const Bio = ({ bio, isMine, isPending }) => {
     )
 }
 
-const BioBox = styled.div`
+const BioBox = styled.div<{ $empty?: boolean; $loading?: boolean }>`
     background-color: ${(p) => p.theme.thirdBackgroundColor};
     border-radius: 16px;
 
@@ -41,7 +49,7 @@ const BioBox = styled.div`
         `}
 
     ${(p) =>
-        p.$skeleton &&
+        p.$loading &&
         css`
             height: 5em;
             ${skeletonBreathingCSS}

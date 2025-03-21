@@ -7,7 +7,6 @@ const DeleteAlert = ({ title, onClose, func }) => {
     const { t } = useTranslation(null, { keyPrefix: "project.delete" })
 
     const buttons = [
-        "close",
         <Button key="delete" form="filled" state="danger" onClick={func}>
             {t("button_delete")}
         </Button>,

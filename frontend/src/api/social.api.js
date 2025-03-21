@@ -74,13 +74,33 @@ export const getRequestersByUser = async (username, page) => {
 
     return res.data
 }
+export const getBlock = async (username) => {
+    try {
+        const res = await client.get(
+            `social/block/@${getCurrentUsername()}/@${username}/`,
+        )
+        return res.data
+    } catch (e) {
+        if (e.response.status === 404) {
+            return null
+        }
 
-export const putBlock = (username) => {
-    return client.put(`social/block/@${getCurrentUsername()}/@${username}/`)
+        throw e
+    }
 }
 
-export const deleteBlock = (username) => {
-    return client.delete(`social/block/@${getCurrentUsername()}/@${username}/`)
+export const putBlock = async (username) => {
+    const res = await client.put(
+        `social/block/@${getCurrentUsername()}/@${username}/`,
+    )
+    return res.data
+}
+
+export const deleteBlock = async (username) => {
+    const res = await client.delete(
+        `social/block/@${getCurrentUsername()}/@${username}/`,
+    )
+    return res.data
 }
 
 export const getDailyLogsPreview = async (username, day) => {
