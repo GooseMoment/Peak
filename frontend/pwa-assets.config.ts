@@ -1,6 +1,6 @@
-import { defineConfig } from "@vite-pwa/assets-generator/config"
+import { type Preset, defineConfig } from "@vite-pwa/assets-generator/config"
 
-const preset = {
+const preset: Preset = {
     transparent: {
         sizes: [64, 192, 512],
         favicons: [[48, "favicon.ico"]],
