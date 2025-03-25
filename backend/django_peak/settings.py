@@ -119,6 +119,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "django_peak.wsgi.application"
 
+APPEND_SLASH = False
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -164,6 +166,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = [
     "users.auth.UserBackend",
     "users.auth.UserTOTPBackend",
+    "users.auth.AdminBackend",
 ]
 
 # CSRF

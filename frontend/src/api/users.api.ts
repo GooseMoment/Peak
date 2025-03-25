@@ -15,7 +15,7 @@ export interface User {
 }
 
 export const getMe = async () => {
-    const res = await client.get<User>("users/me")
+    const res = await client.get<User>("users/me/")
     setCurrentUsername(res.data.username)
     return res.data
 }
