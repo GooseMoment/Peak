@@ -12,6 +12,12 @@ import MildButton from "@components/common/MildButton"
 
 import { cubicBeizer } from "@assets/keyframes"
 
+interface ButtonPosition {
+    top: number
+    left: number
+    width: number
+}
+
 interface Filter {
     display: string
 }
@@ -27,11 +33,12 @@ const FilterButtonGroup = ({
     setActive,
     filters,
 }: FilterButtonGroupProp) => {
-    const [selectedButtonPosition, setSelectedButtonPosition] = useState({
-        top: 0,
-        left: 0,
-        width: 0,
-    })
+    const [selectedButtonPosition, setSelectedButtonPosition] =
+        useState<ButtonPosition>({
+            top: 0,
+            left: 0,
+            width: 0,
+        })
 
     const onRefChange = useCallback(
         (node: HTMLElement | null) => {
@@ -54,11 +61,7 @@ const FilterButtonGroup = ({
     return (
         <FilterGroupWrapper>
             <FilterGroup>
-                <BackgroundButton
-                    $top={selectedButtonPosition.top}
-                    $left={selectedButtonPosition.left}
-                    $width={selectedButtonPosition.width}
-                />
+                <BackgroundButton $position={selectedButtonPosition} />
                 {filterEntries.map(([name, { display }]) => (
                     <FilterButton
                         ref={active === name ? onRefChange : undefined}
@@ -103,18 +106,12 @@ const FilterButton = styled(MildButton)`
     z-index: 3;
 `
 
-interface BackgroundButtonProp {
-    $top: number
-    $left: number
-    $width: number
-}
-
-const BackgroundButton = styled(MildButton)<BackgroundButtonProp>`
+const BackgroundButton = styled(MildButton)<{ $position: ButtonPosition }>`
     position: absolute;
 
-    top: ${(props) => props.$top - 1}px;
-    left: ${(props) => props.$left}px;
-    width: ${(props) => props.$width}px;
+    top: ${(props) => props.$position.top - 1}px;
+    left: ${(props) => props.$position.left}px;
+    width: ${(props) => props.$position.width}px;
 
     transition:
         top 0.25s ${cubicBeizer},
