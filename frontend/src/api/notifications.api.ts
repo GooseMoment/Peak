@@ -11,7 +11,7 @@ import getDeviceType from "@utils/getDeviceType"
 export type TaskReminder = any
 
 export const getReminder = async (id: string) => {
-    const res = await client.get(`notifications/reminders/${id}`)
+    const res = await client.get(`notifications/reminders/${id}/`)
     return res.data
 }
 
@@ -24,12 +24,12 @@ export const patchReminder = async (
     id: string,
     edit: Partial<TaskReminder>,
 ) => {
-    const res = await client.patch(`notifications/reminders/${id}`, edit)
+    const res = await client.patch(`notifications/reminders/${id}/`, edit)
     return res.data
 }
 
 export const deleteReminder = async (id: string) => {
-    const res = await client.delete(`notifications/reminders/${id}`)
+    const res = await client.delete(`notifications/reminders/${id}/`)
     return res.data
 }
 
@@ -72,15 +72,6 @@ export const getNotifications = async (
     return res.data
 }
 
-export const getNotification = async (id: string) => {
-    const res = await client.get(`notifications/${id}`)
-    return res.data
-}
-
-export const deleteNotification = async (id: string) => {
-    return client.delete(`notifications/${id}`)
-}
-
 export interface WebPushSubscription {
     id: string
     user: object
@@ -94,7 +85,7 @@ export interface WebPushSubscription {
 
 export const getSubscription = async (id: string) => {
     const res = await client.get<WebPushSubscription>(
-        `notifications/subscribe/${id}`,
+        `notifications/subscribe/${id}/`,
     )
     return res.data
 }
@@ -113,7 +104,7 @@ export const postSubscription = async (subscription: PushSubscription) => {
     }
 
     const res = await client.post<WebPushSubscription>(
-        `notifications/subscribe`,
+        `notifications/subscribe/`,
         data,
     )
     return res.data
@@ -124,7 +115,7 @@ export const patchSubscription = async (
     data: Partial<WebPushSubscription>,
 ) => {
     const res = await client.patch<WebPushSubscription>(
-        `notifications/subscribe/${id}`,
+        `notifications/subscribe/${id}/`,
         data,
     )
     return res.data
@@ -142,5 +133,5 @@ export const deleteSubscription = async (id: string) => {
 
     setClientSettingsByName("push_notification_subscription", undefined)
 
-    await client.delete(`notifications/subscribe/${id}`)
+    await client.delete(`notifications/subscribe/${id}/`)
 }
