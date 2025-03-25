@@ -1,6 +1,6 @@
 import eslint from "@eslint/js"
 import pluginQuery from "@tanstack/eslint-plugin-query"
-import eslintConfigPrettier from "eslint-config-prettier"
+import eslintConfigPrettier from "eslint-config-prettier/flat"
 import pluginReact from "eslint-plugin-react"
 import globals from "globals"
 import tseslint from "typescript-eslint"
