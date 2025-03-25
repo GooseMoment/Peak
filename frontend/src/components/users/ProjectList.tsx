@@ -6,13 +6,23 @@ import { Section, SectionTitle } from "@components/users/Section"
 
 import { ifMobile } from "@utils/useScreenType"
 
-import { getPaletteColor } from "@assets/palettes"
+import { type PaletteColorName, getPaletteColor } from "@assets/palettes"
 import { skeletonCSS } from "@assets/skeleton"
 
 import { useTranslation } from "react-i18next"
 
-const ProjectList = ({ projects, isMine, isPending }) => {
-    const { t } = useTranslation(null, { keyPrefix: "users" })
+interface ProjectListProp {
+    projects: { id: string; name: string; color: PaletteColorName }[] // TODO: replace to Project
+    isMine?: boolean
+    isLoading?: boolean
+}
+
+const ProjectList = ({
+    projects,
+    isMine = false,
+    isLoading = false,
+}: ProjectListProp) => {
+    const { t } = useTranslation("translation", { keyPrefix: "users" })
     const theme = useTheme()
 
     return (
@@ -20,11 +30,11 @@ const ProjectList = ({ projects, isMine, isPending }) => {
             <SectionTitle>{t("projects")}</SectionTitle>
 
             <Projects>
-                {isPending &&
-                    [...Array(10)].map((_, i) => <Project key={i} $skeleton />)}
+                {isLoading &&
+                    [...Array(10)].map((_, i) => <Project key={i} $loading />)}
 
                 {projects?.map((project) => {
-                    const projectCompo = (
+                    const projectName = (
                         <Project key={project.id}>
                             <Circle
                                 $color={getPaletteColor(
@@ -37,14 +47,14 @@ const ProjectList = ({ projects, isMine, isPending }) => {
                     )
 
                     if (!isMine) {
-                        return projectCompo
+                        return projectName
                     }
 
                     return (
                         <Link
                             to={isMine && `/app/projects/${project.id}`}
                             key={project.id}>
-                            {projectCompo}
+                            {projectName}
                         </Link>
                     )
                 })}
@@ -68,24 +78,24 @@ const Projects = styled.div`
     }
 `
 
-const Project = styled.div`
+const Project = styled.div<{ $loading?: boolean }>`
     display: flex;
     gap: 0.25em;
     font-size: 1.25em;
     align-items: center;
 
     ${(p) =>
-        p.$skeleton &&
+        p.$loading &&
         css`
             height: 1.25em;
             width: 5em;
             border-radius: 8px;
 
-            ${skeletonCSS}
+            ${skeletonCSS()}
         `}
 `
 
-const Circle = styled.div`
+const Circle = styled.div<{ $color: string }>`
     border-radius: 50%;
     background-color: ${(p) => p.$color};
 

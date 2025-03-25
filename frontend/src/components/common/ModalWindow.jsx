@@ -8,7 +8,7 @@ import { cubicBeizer, scaleDown, scaleUp } from "@assets/keyframes"
 
 import { createPortal } from "react-dom"
 
-const CloseContext = createContext(null)
+const CloseContext = createContext({ closeModal: () => {} })
 
 export const useModalWindowCloseContext = () => {
     return useContext(CloseContext)
