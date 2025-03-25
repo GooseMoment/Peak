@@ -61,7 +61,9 @@ const FilterButtonGroup = ({
     return (
         <FilterGroupWrapper>
             <FilterGroup>
-                <BackgroundButton $position={selectedButtonPosition} />
+                {selectedButtonPosition.left !== 0 && (
+                    <BackgroundButton $position={selectedButtonPosition} />
+                )}
                 {filterEntries.map(([name, { display }]) => (
                     <FilterButton
                         ref={active === name ? onRefChange : undefined}
