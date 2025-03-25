@@ -4,7 +4,11 @@ import Switch from "@components/common/Switch"
 
 import { useClientSetting } from "@utils/clientSettings"
 
-const SettingSwitch = ({ submit, name, onlineSetting }) => {
+const SettingSwitch = ({
+    name,
+    submit = () => {},
+    onlineSetting = undefined,
+}) => {
     const [clientSetting, setClientSetting] = useClientSetting()
     const [value, setValue] = useState(
         onlineSetting ? onlineSetting[name] : clientSetting[name],
