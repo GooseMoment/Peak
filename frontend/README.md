@@ -30,13 +30,14 @@ pnpm dev
     - `queries/`: react-query 관련
     - `utils/`: 유틸성 함수
     - `routers/`: 라우터 관련
-    - `main.jsx`: 소스코드 시작 부분
+    - `main.tsx`: 엔트리포인트
 
 ## PWA
 
-[Vite PWA](https://vite-pwa-org.netlify.app/)을 이용해서 PWA화를 진행합니다.
-`vite.config.js`에서 Vite PWA의 설정을 수정할 수 있습니다.
-각종 아이콘은 [pwa-assets-generator](https://vite-pwa-org.netlify.app/assets-generator)로 제작합니다. 해당 설정은 `pwa-assets.config.js`에서 확인할 수 있습니다.
+[Vite PWA](https://vite-pwa-org.netlify.app/)을 이용해 Service Worker를 생성합니다.
+`vite.config.ts`에서 Vite PWA의 설정을 수정할 수 있습니다.
+
+앱 아이콘은 [pwa-assets-generator](https://vite-pwa-org.netlify.app/assets-generator)로 생성합니다. 해당 설정은 `pwa-assets.config.ts`에서 확인할 수 있습니다.
 
 ```bash
 pnpm generate-assets
