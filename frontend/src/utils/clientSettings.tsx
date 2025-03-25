@@ -1,4 +1,11 @@
-import { ReactNode, createContext, useContext, useMemo, useState } from "react"
+import {
+    type ReactNode,
+    createContext,
+    useCallback,
+    useContext,
+    useMemo,
+    useState,
+} from "react"
 
 import { LightDark } from "styled-components"
 
@@ -97,12 +104,11 @@ export const ClientSettingProvider = ({
 }) => {
     const [setting, setSetting] = useState(getClientSettings())
 
-    const updateSetting = useMemo(
-        () =>
-            <K extends keyof Setting, V extends Setting[K]>(key: K, val: V) => {
-                setClientSettingsByName(key, val)
-                setSetting(getClientSettings())
-            },
+    const updateSetting = useCallback(
+        <K extends keyof Setting, V extends Setting[K]>(key: K, val: V) => {
+            setClientSettingsByName(key, val)
+            setSetting(getClientSettings())
+        },
         [],
     )
 
