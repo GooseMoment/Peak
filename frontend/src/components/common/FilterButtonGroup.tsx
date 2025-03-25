@@ -1,4 +1,10 @@
-import { useCallback, useState } from "react"
+import {
+    type Dispatch,
+    type SetStateAction,
+    useCallback,
+    useMemo,
+    useState,
+} from "react"
 
 import styled from "styled-components"
 
@@ -6,16 +12,31 @@ import MildButton from "@components/common/MildButton"
 
 import { cubicBeizer } from "@assets/keyframes"
 
-const FilterButtonGroup = ({ active, setActive, filters }) => {
+interface Filter {
+    display: string
+}
+
+interface FilterButtonGroupProp {
+    active: string
+    setActive: Dispatch<SetStateAction<string>>
+    filters: { [name: string]: Filter }
+}
+
+const FilterButtonGroup = ({
+    active,
+    setActive,
+    filters,
+}: FilterButtonGroupProp) => {
     const [selectedButtonPosition, setSelectedButtonPosition] = useState({
-        top: "0.5em",
+        top: 0,
         left: 0,
         width: 0,
     })
 
     const onRefChange = useCallback(
-        (node) => {
+        (node: HTMLElement | null) => {
             if (!node) {
+                // node is null when this component is unmounted
                 return
             }
 
@@ -28,6 +49,8 @@ const FilterButtonGroup = ({ active, setActive, filters }) => {
         [filters],
     )
 
+    const filterEntries = useMemo(() => Object.entries(filters), [filters])
+
     return (
         <FilterGroupWrapper>
             <FilterGroup>
@@ -36,13 +59,12 @@ const FilterButtonGroup = ({ active, setActive, filters }) => {
                     $left={selectedButtonPosition.left}
                     $width={selectedButtonPosition.width}
                 />
-                {Object.entries(filters).map(([name, filter]) => (
+                {filterEntries.map(([name, { display }]) => (
                     <FilterButton
                         ref={active === name ? onRefChange : undefined}
                         key={name}
-                        onClick={() => setActive(name)}
-                        $active={active === name}>
-                        {filter.display}
+                        onClick={() => setActive(name)}>
+                        {display}
                     </FilterButton>
                 ))}
             </FilterGroup>
@@ -81,7 +103,13 @@ const FilterButton = styled(MildButton)`
     z-index: 3;
 `
 
-const BackgroundButton = styled(MildButton)`
+interface BackgroundButtonProp {
+    $top: number
+    $left: number
+    $width: number
+}
+
+const BackgroundButton = styled(MildButton)<BackgroundButtonProp>`
     position: absolute;
 
     top: ${(props) => props.$top - 1}px;
