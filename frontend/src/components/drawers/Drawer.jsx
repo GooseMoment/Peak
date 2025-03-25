@@ -157,15 +157,18 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
         })
     }, [])
 
-    const dropTask = useCallback(() => {
+    const dropTask = useCallback(async () => {
         const results = data?.pages?.flatMap((page) => page.results) || []
         const changedTasks = tasks
             .map((task, index) => ({ id: task.id, order: index }))
             .filter((task, index) => results[index]?.id !== task.id)
 
-        changedTasks.forEach(({ id, order }) => {
-            patchMutation.mutate({ id, order })
+        const promises = changedTasks.map(({ id, order }) => {
+            return patchMutation.mutateAsync({ id, order })
         })
+
+        await Promise.all(promises)
+
         setOrdering("order")
     }, [tasks, data])
     // ---
