@@ -1,6 +1,7 @@
 {
     "error": {
-        "text": "설정에서 문제가 발생했습니다."
+        "text": "이 섹션의 정보를 불러오지 못했습니다.",
+        "retry": "다시 시도"
     },
     "menus": {
         "title": "설정",
@@ -62,21 +63,27 @@
             "password_change_error": "암호 변경 중 문제가 발생했습니다."
         },
         "totp": {
-            "name": "2단계 인증: 일회용 코드",
-            "description": "일회용 코드(TOTP)를 사용하면 보안을 향상할 수 있습니다.",
-            "activated_at": "{{date}}에 활성화됨",
+            "name": "2단계 인증: 일회용 코드(TOTP)",
+            "description": "암호만 사용하는 것보다 더 강력한 보안을 유지할 수 있습니다.",
+            "activated_at": "{{date}}에 등록했습니다.",
             "enable": "켜기",
             "edit": "수정",
             "delete": "삭제",
             "ask_delete": "일회용 코드 인증을 삭제할까요?",
-            "qrcode_description": "인증기 앱으로 QR 코드를 스캔하세요. 앱에 표시되는 숫자를 아래 입력하면 등록이 완료됩니다.",
-            "secret_manual": "또는, 보안 키를 수동으로 입력할 수 있습니다:",
+            "qrcode_description": "인증기 앱으로 QR 코드를 스캔하세요.",
+            "cannot_scan": "QR코드를 스캔할 수 없나요?",
+            "secret_manual": "QR코드를 스캔하는 대신 보안 키(설정 키)를 수동으로 입력할 수 있습니다.",
             "copy_success": "수동 보안키를 클립보드로 복사했습니다.",
+            "enter_code": "앱에 표시되는 숫자를 아래 입력하면 등록이 완료됩니다.",
             "input_placeholder": "6자리 코드",
             "enter": "입력",
             "cancel": "취소",
-            "register_success": "2단계 인증을 활성화 했습니다.",
-            "delete_success": "2단계 인증을 삭제했습니다.",
+            "enter_6_digit": "6자리를 입력하세요.",
+            "register_success": "일회용 코드 인증을 활성화했습니다.",
+            "register_error": "활성화할 수 없습니다. 다시 시도하세요.",
+            "delete_success": "일회용 코드 인증을 삭제했습니다.",
+            "delete_error": "삭제할 수 없습니다. 다시 시도하세요.",
+            "expired": "만료된 QR코드입니다. 다시 시도하세요.",
             "wrong_code": "잘못된 코드입니다. 다시 시도하세요."
         }
     },
