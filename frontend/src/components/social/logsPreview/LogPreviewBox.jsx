@@ -187,7 +187,7 @@ const StatsUnit = styled.div`
 const StatusIconWrapper = styled.div`
     box-sizing: border-box;
     aspect-ratio: 1;
-    width: 18px;
+    height: 18px;
     padding: 0;
 
     ${(props) =>
