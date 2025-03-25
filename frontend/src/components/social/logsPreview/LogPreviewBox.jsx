@@ -21,6 +21,7 @@ const LogPreviewBox = ({
 }) => {
     const theme = useTheme()
     const { isMobile, isTablet } = useScreenType()
+    const isDesktop = !(isMobile || isTablet)
     const navigate = useNavigate()
 
     const me = getCurrentUsername()
@@ -35,7 +36,7 @@ const LogPreviewBox = ({
     const handleSelect = () => {
         setSelectedUser(log.username === selectedUser ? null : log.username)
 
-        if (isMobile || isTablet)
+        if (!isDesktop)
             navigate(`../daily/@${log.username}`, {
                 state: { selectedDate: selectedDate },
             })
@@ -49,10 +50,12 @@ const LogPreviewBox = ({
             $isMe={log.username === me}
             $bgColor={boxColor}
             $isSelected={log.username === selectedUser}
-            $isDesktop={!(isMobile || isTablet)}
+            $isDesktop={isDesktop}
             onClick={handleSelect}>
             <FrameRow>
-                <ProfileWrapper $isMe={log.username === me}>
+                <ProfileWrapper
+                    $isMe={log.username === me}
+                    $isDesktop={isDesktop}>
                     <SimpleProfile user={log} />
                 </ProfileWrapper>
             </FrameRow>
@@ -88,19 +91,19 @@ const Box = styled.div`
                   aspect-ratio: 2 / 1;
               `
             : css`
-                  width: calc(50% - ${props => props.$isDesktop ? 0.75 : 0.5}em);
+                  width: calc(50% - 0.5em);
                   aspect-ratio: 1/1;
               `}
-    padding: 7.5%;
+    padding: 6%;
 
     background-color: ${(props) => props.$bgColor};
-    border-radius: 16px;
+    border-radius: 24px;
     ${(props) =>
         props.$isSelected &&
         css`
             box-shadow:
                 0 0 0 0.15em ${(p) => p.theme.backgroundColor},
-                0 0 0 0.3em ${(p) => p.theme.textColor} !important;
+                0 0 0 0.3em ${(props) => props.$bgColor} !important;
         `}
 
     display: flex;
@@ -115,16 +118,12 @@ const Box = styled.div`
             0 0 0 0.3em ${(props) => props.$bgColor};
     }
 
-    ${ifMobile} {
+    ${ifMobile}${ifTablet} {
         padding: 1.5em !important;
 
         &:hover {
             box-shadow: none;
         }
-    }
-
-    ${ifTablet} {
-        padding: 1.5em !important;
     }
 `
 
@@ -138,25 +137,24 @@ const ProfileWrapper = styled.div`
     ${(props) =>
         props.$isMe
             ? css`
-                  width: calc((50% - 1.5em) * 0.45);
+                  width: calc(
+                      (50% - 1.5em) * ${props.$isDesktop ? 0.55 : 0.50}
+                  );
               `
             : css`
-                  width: 45%;
+                  width: ${props.$isDesktop ? 55 : 50}%;
               `};
+    max-width: 4.5em;
 
-    ${ifMobile} {
-        max-width: 64px;
-    }
-
-    ${ifTablet} {
-        max-width: 64px;
+    ${ifMobile} ${ifTablet} {
+        max-width: 64px !important;
     }
 `
 
 const InfoContainer = styled.div`
     flex-grow: 1;
     max-height: 3em;
-    
+
     display: flex;
     flex-direction: column;
     gap: 1em;

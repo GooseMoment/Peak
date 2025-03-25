@@ -4,8 +4,6 @@ import LogPreviewBox from "@components/social/logsPreview/LogPreviewBox"
 
 import { getCurrentUsername } from "@api/client"
 
-import useScreenType from "@utils/useScreenType"
-
 const compareDailyLogs = (a, b) => {
     // Show self log first
     const me = getCurrentUsername()
@@ -30,10 +28,8 @@ const compareDailyLogs = (a, b) => {
 }
 
 const LogsPreview = ({ logs, selectedUser, setSelectedUser, selectedDate }) => {
-    const { isMobile, isTablet } = useScreenType()
-
     return (
-        <LogsPreviewContainer $isDesktop={!(isMobile || isTablet)}>
+        <LogsPreviewContainer>
             {logs.sort(compareDailyLogs).map((log) => (
                 <LogPreviewBox
                     key={log.username}
@@ -57,7 +53,7 @@ const LogsPreviewContainer = styled.div`
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
-    row-gap: ${(props) => (props.$isDesktop ? 1.5 : 1)}em;
+    row-gap: 1em;
 `
 
 export default LogsPreview
