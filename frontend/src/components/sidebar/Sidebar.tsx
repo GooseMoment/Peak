@@ -3,7 +3,10 @@ import styled, { css } from "styled-components"
 import Footer from "@components/sidebar/Footer"
 import Header from "@components/sidebar/Header"
 import Middle from "@components/sidebar/Middle"
-import { useSidebarContext } from "@components/sidebar/SidebarContext"
+import {
+    type StyledCollapsedProp,
+    useSidebarContext,
+} from "@components/sidebar/SidebarContext"
 
 import { ifMobile } from "@utils/useScreenType"
 
@@ -19,7 +22,7 @@ const Sidebar = () => {
     )
 }
 
-export const SidebarBox = styled.nav`
+export const SidebarBox = styled.nav<StyledCollapsedProp>`
     z-index: 99;
 
     padding-bottom: calc(env(safe-area-inset-bottom) - 1em);

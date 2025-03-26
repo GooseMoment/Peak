@@ -3,7 +3,10 @@ import { useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
 
-import { useSidebarContext } from "@components/sidebar/SidebarContext"
+import {
+    StyledCollapsedProp,
+    useSidebarContext,
+} from "@components/sidebar/SidebarContext"
 import SidebarLink from "@components/sidebar/SidebarLink"
 
 import { getMe } from "@api/users.api"
@@ -17,14 +20,14 @@ import { toast } from "react-toastify"
 const Footer = () => {
     const {
         data: user,
-        isPending,
+        isLoading,
         isError,
     } = useQuery({
         queryKey: ["users", "me"],
         queryFn: () => getMe(),
     })
 
-    const { t } = useTranslation(null, { keyPrefix: "sidebar" })
+    const { t } = useTranslation("translation", { keyPrefix: "sidebar" })
 
     useEffect(() => {
         if (isError) {
@@ -38,7 +41,7 @@ const Footer = () => {
 
     return (
         <FooterBox $collapsed={isCollapsed}>
-            {isPending && (
+            {isLoading && (
                 <MeProfile>
                     <MeProfileImgSkeleton />
                     {!isCollapsed && <UsernameSkeleton />}
@@ -61,7 +64,6 @@ const Footer = () => {
                     <SidebarLink
                         to="/app/settings/profile"
                         activePath="/app/settings"
-                        end={false}
                         key="settings">
                         <SmallIcon>
                             <FeatherIcon icon="settings" />
@@ -73,7 +75,7 @@ const Footer = () => {
     )
 }
 
-const FooterBox = styled.footer`
+const FooterBox = styled.footer<StyledCollapsedProp>`
     display: flex;
     flex-direction: ${(props) => (props.$collapsed ? "column" : "row")};
     justify-content: space-between;
