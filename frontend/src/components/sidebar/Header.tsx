@@ -68,19 +68,22 @@ const Header = () => {
     )
 }
 
-const ButtonContainer = styled.div`
+interface CollapsedProp {
+    $collapsed?: boolean
+}
+
+const ButtonContainer = styled.div<CollapsedProp>`
     display: flex;
     justify-content: flex-end;
     font-size: 1em;
     padding: 0.75em 0.5em 0.75em 0.5em;
     margin: 0 0.75em;
 
-    ${({ $collapsed }) =>
-        $collapsed
-            ? css`
-                  justify-content: center;
-              `
-            : null}
+    ${(prop) =>
+        prop.$collapsed &&
+        css`
+            justify-content: center;
+        `}
 `
 const rotateToLeft = keyframes`
     0% {
@@ -102,7 +105,7 @@ const rotateToRight = keyframes`
     }
 `
 
-const CollapseButton = styled(MildButton)`
+const CollapseButton = styled(MildButton)<CollapsedProp>`
     padding: 0.75em;
 
     & svg {
