@@ -6,7 +6,7 @@ import SimpleProfile from "@components/social/common/SimpleProfile"
 
 import { getCurrentUsername } from "@api/client"
 
-import useScreenType, { ifMobile, ifTablet } from "@utils/useScreenType"
+import useScreenType, { ifTablet } from "@utils/useScreenType"
 
 import { getPaletteColor } from "@assets/palettes"
 
@@ -20,8 +20,7 @@ const LogPreviewBox = ({
     // pageType = "following",
 }) => {
     const theme = useTheme()
-    const { isMobile, isTablet } = useScreenType()
-    const isDesktop = !(isMobile || isTablet)
+    const { isDesktop } = useScreenType()
     const navigate = useNavigate()
 
     const me = getCurrentUsername()
@@ -50,7 +49,6 @@ const LogPreviewBox = ({
             $isMe={log.username === me}
             $bgColor={boxColor}
             $isSelected={log.username === selectedUser}
-            $isDesktop={isDesktop}
             onClick={handleSelect}>
             <FrameRow>
                 <ProfileWrapper
@@ -118,7 +116,7 @@ const Box = styled.div`
             0 0 0 0.3em ${(props) => props.$bgColor};
     }
 
-    ${ifMobile}${ifTablet} {
+    ${ifTablet} {
         padding: 1.5em !important;
 
         &:hover {
@@ -146,7 +144,7 @@ const ProfileWrapper = styled.div`
               `};
     max-width: 4.5em;
 
-    ${ifMobile} ${ifTablet} {
+    ${ifTablet} {
         max-width: 64px !important;
     }
 `
