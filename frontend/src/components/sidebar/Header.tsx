@@ -3,7 +3,10 @@ import { useEffect, useRef } from "react"
 import styled, { css, keyframes } from "styled-components"
 
 import MildButton from "@components/common/MildButton"
-import { useSidebarContext } from "@components/sidebar/SidebarContext"
+import {
+    type StyledCollapsedProp,
+    useSidebarContext,
+} from "@components/sidebar/SidebarContext"
 
 import useScreenSize from "@utils/useScreenSize"
 import { WIDTH_TABLET } from "@utils/useScreenType"
@@ -68,11 +71,7 @@ const Header = () => {
     )
 }
 
-interface CollapsedProp {
-    $collapsed?: boolean
-}
-
-const ButtonContainer = styled.div<CollapsedProp>`
+const ButtonContainer = styled.div<StyledCollapsedProp>`
     display: flex;
     justify-content: flex-end;
     font-size: 1em;
@@ -105,7 +104,7 @@ const rotateToRight = keyframes`
     }
 `
 
-const CollapseButton = styled(MildButton)<CollapsedProp>`
+const CollapseButton = styled(MildButton)<StyledCollapsedProp>`
     padding: 0.75em;
 
     & svg {

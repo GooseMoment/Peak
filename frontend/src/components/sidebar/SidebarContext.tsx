@@ -12,6 +12,10 @@ import { WIDTH_TABLET } from "@utils/useScreenType"
 
 const startUpWidth = window.innerWidth
 
+export interface StyledCollapsedProp {
+    $collapsed?: boolean
+}
+
 interface SidebarCollapsed {
     isCollapsed: boolean
     setCollapsed: Dispatch<SetStateAction<boolean>>
