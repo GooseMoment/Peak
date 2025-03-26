@@ -1,5 +1,10 @@
-import { startTransition } from "react"
-import { NavLink, useNavigate } from "react-router-dom"
+import {
+    type MouseEvent,
+    type MouseEventHandler,
+    type ReactNode,
+    startTransition,
+} from "react"
+import { NavLink, type To, useNavigate } from "react-router-dom"
 
 import styled from "styled-components"
 
@@ -24,18 +29,28 @@ const StyledNavLink = styled(NavLink)`
     }
 `
 
+interface SidebarLinkProp {
+    onClick?: MouseEventHandler
+    to: To
+    activePath: To
+    end?: boolean
+    children?: ReactNode
+    lazy?: boolean
+    noNavigate?: boolean
+}
+
 const SidebarLink = ({
     onClick, // onClick is called before navigate().
     to,
     activePath, // use if navigated path and active path are different. If empty, then 'to' is used.
-    end,
+    end = false,
     children,
     lazy = false, // if true, then navigate() is called inside startTransition().
     noNavigate = false, // if true, then navigate() isn't called.
-}) => {
+}: SidebarLinkProp) => {
     const navigate = useNavigate()
 
-    const onClickThis = (e) => {
+    const onClickThis = (e: MouseEvent) => {
         e.preventDefault()
 
         if (onClick) {
