@@ -31,7 +31,7 @@ const StyledNavLink = styled(NavLink)`
 
 interface SidebarLinkProp extends NavLinkProps {
     // use if navigated path and active path are different. If empty, then 'to' is used.
-    activePath: To
+    activePath?: To
 }
 
 const SidebarLink = ({
