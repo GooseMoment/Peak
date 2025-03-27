@@ -1,14 +1,14 @@
 import client from "@api/client"
 
 export const getTasksByDrawer = async (drawerID, ordering, page) => {
-    const res = await client.get(
-        `tasks?drawer=${drawerID}&ordering=${ordering}&page=${page}`,
-    )
+    const res = await client.get(`tasks/`, {
+        params: { drawer: drawerID, ordering, page },
+    })
     return res.data
 }
 
 export const getTask = async (id) => {
-    const res = await client.get(`tasks/${id}`)
+    const res = await client.get(`tasks/${id}/`)
     return res.data
 }
 
@@ -18,7 +18,7 @@ export const postTask = async (task) => {
 }
 
 export const patchTask = async (id, edit) => {
-    const res = await client.patch(`tasks/${id}`, edit)
+    const res = await client.patch(`tasks/${id}/`, edit)
     return res.data
 }
 
@@ -28,7 +28,7 @@ export const patchReorderTask = async (data) => {
 }
 
 export const deleteTask = async (id) => {
-    const res = await client.delete(`tasks/${id}`)
+    const res = await client.delete(`tasks/${id}/`)
     return res.data
 }
 

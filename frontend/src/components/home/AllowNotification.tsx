@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next"
 const AllowNotification = () => {
     const { t } = useTranslation("home", { keyPrefix: "allow_notification" })
 
-    if (window.Notification.permission !== "default") {
+    if (!window.Notification || window.Notification.permission !== "default") {
         return null
     }
 

@@ -73,8 +73,8 @@ class TaskList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
         ]
         ordering = self.request.GET.get("ordering", None)
 
-        if ordering.lstrip("-") in ordering_fields:
-            normalize_tasks_order(queryset, ordering)
+        if ordering is not None and ordering.lstrip("-") in ordering_fields:
+            normalize_drawer_order(queryset, ordering)
 
         return queryset
 

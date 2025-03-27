@@ -1,14 +1,14 @@
 import client from "@api/client"
 
 export const getDrawersByProject = async (projectID, ordering) => {
-    const res = await client.get(
-        `drawers?project=${projectID}&ordering=${ordering}`,
-    )
+    const res = await client.get(`drawers/`, {
+        params: { project: projectID, ordering: ordering },
+    })
     return res.data.results
 }
 
 export const getDrawer = async (id) => {
-    const res = await client.get(`drawers/${id}`)
+    const res = await client.get(`drawers/${id}/`)
     return res.data
 }
 
@@ -18,7 +18,7 @@ export const postDrawer = async (drawer) => {
 }
 
 export const patchDrawer = async (id, edit) => {
-    const res = await client.patch(`drawers/${id}`, edit)
+    const res = await client.patch(`drawers/${id}/`, edit)
     return res.data
 }
 
@@ -28,6 +28,6 @@ export const patchReorderDrawer = async (data) => {
 }
 
 export const deleteDrawer = async (id) => {
-    const res = await client.delete(`drawers/${id}`)
+    const res = await client.delete(`drawers/${id}/`)
     return res.data
 }
