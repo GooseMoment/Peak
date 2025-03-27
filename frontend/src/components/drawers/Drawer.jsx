@@ -138,14 +138,6 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
         mutationFn: ({ id, order }) => {
             return patchTask(id, { order })
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: [
-                    "tasks",
-                    { drawerID: drawer.id, ordering: ordering },
-                ],
-            })
-        },
     })
 
     const moveTask = useCallback((dragIndex, hoverIndex) => {
@@ -169,6 +161,9 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
 
         await Promise.all(promises)
 
+        await queryClient.refetchQueries({
+            queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
+        })
         setOrdering("order")
     }, [tasks, data])
     // ---

@@ -96,12 +96,6 @@ const ProjectPage = () => {
         mutationFn: ({ id, order }) => {
             return patchDrawer(id, { order })
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["drawers", { projectID: id, ordering: ordering }],
-            })
-            drawersRefetch()
-        },
     })
 
     const moveDrawer = useCallback((dragIndex, hoverIndex) => {
@@ -113,13 +107,19 @@ const ProjectPage = () => {
         })
     }, [])
 
-    const dropDrawer = useCallback(() => {
+    const dropDrawer = useCallback(async () => {
         const changedDrawers = drawers
             .map((drawer, index) => ({ id: drawer.id, order: index }))
             .filter((drawer, index) => data[index]?.id !== drawer.id)
 
-        changedDrawers.forEach(({ id, order }) => {
-            patchMutation.mutate({ id, order })
+        const promises = changedDrawers.map(({ id, order }) => {
+            return patchMutation.mutateAsync({ id, order })
+        })
+
+        await Promise.all(promises)
+
+        await queryClient.refetchQueries({
+            queryKey: ["drawers", { projectID: id, ordering: "order" }],
         })
         setOrdering("order")
     }, [drawers, data])
