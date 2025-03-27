@@ -82,4 +82,3 @@ class DrawerReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
         Drawer.objects.bulk_update(drawers, ["order"])
 
         return Response(status=status.HTTP_200_OK)
-    

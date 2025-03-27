@@ -74,7 +74,7 @@ class TaskList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
         ordering = self.request.GET.get("ordering", None)
 
         if ordering is not None and ordering.lstrip("-") in ordering_fields:
-            normalize_drawer_order(queryset, ordering)
+            normalize_tasks_order(queryset, ordering)
 
         return queryset
 
@@ -106,4 +106,3 @@ class TaskReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
         Task.objects.bulk_update(tasks, ["order"])
 
         return Response(status=status.HTTP_200_OK)
-
