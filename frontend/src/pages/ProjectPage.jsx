@@ -27,7 +27,7 @@ import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
 import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 
-import { getDrawersByProject, patchDrawer } from "@api/drawers.api"
+import { getDrawersByProject, patchReorderDrawer } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
 
 import { ifMobile } from "@utils/useScreenType"
@@ -93,8 +93,8 @@ const ProjectPage = () => {
     }, [data])
 
     const patchMutation = useMutation({
-        mutationFn: ({ id, order }) => {
-            return patchDrawer(id, { order })
+        mutationFn: (data) => {
+            return patchReorderDrawer(data)
         },
     })
 
@@ -112,11 +112,9 @@ const ProjectPage = () => {
             .map((drawer, index) => ({ id: drawer.id, order: index }))
             .filter((drawer, index) => data[index]?.id !== drawer.id)
 
-        const promises = changedDrawers.map(({ id, order }) => {
-            return patchMutation.mutateAsync({ id, order })
-        })
+        if (changedDrawers.length === 0) return
 
-        await Promise.all(promises)
+        await patchMutation.mutateAsync(changedDrawers)
 
         await queryClient.refetchQueries({
             queryKey: ["drawers", { projectID: id, ordering: "order" }],

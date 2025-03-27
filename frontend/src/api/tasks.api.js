@@ -22,6 +22,11 @@ export const patchTask = async (id, edit) => {
     return res.data
 }
 
+export const patchReorderTask = async (data) => {
+    const res = await client.patch(`tasks/reorder`, data)
+    return res.data
+}
+
 export const deleteTask = async (id) => {
     const res = await client.delete(`tasks/${id}`)
     return res.data

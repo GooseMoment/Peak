@@ -1,7 +1,8 @@
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
+from rest_framework.response import Response
 
 from .models import Drawer
-from .serializers import DrawerSerializer
+from .serializers import DrawerSerializer, DrawerReorderSerializer
 from .utils import normalize_drawers_order
 from api.permissions import IsUserOwner
 
@@ -58,3 +59,27 @@ class DrawerList(
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+
+class DrawerReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
+    serializer_class = DrawerReorderSerializer
+    queryset = Drawer.objects.all()
+
+    def patch(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+
+        drawers_data = serializer.validated_data
+
+        ids = [item["id"] for item in drawers_data]
+        id_to_order = {item["id"]: item["order"] for item in drawers_data}
+
+        drawers = list(self.get_queryset().filter(id__in=ids))
+
+        for drawer in drawers:
+            drawer.order = id_to_order[drawer.id]
+
+        Drawer.objects.bulk_update(drawers, ["order"])
+
+        return Response(status=status.HTTP_200_OK)
+    

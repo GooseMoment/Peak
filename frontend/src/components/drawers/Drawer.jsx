@@ -29,7 +29,7 @@ import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 import DrawerTask from "@components/tasks/DrawerTask"
 
 import { deleteDrawer } from "@api/drawers.api"
-import { getTasksByDrawer, patchTask } from "@api/tasks.api"
+import { getTasksByDrawer, patchReorderTask } from "@api/tasks.api"
 
 import { getPageFromURL } from "@utils/pagination"
 
@@ -135,8 +135,8 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
     }, [data])
 
     const patchMutation = useMutation({
-        mutationFn: ({ id, order }) => {
-            return patchTask(id, { order })
+        mutationFn: (data) => {
+            return patchReorderTask(data)
         },
     })
 
@@ -155,11 +155,9 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
             .map((task, index) => ({ id: task.id, order: index }))
             .filter((task, index) => results[index]?.id !== task.id)
 
-        const promises = changedTasks.map(({ id, order }) => {
-            return patchMutation.mutateAsync({ id, order })
-        })
+        if (changedTasks.length === 0) return
 
-        await Promise.all(promises)
+        await patchMutation.mutateAsync(changedTasks)
 
         await queryClient.refetchQueries({
             queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
