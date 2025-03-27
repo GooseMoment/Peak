@@ -155,7 +155,6 @@ const Profile = () => {
                         <Button
                             disabled={mutation.isPending}
                             loading={mutation.isPending}
-                            form="filled"
                             type="submit">
                             {t("button_submit")}
                         </Button>
@@ -192,7 +191,7 @@ const Username = styled.div`
 
     min-width: 0;
     white-space: nowrap;
-    overflow: hidden;
+    overflow-x: clip;
     text-overflow: ellipsis;
 `
 
