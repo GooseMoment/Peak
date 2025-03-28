@@ -23,7 +23,7 @@ export const patchTask = async (id, edit) => {
 }
 
 export const patchReorderTask = async (data) => {
-    const res = await client.patch(`tasks/reorder`, data)
+    const res = await client.patch(`tasks/reorder/`, data)
     return res.data
 }
 

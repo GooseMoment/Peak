@@ -23,7 +23,7 @@ export const patchDrawer = async (id, edit) => {
 }
 
 export const patchReorderDrawer = async (data) => {
-    const res = await client.patch(`drawers/reorder`, data)
+    const res = await client.patch(`drawers/reorder/`, data)
     return res.data
 }
 
