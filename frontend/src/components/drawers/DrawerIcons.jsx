@@ -1,11 +1,13 @@
 import styled from "styled-components"
 
 import CollapseButton from "@components/common/CollapseButton"
+import OptionsMenu from "@components/project/common/OptionsMenu"
 import SortIcon from "@components/project/sorts/SortIcon"
+import SortMenu from "@components/project/sorts/SortMenu"
 
 import { DrawerIcon } from "./DrawerBox"
 
-import handleToggleContextMenu from "@utils/handleToggleContextMenu"
+import useScreenType from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -14,23 +16,29 @@ const DrawerIcons = ({
     collapsed,
     handleCollapsed,
     clickPlus,
-    setIsSortMenuOpen,
-    setSelectedSortMenuPosition,
-    setIsContextMenuOpen,
-    setSelectedContextPosition,
+    items,
+    openSortMenuMobile,
+    ordering,
+    setOrdering,
+    handleEdit,
+    handleAlert,
 }) => {
+    const { isMobile } = useScreenType()
+
     const drawerIcons = [
         { icon: <FeatherIcon icon="plus" onClick={clickPlus} /> },
         {
-            icon: (
-                <div
-                    onClick={handleToggleContextMenu(
-                        setSelectedSortMenuPosition,
-                        setIsSortMenuOpen,
-                        setIsContextMenuOpen,
-                    )}>
+            icon: isMobile ? (
+                <div onClick={openSortMenuMobile}>
                     <SortIcon color={color} />
                 </div>
+            ) : (
+                <SortMenu
+                    color={color}
+                    items={items}
+                    ordering={ordering}
+                    setOrdering={setOrdering}
+                />
             ),
         },
         {
@@ -43,13 +51,10 @@ const DrawerIcons = ({
         },
         {
             icon: (
-                <FeatherIcon
-                    icon="more-horizontal"
-                    onClick={handleToggleContextMenu(
-                        setSelectedContextPosition,
-                        setIsContextMenuOpen,
-                        setIsSortMenuOpen,
-                    )}
+                <OptionsMenu
+                    color={color}
+                    handleAlert={handleAlert}
+                    handleEdit={handleEdit}
                 />
             ),
         },
@@ -58,13 +63,16 @@ const DrawerIcons = ({
     return (
         <DrawerIcon $color={color}>
             {drawerIcons.map((item, i) => (
-                <Button key={i}>{item.icon}</Button>
+                <IconBox key={i}>{item.icon}</IconBox>
             ))}
         </DrawerIcon>
     )
 }
 
-const Button = styled.button`
+const IconBox = styled.div`
+    width: 1em;
+    height: 1em;
+    margin: 0.5em;
     border: 0;
     background-color: transparent;
 `

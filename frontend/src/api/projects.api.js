@@ -11,7 +11,7 @@ export const getProjectListByUser = async (username) => {
 }
 
 export const getProject = async (id) => {
-    const res = await client.get(`projects/${id}`)
+    const res = await client.get(`projects/${id}/`)
     return res.data
 }
 
@@ -21,11 +21,11 @@ export const postProject = async (project) => {
 }
 
 export const patchProject = async (id, edit) => {
-    const res = await client.patch(`projects/${id}`, edit)
+    const res = await client.patch(`projects/${id}/`, edit)
     return res.data
 }
 
 export const deleteProject = async (id) => {
-    const res = await client.delete(`projects/${id}`)
+    const res = await client.delete(`projects/${id}/`)
     return res.data
 }

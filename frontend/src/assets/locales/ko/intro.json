@@ -121,5 +121,8 @@
             "theme_light": "라이트",
             "theme_dark": "다크"
         }
+    },
+    "section_footer": {
+        "back_to_top": "맨 위로"
     }
 }
