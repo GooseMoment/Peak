@@ -5,7 +5,7 @@ import styled, { useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
-import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
+import ModalBottomSheet from "@components/common/ModalBottomSheet"
 import { useDeleteTask } from "@components/project/common/useDeleteTask"
 import ContentsMobile from "@components/project/taskDetails/mobile/ContentsMobile"
 import TaskNameInput from "@components/tasks/TaskNameInput"
@@ -129,25 +129,18 @@ const TaskCommonDetailMobile = ({
 
     return (
         <ModalBottomSheet
-            headerContent={
-                <Header
-                    title={title}
-                    icon={
-                        isCreating ? null : (
-                            <FeatherIcon
-                                icon="trash-2"
-                                stroke={theme.project.danger}
-                                onClick={handleAlert}
-                            />
-                        )
-                    }
-                    closeSheet={onClose}
-                    handleBack={
-                        activeContent ? () => setActiveContent(null) : null
-                    }
-                />
+            onClose={onClose}
+            title={title}
+            icon={
+                isCreating ? null : (
+                    <FeatherIcon
+                        icon="trash-2"
+                        stroke={theme.project.danger}
+                        onClick={handleAlert}
+                    />
+                )
             }
-            onClose={onClose}>
+            handleBack={activeContent ? () => setActiveContent(null) : null}>
             <TaskCommonDetailMobileBox>
                 <TaskNameInput
                     task={newTask}

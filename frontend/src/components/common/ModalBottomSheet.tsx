@@ -5,51 +5,30 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { Sheet } from "react-modal-sheet"
 
-interface HeaderProps {
+interface BottomSheetProps {
+    onClose: () => void
+    initialSnap?: number
     title?: string | null
     icon?: React.ReactNode | null
     handleBack?: (() => void) | null
-    closeSheet: () => void
-}
-
-export const Header = ({
-    title = null,
-    icon = null,
-    handleBack = null,
-    closeSheet,
-}: HeaderProps) => {
-    return (
-        <HeaderBox>
-            {handleBack ? (
-                <FeatherIcon icon="chevron-left" onClick={handleBack} />
-            ) : icon ? (
-                icon
-            ) : (
-                <EmptyBox />
-            )}
-            {title && title}
-            {closeSheet && <FeatherIcon icon="x" onClick={closeSheet} />}
-        </HeaderBox>
-    )
-}
-
-interface BottomSheetProps {
-    headerContent: React.ReactNode
-    onClose: () => void
-    initialSnap?: number
     children: React.ReactNode
 }
 
 const ModalBottomSheet = ({
-    headerContent,
     onClose,
     initialSnap = 0,
+    title = null,
+    icon = null,
+    handleBack = null,
     children,
 }: BottomSheetProps) => {
     const [isOpen, setIsOpen] = useState(true)
 
     const closeModal = () => {
         setIsOpen(false)
+    }
+
+    const handleAnimationEnd = () => {
         onClose()
     }
 
@@ -57,11 +36,27 @@ const ModalBottomSheet = ({
         <StyledSheet
             isOpen={isOpen}
             onClose={closeModal}
+            onCloseEnd={handleAnimationEnd}
             snapPoints={[600, 500, 200, 0]}
             initialSnap={initialSnap}>
             <Sheet.Container>
-                <Sheet.Header>{headerContent}</Sheet.Header>
-                <Sheet.Scroller draggableAt="both">{children}</Sheet.Scroller>
+                <Sheet.Header>
+                    <HeaderBox>
+                        {handleBack ? (
+                            <FeatherIcon
+                                icon="chevron-left"
+                                onClick={handleBack}
+                            />
+                        ) : icon ? (
+                            icon
+                        ) : (
+                            <EmptyBox />
+                        )}
+                        {title && title}
+                        <FeatherIcon icon="x" onClick={closeModal} />
+                    </HeaderBox>
+                </Sheet.Header>
+                <StyledScroller draggableAt="both">{children}</StyledScroller>
             </Sheet.Container>
             <Sheet.Backdrop onTap={closeModal} />
         </StyledSheet>
@@ -83,6 +78,11 @@ const StyledSheet = styled(Sheet)`
         border-top-right-radius: 30px;
         background-color: ${(p) => p.theme.backgroundColor};
     }
+`
+
+const StyledScroller = styled(Sheet.Scroller)`
+    overflow-y: auto;
+    overflow-x: hidden;
 `
 
 const HeaderBox = styled.div`

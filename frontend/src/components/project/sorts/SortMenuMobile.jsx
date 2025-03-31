@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import styled from "styled-components"
 
-import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
+import ModalBottomSheet from "@components/common/ModalBottomSheet"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -20,14 +20,9 @@ const SortMenuMobile = ({ title, items, onClose, ordering, setOrdering }) => {
 
     return (
         <ModalBottomSheet
-            headerContent={
-                <Header
-                    title={t("title", { title: title })}
-                    closeSheet={handleClose}
-                />
-            }
             onClose={handleClose}
-            initialSnap={1}>
+            initialSnap={1}
+            title={t("title", { title: title })}>
             <ContentBox>
                 <CLine />
                 {items.map((item) => (
