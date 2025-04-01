@@ -62,6 +62,7 @@
         "loading": "Loading...",
         "none": "none",
         "error_load_project_and_drawer": "Couldn't load project and drawers 😢",
+        "error_load_inbox": "Couldn't load inbox 😢",
         "name_placeholder": "Enter a name",
         "edit": {
             "display": "Edit"
