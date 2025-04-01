@@ -7,12 +7,13 @@
 		format console
 	}
 
-	handle /assets/* {
+	@assets_and_fonts path /assets/* *.woff2
+	handle @assets_and_fonts {
 		header Cache-Control max-age=604800
 		file_server
 	}
 
-	@public path *.*
+	@public path *.css *.webp *.png *.ico *.svg *.txt
 	handle @public {
 		header Cache-Control max-age=86400
 		file_server
@@ -34,6 +35,8 @@
 }
 
 {$API_HOSTNAME} {
+	encode zstd gzip
+
 	handle_path /static/* {
 		root * /srv/django_static/static
 		file_server
