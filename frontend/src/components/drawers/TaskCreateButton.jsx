@@ -4,7 +4,7 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const TaskCreateButton = ({ isOpen, onClick }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation("translation", { keyPrefix: "project" })
 
     return (
         <TaskCreateButtonBox onClick={onClick}>

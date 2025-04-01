@@ -17,8 +17,6 @@ import { getProject } from "@api/projects.api"
 import { ifMobile } from "@utils/useScreenType"
 import useScreenType from "@utils/useScreenType"
 
-import { getPaletteColor } from "@assets/palettes"
-
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
@@ -34,10 +32,10 @@ const InboxPage = () => {
     const { isMobile } = useScreenType()
 
     const [ordering, setOrdering] = useState("order")
-    const [isSortMenMobileOpen, setSortMenuMobileOpen] = useState(false)
+    const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
     const [isCreateOpen, setCreateOpen] = useState(false)
 
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation("translation", { keyPrefix: "project" })
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
 
@@ -69,7 +67,7 @@ const InboxPage = () => {
         )
     }
 
-    const color = getPaletteColor(theme.type, data?.color)
+    const color = theme.grey
 
     return (
         <>
@@ -108,7 +106,7 @@ const InboxPage = () => {
                     ordering={ordering}
                 />
             )}
-            {isSortMenMobileOpen && (
+            {isSortMenuMobileOpen && (
                 <Suspense
                     key="sort-menu-mobile-inbox-page"
                     fallback={<ModalLoader />}>

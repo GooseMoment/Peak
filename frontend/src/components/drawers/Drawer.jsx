@@ -44,7 +44,7 @@ const Drawer = ({ project, drawer, color }) => {
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
     const [isCreateOpen, setCreateOpen] = useState(false)
 
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation("translation", { keyPrefix: "project" })
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
 
@@ -164,26 +164,24 @@ const Drawer = ({ project, drawer, color }) => {
 
     return (
         <>
-            {project.type === "inbox" ? null : (
-                <DrawerBox $color={color}>
-                    <DrawerTitleBox>
-                        <DrawerName $color={color}>{drawer.name}</DrawerName>
-                        <PrivacyIcon privacy={drawer.privacy} color={color} />
-                    </DrawerTitleBox>
-                    <DrawerIcons
-                        color={color}
-                        collapsed={collapsed}
-                        handleCollapsed={handleCollapsed}
-                        clickPlus={clickPlus}
-                        items={sortMenuItems}
-                        openSortMenuMobile={() => setSortMenuMobileOpen(true)}
-                        ordering={ordering}
-                        setOrdering={setOrdering}
-                        handleEdit={() => setIsDrawerEditOpen(true)}
-                        handleAlert={() => setIsAlertOpen(true)}
-                    />
-                </DrawerBox>
-            )}
+            <DrawerBox $color={color}>
+                <DrawerTitleBox>
+                    <DrawerName $color={color}>{drawer.name}</DrawerName>
+                    <PrivacyIcon privacy={drawer.privacy} color={color} />
+                </DrawerTitleBox>
+                <DrawerIcons
+                    color={color}
+                    collapsed={collapsed}
+                    handleCollapsed={handleCollapsed}
+                    clickPlus={clickPlus}
+                    items={sortMenuItems}
+                    openSortMenuMobile={() => setSortMenuMobileOpen(true)}
+                    ordering={ordering}
+                    setOrdering={setOrdering}
+                    handleEdit={() => setIsDrawerEditOpen(true)}
+                    handleAlert={() => setIsAlertOpen(true)}
+                />
+            </DrawerBox>
             {collapsed ? null : (
                 <>
                     <TaskList>

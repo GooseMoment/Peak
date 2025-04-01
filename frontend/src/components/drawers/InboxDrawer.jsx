@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next"
 const InboxDrawer = ({ project, drawer, color, ordering }) => {
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
 
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation("translation", { keyPrefix: "project" })
 
     const {
         data,
