@@ -9,14 +9,12 @@ import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
+import TaskCreateButton from "@components/drawers/TaskCreateButton"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 import TaskCreateSimple from "@components/project/TaskCreateSimple"
 import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
-import {
-    SkeletonDrawer,
-    SkeletonInboxDrawer,
-} from "@components/project/skeletons/SkeletonProjectPage"
+import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 import DrawerTask from "@components/tasks/DrawerTask"
 
@@ -152,14 +150,13 @@ const Drawer = ({ project, drawer, color }) => {
     }
 
     if (isLoading) {
-        if (project.type === "inbox")
-            return <SkeletonInboxDrawer taskCount={taskCount} />
+        if (project.type === "inbox") return null
         return <SkeletonDrawer taskCount={taskCount} />
     }
 
     if (isError) {
         return (
-            <TaskErrorBox onClick={() => refetch()}>
+            <TaskErrorBox onClick={refetch}>
                 <FeatherIcon icon="alert-triangle" />
                 {t("error_load_task")}
             </TaskErrorBox>
@@ -212,23 +209,10 @@ const Drawer = ({ project, drawer, color }) => {
                             onClose={() => setIsSimpleOpen(false)}
                         />
                     )}
-                    <TaskCreateButton onClick={handleToggleSimpleCreate}>
-                        {isSimpleOpen ? (
-                            <>
-                                <FeatherIcon icon="x-circle" />
-                                <TaskCreateText>
-                                    {t("button_close_add_task")}
-                                </TaskCreateText>
-                            </>
-                        ) : (
-                            <>
-                                <FeatherIcon icon="plus-circle" />
-                                <TaskCreateText>
-                                    {t("button_add_task")}
-                                </TaskCreateText>
-                            </>
-                        )}
-                    </TaskCreateButton>
+                    <TaskCreateButton
+                        isOpen={isSimpleOpen}
+                        onClick={handleToggleSimpleCreate}
+                    />
                     {hasNextPage ? (
                         <ButtonGroup $justifyContent="center" $margin="1em">
                             <MoreButton
@@ -292,27 +276,6 @@ const DrawerTitleBox = styled.div`
 
 const TaskList = styled.div`
     margin-top: 1em;
-`
-
-const TaskCreateButton = styled.div`
-    display: flex;
-    align-items: center;
-    margin-top: 1em;
-    margin-left: 1.9em;
-    cursor: pointer;
-
-    & svg {
-        width: 1.1em;
-        height: 1.1em;
-        top: 0;
-    }
-`
-
-const TaskCreateText = styled.div`
-    font-size: 1.1em;
-    font-weight: medium;
-    color: ${(p) => p.theme.textColor};
-    margin-top: 0em;
 `
 
 const MoreButton = styled(Button)`

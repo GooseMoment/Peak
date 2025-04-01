@@ -109,10 +109,6 @@ const ProjectPage = () => {
         deleteMutation.mutate()
     }
 
-    const openInboxTaskCreate = () => {
-        setCreateOpen(true)
-    }
-
     const onClickProjectErrorBox = () => {
         projectRefetch()
         drawersRefetch()
@@ -140,22 +136,16 @@ const ProjectPage = () => {
                     <PageTitle $color={color}>{project.name}</PageTitle>
                     <PrivacyIcon
                         privacy={project.privacy}
-                        color={getPaletteColor(theme.type, project.color)}
+                        color={color}
                         isProject
                     />
                 </PageTitleBox>
                 <Icons>
                     <FeatherIcon
                         icon="plus"
-                        onClick={
-                            project?.type === "inbox"
-                                ? openInboxTaskCreate
-                                : () => {
-                                      setIsDrawerCreateOpen(true)
-                                  }
-                        }
+                        onClick={() => setIsDrawerCreateOpen(true)}
                     />
-                    {project?.type === "inbox" || (
+                    {
                         <>
                             <SortIconBox>
                                 {isMobile ? (
@@ -179,7 +169,7 @@ const ProjectPage = () => {
                                 handleAlert={handleAlert}
                             />
                         </>
-                    )}
+                    }
                 </Icons>
             </TitleBox>
             {project.type === "goal" && (
