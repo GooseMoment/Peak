@@ -1,0 +1,412 @@
+{
+    "sidebar": {
+        "search": "검색",
+        "home": "홈",
+        "notifications": "알림",
+        "today": "오늘",
+        "social": "소셜",
+        "projects": "프로젝트",
+        "projects_list_refetch": "눌러서 재시도",
+        "user_error": "유저 정보를 불러올 수 없습니다. 앱을 다시 실행해 주세요."
+    },
+    "notifications": {
+        "title": "알림",
+        "empty": "알림이 없습니다.",
+        "no_more": "알림이 더 이상 없습니다.",
+        "fail_to_load": "알림을 불러오지 못했습니다.",
+        "type_all": "모두",
+        "type_tasks": "작업",
+        "type_comments": "댓글",
+        "type_reactions": "리액션",
+        "type_pecking": "콕 쪼기",
+        "type_follow": "팔로우",
+        "content_task_reminder": "{{delta}}분 전 리마인더",
+        "content_task_reminder_now": "작업할 시간입니다.",
+        "content_peck": "{{count}}번 콕 쪼았습니다.",
+        "content_comment_quote": "{{date}}의 한마디",
+        "content_reaction_quote": "{{date}}의 한마디",
+        "content_follow": "나를 팔로우 합니다.",
+        "content_follow_request": "내게 팔로우 요청을 보냈습니다.",
+        "content_follow_request_accepted": "내 팔로우 요청을 승인했습니다."
+    },
+    "project_list": {
+        "title": "프로젝트",
+        "type_regular": "상시",
+        "type_goal": "목표",
+        "button_add_project": "새 프로젝트 추가"
+    },
+    "today": {
+        "title": "오늘",
+        "important_title": "오늘의 중요한 작업",
+        "filter_todayDue": "오늘 기한",
+        "filter_overDue": "지난 기한",
+        "filter_pastAssigned": "지난 할당",
+        "no_today_assignment": "오늘 할 작업들을 추가하세요.",
+        "error_load_task": "작업을 불러오지 못했어요 😢",
+        "button_load_more": "더보기",
+        "due_change_today_success": "작업을 오늘로 할당했습니다.",
+        "due_change_tomorrow_success": "작업을 내일로 할당했습니다.",
+        "due_change_error": "기한 변경에 실패했습니다.",
+        "no_tasks_todayDue": "오늘 기한인 작업이 없습니다.",
+        "no_tasks_overDue": "기한이 지난 작업이 없습니다.",
+        "no_tasks_pastAssigned": "할당이 지난 작업이 없습니다."
+    },
+    "project": {
+        "no_drawer": "+ 버튼을 눌러서 서랍을 추가하세요.",
+        "progress": "진행 상황",
+        "button_load_more": "더보기",
+        "button_add_task": "새 작업 추가",
+        "button_close_add_task": "닫기",
+        "button_add": "추가하기",
+        "button_save": "수정",
+        "loading": "로딩 중",
+        "none": "없음",
+        "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요 😢",
+        "name_placeholder": "이름을 입력하세요",
+        "edit": {
+            "display": "수정"
+        },
+        "delete": {
+            "display": "삭제",
+            "button_delete": "삭제",
+            "alert_project_title": "\"{{project_name}}\" 프로젝트를",
+            "alert_drawer_title": "\"{{drawer_name}}\" 서랍을",
+            "alert_question": "{{title}} 삭제하시겠습니까?",
+            "project_delete_success": "\"{{project_name}}\" 프로젝트를 삭제했습니다.",
+            "project_delete_error": "\"{{project_name}}\" 프로젝트 삭제에 실패했습니다.",
+            "drawer_delete_success": "\"{{drawer_name}}\" 서랍을 삭제했습니다.",
+            "drawer_delete_error": "\"{{drawer_name}}\" 서랍 삭제에 실패했습니다."
+        },
+        "sort": {
+            "title": "{{title}} 목록 정렬 기준",
+            "drawer_title": "서랍",
+            "task_title": "작업",
+            "name": "이름 사전순",
+            "-name": "이름 사전 역순",
+            "created_at": "생성일자 최신순",
+            "-created_at": "생성일자 오래된순",
+            "-uncompleted_task_count": "미완료 작업 많은순",
+            "-completed_task_count": "완료 작업 많은순",
+            "completed_task_count": "완료 작업 적은순",
+            "-priority": "중요도순",
+            "due_date": "기한 이른 순서",
+            "-due_date": "기한 늦은 순서",
+            "reminders": "리마인더 설정 우선"
+        }
+    },
+    "project_drawer_edit": {
+        "none": "없음",
+        "button_add": "생성",
+        "button_save": "저장",
+        "name_placeholder": "이름을 입력하세요",
+        "created_project": "새 프로젝트를 생성했습니다.",
+        "created_project_error": "프로젝트 생성에 실패했습니다.",
+        "created_drawer": "새 서랍을 생성했습니다.",
+        "created_drawer_error": "서랍 생성에 실패했습니다.",
+        "edited": "변경 사항을 저장했습니다.",
+        "edited_error": "변경 사항 저장에 실패했습니다.",
+        "project_cannot_name_inbox": "프로젝트의 이름을 Inbox로 지을 수 없습니다.",
+        "name_required": "이름을 지어주세요.",
+        "color": {
+            "title": "색깔 설정",
+            "palette1": "기본",
+            "red": "빨간색",
+            "red_orange": "레드오렌지",
+            "orange": "주황색",
+            "yellow": "노란색",
+            "bright_sky_blue": "밝은 하늘색",
+            "blue": "파란색",
+            "magenta": "마젠타",
+            "violet": "보라색",
+            "pink": "분홍색",
+            "hot_pink": "핫핑크",
+            "light_green": "연두색",
+            "mint": "민트색",
+            "olive": "올리브색",
+            "dark_violet": "어두운 보라색",
+            "deep_blue": "딥블루",
+            "deep_indigo": "딥인디고"
+        },
+        "privacy": {
+            "title": "공개 범위 설정",
+            "public": "전체공개",
+            "protected": "팔로워공개",
+            "private": "비공개"
+        },
+        "type": {
+            "title": "프로젝트 종류 설정",
+            "regular": "상시 프로젝트",
+            "goal": "목표 프로젝트"
+        }
+    },
+    "task": {
+        "missed": "놓침",
+        "overdue": "기한 지남",
+        "due_today": "오늘",
+        "due_tomorrow": "내일",
+        "days_left": "일 남음",
+        "name_placeholder": "작업의 이름을 입력하세요.",
+        "name_change_success": "이름을 변경했습니다.",
+        "none": "없음",
+        "error_load_task": "작업을 불러오지 못했어요 😢",
+        "edit": {
+            "edit_title": "작업 수정",
+            "edit_success": "변경 사항을 저장했습니다.",
+            "edit_error": "작업 수정에 실패하였습니다.",
+            "create_title": "작업 생성",
+            "create_success": "새 작업을 생성했습니다.",
+            "create_error": "작업 생성에 실패하였습니다.",
+            "create_no_name": "작업의 이름을 적어주세요.",
+            "button_add": "생성",
+            "button_save": "저장"
+        },
+        "delete": {
+            "alert_task_title": "\"{{task_name}}\" 작업을",
+            "delete_success": "\"{{task_name}}\" 작업을 삭제했습니다.",
+            "delete_error": "\"{{task_name}}\" 작업 삭제에 실패했습니다."
+        },
+        "assigned": {
+            "name": "할당 날짜",
+            "title": "할당 날짜 설정"
+        },
+        "due": {
+            "name": "기한",
+            "title": "기한 설정",
+            "quick": {
+                "title": "빠른 지정",
+                "today": "오늘",
+                "tomorrow": "내일",
+                "next_week": "다음 주",
+                "next_two_weeks": "2주 뒤",
+                "next_month": "한달 뒤",
+                "no_date": "날짜없음"
+            },
+            "calendar": "달력",
+            "time": {
+                "title": "시간 추가",
+                "am": "오전",
+                "pm": "오후",
+                "button_add": "추가하기",
+                "button_remove": "삭제하기",
+                "no_due_before_time": "시간 설정 전에 기한을 설정해주세요.",
+                "acceptable_numbers": "입력 가능한 최대 숫자는 {{max}}입니다.",
+                "time_change_success": "시간을 변경했습니다.",
+                "time_remove": "시간을 삭제했습니다."
+            }
+        },
+        "reminder": {
+            "name": "리마인더",
+            "title": "리마인더 설정",
+            "reminder_before_due_date": "리마인더 설정 전에 기한을 설정해주세요.",
+            "then": "그때",
+            "5_minutes_before": "5분 전",
+            "15_minutes_before": "15분 전",
+            "30_minutes_before": "30분 전",
+            "1_hour_before": "1시간 전",
+            "1_day_before": "1일 전",
+            "2_days_before": "2일 전",
+            "display_then": "그때",
+            "display_5_minutes_before": "5분 전",
+            "display_15_minutes_before": "15분 전",
+            "display_30_minutes_before": "30분 전",
+            "display_1_hour_before": "1시간 전",
+            "display_1_day_before": "1일 전",
+            "display_2_days_before": "2일 전"
+        },
+        "priority": {
+            "name": "중요도",
+            "title": "중요도 설정",
+            "normal": "보통",
+            "important": "중요",
+            "critical": "매우 중요"
+        },
+        "drawer": {
+            "name": "서랍",
+            "title": "서랍 선택",
+            "fetching_error": "데이터를 불러오는 중 오류가 발생했습니다."
+        },
+        "memo": {
+            "name": "메모",
+            "title": "메모 설정",
+            "memo_placeholder": "메모를 입력해주세요.",
+            "button_change": "변경하기",
+            "memo_edit_success": "메모를 변경했습니다."
+        }
+    },
+    "users": {
+        "follows_you": "나를 팔로우 중",
+        "followings": "팔로잉",
+        "followers": "팔로워",
+        "requests_exist": "@{{username}} 님의 요청",
+        "follow_request_sent_to_me": "내게 팔로우 요청을 보냈습니다.",
+        "button_follow_request_accept": "승인",
+        "button_follow_request_reject": "거절",
+        "follow_request_accepted": "팔로우 요청을 승인했습니다.",
+        "follow_request_acceptance_error": "팔로우 요청을 받을 수 없습니다. 다시 시도해주세요.",
+        "follow_request_rejected": "팔로우 요청을 거절했습니다.",
+        "follow_request_rejection_error": "팔로우 요청을 거절 수 없습니다. 다시 시도해주세요.",
+        "bio": "바이오",
+        "bio_empty": "비어 있습니다.",
+        "bio_empty_mine": "프로필 수정을 눌러 바이오를 작성해보세요.",
+        "projects": "프로젝트",
+        "projects_empty": "프로젝트가 없습니다.",
+        "button_edit_profile": "프로필 수정",
+        "button_block": "차단하기",
+        "button_unblock": "차단 해제하기",
+        "confirmation_block": "@{{username}} 님을 차단할까요?",
+        "confirmation_unblock": "@{{username}} 님의 차단을 해제할까요?",
+        "success_block": "@{{username}} 님을 차단했습니다.",
+        "success_unblock": "@{{username}} 님의 차단을 해제했습니다.",
+        "error_block": "차단하지 못했습니다.",
+        "error_unblock": "차단 해제하지 못했습니다.",
+        "error_user_not_found": "찾을 수 없는 유저입니다.",
+        "followings_list": {
+            "title": "@{{username}} 님의 팔로잉 목록",
+            "empty": "아무 것도 없습니다.",
+            "error": "팔로잉 목록을 불러올 수 없습니다."
+        },
+        "followers_list": {
+            "title": "@{{username}} 님의 팔로워 목록",
+            "empty": "아무 것도 없습니다.",
+            "error": "팔로워 목록을 불러올 수 없습니다."
+        }
+    },
+    "follow_button": {
+        "button_follow": "팔로우",
+        "button_accepted": "팔로우 중",
+        "button_requested": "요청 보냄",
+        "success_follow": "@{{username}} 님을 팔로우 합니다.",
+        "success_requested": "@{{username}} 님에게 팔로우 요청을 보냈습니다.",
+        "error_follow": "@{{username}} 님에게 팔로우 요청을 보내지 못했습니다.",
+        "success_unfollow": "이제 @{{username}} 님을 언팔로우 했습니다.",
+        "success_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소했습니다.",
+        "error_unfollow": "@{{username}} 님을 언팔로우 하지 못했습니다.",
+        "error_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소하지 못했습니다.",
+        "cancel_accepted": "@{{username}} 님을 언팔로우 할까요?",
+        "button_unfollow": "언팔로우"
+    },
+    "error-page": {
+        "unknown_error_code": "ㅠ_ㅠ",
+        "unknown_error_text": "알 수 없는 오류가 발생했습니다.",
+        "unknown_error_bottom": "시작 화면으로 돌아가기",
+        "404_error_text": "요청하신 페이지를 찾을 수 없습니다.",
+        "404_error_bottom": "이전 화면으로 돌아가기"
+    },
+    "email_verification": {
+        "invalid_access": "잘못된 접근입니다.",
+        "verified_title": "인증 완료",
+        "verified": "이제 {{email}} 주소로 로그인할 수 있습니다.",
+        "link_sign": "로그인 하기",
+        "resend_title": "인증 메일 재요청",
+        "resend_other_cases": "만약 이미 인증되었거나, 등록되지 않은 이메일이라면 다른 메일이 전송됩니다.",
+        "resend_known_issues": "Outlook 등의 이메일 서비스에서는 스팸으로 간주되어 전송이 불가합니다. 해당 경우에는 다른 주소로 가입하여 주세요.",
+        "resend_success": "메일을 전송했습니다. 메일함 또는 스팸함을 확인하세요.",
+        "resend_error_limit": "약 {{minutes}}분 후 다시 시도하세요.",
+        "resend_error_bad_request": "메일 형식이 올바르지 않습니다.",
+        "resend_error_any": "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        "placeholder_email": "이메일 주소 입력",
+        "button_submit": "제출"
+    },
+    "sign": {
+        "sign_in_again": "로그아웃 되었습니다. 다시 로그인하세요.",
+        "sign_in": "로그인",
+        "sign_in_success": "로그인 성공! 다시 만나서 기뻐요.",
+        "sign_in_failed": "로그인 실패. 유저네임과 암호를 다시 확인하세요.",
+        "network_error": "문제가 발생했습니다. 네트워크 상황을 확인하세요.",
+        "internal_error": "문제가 발생했습니다. 다시 시도해 주세요.",
+        "email_verify_required": "이메일 인증이 아직 진행되지 않았습니다. 메일함 또는 스팸함을 확인해주세요.",
+        "loading": "로딩 중",
+        "button_sign_in": "로그인",
+        "button_create_account": "계정 생성",
+        "button_resend_verification": "인증 메일 재전송",
+        "button_forgot_password": "암호 찾기",
+        "two_factor_authentication": "2단계 인증",
+        "two_factor_authentication_description": "인증기 앱에 표시된 코드를 입력하세요.",
+        "button_cancel": "취소",
+        "button_email_authentication": "이메일 인증",
+        "6-digit_code": "6자리 코드",
+        "enter_6_digit": "6자리 숫자를 입력하세요.",
+        "session_invalid": "다시 로그인하세요.",
+        "try_count_exceed": "2단계 인증 시도 횟수를 초과했습니다. 다시 로그인하세요.",
+        "wrong_code": "잘못된 코드입니다. 다시 시도하세요.",
+        "sign_up": "회원가입",
+        "email": "이메일 주소",
+        "password": "암호",
+        "username": "사용자 이름",
+        "button_sign_up": "가입하기",
+        "tos": "'가입하기' 버튼을 누름으로써 <linkToTos>이용약관</linkToTos>에 동의하게 됩니다.",
+        "button_already_have_account": "로그인 하기",
+        "link_sign_in": "로그인",
+        "sign_up_completed": "메일 인증 필요",
+        "check_inbox": "이메일 인증 메일이 전송되었습니다. 메일함 또는 스팸함을 확인하세요.",
+        "sign_up_errors": {
+            "NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
+            "USER_ALREADY_AUTHENTICATED": "이미 로그인되어 있습니다.",
+            "REQUIRED_FIELD_MISSING": "이메일 주소, 암호, 사용자 이름을 모두 입력해주세요.",
+            "EMAIL_INVALID": "올바른 이메일 주소를 입력해주세요.",
+            "USERNAME_INVALID_LENGTH": "사용자 이름은 4글자 이상, 15글자 이하여야 합니다.",
+            "USERNAME_INVALID_FORMAT": "사용자 이름은 알파벳, 언더스코어(_), 숫자만 포함할 수 있습니다.",
+            "USERNAME_DUPLICATE": "이미 존재하는 사용자 이름입니다.",
+            "PASSWORD_INVALID": "암호는 8글자 이상이어야 합니다.",
+            "INTERNAL_ERROR": "문제가 발생했습니다. 다시 시도해 주세요.",
+            "EMAIL_NOT_SENT": "이메일을 전송할 수 없습니다. 몇 분 뒤에 다시 시도해주세요.",
+            "UNKNOWN_ERROR": "알 수 없는 문제가 발생했습니다. 나중에 시도해 주세요."
+        }
+    },
+    "password_recovery": {
+        "request_title": "암호를 잊었나요?",
+        "request_description": "암호를 잊은 경우, 암호 재설정 링크를 이메일로 받을 수 있습니다.",
+        "placeholder_email": "이메일 주소 입력",
+        "button_submit": "제출",
+        "request_success": "암호 재설정 메일이 전송되었습니다. 메일함을 확인하세요.",
+        "request_error_limit": "한 시간 후에 다시 시도해주세요.",
+        "request_error_bad_request": "잘못된 요청입니다. 페이지 새로고침 후 다시 시도하세요.",
+        "request_error_any": "오류가 발생했습니다. 네트워크 상황을 확인하세요.",
+        "link_sign_in": "로그인",
+        "recovery_title": "암호 재설정",
+        "recovery_description": "새 암호는 8자 이상이어야 합니다.",
+        "placeholder_password": "새 암호 입력",
+        "placeholder_password_again": "한 번 더 입력",
+        "button_set": "암호 변경",
+        "recovery_success": "암호를 변경했습니다. 새 암호로 로그인하세요.",
+        "recovery_error_password_length": "암호는 8자 이상이어야 합니다.",
+        "recovery_error_password_unmatch": "새 암호가 서로 다릅니다.",
+        "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다."
+    },
+    "social": {
+        "following_title": "팔로잉",
+        "explore_title": "탐험",
+        "log_preview_completed": "완료!",
+        "log_details": {
+            "no_content": "작업이 없습니다."
+        },
+        "quote": {
+            "empty_self_quote": "오늘의 한마디를 남겨주세요.",
+            "empty_others_quote": "아직 상대방이 작성하지 않았습니다."
+        },
+        "emoji_modal": {
+            "searchbar": "이모지 찾기"
+        },
+        "explore": {
+            "searchbar": "새로운 인연을 찾아보세요.",
+            "no_result": "당신이 찾는 사람이 없습니다 😢",
+            "suggestion": "새로운 사람과 새로운 인연은 어떤가요?"
+        }
+    },
+    "search": {
+        "title": "검색",
+        "filter_button": {
+            "search_terms": "검색어",
+            "project": "프로젝트",
+            "drawer": "서랍",
+            "assigned_at": "할당 날짜",
+            "completed_at": "완수 날짜",
+            "privacy": "공개 범위",
+            "memo": "메모"
+        },
+        "no_result": "조건에 맞는 결과를 찾을 수 없습니다 🤔"
+    },
+    "common": {
+        "button_no": "아니요"
+    }
+}

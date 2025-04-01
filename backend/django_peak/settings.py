@@ -41,12 +41,12 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("DEBUG", "1") == "1"
 
-SCHEME = os.environ.get("SCHEME")
-WEB_HOSTNAME = os.environ.get("WEB_HOSTNAME")
-API_HOSTNAME = os.environ.get("API_HOSTNAME")
+SCHEME = os.environ.get("SCHEME", "http://")
+WEB_HOSTNAME = os.environ.get("WEB_HOSTNAME", "localhost:8080")
+API_HOSTNAME = os.environ.get("API_HOSTNAME", "localhost:8888")
 
 API_HOSTNAME_NO_PORT = API_HOSTNAME.split(":")[0]
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ") + [
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(" ") + [
     API_HOSTNAME_NO_PORT
 ]
 
@@ -74,7 +74,6 @@ INSTALLED_APPS = [
     "announcements",
     "rest_framework",
     "corsheaders",
-    "dummies",
     "storages",
 ]
 
@@ -120,6 +119,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "django_peak.wsgi.application"
 
+APPEND_SLASH = False
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -134,6 +135,13 @@ DATABASES = {
         "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
+
+if os.environ.get("DJANGO_DUMMYDB", "false") == "true":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.dummy",
+        }
+    }
 
 
 # Password validation
@@ -158,6 +166,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = [
     "users.auth.UserBackend",
     "users.auth.UserTOTPBackend",
+    "users.auth.AdminBackend",
 ]
 
 # CSRF
@@ -170,7 +179,7 @@ AUTHENTICATION_BACKENDS = [
 
 # CORS
 # https://github.com/adamchainz/django-cors-headers?tab=readme-ov-file#configuration
-CORS_ALLOWED_ORIGINS = os.environ.get("DJANGO_CORS_ALLOWED_ORIGINS").split() + [
+CORS_ALLOWED_ORIGINS = os.environ.get("DJANGO_CORS_ALLOWED_ORIGINS", "").split() + [
     SCHEME + WEB_HOSTNAME
 ]
 

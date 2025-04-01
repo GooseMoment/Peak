@@ -1,0 +1,209 @@
+{
+    "error": {
+        "text": "Failed to load the data of this section.",
+        "retry": "Retry"
+    },
+    "menus": {
+        "title": "Settings",
+        "profile": "Profile",
+        "general": "General",
+        "security": "Security",
+        "privacy": "Privacy",
+        "languages_and_time": "Languages & Time",
+        "notifications": "Notifications",
+        "appearance": "Appearance",
+        "reactions": "Reactions",
+        "blocks": "Blocks",
+        "info": "Info"
+    },
+    "profile": {
+        "display_name": "Display name",
+        "display_name_placeholder": "Your awesome name",
+        "bio": "Bio",
+        "header_color": "Header Color",
+        "bio_placeholder": "Tell me who you are",
+        "button_submit": "Save",
+        "profile_edited": "Changes were saved.",
+        "profile_fail": "Couldn't save. Try again.",
+        "button_apply": "Crop",
+        "button_cancel": "Cancel"
+    },
+    "general": {
+        "startpage": {
+            "name": "Start Page",
+            "description": "Determines which page will show up on startup.",
+            "values": {
+                "home": "Home",
+                "today": "Today"
+            }
+        },
+        "delete_task_after_alert": {
+            "name": "Alert before task deletion",
+            "description": "Show an alert before deleting tasks."
+        },
+        "sign_out": {
+            "name": "Sign out",
+            "values": {
+                "button_sign_out": "Sign out"
+            }
+        }
+    },
+    "security": {
+        "password_change": {
+            "name": "Change password",
+            "current_password": "Current password",
+            "new_password": "New password",
+            "new_password_again": "New password (Type again)",
+            "button_change": "Change",
+            "password_too_short": "Password should be more than 8 characters.",
+            "password_is_same": "New password should be different with current password.",
+            "password_not_match": "New password does not match.",
+            "password_wrong": "Current password is wrong.",
+            "password_change_success": "Password was changes.",
+            "password_change_error": "Error occured while changing password."
+        },
+        "totp": {
+            "name": "Two-Factor Authentication: Time-based One-Time Passcode",
+            "description": "This adds additional security to your account more than just a password to sign in.",
+            "activated_at": "Activated at {{date}}",
+            "enable": "Enable",
+            "edit": "Edit",
+            "delete": "Delete",
+            "ask_delete": "Delete the One-Time Passcode?",
+            "qrcode_description": "Scan this QR code with your preferred authentication app.",
+            "cannot_scan": "Can't scan the QR code?",
+            "secret_manual": "Instead of scanning the QR code, you can enter the secret code(aka setup key) manually.",
+            "copy_success": "Copied the secret code to the clipboard.",
+            "enter_code": "Enter the numbers from the app below to complete.",
+            "input_placeholder": "6-digit code",
+            "enter": "Enter",
+            "cancel": "Cancel",
+            "enter_6_digit": "Enter 6 digits.",
+            "register_success": "One-Time Passcode is enabled.",
+            "register_error": "Failed to enable. Try again.",
+            "delete_success": "Disabled One-Time Passcode.",
+            "delete_error": "Failed to delete. Try again.",
+            "expired": "The QR code was expired. Try again.",
+            "wrong_code": "Wrong code. Try again."
+        }
+    },
+    "privacy": {
+        "follow_request_approval_manually": {
+            "name": "Accept follow manually",
+            "description": "Follow requests will be pending until you accept them."
+        },
+        "follow_request_approval_for_followings": {
+            "name": "Accept follows of your followings automatically",
+            "description": "If one of your followings sends you follow request, you accept it without your action."
+        },
+        "follow_list_privacy": {
+            "name": "Visibility of my followings & followers list",
+            "description": "You can set who can see your personal connections.",
+            "values": {
+                "public": "Everyone",
+                "protected": "Limit to my followers",
+                "private": "Only me"
+            }
+        },
+        "setting_submitted": "Privacy settings were saved."
+    },
+    "languages_and_time": {
+        "locale": {
+            "name": "Language",
+            "system": "Auto"
+        },
+        "timezone": {
+            "name": "Timezone",
+            "system": "Same as system"
+        },
+        "start_of_the_week_monday": {
+            "name": "Display the start of the week as Monday"
+        },
+        "time_as_24_hour": {
+            "name": "Display time as a 24-hour"
+        }
+    },
+    "notifications": {
+        "push_notification_subscription": {
+            "name": "Receive push notifications",
+            "description": "Get notifications on this device.",
+            "values": {
+                "button_enable": "Enable",
+                "button_disable": "Disable"
+            },
+            "disabled_push_notification": "Disabled push notification.",
+            "disabled_push_notification_error": "Disabled push notification on this device.",
+            "declined_push_notification": "You declined notifications. Please allow permisssion.",
+            "enabled_push_notification": "Now you can receive notifications from Peak.",
+            "enabled_push_notification_error": "An error is occured while enabling a push notification."
+        },
+        "allowed_types": {
+            "name": "Types of notifications",
+            "description": "Choose which types you want to receive on this device.",
+            "values": {
+                "comment": "When you get a comment",
+                "follow": "When someone follows you",
+                "follow_request": "When you receive a follow request",
+                "follow_request_accepted": "When your follow request is accepted",
+                "peck": "When you get pecked",
+                "reaction": "When you receive a reaction",
+                "task_reminder": "When it's a time to remind a task",
+                "button_save": "Save"
+            },
+            "success": "Saved the preference of notification types.",
+            "failed": "Failed to save the preference. Try again."
+        }
+    },
+    "appearance": {
+        "theme": {
+            "name": "Theme preference",
+            "values": {
+                "system": "Same as system",
+                "light": "Light",
+                "dark": "Dark"
+            }
+        },
+        "main_width": {
+            "name": "Content width",
+            "description": "Only applied in long-width screens.",
+            "values": {
+                "narrow": "Narrow",
+                "normal": "Normal",
+                "wide": "Wide"
+            }
+        },
+        "close_sidebar_on_startup": {
+            "name": "Close sidebar on start up"
+        }
+    },
+    "reactions": {
+        "favorite_emojis": {
+            "name": "Favorite emojis",
+            "description": "Favorite these and react easily."
+        },
+        "dislikable_emojis": {
+            "name": "Emojis to avoid",
+            "description": "These emojis will not show up in front of you."
+        }
+    },
+    "blocks": {
+        "blockees": {
+            "name": "Users blocked by me",
+            "description": "These users don't appear to you.",
+            "button_unblock": "Unblock",
+            "button_block": "Re-block",
+            "empty": "Nobody is here.",
+            "error": "Something went wrong. Try again."
+        }
+    },
+    "info": {
+        "built_at": {
+            "name": "This app was updated at",
+            "for_dev": "This is not shown in the development mode."
+        }
+    },
+    "sign_out": {
+        "question": "Would you like to sign out?",
+        "yes": "Sign out"
+    }
+}

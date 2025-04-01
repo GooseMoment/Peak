@@ -4,13 +4,12 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
+import Input from "@components/common/Input"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import ModalWindow from "@components/common/ModalWindow"
 import Color from "@components/project/edit/Color"
-import Error from "@components/settings/Error"
 import ProfileImg from "@components/settings/ProfileImg"
-import Section, { Name, Value } from "@components/settings/Section"
-import Input from "@components/sign/Input"
+import Section, { Name, Value, ValueError } from "@components/settings/Section"
 
 import { getMe, patchUser } from "@api/users.api"
 
@@ -33,9 +32,10 @@ const Profile = () => {
         data: user,
         isPending,
         isError,
+        refetch,
     } = useQuery({
         queryKey: ["users", "me"],
-        queryFn: () => getMe(),
+        queryFn: getMe,
     })
 
     const [headerColor, setHeaderColor] = useState({
@@ -79,7 +79,11 @@ const Profile = () => {
     }
 
     if (isError) {
-        return <Error />
+        return (
+            <Section>
+                <ValueError onClickRetry={refetch} />
+            </Section>
+        )
     }
 
     return (
@@ -151,7 +155,6 @@ const Profile = () => {
                         <Button
                             disabled={mutation.isPending}
                             loading={mutation.isPending}
-                            form="filled"
                             type="submit">
                             {t("button_submit")}
                         </Button>
@@ -188,7 +191,7 @@ const Username = styled.div`
 
     min-width: 0;
     white-space: nowrap;
-    overflow: hidden;
+    overflow-x: clip;
     text-overflow: ellipsis;
 `
 

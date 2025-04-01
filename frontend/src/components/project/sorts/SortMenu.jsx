@@ -1,18 +1,13 @@
-import styled, { useTheme } from "styled-components"
+import styled from "styled-components"
 
 import SortIcon from "@components/project/sorts/SortIcon"
 
-import { Menu, MenuButton, MenuItem } from "@szhsin/react-menu"
-import "@szhsin/react-menu/dist/index.css"
-import "@szhsin/react-menu/dist/transitions/zoom.css"
+import { Menu, MenuItem } from "@assets/menu"
+
+import { MenuButton } from "@szhsin/react-menu"
 import FeatherIcon from "feather-icons-react"
 
 const SortMenu = ({ color, items, ordering, setOrdering }) => {
-    const theme = useTheme()
-
-    const textColor = theme.textColor
-    const secondBackgroundColor = theme.secondBackgroundColor
-
     return (
         <Menu
             menuButton={
@@ -21,25 +16,16 @@ const SortMenu = ({ color, items, ordering, setOrdering }) => {
                 </EmptyMenuBtn>
             }
             transition
-            align="end"
-            menuStyle={{
-                position: "absolute",
-                backgroundColor: secondBackgroundColor,
-                color: textColor,
-                borderRadius: "10px",
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-                paddingRight: "13px !important",
-                fontSize: "13px",
-            }}>
+            align="end">
             {items.map((item) => (
-                <StyledMenuItem
+                <MenuItem
                     key={item.display}
                     onClick={() => setOrdering(item.context)}>
                     <EmptyBox $isSelected={item.context === ordering}>
                         <FeatherIcon icon="check" />
                     </EmptyBox>
                     {item.display}
-                </StyledMenuItem>
+                </MenuItem>
             ))}
         </Menu>
     )
@@ -60,12 +46,6 @@ const EmptyBox = styled.div`
             props.$isSelected
                 ? props.theme.primaryColors.success
                 : "transparent"};
-    }
-`
-
-const StyledMenuItem = styled(MenuItem)`
-    &:hover {
-        background-color: ${(p) => p.theme.thirdBackgroundColor};
     }
 `
 
