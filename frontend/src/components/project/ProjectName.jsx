@@ -13,8 +13,11 @@ const ProjectName = ({ project, demo = false }) => {
     const { t } = useTranslation(null, { keyPrefix: "project_list" })
     const theme = useTheme()
 
+    const projectLink =
+        project.type === "inbox" ? "/app/inbox" : `/app/projects/${project.id}`
+
     let nameParts = (
-        <Link to={`/app/projects/${project.id}`}>
+        <Link to={projectLink}>
             <NameText>{project.name}</NameText>
         </Link>
     )
