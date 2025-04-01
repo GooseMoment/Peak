@@ -127,7 +127,7 @@ const UserProfileHeader = ({
                             transition
                             menuButton={
                                 <MildButton>
-                                    <FeatherIcon icon="more-horizontal" />
+                                    <FeatherIcon icon="more-vertical" />
                                 </MildButton>
                             }>
                             <MenuItem
