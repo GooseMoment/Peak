@@ -69,7 +69,6 @@
         "delete": {
             "display": "Delete",
             "button_delete": "Delete",
-            "button_done": "Dismiss",
             "alert_project_title": "the \"{{project_name}}\" project",
             "alert_drawer_title": "the \"{{drawer_name}}\" drawer",
             "alert_question": "Delete {{title}}?",
@@ -252,6 +251,14 @@
         "projects": "Projects",
         "projects_empty": "There are no projects.",
         "button_edit_profile": "Edit Profile",
+        "button_block": "Block",
+        "button_unblock": "Unblock",
+        "confirmation_block": "Block @{{username}}?",
+        "confirmation_unblock": "Unblock @{{username}}?",
+        "success_block": "Blocked @{{username}}.",
+        "success_unblock": "Unblocked @{{username}}.",
+        "error_block": "Failed to block.",
+        "error_unblock": "Failed to unblock.",
         "error_user_not_found": "This user is not found.",
         "followings_list": {
             "title": "@{{username}}'s followings",
@@ -276,7 +283,7 @@
         "error_unfollow": "Failed to unfollow @{{username}}.",
         "error_cancel": "Failed to cancel a follow request to @{{username}}.",
         "cancel_accepted": "Unfollow @{{username}}?",
-        "button_sure": "Sure"
+        "button_unfollow": "Unfollow"
     },
     "error-page": {
         "unknown_error_code": "X_X",
@@ -403,5 +410,8 @@
         "message": "New update available.",
         "update": "Update",
         "later": "Later"
+    },
+    "common": {
+        "button_no": "No"
     }
 }

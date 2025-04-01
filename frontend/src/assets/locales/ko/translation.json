@@ -69,7 +69,6 @@
         "delete": {
             "display": "삭제",
             "button_delete": "삭제",
-            "button_done": "닫기",
             "alert_project_title": "\"{{project_name}}\" 프로젝트를",
             "alert_drawer_title": "\"{{drawer_name}}\" 서랍을",
             "alert_question": "{{title}} 삭제하시겠습니까?",
@@ -252,6 +251,14 @@
         "projects": "프로젝트",
         "projects_empty": "프로젝트가 없습니다.",
         "button_edit_profile": "프로필 수정",
+        "button_block": "차단하기",
+        "button_unblock": "차단 해제하기",
+        "confirmation_block": "@{{username}} 님을 차단할까요?",
+        "confirmation_unblock": "@{{username}} 님의 차단을 해제할까요?",
+        "success_block": "@{{username}} 님을 차단했습니다.",
+        "success_unblock": "@{{username}} 님의 차단을 해제했습니다.",
+        "error_block": "차단하지 못했습니다.",
+        "error_unblock": "차단 해제하지 못했습니다.",
         "error_user_not_found": "찾을 수 없는 유저입니다.",
         "followings_list": {
             "title": "@{{username}} 님의 팔로잉 목록",
@@ -276,7 +283,7 @@
         "error_unfollow": "@{{username}} 님을 언팔로우 하지 못했습니다.",
         "error_cancel": "@{{username}} 님에게 보낸 팔로우 요청을 취소하지 못했습니다.",
         "cancel_accepted": "@{{username}} 님을 언팔로우 할까요?",
-        "button_sure": "네"
+        "button_unfollow": "언팔로우"
     },
     "error-page": {
         "unknown_error_code": "ㅠ_ㅠ",
@@ -403,5 +410,8 @@
         "message": "새로운 업데이트가 있습니다.",
         "update": "업데이트",
         "later": "미루기"
+    },
+    "common": {
+        "button_no": "아니요"
     }
 }
