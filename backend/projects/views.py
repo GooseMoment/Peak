@@ -27,6 +27,23 @@ class ProjectDetail(
         return self.destroy(request, *args, **kwargs)
 
 
+class InboxDetail(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    generics.GenericAPIView,
+):
+    serializer_class = ProjectSerializer
+    permission_classes = [IsUserOwner]
+
+    def get_object(self):
+        return Project.objects.filter(
+            user=self.request.user, type=Project.INBOX
+        ).first()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
 class ProjectListPagination(PageNumberPagination):
     page_size = 1000
 

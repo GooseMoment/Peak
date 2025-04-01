@@ -7,8 +7,8 @@ import RoadSign from "@assets/errors/RoadSign"
 const Error = ({
     code,
     text,
-    bottomText,
-    bottomLinkTo,
+    bottomText = undefined,
+    bottomLinkTo = undefined,
     bottomA = false,
     height = "100dvh",
 }) => {
