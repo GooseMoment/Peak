@@ -5,13 +5,20 @@ import styled, { css } from "styled-components"
 import ModalWindow from "@components/common/ModalWindow"
 import FollowList from "@components/users/FollowList"
 
+import { User } from "@api/users.api"
+
 import { skeletonCSS } from "@assets/skeleton"
 
 import { useTranslation } from "react-i18next"
 
-const FollowsCount = ({ user, isPending }) => {
-    const { t } = useTranslation(null, { keyPrefix: "users" })
-    const [window, setWindow] = useState("")
+interface FollowsCount {
+    user?: User
+    isLoading?: boolean
+}
+
+const FollowsCount = ({ user, isLoading = false }: FollowsCount) => {
+    const { t } = useTranslation("translation", { keyPrefix: "users" })
+    const [window, setWindow] = useState<"" | "followers" | "followings">("")
 
     const closeModal = () => {
         setWindow("")
@@ -21,14 +28,14 @@ const FollowsCount = ({ user, isPending }) => {
         closeModal()
     }, [user])
 
-    if (isPending) {
+    if (!user || isLoading) {
         return (
             <Items>
                 <Item>
-                    {t("followers")} <Count $skeleton />
+                    {t("followers")} <Count $loading />
                 </Item>
                 <Item>
-                    {t("followings")} <Count $skeleton />
+                    {t("followings")} <Count $loading />
                 </Item>
             </Items>
         )
@@ -68,15 +75,15 @@ const Item = styled.div`
     gap: 0.5em;
 `
 
-const Count = styled.span`
+const Count = styled.span<{ $loading?: boolean }>`
     font-weight: 700;
 
     ${(p) =>
-        p.$skeleton &&
+        p.$loading &&
         css`
             height: 1em;
             width: 1.5em;
-            ${skeletonCSS}
+            ${skeletonCSS()}
         `}
 `
 
