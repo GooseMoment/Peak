@@ -157,7 +157,7 @@ const routes = [
                 element: <ProjectListPage />,
             },
             {
-                path: "inbox",
+                path: "projects/inbox",
                 element: <InboxPage />,
             },
             {

@@ -1,4 +1,4 @@
-import { Suspense, lazy, useMemo, useState } from "react"
+import { Suspense, lazy, useEffect, useMemo, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -48,10 +48,10 @@ const ProjectPage = () => {
     const [ordering, setOrdering] = useState("created_at")
     const [isAlertOpen, setIsAlertOpen] = useState(false)
     const [isProjectEditOpen, setIsProjectEditOpen] = useState(false)
-    const [isSortMenMobileOpen, setSortMenuMobileOpen] = useState(false)
+    const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
     const [isCreateOpen, setCreateOpen] = useState(false)
 
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation("translation", { keyPrefix: "project" })
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
 
@@ -64,6 +64,12 @@ const ProjectPage = () => {
         queryKey: ["projects", id],
         queryFn: () => getProject(id),
     })
+
+    useEffect(() => {
+        if (project?.type === "inbox") {
+            navigate("/app/projects/inbox", { replace: true })
+        }
+    }, [project, navigate])
 
     const {
         isLoading: isDrawersLoading,
@@ -198,7 +204,7 @@ const ProjectPage = () => {
                     func={handleDelete}
                 />
             )}
-            {isSortMenMobileOpen && (
+            {isSortMenuMobileOpen && (
                 <SortMenuMobile
                     title={t("sort.drawer_title")}
                     items={sortMenuItems}
