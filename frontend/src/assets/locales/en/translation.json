@@ -398,5 +398,10 @@
             "memo": "Memo"
         },
         "no_result": "Your search did not match any tasks 🤔"
+    },
+    "common": {
+        "header": {
+            "back": "Go Back"
+        }
     }
 }

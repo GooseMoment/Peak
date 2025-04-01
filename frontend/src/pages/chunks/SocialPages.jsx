@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
+import SocialDailyPage from "@pages/SocialDailyPage"
 import SocialExplorePage from "@pages/SocialExplorePage"
 import SocialFollowingPage from "@pages/SocialFollowingPage"
 
@@ -14,4 +15,9 @@ const SocialRedirector = () => {
     return null
 }
 
-export { SocialRedirector, SocialFollowingPage, SocialExplorePage }
+export {
+    SocialRedirector,
+    SocialFollowingPage,
+    SocialExplorePage,
+    SocialDailyPage,
+}
