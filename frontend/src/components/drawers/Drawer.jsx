@@ -150,7 +150,6 @@ const Drawer = ({ project, drawer, color }) => {
     }
 
     if (isLoading) {
-        if (project.type === "inbox") return null
         return <SkeletonDrawer taskCount={taskCount} />
     }
 

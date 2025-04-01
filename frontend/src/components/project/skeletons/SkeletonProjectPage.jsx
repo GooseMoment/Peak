@@ -44,12 +44,15 @@ const SkeletonTasks = ({ taskCount }) => {
 }
 
 export const SkeletonInboxPage = () => {
-    <>
-        <ProjectTitle />
+    return <ProjectTitle />
+}
+
+export const SkeletionInboxTask = () => {
+    return (
         <Tasks>
             <SkeletonTasks taskCount={15} />
         </Tasks>
-    </>
+    )
 }
 
 const Frame = styled.div`

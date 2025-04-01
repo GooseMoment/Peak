@@ -7,6 +7,7 @@ import Button, { ButtonGroup } from "@components/common/Button"
 import TaskCreateButton from "@components/drawers/TaskCreateButton"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 import TaskCreateSimple from "@components/project/TaskCreateSimple"
+import { SkeletionInboxTask } from "@components/project/skeletons/SkeletonProjectPage"
 import DrawerTask from "@components/tasks/DrawerTask"
 
 import { getTasksByDrawer } from "@api/tasks.api"
@@ -45,7 +46,7 @@ const InboxDrawer = ({ project, drawer, color, ordering }) => {
     }
 
     if (isLoading) {
-        return null
+        return <SkeletionInboxTask />
     }
 
     if (isError) {
