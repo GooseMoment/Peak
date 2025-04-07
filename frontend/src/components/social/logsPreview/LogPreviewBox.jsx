@@ -136,9 +136,7 @@ const ProfileWrapper = styled.div`
     ${(props) =>
         props.$isMe
             ? css`
-                  width: calc(
-                      (50% - 1.5em) * ${props.$isDesktop ? 0.55 : 0.50}
-                  );
+                  width: calc((50% - 1.5em) * ${props.$isDesktop ? 0.55 : 0.5});
               `
             : css`
                   width: ${props.$isDesktop ? 55 : 50}%;

@@ -17,9 +17,7 @@ const DateBar = ({ selectedDate, setSelectedDate }) => {
     // TODO: selectedDate를 Datetime형으로 바꾼 이후 다시 수정
     const displayDate = () => {
         const date = DateTime.fromISO(selectedDate)
-        return date  
-        .setLocale(locale)  
-        .toLocaleString({  
+        return date.setLocale(locale).toLocaleString({
             weekday: "short",
             month: "short",
             day: "numeric",
