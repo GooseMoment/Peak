@@ -18,8 +18,14 @@ import { ifMobile } from "@utils/useScreenType"
 import queryClient from "@queries/queryClient"
 
 import FeatherIcon from "feather-icons-react"
-import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
+import {
+    DndProvider,
+    MouseTransition,
+    MultiBackend,
+    TouchTransition,
+} from "react-dnd-multi-backend"
+import { TouchBackend } from "react-dnd-touch-backend"
 import { useTranslation } from "react-i18next"
 
 const ProjectListPage = () => {
@@ -69,6 +75,23 @@ const ProjectListPage = () => {
         })
     }, [projects, data])
 
+    const HTML5toTouch = {
+        backends: [
+            {
+                id: "html5",
+                backend: HTML5Backend,
+                transition: MouseTransition,
+            },
+            {
+                id: "touch",
+                backend: TouchBackend,
+                options: { enableMouseEvents: true },
+                preview: true,
+                transition: TouchTransition,
+            },
+        ],
+    }
+
     return (
         <>
             <PageTitleBox>
@@ -86,7 +109,7 @@ const ProjectListPage = () => {
             {isPending && <SkeletonProjectList />}
             {isError && <ErrorProjectList onClick={() => refetch()} />}
 
-            <DndProvider backend={HTML5Backend}>
+            <DndProvider backend={MultiBackend} options={HTML5toTouch}>
                 {projects?.map((project, i) => (
                     <ProjectName
                         key={project.id}
