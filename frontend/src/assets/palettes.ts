@@ -1,5 +1,7 @@
 import type { LightDark } from "styled-components"
 
+type Pastel = "pastel"
+
 export type PaletteColorName =
     | "grey"
     | "red"
@@ -82,14 +84,41 @@ const dark: Palette = {
     deep_indigo: "#3333FF",
 }
 
+const pastel: Palette = {
+    grey: "#CCCCCC",
+    red: "#FFB1B9",
+    red_orange: "#FF8E83",
+    orange: "#FF8E83",
+    yellow: "#FFE168",
+    bright_sky_blue: "#80ECF6",
+    blue: "#53D4FF",
+    magenta: "#DCB5FF",
+    violet: "#E39CF8",
+    pink: "#FFBBEB",
+    hot_pink: "#FF97C3",
+    light_green: "#99F8BD",
+    mint: "#5FE6C9",
+    olive: "#C9DBB2",
+    dark_violet: "#AA84EF",
+    deep_blue: "#94DAFF",
+    deep_indigo: "#6A9CFD",
+}
+
 const themes = {
     light: light,
     dark: dark,
+    pastel: pastel,
 }
 
 export const getPaletteColor = (
-    theme: LightDark,
+    theme: LightDark | Pastel,
     colorName: PaletteColorName,
 ) => {
     return themes[theme][colorName]
+}
+
+export const getPastelPaletteColor = (
+    colorName: PaletteColorName,
+) => {
+    return pastel[colorName]
 }

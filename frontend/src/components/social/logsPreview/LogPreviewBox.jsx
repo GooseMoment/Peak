@@ -8,7 +8,7 @@ import { getCurrentUsername } from "@api/client"
 
 import useScreenType, { ifTablet } from "@utils/useScreenType"
 
-import { getPaletteColor } from "@assets/palettes"
+import { getPastelPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -41,8 +41,9 @@ const LogPreviewBox = ({
             })
     }
 
+    // TODO: theme.grey 삭제
     const boxColor =
-        getPaletteColor(theme.type, log?.header_color) || theme.grey
+        getPastelPaletteColor(log?.header_color) || theme.grey
 
     return (
         <Box
