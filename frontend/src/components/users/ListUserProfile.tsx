@@ -1,3 +1,4 @@
+import { ReactNode } from "react"
 import { Link } from "react-router-dom"
 
 import styled, { css } from "styled-components"
@@ -5,28 +6,37 @@ import styled, { css } from "styled-components"
 import FollowButton from "@components/users/FollowButton"
 
 import { getCurrentUsername } from "@api/client"
+import { User } from "@api/users.api"
 
 import { skeletonCSS } from "@assets/skeleton"
 
-const ListUserProfile = ({ user, children, skeleton }) => {
+interface ListUserProfileProp {
+    user?: User
+    children?: ReactNode
+}
+
+const ListUserProfile = ({ user, children }: ListUserProfileProp) => {
+    if (!user) {
+        return (
+            <UserContainer>
+                <Profile>
+                    <ProfileImgSkeleton />
+                    <Username $loading />
+                </Profile>
+            </UserContainer>
+        )
+    }
+
     return (
         <UserContainer>
-            {skeleton ? (
-                <Profile $skeleton>
-                    <ProfileImgSkeleton />
-                    <Username $skeleton />
-                </Profile>
-            ) : (
-                <Profile>
-                    <ProfileImg src={user?.profile_img} />
-                    <Link to={`/app/users/@${user?.username}`}>
-                        <Username>@{user?.username}</Username>
-                    </Link>
-                </Profile>
-            )}
+            <Profile>
+                <ProfileImg src={user.profile_img} />
+                <Link to={`/app/users/@${user.username}`}>
+                    <Username>@{user?.username}</Username>
+                </Link>
+            </Profile>
             <div>
-                {skeleton ||
-                    children ||
+                {children ||
                     (user.username !== getCurrentUsername() && (
                         <FollowButton user={user} />
                     ))}
@@ -65,10 +75,10 @@ const ProfileImgSkeleton = styled.div`
     aspect-ratio: 1 / 1;
     width: 3em;
 
-    ${skeletonCSS}
+    ${skeletonCSS()}
 `
 
-const Username = styled.div`
+const Username = styled.div<{ $loading?: boolean }>`
     font-weight: 600;
     color: ${(p) => p.theme.textColor};
 
@@ -78,11 +88,11 @@ const Username = styled.div`
     text-overflow: ellipsis;
 
     ${(p) =>
-        p.$skeleton &&
+        p.$loading &&
         css`
             height: 1em;
             width: 5em;
-            ${skeletonCSS}
+            ${skeletonCSS()}
         `}
 `
 
