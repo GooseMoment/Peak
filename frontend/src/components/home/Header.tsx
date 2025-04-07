@@ -29,8 +29,8 @@ const Header = () => {
                 {isLoading ? (
                     <HeaderProfileLoading />
                 ) : (
-                    <Link to={`/app/users/@${me.username}`}>
-                        <HeaderProfile src={me.profile_img} />
+                    <Link to={`/app/users/@${me?.username}`}>
+                        <HeaderProfile src={me?.profile_img} />
                     </Link>
                 )}
                 <Link to="/app/notifications">
