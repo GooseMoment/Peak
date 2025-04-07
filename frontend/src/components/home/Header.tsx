@@ -15,10 +15,9 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const Header = () => {
-    const { data: me, isFetching } = useQuery({
+    const { data: me, isLoading } = useQuery({
         queryKey: ["users", "me"],
         queryFn: () => getMe(),
-        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 
     const { t } = useTranslation("home", { keyPrefix: "page" })
@@ -27,7 +26,7 @@ const Header = () => {
         <Frame>
             <PageTitle>{t("title")}</PageTitle>
             <HeaderIcons>
-                {isFetching ? (
+                {isLoading ? (
                     <HeaderProfileLoading />
                 ) : (
                     <Link to={`/app/users/@${me.username}`}>
