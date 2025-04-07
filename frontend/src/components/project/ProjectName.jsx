@@ -15,14 +15,16 @@ const ProjectName = ({ project, demo = false }) => {
 
     const projectLink = `/app/projects/${project.id}`
 
+    let name = project.type === "inbox" ? t("inbox") : project.name
+
     let nameParts = (
         <Link to={projectLink}>
-            <NameText>{project.name}</NameText>
+            <NameText>{name}</NameText>
         </Link>
     )
 
     if (demo) {
-        nameParts = <NameText>{project.name}</NameText>
+        nameParts = <NameText>{name}</NameText>
     }
 
     return (

@@ -21,7 +21,7 @@ const PrivacyIcon = ({ privacy, color, isProject }) => {
     }
 }
 
-const ProjectPrivacyBox = styled.div`
+export const ProjectPrivacyBox = styled.div`
     margin-left: 0.6em;
     padding-bottom: 0.8em;
 
