@@ -7,7 +7,7 @@ import styled from "styled-components"
 import Button, { ButtonGroup } from "@components/common/Button"
 import Input from "@components/common/Input"
 import LoaderCircle from "@components/common/LoaderCircle"
-import Error from "@components/errors/ErrorLayout"
+import ErrorLayout from "@components/errors/ErrorLayout"
 import Form from "@components/sign/Form"
 
 import {
@@ -405,7 +405,7 @@ export const EmailVerificationForm = () => {
     }
 
     if (isError) {
-        return <Error code="?_?" text={t("invalid_access")} />
+        return <ErrorLayout code="?_?" text={t("invalid_access")} />
     }
 
     return (

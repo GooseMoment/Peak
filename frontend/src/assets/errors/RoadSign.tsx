@@ -2,7 +2,12 @@ import styled, { useTheme } from "styled-components"
 
 import { ifMobile } from "@utils/useScreenType"
 
-const RoadSign = ({ text, spacing = 10 }) => {
+interface RoadSignProp {
+    text: string
+    spacing?: number
+}
+
+const RoadSign = ({ text, spacing = 10 }: RoadSignProp) => {
     const theme = useTheme()
 
     const red = theme.primaryColors.danger
@@ -64,6 +69,9 @@ const Text = styled.text`
     font-size: 60px;
     font-weight: bold;
     text-align: center;
+
+    user-select: none;
+    -webkit-user-select: none;
 `
 
 export default RoadSign
