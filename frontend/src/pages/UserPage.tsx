@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
 
-import Error from "@components/errors/ErrorLayout"
+import ErrorLayout from "@components/errors/ErrorLayout"
 import Bio from "@components/users/Bio"
 import ProjectList from "@components/users/ProjectList"
 import Requests from "@components/users/Requests"
@@ -11,7 +11,8 @@ import UserProfileHeader from "@components/users/UserProfileHeader"
 
 import { getCurrentUsername } from "@api/client"
 import { getProjectListByUser } from "@api/projects.api"
-import { getFollow } from "@api/social.api"
+import { type Block } from "@api/social"
+import { getBlock, getFollow } from "@api/social.api"
 import { getUserByUsername } from "@api/users.api"
 
 import { useTranslation } from "react-i18next"
@@ -21,40 +22,53 @@ const UserPage = () => {
     const { username: usernameWithAt } = useParams()
 
     useEffect(() => {
-        if (usernameWithAt.at(0) !== "@") {
+        if (usernameWithAt!.at(0) !== "@") {
             navigate("/app/users/@" + usernameWithAt)
         }
     }, [usernameWithAt])
 
-    const username = usernameWithAt.slice(1)
+    // usernameWithAt shouldn't be undefined
+    const username = usernameWithAt!.slice(1)
     const currentUsername = getCurrentUsername()
     const isMine = currentUsername === username
 
-    const { data: followingYou } = useQuery({
+    const followingQuery = useQuery({
         queryKey: ["followings", username, currentUsername],
         queryFn: () => getFollow(username, currentUsername),
         enabled: currentUsername !== username,
     })
 
+    const blockQuery = useQuery<Block | null>({
+        queryKey: ["blocks", getCurrentUsername(), username],
+        queryFn() {
+            return getBlock(username)
+        },
+        enabled: currentUsername !== username,
+    })
+
     const {
         data: user,
-        isPending: userPending,
+        isLoading: userLoading,
         isError: userError,
     } = useQuery({
         queryKey: ["users", username],
         queryFn: () => getUserByUsername(username),
     })
 
-    const { data: projects, isPending: projectPending } = useQuery({
+    const { data: projects, isLoading: projectLoading } = useQuery({
         queryKey: ["userProjects", username],
         queryFn: () => getProjectListByUser(username),
     })
 
-    const { t } = useTranslation(null, { keyPrefix: "users" })
+    const { t } = useTranslation("translation", { keyPrefix: "users" })
 
     if (userError) {
         return (
-            <Error height="100%" code="404" text={t("error_user_not_found")} />
+            <ErrorLayout
+                height="100%"
+                code="404"
+                text={t("error_user_not_found")}
+            />
         )
     }
 
@@ -62,17 +76,22 @@ const UserPage = () => {
         <>
             <UserProfileHeader
                 user={user}
-                followingYou={followingYou}
-                isPending={userPending}
+                followingYou={followingQuery.data}
+                block={blockQuery.data}
+                isLoading={
+                    userLoading ||
+                    followingQuery.isLoading ||
+                    blockQuery.isLoading
+                }
                 isMine={isMine}
             />
-            {user && followingYou?.status === "requested" && (
+            {user && followingQuery.data?.status === "requested" && (
                 <Requests user={user} />
             )}
-            <Bio bio={user?.bio} isPending={userPending} isMine={isMine} />
+            <Bio bio={user?.bio} isLoading={userLoading} isMine={isMine} />
             <ProjectList
                 projects={projects}
-                isPending={projectPending}
+                isLoading={projectLoading}
                 isMine={isMine}
             />
         </>
