@@ -108,6 +108,7 @@ const Box = styled.div`
     flex-direction: column;
     justify-content: space-between;
 
+    cursor: pointer;
     transition: all 0.25s ease;
 
     &:hover {
