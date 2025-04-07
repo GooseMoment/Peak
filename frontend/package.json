@@ -28,6 +28,7 @@
         "feather-icons-react": "^0.8.1",
         "github-markdown-css": "^5.8.1",
         "grapheme-splitter": "^1.0.4",
+        "i": "^0.3.7",
         "i18next": "^24.2.3",
         "i18next-resources-to-backend": "^1.2.1",
         "luxon": "^3.6.1",
