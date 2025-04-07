@@ -17,7 +17,6 @@ const ConfirmationSignOut = ({ onClose }) => {
     }
 
     const buttons = [
-        "close",
         <Button
             key="sign_out"
             state="danger"

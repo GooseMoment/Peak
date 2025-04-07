@@ -20,9 +20,9 @@
         "@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.0.3",
         "@atlaskit/pragmatic-drag-and-drop-react-accessibility": "^2.0.0",
         "@szhsin/react-menu": "^4.3.1",
-        "@tanstack/query-sync-storage-persister": "^5.69.0",
-        "@tanstack/react-query": "^5.69.0",
-        "@tanstack/react-query-persist-client": "^5.69.0",
+        "@tanstack/query-sync-storage-persister": "^5.71.1",
+        "@tanstack/react-query": "^5.71.1",
+        "@tanstack/react-query-persist-client": "^5.71.1",
         "@toss/impression-area": "^1.4.2",
         "axios": "^1.8.4",
         "feather-icons-react": "^0.8.1",
@@ -30,7 +30,7 @@
         "grapheme-splitter": "^1.0.4",
         "i18next": "^24.2.3",
         "i18next-resources-to-backend": "^1.2.1",
-        "luxon": "^3.5.0",
+        "luxon": "^3.6.1",
         "moment": "^2.30.1",
         "qrcode": "^1.5.4",
         "react": "^18.2.0",
@@ -47,13 +47,13 @@
     "devDependencies": {
         "@eslint/js": "^9.23.0",
         "@tanstack/eslint-plugin-query": "^5.68.0",
-        "@tanstack/react-query-devtools": "^5.69.0",
+        "@tanstack/react-query-devtools": "^5.71.1",
         "@trivago/prettier-plugin-sort-imports": "^5.2.2",
         "@types/luxon": "^3.4.2",
         "@types/qrcode": "^1.5.5",
         "@types/react": "^18.3.12",
         "@types/react-dom": "^18.3.0",
-        "@vite-pwa/assets-generator": "^0.2.6",
+        "@vite-pwa/assets-generator": "^1.0.0",
         "@vitejs/plugin-react": "^4.3.4",
         "eslint": "^9.23.0",
         "eslint-config-prettier": "^10.1.1",
@@ -61,8 +61,8 @@
         "globals": "^16.0.0",
         "prettier": "^3.5.3",
         "typescript": "^5.8.2",
-        "typescript-eslint": "^8.28.0",
-        "vite": "^6.2.3"
+        "typescript-eslint": "^8.29.0",
+        "vite": "^6.2.4"
     },
     "pnpm": {
         "overrides": {
