@@ -117,8 +117,6 @@ export const getPaletteColor = (
     return themes[theme][colorName]
 }
 
-export const getPastelPaletteColor = (
-    colorName: PaletteColorName,
-) => {
+export const getPastelPaletteColor = (colorName: PaletteColorName) => {
     return pastel[colorName]
 }
