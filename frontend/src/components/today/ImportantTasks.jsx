@@ -114,11 +114,21 @@ const ImportantTasks = () => {
         const pastAssignedTasks =
             pastAssignedQuery.tasks?.pages.flatMap((page) => page.results) || []
 
-        return (
+        const allEmpty =
             todayDueTasks.length === 0 &&
             overDueTasks.length === 0 &&
             pastAssignedTasks.length === 0
-        )
+
+        if (allEmpty) return true
+
+        if (todayDueTasks.length > 0) {
+            setFilter("todayDue")
+        } else if (overDueTasks.length > 0) {
+            setFilter("overDue")
+        } else if (pastAssignedTasks.length > 0) {
+            setFilter("pastAssigned")
+        }
+        return false
     }, [todayDueQuery.tasks, overDueQuery.tasks, pastAssignedQuery.tasks])
 
     if (allTasksEmpty) {
@@ -218,7 +228,7 @@ const ImportantTasksBlock = styled.div`
 const ImportantTasksTitle = styled.div`
     font-size: 1.2em;
     font-weight: bold;
-    margin-left: 0.6em;
+    margin-left: 0.5em;
 `
 
 const CollapseButtonBlock = styled.div`
@@ -263,19 +273,28 @@ const FilterButtonBox = styled.div`
 
 const FilterButton = styled.div`
     width: fit-content;
-    padding: 0.4em 0.6em;
-    border: 1px solid ${(p) => p.theme.borderColor};
+    padding: 0.35em 0.7em;
+    border: 1px solid ${(p) => p.theme.project.borderColor};
     border-radius: 13px;
     color: ${(p) => p.theme.textColor};
     background-color: ${(p) => p.theme.backgroundColor};
     font-size: 0.9em;
-    font-weight: normal;
+    font-weight: 500;
     cursor: pointer;
+
+    ${(props) =>
+        !props.$isActive &&
+        css`
+            &:hover {
+                background-color: ${(p) => p.theme.secondBackgroundColor};
+            }
+    `}
 
     ${(props) =>
         props.$isActive &&
         css`
             color: ${(p) => p.theme.white};
+            border: 1.5px solid ${(p) => p.theme.goose};
             background-color: ${(p) => p.theme.goose};
         `}
 `
