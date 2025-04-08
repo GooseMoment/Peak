@@ -21,7 +21,7 @@ class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
             Task.objects.filter(
                 user=self.request.user, assigned_at=date, completed_at__isnull=True
             )
-            .order_by("-priority", "due_date")
+            .order_by("-priority", "due_date", "created_at")
             .all()
         )
 
