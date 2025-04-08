@@ -1,4 +1,4 @@
-import { lazy, useState } from "react"
+import { useState } from "react"
 
 import { useQuery } from "@tanstack/react-query"
 import { useInfiniteQuery } from "@tanstack/react-query"
@@ -7,6 +7,7 @@ import styled, { useTheme } from "styled-components"
 import Button from "@components/common/Button"
 import TaskCreateButton from "@components/drawers/TaskCreateButton"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
+import TaskCreateSimple from "@components/project/TaskCreateSimple"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
 import Task from "@components/tasks/Task"
 
@@ -20,10 +21,6 @@ import { getPaletteColor } from "@assets/palettes"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
-
-const TaskCreateSimple = lazy(
-    () => import("@components/project/TaskCreateSimple"),
-)
 
 const TodayAssignmentTasks = () => {
     const { t } = useTranslation(null, { keyPrefix: "today" })
