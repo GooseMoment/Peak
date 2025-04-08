@@ -16,9 +16,6 @@
         "generate-assets": "pwa-assets-generator"
     },
     "dependencies": {
-        "@atlaskit/pragmatic-drag-and-drop": "^1.5.0",
-        "@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.0.3",
-        "@atlaskit/pragmatic-drag-and-drop-react-accessibility": "^2.0.0",
         "@szhsin/react-menu": "^4.3.1",
         "@tanstack/query-sync-storage-persister": "^5.71.1",
         "@tanstack/react-query": "^5.71.1",
@@ -35,6 +32,10 @@
         "qrcode": "^1.5.4",
         "react": "^18.2.0",
         "react-calendar": "^4.8.0",
+        "react-dnd": "^16.0.1",
+        "react-dnd-html5-backend": "^16.0.1",
+        "react-dnd-multi-backend": "^9.0.0",
+        "react-dnd-touch-backend": "^16.0.1",
         "react-dom": "^18.2.0",
         "react-easy-crop": "^5.4.1",
         "react-i18next": "^15.4.1",
