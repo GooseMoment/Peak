@@ -27,12 +27,15 @@ const TaskCreateSimple = ({
     drawerName,
     color,
     onClose,
+    init_assigned_at = null,
 }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.edit" })
     const inputRef = useRef(null)
 
     const [content, setContent] = useState("name")
-    const [assignedIndex, setAssignedIndex] = useState(0)
+    const [assignedIndex, setAssignedIndex] = useState(
+        init_assigned_at !== null ? 1 : 0,
+    )
     const [dueIndex, setDueIndex] = useState(0)
     const [priorityIndex, setPriorityIndex] = useState(0)
 
@@ -63,7 +66,7 @@ const TaskCreateSimple = ({
 
     const [newTask, setNewTask] = useState({
         name: "",
-        assigned_at: null,
+        assigned_at: init_assigned_at,
         due_type: null,
         due_date: null,
         due_datetime: null,
@@ -94,6 +97,9 @@ const TaskCreateSimple = ({
             })
             queryClient.invalidateQueries({
                 queryKey: ["project", newTask.project_id],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["today", "assigned"],
             })
             toast.success(t("create_success"))
             onClose()
