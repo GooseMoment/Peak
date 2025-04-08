@@ -1,4 +1,10 @@
-import { useCallback, useState } from "react"
+import {
+    type Dispatch,
+    type SetStateAction,
+    useCallback,
+    useMemo,
+    useState,
+} from "react"
 
 import styled from "styled-components"
 
@@ -6,16 +12,38 @@ import MildButton from "@components/common/MildButton"
 
 import { cubicBeizer } from "@assets/keyframes"
 
-const FilterButtonGroup = ({ active, setActive, filters }) => {
-    const [selectedButtonPosition, setSelectedButtonPosition] = useState({
-        top: "0.5em",
-        left: 0,
-        width: 0,
-    })
+interface ButtonPosition {
+    top: number
+    left: number
+    width: number
+}
+
+interface Filter {
+    display: string
+}
+
+interface FilterButtonGroupProp {
+    active: string
+    setActive: Dispatch<SetStateAction<string>>
+    filters: { [name: string]: Filter }
+}
+
+const FilterButtonGroup = ({
+    active,
+    setActive,
+    filters,
+}: FilterButtonGroupProp) => {
+    const [selectedButtonPosition, setSelectedButtonPosition] =
+        useState<ButtonPosition>({
+            top: 0,
+            left: 0,
+            width: 0,
+        })
 
     const onRefChange = useCallback(
-        (node) => {
+        (node: HTMLElement | null) => {
             if (!node) {
+                // node is null when this component is unmounted
                 return
             }
 
@@ -28,21 +56,20 @@ const FilterButtonGroup = ({ active, setActive, filters }) => {
         [filters],
     )
 
+    const filterEntries = useMemo(() => Object.entries(filters), [filters])
+
     return (
         <FilterGroupWrapper>
             <FilterGroup>
-                <BackgroundButton
-                    $top={selectedButtonPosition.top}
-                    $left={selectedButtonPosition.left}
-                    $width={selectedButtonPosition.width}
-                />
-                {Object.entries(filters).map(([name, filter]) => (
+                {selectedButtonPosition.left !== 0 && (
+                    <BackgroundButton $position={selectedButtonPosition} />
+                )}
+                {filterEntries.map(([name, { display }]) => (
                     <FilterButton
                         ref={active === name ? onRefChange : undefined}
                         key={name}
-                        onClick={() => setActive(name)}
-                        $active={active === name}>
-                        {filter.display}
+                        onClick={() => setActive(name)}>
+                        {display}
                     </FilterButton>
                 ))}
             </FilterGroup>
@@ -81,12 +108,12 @@ const FilterButton = styled(MildButton)`
     z-index: 3;
 `
 
-const BackgroundButton = styled(MildButton)`
+const BackgroundButton = styled(MildButton)<{ $position: ButtonPosition }>`
     position: absolute;
 
-    top: ${(props) => props.$top - 1}px;
-    left: ${(props) => props.$left}px;
-    width: ${(props) => props.$width}px;
+    top: ${(props) => props.$position.top - 1}px;
+    left: ${(props) => props.$position.left}px;
+    width: ${(props) => props.$position.width}px;
 
     transition:
         top 0.25s ${cubicBeizer},
