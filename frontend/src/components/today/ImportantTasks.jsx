@@ -288,7 +288,7 @@ const FilterButton = styled.div`
             &:hover {
                 background-color: ${(p) => p.theme.secondBackgroundColor};
             }
-    `}
+        `}
 
     ${(props) =>
         props.$isActive &&
