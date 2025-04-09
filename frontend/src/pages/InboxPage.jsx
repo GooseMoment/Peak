@@ -7,7 +7,7 @@ import ModalLoader from "@components/common/ModalLoader"
 import PageTitle from "@components/common/PageTitle"
 import InboxDrawer from "@components/drawers/InboxDrawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
-import { ProjectPrivacyBox } from "@components/project/common/PrivacyIcon"
+import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import { SkeletonInboxPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
@@ -74,9 +74,7 @@ const InboxPage = () => {
             <TitleBox>
                 <PageTitleBox>
                     <PageTitle $color={color}>{t("inbox")}</PageTitle>
-                    <ProjectPrivacyBox $color={color}>
-                        <FeatherIcon icon="lock" />
-                    </ProjectPrivacyBox>
+                    <PrivacyIcon privacy="private" color={color} isProject />
                 </PageTitleBox>
                 <Icons>
                     <FeatherIcon icon="plus" onClick={openInboxTaskCreate} />
