@@ -7,6 +7,7 @@ import styled from "styled-components"
 import PageTitle from "@components/common/PageTitle"
 
 import { getMe } from "@api/users.api"
+import { type User } from "@api/users.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
@@ -21,7 +22,7 @@ const Header = () => {
         data: me,
         isLoading,
         isError,
-    } = useQuery({
+    } = useQuery<User>({
         queryKey: ["users", "me"],
         queryFn: () => getMe(),
     })
