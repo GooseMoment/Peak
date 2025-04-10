@@ -42,7 +42,7 @@ const LogPreviewBox = ({
     }
 
     // TODO: theme.grey 삭제
-    const boxColor = getPastelPaletteColor(log?.header_color) || theme.grey
+    const boxColor = getPastelPaletteColor(theme.type, log?.header_color) || theme.grey
 
     return (
         <Box
