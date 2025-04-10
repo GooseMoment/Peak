@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { Link } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
@@ -13,20 +14,33 @@ import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const Header = () => {
-    const { data: me, isLoading } = useQuery({
+    const {
+        data: me,
+        isLoading,
+        isError,
+    } = useQuery({
         queryKey: ["users", "me"],
         queryFn: () => getMe(),
     })
 
     const { t } = useTranslation("home", { keyPrefix: "page" })
 
+    useEffect(() => {
+        if (isError) {
+            toast.error(t("user_error"), {
+                toastId: "home_header_user_load_error",
+            })
+        }
+    }, [isError])
+
     return (
         <Frame>
             <PageTitle>{t("title")}</PageTitle>
             <HeaderIcons>
-                {isLoading ? (
+                {isLoading || isError ? (
                     <HeaderProfileLoading />
                 ) : (
                     <Link to={`/app/users/@${me.username}`}>
