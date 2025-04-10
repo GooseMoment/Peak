@@ -42,7 +42,7 @@ const Header = () => {
             <HeaderIcons>
                 {isLoading || isError ? (
                     <HeaderProfileLoading />
-                ) : (
+                ) : me && (
                     <Link to={`/app/users/@${me.username}`}>
                         <HeaderProfile src={me.profile_img} />
                     </Link>
