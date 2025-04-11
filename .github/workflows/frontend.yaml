@@ -10,14 +10,8 @@ jobs:
   format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - name: Install modules
-        run: pnpm i
-        working-directory: ./frontend
+      - name: Setup Frontend
+        uses: ./.github/actions/setup-frontend
       - name: Run Prettier Check and Show Diff
         run: >-
           pnpm format:check 
@@ -31,17 +25,16 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - name: Install modules
-        run: pnpm i
-        working-directory: ./frontend
+      - name: Setup Frontend
+        uses: ./.github/actions/setup-frontend
       - name: Run ESLint
         run: pnpm lint
         working-directory: ./frontend
+  type:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Frontend
+        uses: ./.github/actions/setup-frontend
       - name: Run type check
         run: pnpm type:check
         working-directory: ./frontend
@@ -49,6 +42,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          cache-dependency-path: '**/.github/workflows/*.yaml'
       - name: Run depcheck
         working-directory: ./frontend
         run: npx depcheck
