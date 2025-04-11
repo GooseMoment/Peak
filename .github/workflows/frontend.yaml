@@ -15,6 +15,12 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 9
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
       - name: Install modules
         run: pnpm i
         working-directory: ./frontend
@@ -36,11 +42,34 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 9
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
       - name: Install modules
         run: pnpm i
         working-directory: ./frontend
       - name: Run ESLint
         run: pnpm lint
+        working-directory: ./frontend
+  type:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
+      - name: Install modules
+        run: pnpm i
         working-directory: ./frontend
       - name: Run type check
         run: pnpm type:check
@@ -49,6 +78,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          cache-dependency-path: '**/.github/workflows/*.yaml'
       - name: Run depcheck
         working-directory: ./frontend
         run: npx depcheck
