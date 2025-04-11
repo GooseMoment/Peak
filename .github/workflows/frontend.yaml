@@ -10,6 +10,7 @@ jobs:
   format:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Setup Frontend
         uses: ./.github/actions/setup-frontend
       - name: Run Prettier Check and Show Diff
@@ -25,6 +26,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Setup Frontend
         uses: ./.github/actions/setup-frontend
       - name: Run ESLint
@@ -33,6 +35,7 @@ jobs:
   type:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Setup Frontend
         uses: ./.github/actions/setup-frontend
       - name: Run type check
