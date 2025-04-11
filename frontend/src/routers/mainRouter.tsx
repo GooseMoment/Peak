@@ -27,6 +27,7 @@ const AnnouncementDetailPage = lazy(
 )
 const NotificationsPage = lazy(() => import("@pages/NotificationsPage"))
 const TodayPage = lazy(() => import("@pages/TodayPage"))
+const InboxPage = lazy(() => import("@pages/InboxPage"))
 const ProjectPage = lazy(() => import("@pages/ProjectPage"))
 const ProjectListPage = lazy(() => import("@pages/ProjectListPage"))
 const SettingsPage = lazy(() => import("@pages/SettingsPage"))
@@ -163,6 +164,10 @@ const routes: RouteObject[] = [
             {
                 path: "projects",
                 element: <ProjectListPage />,
+            },
+            {
+                path: "projects/inbox",
+                element: <InboxPage />,
             },
             {
                 path: "projects/:id",
