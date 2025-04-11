@@ -6,8 +6,7 @@ import styled from "styled-components"
 
 import PageTitle from "@components/common/PageTitle"
 
-import { getMe } from "@api/users.api"
-import { type User } from "@api/users.api"
+import { type User, getMe } from "@api/users.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
@@ -20,7 +19,7 @@ import { toast } from "react-toastify"
 const Header = () => {
     const {
         data: me,
-        isLoading,
+        isPending,
         isError,
     } = useQuery<User>({
         queryKey: ["users", "me"],
@@ -41,14 +40,12 @@ const Header = () => {
         <Frame>
             <PageTitle>{t("title")}</PageTitle>
             <HeaderIcons>
-                {isLoading || isError ? (
+                {isPending || isError ? (
                     <HeaderProfileLoading />
                 ) : (
-                    me && (
-                        <Link to={`/app/users/@${me.username}`}>
-                            <HeaderProfile src={me.profile_img} />
-                        </Link>
-                    )
+                    <Link to={`/app/users/@${me.username}`}>
+                        <HeaderProfile src={me.profile_img} />
+                    </Link>
                 )}
                 <Link to="/app/notifications">
                     <FeatherIcon icon="bell" />
