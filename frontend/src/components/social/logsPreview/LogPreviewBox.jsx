@@ -191,7 +191,7 @@ const StatusIconWrapper = styled.div`
     ${(props) =>
         props.$type === "completedTask" &&
         css`
-            border: 2px solid ${(p) => p.theme.black};
+            border: 2px solid ${(p) => p.theme.textColor};
             border-radius: 50%;
         `}
 
@@ -205,12 +205,12 @@ const StatusIconWrapper = styled.div`
         height: 100%;
         margin: 0;
 
-        stroke: ${(p) => p.theme.black};
+        stroke: ${(p) => p.theme.textColor};
         stroke-width: 3px;
         ${(props) =>
             props.$type === "reaction" &&
             css`
-                fill: ${(p) => p.theme.black};
+                fill: ${(p) => p.theme.textColor};
             `}
     }
 `
