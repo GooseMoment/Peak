@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import styled, { useTheme } from "styled-components"
+import styled, { css, useTheme } from "styled-components"
 
 import SimpleProfile from "@components/social/common/SimpleProfile"
 
@@ -8,7 +8,7 @@ import { getCurrentUsername } from "@api/client"
 
 import { useTranslation } from "react-i18next"
 
-const Quote = ({ user, quote, saveQuote }) => {
+const Quote = ({ user, quote, saveQuote, displayProfile = true }) => {
     const { t } = useTranslation("", { keyPrefix: "social.quote" })
 
     const [inputState, setInputState] = useState(false)
@@ -47,9 +47,11 @@ const Quote = ({ user, quote, saveQuote }) => {
 
     return (
         <Box>
-            <SimpleProfile user={user} />
+            {displayProfile && <SimpleProfile user={user} showUsername />}
 
-            <Wrapper onClick={handleInputState}>
+            <Wrapper
+                onClick={handleInputState}
+                $displayProfile={displayProfile}>
                 {inputState ? (
                     <QuoteInput
                         type="text"
@@ -84,7 +86,13 @@ const Box = styled.div`
 `
 
 const Wrapper = styled.div`
-    width: 72%;
+    width: ${(props) => (props.$displayProfile ? 72 : 100)}%;
+    ${(props) =>
+        !props.$displayProfile &&
+        css`
+            height: 4em;
+        `}
+
     border-radius: 1em;
     background-color: ${(p) => p.theme.secondBackgroundColor};
     padding: 1em;

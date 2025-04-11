@@ -5,19 +5,20 @@ import { styled } from "styled-components"
 
 import CommonCalendar from "@components/common/CommonCalendar"
 import SocialPageTitle from "@components/social/SocialPageTitle"
+import DateBar from "@components/social/common/DateBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
 import LogsPreview from "@components/social/logsPreview/LogsPreview"
 
 import { getCurrentUsername } from "@api/client"
 import { getDailyLogsPreview } from "@api/social.api"
 
-import useScreenType, { ifMobile } from "@utils/useScreenType"
+import useScreenType, { ifMobile, ifTablet } from "@utils/useScreenType"
 
 const SocialFollowingPage = () => {
     const initialDate = new Date()
     initialDate.setHours(0, 0, 0, 0)
 
-    const { isMobile } = useScreenType()
+    const { isMobile, isTablet } = useScreenType()
 
     const me = getCurrentUsername()
 
@@ -38,14 +39,23 @@ const SocialFollowingPage = () => {
 
             <Wrapper>
                 <Container>
-                    <CalendarWrapper>
-                        <CommonCalendar
-                            isRangeSelectMode={false}
-                            selectedStartDate={selectedDate}
-                            setSelectedStartDate={setSelectedDate}
-                            contentedDates={mockNewLogDates}
+                    {(isMobile || isTablet) && (
+                        <DateBar
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
                         />
-                    </CalendarWrapper>
+                    )}
+                    {!(isMobile || isTablet) && (
+                        <CalendarWrapper>
+                            <CommonCalendar
+                                isRangeSelectMode={false}
+                                selectedStartDate={selectedDate}
+                                setSelectedStartDate={setSelectedDate}
+                                contentedDates={mockNewLogDates}
+                            />
+                        </CalendarWrapper>
+                    )}
+
                     {dailyLogs && (
                         <LogsPreview
                             logs={dailyLogs}
@@ -57,7 +67,7 @@ const SocialFollowingPage = () => {
                 </Container>
 
                 {/* TODO: 날짜가 선택되지 않았을 때 */}
-                {!isMobile && (
+                {!(isMobile || isTablet) && (
                     <StickyContainer>
                         <LogDetails
                             username={targetUser}
@@ -71,28 +81,43 @@ const SocialFollowingPage = () => {
 }
 
 const Wrapper = styled.div`
+    width: 90%;
+
     display: flex;
-    gap: 2rem;
+    justify-content: space-between;
 
     ${ifMobile} {
-        flex-direction: column;
+        width: 100%;
+
+        justify-content: center;
+    }
+
+    ${ifTablet} {
+        width: 100%;
+
+        justify-content: center;
     }
 `
 
 const Container = styled.div`
-    width: 50%;
-    min-width: 27.5rem;
+    width: 40%;
+    min-width: 22.5rem;
+    max-width: 28rem;
     margin-bottom: auto;
 
-    padding: 0 1rem 0;
-    overflow: hidden;
+    padding: 0 1em 0;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 1rem;
 
+    ${ifTablet} {
+        padding: 0 0.5em 0;
+    }
+
     ${ifMobile} {
+        margin: 0;
         width: 100%;
         min-width: auto;
 
@@ -101,14 +126,17 @@ const Container = styled.div`
 `
 
 const StickyContainer = styled(Container)`
-    position: sticky;
     top: 2.5rem;
+    margin-left: auto;
     gap: 0rem;
+    position: sticky;
+    flex-grow: 1;
+    max-width: 30rem;
 `
 
 const CalendarWrapper = styled.div`
     margin: 0 auto;
-    width: 80%;
+    width: 100%;
     max-width: 35rem;
 
     ${ifMobile} {
@@ -119,9 +147,9 @@ const CalendarWrapper = styled.div`
 `
 
 const mockNewLogDates = [
-    "2024-05-12T15:00:00.000Z",
-    "2024-05-11T15:00:00.000Z",
-    "2024-09-01T15:00:00.000Z",
+    "2025-02-02T15:00:00.000Z",
+    "2025-02-03T15:00:00.000Z",
+    "2025-01-31T15:00:00.000Z",
 ]
 
 export default SocialFollowingPage

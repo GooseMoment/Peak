@@ -1,7 +1,7 @@
 import useScreenSize from "@utils/useScreenSize"
 
 export const WIDTH_MOBILE = 500
-export const WIDTH_TABLET = 1000
+export const WIDTH_TABLET = 1024
 
 const useScreenType = () => {
     const screenSize = useScreenSize()
