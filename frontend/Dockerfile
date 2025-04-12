@@ -10,6 +10,7 @@ WORKDIR /frontend
 
 COPY ./package.json .
 COPY ./pnpm-lock.yaml .
+COPY ./.npmrc .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY . .

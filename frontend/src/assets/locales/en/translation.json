@@ -406,6 +406,11 @@
         },
         "no_result": "Your search did not match any tasks 🤔"
     },
+    "update": {
+        "message": "New update available.",
+        "update": "Update",
+        "later": "Later"
+    },
     "common": {
         "header": {
             "back": "Go Back"
