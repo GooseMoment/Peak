@@ -13,7 +13,7 @@ export interface ICheckboxItem {
 
 export type CheckboxGroupProp = {
     items: ICheckboxItem[]
-    exclusive: boolean
+    exclusive?: boolean
     selectedItems: ICheckboxItem[]
     setSelectedItems: Dispatch<SetStateAction<ICheckboxItem[]>>
 }
