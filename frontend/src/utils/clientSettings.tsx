@@ -160,12 +160,8 @@ export const useClientTimezone = () => {
 }
 
 export const getClientTimezone = () => {
-    const [setting] = useClientSetting()
-
-    const settingTz = setting?.timezone
-    const tz = getTimezone(settingTz)
-
-    return tz
+    const setting = getClientSettings()
+    return getTimezone(setting.timezone)
 }
 
 export const useClientTheme = (systemTheme: LightDark) => {
