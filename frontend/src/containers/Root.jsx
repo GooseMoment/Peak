@@ -7,12 +7,14 @@ import mainRouter from "@routers/mainRouter"
 import FullscreenLoader from "@components/common/FullscreenLoader"
 
 import useScreenType from "@utils/useScreenType"
+import useUpdatePrompt from "@utils/useUpdatePrompt"
 
 import { Bounce, Slide, ToastContainer } from "react-toastify"
 
 const Root = () => {
     const theme = useTheme()
     const { isMobile } = useScreenType()
+    useUpdatePrompt()
 
     return (
         <>
