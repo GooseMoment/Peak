@@ -16,7 +16,7 @@ const InstallInstructionPage = () => {
 
     return (
         <>
-            <PageBack defaultTo="/app/home">{t("back")}</PageBack>
+            <PageBack defaultTo="/app/home" />
             <PageTitle>{t("title")}</PageTitle>
             <PageDescription>{t("description")}</PageDescription>
             <Blank />
