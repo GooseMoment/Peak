@@ -171,6 +171,10 @@ class WebPushSubscriptionDetail(
             if t not in notification_types:
                 raise exceptions.InvalidNotificationType
 
+        # disallow excluding all types
+        if len(excluded_types) == len(notification_types):
+            raise exceptions.AllTypesExcluded
+
         subscription: WebPushSubscription = self.get_object()
         serializer = WebPushSubscriptionSerializer(
             subscription, data={"excluded_types": excluded_types}, partial=True

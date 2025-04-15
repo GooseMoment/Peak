@@ -1,160 +1,224 @@
-import styled, { useTheme } from "styled-components"
+import { useNavigate } from "react-router-dom"
+
+import styled, { css, useTheme } from "styled-components"
 
 import SimpleProfile from "@components/social/common/SimpleProfile"
-import LogDetails from "@components/social/logDetails/LogDetails"
 
 import { getCurrentUsername } from "@api/client"
 
-import { useClientLocale } from "@utils/clientSettings"
-import useScreenType, { ifMobile } from "@utils/useScreenType"
+import useScreenType, { ifTablet } from "@utils/useScreenType"
 
-import { getPaletteColor } from "@assets/palettes"
+import { getPastelPaletteColor } from "@assets/palettes"
 
-import { DateTime } from "luxon"
-import { useTranslation } from "react-i18next"
-
-const putEllipsis = (text, maxLength) => {
-    return text.length > maxLength
-        ? text.substring(0, maxLength - 3) + "..."
-        : text
-}
+import FeatherIcon from "feather-icons-react"
 
 const LogPreviewBox = ({
     log,
     selectedUser,
     setSelectedUser,
     selectedDate,
-    pageType = "following",
+    // pageType = "following",
 }) => {
-    // TODO: explore feed용 view 추가하면 삭제
-    const initial_date = new Date()
-    initial_date.setHours(0, 0, 0, 0)
-    const tempSelectedDate = initial_date.toISOString()
-
     const theme = useTheme()
-    const locale = useClientLocale()
-    const { isMobile } = useScreenType()
-    const { t } = useTranslation("", { keyPrefix: "social" })
+    const { isDesktop } = useScreenType()
+    const navigate = useNavigate()
 
     const me = getCurrentUsername()
 
     if (!log) return null
 
-    const handleSelect = (e) => {
-        if (e.target.dataset.accept === "true")
-            setSelectedUser(log.username === selectedUser ? null : log.username)
+    // TODO: explore feed용 view 추가하면 삭제
+    const initialDate = new Date()
+    initialDate.setHours(0, 0, 0, 0)
+    // const tempSelectedDate = initial_date.toISOString()
+
+    const handleSelect = () => {
+        setSelectedUser(log.username === selectedUser ? null : log.username)
+
+        if (!isDesktop)
+            navigate(`../daily/@${log.username}`, {
+                state: { selectedDate: selectedDate },
+            })
     }
 
-    const setRingColor = () => {
-        return log.recent_task
-            ? log.recent_task.is_read
-                ? theme.grey
-                : getPaletteColor(theme.type, log.recent_task.project_color)
-            : null
-    }
-
-    const backgroundColor =
-        log.username === selectedUser
-            ? theme.social.activeBackgroundColor
-            : theme.backgroundColor
+    // TODO: theme.grey 삭제
+    const boxColor =
+        getPastelPaletteColor(theme.type, log?.header_color) || theme.grey
 
     return (
-        (isMobile || log.username !== me) && (
-            <Frame
-                onClick={handleSelect}
-                $bgColor={backgroundColor}
-                data-accept="true">
-                {isMobile && log.username === selectedUser ? (
-                    <MobileLogDetail data-accept="true">
-                        <LogDetails
-                            username={selectedUser}
-                            selectedDate={selectedDate || tempSelectedDate}
-                            pageType={pageType}
-                        />
-                    </MobileLogDetail>
-                ) : (
-                    <>
-                        <SimpleProfile
-                            user={log}
-                            ringColor={setRingColor}
-                            data-accept="true"
-                        />
-                        <RecentTask data-accept="true">
-                            {log.recent_task && (
-                                <>
-                                    <TaskName data-accept="true">
-                                        {' "' +
-                                            putEllipsis(
-                                                log.recent_task.name,
-                                                32,
-                                            ) +
-                                            '" ' +
-                                            t("log_preview_completed")}
-                                    </TaskName>
+        <Box
+            $isMe={log.username === me}
+            $bgColor={boxColor}
+            $isSelected={log.username === selectedUser}
+            onClick={handleSelect}>
+            <FrameRow>
+                <ProfileWrapper
+                    $isMe={log.username === me}
+                    $isDesktop={isDesktop}>
+                    <SimpleProfile user={log} />
+                </ProfileWrapper>
+            </FrameRow>
 
-                                    <Ago data-accept="true">
-                                        {" " +
-                                            DateTime.fromISO(
-                                                log.recent_task.completed_at,
-                                            )
-                                                .setLocale(locale)
-                                                .toRelative() +
-                                            " "}
-                                    </Ago>
-                                </>
-                            )}
-                        </RecentTask>
-                    </>
-                )}
-            </Frame>
-        )
+            <InfoContainer>
+                <Username>@{log.username}</Username>
+
+                <SimpleStats>
+                    <StatsUnit>
+                        <StatusIconWrapper $type="completedTask">
+                            <FeatherIcon icon="check" />
+                        </StatusIconWrapper>
+                        <StatusCount>12</StatusCount>
+                    </StatsUnit>
+                    <StatsUnit>
+                        <StatusIconWrapper $type="reaction">
+                            <FeatherIcon icon="heart" />
+                        </StatusIconWrapper>
+                        <StatusCount>12</StatusCount>
+                    </StatsUnit>
+                </SimpleStats>
+            </InfoContainer>
+        </Box>
     )
 }
 
-const Frame = styled.div`
-    border-bottom: 0.05em solid ${(p) => p.theme.social.borderColor};
-    background-color: ${(props) => props.$bgColor};
+const Box = styled.div`
+    box-sizing: border-box;
+    ${(props) =>
+        props.$isMe
+            ? css`
+                  width: 100%;
+                  aspect-ratio: 2 / 1;
+              `
+            : css`
+                  width: calc(50% - 0.5em);
+                  aspect-ratio: 1/1;
+              `}
+    padding: 6%;
 
-    padding: 1.2em 1em 1.2em;
+    color: ${(props) => props.theme.black};
+    background-color: ${(props) => props.$bgColor};
+    border-radius: 24px;
+    ${(props) =>
+        props.$isSelected &&
+        css`
+            box-shadow:
+                0 0 0 0.15em ${(p) => p.theme.backgroundColor},
+                0 0 0 0.3em ${(props) => props.$bgColor} !important;
+        `}
 
     display: flex;
-    align-items: center;
-    gap: 1em;
+    flex-direction: column;
+    justify-content: space-between;
 
-    ${ifMobile} {
-        background-color: ${(p) => p.theme.backgroundColor};
+    cursor: pointer;
+    transition: all 0.25s ease;
+
+    &:hover {
+        box-shadow:
+            0 0 0 0.15em ${(p) => p.theme.backgroundColor},
+            0 0 0 0.3em ${(props) => props.$bgColor};
+    }
+
+    ${ifTablet} {
+        padding: 1.5em !important;
+
+        &:hover {
+            box-shadow: none;
+        }
     }
 `
 
-const RecentTask = styled.div`
-    min-width: 40%;
+const FrameRow = styled.div`
+    display: flex;
+    flex-direction: row;
+`
+
+const ProfileWrapper = styled.div`
+    aspect-ratio: 1;
+    ${(props) =>
+        props.$isMe
+            ? css`
+                  width: calc((50% - 1.5em) * ${props.$isDesktop ? 0.55 : 0.5});
+              `
+            : css`
+                  width: ${props.$isDesktop ? 55 : 50}%;
+              `};
+    max-width: 4.5em;
+
+    ${ifTablet} {
+        max-width: 64px !important;
+    }
+`
+
+const InfoContainer = styled.div`
     flex-grow: 1;
+    max-height: 3em;
 
-    padding-bottom: 0.7em;
-    line-height: 1.3em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 `
 
-const TaskName = styled.div`
-    color: ${(p) => p.theme.textColor};
-    display: inline;
-    font-size: 1.1em;
-`
+const Username = styled.div`
+    font-weight: 600;
+    overflow-x: clip;
+    text-overflow: ellipsis;
 
-const Ago = styled.span`
-    margin-left: 0.5em;
-
-    display: inline;
-
-    font-size: 0.9em;
-    color: ${(p) => p.theme.secondTextColor};
+    text-align: left;
     white-space: nowrap;
 `
 
-const MobileLogDetail = styled.div`
-    height: 70vh;
-    width: 100%;
+const SimpleStats = styled.div`
+    height: 1.5em;
 
-    overflow-y: scroll;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+`
+
+const StatsUnit = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.3em;
+`
+
+const StatusIconWrapper = styled.div`
+    box-sizing: border-box;
+    aspect-ratio: 1;
+    height: 18px;
+    padding: 0;
+
+    ${(props) =>
+        props.$type === "completedTask" &&
+        css`
+            border: 2px solid ${(p) => p.theme.black};
+            border-radius: 50%;
+        `}
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & svg {
+        top: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+
+        stroke: ${(p) => p.theme.black};
+        stroke-width: 3px;
+        ${(props) =>
+            props.$type === "reaction" &&
+            css`
+                fill: ${(p) => p.theme.black};
+            `}
+    }
+`
+
+const StatusCount = styled.div`
+    overflow-x: clip;
+    text-overflow: ellipsis;
 `
 
 export default LogPreviewBox
