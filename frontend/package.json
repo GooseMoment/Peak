@@ -39,8 +39,8 @@
         "react-easy-crop": "^5.4.1",
         "react-i18next": "^15.4.1",
         "react-lazily": "^0.9.2",
+        "react-modal-sheet": "^4.0.1",
         "react-router-dom": "^6.30.0",
-        "react-spring-bottom-sheet": "^3.4.1",
         "react-toastify": "^11.0.5",
         "styled-components": "^6.1.17"
     },
