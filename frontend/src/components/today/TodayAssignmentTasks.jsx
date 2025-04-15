@@ -92,7 +92,7 @@ const TodayAssignmentTasks = () => {
                         )),
                     )
                 )}
-                {isSimpleOpen && (
+                {inboxQuery.data && isSimpleOpen && (
                     <TaskCreateSimple
                         projectID={inboxQuery.data.id}
                         projectName={inboxQuery.data.name}
