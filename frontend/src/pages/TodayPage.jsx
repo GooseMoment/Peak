@@ -8,6 +8,7 @@ import TodayAssignmentTasks from "@components/today/TodayAssignmentTasks"
 import TodayDateMenu from "@components/today/TodayDateMenu"
 
 import { useClientTimezone } from "@utils/clientSettings"
+import { useClientLocale } from "@utils/clientSettings"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
@@ -15,15 +16,21 @@ import { useTranslation } from "react-i18next"
 const TodayPage = () => {
     const { t } = useTranslation(null, { keyPrefix: "today" })
     const tz = useClientTimezone()
+    const locale = useClientLocale()
 
     const today = DateTime.now().setZone(tz)
     const [selectedDate, setSelectedDate] = useState(today.toISODate())
 
     const isToday = selectedDate === today.toISODate()
-    const selected = DateTime.fromISO(selectedDate).setZone(tz)
-    const weekdayName = selected.toFormat("ccc")
+    const selectedDateTime = DateTime.fromISO(selectedDate).setZone(tz)
 
-    const titleText = isToday ? t("title") : `${selectedDate} ${weekdayName}`
+    const titleText = isToday
+        ? t("title")
+        : selectedDateTime.setLocale(locale).toLocaleString({
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+          })
 
     return (
         <>
