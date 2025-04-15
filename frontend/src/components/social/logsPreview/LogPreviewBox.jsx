@@ -95,6 +95,7 @@ const Box = styled.div`
               `}
     padding: 6%;
 
+    color: ${(props) => props.theme.black};
     background-color: ${(props) => props.$bgColor};
     border-radius: 24px;
     ${(props) =>
@@ -191,7 +192,7 @@ const StatusIconWrapper = styled.div`
     ${(props) =>
         props.$type === "completedTask" &&
         css`
-            border: 2px solid ${(p) => p.theme.textColor};
+            border: 2px solid ${(p) => p.theme.black};
             border-radius: 50%;
         `}
 
@@ -205,12 +206,12 @@ const StatusIconWrapper = styled.div`
         height: 100%;
         margin: 0;
 
-        stroke: ${(p) => p.theme.textColor};
+        stroke: ${(p) => p.theme.black};
         stroke-width: 3px;
         ${(props) =>
             props.$type === "reaction" &&
             css`
-                fill: ${(p) => p.theme.textColor};
+                fill: ${(p) => p.theme.black};
             `}
     }
 `
