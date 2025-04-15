@@ -17,12 +17,10 @@ import queryClient from "@queries/queryClient"
 
 import GlobalStyle from "@assets/GlobalStyle"
 
-import registerSW from "@/registerSW"
-
 // initilize client-side settings
 initClientSettings()
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <ClientSettingProvider>
             <ClientThemeProvider>
@@ -35,5 +33,3 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </ClientSettingProvider>
     </React.StrictMode>,
 )
-
-registerSW()

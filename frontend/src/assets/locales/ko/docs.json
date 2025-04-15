@@ -1,6 +1,5 @@
 {
     "install_instruction_ios": {
-        "back": "돌아가기",
         "title": "iOS에서 Peak 설치하기",
         "description": "Peak을 홈 화면에 추가하세요.",
         "step1": "1단계",
