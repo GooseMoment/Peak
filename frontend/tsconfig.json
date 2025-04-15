@@ -24,7 +24,7 @@
         "target": "ES2016",
         "jsx": "react-jsx"
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "src/**/*.json"],
     "exclude": ["**/dist/*", "**/public/*"],
     "typeAcquisition": {
         "enable": true
