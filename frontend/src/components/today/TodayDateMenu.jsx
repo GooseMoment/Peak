@@ -66,7 +66,7 @@ const DateMenuBtn = styled(MenuButton)`
 const CalendarWrapper = styled.div`
     margin: 0.4em auto;
     width: 90%;
-    max-width: 20rem;
+    width: 20rem;
 `
 
 export default TodayDateMenu
