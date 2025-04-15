@@ -80,6 +80,9 @@ const ImportantTasks = () => {
             queryClient.invalidateQueries({
                 queryKey: ["today", filter],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["today", "assigned"],
+            })
         },
         onError: () => {
             toast.error(t("due_change_error"))
