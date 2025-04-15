@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { type Dispatch, type SetStateAction, useMemo, useState } from "react"
 
 import styled, {
     type LightDark,
@@ -34,7 +34,7 @@ const DemoTheme = () => {
         <SubSection>
             <FilterButtonGroup
                 active={activeTheme}
-                setActive={setActiveTheme}
+                setActive={setActiveTheme as Dispatch<SetStateAction<string>>}
                 filters={filters}
             />
             <Wrapper>
