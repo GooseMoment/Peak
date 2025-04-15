@@ -22,6 +22,11 @@ export const patchDrawer = async (id, edit) => {
     return res.data
 }
 
+export const patchReorderDrawer = async (data) => {
+    const res = await client.patch(`drawers/reorder/`, data)
+    return res.data
+}
+
 export const deleteDrawer = async (id) => {
     const res = await client.delete(`drawers/${id}/`)
     return res.data
