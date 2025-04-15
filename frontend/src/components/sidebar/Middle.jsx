@@ -83,7 +83,13 @@ const Middle = () => {
                 )}
 
                 {projects?.map((project) => (
-                    <SidebarLink to={`projects/${project.id}`} key={project.id}>
+                    <SidebarLink
+                        to={
+                            project.type === "inbox"
+                                ? "/app/projects/inbox"
+                                : `/app/projects/${project.id}`
+                        }
+                        key={project.id}>
                         <ProjectItemBox $collapsed={isCollapsed}>
                             <FeatherIcon
                                 icon="circle"
