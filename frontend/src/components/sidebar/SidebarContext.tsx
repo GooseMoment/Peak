@@ -1,13 +1,36 @@
-import { createContext, useContext, useState } from "react"
+import {
+    type Dispatch,
+    type ReactNode,
+    type SetStateAction,
+    createContext,
+    useContext,
+    useState,
+} from "react"
 
 import { useClientSetting } from "@utils/clientSettings"
 import { WIDTH_TABLET } from "@utils/useScreenType"
 
 const startUpWidth = window.innerWidth
 
-const SidebarContext = createContext()
+export interface StyledCollapsedProp {
+    $collapsed?: boolean
+}
 
-export const SidebarContextProvider = ({ children }) => {
+interface SidebarCollapsed {
+    isCollapsed: boolean
+    setCollapsed: Dispatch<SetStateAction<boolean>>
+}
+
+const SidebarContext = createContext<SidebarCollapsed>({
+    isCollapsed: false,
+    setCollapsed: () => {},
+})
+
+export const SidebarContextProvider = ({
+    children,
+}: {
+    children?: ReactNode
+}) => {
     const [clientSetting] = useClientSetting()
 
     const [isCollapsed, setCollapsed] = useState(
