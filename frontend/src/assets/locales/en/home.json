@@ -1,6 +1,7 @@
 {
     "page": {
-        "title": "Home"
+        "title": "Home",
+        "user_error": "Failed to load. Try to reopen the app."
     },
     "add_task": {
         "title": "Add a task",

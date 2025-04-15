@@ -1,6 +1,7 @@
 {
     "page": {
-        "title": "홈"
+        "title": "홈",
+        "user_error": "불러오지 못했습니다. 앱을 재실행해 보세요."
     },
     "add_task": {
         "title": "작업 추가",
