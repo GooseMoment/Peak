@@ -412,6 +412,9 @@
         "later": "Later"
     },
     "common": {
+        "header": {
+            "back": "Go Back"
+        },
         "button_no": "No"
     }
 }

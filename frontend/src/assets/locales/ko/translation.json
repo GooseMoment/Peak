@@ -412,6 +412,9 @@
         "later": "미루기"
     },
     "common": {
+        "header": {
+            "back": "돌아가기"
+        },
         "button_no": "아니요"
     }
 }
