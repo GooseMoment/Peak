@@ -47,9 +47,6 @@ importers:
       grapheme-splitter:
         specifier: ^1.0.4
         version: 1.0.4
-      i:
-        specifier: ^0.3.7
-        version: 0.3.7
       i18next:
         specifier: ^24.2.3
         version: 24.2.3(typescript@5.8.3)
@@ -2275,10 +2272,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-
-  i@0.3.7:
-    resolution: {integrity: sha512-FYz4wlXgkQwIPqhzC5TdNMLSE5+GS1IIDJZY/1ZiEPCT2S3COUVZeT5OW4BmW4r5LHLQuOosSwsvnroG9GR59Q==}
-    engines: {node: '>=0.4'}
 
   ico-endec@0.1.6:
     resolution: {integrity: sha512-ZdLU38ZoED3g1j3iEyzcQj+wAkY2xfWNkymszfJPoxucIUhK7NayQ+/C4Kv0nDFMIsbtbEHldv3V8PU494/ueQ==}
@@ -5970,8 +5963,6 @@ snapshots:
       '@babel/runtime': 7.26.10
     optionalDependencies:
       typescript: 5.8.3
-
-  i@0.3.7: {}
 
   ico-endec@0.1.6: {}
 
