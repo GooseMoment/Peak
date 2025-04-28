@@ -1,10 +1,9 @@
-import { useState } from "react"
+import { useState, ReactNode } from "react"
 
 import styled from "styled-components"
 
 import FeatherIcon from "feather-icons-react"
 import { Sheet } from "react-modal-sheet"
-import { ReactNode } from "react"
 
 interface BottomSheetProps {
     onClose: () => void
