@@ -4,22 +4,23 @@ import styled from "styled-components"
 
 import FeatherIcon from "feather-icons-react"
 import { Sheet } from "react-modal-sheet"
+import { ReactNode } from "react"
 
 interface BottomSheetProps {
     onClose: () => void
     initialSnap?: number
     title?: string | null
-    icon?: React.ReactNode | null
+    icon?: ReactNode
     handleBack?: (() => void) | null
-    children: React.ReactNode
+    children: ReactNode
 }
 
 const ModalBottomSheet = ({
     onClose,
     initialSnap = 0,
-    title = null,
-    icon = null,
-    handleBack = null,
+    title,
+    icon,
+    handleBack,
     children,
 }: BottomSheetProps) => {
     const [isOpen, setIsOpen] = useState(true)
@@ -52,7 +53,7 @@ const ModalBottomSheet = ({
                         ) : (
                             <EmptyBox />
                         )}
-                        {title && title}
+                        {title}
                         <FeatherIcon icon="x" onClick={closeModal} />
                     </HeaderBox>
                 </Sheet.Header>
