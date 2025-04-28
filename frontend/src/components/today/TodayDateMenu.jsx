@@ -57,9 +57,11 @@ const DateMenuBtn = styled(MenuButton)`
     background-color: transparent;
     border: 0;
     cursor: pointer;
+    margin-bottom: 1rem;
 
     & svg {
-        font-size: 1.5em;
+        font-size: 1.5rem;
+        margin-right: 0;
     }
 `
 

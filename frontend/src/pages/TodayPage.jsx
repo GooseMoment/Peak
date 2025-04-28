@@ -7,8 +7,7 @@ import ImportantTasks from "@components/today/ImportantTasks"
 import TodayAssignmentTasks from "@components/today/TodayAssignmentTasks"
 import TodayDateMenu from "@components/today/TodayDateMenu"
 
-import { useClientTimezone } from "@utils/clientSettings"
-import { useClientLocale } from "@utils/clientSettings"
+import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
@@ -50,7 +49,7 @@ const TodayPage = () => {
 const TitleBox = styled.div`
     display: flex;
     justify-content: space-between;
-    padding-right: 1em;
+    align-items: center;
 `
 
 export default TodayPage
