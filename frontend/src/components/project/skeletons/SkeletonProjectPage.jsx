@@ -44,10 +44,17 @@ const SkeletonTasks = ({ taskCount }) => {
 }
 
 export const SkeletonInboxPage = () => {
-    return <ProjectTitle />
+    return (
+        <>
+            <ProjectTitle />
+            <Tasks>
+                <SkeletonTasks taskCount={5} />
+            </Tasks>
+        </>
+    )
 }
 
-export const SkeletionInboxTask = () => {
+export const SkeletonInboxTask = () => {
     return (
         <Tasks>
             <SkeletonTasks taskCount={15} />

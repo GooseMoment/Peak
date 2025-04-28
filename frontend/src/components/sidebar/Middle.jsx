@@ -98,9 +98,10 @@ const Middle = () => {
                                     project.color,
                                 )}
                             />
-                            {!isCollapsed && project.type === "inbox"
-                                ? t("inbox")
-                                : project.name}
+                            {!isCollapsed &&
+                                (project.type === "inbox"
+                                    ? t("inbox")
+                                    : project.name)}
                         </ProjectItemBox>
                     </SidebarLink>
                 ))}
