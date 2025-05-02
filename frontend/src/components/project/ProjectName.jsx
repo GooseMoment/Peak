@@ -10,17 +10,24 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
 const ProjectName = ({ project, demo = false }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project_list" })
+    const { t } = useTranslation("translation", { keyPrefix: "project_list" })
     const theme = useTheme()
 
+    const projectLink =
+        project.type === "inbox"
+            ? "/app/projects/inbox"
+            : `/app/projects/${project.id}`
+
+    let name = project.type === "inbox" ? t("inbox") : project.name
+
     let nameParts = (
-        <Link to={`/app/projects/${project.id}`}>
-            <NameText>{project.name}</NameText>
+        <Link to={projectLink}>
+            <NameText>{name}</NameText>
         </Link>
     )
 
     if (demo) {
-        nameParts = <NameText>{project.name}</NameText>
+        nameParts = <NameText>{name}</NameText>
     }
 
     return (
