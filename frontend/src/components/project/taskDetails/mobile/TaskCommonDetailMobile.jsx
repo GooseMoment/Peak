@@ -5,7 +5,7 @@ import styled, { useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
-import ModalBottomSheet, { Header } from "@components/common/ModalBottomSheet"
+import ModalBottomSheet from "@components/common/ModalBottomSheet"
 import { useDeleteTask } from "@components/project/common/useDeleteTask"
 import ContentsMobile from "@components/project/taskDetails/mobile/ContentsMobile"
 import TaskNameInput from "@components/tasks/TaskNameInput"
@@ -14,6 +14,8 @@ import { postReminder } from "@api/notifications.api"
 import { patchTask, postTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
+
+import { opacityUp } from "@assets/keyframes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -127,26 +129,18 @@ const TaskCommonDetailMobile = ({
 
     return (
         <ModalBottomSheet
-            headerContent={
-                <Header
-                    title={title}
-                    icon={
-                        isCreating ? null : (
-                            <FeatherIcon
-                                icon="trash-2"
-                                stroke={theme.project.danger}
-                                onClick={handleAlert}
-                            />
-                        )
-                    }
-                    closeSheet={onClose}
-                    handleBack={
-                        activeContent ? () => setActiveContent(null) : null
-                    }
-                />
+            onClose={onClose}
+            title={title}
+            icon={
+                isCreating ? null : (
+                    <FeatherIcon
+                        icon="trash-2"
+                        stroke={theme.project.danger}
+                        onClick={handleAlert}
+                    />
+                )
             }
-            blocking={!isAlertOpen}
-            onClose={onClose}>
+            handleBack={activeContent ? () => setActiveContent(null) : null}>
             <TaskCommonDetailMobileBox>
                 <TaskNameInput
                     task={newTask}
@@ -157,12 +151,14 @@ const TaskCommonDetailMobile = ({
                     setFunc={handleChange}
                     isCreate
                 />
-                <ContentsMobile
-                    newTask={newTask}
-                    editNewTask={handleChange}
-                    activeContent={activeContent}
-                    setActiveContent={setActiveContent}
-                />
+                <AnimatedContent $active={activeContent}>
+                    <ContentsMobile
+                        newTask={newTask}
+                        editNewTask={handleChange}
+                        activeContent={activeContent}
+                        setActiveContent={setActiveContent}
+                    />
+                </AnimatedContent>
                 {!activeContent && (
                     <ButtonGroup
                         $justifyContent="flex-end"
@@ -198,6 +194,10 @@ const TaskCommonDetailMobile = ({
 const TaskCommonDetailMobileBox = styled.div`
     width: 90%;
     margin: 1.2em;
+`
+
+const AnimatedContent = styled.div`
+    animation: ${(props) => props.$active && opacityUp} 0.3s ease-in-out;
 `
 
 export default TaskCommonDetailMobile
