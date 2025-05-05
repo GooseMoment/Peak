@@ -100,6 +100,9 @@ const ImportantTasks = () => {
             queryClient.invalidateQueries({
                 queryKey: ["today", filter],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["today", "assigned"],
+            })
         },
         onError: () => {
             toast.error(t("due_change_error"))
@@ -270,14 +273,16 @@ const FilterButtonBox = styled.div`
 
 const FilterButton = styled.div`
     width: fit-content;
-    padding: 0.35em 0.7em;
-    border: 1px solid ${(p) => p.theme.project.borderColor};
+    text-align: center;
+    padding: 0.4em 0.6em;
+    border: 1px solid ${(p) => p.theme.borderColor};
     border-radius: 13px;
     color: ${(p) => p.theme.textColor};
     background-color: ${(p) => p.theme.backgroundColor};
     font-size: 0.9em;
     font-weight: 500;
     cursor: pointer;
+    word-break: keep-all;
 
     ${(props) =>
         !props.$isActive &&
