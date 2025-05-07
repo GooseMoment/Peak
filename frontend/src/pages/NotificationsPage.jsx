@@ -185,6 +185,7 @@ const RefetchIcon = styled.div`
     align-items: center;
     height: 1.75em;
     padding: 0 0.5em;
+    cursor: pointer;
 
     & svg {
         stroke-width: 3px;
