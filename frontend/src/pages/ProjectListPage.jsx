@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 
 import { useQuery } from "@tanstack/react-query"
 import { useMutation } from "@tanstack/react-query"
@@ -13,36 +13,29 @@ import SkeletonProjectList from "@components/project/skeletons/SkeletonProjectLi
 
 import { getProjectList, patchProject } from "@api/projects.api"
 
+import HTML5toTouch from "@utils/html5ToTouch"
 import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
 import FeatherIcon from "feather-icons-react"
-import { HTML5Backend } from "react-dnd-html5-backend"
-import {
-    DndProvider,
-    MouseTransition,
-    MultiBackend,
-    TouchTransition,
-} from "react-dnd-multi-backend"
-import { TouchBackend } from "react-dnd-touch-backend"
+import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
 
 const ProjectListPage = () => {
     const { t } = useTranslation(null, { keyPrefix: "project_list" })
 
-    const [projects, setProjects] = useState([])
     const [isCreateOpen, setIsCreateOpen] = useState(false)
 
-    const { isPending, isError, data, refetch } = useQuery({
+    const {
+        isPending,
+        isError,
+        data: projects,
+        refetch,
+    } = useQuery({
         queryKey: ["projects"],
         queryFn: () => getProjectList(),
     })
-
-    useEffect(() => {
-        if (!data) return
-        setProjects(data)
-    }, [data])
 
     const patchMutation = useMutation({
         mutationFn: ({ id, order }) => {
@@ -52,12 +45,11 @@ const ProjectListPage = () => {
             queryClient.invalidateQueries({
                 queryKey: ["projects"],
             })
-            refetch()
         },
     })
 
     const moveProject = useCallback((dragIndex, hoverIndex) => {
-        setProjects((prevProjects) => {
+        queryClient.setQueryData(["projects"], (prevProjects) => {
             const updatedProjects = [...prevProjects]
             const [moved] = updatedProjects.splice(dragIndex, 1)
             updatedProjects.splice(hoverIndex, 0, moved)
@@ -68,29 +60,12 @@ const ProjectListPage = () => {
     const dropProject = useCallback(() => {
         const changedProjects = projects
             .map((project, index) => ({ id: project.id, order: index }))
-            .filter((project, index) => data[index]?.id !== project.id)
+            .filter((project, index) => projects[index]?.id !== project.id)
 
-        changedProjects.forEach(({ id, order }) => {
-            patchMutation.mutate({ id, order })
+        changedProjects.forEach((element) => {
+            patchMutation.mutate(element)
         })
-    }, [projects, data])
-
-    const HTML5toTouch = {
-        backends: [
-            {
-                id: "html5",
-                backend: HTML5Backend,
-                transition: MouseTransition,
-            },
-            {
-                id: "touch",
-                backend: TouchBackend,
-                options: { enableMouseEvents: true },
-                preview: true,
-                transition: TouchTransition,
-            },
-        ],
-    }
+    }, [projects])
 
     return (
         <>
@@ -109,7 +84,7 @@ const ProjectListPage = () => {
             {isPending && <SkeletonProjectList />}
             {isError && <ErrorProjectList onClick={() => refetch()} />}
 
-            <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+            <DndProvider options={HTML5toTouch}>
                 {projects?.map((project, i) => (
                     <ProjectName
                         key={project.id}
