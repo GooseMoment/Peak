@@ -17,11 +17,13 @@ const DemoProjectName = ({ project }) => {
     const theme = useTheme()
     const color = getPaletteColor(theme.type, project.color)
 
+    let name = project.type === "inbox" ? t("inbox") : project.name
+
     return (
         <ProjectNameBox $demo>
             <NameBox>
                 <FeatherIcon icon="circle" fill={color} />
-                <NameText>{project.name}</NameText>
+                <NameText>{name}</NameText>
                 <TypeText>
                     {project.type === "regular" && t("type_regular")}
                     {project.type === "goal" && t("type_goal")}

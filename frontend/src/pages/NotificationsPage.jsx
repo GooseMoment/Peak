@@ -57,9 +57,9 @@ const NotificationsPage = () => {
         isFetching,
         isFetchingNextPage,
     } = useInfiniteQuery({
-        queryKey: ["notifications", { types: filters[activeFilter] }],
+        queryKey: ["notifications", filters[activeFilter]],
         queryFn: (context) =>
-            getNotifications(context.pageParam, context.queryKey[1]),
+            getNotifications(context.pageParam, context.queryKey[1].types),
         initialPageParam: "",
         getNextPageParam: (lastPage) => getCursorFromURL(lastPage.next),
         gcTime: 30 * 1000,
@@ -185,6 +185,7 @@ const RefetchIcon = styled.div`
     align-items: center;
     height: 1.75em;
     padding: 0 0.5em;
+    cursor: pointer;
 
     & svg {
         stroke-width: 3px;

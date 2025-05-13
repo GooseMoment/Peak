@@ -15,9 +15,7 @@ const calculateDate = (name, date, today, isSocial) => {
     }
 
     const diff_years = date.year - today.year
-    const diff_months = date.month - today.month
-    const diff_days = date.day - today.day
-    const diff_due = date.diff(today, ["years", "months", "days"]).toObject()
+    const diff_total_days = Math.ceil(date.diff(today, "days").days)
 
     let newDate = null
     if (diff_years > 0) {
@@ -27,19 +25,15 @@ const calculateDate = (name, date, today, isSocial) => {
     }
 
     let calculatedDue = ""
-    if (!isSocial && (diff_years < 0 || diff_months < 0 || diff_days < 0)) {
+    if (!isSocial && diff_total_days < 0) {
         calculatedDue = name === "assigned" ? t("missed") : t("overdue")
         return [newDate, calculatedDue, true]
-    } else if (diff_days === 0) {
-        if (name === "due_datetime" && diff_due.days < 0) {
-            calculatedDue = t("overdue")
-            return [newDate, calculatedDue, true]
-        }
+    } else if (diff_total_days === 0) {
         calculatedDue = t("due_today")
-    } else if (diff_days === 1) {
+    } else if (diff_total_days === 1) {
         calculatedDue = t("due_tomorrow")
-    } else if (2 <= diff_days && diff_days <= 30) {
-        calculatedDue = `${diff_days}` + t("days_left")
+    } else if (2 <= diff_total_days && diff_total_days <= 30) {
+        calculatedDue = `${diff_total_days}` + t("days_left")
     } else {
         calculatedDue = newDate
     }

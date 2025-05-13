@@ -23,6 +23,13 @@ const ProjectName = ({ project, index, moveProject, dropProject }) => {
     const isInbox = project.type === "inbox"
     const navigate = useNavigate()
 
+    const projectLink =
+        project.type === "inbox"
+            ? "/app/projects/inbox"
+            : `/app/projects/${project.id}`
+
+    let name = project.type === "inbox" ? t("inbox") : project.name
+
     const [{ handlerId }, drop] = useDrop({
         accept: "Project",
         collect(monitor) {
@@ -81,9 +88,9 @@ const ProjectName = ({ project, index, moveProject, dropProject }) => {
                     fill={getPaletteColor(theme.type, project.color)}
                 />
                 <div
-                    onClick={() => navigate(`/app/projects/${project.id}`)}
+                    onClick={() => navigate(projectLink)}
                     role="link">
-                    <NameText>{project.name}</NameText>
+                    <NameText>{name}</NameText>
                 </div>
                 <TypeText>
                     {project.type === "regular" && t("type_regular")}

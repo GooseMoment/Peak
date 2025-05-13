@@ -26,7 +26,7 @@ const Middle = () => {
         queryFn: () => getProjectList(),
     })
 
-    const { t } = useTranslation("", { keyPrefix: "sidebar" })
+    const { t } = useTranslation("translation", { keyPrefix: "sidebar" })
     const theme = useTheme()
     const items = useMemo(() => getItems(t), [t])
 
@@ -83,7 +83,13 @@ const Middle = () => {
                 )}
 
                 {projects?.map((project) => (
-                    <SidebarLink to={`projects/` + project.id} key={project.id}>
+                    <SidebarLink
+                        to={
+                            project.type === "inbox"
+                                ? "/app/projects/inbox"
+                                : `/app/projects/${project.id}`
+                        }
+                        key={project.id}>
                         <ProjectItemBox $collapsed={isCollapsed}>
                             <FeatherIcon
                                 icon="circle"
@@ -92,7 +98,10 @@ const Middle = () => {
                                     project.color,
                                 )}
                             />
-                            {!isCollapsed && project.name}
+                            {!isCollapsed &&
+                                (project.type === "inbox"
+                                    ? t("inbox")
+                                    : project.name)}
                         </ProjectItemBox>
                     </SidebarLink>
                 ))}

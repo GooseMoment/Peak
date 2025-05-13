@@ -15,27 +15,12 @@ export const SkeletonProjectPage = () => {
     )
 }
 
-export const SkeletonInboxPage = () => {
-    ;<>
-        <ProjectTitle />
-        <SkeletonInboxDrawer taskCount={15} />
-    </>
-}
-
 export const SkeletonDrawer = ({ taskCount }) => {
     return (
         <Frame>
             <DrawerName />
             <SkeletonTasks taskCount={taskCount} />
         </Frame>
-    )
-}
-
-export const SkeletonInboxDrawer = ({ taskCount }) => {
-    return (
-        <Tasks>
-            <SkeletonTasks taskCount={taskCount} />
-        </Tasks>
     )
 }
 
@@ -54,6 +39,25 @@ const SkeletonTasks = ({ taskCount }) => {
             <FlexCenterBox>
                 {taskCount > 10 && <MoreButtonEmptyBox />}
             </FlexCenterBox>
+        </Tasks>
+    )
+}
+
+export const SkeletonInboxPage = () => {
+    return (
+        <>
+            <ProjectTitle />
+            <Tasks>
+                <SkeletonTasks taskCount={5} />
+            </Tasks>
+        </>
+    )
+}
+
+export const SkeletonInboxTask = () => {
+    return (
+        <Tasks>
+            <SkeletonTasks taskCount={15} />
         </Tasks>
     )
 }
