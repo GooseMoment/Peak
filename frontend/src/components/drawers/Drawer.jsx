@@ -18,14 +18,12 @@ import ModalWindow from "@components/common/ModalWindow"
 import HTML5toTouch from "@components/dnds/html5ToTouch"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
+import TaskCreateButton from "@components/drawers/TaskCreateButton"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 import TaskCreateSimple from "@components/project/TaskCreateSimple"
 import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
-import {
-    SkeletonDrawer,
-    SkeletonInboxDrawer,
-} from "@components/project/skeletons/SkeletonProjectPage"
+import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 import DrawerTask from "@components/tasks/DrawerTask"
 
@@ -57,7 +55,7 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
 
     const [tasks, setTasks] = useState([])
 
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation("translation", { keyPrefix: "project" })
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
 
@@ -205,14 +203,12 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
     }
 
     if (isLoading) {
-        if (project.type === "inbox")
-            return <SkeletonInboxDrawer taskCount={taskCount} />
         return <SkeletonDrawer taskCount={taskCount} />
     }
 
     if (isError) {
         return (
-            <TaskErrorBox onClick={() => refetch()}>
+            <TaskErrorBox onClick={refetch}>
                 <FeatherIcon icon="alert-triangle" />
                 {t("error_load_task")}
             </TaskErrorBox>
@@ -221,30 +217,28 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
 
     return (
         <>
-            {project.type === "inbox" ? null : (
-                <DrawerBox
-                    ref={ref}
-                    data-handler-id={handlerId}
-                    $color={color}
-                    $isDragging={isDragging}>
-                    <DrawerTitleBox>
-                        <DrawerName $color={color}>{drawer.name}</DrawerName>
-                        <PrivacyIcon privacy={drawer.privacy} color={color} />
-                    </DrawerTitleBox>
-                    <DrawerIcons
-                        color={color}
-                        collapsed={collapsed}
-                        handleCollapsed={handleCollapsed}
-                        clickPlus={clickPlus}
-                        items={sortMenuItems}
-                        openSortMenuMobile={() => setSortMenuMobileOpen(true)}
-                        ordering={ordering}
-                        setOrdering={setOrdering}
-                        handleEdit={() => setIsDrawerEditOpen(true)}
-                        handleAlert={() => setIsAlertOpen(true)}
-                    />
-                </DrawerBox>
-            )}
+            <DrawerBox
+                ref={ref}
+                data-handler-id={handlerId}
+                $color={color}
+                $isDragging={isDragging}>
+                <DrawerTitleBox>
+                    <DrawerName $color={color}>{drawer.name}</DrawerName>
+                    <PrivacyIcon privacy={drawer.privacy} color={color} />
+                </DrawerTitleBox>
+                <DrawerIcons
+                    color={color}
+                    collapsed={collapsed}
+                    handleCollapsed={handleCollapsed}
+                    clickPlus={clickPlus}
+                    items={sortMenuItems}
+                    openSortMenuMobile={() => setSortMenuMobileOpen(true)}
+                    ordering={ordering}
+                    setOrdering={setOrdering}
+                    handleEdit={() => setIsDrawerEditOpen(true)}
+                    handleAlert={() => setIsAlertOpen(true)}
+                />
+            </DrawerBox>
             {collapsed ? null : (
                 <>
                     <TaskList $isDragging={isDragging}>
@@ -274,23 +268,10 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
                             onClose={() => setIsSimpleOpen(false)}
                         />
                     )}
-                    <TaskCreateButton onClick={handleToggleSimpleCreate}>
-                        {isSimpleOpen ? (
-                            <>
-                                <FeatherIcon icon="x-circle" />
-                                <TaskCreateText>
-                                    {t("button_close_add_task")}
-                                </TaskCreateText>
-                            </>
-                        ) : (
-                            <>
-                                <FeatherIcon icon="plus-circle" />
-                                <TaskCreateText>
-                                    {t("button_add_task")}
-                                </TaskCreateText>
-                            </>
-                        )}
-                    </TaskCreateButton>
+                    <TaskCreateButton
+                        isOpen={isSimpleOpen}
+                        onClick={handleToggleSimpleCreate}
+                    />
                     {hasNextPage ? (
                         <ButtonGroup $justifyContent="center" $margin="1em">
                             <MoreButton
@@ -355,27 +336,6 @@ const DrawerTitleBox = styled.div`
 const TaskList = styled.div`
     margin-top: 1em;
     opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
-`
-
-const TaskCreateButton = styled.div`
-    display: flex;
-    align-items: center;
-    margin-top: 1em;
-    margin-left: 1.9em;
-    cursor: pointer;
-
-    & svg {
-        width: 1.1em;
-        height: 1.1em;
-        top: 0;
-    }
-`
-
-const TaskCreateText = styled.div`
-    font-size: 1.1em;
-    font-weight: medium;
-    color: ${(p) => p.theme.textColor};
-    margin-top: 0em;
 `
 
 const MoreButton = styled(Button)`

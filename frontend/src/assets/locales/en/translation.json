@@ -6,6 +6,7 @@
         "today": "Today",
         "social": "Social",
         "projects": "Projects",
+        "inbox": "Inbox",
         "projects_list_refetch": "Click to retry",
         "user_error": "Unable to load your user information. Please restart the app."
     },
@@ -33,6 +34,7 @@
         "title": "Projects",
         "type_regular": "Regular",
         "type_goal": "Goal",
+        "inbox": "Inbox",
         "button_add_project": "Add new project"
     },
     "today": {
@@ -52,6 +54,7 @@
         "no_tasks_pastAssigned": "No tasks are past assignment."
     },
     "project": {
+        "inbox": "Inbox",
         "no_drawer": "Press + to add drawers",
         "progress": "Progress",
         "button_load_more": "Load more",
@@ -62,6 +65,7 @@
         "loading": "Loading...",
         "none": "none",
         "error_load_project_and_drawer": "Couldn't load project and drawers 😢",
+        "error_load_inbox": "Couldn't load inbox 😢",
         "name_placeholder": "Enter a name",
         "edit": {
             "display": "Edit"

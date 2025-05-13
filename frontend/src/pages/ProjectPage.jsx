@@ -59,10 +59,10 @@ const ProjectPage = () => {
     const [ordering, setOrdering] = useState("order")
     const [isAlertOpen, setIsAlertOpen] = useState(false)
     const [isProjectEditOpen, setIsProjectEditOpen] = useState(false)
-    const [isSortMenMobileOpen, setSortMenuMobileOpen] = useState(false)
+    const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
     const [isCreateOpen, setCreateOpen] = useState(false)
 
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+    const { t } = useTranslation("translation", { keyPrefix: "project" })
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
 
@@ -75,6 +75,12 @@ const ProjectPage = () => {
         queryKey: ["projects", id],
         queryFn: () => getProject(id),
     })
+
+    useEffect(() => {
+        if (project?.type === "inbox") {
+            navigate("/app/projects/inbox", { replace: true })
+        }
+    }, [project, navigate])
 
     const {
         isLoading: isDrawersLoading,
@@ -157,10 +163,6 @@ const ProjectPage = () => {
         deleteMutation.mutate()
     }
 
-    const openInboxTaskCreate = () => {
-        setCreateOpen(true)
-    }
-
     const onClickProjectErrorBox = () => {
         projectRefetch()
         drawersRefetch()
@@ -188,22 +190,16 @@ const ProjectPage = () => {
                     <PageTitle $color={color}>{project.name}</PageTitle>
                     <PrivacyIcon
                         privacy={project.privacy}
-                        color={getPaletteColor(theme.type, project.color)}
+                        color={color}
                         isProject
                     />
                 </PageTitleBox>
                 <Icons>
                     <FeatherIcon
                         icon="plus"
-                        onClick={
-                            project?.type === "inbox"
-                                ? openInboxTaskCreate
-                                : () => {
-                                      setIsDrawerCreateOpen(true)
-                                  }
-                        }
+                        onClick={() => setIsDrawerCreateOpen(true)}
                     />
-                    {project?.type === "inbox" || (
+                    {
                         <>
                             <SortIconBox>
                                 {isMobile ? (
@@ -227,7 +223,7 @@ const ProjectPage = () => {
                                 handleAlert={handleAlert}
                             />
                         </>
-                    )}
+                    }
                 </Icons>
             </TitleBox>
             {project.type === "goal" && (
@@ -260,7 +256,7 @@ const ProjectPage = () => {
                     func={handleDelete}
                 />
             )}
-            {isSortMenMobileOpen && (
+            {isSortMenuMobileOpen && (
                 <SortMenuMobile
                     title={t("sort.drawer_title")}
                     items={sortMenuItems}
