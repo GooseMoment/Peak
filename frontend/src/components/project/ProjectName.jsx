@@ -87,9 +87,7 @@ const ProjectName = ({ project, index, moveProject, dropProject }) => {
                     icon="circle"
                     fill={getPaletteColor(theme.type, project.color)}
                 />
-                <div
-                    onClick={() => navigate(projectLink)}
-                    role="link">
+                <div onClick={() => navigate(projectLink)} role="link">
                     <NameText>{name}</NameText>
                 </div>
                 <TypeText>
