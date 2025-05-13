@@ -15,7 +15,6 @@ import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
 import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
-import HTML5toTouch from "@components/dnds/html5ToTouch"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
 import TaskCreateButton from "@components/drawers/TaskCreateButton"
@@ -30,13 +29,14 @@ import DrawerTask from "@components/tasks/DrawerTask"
 import { deleteDrawer } from "@api/drawers.api"
 import { getTasksByDrawer, patchReorderTask } from "@api/tasks.api"
 
+import HTML5toTouch from "@utils/html5ToTouch"
 import { getPageFromURL } from "@utils/pagination"
 
 import queryClient from "@queries/queryClient"
 
 import FeatherIcon from "feather-icons-react"
 import { useDrag, useDrop } from "react-dnd"
-import { DndProvider, MultiBackend } from "react-dnd-multi-backend"
+import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -242,9 +242,7 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
             {collapsed ? null : (
                 <>
                     <TaskList $isDragging={isDragging}>
-                        <DndProvider
-                            backend={MultiBackend}
-                            options={HTML5toTouch}>
+                        <DndProvider options={HTML5toTouch}>
                             {tasks?.map((task) => (
                                 <DrawerTask
                                     key={task.id}

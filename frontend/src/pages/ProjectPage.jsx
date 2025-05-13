@@ -15,7 +15,6 @@ import DeleteAlert from "@components/common/DeleteAlert"
 import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
-import HTML5toTouch from "@components/dnds/html5ToTouch"
 import Drawer from "@components/drawers/Drawer"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import OptionsMenu from "@components/project/common/OptionsMenu"
@@ -31,6 +30,7 @@ import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 import { getDrawersByProject, patchReorderDrawer } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
 
+import HTML5toTouch from "@utils/html5ToTouch"
 import { ifMobile } from "@utils/useScreenType"
 import useScreenType from "@utils/useScreenType"
 
@@ -39,7 +39,7 @@ import queryClient from "@queries/queryClient"
 import { getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
-import { DndProvider, MultiBackend } from "react-dnd-multi-backend"
+import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -232,7 +232,7 @@ const ProjectPage = () => {
             {drawers && drawers.length === 0 ? (
                 <NoDrawerText>{t("no_drawer")}</NoDrawerText>
             ) : (
-                <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+                <DndProvider options={HTML5toTouch}>
                     {drawers?.map((drawer) => (
                         <Drawer
                             key={drawer.id}
