@@ -29,14 +29,12 @@ import DrawerTask from "@components/tasks/DrawerTask"
 import { deleteDrawer } from "@api/drawers.api"
 import { getTasksByDrawer, patchReorderTask } from "@api/tasks.api"
 
-import HTML5toTouch from "@utils/html5ToTouch"
 import { getPageFromURL } from "@utils/pagination"
 
 import queryClient from "@queries/queryClient"
 
 import FeatherIcon from "feather-icons-react"
 import { useDrag, useDrop } from "react-dnd"
-import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -242,19 +240,17 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
             {collapsed ? null : (
                 <>
                     <TaskList $isDragging={isDragging}>
-                        <DndProvider options={HTML5toTouch}>
-                            {tasks?.map((task) => (
-                                <DrawerTask
-                                    key={task.id}
-                                    task={task}
-                                    color={color}
-                                    projectType={project.type}
-                                    moveTask={moveTask}
-                                    dropTask={dropTask}
-                                    isPending={patchMutation.isPending}
-                                />
-                            ))}
-                        </DndProvider>
+                        {tasks?.map((task) => (
+                            <DrawerTask
+                                key={task.id}
+                                task={task}
+                                color={color}
+                                projectType={project.type}
+                                moveTask={moveTask}
+                                dropTask={dropTask}
+                                isPending={patchMutation.isPending}
+                            />
+                        ))}
                     </TaskList>
                     {isSimpleOpen && (
                         <TaskCreateSimple
