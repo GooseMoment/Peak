@@ -85,6 +85,7 @@
             "title": "{{title}} 목록 정렬 기준",
             "drawer_title": "서랍",
             "task_title": "작업",
+            "my": "나만의 정렬",
             "name": "이름 사전순",
             "-name": "이름 사전 역순",
             "created_at": "생성일자 최신순",

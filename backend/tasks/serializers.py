@@ -89,3 +89,8 @@ class TaskGroupedSerializer(serializers.Serializer):
     name = serializers.CharField(source="drawer__project__name")
     color = serializers.CharField(source="drawer__project__color")
     count = serializers.IntegerField()
+
+
+class TaskReorderSerializer(serializers.Serializer):
+    id = serializers.UUIDField()
+    order = serializers.IntegerField(min_value=0)
