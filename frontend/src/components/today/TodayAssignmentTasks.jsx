@@ -14,22 +14,16 @@ import Task from "@components/tasks/Task"
 import { getProject } from "@api/projects.api"
 import { getTasksAssignedToday } from "@api/today.api"
 
-import { useClientTimezone } from "@utils/clientSettings"
 import { getPageFromURL } from "@utils/pagination"
 
 import { getPaletteColor } from "@assets/palettes"
 
-import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 
-const TodayAssignmentTasks = () => {
+const TodayAssignmentTasks = ({ selectedDate }) => {
     const { t } = useTranslation(null, { keyPrefix: "today" })
 
-    const tz = useClientTimezone()
     const theme = useTheme()
-
-    const today = DateTime.now().setZone(tz)
-    const [selectedDate] = useState(today.toISODate())
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
 
     const {

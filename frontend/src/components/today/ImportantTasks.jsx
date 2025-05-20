@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import { useInfiniteQuery } from "@tanstack/react-query"
@@ -29,6 +29,8 @@ import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
+const isTaskEmpty = (tasks) => !!(tasks?.pages[0]?.results.length === 0)
+
 const useTaskQuery = (filter, fetchFunction) => {
     const {
         data: tasks,
@@ -43,7 +45,14 @@ const useTaskQuery = (filter, fetchFunction) => {
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
-    return { tasks, fetchNextPage, isLoading, isError, refetch }
+    return {
+        tasks,
+        fetchNextPage,
+        isEmpty: isTaskEmpty(tasks),
+        isLoading,
+        isError,
+        refetch,
+    }
 }
 
 const filterContents = ["todayDue", "overDue", "pastAssigned"]
@@ -53,24 +62,35 @@ const ImportantTasks = () => {
     const tz = useClientTimezone()
     const theme = useTheme()
 
-    const today = DateTime.now().setZone(tz)
+    const today = useMemo(() => DateTime.now().setZone(tz), [tz])
 
     const [filter, setFilter] = useState("todayDue")
     const [collapsed, setCollapsed] = useState(false)
 
-    const fetchFunctionMap = {
-        todayDue: getTasksTodayDue,
-        overDue: getTasksOverDue,
-        pastAssigned: getTasksPastAssigned,
+    const todayDueQuery = useTaskQuery("todayDue", getTasksTodayDue)
+    const overDueQuery = useTaskQuery("overDue", getTasksOverDue)
+    const pastAssignedQuery = useTaskQuery("pastAssigned", getTasksPastAssigned)
+
+    const queries = {
+        todayDue: todayDueQuery,
+        overDue: overDueQuery,
+        pastAssigned: pastAssignedQuery,
     }
 
-    const { tasks, fetchNextPage, isLoading, isError, refetch } = useTaskQuery(
-        filter,
-        fetchFunctionMap[filter],
-    )
+    const selectedQuery = queries[filter]
 
-    const importantHasNextPage =
-        tasks?.pages[tasks?.pages?.length - 1].next !== null
+    const hasNextPage =
+        selectedQuery.tasks?.pages[selectedQuery.tasks?.pages?.length - 1]
+            .next !== null
+
+    useEffect(() => {
+        for (const name in queries) {
+            if (!queries[name].isEmpty) {
+                setFilter(name)
+                break
+            }
+        }
+    }, [todayDueQuery.tasks, overDueQuery.tasks, pastAssignedQuery.tasks])
 
     const patchMutation = useMutation({
         mutationFn: ({ task, data }) => {
@@ -79,6 +99,9 @@ const ImportantTasks = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["today", filter],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["today", "assigned"],
             })
         },
         onError: () => {
@@ -101,27 +124,12 @@ const ImportantTasks = () => {
         toast.success(t("due_change_tomorrow_success"))
     }
 
-    const todayDueQuery = useTaskQuery("todayDue", getTasksTodayDue)
-    const overDueQuery = useTaskQuery("overDue", getTasksOverDue)
-    const pastAssignedQuery = useTaskQuery("pastAssigned", getTasksPastAssigned)
-
     // 모든 tasks가 비어 있는지 검사
-    const allTasksEmpty = useMemo(() => {
-        const todayDueTasks =
-            todayDueQuery.tasks?.pages.flatMap((page) => page.results) || []
-        const overDueTasks =
-            overDueQuery.tasks?.pages.flatMap((page) => page.results) || []
-        const pastAssignedTasks =
-            pastAssignedQuery.tasks?.pages.flatMap((page) => page.results) || []
-
-        return (
-            todayDueTasks.length === 0 &&
-            overDueTasks.length === 0 &&
-            pastAssignedTasks.length === 0
-        )
-    }, [todayDueQuery.tasks, overDueQuery.tasks, pastAssignedQuery.tasks])
-
-    if (allTasksEmpty) {
+    if (
+        todayDueQuery.isEmpty &&
+        overDueQuery.isEmpty &&
+        pastAssignedQuery.isEmpty
+    ) {
         return null
     }
 
@@ -151,13 +159,15 @@ const ImportantTasks = () => {
                         ))}
                     </FilterButtonBox>
                     <TasksBox>
-                        {isError && (
-                            <ErrorBox onClick={() => refetch()}>
+                        {selectedQuery.isError && (
+                            <ErrorBox onClick={() => selectedQuery.refetch()}>
                                 {t("error_load_task")}
                             </ErrorBox>
                         )}
-                        {isLoading && <SkeletonDueTasks taskCount={4} />}
-                        {tasks?.pages?.map((group) =>
+                        {selectedQuery.isLoading && (
+                            <SkeletonDueTasks taskCount={4} />
+                        )}
+                        {selectedQuery.tasks?.pages?.map((group) =>
                             group.count === 0 ? (
                                 <NoTasksMessage key={group.count}>
                                     {t("no_tasks_" + filter)}
@@ -191,10 +201,10 @@ const ImportantTasks = () => {
                             ),
                         )}
                     </TasksBox>
-                    {importantHasNextPage ? (
-                        <MoreText onClick={() => fetchNextPage()}>
+                    {hasNextPage ? (
+                        <MoreText onClick={() => selectedQuery.fetchNextPage()}>
                             {t("button_load_more") + " "}(
-                            {tasks?.pages[0].count})
+                            {selectedQuery.tasks?.pages[0].count})
                         </MoreText>
                     ) : null}
                 </>
@@ -218,7 +228,7 @@ const ImportantTasksBlock = styled.div`
 const ImportantTasksTitle = styled.div`
     font-size: 1.2em;
     font-weight: bold;
-    margin-left: 0.6em;
+    margin-left: 0.5em;
 `
 
 const CollapseButtonBlock = styled.div`
@@ -263,19 +273,30 @@ const FilterButtonBox = styled.div`
 
 const FilterButton = styled.div`
     width: fit-content;
+    text-align: center;
     padding: 0.4em 0.6em;
     border: 1px solid ${(p) => p.theme.borderColor};
     border-radius: 13px;
     color: ${(p) => p.theme.textColor};
     background-color: ${(p) => p.theme.backgroundColor};
     font-size: 0.9em;
-    font-weight: normal;
+    font-weight: 500;
     cursor: pointer;
+    word-break: keep-all;
+
+    ${(props) =>
+        !props.$isActive &&
+        css`
+            &:hover {
+                background-color: ${(p) => p.theme.secondBackgroundColor};
+            }
+        `}
 
     ${(props) =>
         props.$isActive &&
         css`
             color: ${(p) => p.theme.white};
+            border: 1.5px solid ${(p) => p.theme.goose};
             background-color: ${(p) => p.theme.goose};
         `}
 `
