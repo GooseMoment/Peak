@@ -78,7 +78,7 @@
             "alert_question": "Delete {{title}}?",
             "project_delete_success": "Deleted the \"{{project_name}}\" project.",
             "project_delete_error": "Failed to delete the \"{{project_name}}\" project.",
-            "drawer_delete_success": "Delted \"{{drawer_name}}\" drawer.",
+            "drawer_delete_success": "Deleted \"{{drawer_name}}\" drawer.",
             "drawer_delete_error": "Failed to delete the \"{{drawer_name}}\" drawer."
         },
         "sort": {
