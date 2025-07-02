@@ -22,6 +22,7 @@ const DrawerFolder = ({ project, changeDrawer }) => {
                               project.drawers[0].name,
                               project.id,
                               project.name,
+                              project.color,
                           )
                         : () => setCollapsed((prev) => !prev)
                 }>
@@ -39,6 +40,7 @@ const DrawerFolder = ({ project, changeDrawer }) => {
                               drawer.name,
                               project.id,
                               project.name,
+                              project.color,
                           )}>
                           <FeatherIcon icon="arrow-right" />
                           <ItemText $is_project={false}>{drawer.name}</ItemText>
