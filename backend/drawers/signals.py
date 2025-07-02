@@ -33,7 +33,11 @@ def set_new_drawer_order(sender, instance: Drawer = None, created=False, **kwarg
     if not created:
         return
 
-    last_order = Drawer.objects.filter(user=instance.user).order_by("-order").first()
-    instance.order = (last_order.order + 1) if last_order else 0
+    last_drawer = (
+        Drawer.objects.filter(user=instance.user, project=instance.project)
+        .order_by("-order")
+        .first()
+    )
+    instance.order = (last_drawer.order + 1) if last_drawer else 0
 
     instance.save()

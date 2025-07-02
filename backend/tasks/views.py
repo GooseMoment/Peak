@@ -98,7 +98,7 @@ class TaskReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
         ids = [item["id"] for item in tasks_data]
         id_to_order = {item["id"]: item["order"] for item in tasks_data}
 
-        tasks = list(self.get_queryset().filter(id__in=ids))
+        tasks = self.get_queryset().filter(id__in=ids)
 
         for task in tasks:
             task.order = id_to_order[task.id]

@@ -5,6 +5,7 @@ from .models import Drawer
 from .serializers import DrawerSerializer, DrawerReorderSerializer
 from .utils import normalize_drawers_order
 from api.permissions import IsUserOwner
+from . import exceptions
 
 
 class DrawerDetail(
@@ -49,6 +50,9 @@ class DrawerList(
         ]
         ordering = self.request.GET.get("ordering", None)
 
+        if ordering is None:
+            raise exceptions.RequiredFieldMissing
+
         if ordering.lstrip("-") in ordering_fields:
             normalize_drawers_order(queryset, ordering)
 
@@ -74,7 +78,7 @@ class DrawerReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
         ids = [item["id"] for item in drawers_data]
         id_to_order = {item["id"]: item["order"] for item in drawers_data}
 
-        drawers = list(self.get_queryset().filter(id__in=ids))
+        drawers = self.get_queryset().filter(id__in=ids)
 
         for drawer in drawers:
             drawer.order = id_to_order[drawer.id]
