@@ -25,13 +25,13 @@ const TaskCircle = ({
 }
 
 const getTopOffset = ({ $isInput, $hasDate }) => {
-    if ($isInput) return '0.05em'
-    if ($hasDate) return '0.3em'
-    return '0'
+    if ($isInput) return "0.05em"
+    if ($hasDate) return "0.3em"
+    return "0"
 }
 
 const getCircleColor = ({ $completed, $color, theme }) =>
-    $completed ? theme.grey : $color ?? theme.goose
+    $completed ? theme.grey : ($color ?? theme.goose)
 
 const Circle = styled.div`
     display: flex;
@@ -46,7 +46,8 @@ const Circle = styled.div`
     margin-right: 0.6em;
     font-size: 1em;
 
-    border: 3px ${(p) => p.$isLoading ? "dashed" : "solid"} ${(p) => getCircleColor(p)};
+    border: 3px ${(p) => (p.$isLoading ? "dashed" : "solid")}
+        ${(p) => getCircleColor(p)};
 
     ${({ $isLoading }) =>
         $isLoading
