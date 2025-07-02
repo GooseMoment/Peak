@@ -2,8 +2,8 @@ import { useMemo } from "react"
 import { useState } from "react"
 
 import Button, { ButtonGroup } from "@components/common/Button"
+import DemoProjectName from "@components/intro/DemoProjectName"
 import SubSection, { SubTitle } from "@components/intro/SubSection"
-import ProjectName from "@components/project/ProjectName"
 
 import { type PaletteColorName } from "@assets/palettes"
 
@@ -22,7 +22,7 @@ const DemoProject = () => {
             <SubTitle>{t("title")}</SubTitle>
 
             {projects.slice(0, count).map((project) => (
-                <ProjectName key={project.id} project={project} demo />
+                <DemoProjectName key={project.id} project={project} />
             ))}
 
             {count < projects.length && (
