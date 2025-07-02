@@ -9,7 +9,11 @@ def set_new_task_order(sender, instance: Task = None, created=False, **kwargs):
     if not created:
         return
 
-    last_order = Task.objects.filter(user=instance.user).order_by("-order").first()
-    instance.order = (last_order.order + 1) if last_order else 0
+    last_task = (
+        Task.objects.filter(user=instance.user, drawer=instance.drawer)
+        .order_by("-order")
+        .first()
+    )
+    instance.order = (last_task.order + 1) if last_task else 0
 
     instance.save()
