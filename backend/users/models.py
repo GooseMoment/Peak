@@ -68,5 +68,5 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
     def __str__(self) -> str:
         return f"@{self.username}"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "users"

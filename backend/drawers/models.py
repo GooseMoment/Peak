@@ -24,5 +24,5 @@ class Drawer(Base, PrivacyMixin):
     def __str__(self) -> str:
         return f"{self.name} in {self.project}"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta, PrivacyMixin.Meta
         db_table = "drawers"

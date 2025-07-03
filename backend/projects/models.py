@@ -27,5 +27,5 @@ class Project(Base, PrivacyMixin):
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta, PrivacyMixin.Meta
         db_table = "projects"

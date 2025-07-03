@@ -16,7 +16,7 @@ class TaskReminder(Base):
             f"Reminder for {self.task.name} before {self.delta}min at {self.scheduled}"
         )
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "task_reminders"
 
 
@@ -94,7 +94,7 @@ class Notification(Base):
     def __str__(self) -> str:
         return f"{self.type} for {self.user}"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "notifications"
 
 
@@ -113,5 +113,5 @@ class WebPushSubscription(Base):
     def __str__(self) -> str:
         return f"Subscription of {self.user} for {self.device}"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "web_push_subscriptions"
