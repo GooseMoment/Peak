@@ -30,7 +30,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
         return uncompleted_task_count
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Project
         fields = [
             "id",
@@ -50,6 +50,6 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializerForUserProjectList(serializers.ModelSerializer):
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Project
         exclude = ()
