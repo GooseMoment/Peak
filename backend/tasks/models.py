@@ -4,6 +4,13 @@ from api.models import Base, PrivacyMixin
 from users.models import User
 from drawers.models import Drawer
 
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from django.db.models.manager import RelatedManager
+    from notifications.models import TaskReminder
+
 
 class Task(Base, PrivacyMixin):
     DUE_DATE = "due_date"
@@ -31,6 +38,8 @@ class Task(Base, PrivacyMixin):
         on_delete=models.CASCADE,
         related_name="tasks",
     )
+
+    reminders: "RelatedManager[TaskReminder]"
 
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"

@@ -4,6 +4,12 @@ from api.models import Base, PrivacyMixin
 from projects.models import Project
 from users.models import User
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from django.db.models.manager import RelatedManager
+    from tasks.models import Task
+
 
 class Drawer(Base, PrivacyMixin):
     name = models.CharField(max_length=128)
@@ -20,6 +26,8 @@ class Drawer(Base, PrivacyMixin):
     order = models.IntegerField()
     uncompleted_task_count = models.IntegerField(default=0)
     completed_task_count = models.IntegerField(default=0)
+
+    tasks: "RelatedManager[Task]"
 
     def __str__(self) -> str:
         return f"{self.name} in {self.project}"
