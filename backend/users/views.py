@@ -78,8 +78,7 @@ def upload_profile_img(request: AuthenticatedRequest):
     if old:
         old.delete()
 
-    if uploaded is None:
-        return Response(status=status.HTTP_200_OK)
+    if uploaded is not None:
+        request.user.profile_img.save(uploaded.name, uploaded)
 
-    request.user.profile_img.save(uploaded.name, uploaded)
     return Response(status=status.HTTP_200_OK)
