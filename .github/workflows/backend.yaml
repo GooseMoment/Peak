@@ -46,7 +46,7 @@ jobs:
         docker build
         --file ./backend/Dockerfile
         --tag peak-api:$(date +%s) ./backend
-  type-check:
+  type:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -55,6 +55,10 @@ jobs:
         with:
           python-version: '3.13'
           cache: 'pip'
+      - name: Setup & Start venv
+        run: | 
+          python3 -m venv .venv 
+          source .venv/bin/activate
       - name: Install dependencies
         run: pip install -r backend/requirements.txt
       - uses: jakebailey/pyright-action@v2
