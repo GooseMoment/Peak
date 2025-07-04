@@ -55,12 +55,12 @@ jobs:
         with:
           python-version: '3.13'
           cache: 'pip'
-      - name: Setup & Start venv
+      - name: Setup venv & Install dependencies
         run: | 
           python3 -m venv .venv 
           source .venv/bin/activate
-      - name: Install dependencies
-        run: pip install -r backend/requirements.txt
+          pip install -r backend/requirements.txt
+          echo "$PWD/.venv/bin" >> $GITHUB_PATH
       - uses: jakebailey/pyright-action@v2
         with:
           pylance-version: latest-release
