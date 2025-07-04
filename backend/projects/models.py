@@ -3,6 +3,12 @@ from django.db import models
 from api.models import Base, PrivacyMixin
 from users.models import User
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from django.db.models.manager import RelatedManager
+    from drawers.models import Drawer
+
 
 class Project(Base, PrivacyMixin):
     INBOX = "inbox"
@@ -23,6 +29,8 @@ class Project(Base, PrivacyMixin):
     order = models.IntegerField()
     color = models.CharField(max_length=128)
     type = models.CharField(choices=PROJECT_TYPE_CHOICES, max_length=128)
+
+    drawers: "RelatedManager[Drawer]"
 
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"
