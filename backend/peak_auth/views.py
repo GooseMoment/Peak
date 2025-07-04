@@ -29,6 +29,7 @@ from .models import (
 )
 from .totp import create_totp_secret, TOTP
 from . import exceptions, mails
+from api.exceptions import RequiredFieldMissing
 
 
 class SignInView(KnoxLoginView):
@@ -74,7 +75,7 @@ class TOTPAuthenticationView(KnoxLoginView):
             token_hex = request.data["token"]
             code = request.data["code"]
         except KeyError:
-            raise exceptions.RequiredFieldMissing
+            raise RequiredFieldMissing
 
         try:
             token = uuid.UUID(hex=token_hex)
@@ -175,7 +176,7 @@ class TOTPRegisterView(GenericAPIView):
         try:
             code = request.data["code"]
         except KeyError:
-            raise exceptions.RequiredFieldMissing
+            raise RequiredFieldMissing
 
         totp = TOTP(secret)
         codes = totp.totp_with_offsets()
@@ -220,7 +221,7 @@ class SignUpView(GenericAPIView):
         new_user = User()
         for field in self.required_fields:
             if field not in payload:
-                raise exceptions.RequiredFieldMissing
+                raise RequiredFieldMissing
 
             setattr(new_user, field, payload[field])
 
