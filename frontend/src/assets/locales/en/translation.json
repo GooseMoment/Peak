@@ -85,6 +85,7 @@
             "title": "{{title}} Sort by",
             "drawer_title": "Drawer",
             "task_title": "Task",
+            "my": "My order",
             "name": "Name alphabetical order",
             "-name": "Name alphabetical reverse order",
             "created_at": "Creation Date Newest",

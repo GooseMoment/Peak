@@ -5,6 +5,7 @@ import { ifMobile } from "@utils/useScreenType"
 interface DrawerStyledProp {
     $color: string
     $demo?: boolean
+    $isDragging?: boolean
 }
 
 const DrawerBox = styled.div<DrawerStyledProp>`
@@ -18,6 +19,8 @@ const DrawerBox = styled.div<DrawerStyledProp>`
     padding-bottom: 0.1em;
     border: solid 0.25em ${(props) => props.$color};
     border-radius: 15px;
+    opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
+    cursor: ${(props) => (props.$demo ? "default" : "grab")};
 
     ${(p) =>
         p.$demo &&
