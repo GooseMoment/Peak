@@ -278,7 +278,9 @@ class SignUpView(GenericAPIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class TokenView(GenericAPIView):
+class TokenMixin:
+    request: Request
+
     def get_token(self):
         token_hex = self.request.data.get("token")
         if token_hex is None:
@@ -292,7 +294,7 @@ class TokenView(GenericAPIView):
         return token
 
 
-class VerifyEmailVerificationToken(TokenView):
+class VerifyEmailVerificationToken(TokenMixin, GenericAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request: Request):
@@ -381,7 +383,7 @@ class PasswordRecoveryAnonRateThrottle(AnonRateThrottle):
     rate = "5/minute"  # up to 5 times a hour
 
 
-class PasswordRecoveryView(TokenView):
+class PasswordRecoveryView(TokenMixin, GenericAPIView):
     permission_classes = (AllowAny,)
 
     # generate a token
