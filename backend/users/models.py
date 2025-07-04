@@ -58,7 +58,7 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
     is_active = models.BooleanField(default=False)
 
     def get_full_name(self):
-        return self.id + "|@" + self.username
+        return str(self.id) + "|@" + self.username
 
     def get_short_name(self):
         return "@" + self.username

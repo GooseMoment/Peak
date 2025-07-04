@@ -1,13 +1,14 @@
 from rest_framework import mixins, generics, status
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-
 from django.conf import settings
-from datetime import datetime, UTC
 
 from .models import Announcement, Heart
 from .serializers import AnnouncementSerializer
 from users.models import User
+
+from datetime import datetime, UTC
 
 
 class AnnouncementList(generics.GenericAPIView):
@@ -17,8 +18,8 @@ class AnnouncementList(generics.GenericAPIView):
     def get_queryset(self):
         return Announcement.objects.all().order_by("-created_at")
 
-    def get(self, request, *args, **kwargs):
-        lang = request.GET.get("lang", settings.LANGUAGE_CODE)
+    def get(self, request: Request, *args, **kwargs):
+        lang: str = request.GET.get("lang", settings.LANGUAGE_CODE)
         pinned_only = request.GET.get("pinned_only", "false") == "true"
 
         now = datetime.now(UTC)

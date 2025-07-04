@@ -51,7 +51,7 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
     queryset = TaskReminder.objects.all()
     serializer_class = TaskReminderSerializer
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
         try:
             task_id = request.data["task"]
             delta_list = request.data["delta_list"]
@@ -68,7 +68,7 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
                 return Response(status=status.HTTP_204_NO_CONTENT)
 
             for delta in delta_list:
-                if task.due_type == "due_date":
+                if task.due_type == "due_date" and task.due_date is not None:
                     tz = self.get_tz()
                     nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=tz)
                     converted_due_datetime = datetime.combine(
@@ -153,7 +153,7 @@ class WebPushSubscriptionDetail(
     # Only accepts updating excluded_types for now
     def patch(self, request: Request, *args, **kwargs):
         try:
-            excluded_types = request.data["excluded_types"]
+            excluded_types: list[str] = request.data["excluded_types"]
         except KeyError:
             raise exceptions.ExcludedTypesMissing
 

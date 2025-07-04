@@ -684,14 +684,16 @@ class PeckView(APIView):
 
 class CommentView(APIView):
     def get(self, request, type, id):
+        comments = Comment.objects.all()
+
         if type == Comment.FOR_TASK:
             task = get_object_or_404(Task, id=id)
-            comments = Comment.objects.filter(
+            comments = comments.filter(
                 parent_type=Reaction.FOR_TASK, task=task
             ).order_by("-created_at")
         elif type == Comment.FOR_QUOTE:
             quote = get_object_or_404(Quote, id=id)
-            comments = Comment.objects.filter(
+            comments = comments.filter(
                 parent_type=Reaction.FOR_QUOTE, quote=quote
             ).order_by("-created_at")
 
