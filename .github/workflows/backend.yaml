@@ -26,10 +26,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python 3.12
+      - name: Setup Python 3.13
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
           cache: 'pip' # caching pip dependencies
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -46,3 +46,17 @@ jobs:
         docker build
         --file ./backend/Dockerfile
         --tag peak-api:$(date +%s) ./backend
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - uses: jakebailey/pyright-action@v2
+        with:
+          pylance-version: latest-release
