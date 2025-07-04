@@ -7,7 +7,6 @@ from rest_framework.pagination import PageNumberPagination, CursorPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import NotFound
 
-from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
@@ -33,7 +32,9 @@ from .serializers import (
 )
 from . import permissions
 from api.models import PrivacyMixin
+from api.request import AuthenticatedRequest
 from api.permissions import IsUserSelfRequest
+from api.exceptions import RequiredFieldMissing
 from drawers.models import Drawer
 from tasks.models import Task
 from tasks.serializers import TaskSerializer
@@ -51,7 +52,7 @@ class ExploreFeedView(mixins.ListModelMixin, generics.GenericAPIView):
     pagination_class = ExploreFeedPagination
 
     def get_queryset(self):
-        user = self.request.user
+        user: User = self.request.user  # pyright: ignore [reportAssignmentType]
         followees = User.objects.filter(followers__follower=user)
         recommendUserFilter = Q(followers__follower=user) | Q(id=user.id)
 
@@ -76,7 +77,7 @@ class ExploreSearchView(mixins.ListModelMixin, generics.GenericAPIView):
         keyword = self.request.GET.get("query")
 
         if keyword is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise RequiredFieldMissing
 
         users_queryset = User.objects.filter(username__icontains=keyword)
 
@@ -230,8 +231,8 @@ class GenericUserList(mixins.ListModelMixin, generics.GenericAPIView):
         followings = self.get_user_ids(username)
         return User.objects.filter(id__in=followings).all()
 
-    def get(self, *args, **kwargs):
-        return self.list(self, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
 class FollowingList(GenericUserList):
@@ -317,17 +318,17 @@ class BlockList(GenericUserList):
 
 ## Daily Logs
 @api_view(["GET"])
-def get_daily_logs(request: HttpRequest, username, day):
+def get_daily_logs(request: Request, username, day):
     followings = Following.objects.filter(
         follower__username=username, status=Following.ACCEPTED
     ).all()
 
-    daily_logs_filter = Q(followers__in=followings.all()) | Q(id=request.user.id)
+    user_id = str(get_object_or_404(User, username=username).id)
+    daily_logs_filter = Q(followers__in=followings.all()) | Q(id=user_id)
 
     followingUsers = User.objects.filter(daily_logs_filter).all().distinct()
     day = datetime.fromisoformat(day)
 
-    user_id = str(get_object_or_404(User, username=username).id)
     day_min = day
     day_max = day + timedelta(hours=24) - timedelta(seconds=1)
 
@@ -341,10 +342,10 @@ def get_daily_logs(request: HttpRequest, username, day):
 
 
 @api_view(["GET"])
-def get_quote(requset: HttpRequest, followee, day):
+def get_quote(request: AuthenticatedRequest, followee, day):
     followeeUser = get_object_or_404(User, username=followee)
 
-    followerUserID = str(requset.user.id)
+    followerUserID = str(request.user.id)
     followeeUserID = str(followeeUser.id)
 
     # set cache for 'is_read'
@@ -384,7 +385,7 @@ def post_quote(request: Request, day):
     content = request.data.get("content")
 
     if quote:
-        quote.content = content
+        quote.content = content if content is not None else ""
         quote.save()
     else:
         quote = Quote.objects.create(user=request.user, content=content, date=day)
@@ -536,7 +537,7 @@ class DailyLogTaskView(generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-def get_following_feed(request: HttpRequest, date):
+def get_following_feed(request: Request, date):
     pass
 
 
@@ -560,6 +561,9 @@ class ReactionView(APIView):
         reactionCountsDir = dict()
         myReactions = []
         for reaction in reactions:
+            if reaction.emoji is None:
+                continue
+
             if reaction.user == user:
                 myReactions.append(EmojiSerializer(reaction.emoji).data)
 
