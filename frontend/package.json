@@ -16,9 +16,6 @@
         "generate-assets": "pwa-assets-generator"
     },
     "dependencies": {
-        "@atlaskit/pragmatic-drag-and-drop": "^1.7.4",
-        "@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.1.0",
-        "@atlaskit/pragmatic-drag-and-drop-react-accessibility": "^2.0.0",
         "@szhsin/react-menu": "^4.4.1",
         "@tanstack/query-sync-storage-persister": "^5.81.5",
         "@tanstack/react-query": "^5.81.5",

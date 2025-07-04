@@ -27,3 +27,8 @@ class DrawerSerializer(serializers.ModelSerializer):
             "updated_at",
             "deleted_at",
         ]
+
+
+class DrawerReorderSerializer(serializers.Serializer):
+    id = serializers.UUIDField()
+    order = serializers.IntegerField(min_value=0)
