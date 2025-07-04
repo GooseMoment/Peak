@@ -8,118 +8,158 @@ from .locale import get_translations
 from pywebpush import webpush, WebPushException
 from json import dumps
 from urllib3.util import parse_url
+from datetime import datetime
+
+
+class PushData:
+    def __init__(self) -> None:
+        self.title = ""
+        self.body = ""
+        self.icon = ""
+        self.datetime: datetime | None = None
+        self.click_url = ""
+
+    def to_json(self) -> str:
+        # https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
+        return dumps(
+            {
+                "title": self.title,
+                "body": self.body,
+                "icon": self.icon,
+                "timestamp": int(self.datetime.timestamp() * 1e3)
+                if self.datetime is not None
+                else None,
+                "data": {"click_url": self.click_url},
+            }
+        )
+
 
 SUBSCRIPTION_MAX_FAILURE = 10
 
 
-def _notificationToPushData(notification: Notification, locale: str) -> dict[str, any]:
-    # FYI: https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
-    data = {
-        # Texts
-        "title": "",
-        "body": "",
-        # URLS
-        "icon": "",
-        # Unix timestamp (only int)
-        "timestamp": 0,
-        # any structure
-        "data": {
-            "click_url": "",
-        },
-    }
+def _notificationToPushData(notification: Notification, locale: str) -> PushData:
+    data = PushData()
 
-    data["timestamp"] = int(notification.created_at.timestamp() * 1e3)
-    data["data"]["click_url"] = "/app/notifications?id=" + str(notification.id)
+    data.datetime = notification.created_at
+    data.click_url = "/app/notifications?id=" + str(notification.id)
 
-    related_user: User = None
+    related_user: User | None = None
     t = get_translations(locale)["push"]
 
     match notification.type:
         case Notification.FOR_TASK_REMINDER:
+            assert notification.task_reminder is not None
+
             t = t[Notification.FOR_TASK_REMINDER]
-            data["title"] = t["title"].format(task=notification.task_reminder.task.name)
+            data.title = t["title"].format(task=notification.task_reminder.task.name)
 
             if notification.task_reminder.delta == 0:
-                data["body"] = t["body_now"]
+                data.body = t["body_now"]
             else:
-                data["body"] = t["body"].format(delta=notification.task_reminder.delta)
+                data.body = t["body"].format(delta=notification.task_reminder.delta)
 
         case Notification.FOR_REACTION:
+            assert notification.reaction is not None
+            assert notification.reaction.emoji is not None
+
             parent: str = ""
             related_user = notification.reaction.user
 
             if notification.reaction.parent_type == Reaction.FOR_QUOTE:
+                assert notification.reaction.quote is not None
                 parent = notification.reaction.quote.content
             else:
+                assert notification.reaction.task is not None
                 parent = notification.reaction.task.name
 
             t = t[Notification.FOR_REACTION]
-            data["title"] = t["title"].format(
+            data.title = t["title"].format(
                 emoji=notification.reaction.emoji.name, username=related_user.username
             )
-            data["body"] = t["body"].format(parent=parent)
+            data.body = t["body"].format(parent=parent)
         case Notification.FOR_FOLLOW:
+            assert notification.following is not None
             related_user = notification.following.follower
             t = t[Notification.FOR_FOLLOW]
-            data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"]
+            data.title = t["title"].format(username=related_user.username)
+            data.body = t["body"]
         case Notification.FOR_FOLLOW_REQUEST:
+            assert notification.following is not None
             related_user = notification.following.follower
             t = t[Notification.FOR_FOLLOW_REQUEST]
-            data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"]
+            data.title = t["title"].format(username=related_user.username)
+            data.body = t["body"]
         case Notification.FOR_FOLLOW_REQUEST_ACCEPTED:
+            assert notification.following is not None
             related_user = notification.following.followee
             t = t[Notification.FOR_FOLLOW_REQUEST_ACCEPTED]
-            data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"]
+            data.title = t["title"].format(username=related_user.username)
+            data.body = t["body"]
         case Notification.FOR_PECK:
+            assert notification.peck is not None
             related_user = notification.peck.user
             t = t[Notification.FOR_PECK]
-            data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"].format(
+            data.title = t["title"].format(username=related_user.username)
+            data.body = t["body"].format(
                 task=notification.peck.task.name, count=notification.peck.count
             )
         case Notification.FOR_COMMENT:
+            assert notification.comment is not None
             related_user = notification.comment.user
             parent: str = ""
 
             if notification.comment.parent_type == Comment.FOR_QUOTE:
+                assert notification.comment.quote is not None
                 parent = notification.comment.quote.content
             else:
+                assert notification.comment.task is not None
                 parent = notification.comment.task.name
 
             t = t[Notification.FOR_COMMENT]
-            data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"].format(
+            data.title = t["title"].format(username=related_user.username)
+            data.body = t["body"].format(
                 parent=parent, comment=notification.comment.comment
             )
 
     if related_user:
         if related_user.profile_img:
-            data["icon"] = related_user.profile_img.url
+            data.icon = related_user.profile_img.url
         else:
-            data["icon"] = settings.USER_DEFAULT_PROFILE_IMG
+            data.icon = settings.USER_DEFAULT_PROFILE_IMG
 
     return data
 
 
 def pushNotificationToUser(user: User, notification: Notification) -> None:
     subscriptions = WebPushSubscription.objects.filter(user=user).all()
-    dumped_datas_per_locale = dict()
+    dumped_datas_per_locale: dict[str, str] = dict()
 
     for subscription in subscriptions:
         if notification.type in subscription.excluded_types:
             continue
 
         endpoint = parse_url(subscription.subscription_info.get("endpoint"))
+        if endpoint.scheme is None or endpoint.host is None:
+            subscription.delete()
+            return
+
         aud = endpoint.scheme + "://" + endpoint.host
+
+        locale = (
+            subscription.locale
+            if subscription.locale is not None
+            else settings.LANGUAGE_CODE
+        )
 
         if subscription.locale in dumped_datas_per_locale:
             data = dumped_datas_per_locale[subscription.locale]
         else:
-            data = dumps(_notificationToPushData(notification, subscription.locale))
-            dumped_datas_per_locale[subscription.locale] = data
+            try:
+                data = _notificationToPushData(notification, locale).to_json()
+            except AssertionError:
+                return
+
+            dumped_datas_per_locale[locale] = data
 
         try:
             webpush(
