@@ -64,7 +64,7 @@ class PasswordRecoveryTokenAdmin(admin.ModelAdmin):
 
 
 @admin.register(TwoFactorAuthToken)
-class TwoFactorAuthToken(admin.ModelAdmin):
+class TwoFactorAuthTokenAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
     search_fields = (
         "user__username",

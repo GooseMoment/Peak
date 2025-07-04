@@ -22,7 +22,7 @@ class TaskReminderSerializer(serializers.ModelSerializer):
     def get_project_id(self, obj):
         return obj.task.drawer.project.id
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = TaskReminder
         fields = [
             "id",
@@ -57,7 +57,7 @@ class TaskSerializer(serializers.ModelSerializer):
     def get_project_color(self, obj):
         return obj.drawer.project.color
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Task
         fields = [
             "id",

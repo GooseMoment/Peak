@@ -11,6 +11,6 @@ class UserSettingSerializer(serializers.ModelSerializer):
         many=True, queryset=Emoji.objects.all()
     )
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = UserSetting
         exclude = ["id", "user", "created_at", "updated_at", "deleted_at"]

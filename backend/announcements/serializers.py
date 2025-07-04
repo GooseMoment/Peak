@@ -8,7 +8,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
     def get_hearts_count(self, obj):
         return Heart.objects.filter(announcement=obj).count()
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Announcement
         fields = (
             "id",

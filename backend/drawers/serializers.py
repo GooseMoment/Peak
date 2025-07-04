@@ -12,7 +12,7 @@ class DrawerSerializer(serializers.ModelSerializer):
     uncompleted_task_count = serializers.IntegerField(default=0, read_only=True)
     completed_task_count = serializers.IntegerField(default=0, read_only=True)
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Drawer
         fields = [
             "id",

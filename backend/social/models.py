@@ -24,7 +24,7 @@ class Emoji(Base):
     def __str__(self) -> str:
         return f":{self.name}:"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "emojis"
 
 
@@ -42,7 +42,7 @@ class Peck(Base):
     def __str__(self) -> str:
         return f"{self.count} pecks by {self.user} → '{self.task.name}'"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "pecks"
 
 
@@ -57,7 +57,7 @@ class Quote(Base):
     def __str__(self) -> str:
         return f"Quote of {self.date} by {self.user}"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "quotes"
 
 
@@ -97,7 +97,7 @@ class Reaction(Base):
     def __str__(self) -> str:
         return f"{self.emoji} by {self.user} → {self.quote or self.task}"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "reactions"
 
 
@@ -127,7 +127,7 @@ class Comment(Base):
     def __str__(self) -> str:
         return f"Comment by {self.user} → {self.quote or self.task}"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "comments"
 
 

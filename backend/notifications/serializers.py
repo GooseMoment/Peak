@@ -21,7 +21,7 @@ class NotificatonSerializer(serializers.ModelSerializer):
     following = FollowingSerializer()
     peck = PeckSerializer()
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Notification
         depth = 1
         fields = [
@@ -41,7 +41,7 @@ class WebPushSubscriptionSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     device = serializers.CharField(default="Unknown")
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = WebPushSubscription
         fields = [
             "id",

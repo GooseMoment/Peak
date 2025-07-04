@@ -7,7 +7,7 @@ from drawers.models import Drawer
 
 
 @receiver(post_save, sender=User)
-def create_inbox(sender, instance: User = None, created=False, **kwargs):
+def create_inbox(instance: User, created=False, **kwargs):
     if not created:
         return
 

@@ -73,7 +73,7 @@ def send_mail_already_verified(user: User, locale: str):
     email.send()
 
 
-def send_mail_no_account(email: str, locale: str):
+def send_mail_no_account(address: str, locale: str):
     t = get_translations(locale)["mail_no_account"]
 
     link = f"{settings.SCHEME}{settings.WEB_HOSTNAME}/sign/up"
@@ -81,18 +81,16 @@ def send_mail_no_account(email: str, locale: str):
     subject = t["subject"]
 
     text_content = t["text_content"].format(
-        email=email,
+        email=address,
         link=link,
     )
 
-    email = Email(
+    Email(
         subject=subject,
         body=text_content,
         from_email=None,
-        to=(email,),
-    )
-
-    email.send()
+        to=(address,),
+    ).send()
 
 
 def send_mail_password_recovery(user: User, link: str, locale: str):

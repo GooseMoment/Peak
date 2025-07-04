@@ -3,9 +3,16 @@ import zoneinfo
 
 from . import exceptions
 
+from rest_framework.request import Request
+
 
 class TimezoneMixin:
+    request: Request
+
     TZ_HEADER = "Client-Timezone"
+    _tz: zoneinfo.ZoneInfo | None
+    _now: datetime.datetime | None
+    _today_range: tuple[datetime.datetime, datetime.datetime] | None
 
     def __init__(self, *args, **kwargs):
         self._tz = None

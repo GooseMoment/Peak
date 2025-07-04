@@ -1,4 +1,10 @@
-fieldset_base = (
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from django.contrib.admin.options import _FieldOpts
+
+
+fieldset_base: tuple[str, "_FieldOpts"] = (
     "ID & CUD (Base)",
     {
         "classes": ["collapse"],

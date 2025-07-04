@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/pyright/refs/heads/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json",
+  "include": ["./backend"],
+  "exclude": ["**/migrations", ".venv"],
+  "venvPath": "./",
+  "venv": ".venv",
+  "useLibraryCodeForTypes": true,
+  "reportUnnecessaryTypeIgnoreComment": "error",
+  "executionEnvironments": [
+    {
+      "root": "./",
+      "venv": "./"
+    }
+  ]
+}

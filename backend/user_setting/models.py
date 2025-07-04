@@ -35,7 +35,7 @@ class UserSetting(Base):
     def __str__(self) -> str:
         return f"UserSetting of {self.user}"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "user_settings"
 
 

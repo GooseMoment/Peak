@@ -10,12 +10,17 @@ import datetime
 from django.db.models import Count
 
 
-class TaskTodayAssignedList(mixins.ListModelMixin, generics.GenericAPIView):
+class TaskTodayAssignedList(
+    TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIView
+):
     serializer_class = TaskSerializer
 
     def get_queryset(self):
-        date_isoformat = self.request.GET.get("date")  # e.g. "2024-09-29"
-        date = datetime.date.fromisoformat(date_isoformat)
+        try:
+            date_isoformat = self.request.GET.get("date", "")  # e.g. "2024-09-29"
+            date = datetime.date.fromisoformat(date_isoformat)
+        except ValueError:
+            date = self.get_today()
 
         today_assignment_tasks = (
             Task.objects.filter(
