@@ -141,7 +141,7 @@ def pushNotificationToUser(user: User, notification: Notification) -> None:
         endpoint = parse_url(subscription.subscription_info.get("endpoint"))
         if endpoint.scheme is None or endpoint.host is None:
             subscription.delete()
-            return
+            continue
 
         aud = endpoint.scheme + "://" + endpoint.host
 
