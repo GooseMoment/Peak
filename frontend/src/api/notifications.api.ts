@@ -1,4 +1,5 @@
 import client from "@api/client"
+import { User } from "@api/users.api"
 
 import {
     getClientSettings,
@@ -42,25 +43,50 @@ export type NotificationType =
     | "comment"
     | "peck"
 
-export interface Notification {
-    // TODO: Replace user after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    user: any
-    type: NotificationType
+export interface NotificationTaskReminder {
+    user: User
+    type: "task_reminder"
     task_reminder: TaskReminder
-    // TODO: Replace reaction after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    reaction?: any
-    // TODO: Replace following after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    following?: any
-    // TODO: Replace peck after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    peck?: any
-    // TODO: Replace comment after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    comment?: any
 }
+
+export interface NotificationReaction {
+    user: User
+    type: "reaction"
+    // TODO: Replace reaction after declaring Reaction
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    reaction: any
+}
+
+export interface NotificationFollowing {
+    user: User
+    type: "follow" | "follow_request" | "follow_request_accepted"
+    // TODO: Replace following after declaring Following
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    following: any
+}
+
+export interface NotificationPeck {
+    user: User
+    type: "peck"
+    // TODO: Replace peck after declaring Peck
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    peck: any
+}
+
+export interface NotificationComment {
+    user: User
+    type: "comment"
+    // TODO: Replace comment after declaring Comment
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    comment: any
+}
+
+export type Notification =
+    | NotificationTaskReminder
+    | NotificationReaction
+    | NotificationFollowing
+    | NotificationPeck
+    | NotificationComment
 
 export const getNotifications = async (
     cursor: string,
