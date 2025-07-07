@@ -420,6 +420,7 @@
         "header": {
             "back": "Go Back"
         },
-        "button_no": "No"
+        "button_no": "No",
+        "error_load": "Failed to load."
     }
 }
