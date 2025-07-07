@@ -36,15 +36,6 @@ export const deleteReminder = async (id: string) => {
     return res.data
 }
 
-export type NotificationType =
-    | "task_reminder"
-    | "reaction"
-    | "follow"
-    | "follow_request"
-    | "follow_request_accepted"
-    | "comment"
-    | "peck"
-
 export interface NotificationTaskReminder extends Base {
     user: User
     type: "task_reminder"
@@ -84,7 +75,7 @@ export type Notification =
 
 export const getNotifications = async (
     cursor: string,
-    types: NotificationType[],
+    types: Notification["type"][],
 ) => {
     const res = await client.get<Notification>(`notifications/`, {
         params: { cursor, types: types.join("|") },
@@ -100,7 +91,7 @@ export interface WebPushSubscription {
     device: string
     user_agent: (typeof navigator)["userAgent"]
     fail_cnt: number
-    excluded_types: NotificationType[]
+    excluded_types: Notification["type"][]
 }
 
 export const getSubscription = async (id: string) => {
