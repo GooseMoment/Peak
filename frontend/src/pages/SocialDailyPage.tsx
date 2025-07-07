@@ -30,7 +30,7 @@ const SocialDailyPage = () => {
         if (usernameWithAt!.at(0) !== "@") {
             navigate("/app/social/daily/@" + usernameWithAt)
         }
-    }, [usernameWithAt])
+    }, [usernameWithAt, navigate])
 
     const username = usernameWithAt!.slice(1)
 
