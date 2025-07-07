@@ -1,25 +1,49 @@
 import styled from "styled-components"
 
+import type { Emoji } from "@api/social"
+import { type User } from "@api/users.api"
+
 import { cubicBeizer } from "@assets/keyframes"
 import { skeletonCSS } from "@assets/skeleton"
 
 import FeatherIcon from "feather-icons-react"
 
-const Images = ({ profile_img, project_color, reaction, skeleton = false }) => {
-    const emojiURL = reaction?.emoji?.img
+interface ImagesPropsUser {
+    relatedUser: User
+    emoji?: Emoji
+    skeleton?: boolean
+}
+
+interface ImagesPropsTask {
+    projectColor: string
+    skeleton?: boolean
+}
+
+const Images = (props: ImagesPropsUser | ImagesPropsTask) => {
+    if (props.skeleton) {
+        return (
+            <Container>
+                <ProfileImgSkeleton />
+            </Container>
+        )
+    }
+
+    if ("projectColor" in props) {
+        return (
+            <Container>
+                <TaskReminderIconBox $color={props.projectColor}>
+                    <FeatherIcon icon="clock" />
+                </TaskReminderIconBox>
+            </Container>
+        )
+    }
 
     return (
         <Container>
-            {skeleton && <ProfileImgSkeleton />}
-            {profile_img && <ProfileImg src={profile_img} />}
-            {project_color && (
-                <TaskReminderIconBox $color={project_color}>
-                    <FeatherIcon icon="clock" />
-                </TaskReminderIconBox>
-            )}
-            {emojiURL && (
+            <ProfileImg src={props.relatedUser.profile_img} />
+            {props.emoji && (
                 <EmojiContainer>
-                    <Emoji src={emojiURL} />
+                    <EmojiImg src={props.emoji.img} />
                 </EmojiContainer>
             )}
         </Container>
@@ -46,7 +70,7 @@ const ProfileImgSkeleton = styled.div`
     ${skeletonCSS()}
 `
 
-const TaskReminderIconBox = styled.div`
+const TaskReminderIconBox = styled.div<{ $color: string }>`
     border-radius: 50%;
     height: 100%;
     aspect-ratio: 1 / 1;
@@ -82,7 +106,7 @@ const EmojiContainer = styled.div`
     align-items: center;
 `
 
-const Emoji = styled.img`
+const EmojiImg = styled.img`
     width: 2em;
     height: 2em;
 
