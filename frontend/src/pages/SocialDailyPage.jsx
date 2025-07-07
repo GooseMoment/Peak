@@ -7,7 +7,7 @@ import styled from "styled-components"
 import PageBack from "@components/common/PageBack"
 import PageTitle from "@components/common/PageTitle"
 import DateBar from "@components/social/common/DateBar"
-import SimpleProfile from "@components/social/common/SimpleProfile"
+import { SimpleProfileImg } from "@components/social/common/SimpleProfile"
 import LogDetails from "@components/social/logDetails/LogDetails"
 
 import { getUserByUsername } from "@api/users.api"
@@ -43,7 +43,7 @@ const SocialDailyPage = () => {
                 </HeaderFrame>
 
                 <ProfileWrapper>
-                    <SimpleProfile user={user} />
+                    <SimpleProfileImg src={user?.username} />
                 </ProfileWrapper>
             </Header>
 
