@@ -19,7 +19,7 @@ interface ImagesPropsTask {
     skeleton?: boolean
 }
 
-const Images = (props: ImagesPropsUser | ImagesPropsTask) => {
+const Avatar = (props: ImagesPropsUser | ImagesPropsTask) => {
     if (props.skeleton) {
         return (
             <Container>
@@ -117,4 +117,4 @@ const EmojiImg = styled.img`
     transition: transform 0.25s ${cubicBeizer};
 `
 
-export default Images
+export default Avatar
