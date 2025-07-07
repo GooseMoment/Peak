@@ -4,15 +4,7 @@ import { styled } from "styled-components"
 
 import { User } from "@api/users.api"
 
-interface SimpleProfileProp {
-    user: User
-}
-
-const SimpleProfile = ({ user }: SimpleProfileProp) => {
-    if (!user) {
-        return null
-    }
-
+const SimpleProfile = ({ user }: { user: User }) => {
     return (
         <Profile to={`/app/users/@${user.username}`}>
             <SimpleProfileImg $ratio={75} src={user.profile_img} />
