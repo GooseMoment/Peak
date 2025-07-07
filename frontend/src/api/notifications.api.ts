@@ -1,5 +1,7 @@
 import client from "@api/client"
-import { User } from "@api/users.api"
+import type { Base } from "@api/common"
+import type { Following, Peck, Reaction } from "@api/social"
+import { type User } from "@api/users.api"
 
 import {
     getClientSettings,
@@ -43,42 +45,34 @@ export type NotificationType =
     | "comment"
     | "peck"
 
-export interface NotificationTaskReminder {
+export interface NotificationTaskReminder extends Base {
     user: User
     type: "task_reminder"
     task_reminder: TaskReminder
 }
 
-export interface NotificationReaction {
+export interface NotificationReaction extends Base {
     user: User
     type: "reaction"
-    // TODO: Replace reaction after declaring Reaction
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    reaction: any
+    reaction: Reaction
 }
 
-export interface NotificationFollowing {
+export interface NotificationFollowing extends Base {
     user: User
     type: "follow" | "follow_request" | "follow_request_accepted"
-    // TODO: Replace following after declaring Following
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    following: any
+    following: Following
 }
 
-export interface NotificationPeck {
+export interface NotificationPeck extends Base {
     user: User
     type: "peck"
-    // TODO: Replace peck after declaring Peck
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    peck: any
+    peck: Peck
 }
 
-export interface NotificationComment {
+export interface NotificationComment extends Base {
     user: User
     type: "comment"
-    // TODO: Replace comment after declaring Comment
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    comment: any
+    comment: Comment
 }
 
 export type Notification =
