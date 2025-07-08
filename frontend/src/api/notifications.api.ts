@@ -1,6 +1,6 @@
 import client from "@api/client"
 import type { Base } from "@api/common"
-import type { Following, Peck, Reaction } from "@api/social"
+import type { Comment, Following, Peck, Reaction } from "@api/social"
 import { type User } from "@api/users.api"
 
 import {
@@ -81,6 +81,20 @@ export const getNotifications = async (
         params: { cursor, types: types.join("|") },
     })
     return res.data
+}
+
+export const getRelatedUserFromNotification = (notification: Notification) => {
+    return (
+        (notification.type === "reaction" && notification.reaction.user) ||
+        (notification.type === "peck" && notification.peck.user) ||
+        (notification.type === "comment" && notification.comment.user) ||
+        (notification.type === "follow" && notification.following?.follower) ||
+        (notification.type === "follow_request" &&
+            notification.following?.follower) ||
+        (notification.type === "follow_request_accepted" &&
+            notification?.following?.followee) ||
+        undefined
+    )
 }
 
 export interface WebPushSubscription {
