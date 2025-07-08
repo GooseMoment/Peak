@@ -8,42 +8,31 @@ import { skeletonCSS } from "@assets/skeleton"
 
 import FeatherIcon from "feather-icons-react"
 
-interface ImagesPropsUser {
-    relatedUser: User
+interface AvatarProps {
+    relatedUser?: User
     emoji?: Emoji
+    projectColor?: string
     skeleton?: boolean
 }
 
-interface ImagesPropsTask {
-    projectColor: string
-    skeleton?: boolean
-}
-
-const Avatar = (props: ImagesPropsUser | ImagesPropsTask) => {
-    if (props.skeleton) {
-        return (
-            <Container>
-                <ProfileImgSkeleton />
-            </Container>
-        )
-    }
-
-    if ("projectColor" in props) {
-        return (
-            <Container>
-                <TaskReminderIconBox $color={props.projectColor}>
-                    <FeatherIcon icon="clock" />
-                </TaskReminderIconBox>
-            </Container>
-        )
-    }
-
+const Avatar = ({
+    relatedUser,
+    emoji,
+    projectColor,
+    skeleton = false,
+}: AvatarProps) => {
     return (
         <Container>
-            <ProfileImg src={props.relatedUser.profile_img} />
-            {props.emoji && (
+            {skeleton && <ProfileImgSkeleton />}
+            {relatedUser && <ProfileImg src={relatedUser.profile_img} />}
+            {projectColor && (
+                <TaskReminderIconBox $color={projectColor}>
+                    <FeatherIcon icon="clock" />
+                </TaskReminderIconBox>
+            )}
+            {emoji && (
                 <EmojiContainer>
-                    <EmojiImg src={props.emoji.img} />
+                    <EmojiImg src={emoji.img} />
                 </EmojiContainer>
             )}
         </Container>
