@@ -9,9 +9,16 @@ import {
 } from "@utils/clientSettings"
 import getDeviceType from "@utils/getDeviceType"
 
-// TODO: Define TaskReminder properly
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type TaskReminder = any
+export interface TaskReminder extends Base {
+    // TODO: replace any with Task
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    task: any
+    delta: number
+    scheduled: string
+    task_name: string
+    project_color: string
+    project_id: string
+}
 
 export const getReminder = async (id: string) => {
     const res = await client.get(`notifications/reminders/${id}/`)
