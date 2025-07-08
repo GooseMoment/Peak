@@ -1,5 +1,5 @@
 import client from "@api/client"
-import type { Base } from "@api/common"
+import type { Base, PaginationData } from "@api/common"
 import type { Comment, Following, Peck, Reaction } from "@api/social"
 import { type User } from "@api/users.api"
 
@@ -77,10 +77,24 @@ export const getNotifications = async (
     cursor: string,
     types: Notification["type"][],
 ) => {
-    const res = await client.get<Notification>(`notifications/`, {
-        params: { cursor, types: types.join("|") },
-    })
+    const res = await client.get<PaginationData<Notification>>(
+        `notifications/`,
+        {
+            params: { cursor, types: types.join("|") },
+        },
+    )
     return res.data
+}
+
+export const hasRelatedUser = (notification: Notification) => {
+    return (
+        notification.type === "reaction" ||
+        notification.type === "peck" ||
+        notification.type === "comment" ||
+        notification.type === "follow" ||
+        notification.type === "follow_request" ||
+        notification.type === "follow_request_accepted"
+    )
 }
 
 export const getRelatedUserFromNotification = (notification: Notification) => {
