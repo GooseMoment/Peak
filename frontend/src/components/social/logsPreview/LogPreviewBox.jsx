@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 
 import styled, { css, useTheme } from "styled-components"
 
-import SimpleProfile from "@components/social/common/SimpleProfile"
+import { SimpleProfileImg } from "@components/social/common/SimpleProfile"
 
 import { getCurrentUsername } from "@api/client"
 
@@ -55,7 +55,7 @@ const LogPreviewBox = ({
                 <ProfileWrapper
                     $isMe={log.username === me}
                     $isDesktop={isDesktop}>
-                    <SimpleProfile user={log} />
+                    <SimpleProfileImg src={log.profile_img} />
                 </ProfileWrapper>
             </FrameRow>
 

@@ -1,8 +1,10 @@
+import { CSSProperties } from "react"
+
 import styled from "styled-components"
 
 interface PageTitleProp {
     $color?: string
-    $cursor?: string
+    $cursor?: CSSProperties["cursor"]
 }
 
 const PageTitle = styled.h1<PageTitleProp>`

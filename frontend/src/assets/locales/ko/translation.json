@@ -420,6 +420,7 @@
         "header": {
             "back": "돌아가기"
         },
-        "button_no": "아니요"
+        "button_no": "아니요",
+        "error_load": "불러오지 못했습니다."
     }
 }

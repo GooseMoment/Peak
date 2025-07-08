@@ -1,17 +1,19 @@
+import { Link } from "react-router-dom"
+
 import { styled } from "styled-components"
 
-const SimpleProfile = ({ user, showUsername = false }) => {
-    return user && showUsername ? (
-        <Profile>
-            <ProfileImg $ratio={75} src={user?.profile_img} />
-            <Username>@{user?.username}</Username>
+import { User } from "@api/users.api"
+
+const SimpleProfile = ({ user }: { user: User }) => {
+    return (
+        <Profile to={`/app/users/@${user.username}`}>
+            <SimpleProfileImg $ratio={75} src={user.profile_img} />
+            <Username>@{user.username}</Username>
         </Profile>
-    ) : (
-        <ProfileImg $ratio={100} src={user?.profile_img} />
     )
 }
 
-const Profile = styled.div`
+const Profile = styled(Link)`
     height: 5em;
     width: 5em;
 
@@ -21,9 +23,9 @@ const Profile = styled.div`
     align-items: center;
 `
 
-const ProfileImg = styled.img`
+export const SimpleProfileImg = styled.img<{ $ratio?: number }>`
     aspect-ratio: 1;
-    width: ${(props) => props.$ratio}%;
+    width: ${(props) => (props.$ratio === undefined ? 100 : props.$ratio)}%;
 
     border-radius: 100%;
 
