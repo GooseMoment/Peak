@@ -60,7 +60,7 @@ const NotificationsPage = () => {
     } = useInfiniteQuery({
         queryKey: ["notifications", filters[activeFilter]] as [
             string,
-            { display: string; types: Notification["type"][] },
+            FilterValue,
         ],
         queryFn: (context) =>
             getNotifications(context.pageParam, context.queryKey[1].types),
@@ -241,12 +241,11 @@ type FilterChoice =
     | "pecking"
     | "follow"
 
+type FilterValue = { display: string; types: Notification["type"][] }
+
 const makeFilters = (
     t: TFunction<"translation", "notifications">,
-): Record<
-    FilterChoice,
-    { display: string; types: Notification["type"][] }
-> => ({
+): Record<FilterChoice, FilterValue> => ({
     all: {
         display: t("type_all"),
         types: [
