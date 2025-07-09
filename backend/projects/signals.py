@@ -25,16 +25,13 @@ def create_inbox(instance: User, created=False, **kwargs):
         order=0,
     )
 
+
 @receiver(post_save, sender=Project)
 def set_new_project_order(sender, instance: Project, created=False, **kwargs):
     if not created:
         return
 
-    last_project = (
-        Project.objects.filter(user=instance.user)
-        .order_by("-order")
-        .first()
-    )
+    last_project = Project.objects.filter(user=instance.user).order_by("-order").first()
     instance.order = (last_project.order + 1) if last_project else 0
 
     instance.save()

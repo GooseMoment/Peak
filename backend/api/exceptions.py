@@ -34,4 +34,3 @@ class UnknownError(APIException):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
     default_detail = "Unknown error occuered."
     default_code = "UNKNOWN_ERROR"
-    
