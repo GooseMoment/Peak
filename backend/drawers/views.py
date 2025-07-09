@@ -6,6 +6,9 @@ from .serializers import DrawerSerializer, DrawerReorderSerializer
 from .utils import normalize_drawers_order
 from api.permissions import IsUserOwner
 from . import exceptions
+from api.exceptions import RequiredFieldMissing, UnknownError
+
+from rest_framework.exceptions import ValidationError
 
 
 class DrawerDetail(
@@ -51,7 +54,7 @@ class DrawerList(
         ordering = self.request.GET.get("ordering", None)
 
         if ordering is None:
-            raise exceptions.RequiredFieldMissing
+            raise RequiredFieldMissing
 
         if ordering.lstrip("-") in ordering_fields:
             normalize_drawers_order(queryset, ordering)
@@ -62,7 +65,13 @@ class DrawerList(
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        try:
+            return self.create(request, *args, **kwargs)
+        except ValidationError:
+            raise exceptions.DrawerNameDuplicate
+        except Exception as e:
+            print(e)
+            raise UnknownError
 
 
 class DrawerReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):

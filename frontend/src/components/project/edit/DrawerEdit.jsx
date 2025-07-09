@@ -58,10 +58,13 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
 
             closeModal()
         },
-        onError: () => {
+        onError: (err) => {
             if (isCreating) {
                 hasCreated.current = false
-                toast.error(t("created_drawer_error"))
+
+                const errorCode = err?.response?.data?.code
+                toast.error(t("created_drawer_error." + errorCode))
+
                 return
             }
 

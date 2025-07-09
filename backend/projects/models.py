@@ -37,3 +37,9 @@ class Project(Base, PrivacyMixin):
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta, PrivacyMixin.Meta
         db_table = "projects"
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["name", "user"], name="constraint_project_name"
+            ),
+        ]

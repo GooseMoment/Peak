@@ -105,9 +105,15 @@
         "button_save": "Save",
         "name_placeholder": "Enter a name",
         "created_project": "Created a new project.",
-        "created_project_error": "Failed to create a new project.",
+        "created_project_error": {
+            "PROJECT_NAME_DUPLICATE": "A project name you entered already exists.",
+            "UNKNOWN_ERROR": "Please try later."
+        },
         "created_drawer": "Created a new drawer.",
-        "created_drawer_error": "Failed to create a new drawer.",
+        "created_drawer_error": {
+            "DRAWER_NAME_DUPLICATE": "A drawer name you entered already exists.",
+            "UNKNOWN_ERROR": "Please try later."
+        },
         "edited": "Saved changes.",
         "edited_error": "Failed to save changes.",
         "project_cannot_name_inbox": "Can't name a project as Inbox.",

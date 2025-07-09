@@ -65,10 +65,13 @@ const ProjectEdit = ({ project, isCreating = false }) => {
             }
             closeModal()
         },
-        onError: () => {
+        onError: (err) => {
             if (isCreating) {
                 hasCreated.current = false
-                toast.error(t("created_project_error"))
+
+                const errorCode = err?.response?.data?.code
+                toast.error(t("created_project_error." + errorCode))
+
                 return
             }
 
