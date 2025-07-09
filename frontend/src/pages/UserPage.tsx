@@ -11,7 +11,6 @@ import UserProfileHeader from "@components/users/UserProfileHeader"
 
 import { getCurrentUsername } from "@api/client"
 import { getProjectListByUser } from "@api/projects.api"
-import { type Block } from "@api/social"
 import { getBlock, getFollow } from "@api/social.api"
 import { getUserByUsername } from "@api/users.api"
 
@@ -34,11 +33,11 @@ const UserPage = () => {
 
     const followingQuery = useQuery({
         queryKey: ["followings", username, currentUsername],
-        queryFn: () => getFollow(username, currentUsername),
+        queryFn: () => getFollow(username, currentUsername!),
         enabled: currentUsername !== username,
     })
 
-    const blockQuery = useQuery<Block | null>({
+    const blockQuery = useQuery({
         queryKey: ["blocks", getCurrentUsername(), username],
         queryFn() {
             return getBlock(username)

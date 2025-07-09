@@ -6,7 +6,6 @@ import Button from "@components/common/Button"
 import Confirmation from "@components/common/Confirmation"
 
 import { getCurrentUsername } from "@api/client"
-import { type Following } from "@api/social"
 import {
     deleteFollowRequest,
     getFollow,
@@ -31,13 +30,12 @@ const FollowButton = ({ user, disabled = false }: FollowButtonProp) => {
 
     const [confirmationVisible, setConfirmationVisible] = useState(false)
 
-    const { data: following, isLoading: fetchFollowLoading } =
-        useQuery<Following>({
-            queryKey: ["followings", currentUsername, user.username],
-            queryFn: () => getFollow(currentUsername, user.username),
-        })
+    const { data: following, isLoading: fetchFollowLoading } = useQuery({
+        queryKey: ["followings", currentUsername, user.username],
+        queryFn: () => getFollow(currentUsername!, user.username),
+    })
 
-    const putMutation = useMutation<Following>({
+    const putMutation = useMutation({
         mutationFn: () => putFollowRequest(user.username),
         onSuccess: (data) => {
             if (data.status === "requested") {
@@ -56,7 +54,7 @@ const FollowButton = ({ user, disabled = false }: FollowButtonProp) => {
         },
     })
 
-    const deleteMutation = useMutation<Following>({
+    const deleteMutation = useMutation({
         mutationFn: () => deleteFollowRequest(user.username),
         onSuccess: (data) => {
             if (following?.status === "requested") {

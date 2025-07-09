@@ -130,7 +130,9 @@ export const deleteFollowRequest = async (username: string) => {
     const follower = getCurrentUsername()
     const followee = username
 
-    const res = await client.delete(`social/follow/@${follower}/@${followee}/`)
+    const res = await client.delete<Following>( // DELETE Following does not delete the row but insert `deleted_at`
+        `social/follow/@${follower}/@${followee}/`,
+    )
 
     return res.data
 }
