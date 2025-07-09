@@ -198,9 +198,41 @@ export const deleteBlock = async (username: string) => {
     return res.data
 }
 
+// TODO: declare DailyLogsPreview
 export const getDailyLogsPreview = async (username: string, day: string) => {
     const res = await client.get(`social/daily/logs/@${username}/${day}/`)
 
+    return res.data
+}
+
+// TODO: declare DailyLogDetail
+export const getDailyLogDetails = async (
+    username: string,
+    day: string,
+    cursor: string,
+) => {
+    const res = await client.get(
+        `social/daily/log/details/@${username}/${day}/`,
+        { params: { cursor } },
+    )
+
+    return res.data
+}
+
+export const getExploreRecommend = async (cursor: string) => {
+    const res = await client.get<PaginationData<User>>(`social/explore/`, {
+        params: { cursor },
+    })
+
+    return res.data
+}
+
+export const getExploreFound = async (query: string, cursor: string) => {
+    const params = new URLSearchParams({ query, cursor })
+    const res = await client.get<PaginationData<User>>(
+        `social/explore/search/`,
+        { params },
+    )
     return res.data
 }
 
@@ -217,31 +249,6 @@ export const postQuote = async (date: string, content: string) => {
         content,
     })
 
-    return res.data
-}
-
-export const getDailyLogDetails = async (
-    username: string,
-    day: string,
-    cursor: string,
-) => {
-    const res = await client.get(
-        `social/daily/log/details/@${username}/${day}/`,
-        { params: { cursor } },
-    )
-
-    return res.data
-}
-
-export const getExploreRecommend = async (cursor: string) => {
-    const res = await client.get(`social/explore/`, { params: { cursor } })
-
-    return res.data
-}
-
-export const getExploreFound = async (query: string, cursor: string) => {
-    const params = new URLSearchParams({ query, cursor })
-    const res = await client.get(`social/explore/search/`, { params })
     return res.data
 }
 
