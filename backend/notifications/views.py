@@ -20,6 +20,8 @@ from .serializers import (
 from .utils import caculateScheduled
 from . import exceptions
 
+from api.exceptions import RequiredFieldMissing
+
 
 class IsUserMatchInReminder(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj):
@@ -57,7 +59,10 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
             delta_list = request.data["delta_list"]
             uuid_task_id = uuid.UUID(hex=task_id)
         except (KeyError, ValueError, TypeError):
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise RequiredFieldMissing
+
+        if len(delta_list) == 0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
         task = get_object_or_404(Task, id=uuid_task_id)
 
@@ -73,13 +78,10 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
                 assert task.due_datetime is not None
                 converted_due_datetime = task.due_datetime
             case _:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                raise RequiredFieldMissing
 
         if task.reminders.exists():
             task.reminders.all().delete()
-
-        if len(delta_list) == 0:
-            return Response(status=status.HTTP_204_NO_CONTENT)
 
         for delta in delta_list:
             new_scheduled = caculateScheduled(converted_due_datetime, delta)
