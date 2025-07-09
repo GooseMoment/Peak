@@ -38,7 +38,7 @@ const LogDetails = ({
 
     // quote
     const { data: quote, isPending: isQuotePending } = useQuery({
-        queryKey: ["quote", username, selectedDate],
+        queryKey: ["quotes", username, selectedDate],
         queryFn: () => getQuote(username, selectedDate),
         enabled: !!selectedDate, // && pageType === "following"
     })
@@ -49,7 +49,7 @@ const LogDetails = ({
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["quote", me, selectedDate],
+                queryKey: ["quotes", me, selectedDate],
             })
         },
         onError: (e) => {
