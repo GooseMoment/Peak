@@ -15,7 +15,7 @@ class AdminBackend(ModelBackend):
 
 
 class UserBackend(BaseBackend):
-    def authenticate(self, request, email: str, password: str, **kwargs):
+    def authenticate(self, request, email: str, password: str, **kwargs):  # pyright: ignore [reportIncompatibleMethodOverride] -- the authenticate method can be overriden with different signatures
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -26,17 +26,15 @@ class UserBackend(BaseBackend):
 
         return user
 
-    def get_user(self, user_id: int) -> User:
+    def get_user(self, user_id: int):
         try:
-            user = User.objects.get(id=user_id)
+            return User.objects.get(id=user_id)
         except User.DoesNotExist:
             return None
 
-        return user
-
 
 class UserTOTPBackend(BaseBackend):
-    def authenticate(self, request, user: User, totp_code: str, **kwrags):
+    def authenticate(self, request, user: User, totp_code: str, **kwrags):  # pyright: ignore [reportIncompatibleMethodOverride] -- the authenticate method can be overriden with different signatures
         if user is None:
             return None
 
@@ -56,10 +54,8 @@ class UserTOTPBackend(BaseBackend):
 
         return None
 
-    def get_user(self, user_id: int) -> User:
+    def get_user(self, user_id: int):
         try:
-            user = User.objects.get(id=user_id)
+            return User.objects.get(id=user_id)
         except User.DoesNotExist:
             return None
-
-        return user

@@ -51,36 +51,39 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
     queryset = TaskReminder.objects.all()
     serializer_class = TaskReminderSerializer
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
         try:
             task_id = request.data["task"]
             delta_list = request.data["delta_list"]
             uuid_task_id = uuid.UUID(hex=task_id)
         except (KeyError, ValueError, TypeError):
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        else:
-            task = get_object_or_404(Task, id=uuid_task_id)
 
-            if task.reminders.exists():
-                task.reminders.all().delete()
+        task = get_object_or_404(Task, id=uuid_task_id)
 
-            if len(delta_list) == 0:
-                return Response(status=status.HTTP_204_NO_CONTENT)
-
-            for delta in delta_list:
-                if task.due_type == "due_date":
-                    tz = self.get_tz()
-                    nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=tz)
-                    converted_due_datetime = datetime.combine(
-                        date=task.due_date, time=nine_oclock_time
-                    )
-                else:
-                    converted_due_datetime = task.due_datetime
-
-                new_scheduled = caculateScheduled(converted_due_datetime, delta)
-                TaskReminder.objects.create(
-                    task=task, delta=delta, scheduled=new_scheduled
+        match task.due_type:
+            case Task.DUE_DATE:
+                assert task.due_date is not None
+                tz = self.get_tz()
+                nine_oclock_time = time(hour=9, minute=0, second=0, tzinfo=tz)
+                converted_due_datetime = datetime.combine(
+                    date=task.due_date, time=nine_oclock_time
                 )
+            case Task.DUE_DATETIME:
+                assert task.due_datetime is not None
+                converted_due_datetime = task.due_datetime
+            case _:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if task.reminders.exists():
+            task.reminders.all().delete()
+
+        if len(delta_list) == 0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        for delta in delta_list:
+            new_scheduled = caculateScheduled(converted_due_datetime, delta)
+            TaskReminder.objects.create(task=task, delta=delta, scheduled=new_scheduled)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -153,7 +156,7 @@ class WebPushSubscriptionDetail(
     # Only accepts updating excluded_types for now
     def patch(self, request: Request, *args, **kwargs):
         try:
-            excluded_types = request.data["excluded_types"]
+            excluded_types: list[str] = request.data["excluded_types"]
         except KeyError:
             raise exceptions.ExcludedTypesMissing
 

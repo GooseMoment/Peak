@@ -6,7 +6,7 @@ from drawers.models import Drawer
 
 
 @receiver(post_save, sender=Task)
-def add_task_count_for_Task(sender, instance: Task = None, created=False, **kwargs):
+def add_task_count_for_Task(instance: Task, created=False, **kwargs):
     if not created:
         return
 
@@ -19,7 +19,7 @@ def add_task_count_for_Task(sender, instance: Task = None, created=False, **kwar
 
 
 @receiver(post_delete, sender=Task)
-def delete_task_count_for_Task(sender, instance: Task = None, **kwargs):
+def delete_task_count_for_Task(instance: Task, **kwargs):
     if instance.completed_at is None:
         instance.drawer.uncompleted_task_count -= 1
     else:
@@ -29,7 +29,7 @@ def delete_task_count_for_Task(sender, instance: Task = None, **kwargs):
 
 
 @receiver(post_save, sender=Drawer)
-def set_new_drawer_order(sender, instance: Drawer = None, created=False, **kwargs):
+def set_new_drawer_order(instance: Drawer, created=False, **kwargs):
     if not created:
         return
 

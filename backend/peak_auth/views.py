@@ -29,16 +29,17 @@ from .models import (
 )
 from .totp import create_totp_secret, TOTP
 from . import exceptions, mails
+from api.exceptions import RequiredFieldMissing
 
 
 class SignInView(KnoxLoginView):
     permission_classes = (AllowAny,)
 
-    def post(self, request):
+    def post(self, request: Request, format=None):
         email: str = request.data["email"]
         password: str = request.data["password"]
 
-        user: User | None = authenticate(request, email=email, password=password)
+        user = authenticate(request, email=email, password=password)
 
         if user is None:
             raise exceptions.CredentialInvalid
@@ -63,18 +64,18 @@ class SignInView(KnoxLoginView):
             )
 
         login(request, user)
-        return super(SignInView, self).post(request, format=None)
+        return super(SignInView, self).post(request, format=format)
 
 
 class TOTPAuthenticationView(KnoxLoginView):
     permission_classes = (AllowAny,)
 
-    def post(self, request: Request):
+    def post(self, request: Request, format=None):
         try:
             token_hex = request.data["token"]
             code = request.data["code"]
         except KeyError:
-            raise exceptions.RequiredFieldMissing
+            raise RequiredFieldMissing
 
         try:
             token = uuid.UUID(hex=token_hex)
@@ -91,11 +92,11 @@ class TOTPAuthenticationView(KnoxLoginView):
             return self.process_fail(request)
 
         self.tfat.delete()
-        return self.process_login(request, user)
+        return self.process_login(request, user, format)
 
-    def process_login(self, request: Request, user: User):
+    def process_login(self, request: Request, user, format):
         login(request, user)
-        return super(TOTPAuthenticationView, self).post(request, format=None)
+        return super(TOTPAuthenticationView, self).post(request, format=format)
 
     def process_fail(self, request: Request):
         self.tfat.try_count += 1
@@ -117,7 +118,7 @@ class TOTPRegisterView(GenericAPIView):
     cache_timeout = 60 * 30  # 30 minutes
 
     def get_cache_key(self) -> str:
-        return self.key_prefix + "-" + self.request.user.username
+        return self.key_prefix + "-" + self.request.user.get_username()
 
     def get_cached_secret(self) -> str | None:
         key = self.get_cache_key()
@@ -161,7 +162,7 @@ class TOTPRegisterView(GenericAPIView):
         return Response(
             {
                 "secret": secret,
-                "uri": totp.get_uri(request.user.username, "Peak"),
+                "uri": totp.get_uri(request.user.get_username(), "Peak"),
             },
             status=status.HTTP_200_OK,
         )
@@ -175,7 +176,7 @@ class TOTPRegisterView(GenericAPIView):
         try:
             code = request.data["code"]
         except KeyError:
-            raise exceptions.RequiredFieldMissing
+            raise RequiredFieldMissing
 
         totp = TOTP(secret)
         codes = totp.totp_with_offsets()
@@ -220,7 +221,7 @@ class SignUpView(GenericAPIView):
         new_user = User()
         for field in self.required_fields:
             if field not in payload:
-                raise exceptions.RequiredFieldMissing
+                raise RequiredFieldMissing
 
             setattr(new_user, field, payload[field])
 
@@ -277,7 +278,9 @@ class SignUpView(GenericAPIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class TokenView:
+class TokenMixin:
+    request: Request
+
     def get_token(self):
         token_hex = self.request.data.get("token")
         if token_hex is None:
@@ -291,7 +294,7 @@ class TokenView:
         return token
 
 
-class VerifyEmailVerificationToken(TokenView, GenericAPIView):
+class VerifyEmailVerificationToken(TokenMixin, GenericAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request: Request):
@@ -368,7 +371,7 @@ class ResendEmailVerificationMail(GenericAPIView):
                     {
                         "seconds": delta.seconds,
                     },
-                    status=status.HTTP_425_TOO_EARLY,
+                    status=status.HTTP_425_TOO_EARLY,  # pyright: ignore [reportAttributeAccessIssue] -- djangorestframework-types missing type
                 )
 
         mails.send_mail_verification_email(verification.user, verification)
@@ -380,7 +383,7 @@ class PasswordRecoveryAnonRateThrottle(AnonRateThrottle):
     rate = "5/minute"  # up to 5 times a hour
 
 
-class PasswordRecoveryView(TokenView, GenericAPIView):
+class PasswordRecoveryView(TokenMixin, GenericAPIView):
     permission_classes = (AllowAny,)
 
     # generate a token
@@ -426,7 +429,7 @@ class PasswordRecoveryView(TokenView, GenericAPIView):
         except PasswordRecoveryToken.DoesNotExist:
             raise exceptions.TokenInvalid
 
-        if token.expires_at < datetime.now(UTC):
+        if token.expires_at is not None and token.expires_at < datetime.now(UTC):
             raise exceptions.TokenInvalid
 
         new_password = request.data.get("new_password")

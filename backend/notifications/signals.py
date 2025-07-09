@@ -10,18 +10,16 @@ from .push import pushNotificationToUser
 
 
 @receiver(post_save, sender=Reaction)
-def create_notification_for_reaction(
-    sender, instance: Reaction = None, created=False, **kwargs
-):
+def create_notification_for_reaction(instance: Reaction, created=False, **kwargs):
     if not created:
         return
 
     target_user = None
     noti_type = Notification.FOR_REACTION
 
-    if instance.parent_type == Reaction.FOR_TASK:
+    if instance.parent_type == Reaction.FOR_TASK and instance.task is not None:
         target_user = instance.task.user
-    elif instance.parent_type == Reaction.FOR_QUOTE:
+    elif instance.parent_type == Reaction.FOR_QUOTE and instance.quote is not None:
         target_user = instance.quote.user
 
     if target_user == instance.user:
@@ -35,9 +33,7 @@ def create_notification_for_reaction(
 
 
 @receiver(post_save, sender=Peck)
-def create_notification_for_peck(
-    sender, instance: Peck = None, created=False, **kwargs
-):
+def create_notification_for_peck(instance: Peck, **kwargs):
     # create peck notification when Peck is created & updated
 
     target_user = instance.task.user
@@ -54,35 +50,28 @@ def create_notification_for_peck(
 
 
 @receiver(post_save, sender=Following)
-def create_notification_for_following(
-    sender, instance: Following = None, created=False, **kwargs
-):
+def create_notification_for_following(instance: Following, **kwargs):
     match instance.status:
         case Following.REQUESTED:
-            return Notification.objects.create(
+            Notification.objects.create(
                 user=instance.followee,
                 type=Notification.FOR_FOLLOW_REQUEST,
                 following=instance,
                 created_at=instance.created_at,
             )
         case Following.ACCEPTED:
-            noti1 = Notification.objects.create(
+            Notification.objects.create(
                 user=instance.follower,
                 type=Notification.FOR_FOLLOW_REQUEST_ACCEPTED,
                 following=instance,
                 created_at=instance.created_at,
             )
 
-            noti2 = Notification.objects.create(
+            Notification.objects.create(
                 user=instance.followee,
                 type=Notification.FOR_FOLLOW,
                 following=instance,
                 created_at=instance.updated_at,
-            )
-
-            return (
-                noti1,
-                noti2,
             )
         case Following.REJECTED, Following.CANCELED:
             # no notification for these types
@@ -90,19 +79,17 @@ def create_notification_for_following(
 
 
 @receiver(post_save, sender=Comment)
-def create_notification_for_comment(
-    sender, instance: Comment = None, created=False, **kwargs
-):
+def create_notification_for_comment(instance: Comment, created=False, **kwargs):
     if not created:
         return
 
     parent_owner = None
     if instance.parent_type == Comment.FOR_TASK:
-        parent_owner = instance.task.user
+        parent_owner = instance.task.user if instance.task else None
     else:
-        parent_owner = instance.quote.user
+        parent_owner = instance.quote.user if instance.quote else None
 
-    if parent_owner == instance.user:
+    if parent_owner == instance.user or parent_owner is None:
         return
 
     return Notification.objects.create(
@@ -114,8 +101,8 @@ def create_notification_for_comment(
 
 
 @receiver(post_save, sender=Notification)
-def push_notification(sender, instance: Notification = None, created=False, **kwargs):
-    if not created:
+def push_notification(instance: Notification, created=False, **kwargs):
+    if not created or instance.user is None:
         return
 
     pushNotificationToUser(instance.user, instance)

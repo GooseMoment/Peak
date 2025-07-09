@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
     is_me = serializers.SerializerMethodField(read_only=True)
     profile_img = DefaultImageField(read_only=True)
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = User
         fields = [
             "username",
