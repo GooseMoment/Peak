@@ -22,17 +22,17 @@ interface Filter {
     display: string
 }
 
-interface FilterButtonGroupProp {
-    active: string
-    setActive: Dispatch<SetStateAction<string>>
+interface FilterButtonGroupProp<T> {
+    active: T
+    setActive: Dispatch<SetStateAction<T>>
     filters: { [name: string]: Filter }
 }
 
-const FilterButtonGroup = ({
+const FilterButtonGroup = <T extends string>({
     active,
     setActive,
     filters,
-}: FilterButtonGroupProp) => {
+}: FilterButtonGroupProp<T>) => {
     const [selectedButtonPosition, setSelectedButtonPosition] =
         useState<ButtonPosition>({
             top: 0,
@@ -68,7 +68,7 @@ const FilterButtonGroup = ({
                     <FilterButton
                         ref={active === name ? onRefChange : undefined}
                         key={name}
-                        onClick={() => setActive(name)}>
+                        onClick={() => setActive(name as T)}>
                         {display}
                     </FilterButton>
                 ))}

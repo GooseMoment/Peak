@@ -13,15 +13,16 @@ import styled, { css, keyframes } from "styled-components"
 
 import FilterButtonGroup from "@components/common/FilterButtonGroup"
 import PageTitle from "@components/common/PageTitle"
-import Box from "@components/notifications/Box"
+import Box, { BoxSkeleton } from "@components/notifications/Box"
 
-import { getNotifications } from "@api/notifications.api"
+import { type Notification, getNotifications } from "@api/notifications.api"
 
 import { useClientLocale } from "@utils/clientSettings"
 import { getCursorFromURL } from "@utils/pagination"
 
 import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
+import { type TFunction } from "i18next"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -30,23 +31,23 @@ const defaultFilter = "all"
 
 const NotificationsPage = () => {
     const locale = useClientLocale()
-    const { t } = useTranslation("", { keyPrefix: "notifications" })
+    const { t } = useTranslation("translation", { keyPrefix: "notifications" })
 
     const filters = useMemo(() => makeFilters(t), [t])
 
     const [searchParams, setSearchParams] = useSearchParams()
     const focusID = searchParams.get("id")
-    const paramActiveFilter = searchParams.get("active")
+    const paramActiveFilter = searchParams.get("active") || ""
 
-    const [activeFilter, setActiveFilter] = useState(
+    const [activeFilter, setActiveFilter] = useState<keyof typeof filters>(
         Object.keys(filters).includes(paramActiveFilter)
-            ? paramActiveFilter
+            ? (paramActiveFilter as keyof typeof filters)
             : defaultFilter,
     )
 
-    const scrollToBox = useCallback((node) => {
-        node?.scrollIntoView({ block: "center", scrollBehavior: "smooth" })
-    })
+    const scrollToBox = useCallback((node: HTMLElement | null) => {
+        node?.scrollIntoView({ block: "center", behavior: "smooth" })
+    }, [])
 
     const {
         data,
@@ -57,7 +58,10 @@ const NotificationsPage = () => {
         isFetching,
         isFetchingNextPage,
     } = useInfiniteQuery({
-        queryKey: ["notifications", filters[activeFilter]],
+        queryKey: ["notifications", filters[activeFilter]] as [
+            string,
+            FilterValue,
+        ],
         queryFn: (context) =>
             getNotifications(context.pageParam, context.queryKey[1].types),
         initialPageParam: "",
@@ -69,7 +73,7 @@ const NotificationsPage = () => {
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
     const isNotificationEmpty = data?.pages[0]?.results?.length === 0
 
-    const lastDate = useRef(null)
+    const lastDate = useRef<null | string>(null)
     useEffect(() => {
         lastDate.current = null
         setSearchParams({ active: activeFilter }, { replace: true })
@@ -77,7 +81,7 @@ const NotificationsPage = () => {
 
     const header = (
         <>
-            <TitleWrapper onClick={!isFetching ? refetch : undefined}>
+            <TitleWrapper onClick={!isFetching ? () => refetch() : undefined}>
                 <PageTitle>{t("title")}</PageTitle>
                 <RefetchIcon $loading={isFetching}>
                     <FeatherIcon icon="rotate-cw" />
@@ -100,7 +104,7 @@ const NotificationsPage = () => {
             <>
                 {header}
                 {[...Array(10)].map((e, i) => (
-                    <Box key={i} skeleton />
+                    <BoxSkeleton key={i} />
                 ))}
             </>
         )
@@ -148,14 +152,14 @@ const NotificationsPage = () => {
                 <>
                     <Date $loading />
                     {[...Array(10)].map((e, i) => (
-                        <Box key={i} skeleton />
+                        <BoxSkeleton key={i} />
                     ))}
                 </>
             ) : null}
             <ImpressionArea
                 onImpressionStart={() => fetchNextPage()}
                 timeThreshold={200}>
-                {hasNextPage && <Box skeleton />}
+                {hasNextPage && <BoxSkeleton />}
                 {!hasNextPage && !isNotificationEmpty && (
                     <NoMore>{t("no_more")}</NoMore>
                 )}
@@ -179,7 +183,7 @@ const rotate = keyframes`
     }
 `
 
-const RefetchIcon = styled.div`
+const RefetchIcon = styled.div<{ $loading?: boolean }>`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -217,7 +221,7 @@ const NoMore = styled.div`
     justify-content: center;
 `
 
-const Date = styled.h2`
+const Date = styled.h2<{ $loading?: boolean }>`
     font-weight: bold;
 
     ${(p) =>
@@ -229,7 +233,19 @@ const Date = styled.h2`
         `}
 `
 
-const makeFilters = (t) => ({
+type FilterChoice =
+    | "all"
+    | "tasks"
+    | "comments"
+    | "reactions"
+    | "pecking"
+    | "follow"
+
+type FilterValue = { display: string; types: Notification["type"][] }
+
+const makeFilters = (
+    t: TFunction<"translation", "notifications">,
+): Record<FilterChoice, FilterValue> => ({
     all: {
         display: t("type_all"),
         types: [

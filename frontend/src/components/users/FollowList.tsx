@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import ListUserProfile from "@components/users/ListUserProfile"
 
-import { type PaginationData } from "@api/client"
+import type { PaginationData } from "@api/common"
 import { getFollowersByUser, getFollowingsByUser } from "@api/social.api"
 import { type User } from "@api/users.api"
 
