@@ -22,7 +22,7 @@ class Announcement(Base):
     def __str__(self) -> str:
         return f"[{self.lang}] {self.title}"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "announcements"
 
 
@@ -37,7 +37,7 @@ class Heart(Base):
     def __str__(self) -> str:
         return f"{self.user} -> '{self.announcement}'"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "announcements_hearts"
 
         constraints = [

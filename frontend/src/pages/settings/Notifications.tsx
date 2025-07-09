@@ -9,7 +9,7 @@ import CheckboxGroup, {
 import Section, { Description, Name, Value } from "@components/settings/Section"
 
 import {
-    NotificationType,
+    type Notification,
     WebPushSubscription,
     deleteSubscription,
     getSubscription,
@@ -250,6 +250,6 @@ const makeAllowlistItems = (
         { name: "peck", display: t("values.peck") },
         { name: "reaction", display: t("values.reaction") },
         { name: "task_reminder", display: t("values.task_reminder") },
-    ] as { name: NotificationType; display: string }[]
+    ] as { name: Notification["type"]; display: string }[]
 
 export default Notifications

@@ -1,4 +1,4 @@
-FROM node:24-slim
+FROM node:lts-alpine
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -18,5 +18,5 @@ COPY . .
 ARG BUILD_DATE
 ENV VITE_BUILD_TIMESTAMP=${BUILD_DATE}
 
-SHELL ["/bin/bash", "-c"]
+SHELL ["/bin/sh", "-c"]
 ENTRYPOINT VITE_BUILD_TIMESTAMP=${VITE_BUILD_TIMESTAMP} pnpm build

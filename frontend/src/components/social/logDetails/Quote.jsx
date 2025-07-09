@@ -47,7 +47,7 @@ const Quote = ({ user, quote, saveQuote, displayProfile = true }) => {
 
     return (
         <Box>
-            {displayProfile && <SimpleProfile user={user} showUsername />}
+            {displayProfile && <SimpleProfile user={user} />}
 
             <Wrapper
                 onClick={handleInputState}

@@ -2,12 +2,6 @@ import { getClientTimezone } from "@utils/clientSettings"
 
 import axios, { type AxiosError } from "axios"
 
-export interface PaginationData<T> {
-    next: null | string
-    prev: null | string
-    results: T[]
-}
-
 const baseURL = import.meta.env.VITE_API_BASEURL
 
 export const getToken = () => {

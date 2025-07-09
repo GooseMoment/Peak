@@ -1,17 +1,17 @@
 from rest_framework import serializers
-
 from django.core.cache import cache
 
 from .models import Emoji, Quote, Reaction, Peck, Comment, Following, Block
 from projects.models import Project
-
 from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
 from drawers.serializers import DrawerSerializer
 
+from datetime import datetime
+
 
 class EmojiSerializer(serializers.ModelSerializer):
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Emoji
         fields = ["id", "name", "img"]
 
@@ -23,8 +23,11 @@ class DailyLogsSerializer(UserSerializer):
         fields = UserSerializer.Meta.fields + ["recent_task"]
 
     def get_recent_task(self, obj):
-        day_min = self.context.get("day_min", None)
-        day_max = self.context.get("day_max", None)
+        day_min: datetime | None = self.context.get("day_min", None)
+        day_max: datetime | None = self.context.get("day_max", None)
+
+        if day_min is None or day_max is None:
+            raise ValueError("context variables day_min or day_max is None")
 
         recent_task = (
             obj.tasks.filter(completed_at__range=(day_min, day_max))
@@ -71,7 +74,7 @@ class DailyLogsSerializer(UserSerializer):
 class QuoteSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Quote
         fields = ["id", "user", "content", "date"]
 
@@ -106,7 +109,7 @@ class ReactionSerializer(serializers.ModelSerializer):
     task = TaskSerializer()
     quote = QuoteSerializer()
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Reaction
         fields = ["id", "user", "parent_type", "task", "quote", "emoji"]
 
@@ -115,7 +118,7 @@ class PeckSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     task = TaskSerializer()
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Peck
         fields = ["id", "user", "task", "count"]
 
@@ -125,7 +128,7 @@ class CommentSerializer(serializers.ModelSerializer):
     task = TaskSerializer()
     quote = QuoteSerializer()
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Comment
         fields = ["id", "user", "parent_type", "task", "quote", "created_at", "comment"]
 
@@ -134,7 +137,7 @@ class FollowingSerializer(serializers.ModelSerializer):
     follower = UserSerializer(many=False, read_only=True)
     followee = UserSerializer(many=False, read_only=True)
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Following
         fields = [
             "follower",
@@ -150,6 +153,6 @@ class BlockSerializer(serializers.ModelSerializer):
     blocker = UserSerializer(many=False, read_only=True)
     blockee = UserSerializer(many=False, read_only=True)
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Block
         fields = ["blocker", "blockee", "deleted_at"]

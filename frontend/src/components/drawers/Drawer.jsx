@@ -1,4 +1,12 @@
-import { Suspense, lazy, useEffect, useMemo, useState } from "react"
+import {
+    Suspense,
+    lazy,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
@@ -19,15 +27,14 @@ import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 import DrawerTask from "@components/tasks/DrawerTask"
 
 import { deleteDrawer } from "@api/drawers.api"
-import { patchDrawer } from "@api/drawers.api"
-import { getTasksByDrawer } from "@api/tasks.api"
+import { getTasksByDrawer, patchReorderTask } from "@api/tasks.api"
 
 import { getPageFromURL } from "@utils/pagination"
 
 import queryClient from "@queries/queryClient"
 
-import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 import FeatherIcon from "feather-icons-react"
+import { useDrag, useDrop } from "react-dnd"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -35,14 +42,16 @@ const TaskCreateElement = lazy(
     () => import("@components/project/taskDetails/TaskCreateElement"),
 )
 
-const Drawer = ({ project, drawer, color }) => {
+const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
     const [collapsed, setCollapsed] = useState(false)
-    const [ordering, setOrdering] = useState(null)
+    const [ordering, setOrdering] = useState("order")
     const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
     const [isDrawerEditOpen, setIsDrawerEditOpen] = useState(false)
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
     const [isCreateOpen, setCreateOpen] = useState(false)
+
+    const [tasks, setTasks] = useState([])
 
     const { t } = useTranslation("translation", { keyPrefix: "project" })
 
@@ -65,52 +74,94 @@ const Drawer = ({ project, drawer, color }) => {
 
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
 
-    const patchMutation = useMutation({
-        mutationFn: (data) => {
-            return patchDrawer(drawer.id, data)
+    /// Drawer Drag and Drop
+    const ref = useRef(null)
+
+    const [{ handlerId }, drop] = useDrop({
+        accept: "Drawer",
+        collect(monitor) {
+            return {
+                handlerId: monitor.getHandlerId(),
+            }
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: drawer.id }],
-            })
+        hover: (item, monitor) => {
+            if (!ref.current) return
+
+            const dragOrder = item.order
+            const hoverOrder = drawer.order
+
+            if (dragOrder === hoverOrder) return
+
+            const hoverBoundingRect = ref.current.getBoundingClientRect()
+            const hoverMiddleY =
+                (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+            const clientOffset = monitor.getClientOffset()
+            const hoverClientY = clientOffset.y - hoverBoundingRect.top
+
+            if (dragOrder < hoverOrder && hoverClientY < hoverMiddleY) return
+            if (dragOrder > hoverOrder && hoverClientY > hoverMiddleY) return
+
+            moveDrawer(dragOrder, hoverOrder)
+
+            item.order = hoverOrder
+        },
+        drop: (item) => {
+            dropDrawer()
+            item.order = drawer.order
         },
     })
 
-    const onDrop = ({ location, source }) => {
-        const targetData = location.current.dropTargets[0]?.data
-        const draggedOrder = source?.data.order
+    const [{ isDragging }, drag] = useDrag({
+        type: "Drawer",
+        item: () => {
+            return { id: drawer.id, order: drawer.order }
+        },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    })
 
-        if (targetData === undefined || draggedOrder === undefined) {
-            return
-        }
+    drag(drop(ref))
+    /// ---
 
-        const targetOrder = targetData?.order
-        const symbolProperties = Object.getOwnPropertySymbols(targetData)
-        const closestEdge = targetData[symbolProperties[0]]
-        const taskID = source?.data.id
-
-        if (typeof targetOrder !== "number" || draggedOrder === targetOrder) {
-            return
-        }
-
-        patchMutation.mutate({
-            task_id: taskID,
-            dragged_order: draggedOrder,
-            target_order: targetOrder,
-            closest_edge: closestEdge,
-        })
-        setOrdering(null)
-    }
-
+    // Task Drag and Drop
     useEffect(() => {
-        const cleanupMonitor = monitorForElements({
-            onDrop: onDrop,
-        })
+        if (!data) return
+        const results = data?.pages?.flatMap((page) => page.results ?? []) || []
+        setTasks(results)
+    }, [data])
 
-        return () => {
-            cleanupMonitor()
-        }
+    const patchMutation = useMutation({
+        mutationFn: (data) => {
+            return patchReorderTask(data)
+        },
+    })
+
+    const moveTask = useCallback((dragIndex, hoverIndex) => {
+        setTasks((prevTasks) => {
+            const updatedTasks = [...prevTasks]
+            const [moved] = updatedTasks.splice(dragIndex, 1)
+            updatedTasks.splice(hoverIndex, 0, moved)
+            return updatedTasks
+        })
     }, [])
+
+    const dropTask = useCallback(async () => {
+        const results = data?.pages?.flatMap((page) => page.results) || []
+        const changedTasks = tasks
+            .map((task, index) => ({ id: task.id, order: index }))
+            .filter((task, index) => results[index]?.id !== task.id)
+
+        if (changedTasks.length === 0) return
+
+        await patchMutation.mutateAsync(changedTasks)
+
+        await queryClient.refetchQueries({
+            queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
+        })
+        setOrdering("order")
+    }, [tasks, data])
+    // ---
 
     const deleteMutation = useMutation({
         mutationFn: () => {
@@ -160,7 +211,11 @@ const Drawer = ({ project, drawer, color }) => {
 
     return (
         <>
-            <DrawerBox $color={color}>
+            <DrawerBox
+                ref={ref}
+                data-handler-id={handlerId}
+                $color={color}
+                $isDragging={isDragging}>
                 <DrawerTitleBox>
                     <DrawerName $color={color}>{drawer.name}</DrawerName>
                     <PrivacyIcon privacy={drawer.privacy} color={color} />
@@ -181,17 +236,18 @@ const Drawer = ({ project, drawer, color }) => {
             {collapsed ? null : isLoading ? (
                 <SkeletonTasks taskCount={taskCount} />
             ) : (
-                <TaskList>
-                    {data?.pages?.map((group) =>
-                        group?.results?.map((task) => (
-                            <DrawerTask
-                                key={task.id}
-                                task={task}
-                                color={color}
-                                projectType={project.type}
-                            />
-                        )),
-                    )}
+                <TaskList $isDragging={isDragging}>
+                    {tasks?.map((task) => (
+                        <DrawerTask
+                            key={task.id}
+                            task={task}
+                            color={color}
+                            projectType={project.type}
+                            moveTask={moveTask}
+                            dropTask={dropTask}
+                            isPending={patchMutation.isPending}
+                        />
+                    ))}
                 </TaskList>
             )}
             <>
@@ -272,6 +328,7 @@ const DrawerTitleBox = styled.div`
 
 const TaskList = styled.div`
     margin-top: 1em;
+    opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
 `
 
 const MoreButton = styled(Button)`
@@ -280,6 +337,7 @@ const MoreButton = styled(Button)`
 `
 
 const makeSortMenuItems = (t) => [
+    { display: t("sort.my"), context: "order" },
     { display: t("sort.-priority"), context: "-priority" },
     { display: t("sort.due_date"), context: "due_date" },
     {

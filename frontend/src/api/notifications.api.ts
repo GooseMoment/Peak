@@ -1,4 +1,7 @@
 import client from "@api/client"
+import type { Base, PaginationData } from "@api/common"
+import type { Comment, Following, Peck, Reaction } from "@api/social"
+import { type User } from "@api/users.api"
 
 import {
     getClientSettings,
@@ -6,9 +9,16 @@ import {
 } from "@utils/clientSettings"
 import getDeviceType from "@utils/getDeviceType"
 
-// TODO: Define TaskReminder properly
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type TaskReminder = any
+export interface TaskReminder extends Base {
+    // TODO: replace any with Task
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    task: any
+    delta: number
+    scheduled: string
+    task_name: string
+    project_color: string
+    project_id: string
+}
 
 export const getReminder = async (id: string) => {
     const res = await client.get(`notifications/reminders/${id}/`)
@@ -33,43 +43,79 @@ export const deleteReminder = async (id: string) => {
     return res.data
 }
 
-export type NotificationType =
-    | "task_reminder"
-    | "reaction"
-    | "follow"
-    | "follow_request"
-    | "follow_request_accepted"
-    | "comment"
-    | "peck"
-
-export interface Notification {
-    // TODO: Replace user after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    user: any
-    type: NotificationType
+export interface NotificationTaskReminder extends Base {
+    user: User
+    type: "task_reminder"
     task_reminder: TaskReminder
-    // TODO: Replace reaction after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    reaction?: any
-    // TODO: Replace following after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    following?: any
-    // TODO: Replace peck after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    peck?: any
-    // TODO: Replace comment after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    comment?: any
 }
+
+export interface NotificationReaction extends Base {
+    user: User
+    type: "reaction"
+    reaction: Reaction
+}
+
+export interface NotificationFollowing extends Base {
+    user: User
+    type: "follow" | "follow_request" | "follow_request_accepted"
+    following: Following
+}
+
+export interface NotificationPeck extends Base {
+    user: User
+    type: "peck"
+    peck: Peck
+}
+
+export interface NotificationComment extends Base {
+    user: User
+    type: "comment"
+    comment: Comment
+}
+
+export type Notification =
+    | NotificationTaskReminder
+    | NotificationReaction
+    | NotificationFollowing
+    | NotificationPeck
+    | NotificationComment
 
 export const getNotifications = async (
     cursor: string,
-    types: NotificationType[],
+    types: Notification["type"][],
 ) => {
-    const res = await client.get<Notification>(`notifications/`, {
-        params: { cursor, types: types.join("|") },
-    })
+    const res = await client.get<PaginationData<Notification>>(
+        `notifications/`,
+        {
+            params: { cursor, types: types.join("|") },
+        },
+    )
     return res.data
+}
+
+export const hasRelatedUser = (notification: Notification) => {
+    return (
+        notification.type === "reaction" ||
+        notification.type === "peck" ||
+        notification.type === "comment" ||
+        notification.type === "follow" ||
+        notification.type === "follow_request" ||
+        notification.type === "follow_request_accepted"
+    )
+}
+
+export const getRelatedUserFromNotification = (notification: Notification) => {
+    return (
+        (notification.type === "reaction" && notification.reaction.user) ||
+        (notification.type === "peck" && notification.peck.user) ||
+        (notification.type === "comment" && notification.comment.user) ||
+        (notification.type === "follow" && notification.following?.follower) ||
+        (notification.type === "follow_request" &&
+            notification.following?.follower) ||
+        (notification.type === "follow_request_accepted" &&
+            notification?.following?.followee) ||
+        undefined
+    )
 }
 
 export interface WebPushSubscription {
@@ -80,7 +126,7 @@ export interface WebPushSubscription {
     device: string
     user_agent: (typeof navigator)["userAgent"]
     fail_cnt: number
-    excluded_types: NotificationType[]
+    excluded_types: Notification["type"][]
 }
 
 export const getSubscription = async (id: string) => {

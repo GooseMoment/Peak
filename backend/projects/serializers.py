@@ -14,7 +14,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     completed_task_count = serializers.SerializerMethodField()
     uncompleted_task_count = serializers.SerializerMethodField()
 
-    def get_completed_task_count(self, obj):
+    def get_completed_task_count(self, obj: Project):
         completed_task_count = 0
 
         for drawer in obj.drawers.all():
@@ -22,7 +22,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
         return completed_task_count
 
-    def get_uncompleted_task_count(self, obj):
+    def get_uncompleted_task_count(self, obj: Project):
         uncompleted_task_count = 0
 
         for drawer in obj.drawers.all():
@@ -30,7 +30,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
         return uncompleted_task_count
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Project
         fields = [
             "id",
@@ -50,6 +50,6 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializerForUserProjectList(serializers.ModelSerializer):
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Project
         exclude = ()

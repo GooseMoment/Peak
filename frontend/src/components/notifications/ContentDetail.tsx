@@ -2,52 +2,51 @@ import { Link } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 
+import { type Notification } from "@api/notifications.api"
+import type { Quote } from "@api/social"
+
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 import { ifMobile } from "@utils/useScreenType"
 
 import { skeletonCSS } from "@assets/skeleton"
 
-import { DateTime } from "luxon"
+import { DateTime, type Zone } from "luxon"
 import { useTranslation } from "react-i18next"
 
-const ContentDetail = ({ type, payload, actionUser, skeleton }) => {
-    const { t } = useTranslation(null, { keyPrefix: "notifications" })
+const ContentDetail = ({ notification: n }: { notification: Notification }) => {
+    const { t } = useTranslation("translation", { keyPrefix: "notifications" })
     const locale = useClientLocale()
     const tz = useClientTimezone()
 
-    if (skeleton) {
-        return <DetailBox $skeleton />
-    }
-
-    switch (type) {
+    switch (n.type) {
         case "task_reminder":
-            if (payload.delta === 0) {
+            if (n.task_reminder.delta === 0) {
                 return <DetailBox>{t("content_task_reminder_now")}</DetailBox>
             }
 
             return (
                 <DetailBox>
                     {t("content_task_reminder", {
-                        delta: payload?.delta,
+                        delta: n.task_reminder.delta,
                     })}
                 </DetailBox>
             )
         case "comment":
-            if (payload.parent_type === "task") {
+            if (n.comment.parent_type === "task") {
                 return (
                     <DetailBox>
                         <DetailLink to="/app/social/following">
-                            <UserContent>{payload.comment}</UserContent>
+                            <UserContent>{n.comment.comment}</UserContent>
                         </DetailLink>
-                        <DetailLink to={getPathToTaskDetail(payload.task)}>
+                        <DetailLink to={getPathToTaskDetail(n.comment.task)}>
                             RE:
-                            <ParentContent>{payload.task.name}</ParentContent>
+                            <ParentContent>{n.comment.task.name}</ParentContent>
                         </DetailLink>
                     </DetailBox>
                 )
             } else {
                 const displayDate = getDisplayDateFromQuote(
-                    payload?.quote,
+                    n.comment.quote,
                     locale,
                     tz,
                 )
@@ -55,7 +54,7 @@ const ContentDetail = ({ type, payload, actionUser, skeleton }) => {
                 return (
                     <DetailBox>
                         <DetailLink to="/app/social/following">
-                            <UserContent>{payload.comment}</UserContent>
+                            <UserContent>{n.comment.comment}</UserContent>
                         </DetailLink>
                         <DetailLink to="/app/social/following">
                             RE:{" "}
@@ -67,18 +66,19 @@ const ContentDetail = ({ type, payload, actionUser, skeleton }) => {
                 )
             }
         case "reaction":
-            if (payload.parent_type === "task") {
+            if (n.reaction.parent_type === "task") {
                 return (
                     <DetailBox>
-                        <DetailLink to={getPathToTaskDetail(payload.task)}>
-                            <ParentContent>{payload.task.name}</ParentContent>
+                        <DetailLink to={getPathToTaskDetail(n.reaction.task)}>
+                            <ParentContent>
+                                {n.reaction.task.name}
+                            </ParentContent>
                         </DetailLink>
                     </DetailBox>
                 )
             } else {
-                // TODO: change to payload?.quote
                 const displayDate = getDisplayDateFromQuote(
-                    payload?.quote,
+                    n.reaction.quote,
                     locale,
                     tz,
                 )
@@ -97,11 +97,11 @@ const ContentDetail = ({ type, payload, actionUser, skeleton }) => {
             return (
                 <DetailBox>
                     <DetailLink to="/app/social/following">
-                        {t("content_peck", { count: payload.count })}
+                        {t("content_peck", { count: n.peck.count })}
                     </DetailLink>
-                    <DetailLink to={getPathToTaskDetail(payload.task)}>
+                    <DetailLink to={getPathToTaskDetail(n.peck.task)}>
                         RE:
-                        <ParentContent>{payload.task.name}</ParentContent>
+                        <ParentContent>{n.peck.task.name}</ParentContent>
                     </DetailLink>
                 </DetailBox>
             )
@@ -111,7 +111,8 @@ const ContentDetail = ({ type, payload, actionUser, skeleton }) => {
         case "follow_request":
             return (
                 <DetailBox>
-                    <DetailLink to={`/app/users/@${actionUser.username}`}>
+                    <DetailLink
+                        to={`/app/users/@${n.following.follower.username}`}>
                         {t("content_follow_request")}
                     </DetailLink>
                 </DetailBox>
@@ -124,7 +125,15 @@ const ContentDetail = ({ type, payload, actionUser, skeleton }) => {
     return null
 }
 
-const getDisplayDateFromQuote = (quote, locale, tz) => {
+export const ContentDetailSkeleton = () => {
+    return <DetailBox $skeleton />
+}
+
+const getDisplayDateFromQuote = (
+    quote: Quote,
+    locale: string,
+    tz: string | Zone,
+) => {
     const date = DateTime.fromISO(quote.date).setLocale(locale).setZone(tz)
 
     const diffNow = date.diffNow(["days"])
@@ -133,7 +142,9 @@ const getDisplayDateFromQuote = (quote, locale, tz) => {
     return Math.abs(diffNow.days) > 7 ? date.toLocaleString() : relativeDate
 }
 
-const getPathToTaskDetail = (task) => {
+// TODO: replace any with Task
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getPathToTaskDetail = (task: any) => {
     return `/app/projects/${task.project_id}`
 }
 
@@ -144,7 +155,7 @@ const ellipsis = css`
     min-width: 0;
 `
 
-const DetailBox = styled.div`
+const DetailBox = styled.div<{ $skeleton?: boolean }>`
     display: flex;
     flex-direction: column;
     gap: 1em;
@@ -158,7 +169,7 @@ const DetailBox = styled.div`
         css`
             width: 140px;
             height: 1em;
-            ${skeletonCSS}
+            ${skeletonCSS()}
         `}
 `
 

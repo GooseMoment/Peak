@@ -53,7 +53,7 @@ class HOTP:
         query = {
             "secret": self._secret_b32,
             "algorithm": self._algorithm.upper(),
-            "digits": self._digits,
+            "digits": str(self._digits),
         }
 
         if issuer is not None:
@@ -64,7 +64,7 @@ class HOTP:
     # https://github.com/google/google-authenticator/wiki/Key-Uri-Format
     # https://docs.yubico.com/yesdk/users-manual/application-oath/uri-string-format.html
     # account and issuer MUST not include any colons.
-    def get_uri(self, account: str, issuer=None):
+    def get_uri(self, account: str, issuer: str | None = None):
         label = account
         if issuer is not None:
             label = issuer + ":" + account
@@ -92,7 +92,7 @@ class TOTP(HOTP):
         return self.hotp(counter)
 
     def totp_with_offsets(self) -> list[str]:
-        codes = []
+        codes: list[str] = []
         t = self.get_timestamp()
 
         for offset in range(self.offset_start, self.offset_end):
@@ -103,5 +103,5 @@ class TOTP(HOTP):
 
     def get_uri_query(self, issuer=None):
         query = super().get_uri_query(issuer)
-        query["period"] = self._period
+        query["period"] = str(self._period)
         return query

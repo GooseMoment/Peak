@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 
 import styled, {
     type LightDark,
@@ -17,7 +17,7 @@ import { cubicBeizer } from "@assets/keyframes"
 import { getPaletteColor } from "@assets/palettes"
 import themes from "@assets/themes"
 
-import { TFunction } from "i18next"
+import { type TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const DemoTheme = () => {
@@ -34,7 +34,7 @@ const DemoTheme = () => {
         <SubSection>
             <FilterButtonGroup
                 active={activeTheme}
-                setActive={setActiveTheme as Dispatch<SetStateAction<string>>}
+                setActive={setActiveTheme}
                 filters={filters}
             />
             <Wrapper>

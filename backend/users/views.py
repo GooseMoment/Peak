@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 
 from .models import User
 from .serializers import UserSerializer
+from api.request import AuthenticatedRequest
 
 
 class UserDetail(
@@ -20,12 +21,12 @@ class UserDetail(
     def get(self, request: Request, username: str, *args, **kwargs):
         instance = self.get_object()
         serializer = UserSerializer(
-            instance, context={"is_me": request.user.username == username}
+            instance, context={"is_me": request.user.get_username() == username}
         )
         return Response(serializer.data)
 
     def patch(self, request: Request, username: str, *args, **kwargs):
-        if request.user.username != username:
+        if request.user.get_username() != username:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         return self.partial_update(request, *args, **kwargs)
@@ -68,8 +69,8 @@ def patch_password(request: Request):
 
 
 @api_view(["POST"])
-def upload_profile_img(request: Request):
-    profile_img = request.FILES.get(
+def upload_profile_img(request: AuthenticatedRequest):
+    uploaded = request.FILES.get(
         "profile_img", None
     )  # None: only removes old profile_img
 
@@ -77,7 +78,7 @@ def upload_profile_img(request: Request):
     if old:
         old.delete()
 
-    request.user.profile_img = profile_img
-    request.user.save()
+    if uploaded is not None:
+        request.user.profile_img.save(uploaded.name, uploaded)
 
     return Response(status=status.HTTP_200_OK)
