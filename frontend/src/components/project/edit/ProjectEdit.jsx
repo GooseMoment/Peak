@@ -40,6 +40,7 @@ const ProjectEdit = ({ project, isCreating = false }) => {
         isCreating ? projectDefault : project,
     )
     const inputRef = useRef(null)
+    const hasCreated = useRef(false)
 
     const mutation = useMutation({
         mutationFn: (data) => {
@@ -66,6 +67,7 @@ const ProjectEdit = ({ project, isCreating = false }) => {
         },
         onError: () => {
             if (isCreating) {
+                hasCreated.current = false
                 toast.error(t("created_project_error"))
                 return
             }
@@ -83,6 +85,14 @@ const ProjectEdit = ({ project, isCreating = false }) => {
     }
 
     const submit = () => {
+        if (mutation.isPending || hasCreated.current) {
+            return
+        }
+
+        if (isCreating) {
+            hasCreated.current = true
+        }
+
         if (newProject.name.trim() === "") {
             toast.error(t("name_required"))
             inputRef.current.focus()
@@ -100,13 +110,15 @@ const ProjectEdit = ({ project, isCreating = false }) => {
 
     const onEnter = (e) => {
         if (e.repeat) {
+            e.preventDefault()
             return
         }
 
-        if (e.key === "Enter") {
-            e.preventDefault()
-            submit()
+        if (e.key !== "Enter") {
+            return
         }
+
+        submit()
     }
 
     const items = useMemo(
