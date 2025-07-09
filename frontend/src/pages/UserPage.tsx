@@ -11,7 +11,7 @@ import UserProfileHeader from "@components/users/UserProfileHeader"
 
 import { getCurrentUsername } from "@api/client"
 import { getProjectListByUser } from "@api/projects.api"
-import { getBlock, getFollow } from "@api/social.api"
+import { getBlock, getFollowing } from "@api/social.api"
 import { getUserByUsername } from "@api/users.api"
 
 import { useTranslation } from "react-i18next"
@@ -33,7 +33,7 @@ const UserPage = () => {
 
     const followingQuery = useQuery({
         queryKey: ["followings", username, currentUsername],
-        queryFn: () => getFollow(username, currentUsername!),
+        queryFn: () => getFollowing(username, currentUsername!),
         enabled: currentUsername !== username,
     })
 

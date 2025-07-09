@@ -74,7 +74,7 @@ export interface Block {
     deleted_at: string
 }
 
-export const getFollow = async (
+export const getFollowing = async (
     followerUsername: string,
     followeeUsername: string,
 ) => {

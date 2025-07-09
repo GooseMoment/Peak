@@ -8,7 +8,7 @@ import Confirmation from "@components/common/Confirmation"
 import { getCurrentUsername } from "@api/client"
 import {
     deleteFollowRequest,
-    getFollow,
+    getFollowing,
     putFollowRequest,
 } from "@api/social.api"
 import { type User } from "@api/users.api"
@@ -32,7 +32,7 @@ const FollowButton = ({ user, disabled = false }: FollowButtonProp) => {
 
     const { data: following, isLoading: fetchFollowLoading } = useQuery({
         queryKey: ["followings", currentUsername, user.username],
-        queryFn: () => getFollow(currentUsername!, user.username),
+        queryFn: () => getFollowing(currentUsername!, user.username),
     })
 
     const putMutation = useMutation({
