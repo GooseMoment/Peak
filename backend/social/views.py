@@ -1,10 +1,9 @@
-from rest_framework import status, mixins, generics
+from rest_framework import status, mixins, generics, permissions as default_permissions
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination, CursorPagination
-from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import NotFound
 
 from django.shortcuts import get_object_or_404
@@ -12,6 +11,7 @@ from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.db.models import Q, F
+from django.db.models.query import QuerySet
 from django.db.utils import IntegrityError
 from django.utils import timezone
 
@@ -209,7 +209,7 @@ class FollowView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class GenericUserList(mixins.ListModelMixin, generics.GenericAPIView):
+class GenericUserList(generics.ListAPIView):
     serializer_class = UserSerializer
     lookup_field = "username"
     permission_classes = [permissions.IsUserNotBlockedOrBlocking]
@@ -227,12 +227,12 @@ class GenericUserList(mixins.ListModelMixin, generics.GenericAPIView):
         raise NotImplementedError()
 
     def get_queryset(self):
-        username = self.check_user_exists()
-        followings = self.get_user_ids(username)
-        return User.objects.filter(id__in=followings).all()
+        return User.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+    def filter_queryset(self, queryset: "QuerySet[User]"):
+        username = self.check_user_exists()
+        user_ids = self.get_user_ids(username)
+        return queryset.filter(id__in=user_ids).all()
 
 
 class FollowingList(GenericUserList):
@@ -271,36 +271,49 @@ class FollowRequesterList(GenericUserList):
 
 
 ## Block
+class BlockPermission(default_permissions.IsAuthenticated):
+    # allow only blocker to see their own blocks
+    def has_permission(self, request: Request, view):
+        blocker_username: str = view.kwargs["blocker_username"]
+
+        return (
+            super().has_permission(request, view)
+            and request.user.get_username() == blocker_username
+        )
+
+
 class BlockView(APIView):
-    # TODO 상대 볼 수 없게/
-    def put(self, request, blocker, blockee):
-        blockerUser = get_object_or_404(User, username=blocker)
-        blockeeUser = get_object_or_404(User, username=blockee)
+    permission_classes = (BlockPermission,)
+
+    def put(self, request, blocker_username: str, blockee_username: str):
+        blocker = get_object_or_404(User, username=blocker_username)
+        blockee = get_object_or_404(User, username=blockee_username)
 
         try:
-            created = Block.objects.create(blocker=blockerUser, blockee=blockeeUser)
+            block = Block.objects.create(blocker=blocker, blockee=blockee)
         except IntegrityError:
             return Response(status=status.HTTP_208_ALREADY_REPORTED)
 
-        serializer = BlockSerializer(created)
-
+        serializer = BlockSerializer(block)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def get(self, request, blocker, blockee):
-        blocking = get_object_or_404(
-            Block, blocker__username=blocker, blockee__username=blockee
+    def get(self, request, blocker_username: str, blockee_username: str):
+        block = get_object_or_404(
+            Block,
+            blocker__username=blocker_username,
+            blockee__username=blockee_username,
         )
 
-        serializer = BlockSerializer(blocking)
-
+        serializer = BlockSerializer(block)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def delete(self, request, blocker, blockee):
-        blocking = get_object_or_404(
-            Block, blocker__username=blocker, blockee__username=blockee
+    def delete(self, request, blocker_username: str, blockee_username: str):
+        block = get_object_or_404(
+            Block,
+            blocker__username=blocker_username,
+            blockee__username=blockee_username,
         )
-        # soft delete
-        blocking.delete()
+        block.delete()
 
         return Response(status=status.HTTP_200_OK)
 
@@ -765,7 +778,7 @@ class EmojiList(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = EmojiSerializer
     pagination_class = EmojiListPagination
 
-    permission_classes = (AllowAny,)
+    permission_classes = (default_permissions.AllowAny,)
 
     @method_decorator(cache_page(60 * 30))  # caching for 30 minutes
     def get(self, request, *args, **kwargs):

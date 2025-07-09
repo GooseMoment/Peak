@@ -8,7 +8,10 @@ urlpatterns = [
     path("explore/search/", views.ExploreSearchView.as_view()),
     path("explore/", views.ExploreFeedView.as_view()),
     path("followings/@<str:follower>/@<str:followee>/", views.FollowView.as_view()),
-    path("blocks/@<str:blocker>/@<str:blockee>/", views.BlockView.as_view()),
+    path(
+        "blocks/@<str:blocker_username>/@<str:blockee_username>/",
+        views.BlockView.as_view(),
+    ),
     path("daily/logs/@<str:username>/<str:day>/", views.get_daily_logs),
     path(
         "daily/log/details/@<str:followee>/<str:day>/",
