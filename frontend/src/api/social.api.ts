@@ -80,7 +80,7 @@ export const getFollow = async (
 ) => {
     try {
         const res = await client.get<Following>(
-            `social/follow/@${followerUsername}/@${followeeUsername}/`,
+            `social/followings/@${followerUsername}/@${followeeUsername}/`,
         )
         return res.data
     } catch (e) {
@@ -98,7 +98,7 @@ export const putFollowRequest = async (username: string) => {
     const followee = username
 
     const res = await client.put<Following>(
-        `social/follow/@${follower}/@${followee}/`,
+        `social/followings/@${follower}/@${followee}/`,
     )
 
     if (res.status === 208) {
@@ -115,7 +115,7 @@ export const patchFollowRequest = async (username: string, accept: boolean) => {
     const followee = getCurrentUsername()
 
     const res = await client.patch<Following>(
-        `social/follow/@${follower}/@${followee}/`,
+        `social/followings/@${follower}/@${followee}/`,
         {
             status: accept ? "accepted" : "rejected",
         },
@@ -131,7 +131,7 @@ export const deleteFollowRequest = async (username: string) => {
     const followee = username
 
     const res = await client.delete<Following>( // DELETE Following does not delete the row but insert `deleted_at`
-        `social/follow/@${follower}/@${followee}/`,
+        `social/followings/@${follower}/@${followee}/`,
     )
 
     return res.data
@@ -172,7 +172,7 @@ export const getRequestersByUser = async (username: string, page: string) => {
 export const getBlock = async (username: string) => {
     try {
         const res = await client.get<Block>(
-            `social/block/@${getCurrentUsername()}/@${username}/`,
+            `social/blocks/@${getCurrentUsername()}/@${username}/`,
         )
         return res.data
     } catch (e) {
@@ -186,14 +186,14 @@ export const getBlock = async (username: string) => {
 
 export const putBlock = async (username: string) => {
     const res = await client.put<Block>(
-        `social/block/@${getCurrentUsername()}/@${username}/`,
+        `social/blocks/@${getCurrentUsername()}/@${username}/`,
     )
     return res.data
 }
 
 export const deleteBlock = async (username: string) => {
     const res = await client.delete(
-        `social/block/@${getCurrentUsername()}/@${username}/`,
+        `social/blocks/@${getCurrentUsername()}/@${username}/`,
     )
     return res.data
 }
@@ -237,15 +237,13 @@ export const getExploreFound = async (query: string, cursor: string) => {
 }
 
 export const getQuote = async (username: string, day: string) => {
-    const res = await client.get<Quote>(
-        `social/daily/quote/@${username}/${day}/`,
-    )
+    const res = await client.get<Quote>(`social/quotes/@${username}/${day}/`)
 
     return res.data
 }
 
 export const postQuote = async (date: string, content: string) => {
-    const res = await client.post<Quote>(`social/daily/quote/${date}/`, {
+    const res = await client.post<Quote>(`social/quotes/${date}/`, {
         content,
     })
 
@@ -263,7 +261,7 @@ export const getReactions = async (
     parentID: string, // TODO: replace string with Task["id"] | Quote["id"]
 ) => {
     const res = await client.get<PaginationData<Reaction>>(
-        `social/reaction/${parentType}/${parentID}/`,
+        `social/reactions/${parentType}/${parentID}/`,
     )
 
     return res.data
@@ -275,7 +273,7 @@ export const postReaction = async (
     emoji: Emoji["name"], // TODO: replace Emoji["name"] with Emoji
 ) => {
     const res = await client.post<Reaction>(
-        `social/reaction/${parentType}/${parentID}/`,
+        `social/reactions/${parentType}/${parentID}/`,
         {
             emoji: emoji,
         },
@@ -292,7 +290,7 @@ export const deleteReaction = async (
     const params = new URLSearchParams({ emoji: emoji })
 
     const res = await client.delete(
-        `social/reaction/${parentType}/${parentID}/`,
+        `social/reactions/${parentType}/${parentID}/`,
         { params },
     )
 
@@ -300,13 +298,13 @@ export const deleteReaction = async (
 }
 
 export const getPeck = async (taskID: string) => {
-    const res = await client.get<Peck>(`social/peck/${taskID}/`)
+    const res = await client.get<Peck>(`social/pecks/${taskID}/`)
 
     return res.data
 }
 
 export const postPeck = async (taskID: string) => {
-    const res = await client.post<Peck>(`social/peck/${taskID}/`)
+    const res = await client.post<Peck>(`social/pecks/${taskID}/`)
 
     return res.data
 }
@@ -316,7 +314,7 @@ export const getComment = async (
     parentID: string,
 ) => {
     const res = await client.get<Comment[]>(
-        `social/comment/${parentType}/${parentID}/`,
+        `social/comments/${parentType}/${parentID}/`,
     ) // TODO: use pagination
 
     return res.data
@@ -328,7 +326,7 @@ export const postComment = async (
     content: string,
 ) => {
     const res = await client.post<Comment>(
-        `social/comment/${parentType}/${parentID}/`,
+        `social/comments/${parentType}/${parentID}/`,
         {
             comment: content,
         },
@@ -344,7 +342,7 @@ export const patchComment = async (
     content: string,
 ) => {
     const res = await client.patch<Comment>(
-        `social/comment/${parentType}/${parentID}/`,
+        `social/comments/${parentType}/${parentID}/`,
         {
             id: commentID,
             comment: content,
@@ -359,7 +357,7 @@ export const deleteComment = async (
     commentID: Comment["id"],
 ) => {
     const res = await client.delete(
-        `social/comment/${parentType}/${parentID}/`,
+        `social/comments/${parentType}/${parentID}/`,
         {
             data: { id: commentID },
         },
