@@ -1,6 +1,6 @@
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 
 from users.models import User
 from .models import Block, Following
@@ -155,69 +155,88 @@ class FollowingTest(APITestCase):
         # fail to DELETE a Following whose followee is me
         self.delete_forbidden(self.alpha.username, self.gamma.username)
 
-    def test_follow_follower(self):
+    def test_following_flow(self):
         self.create_temp_users()
 
-        self.client.force_authenticate(user=self.alpha)
+        alpha_client = APIClient()
+        alpha_client.force_authenticate(user=self.alpha)
+
+        beta_client = APIClient()
+        beta_client.force_authenticate(user=self.beta)
+
         path = self.reverse(
             self.alpha.username,
             self.beta.username,
         )
 
         # missing follow
-        res = self.client.get(path)
+        res = alpha_client.get(path)
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
 
         # attempt to delete when a following does not exist
-        res = self.client.delete(path)
+        res = alpha_client.delete(path)
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
 
         # send follow request
-        res = self.client.put(path)
+        res = alpha_client.put(path)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(
+            Following.objects.filter(
+                follower=self.alpha, followee=self.beta, status=Following.REQUESTED
+            ).exists()
+        )
 
         # duplicate request
-        res = self.client.put(path)
+        res = alpha_client.put(path)
         self.assertEqual(res.status_code, status.HTTP_208_ALREADY_REPORTED)
 
-        # check follow
-        res = self.client.get(path)
+        # alpha checks if the following exists
+        res = alpha_client.get(path)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(cast(dict, res.data)["status"], Following.REQUESTED)
 
-        # cancel follow
-        res = self.client.delete(path)
+        # beta checks if the following exists
+        res = beta_client.get(path)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(cast(dict, res.data)["status"], Following.REQUESTED)
+
+        # alpha cancels the follow request
+        res = alpha_client.delete(path)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(
+            Following.objects.filter(
+                follower=self.alpha, followee=self.beta, status=Following.CANCELED
+            ).exists()
+        )
 
         # cancel follow (second time)
-        res = self.client.delete(path)
+        res = alpha_client.delete(path)
         self.assertEqual(
             res.status_code,
             status.HTTP_208_ALREADY_REPORTED,
             "Expected 208 for canceling follow twice.",
         )
 
-    def test_follow_followee(self):
-        self.create_temp_users()
+        # 0. alpha sends follow request again and beta rejects it
+        # 1. alpha sends follow request again(2) and beta accepts it
+        for following_status in (Following.REJECTED, Following.ACCEPTED):
+            alpha_client.put(path)
+            beta_client.patch(path, data={"status": following_status})
+            self.assertEqual(res.status_code, status.HTTP_200_OK)
+            self.assertTrue(
+                Following.objects.filter(
+                    follower=self.alpha, followee=self.beta, status=following_status
+                ).exists()
+            )
 
-        path_beta = self.reverse(
-            self.beta.username,
-            self.alpha.username,
-        )
-        path_gamma = self.reverse(
-            self.gamma.username,
-            self.alpha.username,
-        )
-
-        # send follow request of beta
-        self.client.force_authenticate(user=self.beta)
-        res = self.client.put(path_beta)
+        res = beta_client.get(path)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-        # send follow request of gamma
-        self.client.force_authenticate(user=self.gamma)
-        res = self.client.put(path_gamma)
+        # alpha cancels the following
+        res = alpha_client.delete(path)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-
-        #
-        self.client.force_authenticate(user=self.alpha)
+        self.assertTrue(
+            Following.objects.filter(
+                follower=self.alpha, followee=self.beta, status=Following.CANCELED
+            ).exists()
+        )
