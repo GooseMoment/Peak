@@ -1,9 +1,10 @@
-from rest_framework import status, mixins, generics, permissions as default_permissions
+from rest_framework import status, mixins, generics
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination, CursorPagination
+from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import NotFound
 
 from django.shortcuts import get_object_or_404
@@ -30,6 +31,7 @@ from .serializers import (
     FollowingSerializer,
     BlockSerializer,
 )
+from .exceptions import BlockSelf
 from . import permissions
 from api.models import PrivacyMixin
 from api.request import AuthenticatedRequest
@@ -271,21 +273,13 @@ class FollowRequesterList(GenericUserList):
 
 
 ## Block
-class BlockPermission(default_permissions.IsAuthenticated):
-    # allow only blocker to see their own blocks
-    def has_permission(self, request: Request, view):
-        blocker_username: str = view.kwargs["blocker_username"]
-
-        return (
-            super().has_permission(request, view)
-            and request.user.get_username() == blocker_username
-        )
-
-
 class BlockView(APIView):
-    permission_classes = (BlockPermission,)
+    permission_classes = (permissions.BlockPermission,)
 
     def put(self, request, blocker_username: str, blockee_username: str):
+        if blocker_username == blockee_username:
+            raise BlockSelf
+
         blocker = get_object_or_404(User, username=blocker_username)
         blockee = get_object_or_404(User, username=blockee_username)
 
@@ -778,7 +772,7 @@ class EmojiList(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = EmojiSerializer
     pagination_class = EmojiListPagination
 
-    permission_classes = (default_permissions.AllowAny,)
+    permission_classes = (AllowAny,)
 
     @method_decorator(cache_page(60 * 30))  # caching for 30 minutes
     def get(self, request, *args, **kwargs):
