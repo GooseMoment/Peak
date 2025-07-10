@@ -7,7 +7,11 @@ from . import views
 urlpatterns = [
     path("explore/search/", views.ExploreSearchView.as_view()),
     path("explore/", views.ExploreFeedView.as_view()),
-    path("followings/@<str:follower>/@<str:followee>/", views.FollowView.as_view()),
+    path(
+        "followings/@<str:follower>/@<str:followee>/",
+        views.FollowView.as_view(),
+        name="followings",
+    ),
     path(
         "blocks/@<str:blocker_username>/@<str:blockee_username>/",
         views.BlockView.as_view(),
