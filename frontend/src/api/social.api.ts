@@ -352,7 +352,7 @@ export const patchComment = async (
 }
 
 export const deleteComment = async (
-    parentType: Comment["comment"],
+    parentType: Comment["parent_type"],
     parentID: string,
     commentID: Comment["id"],
 ) => {
