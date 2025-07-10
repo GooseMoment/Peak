@@ -31,8 +31,7 @@ from .serializers import (
     FollowingSerializer,
     BlockSerializer,
 )
-from .exceptions import BlockSelf
-from . import permissions
+from . import permissions, exceptions
 from api.models import PrivacyMixin
 from api.request import AuthenticatedRequest
 from api.permissions import IsUserSelfRequest
@@ -89,13 +88,20 @@ class ExploreSearchView(mixins.ListModelMixin, generics.GenericAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class FollowView(APIView):
-    def put(self, request, follower, followee):
-        follower = get_object_or_404(User, username=follower)
-        if follower != request.user:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+class FollowingView(APIView):
+    permission_classes = (permissions.FollowingPermission,)
 
-        followee = get_object_or_404(User, username=followee)
+    def get_related_users(self):
+        follower_username: str = self.kwargs["follower_username"]
+        followee_username: str = self.kwargs["followee_username"]
+
+        follower = get_object_or_404(User, username=follower_username)
+        followee = get_object_or_404(User, username=followee_username)
+
+        return (follower, followee)
+
+    def put(self, request: AuthenticatedRequest, **kwargs):
+        (follower, followee) = self.get_related_users()
 
         following, created = Following.objects.get_or_create(
             follower=follower,
@@ -103,59 +109,26 @@ class FollowView(APIView):
             defaults={"status": Following.REQUESTED},
         )
 
-        is_blocking = (
-            Block.objects.filter(blocker=follower, blockee=followee)
-            .exclude(deleted_at=None)
-            .exists()
-        )
-        if is_blocking:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
-        is_blocked = (
-            Block.objects.filter(blocker=followee, blockee=follower)
-            .exclude(deleted_at=None)
-            .exists()
-        )
-        if is_blocked:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if permissions.is_either_blocked(follower.username, followee.username):
+            raise exceptions.FollowingRestricted
 
         if not created:
-            if (
-                following.status == Following.ACCEPTED
-                or following.status == Following.REQUESTED
-            ):
+            if following.status in (Following.ACCEPTED, Following.REQUESTED):
                 return Response(status=status.HTTP_208_ALREADY_REPORTED)
 
-            else:
-                following.status = Following.REQUESTED
-                following.deleted_at = None
-                following.save()
+            following.status = Following.REQUESTED
+            following.deleted_at = None
+            following.save()
 
         serializer = FollowingSerializer(following)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def get(self, request, follower, followee):
-        follower = get_object_or_404(User, username=follower)
-        followee = get_object_or_404(User, username=followee)
+    def get(self, request, **kwargs):
+        (follower, followee) = self.get_related_users()
 
-        is_follower_blocking = (
-            Block.objects.filter(blocker=follower, blockee=request.user)
-            .exclude(deleted_at=None)
-            .exists()
-        )
-        if is_follower_blocking:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
-        is_followee_blocking = (
-            Block.objects.filter(blocker=followee, blockee=request.user)
-            .exclude(deleted_at=None)
-            .exists()
-        )
-        if is_followee_blocking:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
-        following_filter = Q(status=Following.REQUESTED) | Q(status=Following.ACCEPTED)
-        following_filter &= Q(follower=follower, followee=followee)
+        following_filter = (
+            Q(status=Following.REQUESTED) | Q(status=Following.ACCEPTED)
+        ) & Q(follower=follower, followee=followee)
 
         try:
             following = Following.objects.get(following_filter)
@@ -166,17 +139,13 @@ class FollowView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def patch(self, request, follower, followee):
+    def patch(self, request: AuthenticatedRequest, **kwargs):
         new_status = request.data.get("status")
 
-        if new_status not in {Following.ACCEPTED, Following.REJECTED}:
+        if new_status not in (Following.ACCEPTED, Following.REJECTED):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        followee = get_object_or_404(User, username=followee)
-        if followee != request.user:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        follower = get_object_or_404(User, username=follower)
+        (follower, followee) = self.get_related_users()
 
         try:
             following = Following.objects.get(
@@ -189,20 +158,18 @@ class FollowView(APIView):
         following.save()
 
         serializer = FollowingSerializer(following)
-
         return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
-    def delete(self, request, follower, followee):
-        follower = get_object_or_404(User, username=follower)
-        if follower != request.user:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        followee = get_object_or_404(User, username=followee)
+    def delete(self, request, **kwargs):
+        (follower, followee) = self.get_related_users()
 
         try:
             following = Following.objects.get(follower=follower, followee=followee)
         except Following.DoesNotExist:
             return Response(status=status.HTTP_204_NO_CONTENT)
+
+        if following.status == Following.CANCELED:
+            return Response(status=status.HTTP_208_ALREADY_REPORTED)
 
         following.status = Following.CANCELED
         following.deleted_at = timezone.now()
@@ -278,7 +245,7 @@ class BlockView(APIView):
 
     def put(self, request, blocker_username: str, blockee_username: str):
         if blocker_username == blockee_username:
-            raise BlockSelf
+            raise exceptions.BlockSelf
 
         blocker = get_object_or_404(User, username=blocker_username)
         blockee = get_object_or_404(User, username=blockee_username)

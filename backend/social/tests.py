@@ -23,7 +23,10 @@ class FollowingTest(APITestCase):
     def reverse(self, follower_username: str, followee_username: str) -> str:
         return reverse(
             "followings",
-            kwargs={"follower": follower_username, "followee": followee_username},
+            kwargs={
+                "follower_username": follower_username,
+                "followee_username": followee_username,
+            },
         )
 
     def get_forbidden(self, follower_username: str, followee_username: str):
@@ -57,7 +60,7 @@ class FollowingTest(APITestCase):
             follower_username,
             followee_username,
         )
-        res = self.client.patch(path)
+        res = self.client.delete(path)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_follow_you_blocked(self):
@@ -221,8 +224,8 @@ class FollowingTest(APITestCase):
         # 1. alpha sends follow request again(2) and beta accepts it
         for following_status in (Following.REJECTED, Following.ACCEPTED):
             alpha_client.put(path)
-            beta_client.patch(path, data={"status": following_status})
-            self.assertEqual(res.status_code, status.HTTP_200_OK)
+            res = beta_client.patch(path, data={"status": following_status})
+            self.assertEqual(res.status_code, status.HTTP_202_ACCEPTED)
             self.assertTrue(
                 Following.objects.filter(
                     follower=self.alpha, followee=self.beta, status=following_status

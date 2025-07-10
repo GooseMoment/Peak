@@ -8,8 +8,8 @@ urlpatterns = [
     path("explore/search/", views.ExploreSearchView.as_view()),
     path("explore/", views.ExploreFeedView.as_view()),
     path(
-        "followings/@<str:follower>/@<str:followee>/",
-        views.FollowView.as_view(),
+        "followings/@<str:follower_username>/@<str:followee_username>/",
+        views.FollowingView.as_view(),
         name="followings",
     ),
     path(
