@@ -15,6 +15,7 @@ class EmailVerificationTokenAdmin(admin.ModelAdmin):
         "user__username",
         "user__email",
     )
+    autocomplete_fields = ("user",)
     readonly_fields = (
         "created_at",
         "token",
@@ -47,6 +48,7 @@ class PasswordRecoveryTokenAdmin(admin.ModelAdmin):
         "token",
         "link",
     )
+    autocomplete_fields = ("user",)
     fieldsets = [
         (
             None,
@@ -74,6 +76,7 @@ class TwoFactorAuthTokenAdmin(admin.ModelAdmin):
         "created_at",
         "token",
     )
+    autocomplete_fields = ("user",)
     fieldsets = [
         (
             None,
@@ -97,6 +100,7 @@ class TOTPSecretAdmin(admin.ModelAdmin):
         "user__email",
     )
     readonly_fields = ("created_at",)
+    autocomplete_fields = ("user",)
     fieldsets = [
         (
             None,
