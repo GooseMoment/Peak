@@ -69,7 +69,7 @@ class DrawerList(
             return self.create(request, *args, **kwargs)
         except ValidationError:
             raise exceptions.DrawerNameDuplicate
-        except Exception as e:
+        except Exception:
             raise UnknownError
 
 
