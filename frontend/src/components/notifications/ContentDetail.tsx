@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import styled, { css } from "styled-components"
 
 import { type Notification } from "@api/notifications.api"
-import type { Quote } from "@api/social"
+import { type Quote } from "@api/social.api"
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 import { ifMobile } from "@utils/useScreenType"

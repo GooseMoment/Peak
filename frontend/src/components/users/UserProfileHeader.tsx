@@ -11,8 +11,12 @@ import FollowButton from "@components/users/FollowButton"
 import FollowsCount from "@components/users/FollowsCount"
 
 import { getCurrentUsername } from "@api/client"
-import type { Block, Following } from "@api/social"
-import { deleteBlock, putBlock } from "@api/social.api"
+import {
+    type Block,
+    type Following,
+    deleteBlock,
+    putBlock,
+} from "@api/social.api"
 import { type User } from "@api/users.api"
 
 import { ifMobile, ifTablet } from "@utils/useScreenType"
@@ -28,7 +32,7 @@ import { toast } from "react-toastify"
 
 interface UserProfileHeaderProp {
     user?: User
-    followingYou: Following // TODO: replace object to Following
+    followingYou?: Following | null
     block?: Block | null
     isMine: boolean
     isLoading: boolean

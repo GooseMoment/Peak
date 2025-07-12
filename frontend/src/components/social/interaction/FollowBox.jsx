@@ -6,7 +6,7 @@ import MildButton from "@components/common/MildButton"
 import { getCurrentUsername } from "@api/client"
 import {
     deleteFollowRequest,
-    getFollow,
+    getFollowing,
     patchFollowRequest,
     putFollowRequest,
 } from "@api/social.api"
@@ -20,7 +20,7 @@ const FollowBox = ({ user }) => {
 
     const { data: follow } = useQuery({
         queryKey: ["followings", me, user.username],
-        queryFn: () => getFollow(me, user.username),
+        queryFn: () => getFollowing(me, user.username),
         enabled: !!user,
     })
 
@@ -44,7 +44,7 @@ const FollowBox = ({ user }) => {
 
     const { data: followed } = useQuery({
         queryKey: ["followings", user.username, me],
-        queryFn: () => getFollow(user.username, me),
+        queryFn: () => getFollowing(user.username, me),
         enabled: !!user,
     })
 

@@ -1,6 +1,6 @@
 import client from "@api/client"
 import type { Base, PaginationData } from "@api/common"
-import type { Comment, Following, Peck, Reaction } from "@api/social"
+import type { Comment, Following, Peck, Reaction } from "@api/social.api"
 import { type User } from "@api/users.api"
 
 import {

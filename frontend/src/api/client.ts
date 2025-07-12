@@ -1,6 +1,6 @@
 import { getClientTimezone } from "@utils/clientSettings"
 
-import axios, { type AxiosError } from "axios"
+import axios, { type AxiosError, isAxiosError } from "axios"
 
 const baseURL = import.meta.env.VITE_API_BASEURL
 
@@ -67,5 +67,13 @@ client.interceptors.response.use(
         throw err
     },
 )
+
+export const isAxiosErrorStatus = (error: unknown, status: number) => {
+    return (
+        isAxiosError(error) &&
+        error.response &&
+        error.response.status === status
+    )
+}
 
 export default client

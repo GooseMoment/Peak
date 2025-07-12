@@ -22,7 +22,7 @@ const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
     const [commentValue, setCommentValue] = useState("")
 
     const { data: parentComments } = useQuery({
-        queryKey: ["comment", parentType, parent.id],
+        queryKey: ["comments", parentType, parent.id],
         queryFn: () => getComment(parentType, parent.id),
     })
 
@@ -38,7 +38,7 @@ const CommentModal = ({ isOpen, onClose, position, parentType, parent }) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["comment", parentType, parent.id],
+                queryKey: ["comments", parentType, parent.id],
             })
         },
         onError: (e) => {

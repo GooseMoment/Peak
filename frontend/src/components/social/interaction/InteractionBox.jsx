@@ -18,7 +18,7 @@ const InteractionBox = ({ parentType, parent }) => {
     const [pickedEmoji, setPickedEmoji] = useState(null)
 
     const { data: parentReactions } = useQuery({
-        queryKey: ["reaction", parentType, parent.id],
+        queryKey: ["reactions", parentType, parent.id],
         queryFn: () => getReactions(parentType, parent.id),
         enabled: !!parent.id,
     })
@@ -33,7 +33,7 @@ const InteractionBox = ({ parentType, parent }) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["reaction", parentType, parent.id],
+                queryKey: ["reactions", parentType, parent.id],
             })
         },
         onError: (e) => {

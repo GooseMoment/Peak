@@ -12,7 +12,7 @@ import { toast } from "react-toastify"
 
 const PeckButton = ({ taskID, isUncomplete }) => {
     const { data: peck } = useQuery({
-        queryKey: ["peck", taskID],
+        queryKey: ["pecks", taskID],
         queryFn: () => getPeck(taskID),
         enabled: !!taskID,
     })
@@ -22,7 +22,7 @@ const PeckButton = ({ taskID, isUncomplete }) => {
             return postPeck(taskID)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["peck", taskID] })
+            queryClient.invalidateQueries({ queryKey: ["pecks", taskID] })
         },
         onError: (e) => {
             toast.error(e)
