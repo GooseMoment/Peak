@@ -266,11 +266,13 @@ WEBPUSH = {
 }
 
 # Token Authentication
+KNOX_TOKEN_MODEL = "peak_auth.AuthToken"
 
 REST_KNOX = {
     "TOKEN_TTL": timedelta(days=14),
     "USER_SERIALIZER": "users.serializers.UserSerializer",
     "AUTO_REFRESH": True,
+    "TOKEN_MODEL": "peak_auth.AuthToken",
 }
 
 # Password Recovery Token

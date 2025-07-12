@@ -1,11 +1,40 @@
 from django.contrib import admin
 
 from .models import (
+    AuthToken,
     EmailVerificationToken,
     PasswordRecoveryToken,
     TwoFactorAuthToken,
     TOTPSecret,
 )
+
+
+@admin.register(AuthToken)
+class AuthTokenAdmin(admin.ModelAdmin):
+    ordering = ("-created",)
+    search_fields = (
+        "digest",
+        "token_key",
+        "user__username",
+        "user__email",
+    )
+    autocomplete_fields = ("user",)
+    readonly_fields = ("created",)
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": (
+                    "user",
+                    "digest",
+                    "token_key",
+                    "created",
+                    "expiry",
+                ),
+            },
+        ),
+        ("User Agent", {"fields": ("initial_ip", "browser", "os", "device")}),
+    ]
 
 
 @admin.register(EmailVerificationToken)
