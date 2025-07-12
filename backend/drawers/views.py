@@ -70,7 +70,6 @@ class DrawerList(
         except ValidationError:
             raise exceptions.DrawerNameDuplicate
         except Exception as e:
-            print(e)
             raise UnknownError
 
 

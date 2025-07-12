@@ -71,7 +71,6 @@ class ProjectList(
         except ValidationError:
             raise exceptions.ProjectNameDuplicate
         except Exception as e:
-            print(e)
             raise UnknownError
 
 
