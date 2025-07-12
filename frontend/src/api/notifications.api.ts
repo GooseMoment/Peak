@@ -119,7 +119,6 @@ export const getRelatedUserFromNotification = (notification: Notification) => {
 
 export interface WebPushSubscription {
     id: string
-    user: object
     auth: string
     p256dh: string
     endpoint: PushSubscription["endpoint"]
