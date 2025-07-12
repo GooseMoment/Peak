@@ -138,7 +138,7 @@ def pushNotificationToUser(user: User, notification: Notification) -> None:
         if notification.type in subscription.excluded_types:
             continue
 
-        endpoint = parse_url(subscription.subscription_info.get("endpoint"))
+        endpoint = parse_url(subscription.endpoint)
         if endpoint.scheme is None or endpoint.host is None:
             subscription.delete()
             continue
@@ -163,7 +163,7 @@ def pushNotificationToUser(user: User, notification: Notification) -> None:
 
         try:
             webpush(
-                subscription.subscription_info,
+                subscription.to_push_subscription(),
                 data,
                 vapid_private_key=settings.WEBPUSH.get("vapid_private_key"),
                 vapid_claims={

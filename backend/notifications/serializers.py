@@ -37,18 +37,30 @@ class NotificatonSerializer(serializers.ModelSerializer):
         ]
 
 
+class CurrentTokenDefault:
+    requires_context = True
+
+    def __call__(self, serializer_field):
+        return serializer_field.context["request"].auth
+
+    def __repr__(self):
+        return "%s()" % self.__class__.__name__
+
+
 class WebPushSubscriptionSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    device = serializers.CharField(default="Unknown")
+    token = serializers.HiddenField(default=CurrentTokenDefault())
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = WebPushSubscription
         fields = [
             "id",
             "user",
-            "subscription_info",
+            "token",
+            "endpoint",
+            "auth",
+            "p256dh",
+            "expiration_time",
             "locale",
-            "device",
-            "user_agent",
             "excluded_types",
         ]
