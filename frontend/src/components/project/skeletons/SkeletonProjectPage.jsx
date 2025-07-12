@@ -19,26 +19,35 @@ export const SkeletonDrawer = ({ taskCount }) => {
     return (
         <Frame>
             <DrawerName />
-            <SkeletonTasks taskCount={taskCount} />
+            <Tasks>
+                <SkeletonTasks taskCount={taskCount} />
+            </Tasks>
         </Frame>
     )
 }
 
-const SkeletonTasks = ({ taskCount }) => {
+export const SkeletonTasks = ({ taskCount }) => {
+    if (taskCount === 0) return
+
     const skeletonCount = taskCount > 10 ? 10 : taskCount
 
     return (
         <Tasks>
-            {[...Array(skeletonCount)].map((e, i) => (
+            {[...Array(skeletonCount)].map((i) => (
                 <TaskBox key={i}>
                     <Circle />
                     <Bar />
                 </TaskBox>
             ))}
-            <CreateEmptyBox />
-            <FlexCenterBox>
-                {taskCount > 10 && <MoreButtonEmptyBox />}
-            </FlexCenterBox>
+
+            {taskCount > 10 && (
+                <>
+                    <CreateEmptyBox />
+                    <FlexCenterBox>
+                        <MoreButtonEmptyBox />
+                    </FlexCenterBox>
+                </>
+            )}
         </Tasks>
     )
 }
@@ -102,9 +111,8 @@ const DrawerName = styled.div`
 const TaskBox = styled.div`
     display: flex;
     align-items: center;
-    margin-left: 2.45em;
-    gap: 0.8em;
-    padding: 1.04em 0.5em;
+    gap: 0.6em;
+    padding: 1.04em 1.1em;
 
     ${ifMobile} {
         margin-left: 0.8em;
@@ -112,7 +120,7 @@ const TaskBox = styled.div`
 `
 
 const Circle = styled.div`
-    height: 1.5em;
+    height: 1.6em;
     aspect-ratio: 1/1;
     box-sizing: border-box;
 

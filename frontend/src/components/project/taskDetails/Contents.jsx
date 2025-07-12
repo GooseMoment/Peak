@@ -21,7 +21,7 @@ import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const Contents = ({ task, setFunc }) => {
+const Contents = ({ task, setFunc, setNewColor }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
     const [isComponentOpen, setIsComponentOpen] = useState(false)
@@ -108,7 +108,13 @@ const Contents = ({ task, setFunc }) => {
                     : task.drawer_name
                       ? `${task.project_name} / ${task.drawer_name}`
                       : t("none"),
-            component: <Drawer setFunc={setFunc} onClose={closeComponent} />,
+            component: (
+                <Drawer
+                    setFunc={setFunc}
+                    onClose={closeComponent}
+                    setNewColor={setNewColor}
+                />
+            ),
         },
         {
             id: 6,

@@ -5,13 +5,15 @@ import { initializeTask } from "@components/project/taskDetails/initializeTask"
 
 const TaskDetail = ({ projectType, color, task }) => {
     const [newTask, setNewTask] = useState(() => initializeTask(task))
+    const [newColor, setNewColor] = useState(color)
 
     return (
         <TaskCommonDetail
             newTask={newTask}
             setNewTask={setNewTask}
             projectType={projectType}
-            color={color}
+            newColor={newColor}
+            setNewColor={setNewColor}
         />
     )
 }

@@ -39,18 +39,6 @@ const TaskFrame = ({
         isOutOfAssigned,
     } = taskCalculation(task, isSocial)
 
-    const TaskName = (
-        <TaskNameBox
-            $completed={completedAt}
-            onClick={() => {
-                if (showTaskDetail) {
-                    setDetailOpen(true)
-                }
-            }}>
-            {task?.name}
-        </TaskNameBox>
-    )
-
     const hasDate = task.due_type || task.assigned_at
 
     return (
@@ -71,7 +59,15 @@ const TaskFrame = ({
                             onClick={toComplete}
                         />
                     </Icons>
-                    {TaskName}
+                    <TaskNameBox
+                        $completed={completedAt}
+                        onClick={() => {
+                            if (showTaskDetail) {
+                                setDetailOpen(true)
+                            }
+                        }}>
+                        {task?.name}
+                    </TaskNameBox>
                 </CircleName>
 
                 {hasDate && (
@@ -129,12 +125,14 @@ const Box = styled.div`
     align-items: center;
     margin-top: 0.9em;
     margin-bottom: 0.9em;
+    width: 100%;
 
     min-width: 0;
 `
 
 const Content = styled.div`
     min-width: 0;
+    width: 100%;
 `
 
 const TaskNameBox = styled.div`
@@ -146,6 +144,7 @@ const TaskNameBox = styled.div`
     text-overflow: ellipsis;
     overflow: hidden;
     line-height: 1.3em;
+    width: 100%;
     min-width: 0;
 
     ${ifMobile} {
@@ -160,6 +159,7 @@ const TaskNameBox = styled.div`
 
 const CircleName = styled.div`
     display: flex;
+    width: 100%;
 `
 
 const Icons = styled.div`

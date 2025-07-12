@@ -1,16 +1,19 @@
 import { useQuery } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import Detail from "@components/project/common/Detail"
 import DrawerFolder from "@components/project/taskDetails/DrawerFolder"
 
 import { getProjectList } from "@api/projects.api"
 
+import { getPaletteColor } from "@assets/palettes"
+
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Drawer = ({ setFunc, onClose }) => {
+const Drawer = ({ setFunc, onClose, setNewColor }) => {
     const { t } = useTranslation(null, { keyPrefix: "task.drawer" })
+    const theme = useTheme()
 
     const {
         isPending,
@@ -21,7 +24,15 @@ const Drawer = ({ setFunc, onClose }) => {
         queryFn: () => getProjectList(),
     })
 
-    const changeDrawer = (drawerID, drawerName, projectID, projectName) => {
+    const changeDrawer = (
+        drawerID,
+        drawerName,
+        projectID,
+        projectName,
+        projectColor,
+    ) => {
+        const color = getPaletteColor(theme.type, projectColor)
+
         return () => {
             setFunc({
                 drawer: drawerID,
@@ -29,6 +40,7 @@ const Drawer = ({ setFunc, onClose }) => {
                 project_id: projectID,
                 project_name: projectName,
             })
+            setNewColor(color)
             onClose()
         }
     }

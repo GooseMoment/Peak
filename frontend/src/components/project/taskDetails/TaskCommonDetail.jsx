@@ -25,7 +25,8 @@ const TaskCommonDetail = ({
     newTask,
     setNewTask,
     projectType = null,
-    color,
+    newColor,
+    setNewColor,
     isCreating = false,
 }) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
@@ -143,7 +144,7 @@ const TaskCommonDetail = ({
                     name={newTask?.name}
                     setName={(name) => handleChange({ name })}
                     inputRef={inputRef}
-                    color={color}
+                    color={newColor}
                     setFunc={handleChange}
                 />
                 <Icons>
@@ -153,7 +154,11 @@ const TaskCommonDetail = ({
                     <FeatherIcon icon="x" onClick={closeModal} />
                 </Icons>
             </TaskNameBox>
-            <Contents task={newTask} setFunc={handleChange} />
+            <Contents
+                task={newTask}
+                setFunc={handleChange}
+                setNewColor={setNewColor}
+            />
             <ButtonGroup $justifyContent="flex-end" $margin="1em 2em 2em">
                 <Button
                     disabled={mutation.isPending}

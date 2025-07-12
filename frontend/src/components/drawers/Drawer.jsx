@@ -22,7 +22,7 @@ import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
 import TaskCreateSimple from "@components/project/TaskCreateSimple"
 import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
-import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
+import { SkeletonTasks } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 import DrawerTask from "@components/tasks/DrawerTask"
 
@@ -200,10 +200,6 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
         setCreateOpen(true)
     }
 
-    if (isLoading) {
-        return <SkeletonDrawer taskCount={taskCount} />
-    }
-
     if (isError) {
         return (
             <TaskErrorBox onClick={refetch}>
@@ -237,36 +233,40 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
                     handleAlert={() => setIsAlertOpen(true)}
                 />
             </DrawerBox>
-            {collapsed ? null : (
-                <>
-                    <TaskList $isDragging={isDragging}>
-                        {tasks?.map((task) => (
-                            <DrawerTask
-                                key={task.id}
-                                task={task}
-                                color={color}
-                                projectType={project.type}
-                                moveTask={moveTask}
-                                dropTask={dropTask}
-                                isPending={patchMutation.isPending}
-                            />
-                        ))}
-                    </TaskList>
-                    {isSimpleOpen && (
-                        <TaskCreateSimple
-                            projectID={project.id}
-                            projectName={project.name}
-                            drawerID={drawer.id}
-                            drawerName={drawer.name}
+            {collapsed ? null : isLoading ? (
+                <SkeletonTasks taskCount={taskCount} />
+            ) : (
+                <TaskList $isDragging={isDragging}>
+                    {tasks?.map((task) => (
+                        <DrawerTask
+                            key={task.id}
+                            task={task}
                             color={color}
-                            onClose={() => setIsSimpleOpen(false)}
+                            projectType={project.type}
+                            moveTask={moveTask}
+                            dropTask={dropTask}
+                            isPending={patchMutation.isPending}
                         />
-                    )}
-                    <TaskCreateButton
-                        isOpen={isSimpleOpen}
-                        onClick={handleToggleSimpleCreate}
+                    ))}
+                </TaskList>
+            )}
+            <>
+                {isSimpleOpen && (
+                    <TaskCreateSimple
+                        projectID={project.id}
+                        projectName={project.name}
+                        drawerID={drawer.id}
+                        drawerName={drawer.name}
+                        color={color}
+                        onClose={() => setIsSimpleOpen(false)}
                     />
-                    {hasNextPage ? (
+                )}
+                <TaskCreateButton
+                    isOpen={isSimpleOpen}
+                    onClick={handleToggleSimpleCreate}
+                />
+                {isLoading ||
+                    (hasNextPage ? (
                         <ButtonGroup $justifyContent="center" $margin="1em">
                             <MoreButton
                                 disabled={isFetchingNextPage}
@@ -277,9 +277,8 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
                                     : t("button_load_more")}
                             </MoreButton>
                         </ButtonGroup>
-                    ) : null}
-                </>
-            )}
+                    ) : null)}
+            </>
             {isSortMenuMobileOpen && (
                 <SortMenuMobile
                     title={t("sort.task_title")}

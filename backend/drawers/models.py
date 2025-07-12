@@ -34,3 +34,9 @@ class Drawer(Base, PrivacyMixin):
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta, PrivacyMixin.Meta
         db_table = "drawers"
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["name", "project", "user"], name="constraint_drawer_name"
+            ),
+        ]

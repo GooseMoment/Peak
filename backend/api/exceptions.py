@@ -28,3 +28,9 @@ class RequiredFieldMissing(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = "Some fields are missing."
     default_code = "REQUIRED_FIELD_MISSING"
+
+
+class UnknownError(APIException):
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    default_detail = "Unknown error occuered."
+    default_code = "UNKNOWN_ERROR"

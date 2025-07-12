@@ -35,6 +35,7 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
             : drawer,
     )
     const inputRef = useRef(null)
+    const hasCreated = useRef(false)
 
     const mutation = useMutation({
         mutationFn: (data) => {
@@ -57,9 +58,13 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
 
             closeModal()
         },
-        onError: () => {
+        onError: (err) => {
             if (isCreating) {
-                toast.error(t("created_drawer_error"))
+                hasCreated.current = false
+
+                const errorCode = err?.response?.data?.code
+                toast.error(t("created_drawer_error." + errorCode))
+
                 return
             }
 
@@ -76,6 +81,14 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
     }
 
     const submit = () => {
+        if (mutation.isPending || hasCreated.current) {
+            return
+        }
+
+        if (isCreating) {
+            hasCreated.current = true
+        }
+
         if (!newDrawer.name || newDrawer.name.trim() === "") {
             toast.error(t("name_required"))
             inputRef.current.focus()
@@ -87,13 +100,15 @@ const DrawerEdit = ({ drawer, isCreating = false }) => {
 
     const onEnter = (e) => {
         if (e.repeat) {
+            e.preventDefault()
             return
         }
 
-        if (e.key === "Enter") {
-            e.preventDefault()
-            submit()
+        if (e.key !== "Enter") {
+            return
         }
+
+        submit()
     }
 
     const items = [

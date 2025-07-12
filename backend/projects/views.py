@@ -3,7 +3,12 @@ from rest_framework.pagination import PageNumberPagination
 
 from .models import Project
 from .serializers import ProjectSerializer, ProjectSerializerForUserProjectList
+from . import exceptions
 from api.permissions import IsUserOwner
+
+from api.exceptions import UnknownError
+
+from rest_framework.exceptions import ValidationError
 
 
 class ProjectDetail(
@@ -61,7 +66,12 @@ class ProjectList(
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        try:
+            return self.create(request, *args, **kwargs)
+        except ValidationError:
+            raise exceptions.ProjectNameDuplicate
+        except Exception:
+            raise UnknownError
 
 
 class UserProjectList(mixins.ListModelMixin, generics.GenericAPIView):

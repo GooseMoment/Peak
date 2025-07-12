@@ -19,13 +19,15 @@ const TaskCreate = ({ project, drawer, color }) => {
         privacy: "public",
         completed_at: null,
     })
+    const [newColor, setNewColor] = useState(color)
 
     return (
         <TaskCommonDetail
             newTask={newTask}
             setNewTask={setNewTask}
             projectType={project.type}
-            color={color}
+            newColor={newColor}
+            setNewColor={setNewColor}
             isCreating
         />
     )
