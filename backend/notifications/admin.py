@@ -46,14 +46,14 @@ class NotificationAdmin(admin.ModelAdmin):
 @admin.register(WebPushSubscription)
 class WebPushSubscriptionAdmin(admin.ModelAdmin):
     ordering = ["-updated_at"]
-    search_fields = ["user__username", "token__digest"]
-    autocomplete_fields = ["user", "token"]
+    search_fields = ["token__digest"]
+    autocomplete_fields = ["token"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
             None,
             {
-                "fields": ["user", "token", "locale", "excluded_types", "fail_cnt"],
+                "fields": ["token", "locale", "excluded_types", "fail_cnt"],
             },
         ),
         (

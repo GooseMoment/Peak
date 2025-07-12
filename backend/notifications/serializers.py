@@ -48,14 +48,12 @@ class CurrentTokenDefault:
 
 
 class WebPushSubscriptionSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     token = serializers.HiddenField(default=CurrentTokenDefault())
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = WebPushSubscription
         fields = [
             "id",
-            "user",
             "token",
             "endpoint",
             "auth",

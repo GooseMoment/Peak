@@ -100,10 +100,12 @@ class Notification(Base):
 
 
 class WebPushSubscription(Base):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
+    token = models.OneToOneField(
+        AuthToken, on_delete=models.CASCADE, related_name="web_push_subscription"
     )
+    locale = models.CharField(max_length=128, null=True, blank=True)
+    fail_cnt = models.IntegerField(default=0)
+    excluded_types = models.JSONField(default=list)
 
     # [PushSubscription](https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription)
     endpoint = models.URLField()
@@ -118,15 +120,8 @@ class WebPushSubscription(Base):
             "expirationTime": self.expiration_time,
         }
 
-    token = models.OneToOneField(
-        AuthToken, on_delete=models.CASCADE, related_name="web_push_subscription"
-    )
-    locale = models.CharField(max_length=128, null=True, blank=True)
-    fail_cnt = models.IntegerField(default=0)
-    excluded_types = models.JSONField(default=list)
-
     def __str__(self) -> str:
-        return f"WebPushSubscription: {self.user}"
+        return f"WebPushSubscription: <{self.token}>"
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "web_push_subscriptions"

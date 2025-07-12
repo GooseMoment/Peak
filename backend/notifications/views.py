@@ -2,6 +2,7 @@ from rest_framework import mixins, generics, permissions, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.pagination import CursorPagination
+from rest_framework.permissions import BasePermission
 
 from django.shortcuts import get_object_or_404
 
@@ -140,6 +141,13 @@ class WebPushSubscriptionCreate(mixins.CreateModelMixin, generics.GenericAPIView
         return self.create(request, *args, **kwargs)
 
 
+class WebPushSubscriptionPermission(BasePermission):
+    def has_object_permission(
+        self, request: Request, view, obj: WebPushSubscription
+    ) -> bool:
+        return request.auth == obj.token
+
+
 class WebPushSubscriptionDetail(
     mixins.RetrieveModelMixin,
     mixins.DestroyModelMixin,
@@ -148,7 +156,7 @@ class WebPushSubscriptionDetail(
     queryset = WebPushSubscription.objects.all()
     serializer_class = WebPushSubscriptionSerializer
     lookup_field = "id"
-    permission_classes = [IsUserOwner]
+    permission_classes = (WebPushSubscriptionPermission,)
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
