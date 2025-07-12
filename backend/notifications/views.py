@@ -61,10 +61,13 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
         except (KeyError, ValueError, TypeError):
             raise RequiredFieldMissing
 
+        task = get_object_or_404(Task, id=uuid_task_id)
+
+        if task.reminders.exists():
+            task.reminders.all().delete()
+
         if len(delta_list) == 0:
             return Response(status=status.HTTP_204_NO_CONTENT)
-
-        task = get_object_or_404(Task, id=uuid_task_id)
 
         match task.due_type:
             case Task.DUE_DATE:
@@ -79,9 +82,6 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
                 converted_due_datetime = task.due_datetime
             case _:
                 raise RequiredFieldMissing
-
-        if task.reminders.exists():
-            task.reminders.all().delete()
 
         for delta in delta_list:
             new_scheduled = caculateScheduled(converted_due_datetime, delta)
