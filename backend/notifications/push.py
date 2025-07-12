@@ -131,7 +131,7 @@ def _notificationToPushData(notification: Notification, locale: str) -> PushData
 
 
 def pushNotificationToUser(user: User, notification: Notification) -> None:
-    subscriptions = WebPushSubscription.objects.filter(user=user).all()
+    subscriptions = WebPushSubscription.objects.filter(token__user=user).all()
     dumped_datas_per_locale: dict[str, str] = dict()
 
     for subscription in subscriptions:
