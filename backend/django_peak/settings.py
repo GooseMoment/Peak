@@ -137,12 +137,19 @@ DATABASES = {
     }
 }
 
-if os.environ.get("DJANGO_DUMMYDB", "false") == "true":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.dummy",
+match os.environ.get("DJANGO_CI_DATABASE", ""):
+    case "dummy":
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.dummy",
+            }
         }
-    }
+    case "sqlite3":
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+            }
+        }
 
 
 # Password validation
