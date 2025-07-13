@@ -77,5 +77,5 @@ jobs:
         run: pip install -r requirements.txt
         working-directory: ./backend
       - name: Check makemigrations
-        run: DEBUG=1 python manage.py test
+        run: DEBUG=1 DJANGO_DUMMYDB=true python manage.py test
         working-directory: ./backend
