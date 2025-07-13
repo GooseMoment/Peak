@@ -36,7 +36,7 @@ from api.utils import get_client_ip
 from api.exceptions import RequiredFieldMissing
 
 
-class LoginView(KnoxLoginView):
+class BaseLoginView(KnoxLoginView):
     permission_classes = (AllowAny,)
 
     def get_device_and_browser(
@@ -66,7 +66,7 @@ class LoginView(KnoxLoginView):
         )
 
 
-class SignInView(LoginView):
+class SignInView(BaseLoginView):
     def post(self, request: Request, format=None):
         email: str = request.data["email"]
         password: str = request.data["password"]
@@ -99,7 +99,7 @@ class SignInView(LoginView):
         return super(SignInView, self).post(request, format=format)
 
 
-class TOTPAuthenticationView(LoginView):
+class TOTPAuthenticationView(BaseLoginView):
     def post(self, request: Request, format=None):
         try:
             token_hex = request.data["token"]
