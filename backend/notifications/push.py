@@ -8,7 +8,7 @@ from .locale import get_translations
 from pywebpush import webpush, WebPushException
 from json import dumps
 from urllib3.util import parse_url
-from datetime import datetime
+from datetime import datetime, UTC
 
 
 class PushData:
@@ -136,6 +136,12 @@ def pushNotificationToUser(user: User, notification: Notification) -> None:
 
     for subscription in subscriptions:
         if notification.type in subscription.excluded_types:
+            continue
+
+        if subscription.expiration_time and datetime.fromtimestamp(
+            subscription.expiration_time, tz=UTC
+        ) < datetime.now(UTC):
+            subscription.delete()
             continue
 
         endpoint = parse_url(subscription.endpoint)
