@@ -20,6 +20,7 @@ import uuid
 import re
 from datetime import datetime, UTC
 from ua_parser import parse as ua_parse
+from typing import Optional
 
 from users.models import User
 from .models import (
@@ -39,14 +40,9 @@ class LoginView(KnoxLoginView):
     permission_classes = (AllowAny,)
 
     def get_device_and_browser(
-        self, ua: str | None
-    ) -> tuple[str | None, str | None, str | None]:
-        if ua is None:
-            return (None, None, None)
-
+        self, ua: str
+    ) -> tuple[Optional[str], Optional[str], Optional[str]]:
         result = ua_parse(ua)
-        if result is None:
-            return (None, None, None)
 
         browser = result.user_agent.family if result.user_agent else None
         os = result.os.family if result.os else None
@@ -56,7 +52,7 @@ class LoginView(KnoxLoginView):
     def create_token(self):
         token_prefix = self.get_token_prefix()
 
-        user_agent = self.request.headers.get("User-Agent")
+        user_agent = self.request.headers.get("User-Agent", "")
         (browser, os, device) = self.get_device_and_browser(user_agent)
 
         return AuthToken.objects.create(
