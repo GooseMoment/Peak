@@ -82,6 +82,7 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 10,
     "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "TEST_REQUIRED_DEFAULT_FORMAT": "json",
 }
 
 MIDDLEWARE = [
@@ -135,13 +136,6 @@ DATABASES = {
         "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
-
-if os.environ.get("DJANGO_DUMMYDB", "false") == "true":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.dummy",
-        }
-    }
 
 
 # Password validation

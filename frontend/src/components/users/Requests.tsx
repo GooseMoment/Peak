@@ -5,7 +5,6 @@ import Button, { ButtonGroup } from "@components/common/Button"
 import { Section, SectionTitle } from "@components/users/Section"
 
 import { getCurrentUsername } from "@api/client"
-import { type Following } from "@api/social"
 import { patchFollowRequest } from "@api/social.api"
 import { type User } from "@api/users.api"
 
@@ -23,7 +22,7 @@ const Requests = ({ user }: RequestsProp) => {
 
     const { t } = useTranslation("translation", { keyPrefix: "users" })
 
-    const acceptance = useMutation<Following>({
+    const acceptance = useMutation({
         mutationFn: () => patchFollowRequest(user.username, true),
         onSuccess: (data) => {
             queryClient.setQueryData(
@@ -40,7 +39,7 @@ const Requests = ({ user }: RequestsProp) => {
         },
     })
 
-    const rejection = useMutation<Following>({
+    const rejection = useMutation({
         mutationFn: () => patchFollowRequest(user.username, false),
         onSuccess: (data) => {
             queryClient.setQueryData(

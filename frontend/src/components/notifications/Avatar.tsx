@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import type { Emoji } from "@api/social"
+import { type Emoji } from "@api/social.api"
 import { type User } from "@api/users.api"
 
 import { cubicBeizer } from "@assets/keyframes"
