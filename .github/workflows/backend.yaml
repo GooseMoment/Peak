@@ -89,7 +89,7 @@ jobs:
         run: python manage.py test
         env:
           DEBUG: 1
-          SQL_ENGINE: django.db.backends.postgres
+          SQL_ENGINE: django.db.backends.postgresql
           SQL_HOST: postgres
           SQL_PASSWORD: postgres
         working-directory: ./backend
