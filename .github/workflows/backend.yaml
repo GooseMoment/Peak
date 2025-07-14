@@ -38,7 +38,7 @@ jobs:
         run: python manage.py makemigrations --check
         env:
           DEBUG: 1
-          DJANGO_CI_DATABASE: dummy
+          SQL_ENGINE: django.db.backends.dummy
         working-directory: ./backend
   build:
     runs-on: ubuntu-latest
@@ -69,19 +69,26 @@ jobs:
           pylance-version: latest-release
   test:
     runs-on: ubuntu-latest
+    container: python:3.13.5-alpine3.21
+    services:
+      image: postgres:16.2-alpine3.19
+      env:
+        POSTGRES_PASSWORD: postgres
+      options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python 3.13
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: 'pip'
       - name: Install dependencies
         run: pip install -r requirements.txt
         working-directory: ./backend
-      - name: Check makemigrations
+      - name: Run test
         run: python manage.py test
         env:
           DEBUG: 1
-          DJANGO_CI_DATABASE: sqlite3
+          SQL_ENGINE: django.db.backends.postgres
+          SQL_HOST: postgres
+          SQL_PASSWORD: postgres
         working-directory: ./backend

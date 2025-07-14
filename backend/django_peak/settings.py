@@ -137,20 +137,6 @@ DATABASES = {
     }
 }
 
-match os.environ.get("DJANGO_CI_DATABASE", ""):
-    case "dummy":
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.dummy",
-            }
-        }
-    case "sqlite3":
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.sqlite3",
-            }
-        }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
