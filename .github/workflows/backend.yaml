@@ -71,10 +71,11 @@ jobs:
     runs-on: ubuntu-latest
     container: python:3.13.5-alpine3.21
     services:
-      image: postgres:16.2-alpine3.19
-      env:
-        POSTGRES_PASSWORD: postgres
-      options: >-
+      postgres:
+        image: postgres:16.2-alpine3.19
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
