@@ -21,6 +21,12 @@ export interface Quote extends Base {
     date: string
 }
 
+export interface Remark extends Base {
+    user: User
+    content: string
+    date: string
+}
+
 export interface ReactionTask extends Base {
     user: User
     parent_type: "task"
@@ -248,6 +254,28 @@ export const postQuote = async (date: string, content: string) => {
     })
 
     return res.data
+}
+
+export const getRemark = async (username: string, date: string) => {
+    const res = await client.get<Remark | null>(
+        `social/remarks/@${username}/${date}/`,
+    )
+    return res.data
+}
+
+export const putRemark = async (date: string, content: string) => {
+    const res = await client.put<Remark>(
+        `social/remarks/@${getCurrentUsername()}/${date}/`,
+        {
+            content,
+        },
+    )
+    return res.data
+}
+
+export const deleteRemark = async (username: string, date: string) => {
+    const res = await client.delete(`social/remarks/@${username}/${date}/`)
+    return res.status
 }
 
 export const getEmojis = async () => {

@@ -370,22 +370,52 @@ def post_quote(request: Request, day):
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class RemarkCreate(generics.CreateAPIView):
-    queryset = Remark.objects.all()
-    serializer_class = RemarkSerializer
-    permission_classes = (permissions.RemarkCreatePermission,)
-
-
-class RemarkDetail(generics.RetrieveDestroyAPIView):
+class RemarkDetail(generics.GenericAPIView):
     serializer_class = RemarkSerializer
     permission_classes = (permissions.RemarkDetailPermission,)
 
-    def get_object(self):
+    def get_url_args(self):
         username: str = self.kwargs["username"]
         date_iso: str = self.kwargs["date_iso"]
         date = datetime.date.fromisoformat(date_iso)
 
-        return get_object_or_404(Remark, user__username=username, date=date)
+        return (username, date)
+
+    def get_object(self):
+        (username, date) = self.get_url_args()
+        return Remark.objects.filter(user__username=username, date=date).get()
+
+    def get(self, request: Request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Remark.DoesNotExist:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    def put(self, request: Request, **kwargs):
+        (username, date) = self.get_url_args()
+        request.data["date"] = date.isoformat()
+
+        instance = Remark.objects.filter(user__username=username, date=date).first()
+        if instance:
+            instance.deleted_at = None
+
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(
+            data=serializer.data,
+            status=status.HTTP_200_OK if instance else status.HTTP_201_CREATED,
+        )
+
+    def delete(self, request: Request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+
+        return Response(status=status.HTTP_200_OK)
 
 
 def get_privacy_filter(follower, followee):
@@ -544,7 +574,7 @@ class ReactionView(APIView):
                 parent_type=Reaction.FOR_TASK, task=task
             ).order_by("created_at")
         elif type == Reaction.FOR_QUOTE:
-            quote = get_object_or_404(Remark, id=id)
+            quote = get_object_or_404(Quote, id=id)
             reactions = Reaction.objects.filter(
                 parent_type=Reaction.FOR_QUOTE, quote=quote
             ).order_by("created_at")
@@ -593,7 +623,7 @@ class ReactionView(APIView):
             )
 
         elif type == Reaction.FOR_QUOTE:
-            quote = get_object_or_404(Remark, id=id)
+            quote = get_object_or_404(Quote, id=id)
             reaction, created = Reaction.objects.get_or_create(
                 user=user, parent_type=Reaction.FOR_QUOTE, quote=quote, emoji=emoji
             )
@@ -624,7 +654,7 @@ class ReactionView(APIView):
                 emoji=emoji,
             )
         elif type == Reaction.FOR_QUOTE:
-            quote = get_object_or_404(Remark, id=id)
+            quote = get_object_or_404(Quote, id=id)
             reaction = get_object_or_404(
                 Reaction,
                 user=user,
@@ -707,7 +737,7 @@ class CommentView(APIView):
                 user=user, parent_type=Reaction.FOR_TASK, task=task, comment=comment
             )
         elif type == Comment.FOR_QUOTE:
-            quote = get_object_or_404(Remark, id=id)
+            quote = get_object_or_404(Quote, id=id)
             created = Comment.objects.create(
                 user=user, parent_type=Reaction.FOR_QUOTE, quote=quote, comment=comment
             )
