@@ -32,6 +32,33 @@ class IsUserNotBlockedOrBlocking(permissions.IsAuthenticated):
         return True
 
 
+class RemarkCreatePermission(permissions.IsAuthenticated):
+    def has_permission(self, request: Request, view: views.APIView) -> bool:
+        is_authenticated = super().has_permission(request, view)
+        if not is_authenticated:
+            return False
+
+        return request.user.get_username() == request.data.get(
+            "username", request.user.get_username()
+        )
+
+
+class RemarkDetailPermission(permissions.IsAuthenticated):
+    def has_permission(self, request: Request, view: views.APIView) -> bool:
+        is_authenticated = super().has_permission(request, view)
+        if not is_authenticated:
+            return False
+
+        username = view.kwargs["username"]
+        if is_either_blocked(request.user.get_username(), username):
+            return False
+
+        return (
+            request.user.get_username() == username
+            or request.method in permissions.SAFE_METHODS
+        )
+
+
 class FollowingPermission(permissions.IsAuthenticated):
     def has_permission(self, request: Request, view: views.APIView) -> bool:
         is_authenticated = super().has_permission(request, view)

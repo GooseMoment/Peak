@@ -30,6 +30,8 @@ urlpatterns = [
     ),
     path("quotes/@<str:followee>/<str:day>/", views.get_quote),
     path("quotes/<str:day>/", views.post_quote),
+    path("remarks/", views.RemarkCreate.as_view()),
+    path("remarks/@<str:username>/<str:date_iso>/", views.RemarkDetail.as_view()),
     path("reactions/<str:type>/<str:id>/", views.ReactionView.as_view()),
     path("comments/<str:type>/<str:id>/", views.CommentView.as_view()),
     path("pecks/<str:id>/", views.PeckView.as_view()),

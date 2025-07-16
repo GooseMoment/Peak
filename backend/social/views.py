@@ -16,15 +16,14 @@ from django.db.models.query import QuerySet
 from django.db.utils import IntegrityError
 from django.utils import timezone
 
-from datetime import datetime, timedelta
-
-from .models import Emoji, Quote, Reaction, Peck, Comment, Following, Block
+from .models import Emoji, Quote, Remark, Reaction, Peck, Comment, Following, Block
 from .serializers import (
     EmojiSerializer,
     DailyLogsSerializer,
     DailyLogDrawerSerializer,
     DailyLogDetailsSerializer,
     QuoteSerializer,
+    RemarkSerializer,
     ReactionSerializer,
     PeckSerializer,
     CommentSerializer,
@@ -41,6 +40,8 @@ from tasks.models import Task
 from tasks.serializers import TaskSerializer
 from users.models import User
 from users.serializers import UserSerializer
+
+import datetime
 
 
 class ExploreFeedPagination(CursorPagination):
@@ -301,10 +302,10 @@ def get_daily_logs(request: Request, username, day):
     daily_logs_filter = Q(followers__in=followings.all()) | Q(id=user_id)
 
     followingUsers = User.objects.filter(daily_logs_filter).all().distinct()
-    day = datetime.fromisoformat(day)
+    day = datetime.datetime.fromisoformat(day)
 
     day_min = day
-    day_max = day + timedelta(hours=24) - timedelta(seconds=1)
+    day_max = day + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
 
     serializer = DailyLogsSerializer(
         followingUsers,
@@ -326,16 +327,16 @@ def get_quote(request: AuthenticatedRequest, followee, day):
     cache_key = f"user_id_{followeeUserID}_date_{day}"
     cache_data = cache.get(cache_key)
     if cache_data:
-        cache_data[followerUserID] = datetime.now()
+        cache_data[followerUserID] = datetime.datetime.now()
     else:
-        cache_data = {followerUserID: datetime.now()}
+        cache_data = {followerUserID: datetime.datetime.now()}
 
     cache.delete(cache_key)
     # cache.set(cache_key, cache_data, 1*24*60*60)
     cache.set(cache_key, cache_data, 60 * 60)
 
-    day_min = datetime.fromisoformat(day)
-    day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+    day_min = datetime.datetime.fromisoformat(day)
+    day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
     quote = Quote.objects.filter(
         user__id=followeeUserID, date__range=(day_min, day_max)
     ).first()
@@ -350,8 +351,8 @@ def get_quote(request: AuthenticatedRequest, followee, day):
 
 @api_view(["POST"])
 def post_quote(request: Request, day):
-    day_min = datetime.fromisoformat(day)
-    day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+    day_min = datetime.datetime.fromisoformat(day)
+    day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
 
     quote = Quote.objects.filter(
         user=request.user, date__range=(day_min, day_max)
@@ -367,6 +368,24 @@ def post_quote(request: Request, day):
     serializer = QuoteSerializer(quote)
 
     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class RemarkCreate(generics.CreateAPIView):
+    queryset = Remark.objects.all()
+    serializer_class = RemarkSerializer
+    permission_classes = (permissions.RemarkCreatePermission,)
+
+
+class RemarkDetail(generics.RetrieveDestroyAPIView):
+    serializer_class = RemarkSerializer
+    permission_classes = (permissions.RemarkDetailPermission,)
+
+    def get_object(self):
+        username: str = self.kwargs["username"]
+        date_iso: str = self.kwargs["date_iso"]
+        date = datetime.date.fromisoformat(date_iso)
+
+        return get_object_or_404(Remark, user__username=username, date=date)
 
 
 def get_privacy_filter(follower, followee):
@@ -403,8 +422,8 @@ class DailyLogDetailsView(generics.GenericAPIView):
 
     def get(self, request, followee, day):
         followee_user = get_object_or_404(User, username=followee)
-        day_min = datetime.fromisoformat(day)
-        day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+        day_min = datetime.datetime.fromisoformat(day)
+        day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
         day_range = (day_min, day_max)
 
         privacy_filter = get_privacy_filter(request.user, followee_user)
@@ -485,8 +504,8 @@ class DailyLogTaskView(generics.GenericAPIView):
         # privacyFilter = get_privacy_filter(request.user, followee)
         privacyFilter = Q()
 
-        day_min = datetime.fromisoformat(day)
-        day_max = day_min + timedelta(hours=24) - timedelta(seconds=1)
+        day_min = datetime.datetime.fromisoformat(day)
+        day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
         day_range = (day_min, day_max)
 
         tasksFilterForCompleted = Q(completed_at__range=day_range)
@@ -525,7 +544,7 @@ class ReactionView(APIView):
                 parent_type=Reaction.FOR_TASK, task=task
             ).order_by("created_at")
         elif type == Reaction.FOR_QUOTE:
-            quote = get_object_or_404(Quote, id=id)
+            quote = get_object_or_404(Remark, id=id)
             reactions = Reaction.objects.filter(
                 parent_type=Reaction.FOR_QUOTE, quote=quote
             ).order_by("created_at")
@@ -574,7 +593,7 @@ class ReactionView(APIView):
             )
 
         elif type == Reaction.FOR_QUOTE:
-            quote = get_object_or_404(Quote, id=id)
+            quote = get_object_or_404(Remark, id=id)
             reaction, created = Reaction.objects.get_or_create(
                 user=user, parent_type=Reaction.FOR_QUOTE, quote=quote, emoji=emoji
             )
@@ -605,7 +624,7 @@ class ReactionView(APIView):
                 emoji=emoji,
             )
         elif type == Reaction.FOR_QUOTE:
-            quote = get_object_or_404(Quote, id=id)
+            quote = get_object_or_404(Remark, id=id)
             reaction = get_object_or_404(
                 Reaction,
                 user=user,
@@ -688,7 +707,7 @@ class CommentView(APIView):
                 user=user, parent_type=Reaction.FOR_TASK, task=task, comment=comment
             )
         elif type == Comment.FOR_QUOTE:
-            quote = get_object_or_404(Quote, id=id)
+            quote = get_object_or_404(Remark, id=id)
             created = Comment.objects.create(
                 user=user, parent_type=Reaction.FOR_QUOTE, quote=quote, comment=comment
             )
