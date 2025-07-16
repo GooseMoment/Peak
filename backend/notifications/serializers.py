@@ -1,6 +1,7 @@
-from .models import Notification, WebPushSubscription
 from rest_framework import serializers
 
+from . import exceptions
+from .models import Notification, WebPushSubscription
 from social.serializers import (
     CommentSerializer,
     ReactionSerializer,
@@ -37,18 +38,47 @@ class NotificatonSerializer(serializers.ModelSerializer):
         ]
 
 
+class CurrentTokenDefault:
+    requires_context = True
+
+    def __call__(self, serializer_field):
+        return serializer_field.context["request"].auth
+
+    def __repr__(self):
+        return "%s()" % self.__class__.__name__
+
+
+NOTIFICATION_TYPES = Notification.SOCIAL_TYPES + (Notification.FOR_TASK_REMINDER,)
+
+
 class WebPushSubscriptionSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    device = serializers.CharField(default="Unknown")
+    token = serializers.HiddenField(default=CurrentTokenDefault())
+    excluded_types = serializers.JSONField(default=list)
+
+    def validate_excluded_types(self, value):
+        if type(value) is not list or len(value) > len(NOTIFICATION_TYPES):
+            raise exceptions.InvalidNotificationType
+
+        # check all types are valid
+        for t in value:
+            if t not in NOTIFICATION_TYPES:
+                raise exceptions.InvalidNotificationType
+
+        # disallow excluding all types
+        if len(value) == len(NOTIFICATION_TYPES):
+            raise exceptions.AllTypesExcluded
+
+        return value
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = WebPushSubscription
         fields = [
             "id",
-            "user",
-            "subscription_info",
+            "token",
+            "endpoint",
+            "auth",
+            "p256dh",
+            "expiration_time",
             "locale",
-            "device",
-            "user_agent",
             "excluded_types",
         ]

@@ -2,6 +2,7 @@ from rest_framework import mixins, generics, permissions, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.pagination import CursorPagination
+from rest_framework.permissions import BasePermission
 
 from django.shortcuts import get_object_or_404
 
@@ -18,7 +19,6 @@ from .serializers import (
     TaskReminderSerializer,
 )
 from .utils import caculateScheduled
-from . import exceptions
 
 from api.exceptions import RequiredFieldMissing
 
@@ -95,9 +95,7 @@ class NotificationListPagination(CursorPagination):
     ordering = "-created_at"
 
 
-class NotificationList(
-    mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
-):
+class NotificationList(generics.ListAPIView):
     serializer_class = NotificatonSerializer
     pagination_class = NotificationListPagination
     permission_classes = [permissions.IsAuthenticated]
@@ -112,82 +110,28 @@ class NotificationList(
             .all()
         )
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
 
-
-class NotificationDetail(
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    generics.GenericAPIView,
-):
+class NotificationDetail(generics.RetrieveDestroyAPIView):
     queryset = Notification.objects.all()
     serializer_class = NotificatonSerializer
     lookup_field = "id"
     permission_classes = [IsUserOwner]
 
-    def get(self, request, id, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
 
-    def delete(self, request, id, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
-
-
-class WebPushSubscriptionCreate(mixins.CreateModelMixin, generics.GenericAPIView):
+class WebPushSubscriptionCreate(generics.CreateAPIView):
     queryset = WebPushSubscription.objects.all()
     serializer_class = WebPushSubscriptionSerializer
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+
+class WebPushSubscriptionPermission(BasePermission):
+    def has_object_permission(
+        self, request: Request, view, obj: WebPushSubscription
+    ) -> bool:
+        return request.auth == obj.token
 
 
-class WebPushSubscriptionDetail(
-    mixins.RetrieveModelMixin,
-    mixins.DestroyModelMixin,
-    generics.GenericAPIView,
-):
+class WebPushSubscriptionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = WebPushSubscription.objects.all()
     serializer_class = WebPushSubscriptionSerializer
     lookup_field = "id"
-    permission_classes = [IsUserOwner]
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    # Only accepts updating excluded_types for now
-    def patch(self, request: Request, *args, **kwargs):
-        try:
-            excluded_types: list[str] = request.data["excluded_types"]
-        except KeyError:
-            raise exceptions.ExcludedTypesMissing
-
-        notification_types = Notification.SOCIAL_TYPES + (
-            Notification.FOR_TASK_REMINDER,
-        )
-
-        if type(excluded_types) is not list or len(excluded_types) > len(
-            notification_types
-        ):
-            raise exceptions.InvalidNotificationType
-
-        # check all types are valid
-        for t in excluded_types:
-            if t not in notification_types:
-                raise exceptions.InvalidNotificationType
-
-        # disallow excluding all types
-        if len(excluded_types) == len(notification_types):
-            raise exceptions.AllTypesExcluded
-
-        subscription: WebPushSubscription = self.get_object()
-        serializer = WebPushSubscriptionSerializer(
-            subscription, data={"excluded_types": excluded_types}, partial=True
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+    permission_classes = (WebPushSubscriptionPermission,)

@@ -19,9 +19,12 @@ from knox.views import LoginView as KnoxLoginView
 import uuid
 import re
 from datetime import datetime, UTC
+from ua_parser import parse as ua_parse
+from typing import Optional
 
 from users.models import User
 from .models import (
+    AuthToken,
     EmailVerificationToken,
     PasswordRecoveryToken,
     TOTPSecret,
@@ -29,12 +32,41 @@ from .models import (
 )
 from .totp import create_totp_secret, TOTP
 from . import exceptions, mails
+from api.utils import get_client_ip
 from api.exceptions import RequiredFieldMissing
 
 
-class SignInView(KnoxLoginView):
+class BaseLoginView(KnoxLoginView):
     permission_classes = (AllowAny,)
 
+    def get_device_and_browser(
+        self, ua: str
+    ) -> tuple[Optional[str], Optional[str], Optional[str]]:
+        result = ua_parse(ua)
+
+        browser = result.user_agent.family if result.user_agent else None
+        os = result.os.family if result.os else None
+        device = result.device.family if result.device else None
+        return (browser, os, device)
+
+    def create_token(self):
+        token_prefix = self.get_token_prefix()
+
+        user_agent = self.request.headers.get("User-Agent", "")
+        (browser, os, device) = self.get_device_and_browser(user_agent)
+
+        return AuthToken.objects.create(
+            user=self.request.user,
+            expiry=self.get_token_ttl(),
+            prefix=token_prefix,
+            initial_ip=get_client_ip(self.request),
+            browser=browser,
+            os=os,
+            device=device,
+        )
+
+
+class SignInView(BaseLoginView):
     def post(self, request: Request, format=None):
         email: str = request.data["email"]
         password: str = request.data["password"]
@@ -67,9 +99,7 @@ class SignInView(KnoxLoginView):
         return super(SignInView, self).post(request, format=format)
 
 
-class TOTPAuthenticationView(KnoxLoginView):
-    permission_classes = (AllowAny,)
-
+class TOTPAuthenticationView(BaseLoginView):
     def post(self, request: Request, format=None):
         try:
             token_hex = request.data["token"]

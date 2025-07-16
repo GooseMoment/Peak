@@ -7,7 +7,6 @@ import {
     getClientSettings,
     setClientSettingsByName,
 } from "@utils/clientSettings"
-import getDeviceType from "@utils/getDeviceType"
 
 export interface TaskReminder extends Base {
     // TODO: replace any with Task
@@ -120,11 +119,11 @@ export const getRelatedUserFromNotification = (notification: Notification) => {
 
 export interface WebPushSubscription {
     id: string
-    user: object
-    subscription_info: PushSubscription
+    auth: string
+    p256dh: string
+    endpoint: PushSubscription["endpoint"]
+    expiration_time: PushSubscription["expirationTime"]
     locale: string
-    device: string
-    user_agent: (typeof navigator)["userAgent"]
     fail_cnt: number
     excluded_types: Notification["type"][]
 }
@@ -142,11 +141,14 @@ export const postSubscription = async (subscription: PushSubscription) => {
         locale = navigator.language.startsWith("ko") ? "ko" : "en"
     }
 
+    const subscriptionJSON = subscription.toJSON()
+
     const data: Partial<WebPushSubscription> = {
-        subscription_info: subscription,
+        auth: subscriptionJSON.keys?.auth,
+        p256dh: subscriptionJSON.keys?.p256dh,
+        endpoint: subscription.endpoint,
+        expiration_time: subscription.expirationTime,
         locale,
-        device: getDeviceType(),
-        user_agent: navigator.userAgent,
     }
 
     const res = await client.post<WebPushSubscription>(

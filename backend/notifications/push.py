@@ -8,7 +8,7 @@ from .locale import get_translations
 from pywebpush import webpush, WebPushException
 from json import dumps
 from urllib3.util import parse_url
-from datetime import datetime
+from datetime import datetime, UTC
 
 
 class PushData:
@@ -131,14 +131,20 @@ def _notificationToPushData(notification: Notification, locale: str) -> PushData
 
 
 def pushNotificationToUser(user: User, notification: Notification) -> None:
-    subscriptions = WebPushSubscription.objects.filter(user=user).all()
+    subscriptions = WebPushSubscription.objects.filter(token__user=user).all()
     dumped_datas_per_locale: dict[str, str] = dict()
 
     for subscription in subscriptions:
         if notification.type in subscription.excluded_types:
             continue
 
-        endpoint = parse_url(subscription.subscription_info.get("endpoint"))
+        if subscription.expiration_time and datetime.fromtimestamp(
+            subscription.expiration_time, tz=UTC
+        ) < datetime.now(UTC):
+            subscription.delete()
+            continue
+
+        endpoint = parse_url(subscription.endpoint)
         if endpoint.scheme is None or endpoint.host is None:
             subscription.delete()
             continue
@@ -163,7 +169,7 @@ def pushNotificationToUser(user: User, notification: Notification) -> None:
 
         try:
             webpush(
-                subscription.subscription_info,
+                subscription.to_push_subscription(),
                 data,
                 vapid_private_key=settings.WEBPUSH.get("vapid_private_key"),
                 vapid_claims={

@@ -4,6 +4,7 @@ from api.models import Base
 from tasks.models import Task
 from users.models import User
 from social.models import Reaction, Following, Peck, Comment
+from peak_auth.models import AuthToken
 
 
 class TaskReminder(Base):
@@ -99,19 +100,28 @@ class Notification(Base):
 
 
 class WebPushSubscription(Base):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
+    token = models.OneToOneField(
+        AuthToken, on_delete=models.CASCADE, related_name="web_push_subscription"
     )
-    subscription_info = models.JSONField()
     locale = models.CharField(max_length=128, null=True, blank=True)
-    device = models.CharField(max_length=128)
-    user_agent = models.CharField(max_length=500, blank=True)
     fail_cnt = models.IntegerField(default=0)
     excluded_types = models.JSONField(default=list)
 
+    # [PushSubscription](https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription)
+    endpoint = models.URLField()
+    auth = models.CharField(max_length=128)
+    p256dh = models.CharField(max_length=128)
+    expiration_time = models.FloatField(null=True, blank=True)
+
+    def to_push_subscription(self):
+        return {
+            "keys": {"auth": self.auth, "p256dh": self.p256dh},
+            "endpoint": self.endpoint,
+            "expirationTime": self.expiration_time,
+        }
+
     def __str__(self) -> str:
-        return f"Subscription of {self.user} for {self.device}"
+        return f"WebPushSubscription: <{self.token}>"
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "web_push_subscriptions"

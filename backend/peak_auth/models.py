@@ -5,6 +5,20 @@ from users.models import User
 from .totp import TOTP
 
 import uuid
+from knox.models import AbstractAuthToken
+
+
+class AuthToken(AbstractAuthToken):
+    initial_ip = models.GenericIPAddressField()
+    browser = models.CharField(max_length=128, blank=True, null=True)
+    os = models.CharField(max_length=128, blank=True, null=True)
+    device = models.CharField(max_length=128, blank=True, null=True)
+
+    def __str__(self) -> str:
+        return f"AuthToken: {self.user}"
+
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride]
+        db_table = "auth_tokens"
 
 
 class EmailVerificationToken(models.Model):
