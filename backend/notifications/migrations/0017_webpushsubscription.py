@@ -9,7 +9,7 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        migrations.swappable_dependency(settings.KNOX_TOKEN_MODEL),
+        ('peak_auth', '0003_authtoken'),
         ('notifications', '0016_delete_webpushsubscription'),
     ]
 
