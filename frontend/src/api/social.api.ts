@@ -242,20 +242,6 @@ export const getExploreFound = async (query: string, cursor: string) => {
     return res.data
 }
 
-export const getQuote = async (username: string, day: string) => {
-    const res = await client.get<Quote>(`social/quotes/@${username}/${day}/`)
-
-    return res.data
-}
-
-export const postQuote = async (date: string, content: string) => {
-    const res = await client.post<Quote>(`social/quotes/${date}/`, {
-        content,
-    })
-
-    return res.data
-}
-
 export const getRemark = async (username: string, date: string) => {
     const res = await client.get<Remark | "">(
         `social/remarks/@${username}/${date}/`,
