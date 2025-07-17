@@ -399,9 +399,6 @@ class RemarkDetail(generics.GenericAPIView):
         request.data["date"] = date.isoformat()
 
         instance = Remark.objects.filter(user__username=username, date=date).first()
-        if instance:
-            instance.deleted_at = None
-
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
