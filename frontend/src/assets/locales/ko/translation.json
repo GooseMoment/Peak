@@ -434,6 +434,7 @@
             "back": "돌아가기"
         },
         "button_no": "아니요",
-        "error_load": "불러오지 못했습니다."
+        "error_load": "불러오지 못했습니다.",
+        "error_perform": "실행하지 못했습니다."
     }
 }

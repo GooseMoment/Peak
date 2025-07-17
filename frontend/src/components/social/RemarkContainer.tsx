@@ -19,6 +19,7 @@ import { type User } from "@api/users.api"
 import FeatherIcon from "feather-icons-react"
 import { type DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 interface RemarkContainerProps {
     username: User["username"]
@@ -79,24 +80,26 @@ export const RemarkBox = ({ remark, loading = false }: RemarkBoxProps) => {
 }
 
 interface RemarkInputProps {
+    // RemarkInput should be called after fetching is finished regradless of the existence of the remark
     remark: Remark | null
     date: DateTime
 }
 
 export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
-    const [isEditing, setEditing] = useState(false)
-    const [content, setContent] = useState(remark?.content || "")
-    const textareaRef = useRef<HTMLTextAreaElement | null>(null)
-    const { t } = useTranslation("translation", { keyPrefix: "social.remarks" })
+    const [isEditing, setEditing] = useState(false) // whether on the edit mode or not
+    const [content, setContent] = useState(remark?.content || "") // textarea value
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null) // contains the textarea element
 
+    const { t } = useTranslation("translation")
+
+    // resizes the textarea automatically whenever the value changes
     const resizeTextarea = useCallback(
         (node: HTMLTextAreaElement | null) => {
             if (!node) {
                 return
             }
-            textareaRef.current = node
 
-            node.focus()
+            textareaRef.current = node
 
             node.style.height = "auto"
             node.style.height = `${node.scrollHeight + 10}px`
@@ -104,6 +107,8 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
         [content],
     )
 
+    // focuses on the textarea and puts the cursor on the end of the content
+    // when the user enters the edit mode
     useEffect(() => {
         if (!isEditing) {
             return
@@ -139,16 +144,19 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
                 data,
             )
         },
+        onError() {
+            toast.error(t("common.error_perform"))
+        },
     })
 
     const handleClick = () => {
-        if (!isEditing) {
-            setContent(remark?.content || "")
-            setEditing(true)
+        if (isEditing) {
+            submit()
             return
         }
 
-        submit()
+        setContent(remark?.content || "")
+        setEditing(true)
     }
 
     const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -156,10 +164,12 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
             return
         }
 
+        // skip if Shift+Enter
         if (e.key === "Enter" && e.shiftKey) {
             return
         }
 
+        // eat off Enter and submit
         if (e.key === "Enter") {
             e.preventDefault()
             submit()
@@ -171,6 +181,7 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
             return
         }
 
+        // if the content was not changed
         if (content === remark?.content || (!content && !remark)) {
             // do not send a requst to a server
             setEditing(false)
@@ -182,19 +193,21 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
 
     return (
         <InputWrapper>
-            <Box $isFocus={isEditing}>
+            <Box $isFocused={isEditing}>
                 <Title>
                     {!remark
-                        ? t("title_create")
+                        ? t("social.remarks.title_create")
                         : isEditing
-                          ? t("title_edit")
-                          : t("title")}
+                          ? t("social.remarks.title_edit")
+                          : t("social.remarks.title")}
                 </Title>
                 <TextArea
                     ref={resizeTextarea}
                     disabled={mut.isPending || !isEditing}
                     placeholder={
-                        isEditing ? t("placeholder_edit") : t("placeholder")
+                        isEditing
+                            ? t("social.remarks.placeholder_edit")
+                            : t("social.remarks.placeholder")
                     }
                     defaultValue={content}
                     onChange={(e) => setContent(e.target.value)}
@@ -221,7 +234,7 @@ const InputWrapper = styled.div`
     position: relative;
 `
 
-const Box = styled.article<{ $isFocus?: boolean }>`
+const Box = styled.article<{ $isFocused?: boolean }>`
     display: flex;
     flex-direction: column;
     gap: 0.75em;
@@ -235,7 +248,7 @@ const Box = styled.article<{ $isFocus?: boolean }>`
 
     border: 2px
         ${(p) =>
-            p.$isFocus ? p.theme.primaryColors.info : p.theme.backgroundColor}
+            p.$isFocused ? p.theme.primaryColors.info : p.theme.backgroundColor}
         solid;
     transition: border 0.5s var(--cubic);
 

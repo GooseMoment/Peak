@@ -434,6 +434,7 @@
             "back": "Go Back"
         },
         "button_no": "No",
-        "error_load": "Failed to load."
+        "error_load": "Failed to load.",
+        "error_perform": "Failed to perform the requested action."
     }
 }

@@ -250,6 +250,7 @@ export const getRemark = async (username: string, date: string) => {
     return res.data === "" ? null : res.data
 }
 
+// PUT performs the both CREATE and UPDATE
 export const putRemark = async (date: string, content: string) => {
     const res = await client.put<Remark>(
         `social/remarks/@${getCurrentUsername()}/${date}/`,
