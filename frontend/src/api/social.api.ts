@@ -21,6 +21,12 @@ export interface Quote extends Base {
     date: string
 }
 
+export interface Remark extends Base {
+    user: User
+    content: string
+    date: string
+}
+
 export interface ReactionTask extends Base {
     user: User
     parent_type: "task"
@@ -236,18 +242,28 @@ export const getExploreFound = async (query: string, cursor: string) => {
     return res.data
 }
 
-export const getQuote = async (username: string, day: string) => {
-    const res = await client.get<Quote>(`social/quotes/@${username}/${day}/`)
+export const getRemark = async (username: string, date: string) => {
+    const res = await client.get<Remark | "">(
+        `social/remarks/@${username}/${date}/`,
+    )
+    // The data of 204 No Content is a blank string
+    return res.data === "" ? null : res.data
+}
 
+// PUT performs the both CREATE and UPDATE
+export const putRemark = async (date: string, content: string) => {
+    const res = await client.put<Remark>(
+        `social/remarks/@${getCurrentUsername()}/${date}/`,
+        {
+            content,
+        },
+    )
     return res.data
 }
 
-export const postQuote = async (date: string, content: string) => {
-    const res = await client.post<Quote>(`social/quotes/${date}/`, {
-        content,
-    })
-
-    return res.data
+export const deleteRemark = async (date: string) => {
+    await client.delete(`social/remarks/@${getCurrentUsername()}/${date}/`)
+    return null
 }
 
 export const getEmojis = async () => {

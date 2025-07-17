@@ -1,65 +1,32 @@
 import { Fragment, useState } from "react"
 
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
-import InteractionBox from "@components/social/interaction/InteractionBox"
-import Quote from "@components/social/logDetails/Quote"
+import RemarkContainer from "@components/social/RemarkContainer"
 import FollowButton from "@components/users/FollowButton"
 
 import TaskBox from "./TaskBox"
 
-import { getCurrentUsername } from "@api/client"
-import { getDailyLogDetails, getQuote, postQuote } from "@api/social.api"
+import { getDailyLogDetails } from "@api/social.api"
 
+import { useClientTimezone } from "@utils/clientSettings"
 import { getCursorFromURL } from "@utils/pagination"
-import { ifMobile } from "@utils/useScreenType"
-
-import queryClient from "@queries/queryClient"
 
 import { getPaletteColor } from "@assets/palettes"
 
 import { ImpressionArea } from "@toss/impression-area"
+import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
-import { toast } from "react-toastify"
 
-const LogDetails = ({
-    pageType = "following",
-    username,
-    selectedDate,
-    displayProfile = true,
-}) => {
+const LogDetails = ({ pageType = "following", username, selectedDate }) => {
     const { t } = useTranslation("", { keyPrefix: "social.log_details" })
     const theme = useTheme()
+    const tz = useClientTimezone()
 
-    const me = getCurrentUsername()
-
-    // quote
-    const { data: quote, isPending: isQuotePending } = useQuery({
-        queryKey: ["quotes", username, selectedDate],
-        queryFn: () => getQuote(username, selectedDate),
-        enabled: !!selectedDate, // && pageType === "following"
-    })
-
-    const QuoteMutation = useMutation({
-        mutationFn: ({ day, content }) => {
-            return postQuote(day, content)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["quotes", me, selectedDate],
-            })
-        },
-        onError: (e) => {
-            toast.error(e)
-        },
-    })
-
-    const saveQuote = (content) => {
-        QuoteMutation.mutate({ day: selectedDate, content })
-    }
+    const date = DateTime.fromISO(selectedDate).setZone(tz)
 
     // logDetails
     const {
@@ -80,32 +47,16 @@ const LogDetails = ({
     // TODO: Drawer 접기
     const [hiddenDrawers] = useState(new Set())
 
-    return isQuotePending | isLogDetailsPending ? (
-        <SkeletonProjectPage />
-    ) : (
+    if (isLogDetailsPending) {
+        return <SkeletonProjectPage />
+    }
+
+    return (
         <DetailBox>
-            <DetailHeader>
-                {quote && (
-                    <>
-                        <Quote
-                            user={quote.user}
-                            quote={quote}
-                            saveQuote={saveQuote || null}
-                            displayProfile={displayProfile}
-                        />
-                        {pageType === "following" ? (
-                            quote?.id && (
-                                <InteractionBox
-                                    parentType={"quote"}
-                                    parent={quote}
-                                />
-                            )
-                        ) : (
-                            <FollowButton user={quote.user} />
-                        )}
-                    </>
-                )}
-            </DetailHeader>
+            <RemarkWrapper>
+                <RemarkContainer username={username} date={date} />
+                {pageType === "explore" && <FollowButton user={{ username }} />}
+            </RemarkWrapper>
 
             {/* TODO: When there are no task */}
             <DetailBody>
@@ -158,16 +109,13 @@ const DetailBox = styled.div`
     flex-direction: column;
 `
 
-const DetailHeader = styled.div`
-    padding: 1.2em 1em 0.2em;
+const RemarkWrapper = styled.div`
+    margin-top: 1em;
+    padding: 0.25em;
 
     display: flex;
     flex-direction: column;
     gap: 0.7em;
-
-    ${ifMobile} {
-        padding: 0em 0 0.2em;
-    }
 `
 
 const DetailBody = styled.div`

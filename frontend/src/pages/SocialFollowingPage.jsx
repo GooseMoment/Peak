@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { styled } from "styled-components"
 
 import CommonCalendar from "@components/common/CommonCalendar"
+import DailyUserProfile from "@components/social/DailyUserProfile"
 import SocialPageTitle from "@components/social/SocialPageTitle"
 import DateBar from "@components/social/common/DateBar"
 import LogDetails from "@components/social/logDetails/LogDetails"
@@ -69,6 +70,7 @@ const SocialFollowingPage = () => {
                 {/* TODO: 날짜가 선택되지 않았을 때 */}
                 {!(isMobile || isTablet) && (
                     <StickyContainer>
+                        <DailyUserProfile username={targetUser} />
                         <LogDetails
                             username={targetUser}
                             selectedDate={selectedDate}

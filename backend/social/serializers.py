@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.core.cache import cache
 
-from .models import Emoji, Quote, Reaction, Peck, Comment, Following, Block
+from .models import Emoji, Quote, Remark, Reaction, Peck, Comment, Following, Block
 from projects.models import Project
 from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
@@ -85,6 +85,21 @@ class QuoteSerializer(serializers.ModelSerializer):
     #         return {'user': data['user']}
 
     #     return data
+
+
+class RemarkSerializer(serializers.ModelSerializer):
+    user = UserSerializer(default=serializers.CurrentUserDefault())
+
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
+        model = Remark
+        fields = [
+            "id",
+            "user",
+            "content",
+            "date",
+            "created_at",
+            "updated_at",
+        ]
 
 
 class DailyLogDetailsSerializer(TaskSerializer):
