@@ -36,11 +36,7 @@ const SocialDailyPage = () => {
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
             />
-            <LogDetails
-                username={username}
-                selectedDate={selectedDate}
-                displayProfile={false}
-            />
+            <LogDetails username={username} selectedDate={selectedDate} />
         </>
     )
 }
