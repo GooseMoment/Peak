@@ -412,7 +412,11 @@ class RemarkDetail(generics.GenericAPIView):
         )
 
     def delete(self, request: Request, *args, **kwargs):
-        instance = self.get_object()
+        try:
+            instance = self.get_object()
+        except Remark.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
         instance.delete()
 
         return Response(status=status.HTTP_200_OK)

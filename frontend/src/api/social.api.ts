@@ -257,10 +257,11 @@ export const postQuote = async (date: string, content: string) => {
 }
 
 export const getRemark = async (username: string, date: string) => {
-    const res = await client.get<Remark | null>(
+    const res = await client.get<Remark | "">(
         `social/remarks/@${username}/${date}/`,
     )
-    return res.data
+    // The data of 204 No Content is a blank string
+    return res.data === "" ? null : res.data
 }
 
 export const putRemark = async (date: string, content: string) => {
@@ -274,10 +275,8 @@ export const putRemark = async (date: string, content: string) => {
 }
 
 export const deleteRemark = async (date: string) => {
-    const res = await client.delete(
-        `social/remarks/@${getCurrentUsername()}/${date}/`,
-    )
-    return res.status
+    await client.delete(`social/remarks/@${getCurrentUsername()}/${date}/`)
+    return null
 }
 
 export const getEmojis = async () => {

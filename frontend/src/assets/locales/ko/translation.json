@@ -395,6 +395,13 @@
             "empty_self_quote": "오늘의 한마디를 남겨주세요.",
             "empty_others_quote": "아직 상대방이 작성하지 않았습니다."
         },
+        "remarks": {
+            "title": "오늘의 한마디",
+            "title_edit": "수정 중",
+            "title_create": "한마디를 적어주세요",
+            "placeholder": "연필 버튼을 눌러 작성하세요",
+            "placeholder_edit": "이곳에 작성하세요..."
+        },
         "emoji_modal": {
             "searchbar": "이모지 찾기"
         },
