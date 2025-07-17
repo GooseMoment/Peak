@@ -10,7 +10,6 @@ import { getUserByUsername } from "@api/users.api"
 
 interface DailyUserProfileProps {
     username: string
-    loading?: boolean
     back?: boolean
 }
 

@@ -182,7 +182,10 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
         }
 
         // if the content was not changed
-        if (content === remark?.content || (!content && !remark)) {
+        if (
+            content === remark?.content ||
+            (content === "" && remark === null)
+        ) {
             // do not send a requst to a server
             setEditing(false)
             return
@@ -209,7 +212,7 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
                             ? t("social.remarks.placeholder_edit")
                             : t("social.remarks.placeholder")
                     }
-                    defaultValue={content}
+                    value={content}
                     onChange={(e) => setContent(e.target.value)}
                     onKeyDown={handleKeyDown}
                 />

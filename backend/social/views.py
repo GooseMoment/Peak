@@ -383,12 +383,11 @@ class RemarkDetail(generics.GenericAPIView):
 
     def get_object(self):
         (username, date) = self.get_url_args()
-        return Remark.objects.filter(user__username=username, date=date).get()
+        return Remark.objects.filter(user__username=username, date=date).first()
 
     def get(self, request: Request, *args, **kwargs):
-        try:
-            instance = self.get_object()
-        except Remark.DoesNotExist:
+        instance = self.get_object()
+        if instance is None:
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         serializer = self.get_serializer(instance)
@@ -409,9 +408,8 @@ class RemarkDetail(generics.GenericAPIView):
         )
 
     def delete(self, request: Request, *args, **kwargs):
-        try:
-            instance = self.get_object()
-        except Remark.DoesNotExist:
+        instance = self.get_object()
+        if instance is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         instance.delete()
