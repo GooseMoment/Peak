@@ -5,6 +5,7 @@ import styled, { useTheme } from "styled-components"
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
+import RemarkContainer from "@components/social/RemarkContainer"
 import InteractionBox from "@components/social/interaction/InteractionBox"
 import Quote from "@components/social/logDetails/Quote"
 import FollowButton from "@components/users/FollowButton"
@@ -14,6 +15,7 @@ import TaskBox from "./TaskBox"
 import { getCurrentUsername } from "@api/client"
 import { getDailyLogDetails, getQuote, postQuote } from "@api/social.api"
 
+import { useClientTimezone } from "@utils/clientSettings"
 import { getCursorFromURL } from "@utils/pagination"
 import { ifMobile } from "@utils/useScreenType"
 
@@ -22,6 +24,7 @@ import queryClient from "@queries/queryClient"
 import { getPaletteColor } from "@assets/palettes"
 
 import { ImpressionArea } from "@toss/impression-area"
+import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -33,6 +36,7 @@ const LogDetails = ({
 }) => {
     const { t } = useTranslation("", { keyPrefix: "social.log_details" })
     const theme = useTheme()
+    const tz = useClientTimezone()
 
     const me = getCurrentUsername()
 
@@ -42,6 +46,8 @@ const LogDetails = ({
         queryFn: () => getQuote(username, selectedDate),
         enabled: !!selectedDate, // && pageType === "following"
     })
+
+    const date = DateTime.fromISO(selectedDate).setZone(tz)
 
     const QuoteMutation = useMutation({
         mutationFn: ({ day, content }) => {
@@ -106,6 +112,9 @@ const LogDetails = ({
                     </>
                 )}
             </DetailHeader>
+            <RemarkWrapper>
+                <RemarkContainer username={username} date={date} />
+            </RemarkWrapper>
 
             {/* TODO: When there are no task */}
             <DetailBody>
@@ -168,6 +177,13 @@ const DetailHeader = styled.div`
     ${ifMobile} {
         padding: 0em 0 0.2em;
     }
+`
+
+const RemarkWrapper = styled.div`
+    padding: 0.25em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
 `
 
 const DetailBody = styled.div`
