@@ -273,8 +273,10 @@ export const putRemark = async (date: string, content: string) => {
     return res.data
 }
 
-export const deleteRemark = async (username: string, date: string) => {
-    const res = await client.delete(`social/remarks/@${username}/${date}/`)
+export const deleteRemark = async (date: string) => {
+    const res = await client.delete(
+        `social/remarks/@${getCurrentUsername()}/${date}/`,
+    )
     return res.status
 }
 
