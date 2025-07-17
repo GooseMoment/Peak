@@ -6,6 +6,7 @@ import styled, { useTheme } from "styled-components"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import { SkeletonProjectPage } from "@components/project/skeletons/SkeletonProjectPage"
 import RemarkContainer from "@components/social/RemarkContainer"
+import FollowButton from "@components/users/FollowButton"
 
 import TaskBox from "./TaskBox"
 
@@ -54,6 +55,7 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
         <DetailBox>
             <RemarkWrapper>
                 <RemarkContainer username={username} date={date} />
+                {pageType === "explore" && <FollowButton user={{ username }} />}
             </RemarkWrapper>
 
             {/* TODO: When there are no task */}
@@ -110,6 +112,10 @@ const DetailBox = styled.div`
 const RemarkWrapper = styled.div`
     margin-top: 1em;
     padding: 0.25em;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
 `
 
 const DetailBody = styled.div`
