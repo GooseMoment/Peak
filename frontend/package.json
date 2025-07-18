@@ -3,7 +3,7 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "packageManager": "pnpm@9.15.5",
+    "packageManager": "pnpm@10.13.1",
     "scripts": {
         "preinstall": "npx only-allow pnpm",
         "dev": "vite",
@@ -66,13 +66,5 @@
         "vite": "^7.0.3",
         "vite-plugin-pwa": "^1.0.1",
         "workbox-precaching": "^7.3.0"
-    },
-    "pnpm": {
-        "overrides": {
-            "puppeteer": "0.0.0"
-        },
-        "allowedDeprecatedVersions": {
-            "puppeteer": "0.0.0"
-        }
     }
 }
