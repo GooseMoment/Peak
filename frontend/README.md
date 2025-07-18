@@ -2,9 +2,7 @@
 
 ## Start
 
-If you don't have pnpm, then check out [pnpm installation guide](https://pnpm.io/installation).
-
-> Note that Peak uses `pnpm@9`. (not the latest v10!)
+If you don't have pnpm, then check out the [pnpm installation guide](https://pnpm.io/installation).
 
 ```bash
 pnpm i

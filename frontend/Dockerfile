@@ -3,7 +3,7 @@ FROM node:lts-alpine
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN npm install -g corepack@latest
-RUN corepack use pnpm@9.x
+RUN corepack use pnpm@10.x
 RUN corepack enable
 
 WORKDIR /frontend
