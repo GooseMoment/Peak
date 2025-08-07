@@ -395,6 +395,13 @@
             "empty_self_quote": "Write your today's quote.",
             "empty_others_quote": "No quote yet."
         },
+        "remarks": {
+            "title": "Remark of the day",
+            "title_edit": "Editing",
+            "title_create": "What's on your mind?",
+            "placeholder": "Start writing by pressing the pencil button",
+            "placeholder_edit": "Write here..."
+        },
         "emoji_modal": {
             "searchbar": "Search emojis"
         },
@@ -427,6 +434,7 @@
             "back": "Go Back"
         },
         "button_no": "No",
-        "error_load": "Failed to load."
+        "error_load": "Failed to load.",
+        "error_perform": "Failed to perform the requested action."
     }
 }

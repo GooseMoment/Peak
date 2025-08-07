@@ -61,6 +61,27 @@ class Quote(Base):
         db_table = "quotes"
 
 
+class Remark(Base):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    content = models.TextField()
+    date = models.DateField()
+
+    def __str__(self) -> str:
+        return f"Remark: {self.user}/{self.date}"
+
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
+        db_table = "remarks"
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "date"], name="constraint_user_date"
+            ),
+        ]
+
+
 class Reaction(Base):
     FOR_TASK = "task"
     FOR_QUOTE = "quote"

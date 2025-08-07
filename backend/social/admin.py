@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Emoji, Peck, Quote, Reaction, Comment, Following, Block
+from .models import Emoji, Peck, Quote, Remark, Reaction, Comment, Following, Block
 from api.admin import fieldset_base, readonly_fields_base
 
 
@@ -32,6 +32,23 @@ class PeckAdmin(admin.ModelAdmin):
             None,
             {
                 "fields": ["user", "task", "count"],
+            },
+        ),
+        fieldset_base,
+    ]
+
+
+@admin.register(Remark)
+class RemarkAdmin(admin.ModelAdmin):
+    ordering = ["-date", "updated_at"]
+    search_fields = ["user__username", "date"]
+    autocomplete_fields = ["user"]
+    readonly_fields = readonly_fields_base
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ["user", "content", "date"],
             },
         ),
         fieldset_base,
