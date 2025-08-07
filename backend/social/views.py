@@ -35,6 +35,7 @@ from api.models import PrivacyMixin
 from api.request import AuthenticatedRequest
 from api.permissions import IsUserSelfRequest
 from api.exceptions import RequiredFieldMissing
+from api.mixins import TimezoneMixin
 from drawers.models import Drawer
 from tasks.models import Task
 from tasks.serializers import TaskSerializer
@@ -559,8 +560,46 @@ class DailyLogTaskView(generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-def get_following_feed(request: Request, date):
-    pass
+class RecordView(TimezoneMixin, generics.ListAPIView):
+    request: AuthenticatedRequest  # pyright: ignore [reportIncompatibleVariableOverride]
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = (permissions.IsUserNotBlockedOrBlocking,)
+
+    def get_privacy_filter(self, viewer: User, target: User):
+        is_following = (
+            viewer == target
+            or Following.objects.filter(
+                follower=viewer, followee=target, status=Following.ACCEPTED
+            ).exists()
+        )
+
+        filter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
+
+        if is_following:
+            filter |= Q(privacy=PrivacyMixin.FOR_PROTECTED)
+
+        if viewer == target:
+            filter |= Q(privacy=PrivacyMixin.FOR_PRIVATE)
+
+        return filter
+
+    def filter_queryset(self, queryset: QuerySet[Task]) -> QuerySet[Task]:
+        user = get_object_or_404(User, username=self.kwargs["username"])
+        date = datetime.date.fromisoformat(self.kwargs["date_iso"])
+        datetime_range = self.get_datetime_range(date)
+
+        privacy_filter = self.get_privacy_filter(self.request.user, user)
+        completed_filter = Q(completed_at__range=datetime_range)
+        uncompleted_filter = Q(completed_at=None) & (
+            Q(assigned_at=date)
+            | Q(due_datetime__range=datetime_range)
+            | Q(due_date=date)
+        )
+
+        return queryset.filter(
+            Q(user=user) & privacy_filter & (completed_filter | uncompleted_filter)
+        ).order_by(F("drawer__project__order"), F("drawer__order"), "order")
 
 
 class ReactionView(APIView):
