@@ -4,9 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  puppeteer: 0.0.0
-
 importers:
 
   .:
