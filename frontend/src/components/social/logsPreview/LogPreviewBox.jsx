@@ -11,6 +11,7 @@ import useScreenType, { ifTablet } from "@utils/useScreenType"
 import { getPastelPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
+import { DateTime } from "luxon"
 
 const LogPreviewBox = ({
     log,
@@ -34,11 +35,10 @@ const LogPreviewBox = ({
 
     const handleSelect = () => {
         setSelectedUser(log.username === selectedUser ? null : log.username)
-
         if (!isDesktop)
-            navigate(`../daily/@${log.username}`, {
-                state: { selectedDate: selectedDate },
-            })
+            navigate(
+                `/app/social/daily/@${log.username}/${DateTime.fromISO(selectedDate).toISODate()}`,
+            )
     }
 
     // TODO: theme.grey 삭제
