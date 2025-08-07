@@ -55,7 +55,7 @@ const LogDetails = ({ pageType = "following", username, selectedDate }) => {
         <DetailBox>
             <RemarkWrapper>
                 <RemarkContainer username={username} date={date} />
-                {pageType === "explore" && <FollowButton user={{ username }} />}
+                {pageType === "explore" && <FollowButton username={username} />}
             </RemarkWrapper>
 
             {/* TODO: When there are no task */}
