@@ -225,6 +225,24 @@ export const getDailyLogDetails = async (
     return res.data
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Task = any
+
+export const getDailyRecord = async (
+    username: string,
+    date_iso: string,
+    page: string,
+) => {
+    const res = await client.get<PaginationData<Task>>(
+        `social/records/@${username}/${date_iso}/`,
+        {
+            params: { page },
+        },
+    )
+
+    return res.data
+}
+
 export const getExploreRecommend = async (cursor: string) => {
     const res = await client.get<PaginationData<User>>(`social/explore/`, {
         params: { cursor },
