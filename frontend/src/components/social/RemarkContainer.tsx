@@ -125,6 +125,12 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
         )
     }, [isEditing])
 
+    useEffect(() => {
+        setContent(remark?.content || "")
+
+        return () => setEditing(false)
+    }, [date])
+
     const client = useQueryClient()
     const mut = useMutation<null | Remark>({
         mutationFn() {
