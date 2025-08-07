@@ -166,6 +166,10 @@ const routes: RouteObject[] = [
                         path: "daily/:username",
                         element: <SocialDailyPage />,
                     },
+                    {
+                        path: "daily/:username/:date",
+                        element: <SocialDailyPage />,
+                    },
                 ],
             },
             {
