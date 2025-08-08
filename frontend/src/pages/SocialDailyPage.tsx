@@ -1,15 +1,16 @@
-import { type SetStateAction, useEffect } from "react"
+import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
 import DailyContainer from "@components/social/DailyContainer"
 
 import { useClientTimezone } from "@utils/clientSettings"
+import useParamState from "@utils/useParamState"
 
 import { DateTime } from "luxon"
 
 const SocialDailyPage = () => {
     const navigate = useNavigate()
-    const { username: usernameWithAt, date: dateISO } = useParams()
+    const { username: usernameWithAt } = useParams()
     const tz = useClientTimezone()
 
     useEffect(() => {
@@ -19,34 +20,25 @@ const SocialDailyPage = () => {
     }, [usernameWithAt, navigate])
 
     const username = usernameWithAt!.slice(1)
-    const date = DateTime.fromISO(dateISO!, {
-        zone: tz,
+
+    const [date, setDate] = useParamState<DateTime>({
+        name: "date",
+        fallback: () =>
+            DateTime.now()
+                .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+                .setZone(tz),
+        convert: (param) => {
+            if (!param) {
+                return
+            }
+
+            const date = DateTime.fromISO(param, { zone: tz })
+            return date.isValid ? date : undefined
+        },
+        navigate: (value: DateTime) => {
+            navigate(`/app/social/daily/${usernameWithAt}/${value.toISODate()}`)
+        },
     })
-
-    useEffect(() => {
-        const today = DateTime.now()
-            .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
-            .setZone(tz)
-
-        if (!dateISO) {
-            navigate(`/app/social/daily/${usernameWithAt}/${today.toISODate()}`)
-            return
-        }
-
-        const dateISOPurified = date.toISODate()
-        if (!dateISOPurified) {
-            navigate(`/app/social/daily/${usernameWithAt}/${today.toISODate()}`)
-            return
-        } else if (dateISO !== dateISOPurified) {
-            navigate(`/app/social/daily/${usernameWithAt}/${dateISOPurified}`)
-            return
-        }
-    }, [dateISO])
-
-    const setDate = (action: SetStateAction<DateTime>) => {
-        const newDate = typeof action === "function" ? action(date) : action
-        navigate(`/app/social/daily/${usernameWithAt}/${newDate.toISODate()}`)
-    }
 
     return (
         <DailyContainer
