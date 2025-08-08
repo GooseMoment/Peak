@@ -4,9 +4,10 @@ from rest_framework.response import Response
 from api.mixins import TimezoneMixin
 from api.permissions import IsUserOwner
 from .models import Task
-from .serializers import TaskSerializer, TaskReorderSerializer
+from .serializers import TaskSerializer
 from .utils import normalize_tasks_order
 from notifications.serializers import TaskReminderSerializer
+from api.serializers import ReorderSerializer
 
 
 class TaskDetail(
@@ -86,7 +87,7 @@ class TaskList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
 
 
 class TaskReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
-    serializer_class = TaskReorderSerializer
+    serializer_class = ReorderSerializer
     queryset = Task.objects.all()
 
     def patch(self, request, *args, **kwargs):

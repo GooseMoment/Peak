@@ -25,6 +25,7 @@ class Project(Base, PrivacyMixin):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name="projects",
     )
     order = models.IntegerField()
     color = models.CharField(max_length=128)

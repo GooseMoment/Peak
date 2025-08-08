@@ -1,4 +1,5 @@
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
+from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
 from .models import Project
@@ -9,6 +10,7 @@ from api.permissions import IsUserOwner
 from api.exceptions import UnknownError
 
 from rest_framework.exceptions import ValidationError
+from api.serializers import ReorderSerializer
 
 
 class ProjectDetail(
@@ -32,25 +34,8 @@ class ProjectDetail(
         return self.destroy(request, *args, **kwargs)
 
 
-class InboxDetail(
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    generics.GenericAPIView,
-):
-    serializer_class = ProjectSerializer
-    permission_classes = [IsUserOwner]
-
-    def get_object(self):
-        return Project.objects.filter(
-            user=self.request.user, type=Project.INBOX
-        ).first()
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-
 class ProjectListPagination(PageNumberPagination):
-    page_size = 1000
+    page_size = 20
 
 
 class ProjectList(
@@ -84,3 +69,26 @@ class UserProjectList(mixins.ListModelMixin, generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+class ProjectReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
+    serializer_class = ReorderSerializer
+    queryset = Project.objects.all()
+
+    def patch(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+
+        tasks_data = serializer.validated_data
+
+        ids = [item["id"] for item in tasks_data]
+        id_to_order = {item["id"]: item["order"] for item in tasks_data}
+
+        projects = self.get_queryset().filter(id__in=ids)
+
+        for project in projects:
+            project.order = id_to_order[project.id]
+
+        Project.objects.bulk_update(projects, ["order"])
+
+        return Response(status=status.HTTP_200_OK)

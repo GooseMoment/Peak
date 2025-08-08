@@ -8,6 +8,7 @@ from api.permissions import IsUserOwner
 from . import exceptions
 from api.exceptions import RequiredFieldMissing, UnknownError
 
+from projects.models import Project
 from rest_framework.exceptions import ValidationError
 
 
@@ -71,6 +72,23 @@ class DrawerList(
             raise exceptions.DrawerNameDuplicate
         except Exception:
             raise UnknownError
+
+
+class InboxDetail(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    generics.GenericAPIView,
+):
+    serializer_class = DrawerSerializer
+    permission_classes = [IsUserOwner]
+
+    def get_object(self):
+        return Drawer.objects.filter(
+            user=self.request.user, project__type=Project.INBOX
+        ).first()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
 
 class DrawerReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
