@@ -5,29 +5,39 @@ import styled, { css, useTheme } from "styled-components"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
-import { getPaletteColor, palettes } from "@assets/palettes"
+import type { Project } from "@api/projects.api"
+
+import { PaletteColorName, getPaletteColor, palettes } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Color = ({ setColor }) => {
-    const { t } = useTranslation(null, {
+type PaletteType = "palette1"
+
+const ColorEdit = ({
+    setColor,
+}: {
+    setColor: (diff: Partial<Project>) => void
+}) => {
+    const { t } = useTranslation("translation", {
         keyPrefix: "project_drawer_edit.color",
     })
     const theme = useTheme()
 
-    const [activeTab, setActiveTab] = useState("palette1")
+    const [activeTab, setActiveTab] = useState<PaletteType>("palette1")
 
     const { closeModal } = useModalWindowCloseContext()
 
-    const changeColor = (color) => {
+    const changeColor = (color: PaletteColorName) => {
         return () => {
             setColor({ color })
             closeModal()
         }
     }
 
-    const paletteChoices = [{ id: "palette1", themeName: t("palette1") }]
+    const paletteChoices = [
+        { name: "palette1" as const, themeName: t("palette1") },
+    ]
 
     return (
         <Detail title={t("title")} onClose={closeModal}>
@@ -35,13 +45,13 @@ const Color = ({ setColor }) => {
                 {paletteChoices.map((choice) => (
                     <TabButton
                         key={choice.themeName}
-                        $isActive={activeTab === choice.id}
-                        onClick={() => setActiveTab(choice.id)}>
+                        $isActive={activeTab === choice.name}
+                        onClick={() => setActiveTab(choice.name)}>
                         {choice.themeName}
                     </TabButton>
                 ))}
             </TabBox>
-            {palettes[activeTab]?.map((colorName) => (
+            {palettes[activeTab]?.map((colorName: PaletteColorName) => (
                 <ItemBlock key={colorName}>
                     <FeatherIcon
                         icon="circle"
@@ -61,7 +71,7 @@ const TabBox = styled.div`
     gap: 0.8em;
 `
 
-const TabButton = styled.button`
+const TabButton = styled.button<{ $isActive: boolean }>`
     width: fit-content;
     padding: 0.4em 0.6em;
     font-size: 0.9em;
@@ -94,4 +104,4 @@ const ItemBlock = styled.div`
     }
 `
 
-export default Color
+export default ColorEdit

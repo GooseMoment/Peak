@@ -3,39 +3,43 @@ import styled from "styled-components"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
-import privatesvg from "@assets/project/privacy/private.svg"
-import protectedsvg from "@assets/project/privacy/protected.svg"
-import publicsvg from "@assets/project/privacy/public.svg"
+import { type Project, ProjectType } from "@api/projects.api"
+
+import goal from "@assets/project/type/goal.svg"
+import regular from "@assets/project/type/regular.svg"
 
 import { useTranslation } from "react-i18next"
 
-const Privacy = ({ setPrivacy }) => {
-    const { t } = useTranslation(null, {
-        keyPrefix: "project_drawer_edit.privacy",
+const ProjectTypeEdit = ({
+    setType,
+}: {
+    setType: (diff: Partial<Project>) => void
+}) => {
+    const { t } = useTranslation("translation", {
+        keyPrefix: "project_drawer_edit.type",
     })
 
     const { closeModal } = useModalWindowCloseContext()
 
-    const changePrivacy = (privacy) => {
+    const changeType = (type: ProjectType) => {
         return () => {
-            setPrivacy({ privacy })
+            setType({ type })
             closeModal()
         }
     }
 
     const items = [
-        { icon: <img src={publicsvg} />, privacy: "public" },
-        { icon: <img src={protectedsvg} />, privacy: "protected" },
-        { icon: <img src={privatesvg} />, privacy: "private" },
+        { icon: <img src={regular} />, type: "regular" as const },
+        { icon: <img src={goal} />, type: "goal" as const },
     ]
 
     return (
         <Detail title={t("title")} onClose={closeModal}>
             {items.map((item) => (
-                <ItemBlock key={item.privacy}>
+                <ItemBlock key={item.type}>
                     {item.icon}
-                    <ItemText onClick={changePrivacy(item.privacy)}>
-                        {t(item.privacy)}
+                    <ItemText onClick={changeType(item.type)}>
+                        {t(item.type)}
                     </ItemText>
                 </ItemBlock>
             ))}
@@ -70,4 +74,4 @@ const ItemText = styled.p`
     }
 `
 
-export default Privacy
+export default ProjectTypeEdit

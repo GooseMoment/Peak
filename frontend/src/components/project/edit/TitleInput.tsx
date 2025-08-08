@@ -1,14 +1,32 @@
-import { useEffect } from "react"
+import { RefObject, useEffect } from "react"
+import { ChangeEvent } from "react"
 
 import styled from "styled-components"
 
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
-import FeatherIcon from "feather-icons-react"
+import FeatherIcon, { type FeatherIconName } from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const TitleInput = ({ name, setName, inputRef, icon, onClose }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project_drawer_edit" })
+interface TitleInputProps {
+    name: string
+    setName: (name: string) => void
+    inputRef: RefObject<HTMLInputElement>
+    icon: FeatherIconName
+    onClose: () => void
+}
+
+const TitleInput = ({
+    name,
+    setName,
+    inputRef,
+    icon,
+    onClose,
+}: TitleInputProps) => {
+    const { t } = useTranslation("translation", {
+        keyPrefix: "project_drawer_edit",
+    })
+
     const { isMobile } = useScreenType()
 
     useEffect(() => {
@@ -21,7 +39,7 @@ const TitleInput = ({ name, setName, inputRef, icon, onClose }) => {
         }
     }, [])
 
-    const onChange = (e) => {
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newName = e.target.value
         setName(newName)
     }

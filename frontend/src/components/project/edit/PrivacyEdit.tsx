@@ -3,37 +3,47 @@ import styled from "styled-components"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
-import goal from "@assets/project/type/goal.svg"
-import regular from "@assets/project/type/regular.svg"
+import { type Privacy } from "@api/common"
+import { type Drawer } from "@api/drawers.api"
+import { type Project } from "@api/projects.api"
+
+import privatesvg from "@assets/project/privacy/private.svg"
+import protectedsvg from "@assets/project/privacy/protected.svg"
+import publicsvg from "@assets/project/privacy/public.svg"
 
 import { useTranslation } from "react-i18next"
 
-const ProjectType = ({ setType }) => {
-    const { t } = useTranslation(null, {
-        keyPrefix: "project_drawer_edit.type",
+const PrivacyEdit = ({
+    setPrivacy,
+}: {
+    setPrivacy: (diff: Partial<Project> | Partial<Drawer>) => void
+}) => {
+    const { t } = useTranslation("translation", {
+        keyPrefix: "project_drawer_edit.privacy",
     })
 
     const { closeModal } = useModalWindowCloseContext()
 
-    const changeType = (type) => {
+    const changePrivacy = (privacy: Privacy) => {
         return () => {
-            setType({ type })
+            setPrivacy({ privacy })
             closeModal()
         }
     }
 
     const items = [
-        { icon: <img src={regular} />, type: "regular" },
-        { icon: <img src={goal} />, type: "goal" },
+        { icon: <img src={publicsvg} />, privacy: "public" as const },
+        { icon: <img src={protectedsvg} />, privacy: "protected" as const },
+        { icon: <img src={privatesvg} />, privacy: "private" as const },
     ]
 
     return (
         <Detail title={t("title")} onClose={closeModal}>
             {items.map((item) => (
-                <ItemBlock key={item.type}>
+                <ItemBlock key={item.privacy}>
                     {item.icon}
-                    <ItemText onClick={changeType(item.type)}>
-                        {t(item.type)}
+                    <ItemText onClick={changePrivacy(item.privacy)}>
+                        {t(item.privacy)}
                     </ItemText>
                 </ItemBlock>
             ))}
@@ -68,4 +78,4 @@ const ItemText = styled.p`
     }
 `
 
-export default ProjectType
+export default PrivacyEdit
