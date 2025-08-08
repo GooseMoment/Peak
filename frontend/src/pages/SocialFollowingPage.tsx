@@ -46,10 +46,7 @@ const SocialFollowingPage = () => {
                 <SocialPageTitle active="following" />
                 <Wrapper>
                     <Container>
-                        <DateBar
-                            selectedDate={date}
-                            setSelectedDate={setDateFromISO}
-                        />
+                        <DateBar date={date} setDate={setDate} />
                         {dailyLogs && (
                             <LogsPreview
                                 logs={dailyLogs}

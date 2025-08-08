@@ -1,40 +1,34 @@
-import { useEffect, useState } from "react"
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react"
 
 import styled from "styled-components"
 
 import CommonCalendar from "@components/common/CommonCalendar"
 import MildButton from "@components/common/MildButton"
 
-import { useClientLocale } from "@utils/clientSettings"
+import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 import { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 
-const DateBar = ({ selectedDate, setSelectedDate }) => {
+interface DateBarProps {
+    date: DateTime
+    setDate: Dispatch<SetStateAction<DateTime>>
+}
+
+export default function DateBar({ date, setDate }: DateBarProps) {
     const locale = useClientLocale()
+    const tz = useClientTimezone()
 
-    // TODO: selectedDate를 Datetime형으로 바꾼 이후 다시 수정
-    const displayDate = () => {
-        const date = DateTime.fromISO(selectedDate)
-        return date.setLocale(locale).toLocaleString({
-            weekday: "short",
-            month: "short",
-            day: "numeric",
-        })
-    }
-
-    const handleDate = (diff) => {
-        const date = DateTime.fromISO(selectedDate)
-        const newDate = date.plus({ days: diff })
-        setSelectedDate(newDate.setZone("utc").toISO())
+    const handleDate = (diff: number) => {
+        setDate(date.plus({ days: diff }))
     }
 
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
     useEffect(() => {
         setIsCalendarOpen(false)
-    }, [selectedDate])
+    }, [date])
 
     return (
         <Frame>
@@ -49,7 +43,11 @@ const DateBar = ({ selectedDate, setSelectedDate }) => {
                     onClick={() => {
                         setIsCalendarOpen((prev) => !prev)
                     }}>
-                    {displayDate()}
+                    {date.setLocale(locale).toLocaleString({
+                        weekday: "short",
+                        month: "short",
+                        day: "numeric",
+                    })}
                 </DateBox>
                 <NavButton onClick={() => handleDate(1)}>
                     <FeatherIcon icon="chevron-right" />
@@ -63,8 +61,13 @@ const DateBar = ({ selectedDate, setSelectedDate }) => {
                 <CalendarWrapper>
                     <CommonCalendar
                         isRangeSelectMode={false}
-                        selectedStartDate={selectedDate}
-                        setSelectedStartDate={setSelectedDate}
+                        selectedStartDate={date.toISO()}
+                        setSelectedStartDate={(selectedDate: string) =>
+                            setDate(DateTime.fromISO(selectedDate).setZone(tz))
+                        }
+                        selectedEndDate={undefined}
+                        setSelectedEndDate={undefined}
+                        handleClose={undefined}
                     />
                 </CalendarWrapper>
             )}
@@ -124,5 +127,3 @@ const CalendarWrapper = styled.div`
         font-size: 0.9em;
     }
 `
-
-export default DateBar

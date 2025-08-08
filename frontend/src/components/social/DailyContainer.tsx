@@ -2,16 +2,13 @@ import type { Dispatch, SetStateAction } from "react"
 
 import styled from "styled-components"
 
+import DailyUserProfile from "@components/social/DailyUserProfile"
+import RecordContainer from "@components/social/RecordContainer"
+import RemarkContainer from "@components/social/RemarkContainer"
+import DateBar from "@components/social/common/DateBar"
 import FollowButton from "@components/users/FollowButton"
 
-import DailyUserProfile from "./DailyUserProfile"
-import RecordContainer from "./RecordContainer"
-import RemarkContainer from "./RemarkContainer"
-import DateBar from "./common/DateBar"
-
 import type { User } from "@api/users.api"
-
-import { useClientTimezone } from "@utils/clientSettings"
 
 import { DateTime } from "luxon"
 
@@ -41,21 +38,11 @@ export default function DailyContainer({
     standalone,
     className,
 }: DailyContainerProps | DailyContainerPropsStandalone) {
-    const tz = useClientTimezone()
-
     return (
         <Container className={className}>
             <DailyUserProfile username={username} back={standalone} />
             {displayFollowButton && <FollowButton username={username} />}
-            {standalone && (
-                // TODO: edit after typing DateBar
-                <DateBar
-                    selectedDate={date}
-                    setSelectedDate={(selectedDate: string) =>
-                        setDate(DateTime.fromISO(selectedDate).setZone(tz))
-                    }
-                />
-            )}
+            {standalone && <DateBar date={date} setDate={setDate} />}
             <RemarkContainer username={username} date={date} />
             <RecordContainer username={username} date={date} />
         </Container>
