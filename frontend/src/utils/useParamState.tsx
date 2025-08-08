@@ -1,5 +1,10 @@
-import { useMemo } from "react"
-import { type Dispatch, type SetStateAction } from "react"
+import {
+    type Dispatch,
+    type SetStateAction,
+    useCallback,
+    useEffect,
+    useMemo,
+} from "react"
 import { useParams } from "react-router-dom"
 
 interface useParamStateProps<T> {
@@ -21,29 +26,31 @@ export default function useParamState<T>({
 }: useParamStateProps<T>): [T, Dispatch<SetStateAction<T>>] {
     const param = useParams()[name]
 
-    const value = useMemo(() => convert(param), [param])
-    const setValue = useMemo(
-        () => (action: SetStateAction<T>) => {
-            if (typeof action === "function") {
-                const newValue = (action as (prev: T) => T)(value!)
-                navigate(newValue)
+    const convertedValue = useMemo(() => convert(param), [param, convert])
+    const fallbackValue = useMemo(() => fallback(), [fallback])
+    const state = convertedValue !== undefined ? convertedValue : fallbackValue
+
+    useEffect(() => {
+        if (convertedValue === undefined) {
+            navigate(fallbackValue)
+        }
+    }, [convertedValue, navigate, fallbackValue])
+
+    const setValue = useCallback<Dispatch<SetStateAction<T>>>(
+        (action) => {
+            const newValue =
+                typeof action === "function"
+                    ? (action as (prevState: T) => T)(state)
+                    : action
+
+            if (newValue === state) {
                 return
             }
 
-            if (action === value) {
-                return
-            }
-
-            navigate(action)
+            navigate(newValue)
         },
-        [param],
+        [state, navigate],
     )
 
-    if (value === undefined) {
-        const data = fallback()
-        navigate(data)
-        return [data, setValue]
-    }
-
-    return [value, setValue]
+    return [state, setValue]
 }
