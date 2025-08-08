@@ -34,11 +34,14 @@ const LogPreviewBox = ({
     // const tempSelectedDate = initial_date.toISOString()
 
     const handleSelect = () => {
-        setSelectedUser(log.username === selectedUser ? null : log.username)
-        if (!isDesktop)
-            navigate(
-                `/app/social/daily/@${log.username}/${DateTime.fromISO(selectedDate).toISODate()}`,
-            )
+        if (isDesktop) {
+            setSelectedUser(log.username === selectedUser ? null : log.username)
+            return
+        }
+
+        navigate(
+            `/app/social/daily/@${log.username}/${DateTime.fromISO(selectedDate).toISODate()}`,
+        )
     }
 
     // TODO: theme.grey 삭제
