@@ -1,4 +1,9 @@
-const Priority2 = ({ color }) => {
+import { useTheme } from "styled-components"
+
+const Priority2 = () => {
+    const theme = useTheme()
+    const color = theme.project.danger
+
     return (
         <svg
             width="10"
