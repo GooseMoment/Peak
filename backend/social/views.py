@@ -604,8 +604,8 @@ class RecordDetail(TimezoneMixin, generics.ListAPIView):
 
 
 class StatListPagination(PageNumberPagination):
-    page_size = 10
-    max_page_size = 10
+    page_size = 6
+    max_page_size = 6
 
     def get_paginated_data(self, data):
         assert self.page is not None
@@ -619,6 +619,7 @@ class StatListPagination(PageNumberPagination):
 
 class StatList(TimezoneMixin, generics.GenericAPIView):
     pagination_class = StatListPagination
+    serializer_class = StatSerializer
     request: AuthenticatedRequest  # pyright: ignore [reportIncompatibleVariableOverride]
 
     def get_cache_key(self):
@@ -634,7 +635,7 @@ class StatList(TimezoneMixin, generics.GenericAPIView):
 
         user_ids = (
             Following.objects.filter(follower=request.user, status=Following.ACCEPTED)
-            .order_by("updated_at")
+            .order_by("-updated_at")
             .values_list("followee", flat=True)
         )
         paginated_user_ids = self.paginate_queryset(
@@ -661,19 +662,25 @@ class StatList(TimezoneMixin, generics.GenericAPIView):
             reaction_count=Count(
                 "reactions",
                 filter=Q(
-                    reactions__created_at__range=datetime_range,
+                    tasks__user__id=F("id"),
+                    tasks__completed_at__range=datetime_range,
+                    tasks__privacy__in=(
+                        PrivacyMixin.FOR_PUBLIC,
+                        PrivacyMixin.FOR_PROTECTED,
+                    ),
+                    tasks__reactions__created_at__range=datetime_range,
                 ),
-                distinct=True,
             ),
+            date=Value(date_iso),
         )
-        data = StatSerializer(stats, many=True).data
+        data = self.get_serializer(stats, many=True).data
         paginated_data = self.paginator.get_paginated_data(data)  # pyright: ignore[reportAttributeAccessIssue] -- StatListPagination has get_paginated_data method
 
         cache.set(
             cache_key,
             paginated_data,
-            15 if datetime_range[0] < self.get_now() < datetime_range[1] else 60,
-        )  # Cache for 15 seconds if within the date range, otherwise 60 seconds
+            5 if datetime_range[0] <= self.get_now() <= datetime_range[1] else 60,
+        )  # Cache for 5 seconds if within the date range, otherwise 60 seconds
         return Response(
             paginated_data,
             status=status.HTTP_200_OK,
@@ -729,6 +736,7 @@ class StatDetail(TimezoneMixin, generics.RetrieveAPIView):
             .annotate(
                 completed_task_count=Value(completed_task_count),
                 reaction_count=Value(reaction_count),
+                date=Value(date_iso),
             )
             .first()
         )

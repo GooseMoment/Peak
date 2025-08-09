@@ -40,7 +40,7 @@ urlpatterns = [
         name="stat-list",
     ),
     path(
-        "stats/<str:date_iso>/@<str:username>/",
+        "stats/@<str:username>/<str:date_iso>/",
         views.StatDetail.as_view(),
         name="stat-detail",
     ),

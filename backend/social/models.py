@@ -102,6 +102,7 @@ class Reaction(Base):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
+        related_name="reactions",
     )
     quote = models.ForeignKey(
         Quote,

@@ -120,9 +120,14 @@ class DailyLogDrawerSerializer(DrawerSerializer):
 class StatSerializer(UserSerializer):
     completed_task_count = serializers.IntegerField()
     reaction_count = serializers.IntegerField()
+    date = serializers.CharField()
 
     class Meta(UserSerializer.Meta):
-        fields = UserSerializer.Meta.fields + ["completed_task_count", "reaction_count"]
+        fields = UserSerializer.Meta.fields + [
+            "completed_task_count",
+            "reaction_count",
+            "date",
+        ]
 
 
 class ReactionSerializer(serializers.ModelSerializer):
