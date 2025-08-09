@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.db.models import Q, F, Count, Value
+from django.db.models import Q, F, Value
 from django.db.models.query import QuerySet
 from django.db.utils import IntegrityError
 from django.utils import timezone
