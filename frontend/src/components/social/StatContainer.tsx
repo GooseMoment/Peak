@@ -169,7 +169,11 @@ export function StatBox({
                 }
             }}>
             <ProfileImgWrapper>
-                <ProfileImg src={stat.profile_img} alt={stat.username} />
+                <ProfileImg
+                    draggable={false}
+                    src={stat.profile_img}
+                    alt={stat.username}
+                />
             </ProfileImgWrapper>
             <InfoContainer>
                 <Username>{stat.username}</Username>
@@ -201,7 +205,7 @@ const Box = styled(Link)<{
     width: calc(50% - 0.5em);
     aspect-ratio: 1/1;
     padding: 6%;
-    color: ${(p) => p.theme.black};
+    color: ${(p) => p.theme.textColor};
 
     ${(props) =>
         props.$mine &&
@@ -210,6 +214,7 @@ const Box = styled(Link)<{
             aspect-ratio: 2/1;
         `}
 
+    background-color: ${(p) => p.theme.backgroundColor};
     ${(p) =>
         p.$skeleton &&
         css`
@@ -235,6 +240,7 @@ const Box = styled(Link)<{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 0.75em;
 
     cursor: pointer;
     transition: border-color 0.2s ease;
@@ -278,7 +284,7 @@ const InfoContainer = styled.div`
 
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 0.25em;
 `
 
 const Username = styled.div<{ $skeleton?: boolean }>`
@@ -323,7 +329,7 @@ const StatusIconWrapper = styled.div<{ $type: "task" | "reaction" }>`
     ${(props) =>
         props.$type === "task" &&
         css`
-            border: 2px solid ${(p) => p.theme.black};
+            border: 2px solid ${(p) => p.theme.textColor};
             border-radius: 50%;
         `}
 
@@ -337,12 +343,12 @@ const StatusIconWrapper = styled.div<{ $type: "task" | "reaction" }>`
         height: 100%;
         margin: 0;
 
-        stroke: ${(p) => p.theme.black};
+        stroke: ${(p) => p.theme.textColor};
         stroke-width: 3px;
         ${(props) =>
             props.$type === "reaction" &&
             css`
-                fill: ${(p) => p.theme.black};
+                fill: ${(p) => p.theme.textColor};
             `}
     }
 `
