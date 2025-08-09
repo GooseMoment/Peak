@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from "react"
 import { Link } from "react-router-dom"
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import styled, { css, useTheme } from "styled-components"
+import styled, { css } from "styled-components"
 
 import Button from "@components/common/Button"
 import ErrorBox from "@components/errors/ErrorBox"
@@ -14,7 +14,6 @@ import type { User } from "@api/users.api"
 import { getPageFromURL } from "@utils/pagination"
 import useScreenType, { ifTablet } from "@utils/useScreenType"
 
-import { getPastelPaletteColor } from "@assets/palettes"
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import FeatherIcon from "feather-icons-react"
@@ -156,13 +155,11 @@ export function StatBox({
     mine?: boolean
 }) {
     const { isDesktop } = useScreenType()
-    const theme = useTheme()
 
     return (
         <Box
             $mine={mine}
             $isSelected={isSelected}
-            $bgColor={getPastelPaletteColor(theme.type, stat.header_color)}
             to={`/app/social/daily/@${stat.username}/${stat.date}`}
             draggable={false}
             onClick={(e) => {
@@ -197,25 +194,22 @@ export function StatBox({
 
 const Box = styled(Link)<{
     $mine?: boolean
-    $bgColor?: string
     $isSelected: boolean
     $skeleton?: boolean
 }>`
     box-sizing: border-box;
-    ${(props) =>
-        props.$mine
-            ? css`
-                  width: 100%;
-                  aspect-ratio: 2 / 1;
-              `
-            : css`
-                  width: calc(50% - 0.5em);
-                  aspect-ratio: 1/1;
-              `}
+    width: calc(50% - 0.5em);
+    aspect-ratio: 1/1;
     padding: 6%;
-
     color: ${(p) => p.theme.black};
-    background-color: ${(p) => p.$bgColor};
+
+    ${(props) =>
+        props.$mine &&
+        css`
+            width: 100%;
+            aspect-ratio: 2/1;
+        `}
+
     ${(p) =>
         p.$skeleton &&
         css`
@@ -223,12 +217,19 @@ const Box = styled(Link)<{
             ${skeletonBreathingCSS}
         `}
     border-radius: 24px;
+    box-shadow: ${(p) => p.theme.notifications.boxShadowColor} 0px 8px 24px;
+    border: 3px transparent solid;
+
+    @media (hover: hover) {
+        &:hover {
+            border-color: ${(p) => p.theme.primaryColors.info};
+        }
+    }
+
     ${(p) =>
         p.$isSelected &&
         css`
-            box-shadow:
-                0 0 0 0.15em ${p.theme.backgroundColor},
-                0 0 0 0.3em ${p.theme.textColor} !important;
+            border-color: ${p.theme.primaryColors.info};
         `}
 
     display: flex;
@@ -236,13 +237,7 @@ const Box = styled(Link)<{
     justify-content: space-between;
 
     cursor: pointer;
-    transition: all 0.25s ease;
-
-    &:hover {
-        box-shadow:
-            0 0 0 0.15em ${(p) => p.theme.backgroundColor},
-            0 0 0 0.3em ${(p) => p.theme.textColor};
-    }
+    transition: border-color 0.2s ease;
 
     ${ifTablet} {
         padding: 1.5em !important;
