@@ -6,6 +6,12 @@ from api.models import Base
 
 import uuid
 import os
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from django.db.models.manager import RelatedManager
+    from tasks.models import Task
+    from social.models import Reaction
 
 
 class UserManager(BaseUserManager):
@@ -56,6 +62,9 @@ class User(AbstractBaseUser, Base, PermissionsMixin):
     REQUIRED_FIELDS = ["display_name", "password", "email"]
 
     is_active = models.BooleanField(default=False)
+
+    tasks: "RelatedManager[Task]"
+    reactions: "RelatedManager[Reaction]"
 
     def get_full_name(self):
         return str(self.id) + "|@" + self.username
