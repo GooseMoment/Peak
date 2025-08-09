@@ -35,7 +35,7 @@ const LogPreviewBox = ({
 
     const handleSelect = () => {
         if (isDesktop) {
-            setSelectedUser(log.username === selectedUser ? null : log.username)
+            setSelectedUser(log.username)
             return
         }
 
