@@ -15,7 +15,7 @@ interface useParamStateProps<T> {
     /** Returns `T` if the data can be converted into `T`. Returns `undefined` otherwise. */
     convert: (param: string | undefined) => T | undefined
     /** Called with the {@link fallback} data when {@link convert} returns `undefined`. */
-    navigate: (value: T) => void
+    navigate: (value: T, fallback: boolean) => void
 }
 
 export default function useParamState<T>({
@@ -32,7 +32,7 @@ export default function useParamState<T>({
 
     useEffect(() => {
         if (convertedValue === undefined) {
-            navigate(fallbackValue)
+            navigate(fallbackValue, true)
         }
     }, [convertedValue, navigate, fallbackValue])
 
@@ -47,7 +47,7 @@ export default function useParamState<T>({
                 return
             }
 
-            navigate(newValue)
+            navigate(newValue, false)
         },
         [state, navigate],
     )

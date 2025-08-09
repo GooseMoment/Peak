@@ -25,8 +25,10 @@ const SocialFollowingPage = () => {
     const me = getCurrentUsername()
     const [selectedUser, setSelectedUser] = useState(me!)
     const [date, setDate] = useDateParamState({
-        navigate: (value: DateTime) => {
-            navigate(`/app/social/following/${value.toISODate()}`)
+        navigate: (value: DateTime, fallback: boolean) => {
+            navigate(`/app/social/following/${value.toISODate()}`, {
+                replace: fallback,
+            })
         },
     })
 

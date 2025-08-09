@@ -20,8 +20,13 @@ const SocialDailyPage = () => {
     const username = usernameWithAt!.slice(1)
 
     const [date, setDate] = useDateParamState({
-        navigate: (value: DateTime) => {
-            navigate(`/app/social/daily/${usernameWithAt}/${value.toISODate()}`)
+        navigate: (value: DateTime, fallback: boolean) => {
+            navigate(
+                `/app/social/daily/${usernameWithAt}/${value.toISODate()}`,
+                {
+                    replace: fallback,
+                },
+            )
         },
     })
 

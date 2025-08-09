@@ -6,7 +6,7 @@ import { DateTime } from "luxon"
 export default function useDateParamState({
     navigate,
 }: {
-    navigate: (date: DateTime) => void
+    navigate: (date: DateTime, fallback: boolean) => void
 }) {
     const tz = useClientTimezone()
 
