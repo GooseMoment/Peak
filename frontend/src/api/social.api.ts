@@ -228,7 +228,7 @@ export const getDailyLogDetails = async (
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Task = any
 
-export const getDailyRecord = async (
+export const getRecord = async (
     username: string,
     date_iso: string,
     page: string,

@@ -8,7 +8,7 @@ import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 
 import TaskBox from "./logDetails/TaskBox"
 
-import { getDailyRecord } from "@api/social.api"
+import { getRecord } from "@api/social.api"
 import type { User } from "@api/users.api"
 
 import { getPageFromURL } from "@utils/pagination"
@@ -30,7 +30,7 @@ export default function RecordContainer({
     const { data, isPending, isError } = useInfiniteQuery({
         queryKey: ["records", username, date.toISODate()],
         queryFn: (page) =>
-            getDailyRecord(username, date.toISODate()!, page.pageParam),
+            getRecord(username, date.toISODate()!, page.pageParam),
         initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
