@@ -51,9 +51,9 @@ export default function RecordContainer({
     if (isPending) {
         return (
             <>
-                <SkeletonDrawer taskCount={3} />
-                <SkeletonDrawer taskCount={3} />
-                <SkeletonDrawer taskCount={3} />
+                <SkeletonDrawer key={0} taskCount={3} />
+                <SkeletonDrawer key={1} taskCount={3} />
+                <SkeletonDrawer key={2} taskCount={3} />
             </>
         )
     }
