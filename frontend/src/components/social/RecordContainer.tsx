@@ -5,8 +5,10 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { useTheme } from "styled-components"
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
-
-import TaskBox from "./logDetails/TaskBox"
+import ErrorBox from "@components/errors/ErrorBox"
+import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
+import LoadMoreButton from "@components/social/common/LoadMoreButton"
+import TaskBox from "@components/social/logDetails/TaskBox"
 
 import { getRecord } from "@api/social.api"
 import type { User } from "@api/users.api"
@@ -15,7 +17,9 @@ import { getPageFromURL } from "@utils/pagination"
 
 import { getPaletteColor } from "@assets/palettes"
 
+import FeatherIcon from "feather-icons-react"
 import type { DateTime } from "luxon"
+import { useTranslation } from "react-i18next"
 
 interface RecordContainerProps {
     username: User["username"]
@@ -27,7 +31,16 @@ export default function RecordContainer({
     date,
 }: RecordContainerProps) {
     const theme = useTheme()
-    const { data, isPending, isError } = useInfiniteQuery({
+    const { t } = useTranslation("translation")
+    const {
+        data,
+        isPending,
+        isError,
+        refetch,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
         queryKey: ["records", username, date.toISODate()],
         queryFn: (page) =>
             getRecord(username, date.toISODate()!, page.pageParam),
@@ -36,11 +49,17 @@ export default function RecordContainer({
     })
 
     if (isPending) {
-        return <div>Loading</div>
+        return (
+            <>
+                <SkeletonDrawer taskCount={3} />
+                <SkeletonDrawer taskCount={3} />
+                <SkeletonDrawer taskCount={3} />
+            </>
+        )
     }
 
     if (isError) {
-        return <div>Error</div>
+        return <ErrorBox onRetry={refetch} />
     }
 
     let lastDrawerID: null | string = null
@@ -80,6 +99,16 @@ export default function RecordContainer({
                         </Fragment>
                     )
                 }),
+            )}
+            {hasNextPage && (
+                <LoadMoreButton
+                    onClick={() => fetchNextPage()}
+                    loading={isFetchingNextPage}
+                    disabled={isFetchingNextPage}>
+                    <FeatherIcon icon="chevrons-down" />
+                    <p>{t("common.load_more")}</p>
+                    <FeatherIcon icon="chevrons-down" />
+                </LoadMoreButton>
             )}
         </div>
     )
