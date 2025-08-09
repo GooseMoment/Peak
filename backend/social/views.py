@@ -724,7 +724,7 @@ class StatDetail(TimezoneMixin, generics.RetrieveAPIView):
             created_at__range=datetime_range,
         ).count()
 
-        return (
+        stat = (
             User.objects.filter(username=username)
             .annotate(
                 completed_task_count=Value(completed_task_count),
@@ -732,6 +732,10 @@ class StatDetail(TimezoneMixin, generics.RetrieveAPIView):
             )
             .first()
         )
+
+        if not stat:
+            raise NotFound(f"User @{username} not found")
+        return stat
 
 
 class ReactionView(APIView):
