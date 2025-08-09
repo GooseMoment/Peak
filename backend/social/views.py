@@ -2,7 +2,6 @@ from rest_framework import status, mixins, generics
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination, CursorPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import NotFound
@@ -19,11 +18,7 @@ from django.utils import timezone
 from .models import Emoji, Quote, Remark, Reaction, Peck, Comment, Following, Block
 from .serializers import (
     EmojiSerializer,
-    DailyLogsSerializer,
-    DailyLogDrawerSerializer,
-    DailyLogDetailsSerializer,
     StatSerializer,
-    QuoteSerializer,
     RemarkSerializer,
     ReactionSerializer,
     PeckSerializer,
@@ -37,7 +32,6 @@ from api.request import AuthenticatedRequest
 from api.permissions import IsUserSelfRequest
 from api.exceptions import RequiredFieldMissing
 from api.mixins import TimezoneMixin
-from drawers.models import Drawer
 from tasks.models import Task
 from tasks.serializers import TaskSerializer
 from users.models import User
@@ -293,85 +287,6 @@ class BlockList(GenericUserList):
         )
 
 
-## Daily Logs
-@api_view(["GET"])
-def get_daily_logs(request: Request, username, day):
-    followings = Following.objects.filter(
-        follower__username=username, status=Following.ACCEPTED
-    ).all()
-
-    user_id = str(get_object_or_404(User, username=username).id)
-    daily_logs_filter = Q(followers__in=followings.all()) | Q(id=user_id)
-
-    followingUsers = User.objects.filter(daily_logs_filter).all().distinct()
-    day = datetime.datetime.fromisoformat(day)
-
-    day_min = day
-    day_max = day + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-
-    serializer = DailyLogsSerializer(
-        followingUsers,
-        context={"day_min": day_min, "day_max": day_max, "user_id": user_id},
-        many=True,
-    )
-
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@api_view(["GET"])
-def get_quote(request: AuthenticatedRequest, followee, day):
-    followeeUser = get_object_or_404(User, username=followee)
-
-    followerUserID = str(request.user.id)
-    followeeUserID = str(followeeUser.id)
-
-    # set cache for 'is_read'
-    cache_key = f"user_id_{followeeUserID}_date_{day}"
-    cache_data = cache.get(cache_key)
-    if cache_data:
-        cache_data[followerUserID] = datetime.datetime.now()
-    else:
-        cache_data = {followerUserID: datetime.datetime.now()}
-
-    cache.delete(cache_key)
-    # cache.set(cache_key, cache_data, 1*24*60*60)
-    cache.set(cache_key, cache_data, 60 * 60)
-
-    day_min = datetime.datetime.fromisoformat(day)
-    day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-    quote = Quote.objects.filter(
-        user__id=followeeUserID, date__range=(day_min, day_max)
-    ).first()
-
-    if not quote:
-        quote = Quote(id=None, user=followeeUser, content="", date=None)
-    serializer = QuoteSerializer(quote)
-
-    # Response(cache_data, status=status.HTTP_200_OK)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@api_view(["POST"])
-def post_quote(request: Request, day):
-    day_min = datetime.datetime.fromisoformat(day)
-    day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-
-    quote = Quote.objects.filter(
-        user=request.user, date__range=(day_min, day_max)
-    ).first()
-    content = request.data.get("content")
-
-    if quote:
-        quote.content = content if content is not None else ""
-        quote.save()
-    else:
-        quote = Quote.objects.create(user=request.user, content=content, date=day)
-
-    serializer = QuoteSerializer(quote)
-
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
 class RemarkDetail(generics.GenericAPIView):
     serializer_class = RemarkSerializer
     permission_classes = (permissions.RemarkDetailPermission,)
@@ -417,148 +332,6 @@ class RemarkDetail(generics.GenericAPIView):
         instance.delete()
 
         return Response(status=status.HTTP_200_OK)
-
-
-def get_privacy_filter(follower, followee):
-    if follower == followee:
-        privacyFilter = Q()
-        # privacy = PrivacyMixin.FOR_PROTECTED
-    # TODO: BLOCK
-    else:
-        is_follower = Following.objects.filter(
-            follower=follower, followee=followee, status=Following.ACCEPTED
-        ).exists()
-
-        if is_follower:
-            privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(
-                privacy=PrivacyMixin.FOR_PROTECTED
-            )
-            # privacy = PrivacyMixin.FOR_PROTECTED
-        else:
-            privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
-            # privacy = PrivacyMixin.FOR_PUBLIC
-
-    privacyFilter &= Q(user=followee)
-
-    return privacyFilter
-
-
-class DailyLogDetailsPagination(CursorPagination):
-    page_size = 5
-    ordering = ["project_order", "drawer_order", "order"]
-
-
-class DailyLogDetailsView(generics.GenericAPIView):
-    pagination_class = DailyLogDetailsPagination
-
-    def get(self, request, followee, day):
-        followee_user = get_object_or_404(User, username=followee)
-        day_min = datetime.datetime.fromisoformat(day)
-        day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-        day_range = (day_min, day_max)
-
-        privacy_filter = get_privacy_filter(request.user, followee_user)
-
-        completed_tasks_filter = Q(completed_at__range=day_range)
-        uncompleted_tasks_filter = Q(completed_at=None) & Q(
-            assigned_at__range=day_range
-        )
-        # TODO: ( | Q(due_datetime__range=day_range))
-        tasks_filter = privacy_filter & (
-            completed_tasks_filter | uncompleted_tasks_filter
-        )
-
-        tasks_queryset = (
-            Task.objects.filter(tasks_filter)
-            .all()
-            .annotate(
-                project_order=F("drawer__project__order"),
-                drawer_order=F("drawer__order"),
-            )
-        )
-
-        page = self.paginate_queryset(tasks_queryset)
-        if page is not None:
-            serializer = DailyLogDetailsSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = DailyLogDetailsSerializer(tasks_queryset, many=True)
-
-        return Response(serializer.data)
-
-
-class DailyLogDrawerPagination(CursorPagination):
-    page_size = 5
-    ordering = "order"
-    # TODO: due date 찾을 수 있으면 줄이기
-
-
-class DailyLogDrawerView(generics.GenericAPIView):
-    pagination_class = DailyLogDrawerPagination
-
-    def get(self, request, followee):
-        followeeUser = get_object_or_404(User, username=followee)
-
-        privacyFilter = get_privacy_filter(request.user, followeeUser)
-
-        drawers_queryset = (
-            Drawer.objects.filter(privacyFilter)
-            .annotate(color=F("project__color"))
-            .order_by("order")
-        )
-
-        page = self.paginate_queryset(drawers_queryset)
-
-        if page is not None:
-            serializer = DailyLogDrawerSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = DailyLogDrawerSerializer(drawers_queryset, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class DailyLogTaskPagination(PageNumberPagination):
-    page_size = 5
-    max_page_size = 5
-    # TODO: due date 찾을 수 있으면 줄이기
-
-
-class DailyLogTaskView(generics.GenericAPIView):
-    pagination_class = DailyLogTaskPagination
-
-    def get(self, request, drawer, day):
-        drawer = get_object_or_404(Drawer, id=drawer)
-        # followee = drawer.user
-
-        # TODO: task Privacy 반영 이후 다시 고려
-        # privacyFilter = get_privacy_filter(request.user, followee)
-        privacyFilter = Q()
-
-        day_min = datetime.datetime.fromisoformat(day)
-        day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-        day_range = (day_min, day_max)
-
-        tasksFilterForCompleted = Q(completed_at__range=day_range)
-        tasksFilterForUncompleted = Q(completed_at=None) & Q(
-            assigned_at__range=day_range
-        )
-        # TODO: ( | Q(due_datetime__range=day_range))
-        tasksFilter = (
-            Q(drawer=drawer)
-            & privacyFilter
-            & (tasksFilterForCompleted | tasksFilterForUncompleted)
-        )
-
-        tasks_queryset = Task.objects.filter(tasksFilter)
-
-        page = self.paginate_queryset(tasks_queryset)
-        if page is not None:
-            serializer = TaskSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = TaskSerializer(tasks_queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RecordDetail(TimezoneMixin, generics.ListAPIView):

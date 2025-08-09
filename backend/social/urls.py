@@ -18,21 +18,6 @@ urlpatterns = [
         "blocks/@<str:blocker_username>/@<str:blockee_username>/",
         views.BlockView.as_view(),
     ),
-    # daily logs (legacy; to be replaced with stats and records)
-    path("daily/logs/@<str:username>/<str:day>/", views.get_daily_logs),
-    path(
-        "daily/log/details/@<str:followee>/<str:day>/",
-        views.DailyLogDetailsView.as_view(),
-    ),
-    path(
-        "daily/log/details/drawer/@<str:followee>/", views.DailyLogDrawerView.as_view()
-    ),
-    path(
-        "daily/log/details/task/<str:drawer>/<str:day>/",
-        views.DailyLogTaskView.as_view(),
-    ),
-    path("quotes/@<str:followee>/<str:day>/", views.get_quote),
-    path("quotes/<str:day>/", views.post_quote),
     # stats (replacing daily log preview)
     path(
         "stats/<str:date_iso>/",

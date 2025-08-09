@@ -210,27 +210,6 @@ export const deleteBlock = async (username: string) => {
     return res.data
 }
 
-// TODO: declare DailyLogsPreview
-export const getDailyLogsPreview = async (username: string, day: string) => {
-    const res = await client.get(`social/daily/logs/@${username}/${day}/`)
-
-    return res.data
-}
-
-// TODO: declare DailyLogDetail
-export const getDailyLogDetails = async (
-    username: string,
-    day: string,
-    cursor: string,
-) => {
-    const res = await client.get(
-        `social/daily/log/details/@${username}/${day}/`,
-        { params: { cursor } },
-    )
-
-    return res.data
-}
-
 export const getStat = async (username: string, date_iso: string) => {
     const res = await client.get<Stat>(`social/stats/@${username}/${date_iso}/`)
     return res.data
