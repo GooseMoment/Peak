@@ -434,7 +434,10 @@
             "back": "Go Back"
         },
         "button_no": "No",
+        "retry": "Retry",
         "error_load": "Failed to load.",
+        "error_something_wrong": "Something went wrong.",
+        "error_something_wrong_description": "Please try again later.",
         "error_perform": "Failed to perform the requested action."
     }
 }
