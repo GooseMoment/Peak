@@ -27,6 +27,12 @@ export interface Remark extends Base {
     date: string
 }
 
+export interface Stat extends User {
+    completed_task_count: number
+    reaction_count: number
+    date: string
+}
+
 export interface ReactionTask extends Base {
     user: User
     parent_type: "task"
@@ -222,6 +228,21 @@ export const getDailyLogDetails = async (
         { params: { cursor } },
     )
 
+    return res.data
+}
+
+export const getStat = async (username: string, date_iso: string) => {
+    const res = await client.get<Stat>(`social/stats/@${username}/${date_iso}/`)
+    return res.data
+}
+
+export const getStats = async (date_iso: string, page: string) => {
+    const res = await client.get<PaginationData<Stat>>(
+        `social/stats/${date_iso}/`,
+        {
+            params: { page },
+        },
+    )
     return res.data
 }
 
