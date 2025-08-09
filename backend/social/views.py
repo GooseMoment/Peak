@@ -622,6 +622,11 @@ class StatList(TimezoneMixin, generics.GenericAPIView):
     serializer_class = StatSerializer
     request: AuthenticatedRequest  # pyright: ignore [reportIncompatibleVariableOverride]
 
+    PRIVACY_OPTIONS = (
+        PrivacyMixin.FOR_PUBLIC,
+        PrivacyMixin.FOR_PROTECTED,
+    )
+
     def get_cache_key(self):
         date_iso = self.kwargs.get("date_iso")
         page_number = self.request.query_params.get("page") or 1
@@ -647,32 +652,36 @@ class StatList(TimezoneMixin, generics.GenericAPIView):
         date = datetime.date.fromisoformat(date_iso)
         datetime_range = self.get_datetime_range(date)
 
-        stats = User.objects.filter(id__in=paginated_user_ids).annotate(
-            completed_task_count=Count(
-                "tasks",
-                filter=Q(
-                    tasks__completed_at__range=datetime_range,
-                    tasks__privacy__in=(
-                        PrivacyMixin.FOR_PUBLIC,
-                        PrivacyMixin.FOR_PROTECTED,
-                    ),
-                ),
-                distinct=True,
-            ),
-            reaction_count=Count(
-                "reactions",
-                filter=Q(
-                    tasks__user__id=F("id"),
-                    tasks__completed_at__range=datetime_range,
-                    tasks__privacy__in=(
-                        PrivacyMixin.FOR_PUBLIC,
-                        PrivacyMixin.FOR_PROTECTED,
-                    ),
-                    tasks__reactions__created_at__range=datetime_range,
-                ),
-            ),
-            date=Value(date_iso),
-        )
+        stats = []
+        for user_id in paginated_user_ids:
+            completed_task_count = Task.objects.filter(
+                completed_at__range=datetime_range,
+                privacy__in=self.PRIVACY_OPTIONS,
+                user__id=user_id,
+            ).count()
+
+            reaction_count = Reaction.objects.filter(
+                parent_type=Reaction.FOR_TASK,
+                task__user__id=user_id,
+                task__privacy__in=self.PRIVACY_OPTIONS,
+                task__completed_at__range=datetime_range,
+            ).count()
+
+            stat = (
+                User.objects.filter(id=user_id)
+                .annotate(
+                    completed_task_count=Value(completed_task_count),
+                    reaction_count=Value(reaction_count),
+                    date=Value(date_iso),
+                )
+                .first()
+            )
+
+            if not stat:
+                continue
+
+            stats.append(stat)
+
         data = self.get_serializer(stats, many=True).data
         paginated_data = self.paginator.get_paginated_data(data)  # pyright: ignore[reportAttributeAccessIssue] -- StatListPagination has get_paginated_data method
 
@@ -727,8 +736,10 @@ class StatDetail(TimezoneMixin, generics.RetrieveAPIView):
         ).count()
 
         reaction_count = Reaction.objects.filter(
-            user__username=username,
-            created_at__range=datetime_range,
+            parent_type=Reaction.FOR_TASK,
+            task__user__username=username,
+            task__privacy__in=privacy_options,
+            task__completed_at__range=datetime_range,
         ).count()
 
         stat = (
