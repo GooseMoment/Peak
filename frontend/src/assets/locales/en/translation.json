@@ -435,6 +435,7 @@
         },
         "button_no": "No",
         "retry": "Retry",
+        "load_more": "Load more",
         "error_load": "Failed to load.",
         "error_something_wrong": "Something went wrong.",
         "error_something_wrong_description": "Please try again later.",

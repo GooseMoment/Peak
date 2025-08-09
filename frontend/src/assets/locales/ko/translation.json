@@ -435,6 +435,7 @@
         },
         "button_no": "아니요",
         "retry": "재시도",
+        "load_more": "더 불러오기",
         "error_load": "불러오지 못했습니다.",
         "error_something_wrong": "문제가 발생했습니다.",
         "error_something_wrong_description": "나중에 다시 시도해 주세요.",
