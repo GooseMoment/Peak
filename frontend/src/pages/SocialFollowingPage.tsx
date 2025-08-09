@@ -1,17 +1,15 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { useQuery } from "@tanstack/react-query"
 import { styled } from "styled-components"
 
 import CommonCalendar from "@components/common/CommonCalendar"
 import DailyContainer from "@components/social/DailyContainer"
 import SocialPageTitle from "@components/social/SocialPageTitle"
+import StatContainer from "@components/social/StatContainer"
 import DateBar from "@components/social/common/DateBar"
-import LogsPreview from "@components/social/logsPreview/LogsPreview"
 
 import { getCurrentUsername } from "@api/client"
-import { getDailyLogsPreview } from "@api/social.api"
 
 import { useClientTimezone } from "@utils/clientSettings"
 import useDateParamState from "@utils/useDateParamState"
@@ -32,11 +30,6 @@ const SocialFollowingPage = () => {
         },
     })
 
-    const { data: dailyLogs } = useQuery({
-        queryKey: ["daily", "logs", "preview", me, date.toISODate()],
-        queryFn: () => getDailyLogsPreview(me!, date.toISODate()!),
-    })
-
     const setDateFromISO = (dateISO: string) =>
         setDate(DateTime.fromISO(dateISO, { zone: tz }))
 
@@ -47,14 +40,7 @@ const SocialFollowingPage = () => {
                 <Wrapper>
                     <Container>
                         <DateBar date={date} setDate={setDate} />
-                        {dailyLogs && (
-                            <LogsPreview
-                                logs={dailyLogs}
-                                selectedUser={undefined}
-                                setSelectedUser={undefined}
-                                selectedDate={date.toISO()}
-                            />
-                        )}
+                        <StatContainer date={date} />
                     </Container>
                 </Wrapper>
             </>
@@ -78,14 +64,11 @@ const SocialFollowingPage = () => {
                         />
                     </CalendarWrapper>
 
-                    {dailyLogs && (
-                        <LogsPreview
-                            logs={dailyLogs}
-                            selectedUser={selectedUser}
-                            setSelectedUser={setSelectedUser}
-                            selectedDate={date.toISO()}
-                        />
-                    )}
+                    <StatContainer
+                        date={date}
+                        selectedUser={selectedUser}
+                        setSelectedUser={setSelectedUser}
+                    />
                 </Container>
 
                 <StickyContainer>

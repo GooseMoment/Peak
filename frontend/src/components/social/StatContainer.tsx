@@ -1,0 +1,382 @@
+import type { Dispatch, SetStateAction } from "react"
+import { Link } from "react-router-dom"
+
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import styled, { css, useTheme } from "styled-components"
+
+import Button from "@components/common/Button"
+import ErrorBox from "@components/errors/ErrorBox"
+
+import { getCurrentUsername } from "@api/client"
+import { type Stat, getStat, getStats } from "@api/social.api"
+import type { User } from "@api/users.api"
+
+import { getPageFromURL } from "@utils/pagination"
+import useScreenType, { ifTablet } from "@utils/useScreenType"
+
+import { getPastelPaletteColor } from "@assets/palettes"
+import { skeletonBreathingCSS } from "@assets/skeleton"
+
+import FeatherIcon from "feather-icons-react"
+import type { DateTime } from "luxon"
+import { useTranslation } from "react-i18next"
+
+export default function StatContainer({
+    date,
+    selectedUser,
+    setSelectedUser,
+}: {
+    date: DateTime
+    selectedUser?: User["username"]
+    setSelectedUser?: Dispatch<SetStateAction<User["username"]>>
+}) {
+    const me = getCurrentUsername()
+    const { t } = useTranslation("translation")
+
+    const myStatQuery = useQuery({
+        queryKey: ["stats", me, date.toISODate()],
+        queryFn: () => getStat(me!, date.toISODate()!),
+    })
+
+    const {
+        data,
+        isPending,
+        isError,
+        isFetchingNextPage,
+        hasNextPage,
+        fetchNextPage,
+        refetch,
+    } = useInfiniteQuery({
+        queryKey: ["stats", date.toISODate()],
+        queryFn: (page) => getStats(date.toISODate()!, page.pageParam),
+        initialPageParam: "1",
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
+    })
+
+    if (isPending) {
+        return (
+            <Container>
+                <StatBoxSkeleton mine key="mine" />
+                {Array.from({ length: 6 }).map((_, i) => (
+                    <StatBoxSkeleton key={i} />
+                ))}
+            </Container>
+        )
+    }
+
+    if (isError) {
+        return <ErrorBox onRetry={refetch} />
+    }
+
+    return (
+        <Container>
+            {myStatQuery.isPending && <StatBoxSkeleton mine key="mine" />}
+            {myStatQuery.isSuccess && (
+                <StatBox
+                    mine
+                    stat={myStatQuery.data}
+                    isSelected={myStatQuery.data.username === selectedUser}
+                    setSelectedUser={setSelectedUser}
+                />
+            )}
+            {data.pages.map((page) =>
+                page.results.map((stat) => (
+                    <StatBox
+                        key={stat.username}
+                        stat={stat}
+                        isSelected={stat.username === selectedUser}
+                        setSelectedUser={setSelectedUser}
+                    />
+                )),
+            )}
+            {isFetchingNextPage &&
+                Array.from({ length: 2 }).map((_, i) => (
+                    <StatBoxSkeleton key={i} />
+                ))}
+            {hasNextPage && (
+                <LoadMoreButton
+                    onClick={() => fetchNextPage()}
+                    loading={isFetchingNextPage}
+                    disabled={isFetchingNextPage}>
+                    <FeatherIcon icon="chevrons-down" />
+                    <p>{t("common.load_more")}</p>
+                    <FeatherIcon icon="chevrons-down" />
+                </LoadMoreButton>
+            )}
+        </Container>
+    )
+}
+
+const Container = styled.div`
+    width: 100%;
+    max-width: 25rem;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 1em;
+`
+
+export function StatBoxSkeleton({ mine }: { mine?: boolean }) {
+    return (
+        <Box $mine={mine} $skeleton $isSelected={false} to="#">
+            <ProfileImgWrapper>
+                <ProfileImgSkeleton />
+            </ProfileImgWrapper>
+            <InfoContainer>
+                <Username $skeleton />
+                <SimpleStats>
+                    <StatsUnit key="task">
+                        <StatusIconWrapper $type="task">
+                            <FeatherIcon icon="check" />
+                        </StatusIconWrapper>
+                        <StatusCount $skeleton />
+                    </StatsUnit>
+                    <StatsUnit key="reaction">
+                        <StatusIconWrapper $type="reaction">
+                            <FeatherIcon icon="heart" />
+                        </StatusIconWrapper>
+                        <StatusCount $skeleton />
+                    </StatsUnit>
+                </SimpleStats>
+            </InfoContainer>
+        </Box>
+    )
+}
+
+export function StatBox({
+    stat,
+    isSelected = false,
+    setSelectedUser,
+    mine,
+}: {
+    stat: Stat
+    isSelected?: boolean
+    setSelectedUser?: Dispatch<SetStateAction<User["username"]>>
+    mine?: boolean
+}) {
+    const { isDesktop } = useScreenType()
+    const theme = useTheme()
+
+    return (
+        <Box
+            $mine={mine}
+            $isSelected={isSelected}
+            $bgColor={getPastelPaletteColor(theme.type, stat.header_color)}
+            to={`/app/social/daily/@${stat.username}/${stat.date}`}
+            draggable={false}
+            onClick={(e) => {
+                if (isDesktop && setSelectedUser) {
+                    e.preventDefault()
+                    setSelectedUser(stat.username)
+                }
+            }}>
+            <ProfileImgWrapper>
+                <ProfileImg src={stat.profile_img} alt={stat.username} />
+            </ProfileImgWrapper>
+            <InfoContainer>
+                <Username>{stat.username}</Username>
+                <SimpleStats>
+                    <StatsUnit key="task">
+                        <StatusIconWrapper $type="task">
+                            <FeatherIcon icon="check" />
+                        </StatusIconWrapper>
+                        <StatusCount>{stat.completed_task_count}</StatusCount>
+                    </StatsUnit>
+                    <StatsUnit key="reaction">
+                        <StatusIconWrapper $type="reaction">
+                            <FeatherIcon icon="heart" />
+                        </StatusIconWrapper>
+                        <StatusCount>{stat.reaction_count}</StatusCount>
+                    </StatsUnit>
+                </SimpleStats>
+            </InfoContainer>
+        </Box>
+    )
+}
+
+const Box = styled(Link)<{
+    $mine?: boolean
+    $bgColor?: string
+    $isSelected: boolean
+    $skeleton?: boolean
+}>`
+    box-sizing: border-box;
+    ${(props) =>
+        props.$mine
+            ? css`
+                  width: 100%;
+                  aspect-ratio: 2 / 1;
+              `
+            : css`
+                  width: calc(50% - 0.5em);
+                  aspect-ratio: 1/1;
+              `}
+    padding: 6%;
+
+    color: ${(p) => p.theme.black};
+    background-color: ${(p) => p.$bgColor};
+    ${(p) =>
+        p.$skeleton &&
+        css`
+            background-color: ${p.theme.skeleton.defaultColor};
+            ${skeletonBreathingCSS}
+        `}
+    border-radius: 24px;
+    ${(p) =>
+        p.$isSelected &&
+        css`
+            box-shadow:
+                0 0 0 0.15em ${p.theme.backgroundColor},
+                0 0 0 0.3em ${p.theme.textColor} !important;
+        `}
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    cursor: pointer;
+    transition: all 0.25s ease;
+
+    &:hover {
+        box-shadow:
+            0 0 0 0.15em ${(p) => p.theme.backgroundColor},
+            0 0 0 0.3em ${(p) => p.theme.textColor};
+    }
+
+    ${ifTablet} {
+        padding: 1.5em !important;
+
+        &:hover {
+            box-shadow: none;
+        }
+    }
+`
+
+const ProfileImgWrapper = styled.div`
+    position: relative;
+    aspect-ratio: 1;
+    max-width: 4.5em;
+    border-radius: 50%;
+
+    ${ifTablet} {
+        max-width: 64px !important;
+    }
+`
+
+const ProfileImg = styled.img`
+    aspect-ratio: 1;
+    width: 100%;
+    border-radius: 50%;
+`
+
+const ProfileImgSkeleton = styled.div`
+    aspect-ratio: 1;
+    width: 100%;
+    background-color: ${(p) => p.theme.backgroundColor};
+    border-radius: 50%;
+`
+
+const InfoContainer = styled.div`
+    flex-grow: 1;
+    max-height: 3em;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+`
+
+const Username = styled.div<{ $skeleton?: boolean }>`
+    font-weight: 600;
+    overflow-x: clip;
+    text-overflow: ellipsis;
+
+    text-align: left;
+    white-space: nowrap;
+
+    ${(props) =>
+        props.$skeleton &&
+        css`
+            background-color: ${props.theme.backgroundColor};
+            width: 100%;
+            height: 1.2em;
+            border-radius: 0.3em;
+        `}
+`
+
+const SimpleStats = styled.div`
+    height: 1.5em;
+
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+`
+
+const StatsUnit = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.3em;
+`
+
+const StatusIconWrapper = styled.div<{ $type: "task" | "reaction" }>`
+    box-sizing: border-box;
+    aspect-ratio: 1;
+    height: 18px;
+    padding: 0;
+
+    ${(props) =>
+        props.$type === "task" &&
+        css`
+            border: 2px solid ${(p) => p.theme.black};
+            border-radius: 50%;
+        `}
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & svg {
+        top: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+
+        stroke: ${(p) => p.theme.black};
+        stroke-width: 3px;
+        ${(props) =>
+            props.$type === "reaction" &&
+            css`
+                fill: ${(p) => p.theme.black};
+            `}
+    }
+`
+
+const StatusCount = styled.div<{ $skeleton?: boolean }>`
+    overflow-x: clip;
+    text-overflow: ellipsis;
+
+    ${(p) =>
+        p.$skeleton &&
+        css`
+            background-color: ${p.theme.backgroundColor};
+            width: 1em;
+            height: 1.2em;
+            border-radius: 0.3em;
+        `}
+`
+
+const LoadMoreButton = styled(Button)`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    &:active:hover:enabled {
+        transform: scale(0.975);
+    }
+
+    & svg {
+        top: 0;
+        margin-right: 0;
+    }
+`
