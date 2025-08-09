@@ -4,8 +4,8 @@ import { Link } from "react-router-dom"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
 
-import Button from "@components/common/Button"
 import ErrorBox from "@components/errors/ErrorBox"
+import LoadMoreButton from "@components/social/common/LoadMoreButton"
 
 import { getCurrentUsername } from "@api/client"
 import { type Stat, getStat, getStats } from "@api/social.api"
@@ -365,19 +365,4 @@ const StatusCount = styled.div<{ $skeleton?: boolean }>`
             height: 1.2em;
             border-radius: 0.3em;
         `}
-`
-
-const LoadMoreButton = styled(Button)`
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-
-    &:active:hover:enabled {
-        transform: scale(0.975);
-    }
-
-    & svg {
-        top: 0;
-        margin-right: 0;
-    }
 `
