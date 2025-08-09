@@ -28,6 +28,16 @@ urlpatterns = [
         "daily/log/details/task/<str:drawer>/<str:day>/",
         views.DailyLogTaskView.as_view(),
     ),
+    path(
+        "stats/<str:date_iso>/",
+        views.StatList.as_view(),
+        name="stats",
+    ),
+    path(
+        "stats/<str:date_iso>/@<str:username>/",
+        views.StatDetail.as_view(),
+        name="stat-detail",
+    ),
     path("records/@<str:username>/<str:date_iso>/", views.RecordView.as_view()),
     path("quotes/@<str:followee>/<str:day>/", views.get_quote),
     path("quotes/<str:day>/", views.post_quote),

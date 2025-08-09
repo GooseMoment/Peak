@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.db.models import Q, F
+from django.db.models import Q, F, Count, Value
 from django.db.models.query import QuerySet
 from django.db.utils import IntegrityError
 from django.utils import timezone
@@ -22,6 +22,7 @@ from .serializers import (
     DailyLogsSerializer,
     DailyLogDrawerSerializer,
     DailyLogDetailsSerializer,
+    StatSerializer,
     QuoteSerializer,
     RemarkSerializer,
     ReactionSerializer,
@@ -600,6 +601,137 @@ class RecordView(TimezoneMixin, generics.ListAPIView):
         return queryset.filter(
             Q(user=user) & privacy_filter & (completed_filter | uncompleted_filter)
         ).order_by(F("drawer__project__order"), F("drawer__order"), "order")
+
+
+class StatListPagination(PageNumberPagination):
+    page_size = 10
+    max_page_size = 10
+
+    def get_paginated_data(self, data):
+        assert self.page is not None
+        return {
+            "count": self.page.paginator.count,
+            "next": self.get_next_link(),
+            "previous": self.get_previous_link(),
+            "results": data,
+        }
+
+
+class StatList(TimezoneMixin, generics.GenericAPIView):
+    pagination_class = StatListPagination
+    request: AuthenticatedRequest  # pyright: ignore [reportIncompatibleVariableOverride]
+
+    def get_cache_key(self):
+        date_iso = self.kwargs.get("date_iso")
+        page_number = self.request.query_params.get("page") or 1
+        return f"stats/{self.request.user.id}/{date_iso}T{self.get_tz().key}?page={page_number}"
+
+    def get(self, request: AuthenticatedRequest, date_iso: str, *args, **kwargs):
+        cache_key = self.get_cache_key()
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            return Response(cached_data, status=status.HTTP_200_OK)
+
+        user_ids = (
+            Following.objects.filter(follower=request.user, status=Following.ACCEPTED)
+            .order_by("updated_at")
+            .values_list("followee", flat=True)
+        )
+        paginated_user_ids = self.paginate_queryset(
+            user_ids  # pyright: ignore [reportArgumentType] -- ValuesQuerySet is compatible with QuerySet
+        )
+        if not paginated_user_ids:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        date = datetime.date.fromisoformat(date_iso)
+        datetime_range = self.get_datetime_range(date)
+
+        stats = User.objects.filter(id__in=paginated_user_ids).annotate(
+            completed_task_count=Count(
+                "tasks",
+                filter=Q(
+                    tasks__completed_at__range=datetime_range,
+                    tasks__privacy__in=(
+                        PrivacyMixin.FOR_PUBLIC,
+                        PrivacyMixin.FOR_PROTECTED,
+                    ),
+                ),
+                distinct=True,
+            ),
+            reaction_count=Count(
+                "reactions",
+                filter=Q(
+                    reactions__created_at__range=datetime_range,
+                ),
+                distinct=True,
+            ),
+        )
+        data = StatSerializer(stats, many=True).data
+        paginated_data = self.paginator.get_paginated_data(data)  # pyright: ignore[reportAttributeAccessIssue] -- StatListPagination has get_paginated_data method
+
+        cache.set(
+            cache_key,
+            paginated_data,
+            15 if datetime_range[0] < self.get_now() < datetime_range[1] else 60,
+        )  # Cache for 15 seconds if within the date range, otherwise 60 seconds
+        return Response(
+            paginated_data,
+            status=status.HTTP_200_OK,
+        )
+
+
+class StatDetail(TimezoneMixin, generics.RetrieveAPIView):
+    request: AuthenticatedRequest  # pyright: ignore [reportIncompatibleVariableOverride]
+    serializer_class = StatSerializer
+    lookup_field = "username"
+    permission_classes = (permissions.IsUserNotBlockedOrBlocking,)
+
+    def get_privacy_options(self, viewer_username: str, target_username: str):
+        if viewer_username == target_username:
+            return (
+                PrivacyMixin.FOR_PUBLIC,
+                PrivacyMixin.FOR_PROTECTED,
+                PrivacyMixin.FOR_PRIVATE,
+            )
+
+        is_following = Following.objects.filter(
+            follower__username=viewer_username,
+            followee__username=target_username,
+            status=Following.ACCEPTED,
+        ).exists()
+
+        if is_following:
+            return (PrivacyMixin.FOR_PUBLIC, PrivacyMixin.FOR_PROTECTED)
+
+        return (PrivacyMixin.FOR_PUBLIC,)
+
+    def get_object(self):
+        username = self.kwargs.get("username")
+        date_iso = self.kwargs.get("date_iso")
+        date = datetime.date.fromisoformat(date_iso)
+        datetime_range = self.get_datetime_range(date)
+
+        privacy_options = self.get_privacy_options(self.request.user.username, username)
+
+        completed_task_count = Task.objects.filter(
+            completed_at__range=datetime_range,
+            privacy__in=privacy_options,
+            user__username=username,
+        ).count()
+
+        reaction_count = Reaction.objects.filter(
+            user__username=username,
+            created_at__range=datetime_range,
+        ).count()
+
+        return (
+            User.objects.filter(username=username)
+            .annotate(
+                completed_task_count=Value(completed_task_count),
+                reaction_count=Value(reaction_count),
+            )
+            .first()
+        )
 
 
 class ReactionView(APIView):

@@ -117,6 +117,14 @@ class DailyLogDrawerSerializer(DrawerSerializer):
         fields = DrawerSerializer.Meta.fields + ["color"]
 
 
+class StatSerializer(UserSerializer):
+    completed_task_count = serializers.IntegerField()
+    reaction_count = serializers.IntegerField()
+
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + ["completed_task_count", "reaction_count"]
+
+
 class ReactionSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     emoji = EmojiSerializer(many=False, read_only=True)
