@@ -2,8 +2,6 @@ import { useNavigate } from "react-router-dom"
 
 import styled, { css, useTheme } from "styled-components"
 
-import { SimpleProfileImg } from "@components/social/common/SimpleProfile"
-
 import { getCurrentUsername } from "@api/client"
 
 import useScreenType, { ifTablet } from "@utils/useScreenType"
@@ -151,6 +149,17 @@ const ProfileWrapper = styled.div`
     ${ifTablet} {
         max-width: 64px !important;
     }
+`
+
+const SimpleProfileImg = styled.img`
+    aspect-ratio: 1;
+    width: ${(props) => (props.$ratio === undefined ? 100 : props.$ratio)}%;
+
+    border-radius: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 const InfoContainer = styled.div`
