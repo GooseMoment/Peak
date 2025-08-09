@@ -365,7 +365,7 @@ class RecordDetail(TimezoneMixin, generics.ListAPIView):
 
         privacy_filter = self.get_privacy_filter(self.request.user, user)
         completed_filter = Q(completed_at__range=datetime_range)
-        uncompleted_filter = Q(completed_at=None) & (
+        uncompleted_filter = Q(completed_at__isnull=True) & (
             Q(assigned_at=date)
             | Q(due_datetime__range=datetime_range)
             | Q(due_date=date)
