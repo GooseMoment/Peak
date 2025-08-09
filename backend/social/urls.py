@@ -5,8 +5,10 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 urlpatterns = [
+    # explore
     path("explore/search/", views.ExploreSearchView.as_view()),
     path("explore/", views.ExploreFeedView.as_view()),
+    # user list
     path(
         "followings/@<str:follower_username>/@<str:followee_username>/",
         views.FollowingView.as_view(),
@@ -16,6 +18,7 @@ urlpatterns = [
         "blocks/@<str:blocker_username>/@<str:blockee_username>/",
         views.BlockView.as_view(),
     ),
+    # daily logs (legacy; to be replaced with stats and records)
     path("daily/logs/@<str:username>/<str:day>/", views.get_daily_logs),
     path(
         "daily/log/details/@<str:followee>/<str:day>/",
@@ -28,20 +31,32 @@ urlpatterns = [
         "daily/log/details/task/<str:drawer>/<str:day>/",
         views.DailyLogTaskView.as_view(),
     ),
+    path("quotes/@<str:followee>/<str:day>/", views.get_quote),
+    path("quotes/<str:day>/", views.post_quote),
+    # stats (replacing daily log preview)
     path(
         "stats/<str:date_iso>/",
         views.StatList.as_view(),
-        name="stats",
+        name="stat-list",
     ),
     path(
         "stats/<str:date_iso>/@<str:username>/",
         views.StatDetail.as_view(),
         name="stat-detail",
     ),
-    path("records/@<str:username>/<str:date_iso>/", views.RecordView.as_view()),
-    path("quotes/@<str:followee>/<str:day>/", views.get_quote),
-    path("quotes/<str:day>/", views.post_quote),
-    path("remarks/@<str:username>/<str:date_iso>/", views.RemarkDetail.as_view()),
+    # records (replacing daily log detail)
+    path(
+        "records/@<str:username>/<str:date_iso>/",
+        views.RecordDetail.as_view(),
+        name="record-detail",
+    ),
+    # remarks (replacing daily log quote)
+    path(
+        "remarks/@<str:username>/<str:date_iso>/",
+        views.RemarkDetail.as_view(),
+        name="remark-detail",
+    ),
+    # interactions (reactions, comments, pecks)
     path("reactions/<str:type>/<str:id>/", views.ReactionView.as_view()),
     path("comments/<str:type>/<str:id>/", views.CommentView.as_view()),
     path("pecks/<str:id>/", views.PeckView.as_view()),

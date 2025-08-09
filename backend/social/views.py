@@ -561,7 +561,7 @@ class DailyLogTaskView(generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class RecordView(TimezoneMixin, generics.ListAPIView):
+class RecordDetail(TimezoneMixin, generics.ListAPIView):
     request: AuthenticatedRequest  # pyright: ignore [reportIncompatibleVariableOverride]
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
