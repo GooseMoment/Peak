@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from "react"
 import { Link } from "react-router-dom"
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import styled, { css } from "styled-components"
+import styled, { css, useTheme } from "styled-components"
 
 import ErrorBox from "@components/errors/ErrorBox"
 import LoadMoreButton from "@components/social/common/LoadMoreButton"
@@ -14,6 +14,7 @@ import type { User } from "@api/users.api"
 import { getPageFromURL } from "@utils/pagination"
 import useScreenType, { ifTablet } from "@utils/useScreenType"
 
+import { getPastelPaletteColor } from "@assets/palettes"
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import FeatherIcon from "feather-icons-react"
@@ -155,11 +156,13 @@ export function StatBox({
     mine?: boolean
 }) {
     const { isDesktop } = useScreenType()
+    const theme = useTheme()
 
     return (
         <Box
             $mine={mine}
             $isSelected={isSelected}
+            $borderColor={getPastelPaletteColor(theme.type, stat.header_color)}
             to={`/app/social/daily/@${stat.username}/${stat.date}`}
             draggable={false}
             onClick={(e) => {
@@ -199,6 +202,7 @@ export function StatBox({
 const Box = styled(Link)<{
     $mine?: boolean
     $isSelected: boolean
+    $borderColor?: string
     $skeleton?: boolean
 }>`
     box-sizing: border-box;
@@ -214,28 +218,10 @@ const Box = styled(Link)<{
             aspect-ratio: 2/1;
         `}
 
-    background-color: ${(p) => p.theme.backgroundColor};
-    ${(p) =>
-        p.$skeleton &&
-        css`
-            background-color: ${p.theme.skeleton.defaultColor};
-            ${skeletonBreathingCSS}
-        `}
+    background-color: ${(p) => p.theme.secondBackgroundColor};
     border-radius: 24px;
     box-shadow: ${(p) => p.theme.notifications.boxShadowColor} 0px 8px 24px;
     border: 3px transparent solid;
-
-    @media (hover: hover) {
-        &:hover {
-            border-color: ${(p) => p.theme.primaryColors.info};
-        }
-    }
-
-    ${(p) =>
-        p.$isSelected &&
-        css`
-            border-color: ${p.theme.primaryColors.info};
-        `}
 
     display: flex;
     flex-direction: column;
@@ -243,15 +229,33 @@ const Box = styled(Link)<{
     gap: 0.75em;
 
     cursor: pointer;
-    transition: border-color 0.2s ease;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
 
     ${ifTablet} {
         padding: 1.5em !important;
+    }
 
+    @media (hover: hover) {
         &:hover {
-            box-shadow: none;
+            border-color: ${(p) => p.$borderColor};
         }
     }
+
+    ${(p) =>
+        p.$isSelected &&
+        css`
+            border-color: ${p.$borderColor};
+            background-color: ${p.theme.backgroundColor};
+        `}
+
+    ${(p) =>
+        p.$skeleton &&
+        css`
+            background-color: ${p.theme.skeleton.defaultColor};
+            ${skeletonBreathingCSS}
+        `}
 `
 
 const ProfileImgWrapper = styled.div`
