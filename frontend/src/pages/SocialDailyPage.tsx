@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { generatePath, useNavigate, useParams } from "react-router-dom"
 
 import DailyContainer from "@components/social/DailyContainer"
 
@@ -22,7 +22,10 @@ const SocialDailyPage = () => {
     const [date, setDate] = useDateParamState({
         navigate: (value: DateTime, fallback: boolean) => {
             navigate(
-                `/app/social/daily/${usernameWithAt}/${value.toISODate()}`,
+                generatePath("/app/social/daily/:username/:date", {
+                    username: usernameWithAt!,
+                    date: value.toISODate(),
+                }),
                 {
                     replace: fallback,
                 },

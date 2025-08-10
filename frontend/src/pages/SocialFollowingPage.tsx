@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { generatePath, useNavigate } from "react-router-dom"
 
 import { styled } from "styled-components"
 
@@ -26,9 +26,14 @@ const SocialFollowingPage = () => {
     const [selectedUser, setSelectedUser] = useState(me!)
     const [date, setDate] = useDateParamState({
         navigate: (value: DateTime, fallback: boolean) => {
-            navigate(`/app/social/following/${value.toISODate()}`, {
-                replace: fallback,
-            })
+            navigate(
+                generatePath("/app/social/following/:date", {
+                    date: value.toISODate(),
+                }),
+                {
+                    replace: fallback,
+                },
+            )
         },
     })
 
