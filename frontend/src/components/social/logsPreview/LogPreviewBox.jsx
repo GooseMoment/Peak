@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { generatePath, useNavigate } from "react-router-dom"
 
 import styled, { css, useTheme } from "styled-components"
 
@@ -9,13 +9,11 @@ import useScreenType, { ifTablet } from "@utils/useScreenType"
 import { getPastelPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
-import { DateTime } from "luxon"
 
 const LogPreviewBox = ({
     log,
     selectedUser,
     setSelectedUser,
-    selectedDate,
     // pageType = "following",
 }) => {
     const theme = useTheme()
@@ -24,13 +22,6 @@ const LogPreviewBox = ({
 
     const me = getCurrentUsername()
 
-    if (!log) return null
-
-    // TODO: explore feed용 view 추가하면 삭제
-    const initialDate = new Date()
-    initialDate.setHours(0, 0, 0, 0)
-    // const tempSelectedDate = initial_date.toISOString()
-
     const handleSelect = () => {
         if (isDesktop) {
             setSelectedUser(log.username)
@@ -38,7 +29,9 @@ const LogPreviewBox = ({
         }
 
         navigate(
-            `/app/social/daily/@${log.username}/${DateTime.fromISO(selectedDate).toISODate()}`,
+            generatePath("/app/social/daily/:user", {
+                user: "@" + log.username,
+            }),
         )
     }
 
