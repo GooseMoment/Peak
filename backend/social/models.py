@@ -94,7 +94,6 @@ class Reaction(Base):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="reactions",
     )
     parent_type = models.CharField(choices=REACTION_TYPE, max_length=128)
     task = models.ForeignKey(
@@ -102,7 +101,6 @@ class Reaction(Base):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name="reactions",
     )
     quote = models.ForeignKey(
         Quote,
