@@ -2,7 +2,7 @@ import { type ReactElement } from "react"
 import { Fragment } from "react"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
-import { useTheme } from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import ErrorBox from "@components/errors/ErrorBox"
@@ -10,6 +10,7 @@ import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPag
 import LoadMoreButton from "@components/social/common/LoadMoreButton"
 import TaskBox from "@components/social/logDetails/TaskBox"
 
+import { getCurrentUsername } from "@api/client"
 import { getRecord } from "@api/social.api"
 import type { User } from "@api/users.api"
 
@@ -32,6 +33,7 @@ export default function RecordContainer({
 }: RecordContainerProps) {
     const theme = useTheme()
     const { t } = useTranslation("translation")
+    const me = getCurrentUsername()
     const {
         data,
         isPending,
@@ -64,9 +66,19 @@ export default function RecordContainer({
 
     let lastDrawerID: null | string = null
     let lastColor = ""
+    const isEmpty = data.pages.every((page) => page.results.length === 0)
 
     return (
         <div>
+            {isEmpty && (
+                <EmptyBox>
+                    {t(
+                        username === me
+                            ? "social.records.empty_mine"
+                            : "social.records.empty",
+                    )}
+                </EmptyBox>
+            )}
             {data.pages.map((page) =>
                 page.results.map((task) => {
                     let drawerInsertion: null | ReactElement = null
@@ -113,3 +125,18 @@ export default function RecordContainer({
         </div>
     )
 }
+
+const EmptyBox = styled.div`
+    padding: 2em;
+    color: ${(p) => p.theme.textColor};
+    border-radius: 16px;
+    margin: 1em 0;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    line-height: 1.5em;
+    word-break: keep-all;
+`
