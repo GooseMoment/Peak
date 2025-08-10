@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.db.models import Q, F, Value
+from django.db.models import Q, F, Value, Count
 from django.db.models.query import QuerySet
 from django.db.utils import IntegrityError
 from django.utils import timezone
@@ -38,6 +38,8 @@ from users.models import User
 from users.serializers import UserSerializer
 
 import datetime
+from django.db.models import OuterRef, Subquery, IntegerField, Case, When
+from django.db.models.functions import Coalesce
 
 
 class ExploreFeedPagination(CursorPagination):
@@ -400,6 +402,9 @@ class StatList(TimezoneMixin, generics.GenericAPIView):
         PrivacyMixin.FOR_PROTECTED,
     )
 
+    CACHE_TIMEOUT_TODAY = 5  # seconds
+    CACHE_TIMEOUT_OTHER = 15  # seconds
+
     def get_cache_key(self):
         date_iso = self.kwargs.get("date_iso")
         page_number = self.request.query_params.get("page") or 1
@@ -425,35 +430,50 @@ class StatList(TimezoneMixin, generics.GenericAPIView):
         date = datetime.date.fromisoformat(date_iso)
         datetime_range = self.get_datetime_range(date)
 
-        stats = []
-        for user_id in paginated_user_ids:
-            completed_task_count = Task.objects.filter(
+        user_ids = list(paginated_user_ids)
+
+        task_count_sq = (
+            Task.objects.filter(
+                user_id=OuterRef("id"),
                 completed_at__range=datetime_range,
                 privacy__in=self.PRIVACY_OPTIONS,
-                user__id=user_id,
-            ).count()
+            )
+            .order_by()
+            .values("user_id")
+            .annotate(cnt=Count("id"))
+            .values("cnt")
+        )
 
-            reaction_count = Reaction.objects.filter(
+        reaction_count_sq = (
+            Reaction.objects.filter(
                 parent_type=Reaction.FOR_TASK,
-                task__user__id=user_id,
+                task__user_id=OuterRef("id"),
                 task__privacy__in=self.PRIVACY_OPTIONS,
                 task__completed_at__range=datetime_range,
-            ).count()
-
-            stat = (
-                User.objects.filter(id=user_id)
-                .annotate(
-                    completed_task_count=Value(completed_task_count),
-                    reaction_count=Value(reaction_count),
-                    date=Value(date_iso),
-                )
-                .first()
             )
+            .order_by()
+            .values("task__user_id")
+            .annotate(cnt=Count("id"))
+            .values("cnt")
+        )
 
-            if not stat:
-                continue
-
-            stats.append(stat)
+        order_whens = [When(id=uid, then=pos) for pos, uid in enumerate(user_ids)]
+        stats = (
+            User.objects.filter(id__in=user_ids)
+            .annotate(
+                completed_task_count=Coalesce(
+                    Subquery(task_count_sq, output_field=IntegerField()), Value(0)
+                ),
+                reaction_count=Coalesce(
+                    Subquery(reaction_count_sq, output_field=IntegerField()), Value(0)
+                ),
+                date=Value(date_iso),
+                order_index=Case(
+                    *order_whens, default=len(user_ids), output_field=IntegerField()
+                ),
+            )
+            .order_by("order_index")
+        )
 
         data = self.get_serializer(stats, many=True).data
         paginated_data = self.paginator.get_paginated_data(data)  # pyright: ignore[reportAttributeAccessIssue] -- StatListPagination has get_paginated_data method
@@ -461,8 +481,10 @@ class StatList(TimezoneMixin, generics.GenericAPIView):
         cache.set(
             cache_key,
             paginated_data,
-            5 if datetime_range[0] <= self.get_now() <= datetime_range[1] else 60,
-        )  # Cache for 5 seconds if within the date range, otherwise 60 seconds
+            self.CACHE_TIMEOUT_TODAY
+            if datetime_range[0] <= self.get_now() <= datetime_range[1]
+            else self.CACHE_TIMEOUT_OTHER,
+        )
         return Response(
             paginated_data,
             status=status.HTTP_200_OK,
