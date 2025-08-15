@@ -1,7 +1,7 @@
 // from: https://medium.com/@josephat94/building-a-simple-react-hook-to-detect-screen-size-404a867fa2d2
 import { useEffect, useState } from "react"
 
-const useScreenSize = () => {
+export default function useScreenSize() {
     const [screenSize, setScreenSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight,
@@ -25,5 +25,3 @@ const useScreenSize = () => {
 
     return screenSize
 }
-
-export default useScreenSize

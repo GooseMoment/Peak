@@ -18,12 +18,12 @@ export const setToken = (token: string | null) => {
 }
 
 export const getCurrentUsername = () => {
-    const token = localStorage.getItem("username")
-    if (token === "null" || token === "undefined") {
+    const username = localStorage.getItem("username")
+    if (username === "null" || username === "undefined") {
         return null
     }
 
-    return token
+    return username
 }
 
 export const setCurrentUsername = (username: string | null) => {

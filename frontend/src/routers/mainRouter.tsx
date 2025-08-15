@@ -159,11 +159,19 @@ const routes: RouteObject[] = [
                         element: <SocialFollowingPage />,
                     },
                     {
+                        path: "following/:date",
+                        element: <SocialFollowingPage />,
+                    },
+                    {
                         path: "explore",
                         element: <SocialExplorePage />,
                     },
                     {
                         path: "daily/:username",
+                        element: <SocialDailyPage />,
+                    },
+                    {
+                        path: "daily/:username/:date",
                         element: <SocialDailyPage />,
                     },
                 ],

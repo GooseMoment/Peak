@@ -12,6 +12,7 @@ import {
     initClientSettings,
 } from "@utils/clientSettings"
 import i18n, { I18nSetLocale } from "@utils/i18n"
+import { ScreenTypeProvider } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
@@ -26,7 +27,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <ClientThemeProvider>
                 <GlobalStyle />
                 <QueryClientProvider client={queryClient}>
-                    <Root />
+                    <ScreenTypeProvider>
+                        <Root />
+                    </ScreenTypeProvider>
                 </QueryClientProvider>
                 <I18nSetLocale i18n={i18n} />
             </ClientThemeProvider>

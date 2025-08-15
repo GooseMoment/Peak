@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom"
+import type { ReactNode } from "react"
+import { type To, useNavigate } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
 
@@ -6,9 +7,9 @@ import PageTitle from "@components/common/PageTitle"
 
 import { useTranslation } from "react-i18next"
 
-const SocialPageTitle = ({ active }) => {
+const SocialPageTitle = ({ active }: { active: "following" | "explore" }) => {
     const theme = useTheme()
-    const { t } = useTranslation("", { keyPrefix: "social" })
+    const { t } = useTranslation("translation", { keyPrefix: "social" })
 
     if (active === "following")
         return (
@@ -41,7 +42,13 @@ const PageTitleGroup = styled.div`
     -webkit-user-select: none;
 `
 
-const PageTitleButton = ({ $color, to, children }) => {
+interface PageTitleButtonProps {
+    $color?: string
+    to: To
+    children: ReactNode
+}
+
+const PageTitleButton = ({ $color, to, children }: PageTitleButtonProps) => {
     const navigate = useNavigate()
     return (
         <PageTitle
