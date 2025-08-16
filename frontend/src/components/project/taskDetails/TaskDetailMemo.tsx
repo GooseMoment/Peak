@@ -1,16 +1,26 @@
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 
 import styled from "styled-components"
 
 import Button from "@components/common/Button"
+
+import { type MinimalTask } from "@api/tasks.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const Memo = ({ previousMemo, setFunc, onClose }) => {
-    const { t } = useTranslation(null, { keyPrefix: "task.memo" })
+const TaskDetailMemo = ({
+    previousMemo,
+    setFunc,
+    onClose,
+}: {
+    previousMemo: string | undefined
+    setFunc: (diff: Partial<MinimalTask>) => void
+    onClose: () => void
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "task.memo" })
 
     const [memo, setMemo] = useState(previousMemo)
 
@@ -22,7 +32,7 @@ const Memo = ({ previousMemo, setFunc, onClose }) => {
         }
     }
 
-    const onChange = (e) => {
+    const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const newMemo = e.target.value
         setMemo(newMemo)
     }
@@ -31,14 +41,13 @@ const Memo = ({ previousMemo, setFunc, onClose }) => {
         <>
             <FlexBox>
                 <Editor
-                    type="text"
                     onChange={onChange}
                     value={memo || ""}
                     placeholder={t("memo_placeholder")}
                 />
             </FlexBox>
             <FlexBox>
-                <Button onClick={changeMemo(memo)}>{t("button_change")}</Button>
+                <Button onClick={changeMemo}>{t("button_change")}</Button>
             </FlexBox>
         </>
     )
@@ -77,4 +86,4 @@ const Editor = styled.textarea`
     }
 `
 
-export default Memo
+export default TaskDetailMemo

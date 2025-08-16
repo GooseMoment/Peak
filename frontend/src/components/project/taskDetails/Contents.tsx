@@ -1,4 +1,11 @@
-import { Fragment, useMemo, useState } from "react"
+import {
+    Dispatch,
+    Fragment,
+    MouseEvent,
+    SetStateAction,
+    useMemo,
+    useState,
+} from "react"
 
 import styled, { css } from "styled-components"
 
@@ -7,34 +14,58 @@ import Detail from "@components/project/common/Detail"
 import ToolTip from "@components/project/common/ToolTip"
 import taskDate from "@components/tasks/utils/taskDate"
 
-import Assigned from "./Assigned"
-import Drawer from "./Drawer"
-import Due from "./Due"
-import Memo from "./Memo"
-import Priority from "./Priority"
-import Reminder from "./Reminder"
+import TaskDetailAssigned from "./TaskDetailAssigned"
+import TaskDetailDrawer from "./TaskDetailDrawer"
+import TaskDetailDue from "./TaskDetailDue"
+import TaskDetailMemo from "./TaskDetailMemo"
+import TaskDetailPriority from "./TaskDetailPriority"
+import TaskDetailReminder from "./TaskDetailReminder"
 
+import type { MinimalTask } from "@api/tasks.api"
+
+import { PaletteColorName } from "@assets/palettes"
 import AlarmClock from "@assets/project/AlarmClock"
 import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
+import { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const Contents = ({ task, setFunc, setNewColor }) => {
-    const { t } = useTranslation(null, { keyPrefix: "task" })
+type ContentKey = "assigned" | "due" | "priority" | "drawer" | "memo"
 
-    const [isComponentOpen, setIsComponentOpen] = useState(false)
+/// priority, drawer가 있어야함
+const Contents = ({
+    task,
+    setFunc,
+    setNewColor,
+}: {
+    task: MinimalTask
+    setFunc: (diff: Partial<MinimalTask>) => void
+    setNewColor: Dispatch<SetStateAction<PaletteColorName>>
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "task" })
+
+    const [isComponentOpen, setIsComponentOpen] = useState<boolean>(false)
 
     const priorities = useMemo(() => makePriorities(t), [t])
-    const displayReminder = useMemo(() => makeDisplayReminder(t), [t])
+    const displayReminder: Record<number, string> = useMemo(
+        () => makeDisplayReminder(t),
+        [t],
+    )
 
     // text클릭 시 알맞는 component 띄우기
-    const [content, setContent] = useState(null)
+    const [content, setContent] = useState<ContentKey | null>(null)
 
-    const handleClickContent = (e) => {
-        const { name } = e.target.attributes
-        setContent(name.value)
+    const handleClickContent = (e: MouseEvent<HTMLElement>) => {
+        const target = e.target as HTMLElement
+        const el = target.closest<HTMLElement>("[data-name]")
+        if (!el) return
+
+        const name = el.dataset.name
+        if (!name) return
+
+        setContent(name as ContentKey | null)
         setIsComponentOpen(true)
     }
 
@@ -47,40 +78,41 @@ const Contents = ({ task, setFunc, setNewColor }) => {
     const items = [
         {
             id: 1,
-            name: "assigned",
+            name: "assigned" as const,
             icon: <FeatherIcon icon="calendar" />,
             display: task.assigned_at ? formatted_assigned_date : t("none"),
-            component: <Assigned setFunc={setFunc} onClose={closeComponent} />,
+            component: <TaskDetailAssigned setFunc={setFunc} />,
         },
         {
             id: 2,
-            name: "due",
+            name: "due" as const,
             icon: <Hourglass />,
             display:
                 task.due_type && (task.due_date || task.due_datetime)
                     ? formatted_due_datetime
                     : t("none"),
-            component: <Due task={task} setFunc={setFunc} />,
+            component: <TaskDetailDue task={task} setFunc={setFunc} />,
         },
         {
             id: 3,
-            name: "reminder",
+            name: "reminder" as const,
             icon: <AlarmClock />,
             display:
-                task?.reminders && task.reminders?.length !== 0 ? (
-                    <RemindersBox name="reminder">
-                        {task.reminders.map((delta, i) => (
-                            <ReminderBlock key={i} name="reminder">
-                                {displayReminder[delta]}
+                task.reminders && task.reminders.length !== 0 ? (
+                    <RemindersBox data-name="reminder">
+                        {task.reminders.map((reminder, i) => (
+                            <ReminderBlock key={i} data-name="reminder">
+                                {displayReminder[reminder.delta]}
                             </ReminderBlock>
                         ))}
                     </RemindersBox>
                 ) : task.due_type ? (
-                    <EmptyReminderBox name="reminder">+</EmptyReminderBox>
+                    <EmptyReminderBox data-name="reminder">+</EmptyReminderBox>
                 ) : (
                     <EmptyReminderBox
-                        name="none"
-                        onClick={() => {
+                        data-name="none"
+                        onClick={(e) => {
+                            e.stopPropagation()
                             toast.error(
                                 t("reminder.reminder_before_due_date"),
                                 { toastId: "reminder_before_due_date" },
@@ -89,27 +121,32 @@ const Contents = ({ task, setFunc, setNewColor }) => {
                         -
                     </EmptyReminderBox>
                 ),
-            component: <Reminder task={task} setFunc={setFunc} />,
+            component: <TaskDetailReminder task={task} setFunc={setFunc} />,
         },
         {
             id: 4,
-            name: "priority",
+            name: "priority" as const,
             icon: <FeatherIcon icon="alert-circle" />,
             display: priorities[task.priority],
-            component: <Priority setFunc={setFunc} onClose={closeComponent} />,
+            component: (
+                <TaskDetailPriority
+                    setFunc={setFunc}
+                    onClose={closeComponent}
+                />
+            ),
         },
         {
             id: 5,
-            name: "drawer",
+            name: "drawer" as const,
             icon: <FeatherIcon icon="archive" />,
             display:
-                task.project_name === "Inbox"
-                    ? `${task.project_name}`
-                    : task.drawer_name
-                      ? `${task.project_name} / ${task.drawer_name}`
+                task.drawer.project.type === "inbox"
+                    ? `${task.drawer.project.name}`
+                    : task.drawer.name
+                      ? `${task.drawer.project.name} / ${task.drawer.name}`
                       : t("none"),
             component: (
-                <Drawer
+                <TaskDetailDrawer
                     setFunc={setFunc}
                     onClose={closeComponent}
                     setNewColor={setNewColor}
@@ -118,11 +155,11 @@ const Contents = ({ task, setFunc, setNewColor }) => {
         },
         {
             id: 6,
-            name: "memo",
+            name: "memo" as const,
             icon: <FeatherIcon icon="edit" />,
             display: task.memo ? task.memo : t("none"),
             component: (
-                <Memo
+                <TaskDetailMemo
                     previousMemo={task.memo}
                     setFunc={setFunc}
                     onClose={closeComponent}
@@ -136,20 +173,25 @@ const Contents = ({ task, setFunc, setNewColor }) => {
             {items.map((item) => (
                 <Fragment key={item.id}>
                     <ContentsBox>
-                        <ToolTip message={t(item.name + ".name")}>
+                        <ToolTip message={t(`${item.name}.name`)}>
                             {item.icon}
                         </ToolTip>
+
                         <VLine $end={item.id === 1 || item.id === 6} />
+
                         <ContentText
-                            name={item.name === "reminder" ? null : item.name}
+                            data-name={
+                                item.name === "reminder" ? undefined : item.name
+                            }
                             onClick={handleClickContent}
                             $isReminder={item.name === "reminder"}>
                             {item.display}
                         </ContentText>
+
                         {content === item.name && isComponentOpen ? (
                             <ModalWindow afterClose={closeComponent} additional>
                                 <Detail
-                                    title={t(content + ".title")}
+                                    title={t(`${content}.title`)}
                                     onClose={closeComponent}
                                     special={
                                         content === "assigned" ||
@@ -188,7 +230,7 @@ const ContentsBox = styled.div`
     }
 `
 
-const VLine = styled.div`
+const VLine = styled.div<{ $end: boolean }>`
     border-left: thin solid ${(p) => p.theme.project.lineColor};
     height: 1em;
     margin-top: 1.3em;
@@ -203,7 +245,9 @@ const VLine = styled.div`
             : null}
 `
 
-const ContentText = styled.div`
+const ContentText = styled.button<{ $isReminder: boolean }>`
+    all: unset;
+    text-decoration: none;
     width: 31em;
     font-style: normal;
     font-size: 1.2em;
@@ -214,15 +258,19 @@ const ContentText = styled.div`
     white-space: nowrap;
     overflow-x: clip;
     text-overflow: ellipsis;
-    cursor: ${(props) => props.$isReminder || "pointer"};
+    cursor: ${(props) => (props.$isReminder ? "normal" : "pointer")};
 `
 
-const RemindersBox = styled.div`
+const RemindersBox = styled.button`
+    all: unset;
+    text-decoration: none;
     display: flex;
     gap: 0.5em;
 `
 
-const ReminderBlock = styled.div`
+const ReminderBlock = styled.button`
+    all: unset;
+    text-decoration: none;
     width: auto;
     font-size: 0.9em;
     padding: 0.3em;
@@ -234,7 +282,9 @@ const ReminderBlock = styled.div`
     cursor: pointer;
 `
 
-const EmptyReminderBox = styled.div`
+const EmptyReminderBox = styled.button`
+    all: unset;
+    text-decoration: none;
     font-size: 0.9em;
     width: 1em;
     padding: 0.3em;
@@ -247,13 +297,15 @@ const EmptyReminderBox = styled.div`
     cursor: pointer;
 `
 
-const makePriorities = (t) => [
+const makePriorities = (t: TFunction<"translation", "task">) => [
     t("priority.normal"),
     t("priority.important"),
     t("priority.critical"),
 ]
 
-const makeDisplayReminder = (t) => ({
+const makeDisplayReminder = (
+    t: TFunction<"translation", "task">,
+): Record<number, string> => ({
     0: t("reminder.display_then"),
     5: t("reminder.display_5_minutes_before"),
     15: t("reminder.display_15_minutes_before"),

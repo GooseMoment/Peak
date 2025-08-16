@@ -1,8 +1,15 @@
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 
 import styled, { css } from "styled-components"
 
 import Button from "@components/common/Button"
+
+import type {
+    MinimalTask,
+    MinimalTaskDueDate,
+    MinimalTaskDueDatetime,
+    TaskDueStrict,
+} from "@api/tasks.api"
 
 import { useClientSetting } from "@utils/clientSettings"
 import { useClientTimezone } from "@utils/clientSettings"
@@ -11,8 +18,14 @@ import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const TimeDetail = ({ task, setFunc }) => {
-    const { t } = useTranslation(null, { keyPrefix: "task.due.time" })
+const TimeDetail = ({
+    task,
+    setFunc,
+}: {
+    task: MinimalTaskDueDate | MinimalTaskDueDatetime
+    setFunc: (diff: Partial<MinimalTask>) => void
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "task.due.time" })
 
     const ampms = [
         { name: "am", display: t("am") },
@@ -25,21 +38,24 @@ const TimeDetail = ({ task, setFunc }) => {
     const due =
         task.due_type === "due_datetime" ? task.due_datetime : task.due_date
     const due_datetime = DateTime.fromISO(due, { zone: tz })
-    const due_time =
-        task.due_type === "due_datetime"
-            ? due_datetime.toISOTime()
-            : "00:00:00.000Z"
 
-    const [ampm, setAmpm] = useState(ampms[0].name)
-    const [hour, setHour] = useState(due_time && parseInt(due_time.slice(0, 2)))
-    const [min, setMin] = useState(due_time && parseInt(due_time.slice(3, 5)))
+    const [ampm, setAmpm] = useState<string>(ampms[0].name)
+    const [hour, setHour] = useState<number>(
+        task.due_type === "due_datetime" ? due_datetime.hour : 0,
+    )
+    const [min, setMin] = useState<number>(
+        task.due_type === "due_datetime" ? due_datetime.minute : 0,
+    )
 
     const changeTime = () => {
-        let converted_hour =
+        const converted_hour =
             !setting.time_as_24_hour && ampm === "pm" ? hour + 12 : hour
         const converted_datetime = due_datetime
             .set({ hour: converted_hour, minute: min })
             .toISO()
+
+        if (converted_datetime === null) return
+
         setFunc({
             due_type: "due_datetime",
             due_date: null,
@@ -53,11 +69,11 @@ const TimeDetail = ({ task, setFunc }) => {
             due_type: "due_date",
             due_date: due_datetime.toISODate(),
             due_datetime: null,
-        })
+        } as TaskDueStrict)
         toast.error(t("time_remove"))
     }
 
-    const handleHour = (e) => {
+    const handleHour = (e: ChangeEvent<HTMLInputElement>) => {
         let validInputValue = parseInt(e.target.value)
         if (setting.time_as_24_hour) {
             if (validInputValue > 23) {
@@ -78,7 +94,7 @@ const TimeDetail = ({ task, setFunc }) => {
         }
     }
 
-    const handleMinute = (e) => {
+    const handleMinute = (e: ChangeEvent<HTMLInputElement>) => {
         let validInputValue = parseInt(e.target.value)
         if (validInputValue > 59) {
             toast.error(t("acceptable_numbers", { max: 59 }), {
@@ -160,7 +176,7 @@ const ToggleBox = styled.div`
     margin-top: 0.3em;
 `
 
-const AmpmToggle = styled.div`
+const AmpmToggle = styled.div<{ $active: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;

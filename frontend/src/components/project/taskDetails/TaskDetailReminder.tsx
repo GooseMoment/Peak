@@ -1,5 +1,8 @@
 import ReminderContents from "@components/project/taskDetails/ReminderContents"
 
+import { type MinimalReminder } from "@api/notifications.api"
+import { type MinimalTask } from "@api/tasks.api"
+
 import before_1D from "@assets/project/reminder/before_1D.svg"
 import before_1h from "@assets/project/reminder/before_1h.svg"
 import before_2D from "@assets/project/reminder/before_2D.svg"
@@ -10,19 +13,31 @@ import before_D from "@assets/project/reminder/before_D.svg"
 
 import { useTranslation } from "react-i18next"
 
-const Reminder = ({ task, setFunc }) => {
-    const { t } = useTranslation(null, { keyPrefix: "task.reminder" })
+const TaskDetailReminder = ({
+    task,
+    setFunc,
+}: {
+    task: MinimalTask
+    setFunc: (diff: Partial<MinimalTask>) => void
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "task.reminder" })
 
-    const handleReminder = (delta) => {
-        if (task.reminders.includes(delta)) {
+    const handleReminder = (delta: number) => {
+        const current: MinimalReminder[] = task.reminders ?? []
+
+        const exists = current.some((r) => r.delta === delta)
+
+        if (exists) {
             setFunc({
-                reminders: task.reminders.filter(
-                    (currentDetla) => currentDetla !== delta,
-                ),
+                reminders: current.filter((r) => r.delta !== delta),
             })
             return
         }
-        setFunc({ reminders: [...task.reminders, delta] })
+
+        const next: MinimalReminder[] = [...current, { delta }]
+        next.sort((a, b) => a.delta - b.delta)
+
+        setFunc({ reminders: next })
     }
 
     const items = [
@@ -75,4 +90,4 @@ const Reminder = ({ task, setFunc }) => {
     ))
 }
 
-export default Reminder
+export default TaskDetailReminder

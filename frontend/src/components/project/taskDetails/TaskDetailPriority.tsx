@@ -1,5 +1,7 @@
 import styled from "styled-components"
 
+import { type MinimalTask } from "@api/tasks.api"
+
 import { ifMobile } from "@utils/useScreenType"
 
 import critical from "@assets/project/priority/critical.svg"
@@ -8,10 +10,16 @@ import normal from "@assets/project/priority/normal.svg"
 
 import { useTranslation } from "react-i18next"
 
-const Priority = ({ setFunc, onClose }) => {
-    const { t } = useTranslation(null, { keyPrefix: "task.priority" })
+const TaskDetailPriority = ({
+    setFunc,
+    onClose,
+}: {
+    setFunc: (diff: Partial<MinimalTask>) => void
+    onClose: () => void
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "task.priority" })
 
-    const changePriority = (priority) => {
+    const changePriority = (priority: number) => {
         return async () => {
             setFunc({ priority })
             onClose()
@@ -58,4 +66,4 @@ const ItemText = styled.p`
     }
 `
 
-export default Priority
+export default TaskDetailPriority

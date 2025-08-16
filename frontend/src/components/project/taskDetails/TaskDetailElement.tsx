@@ -2,16 +2,24 @@ import ModalWindow from "@components/common/ModalWindow"
 import TaskDetail from "@components/project/taskDetails/TaskDetail"
 import TaskDetailMobile from "@components/project/taskDetails/mobile/TaskDetailMobile"
 
+import { type Task } from "@api/tasks.api"
+
 import useScreenType from "@utils/useScreenType"
 
-const TaskDetailElement = ({ onClose, projectType, color, task }) => {
+const TaskDetailElement = ({
+    task,
+    onClose,
+}: {
+    task: Task
+    onClose: () => void
+}) => {
     const { isMobile } = useScreenType()
 
     return isMobile ? (
-        <TaskDetailMobile closeDetail={onClose} color={color} task={task} />
+        <TaskDetailMobile task={task} closeDetail={onClose} />
     ) : (
         <ModalWindow afterClose={onClose}>
-            <TaskDetail projectType={projectType} color={color} task={task} />
+            <TaskDetail task={task} />
         </ModalWindow>
     )
 }

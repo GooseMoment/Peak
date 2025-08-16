@@ -5,6 +5,8 @@ import styled, { css } from "styled-components"
 import CommonCalendar from "@components/common/CommonCalendar"
 import QuickDue from "@components/project/due/QuickDue"
 
+import { type MinimalTask } from "@api/tasks.api"
+
 import { useClientTimezone } from "@utils/clientSettings"
 import { ifMobile } from "@utils/useScreenType"
 
@@ -15,24 +17,35 @@ import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 
-const Assigned = ({ setFunc, onClose }) => {
-    const { t } = useTranslation(null, { keyPrefix: "task" })
+type AssignedKey = "quick" | "calendar"
+
+const TaskDetailAssigned = ({
+    setFunc,
+}: {
+    setFunc: (diff: Partial<MinimalTask>) => void
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "task" })
     const tz = useClientTimezone()
 
     const today = DateTime.now().setZone(tz)
 
-    const [selectedDate, setSelectedDate] = useState(today.toISODate())
-    const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
+    const [selectedDate, setSelectedDate] = useState<string | null>(
+        today.toISODate(),
+    )
+    const [isAdditionalComp, setIsAdditionalComp] =
+        useState<AssignedKey | null>("quick")
 
-    const handleAdditionalComp = (name) => {
+    const handleAdditionalComp = (name: AssignedKey) => {
         if (isAdditionalComp === name) {
-            setIsAdditionalComp("")
+            setIsAdditionalComp(null)
         } else {
             setIsAdditionalComp(name)
         }
     }
 
-    const changeAssignedDate = (set) => {
+    const changeAssignedDate = (
+        set: { days: number } | { months: number } | null,
+    ) => {
         return async () => {
             let assigned_at = null
 
@@ -41,11 +54,12 @@ const Assigned = ({ setFunc, onClose }) => {
                 assigned_at = date.toISODate()
             }
             setFunc({ assigned_at })
-            onClose()
         }
     }
 
     useEffect(() => {
+        if (selectedDate === null) return
+
         setFunc({
             assigned_at: DateTime.fromISO(selectedDate, {
                 zone: tz,
@@ -55,21 +69,24 @@ const Assigned = ({ setFunc, onClose }) => {
 
     const addComponent = [
         {
-            name: "quick",
+            name: "quick" as const,
             display: t("due.quick.title"),
-            icon: "menu",
+            icon: "menu" as const,
             component: <QuickDue changeDueDate={changeAssignedDate} />,
         },
         {
-            name: "calendar",
+            name: "calendar" as const,
             display: t("due.calendar"),
-            icon: "calendar",
+            icon: "calendar" as const,
             component: (
                 <CalendarWrapper>
                     <CommonCalendar
                         isRangeSelectMode={false}
                         selectedStartDate={selectedDate}
                         setSelectedStartDate={setSelectedDate}
+                        selectedEndDate={undefined}
+                        setSelectedEndDate={undefined}
+                        handleClose={undefined}
                     />
                 </CalendarWrapper>
             ),
@@ -120,7 +137,7 @@ const CLine = styled.div`
     }
 `
 
-const IndexBox = styled.div`
+const IndexBox = styled.div<{ $start: boolean; $end: boolean }>`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -161,7 +178,7 @@ const EmptyBlock = styled.div`
     height: 16px;
 `
 
-const CollapseButton = styled.div`
+const CollapseButton = styled.div<{ $collapsed: boolean }>`
     & svg {
         animation: ${rotateToUp} 0.3s ${cubicBeizer} forwards;
     }
@@ -181,4 +198,4 @@ const CalendarWrapper = styled.div`
     font-size: 0.8em;
 `
 
-export default Assigned
+export default TaskDetailAssigned

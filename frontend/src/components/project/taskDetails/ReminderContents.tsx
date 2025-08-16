@@ -1,12 +1,27 @@
-import { useState } from "react"
+import { ReactNode, useState } from "react"
 
 import styled from "styled-components"
+
+import { type MinimalReminder } from "@api/notifications.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
 
-const ReminderContents = ({ item, reminders, handleReminder }) => {
+const ReminderContents = ({
+    item,
+    reminders,
+    handleReminder,
+}: {
+    item: {
+        id: number
+        icon: ReactNode
+        content: string
+        delta: number
+    }
+    reminders: MinimalReminder[] | undefined
+    handleReminder: (delta: number) => void
+}) => {
     const [isHovering, setIsHovering] = useState(false)
 
     return (
@@ -18,7 +33,7 @@ const ReminderContents = ({ item, reminders, handleReminder }) => {
                 onMouseOut={() => setIsHovering(false)}>
                 {item.content}
             </ItemText>
-            {reminders.includes(item.delta) ? (
+            {reminders?.some((r) => r.delta === item.delta) ? (
                 isHovering ? (
                     <FeatherIcon icon="x" />
                 ) : (
