@@ -15,7 +15,7 @@ export const SkeletonProjectPage = () => {
     )
 }
 
-export const SkeletonDrawer = ({ taskCount }) => {
+export const SkeletonDrawer = ({ taskCount }: { taskCount: number }) => {
     return (
         <Frame>
             <DrawerName />
@@ -26,7 +26,7 @@ export const SkeletonDrawer = ({ taskCount }) => {
     )
 }
 
-export const SkeletonTasks = ({ taskCount }) => {
+export const SkeletonTasks = ({ taskCount }: { taskCount: number }) => {
     if (taskCount === 0) return
 
     const skeletonCount = taskCount > 10 ? 10 : taskCount
@@ -89,12 +89,12 @@ const ProjectTitle = styled.div`
     ${skeletonCSS("-100px", "300px", "2s")}
 `
 
-const breathingBorder = (p) => keyframes`
+const breathingBorder = () => keyframes`
     0%, 100% {
-        border-color: ${p.theme.skeleton.defaultColor};
+        border-color: ${(p) => p.theme.skeleton.defaultColor};
     }
     40% {
-        border-color: ${p.theme.skeleton.shineColor};
+        border-color: ${(p) => p.theme.skeleton.shineColor};
     }
 `
 
@@ -105,7 +105,7 @@ const DrawerName = styled.div`
     box-sizing: border-box;
     border-radius: 15px;
     border: 0.25em solid ${(p) => p.theme.skeleton.defaultColor};
-    animation: ${(p) => breathingBorder(p)} 2s infinite linear;
+    animation: ${breathingBorder} 2s infinite linear;
 `
 
 const TaskBox = styled.div`
@@ -125,7 +125,7 @@ const Circle = styled.div`
     box-sizing: border-box;
 
     border-radius: 50%;
-    ${skeletonCSS}
+    ${skeletonCSS("-100px", "100px", "2s")}
 `
 
 const Bar = styled.div`
@@ -152,5 +152,5 @@ const MoreButtonEmptyBox = styled.div`
     width: 25em;
     border-radius: 10px;
     border: 3px solid ${(p) => p.theme.skeleton.defaultColor};
-    animation: ${(p) => breathingBorder(p)} 2s infinite linear;
+    animation: ${breathingBorder} 2s infinite linear;
 `

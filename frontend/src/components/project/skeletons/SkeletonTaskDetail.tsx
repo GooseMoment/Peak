@@ -14,7 +14,7 @@ const SkeletonTaskDetail = () => {
                     <ContentsBox key={i}>
                         <IconBar />
                         <VLine $end={i === 0 || i === 5} />
-                        <Bar />
+                        <Bar $isTask={false} />
                     </ContentsBox>
                 ))}
             </ContentsBlock>
@@ -35,7 +35,7 @@ const Circle = styled.div`
     box-sizing: border-box;
 
     border-radius: 50%;
-    ${skeletonCSS}
+    ${skeletonCSS()}
 `
 
 const ContentsBlock = styled.div`
@@ -60,7 +60,7 @@ const IconBar = styled.div`
     ${skeletonBreathingCSS}
 `
 
-const VLine = styled.div`
+const VLine = styled.div<{ $end: boolean }>`
     border-left: thin solid ${(p) => p.theme.skeleton.defaultColor};
     height: 1em;
     transform: scale(1, 5);
@@ -73,7 +73,7 @@ const VLine = styled.div`
             : null}
 `
 
-const Bar = styled.div`
+const Bar = styled.div<{ $isTask: boolean }>`
     width: ${(props) => (props.$isTask ? 91.4 : 85)}%;
     height: 1.4em;
     border-radius: 4px;

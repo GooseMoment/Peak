@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 import { skeletonCSS } from "@assets/skeleton"
 
-export const SkeletonDueTasks = ({ taskCount }) => {
+export const SkeletonDueTasks = ({ taskCount }: { taskCount: number }) => {
     const skeletonCount = taskCount > 10 ? 10 : taskCount
 
     return [...Array(skeletonCount)].map((e, i) => (
@@ -36,7 +36,7 @@ const Circle = styled.div`
     box-sizing: border-box;
     margin-top: 0.3em;
     border-radius: 50%;
-    ${skeletonCSS}
+    ${skeletonCSS()}
 `
 
 const Bar = styled.div`
