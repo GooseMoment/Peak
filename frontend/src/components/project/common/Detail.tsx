@@ -1,8 +1,17 @@
+import { ReactNode } from "react"
+
 import styled from "styled-components"
 
 import FeatherIcon from "feather-icons-react"
 
-const Detail = ({ title, children, onClose = () => {}, special = false }) => {
+interface DetailProps {
+    title: string
+    children?: ReactNode
+    onClose?: () => void
+    special?: boolean
+}
+
+const Detail = ({ title, children, onClose, special = false }: DetailProps) => {
     return (
         <DetailBox $special={special}>
             <TitleBox>
@@ -15,7 +24,7 @@ const Detail = ({ title, children, onClose = () => {}, special = false }) => {
     )
 }
 
-const DetailBox = styled.div`
+const DetailBox = styled.div<{ $special: boolean }>`
     z-index: 999;
     width: ${(props) => (props.$special ? 18 : 15)}em;
     height: fit-content;
@@ -48,7 +57,7 @@ const Title = styled.div`
     margin-top: 1.3em;
 `
 
-const CLine = styled.div`
+const CLine = styled.div<{ $special: boolean }>`
     border-top: thin solid ${(p) => p.theme.project.lineColor};
     width: ${(props) => (props.$special ? "90%" : "85%")};
     margin: 1em 1em 0em;

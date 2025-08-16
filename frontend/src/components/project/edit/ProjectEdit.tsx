@@ -65,6 +65,9 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
                 queryClient.invalidateQueries({
                     queryKey: ["projects", project.id],
                 })
+                queryClient.invalidateQueries({
+                    queryKey: ["drawers", { projectID: project.id }],
+                })
                 toast.success(t("edited"))
             } else {
                 toast.success(t("created_project"))
@@ -125,7 +128,7 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
         mutation.mutate(newProject)
     }
 
-    const onEnter = (e: KeyboardEvent) => {
+    const onEnter = (e: KeyboardEvent<HTMLDivElement>) => {
         if (e.repeat) {
             e.preventDefault()
             return

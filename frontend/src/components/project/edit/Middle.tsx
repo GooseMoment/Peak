@@ -1,4 +1,4 @@
-import { Fragment, MouseEvent, ReactNode, useState } from "react"
+import { Fragment, ReactNode, useState } from "react"
 
 import styled, { css } from "styled-components"
 
@@ -24,10 +24,6 @@ const Middle = ({ items }: { items: EditMiddelProps[] }) => {
 
     const [content, setContent] = useState<string | null>(null)
 
-    const handleClickContent = (e: MouseEvent<HTMLButtonElement>) => {
-        setContent(e.currentTarget.name)
-    }
-
     return (
         <Contents>
             {items.map((item, i) => (
@@ -43,9 +39,7 @@ const Middle = ({ items }: { items: EditMiddelProps[] }) => {
                             <FeatherIcon icon={item.icon} />
                         )}
                         <VLine $end={i === 0 || i === items.length - 1} />
-                        <ContentText
-                            id={item.name}
-                            onClick={handleClickContent}>
+                        <ContentText onClick={() => setContent(item.name)}>
                             {item.display ? item.display : t("none")}
                         </ContentText>
                     </ContentBox>
@@ -105,6 +99,7 @@ const VLine = styled.div<{ $end: boolean }>`
 `
 
 const ContentText = styled.button`
+    all: unset;
     font-size: 1em;
     color: ${(p) => p.theme.textColor};
     margin-top: 1.3em;

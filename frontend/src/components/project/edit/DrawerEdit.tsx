@@ -10,7 +10,12 @@ import Middle from "@components/project/edit/Middle"
 import PrivacyEdit from "@components/project/edit/PrivacyEdit"
 import TitleInput from "@components/project/edit/TitleInput"
 
-import { type Drawer, patchDrawer, postDrawer } from "@api/drawers.api"
+import {
+    type Drawer,
+    type DrawerCreateInput,
+    patchDrawer,
+    postDrawer,
+} from "@api/drawers.api"
 
 import useScreenType from "@utils/useScreenType"
 
@@ -19,8 +24,6 @@ import queryClient from "@queries/queryClient"
 import { AxiosError } from "axios"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-
-type DrawerCreateInput = Pick<Drawer, "name" | "privacy" | "project">
 
 const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
     const { t } = useTranslation("translation", {
@@ -43,31 +46,18 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
     const inputRef = useRef<HTMLInputElement>(null)
     const hasCreated = useRef(false)
 
-    const mutation = useMutation({
-        mutationFn: (data: Partial<Drawer>) => {
-            if (drawer) {
-                return patchDrawer(drawer.id, data)
-            }
+    const postMutation = useMutation({
+        mutationFn: (data: DrawerCreateInput) => {
             return postDrawer(data)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["drawers", { projectID: projectID }],
             })
-
-            if (drawer) {
-                toast.success(t("edited"))
-            } else {
-                toast.success(t("created_drawer"))
-            }
-
+            toast.success(t("created_drawer"))
             closeModal()
         },
         onError: (err) => {
-            if (drawer) {
-                toast.error(t("edited_error"))
-                return
-            }
             hasCreated.current = false
 
             if ("response" in err) {
@@ -83,6 +73,22 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
         },
     })
 
+    const patchMutation = useMutation({
+        mutationFn: (data: Drawer) => {
+            return patchDrawer(data.id!, data)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["drawers", { projectID: projectID }],
+            })
+            toast.success(t("edited"))
+            closeModal()
+        },
+        onError: () => {
+            toast.error(t("edited_error"))
+        },
+    })
+
     const handleChange = (diff: Partial<Drawer>) => {
         setNewDrawer(Object.assign({}, newDrawer, diff))
 
@@ -92,7 +98,11 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
     }
 
     const submit = () => {
-        if (mutation.isPending || hasCreated.current) {
+        if (
+            postMutation.isPending ||
+            patchMutation.isPending ||
+            hasCreated.current
+        ) {
             return
         }
 
@@ -106,7 +116,11 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
             return
         }
 
-        mutation.mutate(newDrawer)
+        if (drawer) {
+            patchMutation.mutate(newDrawer as Drawer)
+        } else {
+            postMutation.mutate(newDrawer as DrawerCreateInput)
+        }
     }
 
     const onEnter = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -143,8 +157,8 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
             <Middle items={items} />
             <ButtonGroup $justifyContent="right">
                 <Button
-                    disabled={mutation.isPending}
-                    loading={mutation.isPending}
+                    disabled={postMutation.isPending || patchMutation.isPending}
+                    loading={postMutation.isPending || patchMutation.isPending}
                     onClick={submit}>
                     {t(drawer ? "button_save" : "button_add")}
                 </Button>
