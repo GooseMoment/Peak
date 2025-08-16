@@ -141,11 +141,21 @@ class ReactionBase(Base):
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         abstract = True
         constraints = [
+            models.UniqueConstraint(
+                fields=("user", "task", "unicode_emoji"),
+                condition=models.Q(image_emoji__isnull=True),
+                name="%(app_label)s_%(class)s_user_task_unicode_emoji_unique",
+            ),
+            models.UniqueConstraint(
+                fields=("user", "task", "image_emoji"),
+                condition=models.Q(unicode_emoji__isnull=True),
+                name="%(app_label)s_%(class)s_user_task_image_emoji_unique",
+            ),
             models.CheckConstraint(
                 check=models.Q(image_emoji__isnull=True, unicode_emoji__isnull=False)
                 | models.Q(image_emoji__isnull=False, unicode_emoji__isnull=True),
                 name="%(app_label)s_%(class)s_emojis_exclusive",
-            )
+            ),
         ]
 
 
