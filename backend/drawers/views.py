@@ -1,15 +1,17 @@
 from rest_framework import mixins, generics, status
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.filters import OrderingFilter
+from rest_framework.exceptions import ValidationError
 
 from .models import Drawer
 from .serializers import DrawerSerializer, DrawerReorderSerializer
-from .utils import normalize_drawers_order
+from .exceptions import DrawerNameDuplicate
+
 from api.permissions import IsUserOwner
-from . import exceptions
-from api.exceptions import RequiredFieldMissing, UnknownError
+from api.exceptions import UnknownError
 
 from projects.models import Project
-from rest_framework.exceptions import ValidationError
 
 
 class DrawerDetail(
@@ -33,32 +35,35 @@ class DrawerDetail(
         return self.destroy(request, *args, **kwargs)
 
 
+class DrawerListPagination(PageNumberPagination):
+    page_size = 20
+
+
 class DrawerList(
     mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
 ):
-    serializer_class = DrawerSerializer
     permission_classes = [IsUserOwner]
+    serializer_class = DrawerSerializer
+    pagination_class = DrawerListPagination
+    filter_backends = [OrderingFilter]
+    ordering_fields = [
+        "order",
+        "name",
+        "created_at",
+        "uncompleted_task_count",
+        "completed_task_count",
+    ]
 
     def get_queryset(self):
-        queryset = Drawer.objects.filter(user=self.request.user).order_by("order").all()
+        queryset = (
+            Drawer.objects.filter(user=self.request.user)
+            .order_by("project", "order")
+            .all()
+        )
+
         project_id = self.request.query_params.get("project", None)
         if project_id is not None:
             queryset = queryset.filter(project__id=project_id)
-
-        ordering_fields = [
-            "order",
-            "name",
-            "created_at",
-            "uncompleted_task_count",
-            "completed_task_count",
-        ]
-        ordering = self.request.GET.get("ordering", None)
-
-        if ordering is None:
-            raise RequiredFieldMissing
-
-        if ordering.lstrip("-") in ordering_fields:
-            normalize_drawers_order(queryset, ordering)
 
         return queryset
 
@@ -69,7 +74,7 @@ class DrawerList(
         try:
             return self.create(request, *args, **kwargs)
         except ValidationError:
-            raise exceptions.DrawerNameDuplicate
+            raise DrawerNameDuplicate
         except Exception:
             raise UnknownError
 

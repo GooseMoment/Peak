@@ -2,6 +2,7 @@ from django.db import models
 
 from api.models import Base, PrivacyMixin
 from users.models import User
+from django.db.models import Q, UniqueConstraint
 
 from typing import TYPE_CHECKING
 
@@ -27,7 +28,7 @@ class Project(Base, PrivacyMixin):
         on_delete=models.CASCADE,
         related_name="projects",
     )
-    order = models.IntegerField()
+    order = models.IntegerField(default=0)
     color = models.CharField(max_length=128)
     type = models.CharField(choices=PROJECT_TYPE_CHOICES, max_length=128)
 
@@ -40,7 +41,8 @@ class Project(Base, PrivacyMixin):
         db_table = "projects"
 
         constraints = [
-            models.UniqueConstraint(
-                fields=["name", "user"], name="constraint_project_name"
+            UniqueConstraint(
+                fields=["name", "user"],
+                name="constraint_project_name_active",
             ),
         ]

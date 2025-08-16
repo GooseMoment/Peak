@@ -1,15 +1,14 @@
 from rest_framework import mixins, generics, status
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 
 from .models import Project
 from .serializers import ProjectSerializer, ProjectSerializerForUserProjectList
-from . import exceptions
+from .exceptions import ProjectNameDuplicate
+
 from api.permissions import IsUserOwner
-
 from api.exceptions import UnknownError
-
-from rest_framework.exceptions import ValidationError
 from api.serializers import ReorderSerializer
 
 
@@ -54,7 +53,7 @@ class ProjectList(
         try:
             return self.create(request, *args, **kwargs)
         except ValidationError:
-            raise exceptions.ProjectNameDuplicate
+            raise ProjectNameDuplicate
         except Exception:
             raise UnknownError
 
