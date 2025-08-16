@@ -159,7 +159,7 @@ class ReactionBase(Base):
         ]
 
 
-class ReactionTask(ReactionBase):
+class TaskReaction(ReactionBase):
     task = models.ForeignKey(
         Task,
         related_name="reactions",
@@ -167,10 +167,10 @@ class ReactionTask(ReactionBase):
     )
 
     def __str__(self) -> str:
-        return f"ReactionTask: {self.user}/{self.task}/{self.unicode_emoji or self.image_emoji}"
+        return f"TaskReaction: {self.user}/{self.task}/{self.unicode_emoji or self.image_emoji}"
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ReactionBase
-        db_table = "reaction_tasks"
+        db_table = "task_reactions"
         constraints = ReactionBase.Meta.constraints
 
 

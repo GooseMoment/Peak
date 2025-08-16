@@ -32,7 +32,7 @@ urlpatterns = [
     path("quotes/<str:day>/", views.post_quote),
     path("remarks/@<str:username>/<str:date_iso>/", views.RemarkDetail.as_view()),
     path("reactions/<str:type>/<str:id>/", views.ReactionView.as_view()),
-    path("reactions/<str:id>/", views.ReactionTaskDetail.as_view()),
+    path("reactions/<str:id>/", views.TaskReactionDetail.as_view()),
     path("comments/<str:type>/<str:id>/", views.CommentView.as_view()),
     path("pecks/<str:id>/", views.PeckView.as_view()),
     path("emojis/", views.EmojiList.as_view()),

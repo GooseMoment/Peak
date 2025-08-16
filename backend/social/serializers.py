@@ -4,7 +4,7 @@ from django.core.cache import cache
 from .models import (
     Emoji,
     Quote,
-    ReactionTask,
+    TaskReaction,
     Remark,
     Reaction,
     Peck,
@@ -139,13 +139,13 @@ class ReactionSerializer(serializers.ModelSerializer):
         fields = ["id", "user", "parent_type", "task", "quote", "emoji"]
 
 
-class ReactionTaskSerializer(serializers.ModelSerializer):
+class TaskReactionSerializer(serializers.ModelSerializer):
     user = UserSerializer(default=serializers.CurrentUserDefault())
     task = TaskSerializer()
     image_emoji = EmojiSerializer(required=False, allow_null=True)
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
-        model = ReactionTask
+        model = TaskReaction
         fields = ["id", "user", "task", "image_emoji", "unicode_emoji", "created_at"]
 
 

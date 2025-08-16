@@ -5,7 +5,7 @@ from .models import (
     Quote,
     Remark,
     Reaction,
-    ReactionTask,
+    TaskReaction,
     Comment,
     Following,
     Block,
@@ -105,8 +105,8 @@ class ReactionAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(ReactionTask)
-class ReactionTaskAdmin(admin.ModelAdmin):
+@admin.register(TaskReaction)
+class TaskReactionSerializer(admin.ModelAdmin):
     ordering = ["-updated_at"]
     search_fields = ["user__username", "task__id", "image_emoji", "unicode_emoji"]
     autocomplete_fields = ["user", "task", "image_emoji"]

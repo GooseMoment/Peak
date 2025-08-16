@@ -6,7 +6,7 @@ from .models import Block
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .views import ReactionTaskList
+    from .views import TaskReactionList
 
 
 def is_either_blocked(username_a: str, username_b: str) -> bool:
@@ -53,8 +53,8 @@ class RemarkDetailPermission(permissions.IsAuthenticated):
         )
 
 
-class ReactionTaskPermission(permissions.IsAuthenticated):
-    def has_permission(self, request: Request, view: "ReactionTaskList") -> bool:  # pyright: ignore [reportIncompatibleMethodOverride]
+class TaskReactionPermission(permissions.IsAuthenticated):
+    def has_permission(self, request: Request, view: "TaskReactionList") -> bool:  # pyright: ignore [reportIncompatibleMethodOverride]
         is_authenticated = super().has_permission(request, view)
         if not is_authenticated:
             return False

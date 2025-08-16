@@ -19,7 +19,7 @@ from django.utils import timezone
 from .models import (
     Emoji,
     Quote,
-    ReactionTask,
+    TaskReaction,
     Remark,
     Reaction,
     Peck,
@@ -33,7 +33,7 @@ from .serializers import (
     DailyLogDrawerSerializer,
     DailyLogDetailsSerializer,
     QuoteSerializer,
-    ReactionTaskSerializer,
+    TaskReactionSerializer,
     RemarkSerializer,
     ReactionSerializer,
     PeckSerializer,
@@ -682,9 +682,9 @@ class ReactionView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class ReactionTaskList(generics.ListAPIView):
-    serializer_class = ReactionTaskSerializer
-    permission_classes = (permissions.ReactionTaskPermission,)
+class TaskReactionList(generics.ListAPIView):
+    serializer_class = TaskReactionSerializer
+    permission_classes = (permissions.TaskReactionPermission,)
 
     _task: Optional[Task]
 
@@ -699,7 +699,7 @@ class ReactionTaskList(generics.ListAPIView):
         if not task_id:
             raise NotFound("Task ID is required")
 
-        return ReactionTask.objects.filter(task__id=task_id).order_by(
+        return TaskReaction.objects.filter(task__id=task_id).order_by(
             "image_emoji", "unicode_emoji", "created_at"
         )
 
@@ -729,7 +729,7 @@ class ReactionTaskList(generics.ListAPIView):
                 raise NotFound(f":{image_emoji_name}: is not found")
 
         try:
-            reaction = ReactionTask.objects.create(
+            reaction = TaskReaction.objects.create(
                 user=request.user,
                 task=self.get_task(),
                 unicode_emoji=unicode_emoji,
@@ -745,9 +745,9 @@ class ReactionTaskList(generics.ListAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ReactionTaskDetail(generics.RetrieveDestroyAPIView):
-    queryset = ReactionTask.objects.all()
-    serializer_class = ReactionTaskSerializer
+class TaskReactionDetail(generics.RetrieveDestroyAPIView):
+    queryset = TaskReaction.objects.all()
+    serializer_class = TaskReactionSerializer
     lookup_url_kwarg = "reaction_id"
     permission_classes = (IsUserOwner,)
 
@@ -863,6 +863,7 @@ class CommentView(APIView):
 
 class EmojiListPagination(PageNumberPagination):
     page_size = 1000
+    max_page_size = 1000
 
 
 class EmojiList(mixins.ListModelMixin, generics.GenericAPIView):
