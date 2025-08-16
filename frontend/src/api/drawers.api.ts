@@ -1,6 +1,6 @@
 import client from "@api/client"
 import type { Base, PaginationData, Privacy } from "@api/common"
-import { Project } from "@api/projects.api"
+import type { Project } from "@api/projects.api"
 
 export interface Drawer extends Base {
     name: string
@@ -12,37 +12,50 @@ export interface Drawer extends Base {
     completed_task_count: number
 }
 
+export interface DrawerCreateInput {
+    name: string
+    project: string
+    privacy: Privacy
+}
+
 export const getDrawersByProject = async (
-    projectID: number,
+    projectID: string,
     ordering: string,
 ) => {
     const res = await client.get<PaginationData<Drawer>>(`drawers/`, {
         params: { project: projectID, ordering: ordering },
     })
-    return res.data.results
+    return res.data
 }
 
-export const getDrawer = async (id: number | string) => {
+export const getAllDrawers = async (page: string) => {
+    const res = await client.get<PaginationData<Drawer>>("drawers/", {
+        params: { page },
+    })
+    return res.data
+}
+
+export const getDrawer = async (id: string | string) => {
     const res = await client.get<Drawer>(`drawers/${id}/`)
     return res.data
 }
 
-export const postDrawer = async (drawer: Partial<Drawer>) => {
+export const postDrawer = async (drawer: Partial<DrawerCreateInput>) => {
     const res = await client.post<Drawer>("drawers/", drawer)
     return res.data
 }
 
-export const patchDrawer = async (id: number, edit: Partial<Drawer>) => {
+export const patchDrawer = async (id: string, edit: Partial<Drawer>) => {
     const res = await client.patch<Drawer>(`drawers/${id}/`, edit)
     return res.data
 }
 
-export const patchReorderDrawer = async (data: Partial<Drawer>) => {
+export const patchReorderDrawer = async (data: Partial<Drawer>[]) => {
     const res = await client.patch<Partial<Drawer>[]>(`drawers/reorder/`, data)
     return res.data
 }
 
-export const deleteDrawer = async (id: number) => {
+export const deleteDrawer = async (id: string) => {
     const res = await client.delete(`drawers/${id}/`)
     return res.status
 }

@@ -1,6 +1,7 @@
 import client from "@api/client"
 import type { Base, PaginationData } from "@api/common"
 import type { Comment, Following, Peck, Reaction } from "@api/social.api"
+import { type Task } from "@api/tasks.api"
 import { type User } from "@api/users.api"
 
 import {
@@ -19,19 +20,35 @@ export interface TaskReminder extends Base {
     project_id: string
 }
 
+export interface MinimalReminder {
+    delta: number
+    id?: string
+    task?: Task
+    scheduled?: string
+    task_name?: string
+    project_color?: string
+    project_id?: string
+    created_at?: string
+    updated_at?: string
+    deleted_at?: null | string
+}
+
 export const getReminder = async (id: string) => {
-    const res = await client.get(`notifications/reminders/${id}/`)
+    const res = await client.get<TaskReminder>(`notifications/reminders/${id}/`)
     return res.data
 }
 
-export const postReminder = async (reminders: TaskReminder) => {
+export const postReminder = async (reminders: {
+    task: string
+    delta_list: MinimalReminder[]
+}) => {
     const res = await client.post(`notifications/reminders/`, reminders)
     return res.status
 }
 
 export const patchReminder = async (
     id: string,
-    edit: Partial<TaskReminder>,
+    edit: Partial<MinimalReminder>,
 ) => {
     const res = await client.patch(`notifications/reminders/${id}/`, edit)
     return res.data

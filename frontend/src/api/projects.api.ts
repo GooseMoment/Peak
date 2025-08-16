@@ -9,10 +9,12 @@ export interface Project extends Base {
     order: number
     privacy: Privacy
     color: PaletteColorName
-    type: "inbox" | "regular" | "goal"
+    type: ProjectType
     completed_task_count: number
     uncompleted_task_count: number
 }
+
+export type ProjectType = "inbox" | "regular" | "goal"
 
 export const getProjectList = async (page: string) => {
     const res = await client.get<PaginationData<Project>>("projects/", {
@@ -40,6 +42,14 @@ export const postProject = async (project: Partial<Project>) => {
 
 export const patchProject = async (id: string, edit: Partial<Project>) => {
     const res = await client.patch<Project>(`projects/${id}/`, edit)
+    return res.data
+}
+
+export const patchReorderProject = async (data: Partial<Project>[]) => {
+    const res = await client.patch<Partial<Project>[]>(
+        `projects/reorder/`,
+        data,
+    )
     return res.data
 }
 

@@ -1,61 +1,93 @@
 import client from "@api/client"
-import type { Base, PaginationData, Privacy } from "@api/common"
-import { Drawer } from "@api/drawers.api"
-import { type TaskReminder } from "@api/notifications.api"
+import type { PaginationData, Privacy } from "@api/common"
+import { type Drawer } from "@api/drawers.api"
+import { type MinimalReminder } from "@api/notifications.api"
 
-export interface Task extends Base {
-    name: string
-    user_id: string
+export type TaskDueStrict =
+    | { due_type: null; due_date: null; due_datetime: null }
+    | { due_type: "due_date"; due_date: string; due_datetime: null }
+    | { due_type: "due_datetime"; due_date: null; due_datetime: string }
+
+interface MinimalTaskBase {
+    name?: string
+    user_id?: string
     drawer: Drawer
-    privacy: Privacy
+    privacy?: Privacy
     priority: number
-    order: number
-    completed_at: null | string
-    assigned_at: null | string
-    due_type: null | string
-    due_date: null | string
-    due_datetime: null | string
-    reminders: TaskReminder[]
-    memo: string
+    order?: number
+    completed_at?: null | string
+    assigned_at?: null | string
+    reminders?: MinimalReminder[]
+    memo?: string
+    created_at?: string
+    updated_at?: string
+    deleted_at?: null | string
 }
 
+export interface MinimalTaskNoDue extends MinimalTaskBase {
+    due_type: null
+    due_date: null
+    due_datetime: null
+}
+
+export interface MinimalTaskDueDate extends MinimalTaskBase {
+    due_type: "due_date"
+    due_date: string
+    due_datetime: null
+}
+
+export interface MinimalTaskDueDatetime extends MinimalTaskBase {
+    due_type: "due_datetime"
+    due_date: null
+    due_datetime: string
+}
+
+export type MinimalTask =
+    | MinimalTaskNoDue
+    | MinimalTaskDueDate
+    | MinimalTaskDueDatetime
+
+export type MinimalTaskWithID = MinimalTask & { id: string }
+
+export type Task = Required<MinimalTaskWithID>
+
 export const getTasksByDrawer = async (
-    drawerID: number,
+    drawerID: string,
     ordering: string,
-    page: number,
+    page: string,
 ) => {
     const res = await client.get<PaginationData<Task>>(`tasks/`, {
         params: { drawer: drawerID, ordering, page },
     })
-    return res.data.results
+    return res.data
 }
 
-export const getTask = async (id: number) => {
+export const getTask = async (id: string) => {
     const res = await client.get<Task>(`tasks/${id}/`)
     return res.data
 }
 
-export const postTask = async (task: Partial<Task>) => {
+export const postTask = async (task: Partial<MinimalTask>) => {
     const res = await client.post<Task>("tasks/", task)
     return res.data
 }
 
-export const patchTask = async (id: number, edit: Partial<Task>) => {
+export const patchTask = async (id: string, edit: Partial<Task>) => {
     const res = await client.patch<Task>(`tasks/${id}/`, edit)
     return res.data
 }
 
-export const patchReorderTask = async (data: Partial<Task>) => {
+export const patchReorderTask = async (data: Partial<Task>[]) => {
     const res = await client.patch<Partial<Task>[]>(`tasks/reorder/`, data)
     return res.data
 }
 
-export const deleteTask = async (id: number) => {
+export const deleteTask = async (id: string) => {
     const res = await client.delete(`tasks/${id}/`)
     return res.status
 }
 
-export const completeTask = async (id: number) => {
+export const completeTask = async (id: string) => {
     const date = new Date()
     const edit = {
         completed_at: date.toISOString(),
@@ -63,7 +95,7 @@ export const completeTask = async (id: number) => {
     return await patchTask(id, edit)
 }
 
-export const uncompleteTask = async (id: number) => {
+export const uncompleteTask = async (id: string) => {
     const edit = {
         completed_at: null,
     }
