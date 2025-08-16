@@ -16,13 +16,24 @@ from django.db.models.query import QuerySet
 from django.db.utils import IntegrityError
 from django.utils import timezone
 
-from .models import Emoji, Quote, Remark, Reaction, Peck, Comment, Following, Block
+from .models import (
+    Emoji,
+    Quote,
+    ReactionTask,
+    Remark,
+    Reaction,
+    Peck,
+    Comment,
+    Following,
+    Block,
+)
 from .serializers import (
     EmojiSerializer,
     DailyLogsSerializer,
     DailyLogDrawerSerializer,
     DailyLogDetailsSerializer,
     QuoteSerializer,
+    ReactionTaskSerializer,
     RemarkSerializer,
     ReactionSerializer,
     PeckSerializer,
@@ -33,8 +44,8 @@ from .serializers import (
 from . import permissions, exceptions
 from api.models import PrivacyMixin
 from api.request import AuthenticatedRequest
-from api.permissions import IsUserSelfRequest
-from api.exceptions import RequiredFieldMissing
+from api.permissions import IsUserSelfRequest, IsUserOwner
+from api.exceptions import RequiredFieldMissing, UnknownError
 from drawers.models import Drawer
 from tasks.models import Task
 from tasks.serializers import TaskSerializer
@@ -42,6 +53,8 @@ from users.models import User
 from users.serializers import UserSerializer
 
 import datetime
+from typing import Optional
+import emoji as emojilib
 
 
 class ExploreFeedPagination(CursorPagination):
@@ -667,6 +680,76 @@ class ReactionView(APIView):
         reaction.delete()
 
         return Response(status=status.HTTP_200_OK)
+
+
+class ReactionTaskList(generics.ListAPIView):
+    serializer_class = ReactionTaskSerializer
+    permission_classes = (permissions.ReactionTaskPermission,)
+
+    _task: Optional[Task]
+
+    def get_task(self) -> Task:
+        if not hasattr(self, "_task") or self._task is None:
+            self._task = get_object_or_404(Task, id=self.kwargs["id"])
+
+        return self._task
+
+    def get_queryset(self):
+        task_id = self.kwargs.get("id")
+        if not task_id:
+            raise NotFound("Task ID is required")
+
+        return ReactionTask.objects.filter(task__id=task_id).order_by(
+            "image_emoji", "unicode_emoji", "created_at"
+        )
+
+    def post(self, request: AuthenticatedRequest, **kwargs):
+        unicode_emoji: Optional[str] = request.data.get("unicode_emoji")
+        image_emoji_name: Optional[str] = request.data.get("image_emoji")
+        image_emoji: Optional[Emoji] = None
+
+        # Must provide exactly one
+        if (unicode_emoji is None and image_emoji_name is None) or (
+            unicode_emoji is not None and image_emoji_name is not None
+        ):
+            return Response(
+                "ERROR: provide exactly one of unicode_emoji or image_emoji.",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if unicode_emoji:
+            if not emojilib.is_emoji(unicode_emoji):
+                return Response(
+                    "ERROR: invalid unicode_emoji",
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        else:
+            image_emoji = Emoji.objects.filter(name=image_emoji_name).first()
+            if image_emoji is None:
+                raise NotFound(f":{image_emoji_name}: is not found")
+
+        try:
+            reaction = ReactionTask.objects.create(
+                user=request.user,
+                task=self.get_task(),
+                unicode_emoji=unicode_emoji,
+                image_emoji=image_emoji,
+            )
+        except IntegrityError as e:
+            if "unique constraint" in str(e):
+                return Response(status=status.HTTP_204_NO_CONTENT)
+
+            raise UnknownError
+
+        serializer = self.get_serializer(reaction)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class ReactionTaskDetail(generics.RetrieveDestroyAPIView):
+    queryset = ReactionTask.objects.all()
+    serializer_class = ReactionTaskSerializer
+    lookup_url_kwarg = "reaction_id"
+    permission_classes = (IsUserOwner,)
 
 
 class PeckView(APIView):

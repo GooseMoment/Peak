@@ -3,6 +3,11 @@ from rest_framework.request import Request
 
 from .models import Block
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .views import ReactionTaskList
+
 
 def is_either_blocked(username_a: str, username_b: str) -> bool:
     if username_a == username_b:
@@ -46,6 +51,19 @@ class RemarkDetailPermission(permissions.IsAuthenticated):
             request.user.get_username() == username
             or request.method in permissions.SAFE_METHODS
         )
+
+
+class ReactionTaskPermission(permissions.IsAuthenticated):
+    def has_permission(self, request: Request, view: "ReactionTaskList") -> bool:  # pyright: ignore [reportIncompatibleMethodOverride]
+        is_authenticated = super().has_permission(request, view)
+        if not is_authenticated:
+            return False
+
+        task = view.get_task()
+        if is_either_blocked(request.user.get_username(), task.user.username):
+            return False
+
+        return True
 
 
 class FollowingPermission(permissions.IsAuthenticated):
