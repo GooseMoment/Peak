@@ -1,9 +1,10 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import Button, { ButtonGroup } from "@components/common/Button"
 import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import ErrorProjectList from "@components/errors/ErrorProjectList"
@@ -11,9 +12,14 @@ import ProjectName from "@components/project/ProjectName"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
 import SkeletonProjectList from "@components/project/skeletons/SkeletonProjectList"
 
-import { getProjectList, patchProject } from "@api/projects.api"
+import {
+    type Project,
+    getProjectList,
+    patchReorderProject,
+} from "@api/projects.api"
 
 import HTML5toTouch from "@utils/html5ToTouch"
+import { getPageFromURL } from "@utils/pagination"
 import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -23,33 +29,41 @@ import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
 
 const ProjectListPage = () => {
-    const { t } = useTranslation(null, { keyPrefix: "project_list" })
+    const { t } = useTranslation("translation", { keyPrefix: "project_list" })
 
-    const [isCreateOpen, setIsCreateOpen] = useState(false)
+    const [projects, setProjects] = useState<Project[]>([])
+    const [isCreateOpen, setIsCreateOpen] = useState<boolean>(false)
 
     const {
+        data,
         isPending,
         isError,
-        data: projects,
         refetch,
-    } = useQuery({
+        fetchNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
         queryKey: ["projects"],
-        queryFn: () => getProjectList(),
+        queryFn: (context) => getProjectList(context.pageParam),
+        initialPageParam: "1",
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
+
+    const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
 
     const patchMutation = useMutation({
-        mutationFn: ({ id, order }) => {
-            return patchProject(id, { order })
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["projects"],
-            })
+        mutationFn: (data: Partial<Project>[]) => {
+            return patchReorderProject(data)
         },
     })
 
-    const moveProject = useCallback((dragIndex, hoverIndex) => {
-        queryClient.setQueryData(["projects"], (prevProjects) => {
+    useEffect(() => {
+        if (!data) return
+        const results = data?.pages?.flatMap((page) => page.results ?? []) || []
+        setProjects(results)
+    }, [data])
+
+    const moveProject = useCallback((dragIndex: number, hoverIndex: number) => {
+        setProjects((prevProjects) => {
             const updatedProjects = [...prevProjects]
             const [moved] = updatedProjects.splice(dragIndex, 1)
             updatedProjects.splice(hoverIndex, 0, moved)
@@ -57,15 +71,20 @@ const ProjectListPage = () => {
         })
     }, [])
 
-    const dropProject = useCallback(() => {
+    const dropProject = useCallback(async () => {
+        const results = data?.pages?.flatMap((page) => page.results) || []
         const changedProjects = projects
             .map((project, index) => ({ id: project.id, order: index }))
-            .filter((project, index) => projects[index]?.id !== project.id)
+            .filter((project, index) => results[index]?.id !== project.id)
 
-        changedProjects.forEach((element) => {
-            patchMutation.mutate(element)
+        if (changedProjects.length === 0) return
+
+        await patchMutation.mutateAsync(changedProjects)
+
+        await queryClient.refetchQueries({
+            queryKey: ["projects"],
         })
-    }, [projects])
+    }, [projects, data])
 
     return (
         <>
@@ -82,10 +101,10 @@ const ProjectListPage = () => {
             </PageTitleBox>
 
             {isPending && <SkeletonProjectList />}
-            {isError && <ErrorProjectList onClick={() => refetch()} />}
+            {isError && <ErrorProjectList refetch={() => refetch()} />}
 
             <DndProvider options={HTML5toTouch}>
-                {projects?.map((project, i) => (
+                {projects.map((project, i) => (
                     <ProjectName
                         key={project.id}
                         project={project}
@@ -95,6 +114,17 @@ const ProjectListPage = () => {
                     />
                 ))}
             </DndProvider>
+
+            {hasNextPage ? (
+                <ButtonGroup $justifyContent="center" $margin="1em">
+                    <MoreButton
+                        disabled={isFetchingNextPage}
+                        loading={isFetchingNextPage}
+                        onClick={() => fetchNextPage()}>
+                        {isPending ? t("loading") : t("button_load_more")}
+                    </MoreButton>
+                </ButtonGroup>
+            ) : null}
 
             {isPending || (
                 <ProjectCreateButton
@@ -112,7 +142,7 @@ const ProjectListPage = () => {
                     afterClose={() => {
                         setIsCreateOpen(false)
                     }}>
-                    <ProjectEdit isCreating />
+                    <ProjectEdit />
                 </ModalWindow>
             )}
         </>
@@ -134,6 +164,11 @@ const PlusBox = styled.div`
         height: 16px;
         top: 0;
     }
+`
+
+const MoreButton = styled(Button)`
+    max-width: 25em;
+    width: 80vw;
 `
 
 const ProjectCreateButton = styled.div`

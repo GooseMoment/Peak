@@ -1,15 +1,32 @@
+import { Dispatch, SetStateAction } from "react"
+
 import styled from "styled-components"
 
 import CollapseButton from "@components/common/CollapseButton"
+import { DrawerIcon } from "@components/drawers/DrawerBox"
 import OptionsMenu from "@components/project/common/OptionsMenu"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
 
-import { DrawerIcon } from "./DrawerBox"
-
 import useScreenType from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
+
+interface DrawerIconsProps {
+    color: string
+    collapsed: boolean
+    handleCollapsed: () => void
+    clickPlus: () => void
+    items: {
+        display: string
+        context: string
+    }[]
+    openSortMenuMobile: () => void
+    ordering: string
+    setOrdering: Dispatch<SetStateAction<string>>
+    handleEdit: () => void
+    handleAlert: () => void
+}
 
 const DrawerIcons = ({
     color,
@@ -22,7 +39,7 @@ const DrawerIcons = ({
     setOrdering,
     handleEdit,
     handleAlert,
-}) => {
+}: DrawerIconsProps) => {
     const { isMobile } = useScreenType()
 
     const drawerIcons = [

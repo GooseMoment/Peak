@@ -9,7 +9,7 @@ import {
 } from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
@@ -19,21 +19,25 @@ import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
 import TaskCreateButton from "@components/drawers/TaskCreateButton"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
-import TaskCreateSimple from "@components/project/TaskCreateSimple"
 import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import DrawerEdit from "@components/project/edit/DrawerEdit"
 import { SkeletonTasks } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
+import TaskCreateSimple from "@components/project/taskCreateSimple"
 import DrawerTask from "@components/tasks/DrawerTask"
 
-import { deleteDrawer } from "@api/drawers.api"
-import { getTasksByDrawer, patchReorderTask } from "@api/tasks.api"
+import { type Drawer, deleteDrawer } from "@api/drawers.api"
+import { type Task, getTasksByDrawer, patchReorderTask } from "@api/tasks.api"
 
 import { getPageFromURL } from "@utils/pagination"
 
 import queryClient from "@queries/queryClient"
 
+import { getPaletteColor } from "@assets/palettes"
+
+import { Identifier } from "dnd-core"
 import FeatherIcon from "feather-icons-react"
+import { TFunction } from "i18next"
 import { useDrag, useDrop } from "react-dnd"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -42,16 +46,35 @@ const TaskCreateElement = lazy(
     () => import("@components/project/taskDetails/TaskCreateElement"),
 )
 
-const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
-    const [collapsed, setCollapsed] = useState(false)
-    const [ordering, setOrdering] = useState("order")
-    const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
-    const [isAlertOpen, setIsAlertOpen] = useState(false)
-    const [isDrawerEditOpen, setIsDrawerEditOpen] = useState(false)
-    const [isSimpleOpen, setIsSimpleOpen] = useState(false)
-    const [isCreateOpen, setCreateOpen] = useState(false)
+interface DrawerProps {
+    drawer: Drawer
+    moveDrawer: (dragIndex: number, hoverIndex: number) => void
+    dropDrawer: () => void
+}
 
-    const [tasks, setTasks] = useState([])
+type DragItem = {
+    type: "Drawer"
+    id: string
+    order: number
+}
+
+type Collected = {
+    handlerId: Identifier | null
+}
+
+const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
+    const [collapsed, setCollapsed] = useState<boolean>(false)
+    const [ordering, setOrdering] = useState<string>("order")
+    const [isSortMenuMobileOpen, setSortMenuMobileOpen] =
+        useState<boolean>(false)
+    const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
+    const [isDrawerEditOpen, setIsDrawerEditOpen] = useState<boolean>(false)
+    const [isSimpleOpen, setIsSimpleOpen] = useState<boolean>(false)
+    const [isCreateOpen, setCreateOpen] = useState<boolean>(false)
+
+    const theme = useTheme()
+
+    const [tasks, setTasks] = useState<Task[]>([])
 
     const { t } = useTranslation("translation", { keyPrefix: "project" })
 
@@ -67,17 +90,17 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
     } = useInfiniteQuery({
         queryKey: ["tasks", { drawerID: drawer.id, ordering: ordering }],
         queryFn: (pages) =>
-            getTasksByDrawer(drawer.id, ordering, pages.pageParam || 1),
-        initialPageParam: 1,
+            getTasksByDrawer(drawer.id, ordering, pages.pageParam),
+        initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
 
     /// Drawer Drag and Drop
-    const ref = useRef(null)
+    const ref = useRef<HTMLDivElement>(null)
 
-    const [{ handlerId }, drop] = useDrop({
+    const [{ handlerId }, drop] = useDrop<DragItem, void, Collected>({
         accept: "Drawer",
         collect(monitor) {
             return {
@@ -96,6 +119,8 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
             const hoverMiddleY =
                 (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
             const clientOffset = monitor.getClientOffset()
+
+            if (!clientOffset) return
             const hoverClientY = clientOffset.y - hoverBoundingRect.top
 
             if (dragOrder < hoverOrder && hoverClientY < hoverMiddleY) return
@@ -132,12 +157,12 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
     }, [data])
 
     const patchMutation = useMutation({
-        mutationFn: (data) => {
+        mutationFn: (data: Partial<Task>[]) => {
             return patchReorderTask(data)
         },
     })
 
-    const moveTask = useCallback((dragIndex, hoverIndex) => {
+    const moveTask = useCallback((dragIndex: number, hoverIndex: number) => {
         setTasks((prevTasks) => {
             const updatedTasks = [...prevTasks]
             const [moved] = updatedTasks.splice(dragIndex, 1)
@@ -172,10 +197,10 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
                 t("delete.drawer_delete_success", { drawer_name: drawer.name }),
             )
             queryClient.invalidateQueries({
-                queryKey: ["drawers", { projectID: project.id }],
+                queryKey: ["drawers", { projectID: drawer.project.id }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["projects", project.id],
+                queryKey: ["projects", drawer.project.id],
             })
         },
         onError: () => {
@@ -200,9 +225,11 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
         setCreateOpen(true)
     }
 
+    const color = getPaletteColor(theme.type, drawer.project.color)
+
     if (isError) {
         return (
-            <TaskErrorBox onClick={refetch}>
+            <TaskErrorBox onClick={() => refetch()}>
                 <FeatherIcon icon="alert-triangle" />
                 {t("error_load_task")}
             </TaskErrorBox>
@@ -241,8 +268,6 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
                         <DrawerTask
                             key={task.id}
                             task={task}
-                            color={color}
-                            projectType={project.type}
                             moveTask={moveTask}
                             dropTask={dropTask}
                             isPending={patchMutation.isPending}
@@ -253,11 +278,7 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
             <>
                 {isSimpleOpen && (
                     <TaskCreateSimple
-                        projectID={project.id}
-                        projectName={project.name}
-                        drawerID={drawer.id}
-                        drawerName={drawer.name}
-                        color={color}
+                        drawer={drawer}
                         onClose={() => setIsSimpleOpen(false)}
                     />
                 )}
@@ -304,16 +325,14 @@ const Drawer = ({ project, drawer, color, moveDrawer, dropDrawer }) => {
                     afterClose={() => {
                         setIsDrawerEditOpen(false)
                     }}>
-                    <DrawerEdit projectID={project.id} drawer={drawer} />
+                    <DrawerEdit drawer={drawer} />
                 </ModalWindow>
             )}
             {isCreateOpen && (
                 <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
                     <TaskCreateElement
-                        onClose={() => setCreateOpen(false)}
-                        project={project}
                         drawer={drawer}
-                        color={color}
+                        onClose={() => setCreateOpen(false)}
                     />
                 </Suspense>
             )}
@@ -326,7 +345,7 @@ const DrawerTitleBox = styled.div`
     align-items: center;
 `
 
-const TaskList = styled.div`
+const TaskList = styled.div<{ $isDragging: boolean }>`
     margin-top: 1em;
     opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
 `
@@ -336,7 +355,7 @@ const MoreButton = styled(Button)`
     width: 80vw;
 `
 
-const makeSortMenuItems = (t) => [
+const makeSortMenuItems = (t: TFunction<"translation", "project">) => [
     { display: t("sort.my"), context: "order" },
     { display: t("sort.-priority"), context: "-priority" },
     { display: t("sort.due_date"), context: "due_date" },
@@ -351,4 +370,4 @@ const makeSortMenuItems = (t) => [
     { display: t("sort.reminders"), context: "reminders" },
 ]
 
-export default Drawer
+export default DrawerBlock

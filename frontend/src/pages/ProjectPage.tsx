@@ -15,7 +15,7 @@ import DeleteAlert from "@components/common/DeleteAlert"
 import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
-import Drawer from "@components/drawers/Drawer"
+import DrawerBlock from "@components/drawers/DrawerBlock"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import OptionsMenu from "@components/project/common/OptionsMenu"
 import PrivacyIcon from "@components/project/common/PrivacyIcon"
@@ -27,8 +27,13 @@ import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
 import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 
-import { getDrawersByProject, patchReorderDrawer } from "@api/drawers.api"
-import { deleteProject, getProject } from "@api/projects.api"
+import { PaginationData } from "@api/common"
+import {
+    type Drawer,
+    getDrawersByProject,
+    patchReorderDrawer,
+} from "@api/drawers.api"
+import { type Project, deleteProject, getProject } from "@api/projects.api"
 
 import HTML5toTouch from "@utils/html5ToTouch"
 import { ifMobile } from "@utils/useScreenType"
@@ -39,6 +44,7 @@ import queryClient from "@queries/queryClient"
 import { getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
+import { TFunction } from "i18next"
 import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -53,27 +59,28 @@ const ProjectPage = () => {
     const navigate = useNavigate()
     const { isMobile } = useScreenType()
 
-    const [drawers, setDrawers] = useState([])
+    const [drawers, setDrawers] = useState<Drawer[]>([])
 
-    const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
-    const [ordering, setOrdering] = useState("order")
-    const [isAlertOpen, setIsAlertOpen] = useState(false)
-    const [isProjectEditOpen, setIsProjectEditOpen] = useState(false)
-    const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
-    const [isCreateOpen, setCreateOpen] = useState(false)
+    const [ordering, setOrdering] = useState<string>("order")
+    const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState<boolean>(false)
+    const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
+    const [isProjectEditOpen, setIsProjectEditOpen] = useState<boolean>(false)
+    const [isSortMenuMobileOpen, setSortMenuMobileOpen] =
+        useState<boolean>(false)
+    const [isCreateOpen, setCreateOpen] = useState<boolean>(false)
 
     const { t } = useTranslation("translation", { keyPrefix: "project" })
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
 
     const {
-        isLoading: isProjectLoading,
+        isPending: isProjectPending,
         isError: isProjectError,
         data: project,
         refetch: projectRefetch,
-    } = useQuery({
+    } = useQuery<Project>({
         queryKey: ["projects", id],
-        queryFn: () => getProject(id),
+        queryFn: () => getProject(id!),
     })
 
     useEffect(() => {
@@ -83,28 +90,28 @@ const ProjectPage = () => {
     }, [project, navigate])
 
     const {
-        isLoading: isDrawersLoading,
+        isPending: isDrawersPending,
         isError: isDrawersError,
         data,
         refetch: drawersRefetch,
-    } = useQuery({
+    } = useQuery<PaginationData<Drawer>>({
         queryKey: ["drawers", { projectID: id, ordering: ordering }],
-        queryFn: () => getDrawersByProject(id, ordering),
+        queryFn: () => getDrawersByProject(id!, ordering),
     })
 
     /// Drawers Drag And Drop
     useEffect(() => {
         if (!data) return
-        setDrawers(data)
+        setDrawers(data.results)
     }, [data])
 
     const patchMutation = useMutation({
-        mutationFn: (data) => {
+        mutationFn: (data: Partial<Drawer>[]) => {
             return patchReorderDrawer(data)
         },
     })
 
-    const moveDrawer = useCallback((dragIndex, hoverIndex) => {
+    const moveDrawer = useCallback((dragIndex: number, hoverIndex: number) => {
         setDrawers((prevDrawers) => {
             const updatedDrawers = [...prevDrawers]
             const [moved] = updatedDrawers.splice(dragIndex, 1)
@@ -116,7 +123,7 @@ const ProjectPage = () => {
     const dropDrawer = useCallback(async () => {
         const changedDrawers = drawers
             .map((drawer, index) => ({ id: drawer.id, order: index }))
-            .filter((drawer, index) => data[index]?.id !== drawer.id)
+            .filter((drawer, index) => data?.results?.[index]?.id !== drawer.id)
 
         if (changedDrawers.length === 0) return
 
@@ -131,12 +138,12 @@ const ProjectPage = () => {
 
     const deleteMutation = useMutation({
         mutationFn: () => {
-            return deleteProject(id)
+            return deleteProject(id!)
         },
         onSuccess: () => {
             toast.success(
                 t("delete.project_delete_success", {
-                    project_name: project.name,
+                    project_name: project?.name,
                 }),
             )
             queryClient.invalidateQueries({ queryKey: ["projects"] })
@@ -144,7 +151,7 @@ const ProjectPage = () => {
         onError: () => {
             toast.error(
                 t("delete.project_delete_error", {
-                    project_name: project.name,
+                    project_name: project?.name,
                 }),
             )
         },
@@ -168,20 +175,20 @@ const ProjectPage = () => {
         drawersRefetch()
     }
 
-    if (isProjectLoading || isDrawersLoading) {
+    if (isProjectPending || isDrawersPending) {
         return <SkeletonProjectPage />
     }
 
     if (isProjectError || isDrawersError) {
         return (
-            <ErrorBox $isTasks={false} onClick={onClickProjectErrorBox}>
+            <ErrorBox onClick={onClickProjectErrorBox}>
                 <FeatherIcon icon="alert-triangle" />
                 {t("error_load_project_and_drawer")}
             </ErrorBox>
         )
     }
 
-    const color = getPaletteColor(theme.type, project?.color)
+    const color = getPaletteColor(theme.type, project.color)
 
     return (
         <>
@@ -234,11 +241,9 @@ const ProjectPage = () => {
             ) : (
                 <DndProvider options={HTML5toTouch}>
                     {drawers?.map((drawer) => (
-                        <Drawer
+                        <DrawerBlock
                             key={drawer.id}
-                            project={project}
                             drawer={drawer}
-                            color={color}
                             moveDrawer={moveDrawer}
                             dropDrawer={dropDrawer}
                         />
@@ -270,7 +275,7 @@ const ProjectPage = () => {
                     afterClose={() => {
                         setIsDrawerCreateOpen(false)
                     }}>
-                    <DrawerEdit isCreating />
+                    <DrawerEdit />
                 </ModalWindow>
             )}
             {isProjectEditOpen && (
@@ -286,10 +291,8 @@ const ProjectPage = () => {
                     key="task-create-project-page"
                     fallback={<ModalLoader />}>
                     <TaskCreateElement
+                        drawer={data.results[0]}
                         onClose={() => setCreateOpen(false)}
-                        project={project}
-                        drawer={project.drawers[0]}
-                        color={color}
                     />
                 </Suspense>
             )}
@@ -339,7 +342,7 @@ const NoDrawerText = styled.div`
     font-size: 1.4em;
 `
 
-const makeSortMenuItems = (t) => [
+const makeSortMenuItems = (t: TFunction<"translation", "project">) => [
     { display: t("sort.my"), context: "order" },
     { display: t("sort.name"), context: "name" },
     { display: t("sort.-name"), context: "-name" },
