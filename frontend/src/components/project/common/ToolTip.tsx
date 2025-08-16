@@ -1,6 +1,14 @@
+import { ReactNode } from "react"
+
 import styled from "styled-components"
 
-const ToolTip = ({ message, children }) => {
+const ToolTip = ({
+    message,
+    children,
+}: {
+    message: string
+    children: ReactNode
+}) => {
     return (
         <Container>
             {children}

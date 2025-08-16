@@ -3,7 +3,13 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const TaskCreateButton = ({ isOpen, onClick }) => {
+const TaskCreateButton = ({
+    isOpen,
+    onClick,
+}: {
+    isOpen: boolean
+    onClick: () => void
+}) => {
     const { t } = useTranslation("translation", { keyPrefix: "project" })
 
     return (

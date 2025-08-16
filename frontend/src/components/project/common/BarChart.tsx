@@ -1,11 +1,23 @@
 import styled, { css } from "styled-components"
 
+import { type Drawer } from "@api/drawers.api"
+
 import { cubicBeizer } from "@assets/keyframes"
 
-const BarChart = ({ isCompleted, color, drawers, projectTaskCount }) => {
+const BarChart = ({
+    isCompleted,
+    color,
+    drawers,
+    projectTaskCount,
+}: {
+    isCompleted: boolean
+    color: string
+    drawers: Drawer[]
+    projectTaskCount: number
+}) => {
     if (isCompleted) {
         return (
-            <BarChartBox $percent={100} $isCompleted={true} $color={color}>
+            <BarChartBox $percent={100} $color={color} $isCompleted={true}>
                 <PercentText>100%</PercentText>
             </BarChartBox>
         )
@@ -19,11 +31,11 @@ const BarChart = ({ isCompleted, color, drawers, projectTaskCount }) => {
         return (
             <BarChartBox
                 key={drawer.id}
-                $color={color}
                 $percent={calculatePercent(
                     drawer.uncompleted_task_count + drawer.completed_task_count,
                     projectTaskCount,
-                )}>
+                )}
+                $color={color}>
                 <PercentText>
                     {calculatePercent(
                         drawer.completed_task_count,
@@ -45,10 +57,10 @@ const BarChart = ({ isCompleted, color, drawers, projectTaskCount }) => {
     })
 }
 
-const calculatePercent = (ratio, base) => {
+const calculatePercent = (ratio: number, base: number) => {
     if (base === 0) return 0
 
-    let calculated = Math.floor((ratio / base) * 100)
+    const calculated = Math.floor((ratio / base) * 100)
 
     if (isNaN(calculated)) return 0
     return calculated
@@ -74,7 +86,10 @@ const PercentText = styled.div`
     font-size: 0.8em;
 `
 
-const BarProgress = styled.div`
+const BarProgress = styled.div<{
+    $percent: number
+    $color: string
+}>`
     display: ${(props) => (props.$percent === 0 ? "none" : "flex")};
     width: 100%;
     background: linear-gradient(
@@ -85,7 +100,12 @@ const BarProgress = styled.div`
     background-repeat: no-repeat;
 `
 
-const BarChartBox = styled.div`
+const BarChartBox = styled.div<{
+    $percent: number
+    $color: string
+    $isOne?: boolean
+    $isCompleted?: boolean
+}>`
     position: relative;
     display: flex;
     width: ${(props) => props.$percent}%;
@@ -101,7 +121,7 @@ const BarChartBox = styled.div`
 
     ${(props) =>
         props.$isCompleted &&
-        css`
+        css<{ $color: string }>`
             background-color: ${(props) => props.$color};
             border-radius: 15px;
         `}

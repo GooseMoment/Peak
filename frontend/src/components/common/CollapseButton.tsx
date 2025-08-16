@@ -4,7 +4,13 @@ import { cubicBeizer, rotateToUnder, rotateToUp } from "@assets/keyframes"
 
 import FeatherIcon from "feather-icons-react"
 
-const CollapseButton = ({ collapsed, handleCollapsed }) => {
+const CollapseButton = ({
+    collapsed,
+    handleCollapsed,
+}: {
+    collapsed: boolean
+    handleCollapsed: () => void
+}) => {
     return (
         <CollapseButtonBox $collapsed={collapsed}>
             <FeatherIcon icon="chevron-down" onClick={handleCollapsed} />
@@ -12,7 +18,7 @@ const CollapseButton = ({ collapsed, handleCollapsed }) => {
     )
 }
 
-const CollapseButtonBox = styled.div`
+const CollapseButtonBox = styled.div<{ $collapsed: boolean }>`
     & svg {
         animation: ${rotateToUp} 0.5s ${cubicBeizer} forwards;
     }

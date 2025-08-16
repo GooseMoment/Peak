@@ -6,8 +6,16 @@ import { MenuButton } from "@szhsin/react-menu"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const OptionsMenu = ({ color = null, handleEdit, handleAlert }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+const OptionsMenu = ({
+    color,
+    handleEdit,
+    handleAlert,
+}: {
+    color?: string
+    handleEdit: () => void
+    handleAlert: () => void
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "project" })
     const theme = useTheme()
 
     const textColor = theme.textColor

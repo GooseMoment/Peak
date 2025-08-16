@@ -1,4 +1,4 @@
-const Hourglass = ({ color }: { color: string }) => {
+const Hourglass = ({ color }: { color?: string }) => {
     return (
         <svg
             width="22"

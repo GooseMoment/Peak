@@ -1,8 +1,9 @@
+import { Dispatch, SetStateAction } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
 
-import { deleteTask } from "@api/tasks.api"
+import { type Task, deleteTask } from "@api/tasks.api"
 
 import { useClientSetting } from "@utils/clientSettings"
 
@@ -11,13 +12,18 @@ import queryClient from "@queries/queryClient"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
+interface useDeleteTaskProps {
+    task: NormalizedTask
+    setIsAlertOpen: Dispatch<SetStateAction<boolean>>
+    goBack?: boolean
+}
+
 export const useDeleteTask = ({
     task,
-    projectType,
     setIsAlertOpen,
     goBack = false,
-}) => {
-    const { t } = useTranslation(null, { keyPrefix: "task.delete" })
+}: useDeleteTaskProps) => {
+    const { t } = useTranslation("translation", { keyPrefix: "task.delete" })
     const [setting] = useClientSetting()
     const navigate = useNavigate()
 
@@ -41,12 +47,15 @@ export const useDeleteTask = ({
                 queryKey: ["tasks", { drawerID: task.drawer }],
             })
 
-            if (projectType === "goal") {
+            if (task.drawer.project.type === "goal") {
                 queryClient.invalidateQueries({
-                    queryKey: ["drawers", { projectID: task.project_id }],
+                    queryKey: [
+                        "drawers",
+                        { projectID: task.drawer.project.id },
+                    ],
                 })
                 queryClient.invalidateQueries({
-                    queryKey: ["projects", task.project_id],
+                    queryKey: ["projects", task.drawer.project.id],
                 })
             }
 
@@ -58,7 +67,7 @@ export const useDeleteTask = ({
     })
 
     const handleDelete = () => {
-        if (goBack) navigate(`/app/projects/${task.project_id}`)
+        if (goBack) navigate(`/app/projects/${task.drawer.project.id}`)
         else setIsAlertOpen(false)
 
         deleteMutation.mutate()

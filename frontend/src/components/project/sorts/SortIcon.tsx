@@ -1,4 +1,4 @@
-const SortIcon = ({ color }) => {
+const SortIcon = ({ color }: { color: string }) => {
     return (
         <svg
             width="13"

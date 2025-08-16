@@ -1,8 +1,18 @@
 import styled from "styled-components"
 
+import { Privacy } from "@api/common"
+
 import FeatherIcon from "feather-icons-react"
 
-const PrivacyIcon = ({ privacy, color, isProject }) => {
+const PrivacyIcon = ({
+    privacy,
+    color,
+    isProject = false,
+}: {
+    privacy: Privacy
+    color: string
+    isProject?: boolean
+}) => {
     if (privacy === "public") {
         return null
     }
@@ -21,7 +31,7 @@ const PrivacyIcon = ({ privacy, color, isProject }) => {
     }
 }
 
-const ProjectPrivacyBox = styled.div`
+const ProjectPrivacyBox = styled.div<{ $color: string }>`
     margin-left: 0.6em;
     padding-bottom: 0.8em;
 
@@ -33,7 +43,7 @@ const ProjectPrivacyBox = styled.div`
     }
 `
 
-const DrawerPrivacyBox = styled.div`
+const DrawerPrivacyBox = styled.div<{ $color: string }>`
     margin-bottom: 0.1em;
     margin-left: 0.6em;
 

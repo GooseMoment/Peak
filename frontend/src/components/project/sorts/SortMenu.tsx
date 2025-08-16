@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react"
+
 import styled from "styled-components"
 
 import SortIcon from "@components/project/sorts/SortIcon"
@@ -7,7 +9,20 @@ import { Menu, MenuItem } from "@assets/menu"
 import { MenuButton } from "@szhsin/react-menu"
 import FeatherIcon from "feather-icons-react"
 
-const SortMenu = ({ color, items, ordering, setOrdering }) => {
+const SortMenu = ({
+    color,
+    items,
+    ordering,
+    setOrdering,
+}: {
+    color: string
+    items: {
+        display: string
+        context: string
+    }[]
+    ordering: string
+    setOrdering: Dispatch<SetStateAction<string>>
+}) => {
     return (
         <Menu
             menuButton={
@@ -36,7 +51,7 @@ const EmptyMenuBtn = styled(MenuButton)`
     border: 0;
 `
 
-const EmptyBox = styled.div`
+const EmptyBox = styled.div<{ $isSelected: boolean }>`
     width: 16px;
     height: 16px;
     margin-right: 0.5em;

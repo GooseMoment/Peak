@@ -2,15 +2,24 @@ import styled, { useTheme } from "styled-components"
 
 import BarChart from "@components/project/common/BarChart"
 
+import { type Drawer } from "@api/drawers.api"
+import { type Project } from "@api/projects.api"
+
 import { getPaletteColor } from "@assets/palettes"
 
 import { useTranslation } from "react-i18next"
 
-const Progress = ({ project, drawers }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project" })
+const Progress = ({
+    project,
+    drawers,
+}: {
+    project: Project
+    drawers: Drawer[]
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "project" })
     const theme = useTheme()
 
-    let projectTaskCount =
+    const projectTaskCount =
         project.completed_task_count + project.uncompleted_task_count
 
     if (projectTaskCount === 0) {
