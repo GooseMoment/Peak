@@ -1,7 +1,17 @@
 from rest_framework import serializers
 from django.core.cache import cache
 
-from .models import Emoji, Quote, Remark, Reaction, Peck, Comment, Following, Block
+from .models import (
+    Emoji,
+    Quote,
+    ReactionTask,
+    Remark,
+    Reaction,
+    Peck,
+    Comment,
+    Following,
+    Block,
+)
 from projects.models import Project
 from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
@@ -127,6 +137,16 @@ class ReactionSerializer(serializers.ModelSerializer):
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Reaction
         fields = ["id", "user", "parent_type", "task", "quote", "emoji"]
+
+
+class ReactionTaskSerializer(serializers.ModelSerializer):
+    user = UserSerializer(default=serializers.CurrentUserDefault())
+    task = TaskSerializer()
+    image_emoji = EmojiSerializer(required=False, allow_null=True)
+
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
+        model = ReactionTask
+        fields = ["id", "user", "task", "image_emoji", "unicode_emoji", "created_at"]
 
 
 class PeckSerializer(serializers.ModelSerializer):

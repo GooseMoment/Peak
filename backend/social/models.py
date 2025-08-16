@@ -122,6 +122,48 @@ class Reaction(Base):
         db_table = "reactions"
 
 
+class ReactionBase(Base):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+
+    image_emoji = models.ForeignKey(
+        Emoji,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+    )
+    # currently length of the longest emoji is 8, but as joined emojis can be defined with longer combinations, we set this to 16
+    # assert len("👩🏼‍❤️‍👨🏾") == 8
+    unicode_emoji = models.CharField(max_length=16, null=True, blank=True)
+
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
+        abstract = True
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(image_emoji__isnull=True, unicode_emoji__isnull=False)
+                | models.Q(image_emoji__isnull=False, unicode_emoji__isnull=True),
+                name="%(app_label)s_%(class)s_emojis_exclusive",
+            )
+        ]
+
+
+class ReactionTask(ReactionBase):
+    task = models.ForeignKey(
+        Task,
+        related_name="reactions",
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self) -> str:
+        return f"ReactionTask: {self.user}/{self.task}/{self.unicode_emoji or self.image_emoji}"
+
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ReactionBase
+        db_table = "reaction_tasks"
+        constraints = ReactionBase.Meta.constraints
+
+
 class Comment(Base):
     FOR_TASK = "task"
     FOR_QUOTE = "quote"
