@@ -1,6 +1,6 @@
 import client, { getCurrentUsername, isAxiosErrorStatus } from "@api/client"
 import type { Base, PaginationData } from "@api/common"
-import { type User } from "@api/users.api"
+import type { User } from "@api/users.api"
 
 export interface Emoji extends Base {
     name: string
@@ -27,6 +27,9 @@ export interface Remark extends Base {
     date: string
 }
 
+/**
+ * @deprecated use ReactionTask instead
+ */
 export interface ReactionTask extends Base {
     user: User
     parent_type: "task"
@@ -44,6 +47,26 @@ export interface ReactionQuote extends Base {
 }
 
 export type Reaction = ReactionTask | ReactionQuote
+
+export interface TaskReactionUnicodeEmoji extends Base {
+    user: User
+    // TODO: replace Task
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    task: any
+    unicode_emoji: string
+    image_emoji: null
+}
+
+export interface TaskReactionImageEmoji extends Base {
+    user: User
+    // TODO: replace Task
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    task: any
+    unicode_emoji: null
+    image_emoji: Emoji
+}
+
+export type TaskReaction = TaskReactionUnicodeEmoji | TaskReactionImageEmoji
 
 export interface CommentTask extends Base {
     user: User
@@ -311,6 +334,15 @@ export const deleteReaction = async (
     )
 
     return res.status
+}
+
+export const getTaskReactions = async (taskID: string) => {
+    const res = await client.get<TaskReaction[]>(
+        `tasks/${taskID}/reactions/`,
+        {},
+    )
+
+    return res.data
 }
 
 export const getPeck = async (taskID: string) => {
