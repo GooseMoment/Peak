@@ -1,42 +1,88 @@
+import { useEffect, useMemo, useState } from "react"
+
 import styled from "styled-components"
 
 import MildButton from "@components/common/MildButton"
 
-import type { Emoji } from "@api/social.api"
+import type { Emoji, TaskReaction } from "@api/social.api"
 import type { User } from "@api/users.api"
 
 interface ReactionButtonProps {
+    emojiName: string
     imageEmoji: Emoji | null
-    unicodeEmoji: string | null
     users: User[]
     count: number
-    isSelected?: boolean
+    myReactionID?: TaskReaction["id"]
+    onPost: (emojiName: string, isCustom: boolean) => void
+    onDelete: (id: TaskReaction["id"]) => void
 }
 
 export default function ReactionButton({
     imageEmoji,
-    unicodeEmoji,
+    emojiName,
     users,
     count,
-    isSelected,
+    myReactionID,
+    onPost,
+    onDelete,
 }: ReactionButtonProps) {
+    const [selected, setSelected] = useState(myReactionID !== undefined)
+
+    useEffect(() => {
+        setSelected(myReactionID !== undefined)
+    }, [myReactionID])
+
+    const onClick = () => {
+        if (selected) {
+            if (myReactionID !== undefined) {
+                onDelete(myReactionID)
+            }
+        } else {
+            onPost(emojiName, !!imageEmoji)
+        }
+        setSelected(!selected)
+    }
+
+    const correctedCount = useMemo(() => {
+        if (!myReactionID && selected) {
+            return count + 1
+        }
+
+        if (myReactionID && !selected) {
+            return count - 1
+        }
+
+        return count
+    }, [count, myReactionID, selected])
+
+    if (correctedCount === 0) {
+        return null
+    }
+
     return (
-        <ReactionButtonContainer $selected={isSelected}>
-            {imageEmoji && <Img src={imageEmoji.img} />}
-            {unicodeEmoji && <UnicodeEmoji>{unicodeEmoji}</UnicodeEmoji>}
-            <EmojiCount $selected={isSelected}>{count}</EmojiCount>
+        <ReactionButtonContainer onClick={onClick} $selected={selected}>
+            {imageEmoji && (
+                <Img
+                    draggable="false"
+                    alt={imageEmoji.name}
+                    src={imageEmoji.img}
+                />
+            )}
+            {imageEmoji === null && <UnicodeEmoji>{emojiName}</UnicodeEmoji>}
+            <EmojiCount $selected={selected}>{correctedCount}</EmojiCount>
             <Tooltip>
                 {imageEmoji && (
                     <div>
                         <TooltipImg
+                            draggable="false"
                             src={imageEmoji.img}
                             alt={imageEmoji.name}
                         />
                         <TooltipImgName>{imageEmoji.name}</TooltipImgName>
                     </div>
                 )}
-                {unicodeEmoji && (
-                    <TooltipUnicode>{unicodeEmoji}</TooltipUnicode>
+                {imageEmoji === null && (
+                    <TooltipUnicode>{emojiName}</TooltipUnicode>
                 )}
                 <TooltipUserList>
                     {users.slice(0, 3).map((user) => (
@@ -55,8 +101,10 @@ export default function ReactionButton({
 }
 
 const Tooltip = styled.div`
+    pointer-events: none;
+
     position: absolute;
-    bottom: 20px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     padding: 6px 10px;
