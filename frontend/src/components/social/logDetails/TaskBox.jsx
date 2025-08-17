@@ -1,15 +1,13 @@
 import styled from "styled-components"
 
-import InteractionBox from "@components/social/interaction/InteractionBox"
+import InteractionContainer from "@components/social/interaction/InteractionContainer"
 import TaskFrame from "@components/tasks/TaskFrame"
 
 const TaskBox = ({ task, color, isFollowingPage }) => {
     return (
         <TaskContainer>
             <TaskFrame task={task} color={color} isSocial />
-            {isFollowingPage && (
-                <InteractionBox parentType={"task"} parent={task} />
-            )}
+            {isFollowingPage && <InteractionContainer task={task} />}
         </TaskContainer>
     )
 }
