@@ -143,10 +143,22 @@ class TaskReactionSerializer(serializers.ModelSerializer):
     user = UserSerializer(default=serializers.CurrentUserDefault())
     task = TaskSerializer()
     image_emoji = EmojiSerializer(required=False, allow_null=True)
+    emoji_name = serializers.SerializerMethodField()
+
+    def get_emoji_name(self, obj: TaskReaction):
+        return obj.image_emoji is not None and obj.image_emoji.name or obj.unicode_emoji
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = TaskReaction
-        fields = ["id", "user", "task", "image_emoji", "unicode_emoji", "created_at"]
+        fields = [
+            "id",
+            "user",
+            "task",
+            "image_emoji",
+            "unicode_emoji",
+            "emoji_name",
+            "created_at",
+        ]
 
 
 class PeckSerializer(serializers.ModelSerializer):
