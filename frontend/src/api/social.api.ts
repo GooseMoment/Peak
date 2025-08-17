@@ -55,6 +55,7 @@ export interface TaskReactionUnicodeEmoji extends Base {
     task: any
     unicode_emoji: string
     image_emoji: null
+    emoji_name: string
 }
 
 export interface TaskReactionImageEmoji extends Base {
@@ -64,6 +65,7 @@ export interface TaskReactionImageEmoji extends Base {
     task: any
     unicode_emoji: null
     image_emoji: Emoji
+    emoji_name: string
 }
 
 export type TaskReaction = TaskReactionUnicodeEmoji | TaskReactionImageEmoji
@@ -343,6 +345,30 @@ export const getTaskReactions = async (taskID: string) => {
     )
 
     return res.data
+}
+
+export type TaskReactionPost =
+    | {
+          unicode_emoji: string
+      }
+    | {
+          image_emoji: string
+      }
+
+export const postTaskReaction = async (
+    taskID: string,
+    data: TaskReactionPost,
+) => {
+    const res = await client.post<TaskReaction>(
+        `tasks/${taskID}/reactions/`,
+        data,
+    )
+
+    return res.data
+}
+
+export const deleteTaskReaction = async (reactionID: TaskReaction["id"]) => {
+    await client.delete(`social/reactions/${reactionID}/`)
 }
 
 export const getPeck = async (taskID: string) => {
