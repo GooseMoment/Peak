@@ -682,7 +682,8 @@ class ReactionView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class TaskReactionList(generics.ListAPIView):
+class TaskReactionList(generics.GenericAPIView):
+    queryset = TaskReaction.objects.all()
     serializer_class = TaskReactionSerializer
     permission_classes = (permissions.TaskReactionPermission,)
 
@@ -694,14 +695,19 @@ class TaskReactionList(generics.ListAPIView):
 
         return self._task
 
-    def get_queryset(self):
+    def filter_queryset(self, queryset: "QuerySet[TaskReaction]"):
         task_id = self.kwargs.get("id")
         if not task_id:
             raise NotFound("Task ID is required")
 
-        return TaskReaction.objects.filter(task__id=task_id).order_by(
+        return queryset.filter(task__id=task_id).order_by(
             "image_emoji", "unicode_emoji", "created_at"
         )
+
+    def get(self, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def post(self, request: AuthenticatedRequest, **kwargs):
         unicode_emoji: Optional[str] = request.data.get("unicode_emoji")
