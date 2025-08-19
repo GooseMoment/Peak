@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import { ButtonGroup } from "@components/common/Button"
@@ -6,24 +6,59 @@ import CommentButton from "@components/social/interaction/comment/CommentButton"
 import PeckButton from "@components/social/interaction/peck/PeckButton"
 import EmojiPickerButton, {
     PickerButtonSkeleton,
-} from "@components/social/interaction/reaction/EmojiPickerButton"
-import ReactionButton from "@components/social/interaction/reaction/ReactionButton"
+} from "@components/social/interaction/reactions/EmojiPickerButton"
+import ReactionButton, {
+    ReactionButtonGroup,
+    TaskReactionGroup,
+} from "@components/social/interaction/reactions/ReactionButton"
 
-import { Emoji, getTaskReactions } from "@api/social.api"
-import type { User } from "@api/users.api"
+import { getCurrentUsername } from "@api/client"
+import {
+    TaskReaction,
+    TaskReactionPost,
+    deleteTaskReaction,
+    getTaskReactions,
+    postTaskReaction,
+} from "@api/social.api"
 
-interface GroupedEmoji {
-    imageEmoji: Emoji | null
-    unicodeEmoji: string | null
-    count: number
-    users: User[]
+import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
+
+const me = getCurrentUsername()
+
+function groupTaskReactions(data: TaskReaction[]) {
+    const groups: Record<TaskReactionGroup["emojiName"], TaskReactionGroup> = {}
+
+    for (let i = 0; i < data.length; i++) {
+        const key = data[i].emoji_name
+
+        if (i === 0 || groups[key] === undefined) {
+            groups[key] = {
+                emojiName: key,
+                imageEmoji: data[i].image_emoji,
+                count: 0,
+                users: [],
+            }
+        }
+
+        groups[key].count += 1
+        groups[key].users.push(data[i].user)
+
+        if (data[i].user.username === me) {
+            groups[key].currentUserReactionID = data[i].id
+        }
+    }
+
+    return groups
 }
 
 // TODO: replace Task
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function InteractionContainer({ task }: { task: any }) {
+    const client = useQueryClient()
+    const { t } = useTranslation("translation")
     const {
-        data: reactions,
+        data: groups,
         isSuccess,
         isPending,
     } = useQuery({
@@ -31,50 +66,87 @@ export default function InteractionContainer({ task }: { task: any }) {
         queryFn() {
             return getTaskReactions(task.id)
         },
-        select(data) {
-            const reduced: GroupedEmoji[] = []
+        select: groupTaskReactions,
+    })
 
-            for (let i = 0; i < data.length; i++) {
-                if (
-                    i === 0 ||
-                    data[i - 1].unicode_emoji !== data[i].unicode_emoji ||
-                    data[i - 1].image_emoji?.name !== data[i].image_emoji?.name
-                ) {
-                    reduced.push({
-                        imageEmoji: data[i].image_emoji,
-                        unicodeEmoji: data[i].unicode_emoji,
-                        count: 0,
-                        users: [],
-                    })
-                }
-
-                reduced[reduced.length - 1].count += 1
-                reduced[reduced.length - 1].users.push(data[i].user)
-            }
-
-            return reduced
+    const postMutation = useMutation({
+        mutationFn({
+            taskID,
+            emoji,
+        }: {
+            taskID: string
+            emoji: TaskReactionPost
+        }) {
+            return postTaskReaction(taskID, emoji)
+        },
+        onSuccess() {
+            client.invalidateQueries({
+                queryKey: ["tasks", task.id, "reactions"],
+            })
+        },
+        onError() {
+            toast.error(t("common.error_perform"))
         },
     })
 
+    const deleteMutation = useMutation({
+        mutationFn({ reactionID }: { reactionID: TaskReaction["id"] }) {
+            return deleteTaskReaction(reactionID)
+        },
+        onSuccess() {
+            client.invalidateQueries({
+                queryKey: ["tasks", task.id, "reactions"],
+            })
+        },
+        onError() {
+            toast.error(t("common.error_perform"))
+        },
+    })
+
+    const onPost = (emojiName: string, isCustom: boolean) => {
+        postMutation.mutate({
+            taskID: task.id,
+            emoji: isCustom
+                ? { image_emoji: emojiName }
+                : { unicode_emoji: emojiName },
+        })
+    }
+
+    const onDelete = (reactionID: TaskReaction["id"]) => {
+        deleteMutation.mutate({ reactionID })
+    }
+
+    const onSelectEmoji = (emojiName: string, isCustom: boolean) => {
+        if (!isSuccess) {
+            return
+        }
+
+        const reactionID = groups[emojiName]?.currentUserReactionID
+        if (reactionID) {
+            onDelete(reactionID)
+        } else {
+            onPost(emojiName, isCustom)
+        }
+    }
+
     return (
         <Box>
-            <ReactionContainer>
+            <ReactionButtonGroup>
                 {isSuccess &&
-                    reactions.map((val) => (
+                    Object.entries(groups).map(([key, group]) => (
                         <ReactionButton
-                            key={val.unicodeEmoji || val.imageEmoji?.name}
-                            unicodeEmoji={val.unicodeEmoji}
-                            imageEmoji={val.imageEmoji}
-                            users={val.users}
-                            count={val.count}
+                            key={key}
+                            group={group}
+                            onPost={onPost}
+                            onDelete={onDelete}
                         />
                     ))}
                 {isSuccess && !!task.completed_at && (
-                    <EmojiPickerButton onSelectEmoji={() => {}} />
+                    <EmojiPickerButton onSelectEmoji={onSelectEmoji} />
                 )}
                 {isPending && <PickerButtonSkeleton />}
-            </ReactionContainer>
-            <ButtonGroup $justifyContent="flex-start" $margin="0 0 0 0.25em">
+            </ReactionButtonGroup>
+            <ButtonGroup $justifyContent="flex-end" $margin="0 0 0 0.25em">
                 <CommentButton parentType="task" parent={task} />
                 <PeckButton
                     taskID={task.id}
@@ -89,11 +161,4 @@ const Box = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-`
-
-const ReactionContainer = styled.div`
-    margin-left: auto;
-    display: flex;
-    gap: 0.5em;
-    flex-wrap: wrap;
 `
