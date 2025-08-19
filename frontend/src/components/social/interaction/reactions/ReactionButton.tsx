@@ -7,53 +7,55 @@ import MildButton from "@components/common/MildButton"
 import type { Emoji, TaskReaction } from "@api/social.api"
 import type { User } from "@api/users.api"
 
-interface ReactionButtonProps {
+export interface TaskReactionGroup {
     emojiName: string
     imageEmoji: Emoji | null
-    users: User[]
     count: number
-    myReactionID?: TaskReaction["id"]
+    users: User[]
+    currentUserReactionID?: TaskReaction["id"]
+}
+
+interface ReactionButtonProps {
+    group: TaskReactionGroup
     onPost: (emojiName: string, isCustom: boolean) => void
     onDelete: (id: TaskReaction["id"]) => void
 }
 
 export default function ReactionButton({
-    imageEmoji,
-    emojiName,
-    users,
-    count,
-    myReactionID,
+    group,
     onPost,
     onDelete,
 }: ReactionButtonProps) {
-    const [selected, setSelected] = useState(myReactionID !== undefined)
+    const [selected, setSelected] = useState(
+        group.currentUserReactionID !== undefined,
+    )
 
     useEffect(() => {
-        setSelected(myReactionID !== undefined)
-    }, [myReactionID])
+        setSelected(group.currentUserReactionID !== undefined)
+    }, [group.currentUserReactionID])
 
     const onClick = () => {
         if (selected) {
-            if (myReactionID !== undefined) {
-                onDelete(myReactionID)
+            if (group.currentUserReactionID !== undefined) {
+                onDelete(group.currentUserReactionID)
             }
         } else {
-            onPost(emojiName, !!imageEmoji)
+            onPost(group.emojiName, !!group.imageEmoji)
         }
         setSelected(!selected)
     }
 
     const correctedCount = useMemo(() => {
-        if (!myReactionID && selected) {
-            return count + 1
+        if (!group.currentUserReactionID && selected) {
+            return group.count + 1
         }
 
-        if (myReactionID && !selected) {
-            return count - 1
+        if (group.currentUserReactionID && !selected) {
+            return group.count - 1
         }
 
-        return count
-    }, [count, myReactionID, selected])
+        return group.count
+    }, [group.count, group.currentUserReactionID, selected])
 
     if (correctedCount === 0) {
         return null
@@ -61,38 +63,42 @@ export default function ReactionButton({
 
     return (
         <ReactionButtonContainer onClick={onClick} $selected={selected}>
-            {imageEmoji && (
+            {group.imageEmoji && (
                 <Img
                     draggable="false"
-                    alt={imageEmoji.name}
-                    src={imageEmoji.img}
+                    alt={group.imageEmoji.name}
+                    src={group.imageEmoji.img}
                 />
             )}
-            {imageEmoji === null && <UnicodeEmoji>{emojiName}</UnicodeEmoji>}
+            {group.imageEmoji === null && (
+                <UnicodeEmoji>{group.emojiName}</UnicodeEmoji>
+            )}
             <EmojiCount $selected={selected}>{correctedCount}</EmojiCount>
             <Tooltip>
-                {imageEmoji && (
+                {group.imageEmoji && (
                     <div>
                         <TooltipImg
                             draggable="false"
-                            src={imageEmoji.img}
-                            alt={imageEmoji.name}
+                            src={group.imageEmoji.img}
+                            alt={group.imageEmoji.name}
                         />
-                        <TooltipImgName>{imageEmoji.name}</TooltipImgName>
+                        <TooltipImgName>{group.imageEmoji.name}</TooltipImgName>
                     </div>
                 )}
-                {imageEmoji === null && (
-                    <TooltipUnicode>{emojiName}</TooltipUnicode>
+                {group.imageEmoji === null && (
+                    <TooltipUnicode>{group.emojiName}</TooltipUnicode>
                 )}
                 <TooltipUserList>
-                    {users.slice(0, 3).map((user) => (
+                    {group.users.slice(0, 3).map((user) => (
                         <TooltipUser key={user.username}>
                             <img src={user.profile_img} />
                             <p>{user.username}</p>
                         </TooltipUser>
                     ))}
-                    {count > 3 && (
-                        <TooltipUserMore>그 외 {count - 3}명</TooltipUserMore>
+                    {group.count > 3 && (
+                        <TooltipUserMore>
+                            그 외 {group.count - 3}명
+                        </TooltipUserMore>
                     )}
                 </TooltipUserList>
             </Tooltip>
@@ -211,4 +217,11 @@ const EmojiCount = styled.p<{ $selected?: boolean }>`
         p.$selected ? p.theme.social.activeColor : p.theme.textColor};
 
     transition: color 0.1s ease;
+`
+
+export const ReactionButtonGroup = styled.div`
+    margin-left: auto;
+    display: flex;
+    gap: 0.5em;
+    flex-wrap: wrap;
 `
