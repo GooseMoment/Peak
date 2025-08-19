@@ -66,8 +66,10 @@ export default function EmojiPickerButton({
 }
 
 const PickerButton = styled(ReactionButtonContainer)`
-    background-color: ${(p) => p.theme.secondTextColor};
-    color: ${(p) => p.theme.backgroundColor};
+    border-color: ${(p) => p.theme.textColor};
+    border-width: 1.5px;
+    width: 2em;
+    padding: 0.25em;
 
     & svg {
         top: 0;
