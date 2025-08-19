@@ -402,6 +402,9 @@
             "placeholder": "Start writing by pressing the pencil button",
             "placeholder_edit": "Write here..."
         },
+        "reactions": {
+            "more": "With {{count}} more"
+        },
         "explore": {
             "searchbar": "Search for usernames to follow.",
             "no_result": "No users matched your search",

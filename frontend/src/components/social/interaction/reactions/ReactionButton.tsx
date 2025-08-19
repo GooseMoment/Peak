@@ -7,6 +7,8 @@ import MildButton from "@components/common/MildButton"
 import type { Emoji, TaskReaction } from "@api/social.api"
 import type { User } from "@api/users.api"
 
+import { useTranslation } from "react-i18next"
+
 export interface TaskReactionGroup {
     emojiName: string
     imageEmoji: Emoji | null
@@ -26,6 +28,8 @@ export default function ReactionButton({
     onPost,
     onDelete,
 }: ReactionButtonProps) {
+    const { t } = useTranslation("translation")
+
     const [selected, setSelected] = useState(
         group.currentUserReactionID !== undefined,
     )
@@ -97,7 +101,9 @@ export default function ReactionButton({
                     ))}
                     {group.count > 3 && (
                         <TooltipUserMore>
-                            그 외 {group.count - 3}명
+                            {t("social.reactions.more", {
+                                count: group.count - 3,
+                            })}
                         </TooltipUserMore>
                     )}
                 </TooltipUserList>
