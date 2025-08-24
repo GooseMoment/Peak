@@ -77,6 +77,16 @@ def _notificationToPushData(notification: Notification, locale: str) -> PushData
                 emoji=notification.reaction.emoji.name, username=related_user.username
             )
             data.body = t["body"].format(parent=parent)
+        case Notification.FOR_TASK_REACTION:
+            assert notification.task_reaction is not None
+            t = t[Notification.FOR_TASK_REACTION]
+            data.title = t["title"].format(
+                notification.task_reaction.image_emoji is not None
+                and notification.task_reaction.image_emoji.name,
+                emoji=notification.task_reaction.unicode_emoji,
+                username=notification.task_reaction.user,
+            )
+            data.body = t["body"].format(task_name=notification.task_reaction.task.name)
         case Notification.FOR_FOLLOW:
             assert notification.following is not None
             related_user = notification.following.follower
