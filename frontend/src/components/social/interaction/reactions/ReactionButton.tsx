@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react"
 import styled from "styled-components"
 
 import MildButton from "@components/common/MildButton"
+import AnimatedCount from "@components/social/interaction/reactions/AnimatedCount"
 
 import type { Emoji, TaskReaction } from "@api/social.api"
 import type { User } from "@api/users.api"
@@ -77,7 +78,7 @@ export default function ReactionButton({
             {group.imageEmoji === null && (
                 <UnicodeEmoji>{group.emojiName}</UnicodeEmoji>
             )}
-            <EmojiCount $selected={selected}>{correctedCount}</EmojiCount>
+            <AnimatedCount count={correctedCount} selected={selected} />
             <Tooltip>
                 {group.imageEmoji && (
                     <div>
@@ -212,17 +213,6 @@ const Img = styled.img`
 
 const UnicodeEmoji = styled.p`
     font-size: 1.2em;
-`
-
-const EmojiCount = styled.p<{ $selected?: boolean }>`
-    font-weight: 600;
-    min-width: 0.9em;
-    text-align: right;
-
-    color: ${(p) =>
-        p.$selected ? p.theme.social.activeColor : p.theme.textColor};
-
-    transition: color 0.1s ease;
 `
 
 export const ReactionButtonGroup = styled.div`
