@@ -15,7 +15,7 @@ import themes from "@assets/themes"
 
 const KEY_CLIENT_SETTINGS = "client_settings"
 
-interface Setting {
+export interface ClientSetting {
     startpage: "home" | "today"
     delete_task_after_alert: boolean
 
@@ -38,7 +38,7 @@ interface Setting {
     close_sidebar_on_startup: boolean
 }
 
-const defaultSettings: Setting = {
+const defaultSettings: ClientSetting = {
     startpage: "home",
     delete_task_after_alert: true,
     locale: "system",
@@ -58,7 +58,7 @@ export const getClientSettings = () => {
 
     try {
         return (
-            (savedSettings && (JSON.parse(savedSettings) as Setting)) ||
+            (savedSettings && (JSON.parse(savedSettings) as ClientSetting)) ||
             defaultSettings
         )
     } catch {
@@ -67,8 +67,8 @@ export const getClientSettings = () => {
 }
 
 export const setClientSettingsByName = <
-    K extends keyof Setting,
-    V extends Setting[K],
+    K extends keyof ClientSetting,
+    V extends ClientSetting[K],
 >(
     name: K,
     value: V,
@@ -87,15 +87,15 @@ export const initClientSettings = () => {
     localStorage.setItem(KEY_CLIENT_SETTINGS, JSON.stringify(settings))
 }
 
-function dummyUpdateSetting<K extends keyof Setting, V extends Setting[K]>(
-    _k: K,
-    _v: V,
-) {}
+function _dummyUpdateSetting<
+    K extends keyof ClientSetting,
+    V extends ClientSetting[K],
+>(_k: K, _v: V) {}
 
 const ClientSettingContext = createContext([
     defaultSettings,
-    dummyUpdateSetting,
-] as [Setting, typeof dummyUpdateSetting])
+    _dummyUpdateSetting,
+] as [ClientSetting, typeof _dummyUpdateSetting])
 
 export const ClientSettingProvider = ({
     children,
@@ -105,7 +105,10 @@ export const ClientSettingProvider = ({
     const [setting, setSetting] = useState(getClientSettings())
 
     const updateSetting = useCallback(
-        <K extends keyof Setting, V extends Setting[K]>(key: K, val: V) => {
+        <K extends keyof ClientSetting, V extends ClientSetting[K]>(
+            key: K,
+            val: V,
+        ) => {
             setClientSettingsByName(key, val)
             setSetting(getClientSettings())
         },
@@ -113,7 +116,11 @@ export const ClientSettingProvider = ({
     )
 
     const providerValue = useMemo(
-        () => [setting, updateSetting] as [Setting, typeof dummyUpdateSetting],
+        () =>
+            [setting, updateSetting] as [
+                ClientSetting,
+                typeof _dummyUpdateSetting,
+            ],
         [setting, updateSetting],
     )
 
