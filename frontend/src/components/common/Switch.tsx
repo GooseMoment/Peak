@@ -1,16 +1,13 @@
+import type { InputHTMLAttributes } from "react"
+
 import styled from "styled-components"
 
 /**
  * input type="checkbox"를 스타일링하는 토글 스위치
- * @param {Object} props - input type="checkbox"의 모든 props를 수용합니다.
- * @param {boolean} checked
- * @param {Function} onChange
  */
-const Switch = (props) => {
-    const onClick = props?.onClick
-
+const Switch = (props: InputHTMLAttributes<HTMLInputElement>) => {
     return (
-        <Label onClick={onClick}>
+        <Label>
             <Checkbox {...props} type="checkbox" />
             <Slider />
         </Label>
