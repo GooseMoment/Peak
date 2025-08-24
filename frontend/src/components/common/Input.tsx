@@ -1,10 +1,17 @@
-import { type InputHTMLAttributes } from "react"
+import type { InputHTMLAttributes } from "react"
 
 import styled, { css } from "styled-components"
 
 import FeatherIcon, { type FeatherIconName } from "feather-icons-react"
 
-interface InputProp extends InputHTMLAttributes<HTMLInputElement> {
+interface StyledInputProp {
+    $width?: string
+    $hasIcon: boolean
+}
+
+interface InputProp
+    extends InputHTMLAttributes<HTMLInputElement>,
+        Omit<StyledInputProp, "$hasIcon"> {
     icon?: FeatherIconName
 }
 
@@ -28,11 +35,6 @@ const Box = styled.p`
     box-sizing: border-box;
     clear: both;
 `
-
-interface StyledInputProp {
-    $width?: string
-    $hasIcon: boolean
-}
 
 const StyledInput = styled.input<StyledInputProp>`
     width: ${(p) => p.$width || "100%"};

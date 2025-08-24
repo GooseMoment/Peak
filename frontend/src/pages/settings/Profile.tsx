@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { type FormEvent, type MouseEvent, useEffect, useState } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -6,18 +6,19 @@ import styled, { useTheme } from "styled-components"
 import Button, { ButtonGroup } from "@components/common/Button"
 import Input from "@components/common/Input"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
+import MildButton from "@components/common/MildButton"
 import ModalWindow from "@components/common/ModalWindow"
 import Color from "@components/project/edit/Color"
 import ProfileImg from "@components/settings/ProfileImg"
 import Section, { Name, Value, ValueError } from "@components/settings/Section"
 
-import { getMe, patchUser } from "@api/users.api"
+import { type User, getMe, patchUser } from "@api/users.api"
 
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
-import { getPaletteColor } from "@assets/palettes"
+import { type PaletteColorName, getPaletteColor } from "@assets/palettes"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -38,19 +39,21 @@ const Profile = () => {
         queryFn: getMe,
     })
 
-    const [headerColor, setHeaderColor] = useState({
-        color: user?.header_color,
-    })
+    const [headerColor, setHeaderColor] = useState<{ color: PaletteColorName }>(
+        {
+            color: "grey",
+        },
+    )
     const [paletteOpen, setPaletteOpen] = useState(false)
 
     const mutation = useMutation({
-        mutationFn: (data) => {
+        mutationFn: (data: Partial<User>) => {
             return patchUser(data)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["users", "me"] })
             queryClient.invalidateQueries({
-                queryKey: ["users", user.username],
+                queryKey: ["users", user?.username],
             })
             toast.success(t("profile_edited"))
         },
@@ -60,18 +63,34 @@ const Profile = () => {
     })
 
     useEffect(() => {
-        setHeaderColor({ color: user?.header_color })
+        if (user) {
+            setHeaderColor({ color: user.header_color })
+        }
     }, [user])
 
-    const onClickOpenPalette = (e) => {
+    const onClickOpenPalette = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         setPaletteOpen(true)
     }
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const formData = new FormData(e.target)
-        mutation.mutate(formData)
+        const form = e.currentTarget
+        const fd = new FormData(form)
+
+        const payload: Partial<User> = {}
+
+        const displayName = fd.get("display_name")
+        if (typeof displayName === "string") payload.display_name = displayName
+
+        const bio = fd.get("bio")
+        if (typeof bio === "string") payload.bio = bio
+
+        const headerColor = fd.get("header_color")
+        if (typeof headerColor === "string")
+            payload.header_color = headerColor as PaletteColorName
+
+        mutation.mutate(payload)
     }
 
     if (isPending) {
@@ -109,7 +128,7 @@ const Profile = () => {
                         <Input
                             name="display_name"
                             type="text"
-                            maxLength="18"
+                            maxLength={18}
                             defaultValue={user.display_name}
                             placeholder={t("display_name_placeholder")}
                             $width={isDesktop ? "30em" : "100%"}
@@ -122,7 +141,7 @@ const Profile = () => {
                         <Bio
                             autoComplete="off"
                             name="bio"
-                            maxLength="150"
+                            maxLength={150}
                             defaultValue={user.bio}
                             placeholder={t("bio_placeholder")}
                         />
@@ -219,7 +238,7 @@ const Bio = styled.textarea`
     }
 `
 
-const ColorButton = styled.div`
+const ColorButton = styled(MildButton)<{ $color: string }>`
     border-radius: 64px;
     border: 1.5px solid ${(p) => p.theme.secondBackgroundColor};
     aspect-ratio: 3/1;
