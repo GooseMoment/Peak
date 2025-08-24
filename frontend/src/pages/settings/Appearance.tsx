@@ -8,7 +8,7 @@ import Switch from "@components/settings/SettingSwitch"
 
 import useScreenType from "@utils/useScreenType"
 
-import { TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const Appearance = () => {
