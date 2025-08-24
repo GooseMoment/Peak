@@ -98,10 +98,10 @@
         },
         "follow_list_privacy": {
             "name": "Visibility of my followings & followers list",
-            "description": "You can set who can see your personal connections.",
+            "description": "Choose who can see your followers and following lists. Everyone can still see the follower and following counts.",
             "values": {
                 "public": "Everyone",
-                "protected": "Limit to my followers",
+                "protected": "My followers",
                 "private": "Only me"
             }
         },
