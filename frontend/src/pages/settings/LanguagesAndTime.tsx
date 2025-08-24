@@ -6,6 +6,7 @@ import Switch from "@components/settings/SettingSwitch"
 
 import timezonesData from "@assets/settings/timezones.json"
 
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const browserTz = Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -58,23 +59,25 @@ const LanguagesAndTime = () => {
     )
 }
 
-const languageNames = (code) => {
+const languageNames = (code: string) => {
     return new Intl.DisplayNames([code], {
         type: "language",
     }).of(code)
 }
 
-const makeLanguageChoices = (t) => [
+const makeLanguageChoices = (
+    t: TFunction<"settings", "languages_and_time">,
+) => [
     {
         display: t("locale.system") + ` (${languageNames(navigator.language)})`,
         value: "system",
     },
     {
-        display: languageNames("en"),
+        display: languageNames("en")!,
         value: "en",
     },
     {
-        display: languageNames("ko"),
+        display: languageNames("ko")!,
         value: "ko",
     },
 ]
