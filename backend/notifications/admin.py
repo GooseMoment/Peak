@@ -27,7 +27,6 @@ class NotificationAdmin(admin.ModelAdmin):
     autocomplete_fields = [
         "user",
         "task_reminder",
-        "reaction",
         "task_reaction",
         "following",
         "peck",
@@ -45,7 +44,6 @@ class NotificationAdmin(admin.ModelAdmin):
             {
                 "fields": [
                     "task_reminder",
-                    "reaction",
                     "task_reaction",
                     "following",
                     "peck",

@@ -7,10 +7,6 @@ translation = {
             "body": "{delta}분 남았습니다.",
             "body_now": "작업할 시간입니다.",
         },
-        Notification.FOR_REACTION: {
-            "title": ":{emoji}: @{username}",
-            "body": "RE: {parent}",
-        },
         Notification.FOR_TASK_REACTION: {
             "title": ":{emoji}: by @{username}",
             "body": "RE: {task_name}",

@@ -1,13 +1,7 @@
 import client from "@api/client"
 import type { Base, PaginationData } from "@api/common"
-import type {
-    Comment,
-    Following,
-    Peck,
-    Reaction,
-    TaskReaction,
-} from "@api/social.api"
-import { type User } from "@api/users.api"
+import type { Comment, Following, Peck, TaskReaction } from "@api/social.api"
+import type { User } from "@api/users.api"
 
 import {
     getClientSettings,
@@ -54,12 +48,6 @@ export interface NotificationTaskReminder extends Base {
     task_reminder: TaskReminder
 }
 
-export interface NotificationReaction extends Base {
-    user: User
-    type: "reaction"
-    reaction: Reaction
-}
-
 export interface NotificationTaskReaction extends Base {
     user: User
     type: "task_reaction"
@@ -86,7 +74,6 @@ export interface NotificationComment extends Base {
 
 export type Notification =
     | NotificationTaskReminder
-    | NotificationReaction
     | NotificationTaskReaction
     | NotificationFollowing
     | NotificationPeck
@@ -107,7 +94,6 @@ export const getNotifications = async (
 
 export const getRelatedUserFromNotification = (notification: Notification) => {
     return (
-        (notification.type === "reaction" && notification.reaction.user) ||
         (notification.type === "task_reaction" &&
             notification.task_reaction.user) ||
         (notification.type === "peck" && notification.peck.user) ||

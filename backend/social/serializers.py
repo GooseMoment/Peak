@@ -6,7 +6,6 @@ from .models import (
     Quote,
     TaskReaction,
     Remark,
-    Reaction,
     Peck,
     Comment,
     Following,
@@ -125,18 +124,6 @@ class DailyLogDrawerSerializer(DrawerSerializer):
 
     class Meta(DrawerSerializer.Meta):
         fields = DrawerSerializer.Meta.fields + ["color"]
-
-
-class ReactionSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-    emoji = EmojiSerializer(many=False, read_only=True)
-
-    task = TaskSerializer()
-    quote = QuoteSerializer()
-
-    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
-        model = Reaction
-        fields = ["id", "user", "parent_type", "task", "quote", "emoji"]
 
 
 class TaskReactionSerializer(serializers.ModelSerializer):

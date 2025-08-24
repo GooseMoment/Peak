@@ -31,27 +31,6 @@ export interface Remark extends Base {
     date: string
 }
 
-/**
- * @deprecated use {@link TaskReaction} instead
- */
-export interface ReactionTask extends Base {
-    user: User
-    parent_type: "task"
-    // TODO: replace Task
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    task: any
-    emoji: Emoji
-}
-
-export interface ReactionQuote extends Base {
-    user: User
-    parent_type: "quote"
-    quote: Quote
-    emoji: Emoji
-}
-
-export type Reaction = ReactionTask | ReactionQuote
-
 export interface TaskReactionUnicodeEmoji extends Base {
     user: User
     // TODO: replace Task
@@ -301,47 +280,6 @@ export const getEmojis = async () => {
     return res.data.results
 }
 
-export const getReactions = async (
-    parentType: Reaction["parent_type"],
-    parentID: string, // TODO: replace string with Task["id"] | Quote["id"]
-) => {
-    const res = await client.get<PaginationData<Reaction>>(
-        `social/reactions/${parentType}/${parentID}/`,
-    )
-
-    return res.data
-}
-
-export const postReaction = async (
-    parentType: Reaction["parent_type"],
-    parentID: string,
-    emoji: Emoji["name"], // TODO: replace Emoji["name"] with Emoji
-) => {
-    const res = await client.post<Reaction>(
-        `social/reactions/${parentType}/${parentID}/`,
-        {
-            emoji: emoji,
-        },
-    )
-
-    return res.data
-}
-
-export const deleteReaction = async (
-    parentType: Reaction["parent_type"],
-    parentID: string,
-    emoji: Emoji["name"],
-) => {
-    const params = new URLSearchParams({ emoji: emoji })
-
-    const res = await client.delete(
-        `social/reactions/${parentType}/${parentID}/`,
-        { params },
-    )
-
-    return res.status
-}
-
 export const getTaskReactions = async (taskID: string) => {
     const res = await client.get<TaskReaction[]>(
         `tasks/${taskID}/reactions/`,
@@ -372,7 +310,7 @@ export const postTaskReaction = async (
 }
 
 export const deleteTaskReaction = async (reactionID: TaskReaction["id"]) => {
-    await client.delete(`social/reactions/${reactionID}/`)
+    await client.delete(`social/task_reactions/${reactionID}/`)
 }
 
 export const getPeck = async (taskID: string) => {

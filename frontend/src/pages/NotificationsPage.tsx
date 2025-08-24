@@ -250,7 +250,6 @@ const makeFilters = (
         display: t("type_all"),
         types: [
             "task_reminder",
-            "reaction",
             "task_reaction",
             "follow",
             "follow_request",
@@ -269,7 +268,7 @@ const makeFilters = (
     },
     reactions: {
         display: t("type_reactions"),
-        types: ["reaction", "task_reaction"],
+        types: ["task_reaction"],
     },
     pecking: {
         display: t("type_pecking"),

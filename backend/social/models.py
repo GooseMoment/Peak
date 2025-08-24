@@ -82,46 +82,6 @@ class Remark(Base):
         ]
 
 
-class Reaction(Base):
-    FOR_TASK = "task"
-    FOR_QUOTE = "quote"
-
-    REACTION_TYPE = [
-        (FOR_TASK, "For task"),
-        (FOR_QUOTE, "For quote"),
-    ]
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-    )
-    parent_type = models.CharField(choices=REACTION_TYPE, max_length=128)
-    task = models.ForeignKey(
-        Task,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-    quote = models.ForeignKey(
-        Quote,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-    emoji = models.ForeignKey(
-        Emoji,
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE,
-    )
-
-    def __str__(self) -> str:
-        return f"{self.emoji} by {self.user} → {self.quote or self.task}"
-
-    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
-        db_table = "reactions"
-
-
 class ReactionBase(Base):
     user = models.ForeignKey(
         User,

@@ -4,7 +4,6 @@ from .models import (
     Peck,
     Quote,
     Remark,
-    Reaction,
     TaskReaction,
     Comment,
     Following,
@@ -76,29 +75,6 @@ class QuoteAdmin(admin.ModelAdmin):
             None,
             {
                 "fields": ["user", "content", "date"],
-            },
-        ),
-        fieldset_base,
-    ]
-
-
-@admin.register(Reaction)
-class ReactionAdmin(admin.ModelAdmin):
-    ordering = ["-updated_at"]
-    search_fields = ["user__username", "emoji"]
-    autocomplete_fields = ["user", "task", "quote", "emoji"]
-    readonly_fields = readonly_fields_base
-    fieldsets = [
-        (
-            None,
-            {
-                "fields": ["user", "parent_type", "emoji"],
-            },
-        ),
-        (
-            "Payloads",
-            {
-                "fields": ["task", "quote"],
             },
         ),
         fieldset_base,

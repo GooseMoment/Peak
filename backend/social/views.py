@@ -21,7 +21,6 @@ from .models import (
     Quote,
     TaskReaction,
     Remark,
-    Reaction,
     Peck,
     Comment,
     Following,
@@ -35,7 +34,6 @@ from .serializers import (
     QuoteSerializer,
     TaskReactionSerializer,
     RemarkSerializer,
-    ReactionSerializer,
     PeckSerializer,
     CommentSerializer,
     FollowingSerializer,
@@ -576,112 +574,6 @@ def get_following_feed(request: Request, date):
     pass
 
 
-class ReactionView(APIView):
-    def get(self, request, type, id):
-        user = request.user
-
-        if type == Reaction.FOR_TASK:
-            task = get_object_or_404(Task, id=id)
-            reactions = Reaction.objects.filter(
-                parent_type=Reaction.FOR_TASK, task=task
-            ).order_by("created_at")
-        elif type == Reaction.FOR_QUOTE:
-            quote = get_object_or_404(Quote, id=id)
-            reactions = Reaction.objects.filter(
-                parent_type=Reaction.FOR_QUOTE, quote=quote
-            ).order_by("created_at")
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        reactionCountsDir = dict()
-        myReactions = []
-        for reaction in reactions:
-            if reaction.emoji is None:
-                continue
-
-            if reaction.user == user:
-                myReactions.append(EmojiSerializer(reaction.emoji).data)
-
-            emoji_id = str(reaction.emoji.id)
-            reactionNum = reactionCountsDir.get(emoji_id)
-            if reactionNum:
-                reactionCountsDir[emoji_id]["counts"] = reactionNum["counts"] + 1
-            else:
-                reactionCountsDir[emoji_id] = {
-                    "emoji": EmojiSerializer(reaction.emoji).data,
-                    "counts": 1,
-                }
-
-        serializer = ReactionSerializer(reactions, many=True)
-
-        data = {
-            "reactions": serializer.data,
-            "reaction_counts": reactionCountsDir,
-            "my_reactions": myReactions,
-        }
-
-        return Response(data, status=status.HTTP_200_OK)
-
-    def post(self, request: Request, type, id):
-        # TODO: Need to check block
-        emoji_name = request.data.get("emoji")
-        emoji = get_object_or_404(Emoji, name=emoji_name)
-        user = request.user
-
-        if type == Reaction.FOR_TASK:
-            task = get_object_or_404(Task, id=id)
-            reaction, created = Reaction.objects.get_or_create(
-                user=user, parent_type=Reaction.FOR_TASK, task=task, emoji=emoji
-            )
-
-        elif type == Reaction.FOR_QUOTE:
-            quote = get_object_or_404(Quote, id=id)
-            reaction, created = Reaction.objects.get_or_create(
-                user=user, parent_type=Reaction.FOR_QUOTE, quote=quote, emoji=emoji
-            )
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        if not created:
-            return Response(status=status.HTTP_208_ALREADY_REPORTED)
-
-        serializer = ReactionSerializer(reaction)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def delete(self, request, type, id):
-        emoji_name = request.GET.get("emoji")
-        emoji = get_object_or_404(Emoji, name=emoji_name)
-
-        # emoji = Emoji.objects.filter(id=emoji_id).first()
-
-        user = request.user
-
-        if type == Reaction.FOR_TASK:
-            task = get_object_or_404(Task, id=id)
-            reaction = get_object_or_404(
-                Reaction,
-                user=user,
-                parent_type=Reaction.FOR_TASK,
-                task=task,
-                emoji=emoji,
-            )
-        elif type == Reaction.FOR_QUOTE:
-            quote = get_object_or_404(Quote, id=id)
-            reaction = get_object_or_404(
-                Reaction,
-                user=user,
-                parent_type=Reaction.FOR_QUOTE,
-                quote=quote,
-                emoji=emoji,
-            )
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        reaction.delete()
-
-        return Response(status=status.HTTP_200_OK)
-
-
 class TaskReactionList(generics.GenericAPIView):
     queryset = TaskReaction.objects.all()
     serializer_class = TaskReactionSerializer
@@ -802,12 +694,12 @@ class CommentView(APIView):
         if type == Comment.FOR_TASK:
             task = get_object_or_404(Task, id=id)
             comments = Comment.objects.filter(
-                parent_type=Reaction.FOR_TASK, task=task
+                parent_type=Comment.FOR_TASK, task=task
             ).order_by("-created_at")
         else:
             quote = get_object_or_404(Quote, id=id)
             comments = Comment.objects.filter(
-                parent_type=Reaction.FOR_QUOTE, quote=quote
+                parent_type=Comment.FOR_QUOTE, quote=quote
             ).order_by("-created_at")
 
         serializer = CommentSerializer(comments, many=True)
@@ -822,12 +714,12 @@ class CommentView(APIView):
         if type == Comment.FOR_TASK:
             task = get_object_or_404(Task, id=id)
             created = Comment.objects.create(
-                user=user, parent_type=Reaction.FOR_TASK, task=task, comment=comment
+                user=user, parent_type=Comment.FOR_TASK, task=task, comment=comment
             )
         elif type == Comment.FOR_QUOTE:
             quote = get_object_or_404(Quote, id=id)
             created = Comment.objects.create(
-                user=user, parent_type=Reaction.FOR_QUOTE, quote=quote, comment=comment
+                user=user, parent_type=Comment.FOR_QUOTE, quote=quote, comment=comment
             )
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)

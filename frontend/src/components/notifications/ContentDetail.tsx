@@ -2,8 +2,8 @@ import { Link } from "react-router-dom"
 
 import styled, { css } from "styled-components"
 
-import { type Notification } from "@api/notifications.api"
-import { type Quote } from "@api/social.api"
+import type { Notification } from "@api/notifications.api"
+import type { Quote } from "@api/social.api"
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 import { ifMobile } from "@utils/useScreenType"
@@ -58,34 +58,6 @@ const ContentDetail = ({ notification: n }: { notification: Notification }) => {
                         </DetailLink>
                         <DetailLink to="/app/social/following">
                             RE:{" "}
-                            {t("content_comment_quote", {
-                                date: displayDate,
-                            })}
-                        </DetailLink>
-                    </DetailBox>
-                )
-            }
-        case "reaction":
-            if (n.reaction.parent_type === "task") {
-                return (
-                    <DetailBox>
-                        <DetailLink to={getPathToTaskDetail(n.reaction.task)}>
-                            <ParentContent>
-                                {n.reaction.task.name}
-                            </ParentContent>
-                        </DetailLink>
-                    </DetailBox>
-                )
-            } else {
-                const displayDate = getDisplayDateFromQuote(
-                    n.reaction.quote,
-                    locale,
-                    tz,
-                )
-
-                return (
-                    <DetailBox>
-                        <DetailLink to="/app/social/following">
                             {t("content_comment_quote", {
                                 date: displayDate,
                             })}

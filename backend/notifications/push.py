@@ -2,7 +2,7 @@ from django.conf import settings
 
 from users.models import User
 from .models import Notification, WebPushSubscription
-from social.models import Reaction, Comment
+from social.models import Comment
 from .locale import get_translations
 
 from pywebpush import webpush, WebPushException
@@ -49,34 +49,12 @@ def _notificationToPushData(notification: Notification, locale: str) -> PushData
     match notification.type:
         case Notification.FOR_TASK_REMINDER:
             assert notification.task_reminder is not None
-
             t = t[Notification.FOR_TASK_REMINDER]
             data.title = t["title"].format(task=notification.task_reminder.task.name)
-
             if notification.task_reminder.delta == 0:
                 data.body = t["body_now"]
             else:
                 data.body = t["body"].format(delta=notification.task_reminder.delta)
-
-        case Notification.FOR_REACTION:
-            assert notification.reaction is not None
-            assert notification.reaction.emoji is not None
-
-            parent: str = ""
-            related_user = notification.reaction.user
-
-            if notification.reaction.parent_type == Reaction.FOR_QUOTE:
-                assert notification.reaction.quote is not None
-                parent = notification.reaction.quote.content
-            else:
-                assert notification.reaction.task is not None
-                parent = notification.reaction.task.name
-
-            t = t[Notification.FOR_REACTION]
-            data.title = t["title"].format(
-                emoji=notification.reaction.emoji.name, username=related_user.username
-            )
-            data.body = t["body"].format(parent=parent)
         case Notification.FOR_TASK_REACTION:
             assert notification.task_reaction is not None
             t = t[Notification.FOR_TASK_REACTION]
