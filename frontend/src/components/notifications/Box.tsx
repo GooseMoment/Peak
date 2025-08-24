@@ -38,6 +38,9 @@ const Box = forwardRef(function BoxInternal(
                 emoji={
                     (notification.type === "reaction" &&
                         notification.reaction.emoji) ||
+                    (notification.type === "task_reaction" &&
+                        (notification.task_reaction.image_emoji ||
+                            notification.task_reaction.unicode_emoji)) ||
                     undefined
                 }
             />

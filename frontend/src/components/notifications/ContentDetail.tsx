@@ -93,6 +93,16 @@ const ContentDetail = ({ notification: n }: { notification: Notification }) => {
                     </DetailBox>
                 )
             }
+        case "task_reaction":
+            return (
+                <DetailBox>
+                    <DetailLink to={getPathToTaskDetail(n.task_reaction.task)}>
+                        <ParentContent>
+                            {n.task_reaction.task.name}
+                        </ParentContent>
+                    </DetailLink>
+                </DetailBox>
+            )
         case "peck": {
             return (
                 <DetailBox>
