@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react"
+import { type TouchEvent, useEffect, useMemo, useState } from "react"
+import { useRef } from "react"
 
 import styled from "styled-components"
 
@@ -25,6 +26,9 @@ export default function ReactionButton({
     const [selected, setSelected] = useState(
         group.currentUserReactionID !== undefined,
     )
+
+    const [mobileHovered, setMobileHovered] = useState(false)
+    const mobileHoveredTimeout = useRef<NodeJS.Timeout | null>(null)
 
     useEffect(() => {
         setSelected(group.currentUserReactionID !== undefined)
@@ -53,12 +57,35 @@ export default function ReactionButton({
         return group.count
     }, [group.count, group.currentUserReactionID, selected])
 
+    const onTouchStart = (e: TouchEvent) => {
+        e.preventDefault()
+
+        if (mobileHoveredTimeout.current) {
+            clearTimeout(mobileHoveredTimeout.current)
+        }
+
+        mobileHoveredTimeout.current = setTimeout(() => {
+            setMobileHovered(true)
+        }, 300)
+    }
+
+    const onTouchEnd = () => {
+        if (mobileHoveredTimeout.current) {
+            clearTimeout(mobileHoveredTimeout.current)
+        }
+        setMobileHovered(false)
+    }
+
     if (correctedCount === 0) {
         return null
     }
 
     return (
-        <ReactionButtonContainer onClick={onClick} $selected={selected}>
+        <ReactionButtonContainer
+            onClick={onClick}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+            $selected={selected}>
             {group.imageEmoji && (
                 <Img
                     draggable="false"
@@ -70,7 +97,7 @@ export default function ReactionButton({
                 <UnicodeEmoji>{group.emojiName}</UnicodeEmoji>
             )}
             <AnimatedCount count={correctedCount} selected={selected} />
-            <ReactionGroupTooltip group={group} />
+            <ReactionGroupTooltip group={group} visible={mobileHovered} />
         </ReactionButtonContainer>
     )
 }
@@ -100,20 +127,28 @@ export const ReactionButtonContainer = styled(MildButton)<{
         background-color 0.1s ease,
         border-color 0.1s ease;
 
-    &:hover ${TooltipBox} {
-        opacity: 1;
-        visibility: visible;
-        bottom: 40px;
+    @media (hover: hover) {
+        &:hover ${TooltipBox} {
+            opacity: 1;
+            visibility: visible;
+            bottom: 40px;
+        }
     }
 `
 
 const Img = styled.img`
     height: 1.3em;
     min-width: 1.3em;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
 `
 
 const UnicodeEmoji = styled.p`
     font-size: 1.2em;
+    user-select: none;
+    -webkit-user-select: none;
 `
 
 export const ReactionButtonGroup = styled.div`

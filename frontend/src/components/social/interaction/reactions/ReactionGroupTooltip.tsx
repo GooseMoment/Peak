@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 import type { Emoji, TaskReaction } from "@api/social.api"
 import type { User } from "@api/users.api"
@@ -15,12 +15,14 @@ export interface TaskReactionGroup {
 
 export default function ReactionGroupTooltip({
     group,
+    visible,
 }: {
     group: TaskReactionGroup
+    visible?: boolean
 }) {
     const { t } = useTranslation("translation")
     return (
-        <TooltipBox>
+        <TooltipBox $visible={visible}>
             {group.imageEmoji && (
                 <div>
                     <TooltipImg
@@ -53,11 +55,10 @@ export default function ReactionGroupTooltip({
     )
 }
 
-export const TooltipBox = styled.div`
+export const TooltipBox = styled.div<{ $visible?: boolean }>`
     pointer-events: none;
 
     position: absolute;
-    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     padding: 6px 10px;
@@ -69,9 +70,19 @@ export const TooltipBox = styled.div`
     align-items: center;
     gap: 1em;
 
+    transition: all 0.2s ease;
+
     opacity: 0;
     visibility: hidden;
-    transition: all 0.2s ease;
+    bottom: 30px;
+
+    ${(p) =>
+        p.$visible &&
+        css`
+            opacity: 1;
+            visibility: visible;
+            bottom: 40px;
+        `}
 `
 
 const TooltipImgName = styled.p`

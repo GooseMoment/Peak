@@ -62,6 +62,8 @@ const Wrapper = styled.span<{ $selected?: boolean }>`
         font-weight: 600;
         min-width: 0.9em;
         text-align: right;
+        user-select: none;
+        -webkit-user-select: none;
 
         color: ${(p) =>
             p.$selected ? p.theme.social.activeColor : p.theme.textColor};
