@@ -150,10 +150,3 @@ const UnicodeEmoji = styled.p`
     user-select: none;
     -webkit-user-select: none;
 `
-
-export const ReactionButtonGroup = styled.div`
-    margin-left: auto;
-    display: flex;
-    gap: 0.5em;
-    flex-wrap: wrap;
-`
