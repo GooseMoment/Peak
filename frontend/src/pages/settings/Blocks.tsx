@@ -30,7 +30,7 @@ const Blocks = () => {
         queryKey: ["blocks"],
         queryFn: ({ pageParam }) => getBlocks(pageParam),
         refetchOnWindowFocus: false,
-        initialPageParam: 1,
+        initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
     const isEmpty = data?.pages[0]?.results?.length === 0
@@ -46,7 +46,7 @@ const Blocks = () => {
                     {isFetching &&
                         !isFetchingNextPage &&
                         [...Array(10)].map((_, i) => (
-                            <ListUserProfile key={i} skeleton />
+                            <ListUserProfile key={i} />
                         ))}
                     {isEmpty && <Message>{t("blockees.empty")}</Message>}
                     {data?.pages.map((group) =>
@@ -60,7 +60,7 @@ const Blocks = () => {
                         <ImpressionArea
                             onImpressionStart={() => fetchNextPage()}
                             timeThreshold={200}>
-                            <ListUserProfile skeleton />
+                            <ListUserProfile />
                         </ImpressionArea>
                     )}
                 </Value>

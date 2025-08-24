@@ -5,17 +5,18 @@ import { useMutation } from "@tanstack/react-query"
 import Button from "@components/common/Button"
 
 import { deleteBlock, putBlock } from "@api/social.api"
+import type { User } from "@api/users.api"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const UnblockButton = ({ user }) => {
+export default function UnblockButton({ user }: { user: User }) {
     const { t } = useTranslation("settings", { keyPrefix: "blocks" })
 
     const [blocked, setBlocked] = useState(true)
 
     const mutation = useMutation({
-        mutationFn: ({ prev }) => {
+        mutationFn: ({ prev }: { prev: boolean }) => {
             if (prev) {
                 // if blocked
                 return deleteBlock(user.username)
@@ -27,7 +28,7 @@ const UnblockButton = ({ user }) => {
             setBlocked(!blocked)
         },
         onError: () => {
-            toast.error(t("error"))
+            toast.error(t("blockees.error"))
         },
     })
 
@@ -42,5 +43,3 @@ const UnblockButton = ({ user }) => {
         </Button>
     )
 }
-
-export default UnblockButton
