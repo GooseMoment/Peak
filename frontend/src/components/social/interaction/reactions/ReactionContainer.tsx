@@ -143,7 +143,7 @@ export default function ReactionContainer({ task }: { task: any }) {
     )
 }
 
-const ReactionButtonGroup = styled.div`
+export const ReactionButtonGroup = styled.div`
     margin-left: auto;
     display: flex;
     gap: 0.5em;

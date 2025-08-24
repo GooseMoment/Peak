@@ -5,9 +5,8 @@ import { DefaultTheme, useTheme } from "styled-components"
 
 import SubSection from "@components/intro/SubSection"
 import EmojiPickerButton from "@components/social/interaction/reactions/EmojiPickerButton"
-import ReactionButton, {
-    ReactionButtonGroup,
-} from "@components/social/interaction/reactions/ReactionButton"
+import ReactionButton from "@components/social/interaction/reactions/ReactionButton"
+import { ReactionButtonGroup } from "@components/social/interaction/reactions/ReactionContainer"
 import type { TaskReactionGroup } from "@components/social/interaction/reactions/ReactionGroupTooltip"
 import TaskFrame from "@components/tasks/TaskFrame"
 
