@@ -5,14 +5,7 @@ import styled from "styled-components"
 import type { UserSetting } from "@api/user_setting.api"
 
 import { type ClientSetting, useClientSetting } from "@utils/clientSettings"
-
-type StringLiteralKeysOf<T> = {
-    [K in keyof T]-?: NonNullable<T[K]> extends string
-        ? string extends NonNullable<T[K]>
-            ? never
-            : K
-        : never
-}[keyof T]
+import { StringLiteralKeysOf } from "@utils/utility"
 
 type SelectProps<K extends StringLiteralKeysOf<ClientSetting>> =
     | {

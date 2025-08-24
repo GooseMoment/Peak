@@ -5,16 +5,10 @@ import Switch from "@components/common/Switch"
 import type { UserSetting } from "@api/user_setting.api"
 
 import { type ClientSetting, useClientSetting } from "@utils/clientSettings"
+import { BooleanKeysOf } from "@utils/utility"
 
 interface ClientSettingSwitchProps {
-    // ClientSetting key whose value type is boolean
-    name: {
-        [K in keyof ClientSetting]-?: NonNullable<
-            ClientSetting[K]
-        > extends boolean
-            ? K
-            : never
-    }[keyof ClientSetting]
+    name: BooleanKeysOf<ClientSetting>
 }
 
 export default function ClientSettingSwitch({
@@ -30,11 +24,7 @@ export default function ClientSettingSwitch({
 }
 
 interface UserSettingSwitchProps {
-    name: {
-        [K in keyof UserSetting]-?: NonNullable<UserSetting[K]> extends boolean
-            ? K
-            : never
-    }[keyof UserSetting]
+    name: BooleanKeysOf<UserSetting>
     userSetting: UserSetting
     submit: (data: Partial<UserSetting>) => void
 }
