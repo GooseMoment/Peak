@@ -9,6 +9,7 @@ import Select from "@components/settings/Select"
 import SettingSwitch from "@components/settings/SettingSwitch"
 
 import FeatherIcon from "feather-icons-react"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const General = () => {
@@ -63,14 +64,14 @@ const General = () => {
     )
 }
 
-const makeStartpageChoices = (t) => [
+const makeStartpageChoices = (t: TFunction<"settings", "general">) => [
     {
         display: t("startpage.values.home"),
-        value: "home",
+        value: "home" as const,
     },
     {
         display: t("startpage.values.today"),
-        value: "today",
+        value: "today" as const,
     },
 ]
 
