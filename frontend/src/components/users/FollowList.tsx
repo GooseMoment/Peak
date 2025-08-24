@@ -26,7 +26,7 @@ const FollowList = ({ user, list }: FollowListProp) => {
 
     const { closeModal } = useModalWindowCloseContext()
 
-    const { data, isLoading, hasNextPage, fetchNextPage, isError } =
+    const { data, isPending, isError, isSuccess, hasNextPage, fetchNextPage } =
         useInfiniteQuery({
             queryKey: ["users", user.username, list],
             queryFn: ({ pageParam }) => {
@@ -56,15 +56,16 @@ const FollowList = ({ user, list }: FollowListProp) => {
                 </CloseButton>
             </TitleBar>
             <List>
-                {isLoading &&
+                {isPending &&
                     [...Array(10)].map((_, i) => <ListUserProfile key={i} />)}
                 {isError && <Message>{t("error")}</Message>}
                 {isEmpty && <Message>{t("empty")}</Message>}
-                {data?.pages.map((group) =>
-                    group.results.map((user) => (
-                        <ListUserProfile user={user} key={user.username} />
-                    )),
-                )}
+                {isSuccess &&
+                    data.pages.map((group) =>
+                        group.results.map((user) => (
+                            <ListUserProfile user={user} key={user.username} />
+                        )),
+                    )}
                 {hasNextPage && (
                     <ImpressionArea
                         onImpressionStart={() => fetchNextPage()}
