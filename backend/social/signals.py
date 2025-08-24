@@ -53,7 +53,7 @@ def accept_follow_request_based_on_user_setting(
         followee=instance.follower,
         follower=instance.followee,
         status=Following.ACCEPTED,
-    ).first()
+    ).exists()
 
     if not reversed_following_exists:
         return
