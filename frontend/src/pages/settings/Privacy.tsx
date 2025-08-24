@@ -79,19 +79,25 @@ const Privacy = () => {
                 </Value>
             </Section>
 
-            <Section>
-                <Name>{t("follow_request_approval_for_followings.name")}</Name>
-                <Description>
-                    {t("follow_request_approval_for_followings.description")}
-                </Description>
-                <Value>
-                    <UserSettingSwitch
-                        userSetting={settings}
-                        submit={mutation.mutate}
-                        name="follow_request_approval_for_followings"
-                    />
-                </Value>
-            </Section>
+            {settings.follow_request_approval_manually && (
+                <Section>
+                    <Name>
+                        {t("follow_request_approval_for_followings.name")}
+                    </Name>
+                    <Description>
+                        {t(
+                            "follow_request_approval_for_followings.description",
+                        )}
+                    </Description>
+                    <Value>
+                        <UserSettingSwitch
+                            userSetting={settings}
+                            submit={mutation.mutate}
+                            name="follow_request_approval_for_followings"
+                        />
+                    </Value>
+                </Section>
+            )}
 
             <Section>
                 <Name>{t("follow_list_privacy.name")}</Name>
