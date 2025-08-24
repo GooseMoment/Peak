@@ -206,6 +206,8 @@ class GenericUserList(generics.ListAPIView):
 
 
 class FollowingList(GenericUserList):
+    permission_classes = (permissions.FollowingListPermission,)
+
     def get_user_ids(self, username: str):
         return (
             Following.objects.filter(
