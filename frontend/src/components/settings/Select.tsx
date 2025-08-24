@@ -14,14 +14,22 @@ type StringLiteralKeysOf<T> = {
         : never
 }[keyof T]
 
-type SelectProps<K extends StringLiteralKeysOf<ClientSetting>> = {
-    // ClientSetting key whose value type is string literal union
-    name: K
-    choices: Array<{
-        display: string
-        value: ClientSetting[K]
-    }>
-}
+type SelectProps<K extends StringLiteralKeysOf<ClientSetting>> =
+    | {
+          // ClientSetting key whose value type is string literal union
+          name: K
+          choices: Array<{
+              display: string
+              value: ClientSetting[K]
+          }>
+      }
+    | {
+          name: "locale" | "timezone"
+          choices: Array<{
+              display: string
+              value: string
+          }>
+      }
 
 export default function Select<K extends StringLiteralKeysOf<ClientSetting>>({
     name,
