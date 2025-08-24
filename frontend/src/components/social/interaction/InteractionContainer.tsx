@@ -9,8 +9,8 @@ import EmojiPickerButton, {
 } from "@components/social/interaction/reactions/EmojiPickerButton"
 import ReactionButton, {
     ReactionButtonGroup,
-    TaskReactionGroup,
 } from "@components/social/interaction/reactions/ReactionButton"
+import type { TaskReactionGroup } from "@components/social/interaction/reactions/ReactionGroupTooltip"
 
 import { getCurrentUsername } from "@api/client"
 import {

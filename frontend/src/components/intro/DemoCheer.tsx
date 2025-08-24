@@ -7,8 +7,8 @@ import SubSection from "@components/intro/SubSection"
 import EmojiPickerButton from "@components/social/interaction/reactions/EmojiPickerButton"
 import ReactionButton, {
     ReactionButtonGroup,
-    TaskReactionGroup,
 } from "@components/social/interaction/reactions/ReactionButton"
+import type { TaskReactionGroup } from "@components/social/interaction/reactions/ReactionGroupTooltip"
 import TaskFrame from "@components/tasks/TaskFrame"
 
 import { getEmojis } from "@api/social.api"
