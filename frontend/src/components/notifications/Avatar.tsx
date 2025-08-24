@@ -24,7 +24,14 @@ const Avatar = ({
     return (
         <Container>
             {skeleton && <ProfileImgSkeleton />}
-            {relatedUser && <ProfileImg src={relatedUser.profile_img} />}
+            {relatedUser && (
+                <ProfileImg
+                    alt={relatedUser.username}
+                    title={relatedUser.username}
+                    src={relatedUser.profile_img}
+                    draggable="false"
+                />
+            )}
             {projectColor && (
                 <TaskReminderIconBox $color={projectColor}>
                     <FeatherIcon icon="clock" />
@@ -35,7 +42,12 @@ const Avatar = ({
                     {typeof emoji === "string" ? (
                         <EmojiContent>{emoji}</EmojiContent>
                     ) : (
-                        <EmojiImg draggable="false" src={emoji.img} />
+                        <EmojiImg
+                            alt={emoji.name}
+                            title={emoji.name}
+                            src={emoji.img}
+                            draggable="false"
+                        />
                     )}
                 </EmojiContainer>
             )}
