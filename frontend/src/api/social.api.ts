@@ -2,7 +2,8 @@ import client, { getCurrentUsername, isAxiosErrorStatus } from "@api/client"
 import type { Base, PaginationData } from "@api/common"
 import type { User } from "@api/users.api"
 
-export interface Emoji extends Base {
+export interface Emoji {
+    id: string
     name: string
     img: string
 }
@@ -15,6 +16,9 @@ export interface Peck extends Base {
     count: number
 }
 
+/**
+ * @deprecated use {@link Remark} instead
+ */
 export interface Quote extends Base {
     user: User
     content: string
@@ -28,7 +32,7 @@ export interface Remark extends Base {
 }
 
 /**
- * @deprecated use ReactionTask instead
+ * @deprecated use {@link TaskReaction} instead
  */
 export interface ReactionTask extends Base {
     user: User
