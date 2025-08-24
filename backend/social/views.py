@@ -213,17 +213,21 @@ class FollowingList(GenericUserList):
             Following.objects.filter(
                 follower__username=username, status=Following.ACCEPTED
             )
+            .order_by("-updated_at")
             .values("followee")
             .all()
         )
 
 
 class FollowerList(GenericUserList):
+    permission_classes = (permissions.FollowingListPermission,)
+
     def get_user_ids(self, username: str):
         return (
             Following.objects.filter(
                 followee__username=username, status=Following.ACCEPTED
             )
+            .order_by("-updated_at")
             .values("follower")
             .all()
         )
@@ -237,6 +241,7 @@ class FollowRequesterList(GenericUserList):
             Following.objects.filter(
                 followee__username=username, status=Following.REQUESTED
             )
+            .order_by("-updated_at")
             .values("follower")
             .all()
         )

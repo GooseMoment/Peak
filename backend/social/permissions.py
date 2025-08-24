@@ -83,10 +83,14 @@ class FollowingListPermission(IsUserNotBlockedOrBlocking):
         if not super().has_permission(request, view):
             return False
 
-        if request.user.get_username() == view.kwargs["username"]:
+        target_username = view.kwargs["username"]
+
+        if request.user.get_username() == target_username:
             return True
 
-        user_setting = UserSetting.objects.filter(user=request.user).first()
+        user_setting = UserSetting.objects.filter(
+            user__username=target_username
+        ).first()
         if user_setting is None:
             return True
 
@@ -98,7 +102,7 @@ class FollowingListPermission(IsUserNotBlockedOrBlocking):
 
         return Following.objects.filter(
             follower=request.user,
-            followee__username=view.kwargs["username"],
+            followee__username=target_username,
             status=Following.ACCEPTED,
         ).exists()
 
