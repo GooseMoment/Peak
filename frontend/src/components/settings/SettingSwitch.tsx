@@ -48,11 +48,6 @@ export function UserSettingSwitch({
 
     const timer = useRef<NodeJS.Timeout | null>(null)
 
-    const sendChangeOnline = () => {
-        submit({ [name]: value })
-        timer.current = null
-    }
-
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         const checked = e.target.checked
         setValue(checked)
@@ -61,7 +56,10 @@ export function UserSettingSwitch({
             clearTimeout(timer.current)
         }
 
-        timer.current = setTimeout(sendChangeOnline, 1000)
+        timer.current = setTimeout(() => {
+            submit({ [name]: checked })
+            timer.current = null
+        }, 1000)
     }
 
     return <Switch checked={value} onChange={onChange} />
