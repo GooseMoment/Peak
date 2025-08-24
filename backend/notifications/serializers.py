@@ -5,6 +5,7 @@ from .models import Notification, WebPushSubscription
 from social.serializers import (
     CommentSerializer,
     ReactionSerializer,
+    TaskReactionSerializer,
     FollowingSerializer,
     PeckSerializer,
 )
@@ -17,6 +18,7 @@ class NotificatonSerializer(serializers.ModelSerializer):
     )
 
     task_reminder = TaskReminderSerializer()
+    task_reaction = TaskReactionSerializer()
     comment = CommentSerializer()
     reaction = ReactionSerializer()
     following = FollowingSerializer()
@@ -30,6 +32,7 @@ class NotificatonSerializer(serializers.ModelSerializer):
             "type",
             "username",
             "task_reminder",
+            "task_reaction",
             "comment",
             "reaction",
             "following",
