@@ -125,7 +125,7 @@ const UserProfileHeader = ({
                 )}
                 {!isMine && (
                     <FollowButtonWrapper>
-                        <FollowButton user={user} />
+                        <FollowButton username={user.username} />
                         <Menu
                             align="end"
                             transition

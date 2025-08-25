@@ -387,13 +387,9 @@
     "social": {
         "following_title": "Following",
         "explore_title": "Explore",
-        "log_preview_completed": "completed!",
-        "log_details": {
-            "no_content": "There is no task."
-        },
-        "quote": {
-            "empty_self_quote": "Write your today's quote.",
-            "empty_others_quote": "No quote yet."
+        "records": {
+            "empty": "Nothing is here.",
+            "empty_mine": "Tasks completed, assigned, or due today show here."
         },
         "remarks": {
             "title": "Remark of the day",
@@ -434,7 +430,11 @@
             "back": "Go Back"
         },
         "button_no": "No",
+        "retry": "Retry",
+        "load_more": "Load more",
         "error_load": "Failed to load.",
+        "error_something_wrong": "Something went wrong.",
+        "error_something_wrong_description": "Please try again later.",
         "error_perform": "Failed to perform the requested action."
     }
 }

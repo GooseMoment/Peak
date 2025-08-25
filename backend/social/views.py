@@ -2,19 +2,29 @@ from rest_framework import status, mixins, generics
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination, CursorPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import NotFound
 
 from django.shortcuts import get_object_or_404
 from django.core.cache import cache
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.db.models import Q, F
+from django.db.models import (
+    Q,
+    F,
+    Value,
+    Count,
+    OuterRef,
+    Subquery,
+    IntegerField,
+    Case,
+    When,
+)
 from django.db.models.query import QuerySet
+from django.db.models.functions import Coalesce
 from django.db.utils import IntegrityError
-from django.utils import timezone
 
 from .models import (
     Emoji,
@@ -28,12 +38,9 @@ from .models import (
 )
 from .serializers import (
     EmojiSerializer,
-    DailyLogsSerializer,
-    DailyLogDrawerSerializer,
-    DailyLogDetailsSerializer,
-    QuoteSerializer,
-    TaskReactionSerializer,
+    StatSerializer,
     RemarkSerializer,
+    TaskReactionSerializer,
     PeckSerializer,
     CommentSerializer,
     FollowingSerializer,
@@ -44,7 +51,7 @@ from api.models import PrivacyMixin
 from api.request import AuthenticatedRequest
 from api.permissions import IsUserSelfRequest, IsUserOwner
 from api.exceptions import RequiredFieldMissing, UnknownError
-from drawers.models import Drawer
+from api.mixins import TimezoneMixin
 from tasks.models import Task
 from tasks.serializers import TaskSerializer
 from users.models import User
@@ -302,85 +309,6 @@ class BlockList(GenericUserList):
         )
 
 
-## Daily Logs
-@api_view(["GET"])
-def get_daily_logs(request: Request, username, day):
-    followings = Following.objects.filter(
-        follower__username=username, status=Following.ACCEPTED
-    ).all()
-
-    user_id = str(get_object_or_404(User, username=username).id)
-    daily_logs_filter = Q(followers__in=followings.all()) | Q(id=user_id)
-
-    followingUsers = User.objects.filter(daily_logs_filter).all().distinct()
-    day = datetime.datetime.fromisoformat(day)
-
-    day_min = day
-    day_max = day + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-
-    serializer = DailyLogsSerializer(
-        followingUsers,
-        context={"day_min": day_min, "day_max": day_max, "user_id": user_id},
-        many=True,
-    )
-
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@api_view(["GET"])
-def get_quote(request: AuthenticatedRequest, followee, day):
-    followeeUser = get_object_or_404(User, username=followee)
-
-    followerUserID = str(request.user.id)
-    followeeUserID = str(followeeUser.id)
-
-    # set cache for 'is_read'
-    cache_key = f"user_id_{followeeUserID}_date_{day}"
-    cache_data = cache.get(cache_key)
-    if cache_data:
-        cache_data[followerUserID] = datetime.datetime.now()
-    else:
-        cache_data = {followerUserID: datetime.datetime.now()}
-
-    cache.delete(cache_key)
-    # cache.set(cache_key, cache_data, 1*24*60*60)
-    cache.set(cache_key, cache_data, 60 * 60)
-
-    day_min = datetime.datetime.fromisoformat(day)
-    day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-    quote = Quote.objects.filter(
-        user__id=followeeUserID, date__range=(day_min, day_max)
-    ).first()
-
-    if not quote:
-        quote = Quote(id=None, user=followeeUser, content="", date=None)
-    serializer = QuoteSerializer(quote)
-
-    # Response(cache_data, status=status.HTTP_200_OK)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@api_view(["POST"])
-def post_quote(request: Request, day):
-    day_min = datetime.datetime.fromisoformat(day)
-    day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-
-    quote = Quote.objects.filter(
-        user=request.user, date__range=(day_min, day_max)
-    ).first()
-    content = request.data.get("content")
-
-    if quote:
-        quote.content = content if content is not None else ""
-        quote.save()
-    else:
-        quote = Quote.objects.create(user=request.user, content=content, date=day)
-
-    serializer = QuoteSerializer(quote)
-
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
 class RemarkDetail(generics.GenericAPIView):
     serializer_class = RemarkSerializer
     permission_classes = (permissions.RemarkDetailPermission,)
@@ -428,150 +356,218 @@ class RemarkDetail(generics.GenericAPIView):
         return Response(status=status.HTTP_200_OK)
 
 
-def get_privacy_filter(follower, followee):
-    if follower == followee:
-        privacyFilter = Q()
-        # privacy = PrivacyMixin.FOR_PROTECTED
-    # TODO: BLOCK
-    else:
-        is_follower = Following.objects.filter(
-            follower=follower, followee=followee, status=Following.ACCEPTED
+class RecordDetail(TimezoneMixin, generics.ListAPIView):
+    request: AuthenticatedRequest  # pyright: ignore [reportIncompatibleVariableOverride]
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = (permissions.IsUserNotBlockedOrBlocking,)
+
+    def get_privacy_filter(self, viewer: User, target: User):
+        is_following = (
+            viewer == target
+            or Following.objects.filter(
+                follower=viewer, followee=target, status=Following.ACCEPTED
+            ).exists()
+        )
+
+        filter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
+
+        if is_following:
+            filter |= Q(privacy=PrivacyMixin.FOR_PROTECTED)
+
+        if viewer == target:
+            filter |= Q(privacy=PrivacyMixin.FOR_PRIVATE)
+
+        return filter
+
+    def filter_queryset(self, queryset: QuerySet[Task]) -> QuerySet[Task]:
+        user = get_object_or_404(User, username=self.kwargs["username"])
+        date = datetime.date.fromisoformat(self.kwargs["date_iso"])
+        datetime_range = self.get_datetime_range(date)
+
+        privacy_filter = self.get_privacy_filter(self.request.user, user)
+        completed_filter = Q(completed_at__range=datetime_range)
+        uncompleted_filter = Q(completed_at__isnull=True) & (
+            Q(assigned_at=date)
+            | Q(due_datetime__range=datetime_range)
+            | Q(due_date=date)
+        )
+
+        return queryset.filter(
+            Q(user=user) & privacy_filter & (completed_filter | uncompleted_filter)
+        ).order_by(F("drawer__project__order"), F("drawer__order"), "order")
+
+
+class StatListPagination(PageNumberPagination):
+    page_size = 6
+    max_page_size = 6
+
+    def get_paginated_data(self, data):
+        assert self.page is not None
+        return {
+            "count": self.page.paginator.count,
+            "next": self.get_next_link(),
+            "previous": self.get_previous_link(),
+            "results": data,
+        }
+
+
+class StatList(TimezoneMixin, generics.GenericAPIView):
+    pagination_class = StatListPagination
+    serializer_class = StatSerializer
+    request: AuthenticatedRequest  # pyright: ignore [reportIncompatibleVariableOverride]
+
+    PRIVACY_OPTIONS = (
+        PrivacyMixin.FOR_PUBLIC,
+        PrivacyMixin.FOR_PROTECTED,
+    )
+
+    CACHE_TIMEOUT_TODAY = 5  # seconds
+    CACHE_TIMEOUT_OTHER = 15  # seconds
+
+    def get_cache_key(self):
+        date_iso = self.kwargs.get("date_iso")
+        page_number = self.request.query_params.get("page") or 1
+        return f"stats/{self.request.user.id}/{date_iso}T{self.get_tz().key}?page={page_number}"
+
+    def get(self, request: AuthenticatedRequest, date_iso: str, *args, **kwargs):
+        cache_key = self.get_cache_key()
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            return Response(cached_data, status=status.HTTP_200_OK)
+
+        user_ids = (
+            Following.objects.filter(follower=request.user, status=Following.ACCEPTED)
+            .order_by("-updated_at")
+            .values_list("followee", flat=True)
+        )
+        paginated_user_ids = self.paginate_queryset(
+            user_ids  # pyright: ignore [reportArgumentType] -- ValuesQuerySet is compatible with QuerySet
+        )
+        if not paginated_user_ids:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        date = datetime.date.fromisoformat(date_iso)
+        datetime_range = self.get_datetime_range(date)
+
+        user_ids = list(paginated_user_ids)
+
+        task_count_sq = (
+            Task.objects.filter(
+                user_id=OuterRef("id"),
+                completed_at__range=datetime_range,
+                privacy__in=self.PRIVACY_OPTIONS,
+            )
+            .order_by()
+            .values("user_id")
+            .annotate(cnt=Count("id"))
+            .values("cnt")
+        )
+
+        reaction_count_sq = (
+            TaskReaction.objects.filter(
+                task__user_id=OuterRef("id"),
+                task__privacy__in=self.PRIVACY_OPTIONS,
+                task__completed_at__range=datetime_range,
+            )
+            .order_by()
+            .values("task__user_id")
+            .annotate(cnt=Count("id"))
+            .values("cnt")
+        )
+
+        order_whens = [When(id=uid, then=pos) for pos, uid in enumerate(user_ids)]
+        stats = (
+            User.objects.filter(id__in=user_ids)
+            .annotate(
+                completed_task_count=Coalesce(
+                    Subquery(task_count_sq, output_field=IntegerField()), Value(0)
+                ),
+                reaction_count=Coalesce(
+                    Subquery(reaction_count_sq, output_field=IntegerField()), Value(0)
+                ),
+                date=Value(date_iso),
+                order_index=Case(
+                    *order_whens, default=len(user_ids), output_field=IntegerField()
+                ),
+            )
+            .order_by("order_index")
+        )
+
+        data = self.get_serializer(stats, many=True).data
+        paginated_data = self.paginator.get_paginated_data(data)  # pyright: ignore[reportAttributeAccessIssue] -- StatListPagination has get_paginated_data method
+
+        cache.set(
+            cache_key,
+            paginated_data,
+            self.CACHE_TIMEOUT_TODAY
+            if datetime_range[0] <= self.get_now() <= datetime_range[1]
+            else self.CACHE_TIMEOUT_OTHER,
+        )
+        return Response(
+            paginated_data,
+            status=status.HTTP_200_OK,
+        )
+
+
+class StatDetail(TimezoneMixin, generics.RetrieveAPIView):
+    request: AuthenticatedRequest  # pyright: ignore [reportIncompatibleVariableOverride]
+    serializer_class = StatSerializer
+    lookup_field = "username"
+    permission_classes = (permissions.IsUserNotBlockedOrBlocking,)
+
+    def get_privacy_options(self, viewer_username: str, target_username: str):
+        if viewer_username == target_username:
+            return (
+                PrivacyMixin.FOR_PUBLIC,
+                PrivacyMixin.FOR_PROTECTED,
+                PrivacyMixin.FOR_PRIVATE,
+            )
+
+        is_following = Following.objects.filter(
+            follower__username=viewer_username,
+            followee__username=target_username,
+            status=Following.ACCEPTED,
         ).exists()
 
-        if is_follower:
-            privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC) | Q(
-                privacy=PrivacyMixin.FOR_PROTECTED
-            )
-            # privacy = PrivacyMixin.FOR_PROTECTED
-        else:
-            privacyFilter = Q(privacy=PrivacyMixin.FOR_PUBLIC)
-            # privacy = PrivacyMixin.FOR_PUBLIC
+        if is_following:
+            return (PrivacyMixin.FOR_PUBLIC, PrivacyMixin.FOR_PROTECTED)
 
-    privacyFilter &= Q(user=followee)
+        return (PrivacyMixin.FOR_PUBLIC,)
 
-    return privacyFilter
+    def get_object(self):
+        username = self.kwargs.get("username")
+        date_iso = self.kwargs.get("date_iso")
+        date = datetime.date.fromisoformat(date_iso)
+        datetime_range = self.get_datetime_range(date)
 
+        privacy_options = self.get_privacy_options(self.request.user.username, username)
 
-class DailyLogDetailsPagination(CursorPagination):
-    page_size = 5
-    ordering = ["project_order", "drawer_order", "order"]
+        completed_task_count = Task.objects.filter(
+            completed_at__range=datetime_range,
+            privacy__in=privacy_options,
+            user__username=username,
+        ).count()
 
+        reaction_count = TaskReaction.objects.filter(
+            task__user__username=username,
+            task__privacy__in=privacy_options,
+            task__completed_at__range=datetime_range,
+        ).count()
 
-class DailyLogDetailsView(generics.GenericAPIView):
-    pagination_class = DailyLogDetailsPagination
-
-    def get(self, request, followee, day):
-        followee_user = get_object_or_404(User, username=followee)
-        day_min = datetime.datetime.fromisoformat(day)
-        day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-        day_range = (day_min, day_max)
-
-        privacy_filter = get_privacy_filter(request.user, followee_user)
-
-        completed_tasks_filter = Q(completed_at__range=day_range)
-        uncompleted_tasks_filter = Q(completed_at=None) & Q(
-            assigned_at__range=day_range
-        )
-        # TODO: ( | Q(due_datetime__range=day_range))
-        tasks_filter = privacy_filter & (
-            completed_tasks_filter | uncompleted_tasks_filter
-        )
-
-        tasks_queryset = (
-            Task.objects.filter(tasks_filter)
-            .all()
+        stat = (
+            User.objects.filter(username=username)
             .annotate(
-                project_order=F("drawer__project__order"),
-                drawer_order=F("drawer__order"),
+                completed_task_count=Value(completed_task_count),
+                reaction_count=Value(reaction_count),
+                date=Value(date_iso),
             )
+            .first()
         )
 
-        page = self.paginate_queryset(tasks_queryset)
-        if page is not None:
-            serializer = DailyLogDetailsSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = DailyLogDetailsSerializer(tasks_queryset, many=True)
-
-        return Response(serializer.data)
-
-
-class DailyLogDrawerPagination(CursorPagination):
-    page_size = 5
-    ordering = "order"
-    # TODO: due date 찾을 수 있으면 줄이기
-
-
-class DailyLogDrawerView(generics.GenericAPIView):
-    pagination_class = DailyLogDrawerPagination
-
-    def get(self, request, followee):
-        followeeUser = get_object_or_404(User, username=followee)
-
-        privacyFilter = get_privacy_filter(request.user, followeeUser)
-
-        drawers_queryset = (
-            Drawer.objects.filter(privacyFilter)
-            .annotate(color=F("project__color"))
-            .order_by("order")
-        )
-
-        page = self.paginate_queryset(drawers_queryset)
-
-        if page is not None:
-            serializer = DailyLogDrawerSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = DailyLogDrawerSerializer(drawers_queryset, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class DailyLogTaskPagination(PageNumberPagination):
-    page_size = 5
-    max_page_size = 5
-    # TODO: due date 찾을 수 있으면 줄이기
-
-
-class DailyLogTaskView(generics.GenericAPIView):
-    pagination_class = DailyLogTaskPagination
-
-    def get(self, request, drawer, day):
-        drawer = get_object_or_404(Drawer, id=drawer)
-        # followee = drawer.user
-
-        # TODO: task Privacy 반영 이후 다시 고려
-        # privacyFilter = get_privacy_filter(request.user, followee)
-        privacyFilter = Q()
-
-        day_min = datetime.datetime.fromisoformat(day)
-        day_max = day_min + datetime.timedelta(hours=24) - datetime.timedelta(seconds=1)
-        day_range = (day_min, day_max)
-
-        tasksFilterForCompleted = Q(completed_at__range=day_range)
-        tasksFilterForUncompleted = Q(completed_at=None) & Q(
-            assigned_at__range=day_range
-        )
-        # TODO: ( | Q(due_datetime__range=day_range))
-        tasksFilter = (
-            Q(drawer=drawer)
-            & privacyFilter
-            & (tasksFilterForCompleted | tasksFilterForUncompleted)
-        )
-
-        tasks_queryset = Task.objects.filter(tasksFilter)
-
-        page = self.paginate_queryset(tasks_queryset)
-        if page is not None:
-            serializer = TaskSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = TaskSerializer(tasks_queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-def get_following_feed(request: Request, date):
-    pass
+        if not stat:
+            raise NotFound(f"User @{username} not found")
+        return stat
 
 
 class TaskReactionList(generics.GenericAPIView):

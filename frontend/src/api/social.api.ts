@@ -31,6 +31,12 @@ export interface Remark extends Base {
     date: string
 }
 
+export interface Stat extends User {
+    completed_task_count: number
+    reaction_count: number
+    date: string
+}
+
 export interface TaskReactionUnicodeEmoji extends Base {
     user: User
     // TODO: replace Task
@@ -212,22 +218,34 @@ export const deleteBlock = async (username: string) => {
     return res.data
 }
 
-// TODO: declare DailyLogsPreview
-export const getDailyLogsPreview = async (username: string, day: string) => {
-    const res = await client.get(`social/daily/logs/@${username}/${day}/`)
-
+export const getStat = async (username: string, date_iso: string) => {
+    const res = await client.get<Stat>(`social/stats/@${username}/${date_iso}/`)
     return res.data
 }
 
-// TODO: declare DailyLogDetail
-export const getDailyLogDetails = async (
+export const getStats = async (date_iso: string, page: string) => {
+    const res = await client.get<PaginationData<Stat>>(
+        `social/stats/${date_iso}/`,
+        {
+            params: { page },
+        },
+    )
+    return res.data
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Task = any
+
+export const getRecord = async (
     username: string,
-    day: string,
-    cursor: string,
+    date_iso: string,
+    page: string,
 ) => {
-    const res = await client.get(
-        `social/daily/log/details/@${username}/${day}/`,
-        { params: { cursor } },
+    const res = await client.get<PaginationData<Task>>(
+        `social/records/@${username}/${date_iso}/`,
+        {
+            params: { page },
+        },
     )
 
     return res.data
