@@ -10,7 +10,7 @@ import FeatherIcon from "feather-icons-react"
 
 interface AvatarProps {
     relatedUser?: User
-    emoji?: Emoji
+    emoji?: Emoji | string
     projectColor?: string
     skeleton?: boolean
 }
@@ -24,7 +24,14 @@ const Avatar = ({
     return (
         <Container>
             {skeleton && <ProfileImgSkeleton />}
-            {relatedUser && <ProfileImg src={relatedUser.profile_img} />}
+            {relatedUser && (
+                <ProfileImg
+                    alt={relatedUser.username}
+                    title={relatedUser.username}
+                    src={relatedUser.profile_img}
+                    draggable="false"
+                />
+            )}
             {projectColor && (
                 <TaskReminderIconBox $color={projectColor}>
                     <FeatherIcon icon="clock" />
@@ -32,7 +39,16 @@ const Avatar = ({
             )}
             {emoji && (
                 <EmojiContainer>
-                    <EmojiImg src={emoji.img} />
+                    {typeof emoji === "string" ? (
+                        <EmojiContent>{emoji}</EmojiContent>
+                    ) : (
+                        <EmojiImg
+                            alt={emoji.name}
+                            title={emoji.name}
+                            src={emoji.img}
+                            draggable="false"
+                        />
+                    )}
                 </EmojiContainer>
             )}
         </Container>
@@ -96,8 +112,21 @@ const EmojiContainer = styled.div`
 `
 
 const EmojiImg = styled.img`
-    width: 2em;
     height: 2em;
+
+    &:hover {
+        transform: scale(1.5);
+    }
+
+    transition: transform 0.25s ${cubicBeizer};
+`
+
+const EmojiContent = styled.span`
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 2em;
 
     &:hover {
         transform: scale(1.5);

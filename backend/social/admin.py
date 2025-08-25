@@ -1,5 +1,14 @@
 from django.contrib import admin
-from .models import Emoji, Peck, Quote, Remark, Reaction, Comment, Following, Block
+from .models import (
+    Emoji,
+    Peck,
+    Quote,
+    Remark,
+    TaskReaction,
+    Comment,
+    Following,
+    Block,
+)
 from api.admin import fieldset_base, readonly_fields_base
 
 
@@ -72,23 +81,17 @@ class QuoteAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(Reaction)
-class ReactionAdmin(admin.ModelAdmin):
+@admin.register(TaskReaction)
+class TaskReactionSerializer(admin.ModelAdmin):
     ordering = ["-updated_at"]
-    search_fields = ["user__username", "emoji"]
-    autocomplete_fields = ["user", "task", "quote", "emoji"]
+    search_fields = ["user__username", "task__id", "image_emoji", "unicode_emoji"]
+    autocomplete_fields = ["user", "task", "image_emoji"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
             None,
             {
-                "fields": ["user", "parent_type", "emoji"],
-            },
-        ),
-        (
-            "Payloads",
-            {
-                "fields": ["task", "quote"],
+                "fields": ["user", "task", "image_emoji", "unicode_emoji"],
             },
         ),
         fieldset_base,

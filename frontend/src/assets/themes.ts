@@ -63,10 +63,11 @@ const light: DefaultTheme = {
     },
     social: {
         borderColor: black,
-        activeBackgroundColor: "rgb(255 74 3 / 0.35)",
         modalShadowColor: "rgba(123, 123, 123, 0.1)",
         modalCellHoverColor: "#F0F0F0",
         buttonColor: "#A9A9A9",
+        activeColor: "oklch(45.7% 0.24 277.023)",
+        activeBackgroundColor: "oklch(96.2% 0.018 272.314)",
     },
     calendar: {
         backgroundColor: "#D9D9D9",
@@ -143,10 +144,11 @@ const dark: DefaultTheme = {
     },
     social: {
         borderColor: white,
-        activeBackgroundColor: "rgb(255 74 3 / 0.35)",
         modalShadowColor: "rgba(210, 210, 210, 0.1)",
         modalCellHoverColor: "#383838",
         buttonColor: "#A9A9A9",
+        activeColor: "oklch(96.2% 0.018 272.314)",
+        activeBackgroundColor: "oklch(45.7% 0.24 277.023)",
     },
     calendar: {
         backgroundColor: "#323232",

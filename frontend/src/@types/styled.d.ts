@@ -52,10 +52,11 @@ declare module "styled-components" {
         notifications: { boxShadowColor: string }
         social: {
             borderColor: string
-            activeBackgroundColor: string
             modalShadowColor: string
             modalCellHoverColor: string
             buttonColor: string
+            activeColor: string
+            activeBackgroundColor: string
         }
         calendar: {
             backgroundColor: string

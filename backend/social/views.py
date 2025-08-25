@@ -8,19 +8,39 @@ from rest_framework.exceptions import NotFound
 
 from django.shortcuts import get_object_or_404
 from django.core.cache import cache
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.db.models import Q, F, Value, Count
+from django.db.models import (
+    Q,
+    F,
+    Value,
+    Count,
+    OuterRef,
+    Subquery,
+    IntegerField,
+    Case,
+    When,
+)
 from django.db.models.query import QuerySet
+from django.db.models.functions import Coalesce
 from django.db.utils import IntegrityError
-from django.utils import timezone
 
-from .models import Emoji, Quote, Remark, Reaction, Peck, Comment, Following, Block
+from .models import (
+    Emoji,
+    Quote,
+    TaskReaction,
+    Remark,
+    Peck,
+    Comment,
+    Following,
+    Block,
+)
 from .serializers import (
     EmojiSerializer,
     StatSerializer,
     RemarkSerializer,
-    ReactionSerializer,
+    TaskReactionSerializer,
     PeckSerializer,
     CommentSerializer,
     FollowingSerializer,
@@ -29,8 +49,8 @@ from .serializers import (
 from . import permissions, exceptions
 from api.models import PrivacyMixin
 from api.request import AuthenticatedRequest
-from api.permissions import IsUserSelfRequest
-from api.exceptions import RequiredFieldMissing
+from api.permissions import IsUserSelfRequest, IsUserOwner
+from api.exceptions import RequiredFieldMissing, UnknownError
 from api.mixins import TimezoneMixin
 from tasks.models import Task
 from tasks.serializers import TaskSerializer
@@ -38,8 +58,8 @@ from users.models import User
 from users.serializers import UserSerializer
 
 import datetime
-from django.db.models import OuterRef, Subquery, IntegerField, Case, When
-from django.db.models.functions import Coalesce
+from typing import Optional
+import emoji as emojilib
 
 
 class ExploreFeedPagination(CursorPagination):
@@ -452,8 +472,7 @@ class StatList(TimezoneMixin, generics.GenericAPIView):
         )
 
         reaction_count_sq = (
-            Reaction.objects.filter(
-                parent_type=Reaction.FOR_TASK,
+            TaskReaction.objects.filter(
                 task__user_id=OuterRef("id"),
                 task__privacy__in=self.PRIVACY_OPTIONS,
                 task__completed_at__range=datetime_range,
@@ -537,8 +556,7 @@ class StatDetail(TimezoneMixin, generics.RetrieveAPIView):
             user__username=username,
         ).count()
 
-        reaction_count = Reaction.objects.filter(
-            parent_type=Reaction.FOR_TASK,
+        reaction_count = TaskReaction.objects.filter(
             task__user__username=username,
             task__privacy__in=privacy_options,
             task__completed_at__range=datetime_range,
@@ -559,110 +577,80 @@ class StatDetail(TimezoneMixin, generics.RetrieveAPIView):
         return stat
 
 
-class ReactionView(APIView):
-    def get(self, request, type, id):
-        user = request.user
+class TaskReactionList(generics.GenericAPIView):
+    queryset = TaskReaction.objects.all()
+    serializer_class = TaskReactionSerializer
+    permission_classes = (permissions.TaskReactionPermission,)
 
-        if type == Reaction.FOR_TASK:
-            task = get_object_or_404(Task, id=id)
-            reactions = Reaction.objects.filter(
-                parent_type=Reaction.FOR_TASK, task=task
-            ).order_by("created_at")
-        elif type == Reaction.FOR_QUOTE:
-            quote = get_object_or_404(Quote, id=id)
-            reactions = Reaction.objects.filter(
-                parent_type=Reaction.FOR_QUOTE, quote=quote
-            ).order_by("created_at")
+    _task: Optional[Task]
+
+    def get_task(self) -> Task:
+        if not hasattr(self, "_task") or self._task is None:
+            self._task = get_object_or_404(Task, id=self.kwargs["id"])
+
+        return self._task
+
+    def filter_queryset(self, queryset: "QuerySet[TaskReaction]"):
+        task_id = self.kwargs.get("id")
+        if not task_id:
+            raise NotFound("Task ID is required")
+
+        return queryset.filter(task__id=task_id).order_by(
+            "image_emoji", "unicode_emoji", "created_at"
+        )
+
+    def get(self, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def post(self, request: AuthenticatedRequest, **kwargs):
+        unicode_emoji: Optional[str] = request.data.get("unicode_emoji")
+        image_emoji_name: Optional[str] = request.data.get("image_emoji")
+        image_emoji: Optional[Emoji] = None
+
+        # Must provide exactly one
+        if (unicode_emoji is None and image_emoji_name is None) or (
+            unicode_emoji is not None and image_emoji_name is not None
+        ):
+            return Response(
+                "ERROR: provide exactly one of unicode_emoji or image_emoji.",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if unicode_emoji:
+            if not emojilib.is_emoji(unicode_emoji):
+                return Response(
+                    "ERROR: invalid unicode_emoji",
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            image_emoji = Emoji.objects.filter(name=image_emoji_name).first()
+            if image_emoji is None:
+                raise NotFound(f":{image_emoji_name}: is not found")
 
-        reactionCountsDir = dict()
-        myReactions = []
-        for reaction in reactions:
-            if reaction.emoji is None:
-                continue
-
-            if reaction.user == user:
-                myReactions.append(EmojiSerializer(reaction.emoji).data)
-
-            emoji_id = str(reaction.emoji.id)
-            reactionNum = reactionCountsDir.get(emoji_id)
-            if reactionNum:
-                reactionCountsDir[emoji_id]["counts"] = reactionNum["counts"] + 1
-            else:
-                reactionCountsDir[emoji_id] = {
-                    "emoji": EmojiSerializer(reaction.emoji).data,
-                    "counts": 1,
-                }
-
-        serializer = ReactionSerializer(reactions, many=True)
-
-        data = {
-            "reactions": serializer.data,
-            "reaction_counts": reactionCountsDir,
-            "my_reactions": myReactions,
-        }
-
-        return Response(data, status=status.HTTP_200_OK)
-
-    def post(self, request: Request, type, id):
-        # TODO: Need to check block
-        emoji_name = request.data.get("emoji")
-        emoji = get_object_or_404(Emoji, name=emoji_name)
-        user = request.user
-
-        if type == Reaction.FOR_TASK:
-            task = get_object_or_404(Task, id=id)
-            reaction, created = Reaction.objects.get_or_create(
-                user=user, parent_type=Reaction.FOR_TASK, task=task, emoji=emoji
+        try:
+            reaction = TaskReaction.objects.create(
+                user=request.user,
+                task=self.get_task(),
+                unicode_emoji=unicode_emoji,
+                image_emoji=image_emoji,
             )
+        except IntegrityError as e:
+            if "unique constraint" in str(e):
+                return Response(status=status.HTTP_204_NO_CONTENT)
 
-        elif type == Reaction.FOR_QUOTE:
-            quote = get_object_or_404(Quote, id=id)
-            reaction, created = Reaction.objects.get_or_create(
-                user=user, parent_type=Reaction.FOR_QUOTE, quote=quote, emoji=emoji
-            )
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise UnknownError
 
-        if not created:
-            return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        serializer = self.get_serializer(reaction)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        serializer = ReactionSerializer(reaction)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def delete(self, request, type, id):
-        emoji_name = request.GET.get("emoji")
-        emoji = get_object_or_404(Emoji, name=emoji_name)
-
-        # emoji = Emoji.objects.filter(id=emoji_id).first()
-
-        user = request.user
-
-        if type == Reaction.FOR_TASK:
-            task = get_object_or_404(Task, id=id)
-            reaction = get_object_or_404(
-                Reaction,
-                user=user,
-                parent_type=Reaction.FOR_TASK,
-                task=task,
-                emoji=emoji,
-            )
-        elif type == Reaction.FOR_QUOTE:
-            quote = get_object_or_404(Quote, id=id)
-            reaction = get_object_or_404(
-                Reaction,
-                user=user,
-                parent_type=Reaction.FOR_QUOTE,
-                quote=quote,
-                emoji=emoji,
-            )
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        reaction.delete()
-
-        return Response(status=status.HTTP_200_OK)
+class TaskReactionDetail(generics.RetrieveDestroyAPIView):
+    queryset = TaskReaction.objects.all()
+    serializer_class = TaskReactionSerializer
+    lookup_url_kwarg = "reaction_id"
+    permission_classes = (IsUserOwner,)
 
 
 class PeckView(APIView):
@@ -709,12 +697,12 @@ class CommentView(APIView):
         if type == Comment.FOR_TASK:
             task = get_object_or_404(Task, id=id)
             comments = Comment.objects.filter(
-                parent_type=Reaction.FOR_TASK, task=task
+                parent_type=Comment.FOR_TASK, task=task
             ).order_by("-created_at")
         else:
             quote = get_object_or_404(Quote, id=id)
             comments = Comment.objects.filter(
-                parent_type=Reaction.FOR_QUOTE, quote=quote
+                parent_type=Comment.FOR_QUOTE, quote=quote
             ).order_by("-created_at")
 
         serializer = CommentSerializer(comments, many=True)
@@ -729,12 +717,12 @@ class CommentView(APIView):
         if type == Comment.FOR_TASK:
             task = get_object_or_404(Task, id=id)
             created = Comment.objects.create(
-                user=user, parent_type=Reaction.FOR_TASK, task=task, comment=comment
+                user=user, parent_type=Comment.FOR_TASK, task=task, comment=comment
             )
         elif type == Comment.FOR_QUOTE:
             quote = get_object_or_404(Quote, id=id)
             created = Comment.objects.create(
-                user=user, parent_type=Reaction.FOR_QUOTE, quote=quote, comment=comment
+                user=user, parent_type=Comment.FOR_QUOTE, quote=quote, comment=comment
             )
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -776,6 +764,7 @@ class CommentView(APIView):
 
 class EmojiListPagination(PageNumberPagination):
     page_size = 1000
+    max_page_size = 1000
 
 
 class EmojiList(mixins.ListModelMixin, generics.GenericAPIView):

@@ -1,8 +1,9 @@
 import client, { getCurrentUsername, isAxiosErrorStatus } from "@api/client"
 import type { Base, PaginationData } from "@api/common"
-import { type User } from "@api/users.api"
+import type { User } from "@api/users.api"
 
-export interface Emoji extends Base {
+export interface Emoji {
+    id: string
     name: string
     img: string
 }
@@ -15,6 +16,9 @@ export interface Peck extends Base {
     count: number
 }
 
+/**
+ * @deprecated use {@link Remark} instead
+ */
 export interface Quote extends Base {
     user: User
     content: string
@@ -33,23 +37,27 @@ export interface Stat extends User {
     date: string
 }
 
-export interface ReactionTask extends Base {
+export interface TaskReactionUnicodeEmoji extends Base {
     user: User
-    parent_type: "task"
     // TODO: replace Task
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     task: any
-    emoji: Emoji
+    unicode_emoji: string
+    image_emoji: null
+    emoji_name: string
 }
 
-export interface ReactionQuote extends Base {
+export interface TaskReactionImageEmoji extends Base {
     user: User
-    parent_type: "quote"
-    quote: Quote
-    emoji: Emoji
+    // TODO: replace Task
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    task: any
+    unicode_emoji: null
+    image_emoji: Emoji
+    emoji_name: string
 }
 
-export type Reaction = ReactionTask | ReactionQuote
+export type TaskReaction = TaskReactionUnicodeEmoji | TaskReactionImageEmoji
 
 export interface CommentTask extends Base {
     user: User
@@ -290,45 +298,37 @@ export const getEmojis = async () => {
     return res.data.results
 }
 
-export const getReactions = async (
-    parentType: Reaction["parent_type"],
-    parentID: string, // TODO: replace string with Task["id"] | Quote["id"]
-) => {
-    const res = await client.get<PaginationData<Reaction>>(
-        `social/reactions/${parentType}/${parentID}/`,
+export const getTaskReactions = async (taskID: string) => {
+    const res = await client.get<TaskReaction[]>(
+        `tasks/${taskID}/reactions/`,
+        {},
     )
 
     return res.data
 }
 
-export const postReaction = async (
-    parentType: Reaction["parent_type"],
-    parentID: string,
-    emoji: Emoji["name"], // TODO: replace Emoji["name"] with Emoji
+export type TaskReactionPost =
+    | {
+          unicode_emoji: string
+      }
+    | {
+          image_emoji: string
+      }
+
+export const postTaskReaction = async (
+    taskID: string,
+    data: TaskReactionPost,
 ) => {
-    const res = await client.post<Reaction>(
-        `social/reactions/${parentType}/${parentID}/`,
-        {
-            emoji: emoji,
-        },
+    const res = await client.post<TaskReaction>(
+        `tasks/${taskID}/reactions/`,
+        data,
     )
 
     return res.data
 }
 
-export const deleteReaction = async (
-    parentType: Reaction["parent_type"],
-    parentID: string,
-    emoji: Emoji["name"],
-) => {
-    const params = new URLSearchParams({ emoji: emoji })
-
-    const res = await client.delete(
-        `social/reactions/${parentType}/${parentID}/`,
-        { params },
-    )
-
-    return res.status
+export const deleteTaskReaction = async (reactionID: TaskReaction["id"]) => {
+    await client.delete(`social/task_reactions/${reactionID}/`)
 }
 
 export const getPeck = async (taskID: string) => {

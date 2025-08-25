@@ -1,5 +1,4 @@
-import { Suspense, forwardRef } from "react"
-import { Ref } from "react"
+import { Ref, Suspense, forwardRef } from "react"
 
 import styled, { css, keyframes } from "styled-components"
 
@@ -36,8 +35,9 @@ const Box = forwardRef(function BoxInternal(
                 }
                 relatedUser={relatedUser}
                 emoji={
-                    (notification.type === "reaction" &&
-                        notification.reaction.emoji) ||
+                    (notification.type === "task_reaction" &&
+                        (notification.task_reaction.image_emoji ||
+                            notification.task_reaction.unicode_emoji)) ||
                     undefined
                 }
             />

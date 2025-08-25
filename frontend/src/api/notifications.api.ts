@@ -1,7 +1,7 @@
 import client from "@api/client"
 import type { Base, PaginationData } from "@api/common"
-import type { Comment, Following, Peck, Reaction } from "@api/social.api"
-import { type User } from "@api/users.api"
+import type { Comment, Following, Peck, TaskReaction } from "@api/social.api"
+import type { User } from "@api/users.api"
 
 import {
     getClientSettings,
@@ -48,10 +48,10 @@ export interface NotificationTaskReminder extends Base {
     task_reminder: TaskReminder
 }
 
-export interface NotificationReaction extends Base {
+export interface NotificationTaskReaction extends Base {
     user: User
-    type: "reaction"
-    reaction: Reaction
+    type: "task_reaction"
+    task_reaction: TaskReaction
 }
 
 export interface NotificationFollowing extends Base {
@@ -74,7 +74,7 @@ export interface NotificationComment extends Base {
 
 export type Notification =
     | NotificationTaskReminder
-    | NotificationReaction
+    | NotificationTaskReaction
     | NotificationFollowing
     | NotificationPeck
     | NotificationComment
@@ -92,20 +92,10 @@ export const getNotifications = async (
     return res.data
 }
 
-export const hasRelatedUser = (notification: Notification) => {
-    return (
-        notification.type === "reaction" ||
-        notification.type === "peck" ||
-        notification.type === "comment" ||
-        notification.type === "follow" ||
-        notification.type === "follow_request" ||
-        notification.type === "follow_request_accepted"
-    )
-}
-
 export const getRelatedUserFromNotification = (notification: Notification) => {
     return (
-        (notification.type === "reaction" && notification.reaction.user) ||
+        (notification.type === "task_reaction" &&
+            notification.task_reaction.user) ||
         (notification.type === "peck" && notification.peck.user) ||
         (notification.type === "comment" && notification.comment.user) ||
         (notification.type === "follow" && notification.following?.follower) ||

@@ -7,9 +7,9 @@ translation = {
             "body": "{delta} min(s) left.",
             "body_now": "Time to work.",
         },
-        Notification.FOR_REACTION: {
-            "title": ":{emoji}: @{username}",
-            "body": "RE: {parent}",
+        Notification.FOR_TASK_REACTION: {
+            "title": ":{emoji}: by @{username}",
+            "body": "RE: {task_name}",
         },
         Notification.FOR_FOLLOW: {
             "title": "📩 @{username}",

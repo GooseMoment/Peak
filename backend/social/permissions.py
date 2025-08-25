@@ -5,6 +5,11 @@ from .models import Following, Block
 from user_setting.models import UserSetting
 from api.models import PrivacyMixin
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .views import TaskReactionList
+
 
 def is_either_blocked(username_a: str, username_b: str) -> bool:
     if username_a == username_b:
@@ -48,6 +53,19 @@ class RemarkDetailPermission(permissions.IsAuthenticated):
             request.user.get_username() == username
             or request.method in permissions.SAFE_METHODS
         )
+
+
+class TaskReactionPermission(permissions.IsAuthenticated):
+    def has_permission(self, request: Request, view: "TaskReactionList") -> bool:  # pyright: ignore [reportIncompatibleMethodOverride]
+        is_authenticated = super().has_permission(request, view)
+        if not is_authenticated:
+            return False
+
+        task = view.get_task()
+        if is_either_blocked(request.user.get_username(), task.user.username):
+            return False
+
+        return True
 
 
 class FollowingPermission(permissions.IsAuthenticated):

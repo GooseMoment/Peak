@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Emoji, Quote, Remark, Reaction, Peck, Comment, Following, Block
+from .models import Emoji, Quote, Remark, TaskReaction, Peck, Comment, Following, Block
 from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
 
@@ -47,16 +47,26 @@ class StatSerializer(UserSerializer):
         ]
 
 
-class ReactionSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-    emoji = EmojiSerializer(many=False, read_only=True)
-
+class TaskReactionSerializer(serializers.ModelSerializer):
+    user = UserSerializer(default=serializers.CurrentUserDefault())
     task = TaskSerializer()
-    quote = QuoteSerializer()
+    image_emoji = EmojiSerializer(required=False, allow_null=True)
+    emoji_name = serializers.SerializerMethodField()
+
+    def get_emoji_name(self, obj: TaskReaction):
+        return obj.image_emoji is not None and obj.image_emoji.name or obj.unicode_emoji
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
-        model = Reaction
-        fields = ["id", "user", "parent_type", "task", "quote", "emoji"]
+        model = TaskReaction
+        fields = [
+            "id",
+            "user",
+            "task",
+            "image_emoji",
+            "unicode_emoji",
+            "emoji_name",
+            "created_at",
+        ]
 
 
 class PeckSerializer(serializers.ModelSerializer):

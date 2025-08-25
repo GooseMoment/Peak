@@ -398,8 +398,8 @@
             "placeholder": "연필 버튼을 눌러 작성하세요",
             "placeholder_edit": "이곳에 작성하세요..."
         },
-        "emoji_modal": {
-            "searchbar": "이모지 찾기"
+        "reactions": {
+            "more": "그 외 {{count}}명"
         },
         "explore": {
             "searchbar": "새로운 인연을 찾아보세요.",
