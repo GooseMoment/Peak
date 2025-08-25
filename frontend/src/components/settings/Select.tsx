@@ -64,9 +64,13 @@ export function UserSettingSelect<K extends StringLiteralKeysOf<UserSetting>>({
     const [value, setValue] = useState(userSetting[name])
 
     const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        const newValue = e.target.value as UserSetting[K]
-        setValue(newValue)
-        submit({ [name]: newValue })
+        const selected = choices.find(
+            (choice) => choice.value === e.target.value,
+        )
+        if (selected) {
+            setValue(selected.value)
+            submit({ [name]: selected.value })
+        }
     }
 
     return (

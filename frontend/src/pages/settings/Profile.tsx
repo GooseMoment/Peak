@@ -87,7 +87,10 @@ const Profile = () => {
         if (typeof bio === "string") payload.bio = bio
 
         const headerColor = fd.get("header_color")
-        if (typeof headerColor === "string")
+        if (
+            typeof headerColor === "string" &&
+            getPaletteColor(theme.type, headerColor as PaletteColorName)
+        )
             payload.header_color = headerColor as PaletteColorName
 
         mutation.mutate(payload)
