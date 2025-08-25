@@ -98,7 +98,7 @@
         },
         "follow_list_privacy": {
             "name": "내 팔로우 & 팔로워 목록 공개 범위",
-            "description": "내 인맥을 누구까지 보여줄지 정합니다.",
+            "description": "내 인맥 목록을 누구까지 보여줄지 정합니다. 팔로우 & 팔로워 수는 모두가 볼 수 있습니다.",
             "values": {
                 "public": "모두에게",
                 "protected": "팔로워에게만",

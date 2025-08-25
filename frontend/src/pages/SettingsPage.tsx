@@ -8,7 +8,8 @@ import PageTitle from "@components/common/PageTitle"
 
 import { cubicBeizer } from "@assets/keyframes"
 
-import FeatherIcon from "feather-icons-react"
+import FeatherIcon, { type FeatherIconName } from "feather-icons-react"
+import { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const pathRoot = "/app/settings/"
@@ -41,58 +42,59 @@ const SettingsPage = () => {
     )
 }
 
-const getMenuItems = (t) => [
-    {
-        icon: "user",
-        display: t("profile"),
-        to: "profile",
-    },
-    {
-        icon: "settings",
-        display: t("general"),
-        to: "general",
-    },
-    {
-        icon: "shield",
-        display: t("security"),
-        to: "security",
-    },
-    // {
-    //     icon: "lock",
-    //     display: t("privacy"),
-    //     to: "privacy",
-    // },
-    {
-        icon: "globe",
-        display: t("languages_and_time"),
-        to: "languages-and-time",
-    },
-    {
-        icon: "bell",
-        display: t("notifications"),
-        to: "notifications",
-    },
-    {
-        icon: "sun",
-        display: t("appearance"),
-        to: "appearance",
-    },
-    // {
-    //     icon: "heart",
-    //     display: t("reactions"),
-    //     to: "reactions",
-    // },
-    {
-        icon: "slash",
-        display: t("blocks"),
-        to: "blocks",
-    },
-    {
-        icon: "info",
-        display: t("info"),
-        to: "info",
-    },
-]
+const getMenuItems = (t: TFunction<"settings", "menus">) =>
+    [
+        {
+            icon: "user",
+            display: t("profile"),
+            to: "profile",
+        },
+        {
+            icon: "settings",
+            display: t("general"),
+            to: "general",
+        },
+        {
+            icon: "shield",
+            display: t("security"),
+            to: "security",
+        },
+        {
+            icon: "lock",
+            display: t("privacy"),
+            to: "privacy",
+        },
+        {
+            icon: "globe",
+            display: t("languages_and_time"),
+            to: "languages-and-time",
+        },
+        {
+            icon: "bell",
+            display: t("notifications"),
+            to: "notifications",
+        },
+        {
+            icon: "sun",
+            display: t("appearance"),
+            to: "appearance",
+        },
+        // {
+        //     icon: "heart",
+        //     display: t("reactions"),
+        //     to: "reactions",
+        // },
+        {
+            icon: "slash",
+            display: t("blocks"),
+            to: "blocks",
+        },
+        {
+            icon: "info",
+            display: t("info"),
+            to: "info",
+        },
+    ] as { icon: FeatherIconName; display: string; to: string }[]
 
 const MenuBox = styled.div`
     display: flex;

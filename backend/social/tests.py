@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from users.models import User
+from user_setting.models import UserSetting
 from .models import Block, Following
 
 from typing import cast
@@ -158,8 +159,18 @@ class FollowingTest(APITestCase):
         # fail to DELETE a Following whose followee is me
         self.delete_forbidden(self.alpha.username, self.gamma.username)
 
+    # tests the whole following flow without accepting following requests settings
     def test_following_flow(self):
         self.create_temp_users()
+        alpha_setting = UserSetting.objects.get(user=self.alpha)
+        alpha_setting.follow_request_approval_manually = True
+        alpha_setting.follow_request_approval_for_followings = False
+        alpha_setting.save()
+
+        beta_setting = UserSetting.objects.get(user=self.beta)
+        beta_setting.follow_request_approval_manually = True
+        beta_setting.follow_request_approval_for_followings = False
+        beta_setting.save()
 
         alpha_client = APIClient()
         alpha_client.force_authenticate(user=self.alpha)
@@ -243,3 +254,68 @@ class FollowingTest(APITestCase):
                 follower=self.alpha, followee=self.beta, status=Following.CANCELED
             ).exists()
         )
+
+    def test_accept_follow_request_based_on_user_setting(self):
+        self.create_temp_users()
+
+        # Case 1: follow_request_approval_manually is False (auto-accept)
+        followee_setting_auto_accept = UserSetting.objects.get(user=self.beta)
+        followee_setting_auto_accept.follow_request_approval_manually = False
+        followee_setting_auto_accept.save()
+
+        # Create a following request
+        following_auto = Following.objects.create(
+            follower=self.alpha, followee=self.beta, status=Following.REQUESTED
+        )
+        # The signal should have automatically changed the status to ACCEPTED
+        following_auto.refresh_from_db()
+        self.assertEqual(following_auto.status, Following.ACCEPTED)
+
+        # Case 2: follow_request_approval_manually is True (manual approval)
+        Following.objects.all().delete()  # Ensure clean slate for this case
+        followee_setting_manual_approve = UserSetting.objects.get(user=self.gamma)
+        followee_setting_manual_approve.follow_request_approval_manually = True
+        followee_setting_manual_approve.save()
+
+        # Create a following request
+        following_manual = Following.objects.create(
+            follower=self.alpha, followee=self.gamma, status=Following.REQUESTED
+        )
+        # The signal should NOT have changed the status
+        following_manual.refresh_from_db()
+        self.assertEqual(following_manual.status, Following.REQUESTED)
+
+        # Case 3: follow_request_approval_manually is True and follow_request_approval_for_followings is True, with reversed following
+        Following.objects.all().delete()  # Ensure clean slate for this case
+        followee_setting_mutual_follow = UserSetting.objects.get(user=self.beta)
+        followee_setting_mutual_follow.follow_request_approval_manually = True
+        followee_setting_mutual_follow.follow_request_approval_for_followings = True
+        followee_setting_mutual_follow.save()
+
+        # Create a reversed following (beta follows alpha)
+        Following.objects.create(
+            follower=self.beta, followee=self.alpha, status=Following.ACCEPTED
+        )
+
+        # Create a following request (alpha follows beta)
+        following_mutual = Following.objects.create(
+            follower=self.alpha, followee=self.beta, status=Following.REQUESTED
+        )
+        # The signal should have automatically changed the status to ACCEPTED
+        following_mutual.refresh_from_db()
+        self.assertEqual(following_mutual.status, Following.ACCEPTED)
+
+        # Case 4: follow_request_approval_manually is True and follow_request_approval_for_followings is True, without reversed following
+        Following.objects.all().delete()  # Ensure clean slate for this case
+        followee_setting_no_mutual = UserSetting.objects.get(user=self.alpha)
+        followee_setting_no_mutual.follow_request_approval_manually = True
+        followee_setting_no_mutual.follow_request_approval_for_followings = True
+        followee_setting_no_mutual.save()
+
+        # Create a following request (beta follows alpha) - no reversed following from alpha to beta
+        following_no_mutual = Following.objects.create(
+            follower=self.beta, followee=self.alpha, status=Following.REQUESTED
+        )
+        # The signal should NOT have changed the status
+        following_no_mutual.refresh_from_db()
+        self.assertEqual(following_no_mutual.status, Following.REQUESTED)

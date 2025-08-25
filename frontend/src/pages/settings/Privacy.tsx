@@ -9,13 +9,18 @@ import Section, {
     Value,
     ValueError,
 } from "@components/settings/Section"
-import Select from "@components/settings/Select"
-import Switch from "@components/settings/SettingSwitch"
+import { UserSettingSelect } from "@components/settings/Select"
+import { UserSettingSwitch } from "@components/settings/SettingSwitch"
 
-import { getSettings, patchSettings } from "@api/user_setting.api"
+import {
+    type UserSetting,
+    getSettings,
+    patchSettings,
+} from "@api/user_setting.api"
 
 import queryClient from "@queries/queryClient"
 
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -33,7 +38,7 @@ const Privacy = () => {
     const { t } = useTranslation("settings", { keyPrefix: "privacy" })
 
     const mutation = useMutation({
-        mutationFn: (data) => {
+        mutationFn: (data: Partial<UserSetting>) => {
             return patchSettings(data)
         },
         onSuccess: () => {
@@ -66,27 +71,33 @@ const Privacy = () => {
                     {t("follow_request_approval_manually.description")}
                 </Description>
                 <Value>
-                    <Switch
-                        onlineSetting={settings}
+                    <UserSettingSwitch
+                        userSetting={settings}
                         submit={mutation.mutate}
                         name="follow_request_approval_manually"
                     />
                 </Value>
             </Section>
 
-            <Section>
-                <Name>{t("follow_request_approval_for_followings.name")}</Name>
-                <Description>
-                    {t("follow_request_approval_for_followings.description")}
-                </Description>
-                <Value>
-                    <Switch
-                        onlineSetting={settings}
-                        submit={mutation.mutate}
-                        name="follow_request_approval_for_followings"
-                    />
-                </Value>
-            </Section>
+            {settings.follow_request_approval_manually && (
+                <Section>
+                    <Name>
+                        {t("follow_request_approval_for_followings.name")}
+                    </Name>
+                    <Description>
+                        {t(
+                            "follow_request_approval_for_followings.description",
+                        )}
+                    </Description>
+                    <Value>
+                        <UserSettingSwitch
+                            userSetting={settings}
+                            submit={mutation.mutate}
+                            name="follow_request_approval_for_followings"
+                        />
+                    </Value>
+                </Section>
+            )}
 
             <Section>
                 <Name>{t("follow_list_privacy.name")}</Name>
@@ -94,8 +105,8 @@ const Privacy = () => {
                     {t("follow_list_privacy.description")}
                 </Description>
                 <Value>
-                    <Select
-                        onlineSetting={settings}
+                    <UserSettingSelect
+                        userSetting={settings}
                         submit={mutation.mutate}
                         name="follow_list_privacy"
                         choices={privacyChoices}
@@ -106,18 +117,18 @@ const Privacy = () => {
     )
 }
 
-const makePrivacyChoices = (t) => [
+const makePrivacyChoices = (t: TFunction<"settings", "privacy">) => [
     {
         display: t("follow_list_privacy.values.public"),
-        value: "public",
+        value: "public" as const,
     },
     {
         display: t("follow_list_privacy.values.protected"),
-        value: "protected",
+        value: "protected" as const,
     },
     {
         display: t("follow_list_privacy.values.private"),
-        value: "private",
+        value: "private" as const,
     },
 ]
 

@@ -1,7 +1,9 @@
 from rest_framework import permissions, views
 from rest_framework.request import Request
 
-from .models import Block
+from .models import Following, Block
+from user_setting.models import UserSetting
+from api.models import PrivacyMixin
 
 
 def is_either_blocked(username_a: str, username_b: str) -> bool:
@@ -74,6 +76,35 @@ class FollowingPermission(permissions.IsAuthenticated):
                 return request.user.get_username() == follower_username
 
         return False
+
+
+class FollowingListPermission(IsUserNotBlockedOrBlocking):
+    def has_permission(self, request: Request, view: views.APIView):
+        if not super().has_permission(request, view):
+            return False
+
+        target_username = view.kwargs["username"]
+
+        if request.user.get_username() == target_username:
+            return True
+
+        user_setting = UserSetting.objects.filter(
+            user__username=target_username
+        ).first()
+        if user_setting is None:
+            return True
+
+        if user_setting.follow_list_privacy == PrivacyMixin.FOR_PUBLIC:
+            return True
+
+        if user_setting.follow_list_privacy == PrivacyMixin.FOR_PRIVATE:
+            return False
+
+        return Following.objects.filter(
+            follower=request.user,
+            followee__username=target_username,
+            status=Following.ACCEPTED,
+        ).exists()
 
 
 class BlockPermission(permissions.BasePermission):
