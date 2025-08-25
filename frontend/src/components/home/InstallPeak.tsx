@@ -4,8 +4,14 @@ import Module, { Center, CenteredText, Title } from "@components/home/Module"
 
 import { useTranslation } from "react-i18next"
 
+const isStandalone = window.matchMedia("(display-mode: standalone)").matches
+
 const InstallPeak = () => {
     const { t } = useTranslation("home", { keyPrefix: "install_peak" })
+
+    if (!("standalone" in window.navigator) || isStandalone) {
+        return null
+    }
 
     return (
         <Module to="/docs/install-instruction">
