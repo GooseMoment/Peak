@@ -13,10 +13,10 @@ interface DailyUserProfileProps {
     back?: boolean
 }
 
-const DailyUserProfile = ({
+export default function DailyUserProfile({
     username,
     back = false,
-}: DailyUserProfileProps) => {
+}: DailyUserProfileProps) {
     const {
         data: user,
         isPending,
@@ -28,21 +28,21 @@ const DailyUserProfile = ({
 
     if (isPending || isError) {
         return (
-            <Header>
-                <HeaderTexts>
+            <Box>
+                <Texts>
                     {back && <PageBack defaultTo="/app/social" />}
                     <UsernameTitle $loading />
                     {!back && <DisplayNameSkeleton />}
-                </HeaderTexts>
+                </Texts>
                 <ProfileImgSkeleton />
-            </Header>
+            </Box>
         )
     }
 
     const userPagePath = `/app/users/@${user.username}`
     return (
-        <Header>
-            <HeaderTexts>
+        <Box>
+            <Texts>
                 {back && <PageBack defaultTo="/app/social" />}
                 <Link to={userPagePath}>
                     <UsernameTitle $cursor="pointer">
@@ -50,22 +50,22 @@ const DailyUserProfile = ({
                     </UsernameTitle>
                 </Link>
                 {!back && <Link to={userPagePath}>{user.display_name}</Link>}
-            </HeaderTexts>
-            <ProfileWrapper to={userPagePath}>
+            </Texts>
+            <ProfileImgWrapper to={userPagePath}>
                 <ProfileImg src={user.profile_img} />
-            </ProfileWrapper>
-        </Header>
+            </ProfileImgWrapper>
+        </Box>
     )
 }
 
-const Header = styled.div`
+const Box = styled.div`
     width: 100%;
 
     display: flex;
     justify-content: space-between;
 `
 
-const HeaderTexts = styled.div`
+const Texts = styled.div`
     width: 70%;
 
     display: flex;
@@ -96,7 +96,7 @@ const DisplayNameSkeleton = styled.div`
     background-color: ${(p) => p.theme.skeleton.defaultColor};
 `
 
-const ProfileWrapper = styled(Link)`
+const ProfileImgWrapper = styled(Link)`
     width: 4rem;
 `
 
@@ -116,5 +116,3 @@ const ProfileImgSkeleton = styled.div`
     border-radius: 100%;
     background-color: ${(p) => p.theme.skeleton.defaultColor};
 `
-
-export default DailyUserProfile

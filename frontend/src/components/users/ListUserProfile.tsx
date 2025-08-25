@@ -38,7 +38,7 @@ const ListUserProfile = ({ user, children }: ListUserProfileProp) => {
             <div>
                 {children ||
                     (user.username !== getCurrentUsername() && (
-                        <FollowButton user={user} />
+                        <FollowButton username={user.username} />
                     ))}
             </div>
         </UserContainer>

@@ -1,13 +1,8 @@
 from rest_framework import serializers
-from django.core.cache import cache
 
 from .models import Emoji, Quote, Remark, Reaction, Peck, Comment, Following, Block
-from projects.models import Project
 from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
-from drawers.serializers import DrawerSerializer
-
-from datetime import datetime
 
 
 class EmojiSerializer(serializers.ModelSerializer):
@@ -16,75 +11,12 @@ class EmojiSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "img"]
 
 
-class DailyLogsSerializer(UserSerializer):
-    recent_task = serializers.SerializerMethodField()
-
-    class Meta(UserSerializer.Meta):
-        fields = UserSerializer.Meta.fields + ["recent_task"]
-
-    def get_recent_task(self, obj):
-        day_min: datetime | None = self.context.get("day_min", None)
-        day_max: datetime | None = self.context.get("day_max", None)
-
-        if day_min is None or day_max is None:
-            raise ValueError("context variables day_min or day_max is None")
-
-        recent_task = (
-            obj.tasks.filter(completed_at__range=(day_min, day_max))
-            .all()
-            .order_by("-completed_at")
-            .first()
-        )
-
-        if not recent_task:
-            return None
-
-        followee_user_id = obj.id
-        day = day_min.isoformat()
-
-        cache_key = f"user_id_{followee_user_id}_date_{day}"
-        cache_data = cache.get(cache_key)
-
-        is_read = True
-        if cache_data:
-            # last_visted = timezone.make_aware()
-            last_visted = cache_data[self.context.get("user_id", None)]
-            is_read = last_visted > recent_task.completed_at
-
-        # need to delete
-        is_read = False
-
-        recent_task = TaskSerializer(recent_task).data
-        recent_task["is_read"] = is_read
-        recent_task["project_color"] = Project.objects.get(
-            id=recent_task["project_id"]
-        ).color
-
-        return recent_task
-
-    # for sort in backend
-    # def to_representation(self, instance):
-    #     ret = super().to_representation(instance)
-
-    #     if 'recent_task' in ret:
-    #         ret['recent_task'] = sorted(ret['recent_task'], key=lambda x: x['recent_task__completed_at'])
-    #     return ret
-
-
 class QuoteSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Quote
         fields = ["id", "user", "content", "date"]
-
-    # def to_representation(self, instance):
-    #     data = super().to_representation(instance)
-
-    #     if not instance.comment:
-    #         return {'user': data['user']}
-
-    #     return data
 
 
 class RemarkSerializer(serializers.ModelSerializer):
@@ -102,19 +34,17 @@ class RemarkSerializer(serializers.ModelSerializer):
         ]
 
 
-class DailyLogDetailsSerializer(TaskSerializer):
-    project_order = serializers.IntegerField(read_only=True)
-    drawer_order = serializers.IntegerField(read_only=True)
+class StatSerializer(UserSerializer):
+    completed_task_count = serializers.IntegerField()
+    reaction_count = serializers.IntegerField()
+    date = serializers.CharField()
 
-    class Meta(TaskSerializer.Meta):
-        fields = TaskSerializer.Meta.fields + ["project_order", "drawer_order"]
-
-
-class DailyLogDrawerSerializer(DrawerSerializer):
-    color = serializers.CharField(read_only=True)
-
-    class Meta(DrawerSerializer.Meta):
-        fields = DrawerSerializer.Meta.fields + ["color"]
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + [
+            "completed_task_count",
+            "reaction_count",
+            "date",
+        ]
 
 
 class ReactionSerializer(serializers.ModelSerializer):

@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom"
+import { generatePath, useNavigate } from "react-router-dom"
 
 import styled, { css, useTheme } from "styled-components"
-
-import { SimpleProfileImg } from "@components/social/common/SimpleProfile"
 
 import { getCurrentUsername } from "@api/client"
 
@@ -16,7 +14,6 @@ const LogPreviewBox = ({
     log,
     selectedUser,
     setSelectedUser,
-    selectedDate,
     // pageType = "following",
 }) => {
     const theme = useTheme()
@@ -25,20 +22,17 @@ const LogPreviewBox = ({
 
     const me = getCurrentUsername()
 
-    if (!log) return null
-
-    // TODO: explore feed용 view 추가하면 삭제
-    const initialDate = new Date()
-    initialDate.setHours(0, 0, 0, 0)
-    // const tempSelectedDate = initial_date.toISOString()
-
     const handleSelect = () => {
-        setSelectedUser(log.username === selectedUser ? null : log.username)
+        if (isDesktop) {
+            setSelectedUser(log.username)
+            return
+        }
 
-        if (!isDesktop)
-            navigate(`../daily/@${log.username}`, {
-                state: { selectedDate: selectedDate },
-            })
+        navigate(
+            generatePath("/app/social/daily/:user", {
+                user: "@" + log.username,
+            }),
+        )
     }
 
     // TODO: theme.grey 삭제
@@ -148,6 +142,17 @@ const ProfileWrapper = styled.div`
     ${ifTablet} {
         max-width: 64px !important;
     }
+`
+
+const SimpleProfileImg = styled.img`
+    aspect-ratio: 1;
+    width: ${(props) => (props.$ratio === undefined ? 100 : props.$ratio)}%;
+
+    border-radius: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 const InfoContainer = styled.div`

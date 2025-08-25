@@ -4,22 +4,28 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { styled } from "styled-components"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
+import DailyContainer from "@components/social/DailyContainer"
 import SocialPageTitle from "@components/social/SocialPageTitle"
 import ExploreFeed from "@components/social/explore/ExploreFeed"
 import ExploreSearchBar from "@components/social/explore/ExploreSearchBar"
-import LogDetails from "@components/social/logDetails/LogDetails"
 
 import { getExploreFound, getExploreRecommend } from "@api/social.api"
 
+import { useClientTimezone } from "@utils/clientSettings"
 import { getCursorFromURL } from "@utils/pagination"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
+import { DateTime } from "luxon"
+
 const SocialExplorePage = () => {
-    const initialDate = new Date()
-    initialDate.setHours(0, 0, 0, 0)
-    const selectedDate = initialDate.toISOString()
+    const tz = useClientTimezone()
+    const [today] = useState(() =>
+        DateTime.now()
+            .setZone(tz)
+            .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }),
+    )
 
     const { isMobile } = useScreenType()
 
@@ -89,10 +95,10 @@ const SocialExplorePage = () => {
                 {!isMobile && (
                     <StickyContainer>
                         {selectedUser && (
-                            <LogDetails
+                            <DailyContainer
                                 username={selectedUser}
-                                selectedDate={selectedDate} //TOD temp
-                                pageType="explore"
+                                displayFollowButton
+                                date={today}
                             />
                         )}
                     </StickyContainer>
