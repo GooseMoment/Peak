@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from django.db.models.manager import RelatedManager
     from notifications.models import TaskReminder
+    from social.models import TaskReaction
 
 
 class Task(Base, PrivacyMixin):
@@ -40,6 +41,7 @@ class Task(Base, PrivacyMixin):
     memo = models.TextField(null=True, blank=True)
 
     reminders: "RelatedManager[TaskReminder]"
+    reactions: "RelatedManager[TaskReaction]"
 
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"

@@ -1,4 +1,5 @@
 import client, { getCurrentUsername, setCurrentUsername } from "@api/client"
+import type { PaginationData } from "@api/common"
 
 import { type PaletteColorName } from "@assets/palettes"
 
@@ -46,10 +47,13 @@ export const uploadProfileImg = async (formData: FormData) => {
     return res.status
 }
 
-export const getBlocks = async (page: number) => {
+export const getBlocks = async (page: string) => {
     const username = getCurrentUsername()
-    const res = await client.get<User[]>(`users/@${username}/blocks/`, {
-        params: { page },
-    })
+    const res = await client.get<PaginationData<User>>(
+        `users/@${username}/blocks/`,
+        {
+            params: { page },
+        },
+    )
     return res.data
 }

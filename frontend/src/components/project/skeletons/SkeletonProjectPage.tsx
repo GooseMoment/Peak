@@ -8,9 +8,9 @@ export const SkeletonProjectPage = () => {
     return (
         <>
             <ProjectTitle />
-            <SkeletonDrawer taskCount={3} />
-            <SkeletonDrawer taskCount={3} />
-            <SkeletonDrawer taskCount={3} />
+            <SkeletonDrawer key={0} taskCount={3} />
+            <SkeletonDrawer key={1} taskCount={3} />
+            <SkeletonDrawer key={2} taskCount={3} />
         </>
     )
 }
@@ -33,7 +33,7 @@ export const SkeletonTasks = ({ taskCount }: { taskCount: number }) => {
 
     return (
         <Tasks>
-            {[...Array(skeletonCount)].map((i) => (
+            {[...Array(skeletonCount)].map((_, i) => (
                 <TaskBox key={i}>
                     <Circle />
                     <Bar />

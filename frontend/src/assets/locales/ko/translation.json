@@ -396,16 +396,19 @@
     "social": {
         "following_title": "팔로잉",
         "explore_title": "탐험",
-        "log_preview_completed": "완료!",
-        "log_details": {
-            "no_content": "작업이 없습니다."
+        "records": {
+            "empty": "아무 것도 없습니다.",
+            "empty_mine": "오늘 완료했거나 할당했거나 기한인 작업이 여기 표시됩니다."
         },
-        "quote": {
-            "empty_self_quote": "오늘의 한마디를 남겨주세요.",
-            "empty_others_quote": "아직 상대방이 작성하지 않았습니다."
+        "remarks": {
+            "title": "오늘의 한마디",
+            "title_edit": "수정 중",
+            "title_create": "한마디를 적어주세요",
+            "placeholder": "연필 버튼을 눌러 작성하세요",
+            "placeholder_edit": "이곳에 작성하세요..."
         },
-        "emoji_modal": {
-            "searchbar": "이모지 찾기"
+        "reactions": {
+            "more": "그 외 {{count}}명"
         },
         "explore": {
             "searchbar": "새로운 인연을 찾아보세요.",
@@ -436,6 +439,11 @@
             "back": "돌아가기"
         },
         "button_no": "아니요",
-        "error_load": "불러오지 못했습니다."
+        "retry": "재시도",
+        "load_more": "더 불러오기",
+        "error_load": "불러오지 못했습니다.",
+        "error_something_wrong": "문제가 발생했습니다.",
+        "error_something_wrong_description": "나중에 다시 시도해 주세요.",
+        "error_perform": "실행하지 못했습니다."
     }
 }

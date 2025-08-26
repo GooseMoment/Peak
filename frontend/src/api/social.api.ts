@@ -1,8 +1,9 @@
 import client, { getCurrentUsername, isAxiosErrorStatus } from "@api/client"
 import type { Base, PaginationData } from "@api/common"
-import { type User } from "@api/users.api"
+import type { User } from "@api/users.api"
 
-export interface Emoji extends Base {
+export interface Emoji {
+    id: string
     name: string
     img: string
 }
@@ -15,29 +16,48 @@ export interface Peck extends Base {
     count: number
 }
 
+/**
+ * @deprecated use {@link Remark} instead
+ */
 export interface Quote extends Base {
     user: User
     content: string
     date: string
 }
 
-export interface ReactionTask extends Base {
+export interface Remark extends Base {
     user: User
-    parent_type: "task"
+    content: string
+    date: string
+}
+
+export interface Stat extends User {
+    completed_task_count: number
+    reaction_count: number
+    date: string
+}
+
+export interface TaskReactionUnicodeEmoji extends Base {
+    user: User
     // TODO: replace Task
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     task: any
-    emoji: Emoji
+    unicode_emoji: string
+    image_emoji: null
+    emoji_name: string
 }
 
-export interface ReactionQuote extends Base {
+export interface TaskReactionImageEmoji extends Base {
     user: User
-    parent_type: "quote"
-    quote: Quote
-    emoji: Emoji
+    // TODO: replace Task
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    task: any
+    unicode_emoji: null
+    image_emoji: Emoji
+    emoji_name: string
 }
 
-export type Reaction = ReactionTask | ReactionQuote
+export type TaskReaction = TaskReactionUnicodeEmoji | TaskReactionImageEmoji
 
 export interface CommentTask extends Base {
     user: User
@@ -198,22 +218,34 @@ export const deleteBlock = async (username: string) => {
     return res.data
 }
 
-// TODO: declare DailyLogsPreview
-export const getDailyLogsPreview = async (username: string, day: string) => {
-    const res = await client.get(`social/daily/logs/@${username}/${day}/`)
-
+export const getStat = async (username: string, date_iso: string) => {
+    const res = await client.get<Stat>(`social/stats/@${username}/${date_iso}/`)
     return res.data
 }
 
-// TODO: declare DailyLogDetail
-export const getDailyLogDetails = async (
+export const getStats = async (date_iso: string, page: string) => {
+    const res = await client.get<PaginationData<Stat>>(
+        `social/stats/${date_iso}/`,
+        {
+            params: { page },
+        },
+    )
+    return res.data
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Task = any
+
+export const getRecord = async (
     username: string,
-    day: string,
-    cursor: string,
+    date_iso: string,
+    page: string,
 ) => {
-    const res = await client.get(
-        `social/daily/log/details/@${username}/${day}/`,
-        { params: { cursor } },
+    const res = await client.get<PaginationData<Task>>(
+        `social/records/@${username}/${date_iso}/`,
+        {
+            params: { page },
+        },
     )
 
     return res.data
@@ -236,18 +268,28 @@ export const getExploreFound = async (query: string, cursor: string) => {
     return res.data
 }
 
-export const getQuote = async (username: string, day: string) => {
-    const res = await client.get<Quote>(`social/quotes/@${username}/${day}/`)
+export const getRemark = async (username: string, date: string) => {
+    const res = await client.get<Remark | "">(
+        `social/remarks/@${username}/${date}/`,
+    )
+    // The data of 204 No Content is a blank string
+    return res.data === "" ? null : res.data
+}
 
+// PUT performs the both CREATE and UPDATE
+export const putRemark = async (date: string, content: string) => {
+    const res = await client.put<Remark>(
+        `social/remarks/@${getCurrentUsername()}/${date}/`,
+        {
+            content,
+        },
+    )
     return res.data
 }
 
-export const postQuote = async (date: string, content: string) => {
-    const res = await client.post<Quote>(`social/quotes/${date}/`, {
-        content,
-    })
-
-    return res.data
+export const deleteRemark = async (date: string) => {
+    await client.delete(`social/remarks/@${getCurrentUsername()}/${date}/`)
+    return null
 }
 
 export const getEmojis = async () => {
@@ -256,45 +298,37 @@ export const getEmojis = async () => {
     return res.data.results
 }
 
-export const getReactions = async (
-    parentType: Reaction["parent_type"],
-    parentID: string, // TODO: replace string with Task["id"] | Quote["id"]
-) => {
-    const res = await client.get<PaginationData<Reaction>>(
-        `social/reactions/${parentType}/${parentID}/`,
+export const getTaskReactions = async (taskID: string) => {
+    const res = await client.get<TaskReaction[]>(
+        `tasks/${taskID}/reactions/`,
+        {},
     )
 
     return res.data
 }
 
-export const postReaction = async (
-    parentType: Reaction["parent_type"],
-    parentID: string,
-    emoji: Emoji["name"], // TODO: replace Emoji["name"] with Emoji
+export type TaskReactionPost =
+    | {
+          unicode_emoji: string
+      }
+    | {
+          image_emoji: string
+      }
+
+export const postTaskReaction = async (
+    taskID: string,
+    data: TaskReactionPost,
 ) => {
-    const res = await client.post<Reaction>(
-        `social/reactions/${parentType}/${parentID}/`,
-        {
-            emoji: emoji,
-        },
+    const res = await client.post<TaskReaction>(
+        `tasks/${taskID}/reactions/`,
+        data,
     )
 
     return res.data
 }
 
-export const deleteReaction = async (
-    parentType: Reaction["parent_type"],
-    parentID: string,
-    emoji: Emoji["name"],
-) => {
-    const params = new URLSearchParams({ emoji: emoji })
-
-    const res = await client.delete(
-        `social/reactions/${parentType}/${parentID}/`,
-        { params },
-    )
-
-    return res.status
+export const deleteTaskReaction = async (reactionID: TaskReaction["id"]) => {
+    await client.delete(`social/task_reactions/${reactionID}/`)
 }
 
 export const getPeck = async (taskID: string) => {

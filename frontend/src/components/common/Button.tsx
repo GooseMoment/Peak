@@ -1,4 +1,9 @@
-import type { ButtonHTMLAttributes, ElementType, ReactNode } from "react"
+import type {
+    ButtonHTMLAttributes,
+    CSSProperties,
+    ElementType,
+    ReactNode,
+} from "react"
 
 import styled from "styled-components"
 
@@ -35,7 +40,7 @@ export default function Button({
 }
 
 export const ButtonGroup = styled.div<{
-    $justifyContent?: string
+    $justifyContent?: CSSProperties["justifyContent"]
     $margin?: string
 }>`
     display: flex;
