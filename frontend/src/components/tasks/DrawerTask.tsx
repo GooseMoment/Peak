@@ -83,7 +83,7 @@ const DrawerTask = ({
     const [{ isDragging }, drag] = useDrag({
         type: "Task",
         item: () => {
-            return { id: task.id, order: task.order, drawerId: task.drawer }
+            return { id: task.id, order: task.order, drawerId: task.drawer.id }
         },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),

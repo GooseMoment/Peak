@@ -2,13 +2,13 @@ import { useMutation } from "@tanstack/react-query"
 
 import TaskFrame from "./TaskFrame"
 
-import { type Task, patchTask } from "@api/tasks.api"
+import { type Task, TaskPost, patchTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
 
 const TaskBlock = ({ task }: { task: Task }) => {
     const mutation = useMutation({
-        mutationFn: (data: Partial<Task>) => {
+        mutationFn: (data: Partial<TaskPost>) => {
             return patchTask(task.id, data)
         },
         onSuccess: () => {

@@ -181,7 +181,7 @@ const TaskCreateSimple = ({
                     priorityIndex={priorityIndex}
                     setPriorityIndex={setPriorityIndex}
                     editNewTask={editNewTask}
-                    color={drawer.project.color}
+                    color={color}
                 />
             ),
         },
@@ -195,7 +195,7 @@ const TaskCreateSimple = ({
                         key={item.name}
                         data-name={item.name}
                         onClick={handleClickContent}
-                        $color={drawer.project.color}
+                        $color={color}
                         $isSelected={content === item.name}>
                         {item.icon}
                     </IndexBox>

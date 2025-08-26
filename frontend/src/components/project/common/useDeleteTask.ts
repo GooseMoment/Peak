@@ -44,7 +44,7 @@ export const useDeleteTask = ({
                 queryKey: ["task", { taskID: task.id }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: task.drawer }],
+                queryKey: ["tasks", { drawerID: task.drawer.id }],
             })
 
             if (task.drawer.project.type === "goal") {
