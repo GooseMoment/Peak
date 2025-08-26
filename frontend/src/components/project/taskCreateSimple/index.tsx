@@ -1,42 +1,63 @@
-import { useEffect, useRef, useState } from "react"
+import { MouseEvent, useEffect, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
-import styled, { css } from "styled-components"
+import styled, { css, useTheme } from "styled-components"
 
-import SimpleAssigned from "@components/project/TaskCreateSimple/SimpleAssigned"
-import SimpleDue from "@components/project/TaskCreateSimple/SimpleDue"
-import SimplePriority from "@components/project/TaskCreateSimple/SimplePriority"
+import SimpleAssigned from "@components/project/taskCreateSimple/SimpleAssigned"
+import SimpleDue from "@components/project/taskCreateSimple/SimpleDue"
+import SimplePriority from "@components/project/taskCreateSimple/SimplePriority"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
-import { postTask } from "@api/tasks.api"
+import { type Drawer } from "@api/drawers.api"
+import { type MinimalTask, postTask } from "@api/tasks.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
+import { getPaletteColor } from "@assets/palettes"
 import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
+type SimpleContentKey = "name" | "assigned" | "due" | "priority"
+
 const TaskCreateSimple = ({
-    projectID,
-    projectName,
-    drawerID,
-    drawerName,
-    color,
+    drawer,
     onClose,
+}: {
+    drawer: Drawer
+    onClose: () => void
 }) => {
-    const { t } = useTranslation(null, { keyPrefix: "task.edit" })
-    const inputRef = useRef(null)
+    const { t } = useTranslation("translation", { keyPrefix: "task.edit" })
+    const inputRef = useRef<HTMLInputElement>(null)
 
-    const [content, setContent] = useState("name")
-    const [assignedIndex, setAssignedIndex] = useState(0)
-    const [dueIndex, setDueIndex] = useState(0)
-    const [priorityIndex, setPriorityIndex] = useState(0)
+    const [newTask, setNewTask] = useState<MinimalTask>({
+        name: "",
+        drawer: drawer,
+        privacy: "public",
+        priority: 0,
+        completed_at: null,
+        assigned_at: null,
+        due_type: null,
+        due_date: null,
+        due_datetime: null,
+        reminders: [],
+        memo: "",
+    })
 
-    const onKeyDownAlt = (e) => {
+    const theme = useTheme()
+
+    const color = getPaletteColor(theme.type, drawer.project.color)
+
+    const [content, setContent] = useState<SimpleContentKey>("name")
+    const [assignedIndex, setAssignedIndex] = useState<number>(0)
+    const [dueIndex, setDueIndex] = useState<number>(0)
+    const [priorityIndex, setPriorityIndex] = useState<number>(0)
+
+    const onKeyDownAlt = (e: KeyboardEvent) => {
         if (!e.altKey) {
             return
         }
@@ -56,44 +77,32 @@ const TaskCreateSimple = ({
         }
     }, [])
 
-    const handleClickContent = (e) => {
+    const handleClickContent = (e: MouseEvent<HTMLDivElement>) => {
         const name = e.currentTarget.getAttribute("name")
-        setContent(name)
+        setContent(name as SimpleContentKey)
     }
 
-    const [newTask, setNewTask] = useState({
-        name: "",
-        assigned_at: null,
-        due_type: null,
-        due_date: null,
-        due_datetime: null,
-        priority: 0,
-        reminders: [],
-        drawer: drawerID,
-        drawer_name: drawerName,
-        project_id: projectID,
-        project_name: projectName,
-        memo: "",
-        privacy: "public",
-    })
-
-    const editNewTask = (edit) => {
-        setNewTask(Object.assign({}, newTask, edit))
+    const editNewTask = (diff: Partial<MinimalTask>) => {
+        setNewTask(Object.assign({}, newTask, diff))
     }
 
     const postMutation = useMutation({
-        mutationFn: (data) => {
-            return postTask(data)
+        mutationFn: (data: MinimalTask) => {
+            const taskData = {
+                ...data,
+                drawer: data.drawer.id,
+            }
+            return postTask(taskData)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: newTask.drawer }],
+                queryKey: ["tasks", { drawerID: drawer.id }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["drawers", { projectID: newTask.project_id }],
+                queryKey: ["drawers", { projectID: drawer.project.id }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["project", newTask.project_id],
+                queryKey: ["projects", drawer.project.id],
             })
             toast.success(t("create_success"))
             onClose()
@@ -103,7 +112,7 @@ const TaskCreateSimple = ({
         },
     })
 
-    const onKeyDownEnter = (e) => {
+    const onKeyDownEnter = (e: KeyboardEvent | React.KeyboardEvent) => {
         if (postMutation.isPending) {
             e.preventDefault()
             return
@@ -115,8 +124,10 @@ const TaskCreateSimple = ({
 
         e.preventDefault()
 
-        if (newTask.name.trim() === "") {
-            return toast.error(t("create_no_name"))
+        if (newTask.name === undefined || newTask.name.trim() === "") {
+            toast.error(t("create_no_name"))
+            inputRef.current?.focus()
+            return
         }
 
         postMutation.mutate(newTask)
@@ -124,22 +135,22 @@ const TaskCreateSimple = ({
 
     const items = [
         {
-            name: "name",
+            name: "name" as const,
             icon: <FeatherIcon icon="tag" />,
             component: (
                 <TaskNameInput
                     task={newTask}
-                    name={newTask.name}
+                    name={newTask.name || ""}
                     setName={(name) => editNewTask({ name })}
+                    color={drawer.project.color}
                     inputRef={inputRef}
-                    color={color}
                     setFunc={editNewTask}
-                    isCreate
+                    isCreating
                 />
             ),
         },
         {
-            name: "assigned",
+            name: "assigned" as const,
             icon: <FeatherIcon icon="calendar" />,
             component: (
                 <SimpleAssigned
@@ -151,7 +162,7 @@ const TaskCreateSimple = ({
             ),
         },
         {
-            name: "due",
+            name: "due" as const,
             icon: <Hourglass />,
             component: (
                 <SimpleDue
@@ -163,14 +174,14 @@ const TaskCreateSimple = ({
             ),
         },
         {
-            name: "priority",
+            name: "priority" as const,
             icon: <FeatherIcon icon="alert-circle" />,
             component: (
                 <SimplePriority
                     priorityIndex={priorityIndex}
                     setPriorityIndex={setPriorityIndex}
                     editNewTask={editNewTask}
-                    color={color}
+                    color={drawer.project.color}
                 />
             ),
         },
@@ -182,9 +193,9 @@ const TaskCreateSimple = ({
                 {items.map((item) => (
                     <IndexBox
                         key={item.name}
-                        name={item.name}
+                        data-name={item.name}
                         onClick={handleClickContent}
-                        $color={color}
+                        $color={drawer.project.color}
                         $isSelected={content === item.name}>
                         {item.icon}
                     </IndexBox>
@@ -242,7 +253,7 @@ const TaskCreateSimpleBox = styled.div`
     }
 `
 
-const IndexBox = styled.div`
+const IndexBox = styled.div<{ $isSelected: boolean; $color: string }>`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -261,18 +272,18 @@ const IndexBox = styled.div`
         stroke: ${(p) => p.theme.textColor};
     }
 
-    ${(props) =>
-        props.$isSelected &&
-        css`
-            background-color: ${(props) => props.$color};
+    ${({ $isSelected }) =>
+        $isSelected &&
+        css<{ $color: string }>`
+            background-color: ${({ $color }) => $color};
 
             & svg {
-                stroke: ${(p) => p.theme.white};
+                stroke: ${({ theme }) => theme.white};
             }
         `}
 `
 
-const ComponentBox = styled.div`
+const ComponentBox = styled.div<{ $isSelected: boolean }>`
     width: 100%;
 
     ${(props) =>

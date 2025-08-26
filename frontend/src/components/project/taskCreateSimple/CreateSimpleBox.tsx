@@ -1,6 +1,14 @@
+import { ReactNode } from "react"
+
 import styled, { css } from "styled-components"
 
-export const CreateSimpleBox = ({ icon, children }) => {
+export const CreateSimpleBox = ({
+    icon,
+    children,
+}: {
+    icon: ReactNode
+    children: ReactNode
+}) => {
     return (
         <Box>
             {icon}
@@ -35,7 +43,7 @@ const ContentBlock = styled.div`
     gap: 0.5em;
 `
 
-export const ContentBox = styled.div`
+export const ContentBox = styled.div<{ $isActive: boolean; $color: string }>`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -52,12 +60,11 @@ export const ContentBox = styled.div`
         margin-right: 0.3em;
     }
 
-    ${(props) =>
-        props.$isActive &&
-        css`
+    ${(p) =>
+        p.$isActive &&
+        css<{ $color: string }>`
             color: ${(p) => p.theme.white};
-            background-color: ${(props) => props.$color};
-
+            background-color: ${(p) => p.$color};
             & svg {
                 stroke: ${(p) => p.theme.white};
             }

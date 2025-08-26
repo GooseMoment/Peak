@@ -2,7 +2,9 @@ import { getClientTimezone } from "@utils/clientSettings"
 
 import { DateTime } from "luxon"
 
-const addDateFromToday = (set) => {
+const addDateFromToday = (
+    set: { days: number } | { months: number } | null,
+) => {
     if (!set) {
         return null
     }

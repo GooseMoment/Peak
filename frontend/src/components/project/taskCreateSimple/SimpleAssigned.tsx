@@ -1,12 +1,12 @@
-import { useEffect } from "react"
+import { Dispatch, SetStateAction, useEffect } from "react"
 
 import {
     ContentBox,
     CreateSimpleBox,
-} from "@components/project/TaskCreateSimple/CreateSimpleBox"
-import addDateFromToday from "@components/project/TaskCreateSimple/addDateFromToday"
+} from "@components/project/taskCreateSimple/CreateSimpleBox"
+import addDateFromToday from "@components/project/taskCreateSimple/addDateFromToday"
 
-import { useClientTimezone } from "@utils/clientSettings"
+import { type MinimalTask } from "@api/tasks.api"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -16,11 +16,15 @@ const SimpleAssigned = ({
     setAssignedIndex,
     editNewTask,
     color,
+}: {
+    assignedIndex: number
+    setAssignedIndex: Dispatch<SetStateAction<number>>
+    editNewTask: (diff: Partial<MinimalTask>) => void
+    color: string
 }) => {
-    const { t } = useTranslation(null, { keyPrefix: "task.due.quick" })
-    const due_tz = useClientTimezone()
+    const { t } = useTranslation("translation", { keyPrefix: "task.due.quick" })
 
-    const onKeyDown = (e) => {
+    const onKeyDown = (e: KeyboardEvent | React.KeyboardEvent) => {
         if (e.key === "ArrowRight") {
             if (assignedIndex === 5) return
             setAssignedIndex(assignedIndex + 1)
@@ -41,7 +45,6 @@ const SimpleAssigned = ({
 
     useEffect(() => {
         editNewTask({
-            due_tz: due_tz,
             assigned_at: addDateFromToday(items[assignedIndex].set),
         })
     }, [assignedIndex])
@@ -68,22 +71,22 @@ const SimpleAssigned = ({
     ]
 
     return (
-        <CreateSimpleBox
-            onKeyDown={onKeyDown}
-            icon={<FeatherIcon icon="calendar" />}>
-            {items.map((item) => (
-                <ContentBox
-                    key={item.index}
-                    $color={color}
-                    $isActive={assignedIndex === item.index}
-                    onClick={() => setAssignedIndex(item.index)}>
-                    {assignedIndex === item.index && (
-                        <FeatherIcon icon="check" />
-                    )}
-                    {item.display}
-                </ContentBox>
-            ))}
-        </CreateSimpleBox>
+        <div onKeyDown={onKeyDown}>
+            <CreateSimpleBox icon={<FeatherIcon icon="calendar" />}>
+                {items.map((item, index) => (
+                    <ContentBox
+                        key={item.display}
+                        $color={color}
+                        $isActive={assignedIndex === index}
+                        onClick={() => setAssignedIndex(index)}>
+                        {assignedIndex === item.index && (
+                            <FeatherIcon icon="check" />
+                        )}
+                        {item.display}
+                    </ContentBox>
+                ))}
+            </CreateSimpleBox>
+        </div>
     )
 }
 
