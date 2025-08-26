@@ -40,7 +40,7 @@ export const getReminder = async (id: string) => {
 
 export const postReminder = async (reminders: {
     task: string
-    delta_list: MinimalReminder[]
+    delta_list: number[]
 }) => {
     const res = await client.post(`notifications/reminders/`, reminders)
     return res.status

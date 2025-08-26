@@ -50,8 +50,9 @@ const TaskForm = ({
     const { isDesktop } = useScreenType()
 
     const postReminderMutation = useMutation({
-        mutationFn: (data: { task: string; delta_list: MinimalReminder[] }) => {
-            return postReminder(data)
+        mutationFn: (data: { task: string; reminders: MinimalReminder[] }) => {
+            const deltaList = data.reminders.map((reminder) => reminder.delta)
+            return postReminder({ task: data.task, delta_list: deltaList })
         },
         onSuccess: (_result, variables) => {
             queryClient.invalidateQueries({
@@ -90,7 +91,7 @@ const TaskForm = ({
         if (newTask.reminders !== undefined) {
             postReminderMutation.mutate({
                 task: createdTask.id,
-                delta_list: newTask.reminders,
+                reminders: newTask.reminders,
             })
         }
     }

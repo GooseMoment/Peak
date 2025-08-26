@@ -38,7 +38,11 @@ const TaskDetail = ({ task }: { task: MinimalTaskWithID }) => {
 
     const patchMutation = useMutation({
         mutationFn: (data: MinimalTaskWithID) => {
-            return patchTask(data.id, data)
+            const taskData = {
+                ...data,
+                drawer: data.drawer.id,
+            }
+            return patchTask(data.id, taskData)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({

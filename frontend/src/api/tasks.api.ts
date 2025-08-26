@@ -92,7 +92,7 @@ export const postTask = async (task: TaskPost) => {
     return res.data
 }
 
-export const patchTask = async (id: string, edit: Partial<Task>) => {
+export const patchTask = async (id: string, edit: Partial<TaskPost>) => {
     const res = await client.patch<Task>(`tasks/${id}/`, edit)
     return res.data
 }
