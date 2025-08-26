@@ -8,7 +8,7 @@ import Input from "@components/common/Input"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import MildButton from "@components/common/MildButton"
 import ModalWindow from "@components/common/ModalWindow"
-import Color from "@components/project/edit/Color"
+import ColorEdit from "@components/project/edit/ColorEdit"
 import ProfileImg from "@components/settings/ProfileImg"
 import Section, { Name, Value, ValueError } from "@components/settings/Section"
 
@@ -168,7 +168,7 @@ const Profile = () => {
                     </Value>
                     {paletteOpen && (
                         <ModalWindow afterClose={() => setPaletteOpen(false)}>
-                            <Color setColor={setHeaderColor} />
+                            <ColorEdit setColor={setHeaderColor} />
                         </ModalWindow>
                     )}
                 </Section>

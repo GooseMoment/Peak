@@ -7,7 +7,7 @@ import MildButton from "@components/common/MildButton"
 import ModalLoader from "@components/common/ModalLoader"
 import Module, { Title } from "@components/home/Module"
 
-import { getProject } from "@api/projects.api"
+import { getDrawer } from "@api/drawers.api"
 
 import PlusCircle from "@assets/home/PlusCircle"
 
@@ -28,7 +28,7 @@ const AddTask = () => {
     const inboxQuery = useQuery({
         queryKey: ["projects", "inbox"],
         async queryFn() {
-            return getProject("inbox")
+            return getDrawer("inbox")
         },
         refetchOnWindowFocus: false,
     })
@@ -44,10 +44,8 @@ const AddTask = () => {
             {isOpen && inboxQuery.isSuccess && (
                 <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
                     <TaskCreateElement
+                        drawer={inboxQuery.data}
                         onClose={() => setOpen(false)}
-                        project={inboxQuery.data}
-                        drawer={inboxQuery.data.drawers[0]}
-                        color={inboxQuery.data.color}
                     />
                 </Suspense>
             )}

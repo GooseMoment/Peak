@@ -8,7 +8,9 @@
         "projects": "프로젝트",
         "inbox": "인박스",
         "projects_list_refetch": "눌러서 재시도",
-        "user_error": "유저 정보를 불러올 수 없습니다. 앱을 다시 실행해 주세요."
+        "user_error": "유저 정보를 불러올 수 없습니다. 앱을 다시 실행해 주세요.",
+        "loading": "로딩 중",
+        "button_load_more": "더보기"
     },
     "notifications": {
         "title": "알림",
@@ -35,7 +37,9 @@
         "type_regular": "상시",
         "type_goal": "목표",
         "inbox": "인박스",
-        "button_add_project": "새 프로젝트 추가"
+        "button_add_project": "새 프로젝트 추가",
+        "loading": "로딩 중",
+        "button_load_more": "더보기"
     },
     "today": {
         "title": "오늘",
@@ -66,6 +70,7 @@
         "none": "없음",
         "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요 😢",
         "error_load_inbox": "인박스 프로젝트를 불러오지 못했어요 😢",
+        "error_load_task": "작업을 불러오지 못했어요 😢",
         "name_placeholder": "이름을 입력하세요",
         "edit": {
             "display": "수정"
@@ -121,6 +126,7 @@
         "color": {
             "title": "색깔 설정",
             "palette1": "기본",
+            "grey": "회색",
             "red": "빨간색",
             "red_orange": "레드오렌지",
             "orange": "주황색",
@@ -146,6 +152,7 @@
         },
         "type": {
             "title": "프로젝트 종류 설정",
+            "inbox": "인박스",
             "regular": "상시 프로젝트",
             "goal": "목표 프로젝트"
         }
@@ -234,7 +241,9 @@
         "drawer": {
             "name": "서랍",
             "title": "서랍 선택",
-            "fetching_error": "데이터를 불러오는 중 오류가 발생했습니다."
+            "fetching_error": "데이터를 불러오는 중 오류가 발생했습니다.",
+            "loading": "로딩 중",
+            "button_load_more": "더보기"
         },
         "memo": {
             "name": "메모",

@@ -7,6 +7,7 @@ from . import views
 urlpatterns = [
     path("reorder/", views.DrawerReorderView.as_view()),
     path("", views.DrawerList.as_view()),
+    path("inbox/", views.InboxDrawerDetail.as_view()),
     path("<str:id>/", views.DrawerDetail.as_view()),
 ]
 

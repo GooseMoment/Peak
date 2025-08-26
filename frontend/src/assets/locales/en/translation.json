@@ -8,7 +8,9 @@
         "projects": "Projects",
         "inbox": "Inbox",
         "projects_list_refetch": "Click to retry",
-        "user_error": "Unable to load your user information. Please restart the app."
+        "user_error": "Unable to load your user information. Please restart the app.",
+        "loading": "Loading...",
+        "button_load_more": "Load more"
     },
     "notifications": {
         "title": "Notifications",
@@ -35,7 +37,9 @@
         "type_regular": "Regular",
         "type_goal": "Goal",
         "inbox": "Inbox",
-        "button_add_project": "Add new project"
+        "button_add_project": "Add new project",
+        "loading": "Loading...",
+        "button_load_more": "Load more"
     },
     "today": {
         "title": "Today",
@@ -66,6 +70,7 @@
         "none": "none",
         "error_load_project_and_drawer": "Couldn't load project and drawers 😢",
         "error_load_inbox": "Couldn't load inbox 😢",
+        "error_load_task": "Couldn't load tasks 😢",
         "name_placeholder": "Enter a name",
         "edit": {
             "display": "Edit"
@@ -121,6 +126,7 @@
         "color": {
             "title": "Color Settings",
             "palette1": "Basic",
+            "grey": "grey",
             "red": "red",
             "red_orange": "red orange",
             "orange": "orange",
@@ -146,6 +152,7 @@
         },
         "type": {
             "title": "Project Type Settings",
+            "inbox": "a inbox project",
             "regular": "a regular project",
             "goal": "a goal project"
         }
@@ -234,7 +241,9 @@
         "drawer": {
             "name": "Drawer",
             "title": "Select a drawer",
-            "fetching_error": "An error occurred while fetching data."
+            "fetching_error": "An error occurred while fetching data.",
+            "loading": "Loading...",
+            "button_load_more": "Load more"
         },
         "memo": {
             "name": "Memo",

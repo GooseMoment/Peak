@@ -6,7 +6,7 @@ from rest_framework.permissions import BasePermission
 
 from django.shortcuts import get_object_or_404
 
-import uuid
+from uuid import UUID
 from datetime import datetime, time
 
 from api.mixins import TimezoneMixin
@@ -57,7 +57,7 @@ class ReminderList(mixins.CreateModelMixin, TimezoneMixin, generics.GenericAPIVi
         try:
             task_id = request.data["task"]
             delta_list = request.data["delta_list"]
-            uuid_task_id = uuid.UUID(hex=task_id)
+            uuid_task_id = UUID(task_id)
         except (KeyError, ValueError, TypeError):
             raise RequiredFieldMissing
 
