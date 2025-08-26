@@ -79,7 +79,7 @@ class DrawerList(
             raise UnknownError
 
 
-class InboxDetail(
+class InboxDrawerDetail(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     generics.GenericAPIView,
