@@ -34,7 +34,11 @@ const TaskCreate = ({ drawer }: { drawer: Drawer }) => {
 
     const postMutation = useMutation({
         mutationFn: (data: MinimalTask) => {
-            return postTask(data)
+            const taskData = {
+                ...data,
+                drawer: data.drawer.id,
+            }
+            return postTask(taskData)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
