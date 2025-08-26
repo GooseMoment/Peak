@@ -22,9 +22,9 @@ const TaskDetailElement = lazy(
 
 interface TaskFrameProps {
     task: Task
-    isLoading: boolean
-    toComplete: () => void
-    showTaskDetail: boolean
+    isLoading?: boolean
+    toComplete?: () => void
+    showTaskDetail?: boolean
     isSocial?: boolean
 }
 

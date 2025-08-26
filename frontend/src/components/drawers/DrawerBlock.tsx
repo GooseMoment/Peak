@@ -35,7 +35,7 @@ import queryClient from "@queries/queryClient"
 
 import { getPaletteColor } from "@assets/palettes"
 
-import { Identifier } from "dnd-core"
+import type { Identifier } from "dnd-core"
 import FeatherIcon from "feather-icons-react"
 import { TFunction } from "i18next"
 import { useDrag, useDrop } from "react-dnd"

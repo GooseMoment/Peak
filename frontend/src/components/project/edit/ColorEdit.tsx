@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 import styled, { css, useTheme } from "styled-components"
 
@@ -17,7 +17,9 @@ type PaletteType = "palette1"
 const ColorEdit = ({
     setColor,
 }: {
-    setColor: (diff: Partial<Project>) => void
+    setColor:
+        | ((diff: Partial<Project>) => void)
+        | Dispatch<SetStateAction<{ color: PaletteColorName }>>
 }) => {
     const { t } = useTranslation("translation", {
         keyPrefix: "project_drawer_edit.color",

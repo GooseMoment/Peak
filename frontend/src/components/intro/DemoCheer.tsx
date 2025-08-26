@@ -89,11 +89,10 @@ const DemoCheer = () => {
         <SubSection>
             <TaskFrame
                 task={task}
-                color={task.color}
-                isSocial
-                showTaskDetail={undefined}
                 isLoading={undefined}
                 toComplete={undefined}
+                showTaskDetail={undefined}
+                isSocial
             />
             <ReactionButtonGroup>
                 {Object.entries(reactionGroups).map(([key, group]) => (
