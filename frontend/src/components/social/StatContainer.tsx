@@ -152,7 +152,7 @@ export function StatBox({
 }: {
     stat: Stat
     isSelected?: boolean
-    setSelectedUser?: Dispatch<SetStateAction<User["username"]>>
+    setSelectedUser?: (username: string) => void
     mine?: boolean
 }) {
     const { isDesktop } = useScreenType()
