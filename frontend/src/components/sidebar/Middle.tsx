@@ -1,18 +1,25 @@
 import { useMemo } from "react"
 
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { css, useTheme } from "styled-components"
 
-import { useSidebarContext } from "@components/sidebar/SidebarContext"
+import Button, { ButtonGroup } from "@components/common/Button"
+import {
+    type StyledCollapsedProp,
+    useSidebarContext,
+} from "@components/sidebar/SidebarContext"
 import SidebarLink from "@components/sidebar/SidebarLink"
 
 import { getProjectList } from "@api/projects.api"
+
+import { getPageFromURL } from "@utils/pagination"
 
 import { cubicBeizer } from "@assets/keyframes"
 import { getPaletteColor } from "@assets/palettes"
 import { skeletonCSS } from "@assets/skeleton"
 
 import FeatherIcon from "feather-icons-react"
+import { type TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const Middle = () => {
@@ -21,10 +28,17 @@ const Middle = () => {
         isPending,
         isError,
         refetch,
-    } = useQuery({
+        fetchNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
         queryKey: ["projects"],
-        queryFn: () => getProjectList(),
+        queryFn: (context) => getProjectList(context.pageParam),
+        initialPageParam: "1",
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
+
+    const hasNextPage =
+        projects?.pages[projects?.pages?.length - 1].next !== null
 
     const { t } = useTranslation("translation", { keyPrefix: "sidebar" })
     const theme = useTheme()
@@ -82,48 +96,76 @@ const Middle = () => {
                     </ProjectLoadErrorBox>
                 )}
 
-                {projects?.map((project) => (
-                    <SidebarLink
-                        to={
-                            project.type === "inbox"
-                                ? "/app/projects/inbox"
-                                : `/app/projects/${project.id}`
-                        }
-                        key={project.id}>
-                        <ProjectItemBox $collapsed={isCollapsed}>
-                            <FeatherIcon
-                                icon="circle"
-                                fill={getPaletteColor(
-                                    theme.type,
-                                    project.color,
-                                )}
-                            />
-                            {!isCollapsed &&
-                                (project.type === "inbox"
-                                    ? t("inbox")
-                                    : project.name)}
-                        </ProjectItemBox>
-                    </SidebarLink>
-                ))}
+                {projects?.pages?.map((group) =>
+                    group?.results?.map((project) => (
+                        <SidebarLink
+                            to={
+                                project.type === "inbox"
+                                    ? "/app/projects/inbox"
+                                    : `/app/projects/${project.id}`
+                            }
+                            key={project.id}>
+                            <ProjectItemBox $collapsed={isCollapsed}>
+                                <FeatherIcon
+                                    icon="circle"
+                                    fill={getPaletteColor(
+                                        theme.type,
+                                        project.color,
+                                    )}
+                                />
+                                {!isCollapsed &&
+                                    (project.type === "inbox"
+                                        ? t("inbox")
+                                        : project.name)}
+                            </ProjectItemBox>
+                        </SidebarLink>
+                    )),
+                )}
+
+                {hasNextPage ? (
+                    <ButtonGroup $justifyContent="center" $margin="1em">
+                        <MoreButton
+                            disabled={isFetchingNextPage}
+                            loading={isFetchingNextPage}
+                            onClick={() => fetchNextPage()}>
+                            {isPending ? t("loading") : t("button_load_more")}
+                        </MoreButton>
+                    </ButtonGroup>
+                ) : null}
             </ProjectItemsContainer>
         </MiddleBox>
     )
 }
 
-const getItems = (t) => [
+const getItems = (t: TFunction<"translation", "sidebar">) => [
     // end가 true:  경로가 to와 완전히 일치해야 active
     //       false: to의 하위 경로에 있어도 active
-    { icon: "search", name: t("search"), to: "search", end: false },
-    { icon: "home", name: t("home"), to: "home", end: true },
-    { icon: "bell", name: t("notifications"), to: "notifications", end: false },
-    { icon: "calendar", name: t("today"), to: "today", end: false },
+    {
+        icon: "search" as const,
+        name: t("search"),
+        to: "search",
+        end: false,
+    },
+    { icon: "home" as const, name: t("home"), to: "home", end: true },
+    {
+        icon: "bell" as const,
+        name: t("notifications"),
+        to: "notifications",
+        end: false,
+    },
+    {
+        icon: "calendar" as const,
+        name: t("today"),
+        to: "today",
+        end: false,
+    },
 ]
 
 export const MiddleBox = styled.div`
     flex-grow: 99;
 `
 
-export const ItemBox = styled.div`
+export const ItemBox = styled.div<StyledCollapsedProp>`
     font-size: 1em;
     padding: 0.75em 0 0.75em 0.5em;
     margin: 0 0.75em;
@@ -152,7 +194,10 @@ export const ItemBox = styled.div`
         `}
 `
 
-const ProjectItemsContainer = styled.div`
+const ProjectItemsContainer = styled.div<{
+    $collapsed?: boolean
+    $noScrollbar?: boolean
+}>`
     overflow-y: auto;
     height: calc(100dvh - 25em);
 
@@ -173,7 +218,10 @@ const ProjectItemsContainer = styled.div`
         `}
 `
 
-const ProjectItemBox = styled.div`
+const ProjectItemBox = styled.div<{
+    $skeleton?: boolean
+    $collapsed?: boolean
+}>`
     padding: 0.5em 0.5em;
     margin: 0 1.5em;
     background-color: inherit;
@@ -212,7 +260,7 @@ const ProjectItemBox = styled.div`
         `}
 `
 
-const ProjectLoadErrorBox = styled(ProjectItemBox)`
+const ProjectLoadErrorBox = styled(ProjectItemBox)<StyledCollapsedProp>`
     cursor: pointer;
     color: ${(p) => p.theme.white};
     background-color: ${(p) => p.theme.primaryColors.danger};
@@ -220,6 +268,10 @@ const ProjectLoadErrorBox = styled(ProjectItemBox)`
     & svg {
         stroke: ${(p) => p.theme.textColor};
     }
+`
+
+const MoreButton = styled(Button)`
+    width: 80%;
 `
 
 export default Middle
