@@ -275,31 +275,27 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
                     ))}
                 </TaskList>
             )}
-            <>
-                {isSimpleOpen && (
-                    <TaskCreateSimple
-                        drawer={drawer}
-                        onClose={() => setIsSimpleOpen(false)}
-                    />
-                )}
-                <TaskCreateButton
-                    isOpen={isSimpleOpen}
-                    onClick={handleToggleSimpleCreate}
+            {isSimpleOpen && (
+                <TaskCreateSimple
+                    drawer={drawer}
+                    onClose={() => setIsSimpleOpen(false)}
                 />
-                {isLoading ||
-                    (hasNextPage ? (
-                        <ButtonGroup $justifyContent="center" $margin="1em">
-                            <MoreButton
-                                disabled={isFetchingNextPage}
-                                loading={isFetchingNextPage}
-                                onClick={() => fetchNextPage()}>
-                                {isLoading
-                                    ? t("loading")
-                                    : t("button_load_more")}
-                            </MoreButton>
-                        </ButtonGroup>
-                    ) : null)}
-            </>
+            )}
+            <TaskCreateButton
+                isOpen={isSimpleOpen}
+                onClick={handleToggleSimpleCreate}
+            />
+            {isLoading ||
+                (hasNextPage ? (
+                    <ButtonGroup $justifyContent="center" $margin="1em">
+                        <MoreButton
+                            disabled={isFetchingNextPage}
+                            loading={isFetchingNextPage}
+                            onClick={() => fetchNextPage()}>
+                            {isLoading ? t("loading") : t("button_load_more")}
+                        </MoreButton>
+                    </ButtonGroup>
+                ) : null)}
             {isSortMenuMobileOpen && (
                 <SortMenuMobile
                     title={t("sort.task_title")}

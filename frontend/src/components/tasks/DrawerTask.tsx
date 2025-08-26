@@ -76,6 +76,7 @@ const DrawerTask = ({
         drop: (item) => {
             if (isPending) return
             dropTask()
+            item.drawer.id = task.drawer.id
             item.order = task.order
         },
     })
@@ -83,7 +84,7 @@ const DrawerTask = ({
     const [{ isDragging }, drag] = useDrag({
         type: "Task",
         item: () => {
-            return { id: task.id, order: task.order, drawerId: task.drawer.id }
+            return task
         },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
@@ -92,6 +93,10 @@ const DrawerTask = ({
 
     drag(drop(ref))
     /// ---
+
+    if (!task) {
+        return null
+    }
 
     return (
         <>

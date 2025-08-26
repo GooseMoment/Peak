@@ -95,7 +95,13 @@ const InboxPage = () => {
                     </SortIconBox>
                 </Icons>
             </TitleBox>
-            {data && <InboxDrawer drawer={data} ordering={ordering} />}
+            {data && (
+                <InboxDrawer
+                    drawer={data}
+                    ordering={ordering}
+                    setOrdering={setOrdering}
+                />
+            )}
             {isSortMenuMobileOpen && (
                 <Suspense
                     key="sort-menu-mobile-inbox-page"
