@@ -1,11 +1,17 @@
+import { useState } from "react"
+
+import { useQuery } from "@tanstack/react-query"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
 import Button from "@components/common/Button"
+import TaskCreateButton from "@components/drawers/TaskCreateButton"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
+import TaskCreateSimple from "@components/project/TaskCreateSimple"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
 import Task from "@components/tasks/Task"
 
+import { getProject } from "@api/projects.api"
 import { getTasksAssignedToday } from "@api/today.api"
 
 import { getPageFromURL } from "@utils/pagination"
@@ -18,6 +24,7 @@ const TodayAssignmentTasks = ({ selectedDate }) => {
     const { t } = useTranslation(null, { keyPrefix: "today" })
 
     const theme = useTheme()
+    const [isSimpleOpen, setIsSimpleOpen] = useState(false)
 
     const {
         data: todayAssignmentTasks,
@@ -32,6 +39,18 @@ const TodayAssignmentTasks = ({ selectedDate }) => {
         initialPageParam: 1,
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
+
+    const inboxQuery = useQuery({
+        queryKey: ["projects", "inbox"],
+        async queryFn() {
+            return getProject("inbox")
+        },
+        refetchOnWindowFocus: false,
+    })
+
+    const handleToggleSimpleCreate = () => {
+        setIsSimpleOpen((prev) => !prev)
+    }
 
     const todayHasNextPage =
         todayAssignmentTasks?.pages[todayAssignmentTasks?.pages?.length - 1]
@@ -67,6 +86,21 @@ const TodayAssignmentTasks = ({ selectedDate }) => {
                         )),
                     )
                 )}
+                {inboxQuery.data && isSimpleOpen && (
+                    <TaskCreateSimple
+                        projectID={inboxQuery.data.id}
+                        projectName={inboxQuery.data.name}
+                        drawerID={inboxQuery.data.drawers[0].id}
+                        drawerName={inboxQuery.data.drawers[0].name}
+                        color={inboxQuery.data.color}
+                        onClose={() => setIsSimpleOpen(false)}
+                        init_assigned_at={selectedDate}
+                    />
+                )}
+                <TaskCreateButton
+                    isOpen={isSimpleOpen}
+                    onClick={handleToggleSimpleCreate}
+                />
             </TasksBox>
             <FlexCenterBox>
                 {todayHasNextPage ? (
