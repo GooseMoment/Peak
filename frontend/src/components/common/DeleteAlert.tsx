@@ -3,8 +3,16 @@ import Confirmation from "@components/common/Confirmation"
 
 import { useTranslation } from "react-i18next"
 
-const DeleteAlert = ({ title, onClose, func }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.delete" })
+const DeleteAlert = ({
+    title,
+    onClose,
+    func,
+}: {
+    title: string
+    onClose: () => void
+    func: () => void
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "project.delete" })
 
     const buttons = [
         <Button key="delete" form="filled" state="danger" onClick={func}>
