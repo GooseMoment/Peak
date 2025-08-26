@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
-import styled, { useTheme } from "styled-components"
+import styled from "styled-components"
 
 import Button from "@components/common/Button"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
@@ -10,14 +10,10 @@ import { getTasksAssignedToday } from "@api/today.api"
 
 import { getPageFromURL } from "@utils/pagination"
 
-import { getPaletteColor } from "@assets/palettes"
-
 import { useTranslation } from "react-i18next"
 
-const TodayAssignmentTasks = ({ selectedDate }) => {
-    const { t } = useTranslation(null, { keyPrefix: "today" })
-
-    const theme = useTheme()
+const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: string }) => {
+    const { t } = useTranslation("translation", { keyPrefix: "today" })
 
     const {
         data: todayAssignmentTasks,
@@ -28,8 +24,8 @@ const TodayAssignmentTasks = ({ selectedDate }) => {
     } = useInfiniteQuery({
         queryKey: ["today", "assigned", selectedDate],
         queryFn: (pages) =>
-            getTasksAssignedToday(selectedDate, pages.pageParam || 1),
-        initialPageParam: 1,
+            getTasksAssignedToday(selectedDate, pages.pageParam),
+        initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
@@ -51,19 +47,12 @@ const TodayAssignmentTasks = ({ selectedDate }) => {
                 {isTodayAssignmentLoading && (
                     <SkeletonDueTasks taskCount={10} />
                 )}
-                {todayAssignmentTasks?.pages[0].count === 0 ? (
+                {todayAssignmentTasks?.pages[0].results.length === 0 ? (
                     <NoTaskText>{t("no_today_assignment")}</NoTaskText>
                 ) : (
                     todayAssignmentTasks?.pages?.map((group) =>
                         group?.results?.map((task) => (
-                            <TaskBlock
-                                key={task.id}
-                                task={task}
-                                color={getPaletteColor(
-                                    theme.type,
-                                    task.project_color,
-                                )}
-                            />
+                            <TaskBlock key={task.id} task={task} />
                         )),
                     )
                 )}

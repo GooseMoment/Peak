@@ -13,12 +13,15 @@ import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 
 const TodayPage = () => {
-    const { t } = useTranslation(null, { keyPrefix: "today" })
+    const { t } = useTranslation("translation", { keyPrefix: "today" })
+
     const tz = useClientTimezone()
     const locale = useClientLocale()
 
     const today = DateTime.now().setZone(tz)
-    const [selectedDate, setSelectedDate] = useState(today.toISODate())
+    const [selectedDate, setSelectedDate] = useState<string>(
+        today.toISODate() || "",
+    )
 
     const isToday = selectedDate === today.toISODate()
     const selectedDateTime = DateTime.fromISO(selectedDate).setZone(tz)

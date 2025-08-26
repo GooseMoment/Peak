@@ -1,15 +1,19 @@
 import { useEffect, useMemo, useState } from "react"
 
-import { useMutation } from "@tanstack/react-query"
-import { useInfiniteQuery } from "@tanstack/react-query"
-import styled, { css, useTheme } from "styled-components"
+import {
+    InfiniteData,
+    useInfiniteQuery,
+    useMutation,
+} from "@tanstack/react-query"
+import styled, { css } from "styled-components"
 
 import CollapseButton from "@components/common/CollapseButton"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
 import TaskBlock from "@components/tasks/TaskBlock"
 
-import { patchTask } from "@api/tasks.api"
+import { type PaginationData } from "@api/common"
+import { type Task, TaskPost, patchTask } from "@api/tasks.api"
 import {
     getTasksOverDue,
     getTasksPastAssigned,
@@ -22,16 +26,19 @@ import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
-import { getPaletteColor } from "@assets/palettes"
-
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const isTaskEmpty = (tasks) => !!(tasks?.pages[0]?.results.length === 0)
+const isTaskEmpty = (
+    tasks: InfiniteData<PaginationData<Task>, unknown> | undefined,
+) => !!(tasks?.pages[0]?.results.length === 0)
 
-const useTaskQuery = (filter, fetchFunction) => {
+const useTaskQuery = (
+    filter: filterContentsKey,
+    fetchFunction: (page: string) => Promise<PaginationData<Task>>,
+) => {
     const {
         data: tasks,
         fetchNextPage,
@@ -40,8 +47,8 @@ const useTaskQuery = (filter, fetchFunction) => {
         refetch,
     } = useInfiniteQuery({
         queryKey: ["today", filter],
-        queryFn: (pages) => fetchFunction(pages.pageParam || 1),
-        initialPageParam: 1,
+        queryFn: (pages) => fetchFunction(pages.pageParam),
+        initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
@@ -55,17 +62,23 @@ const useTaskQuery = (filter, fetchFunction) => {
     }
 }
 
-const filterContents = ["todayDue", "overDue", "pastAssigned"]
+type filterContentsKey = "todayDue" | "overDue" | "pastAssigned"
+
+const filterContents = [
+    "todayDue" as const,
+    "overDue" as const,
+    "pastAssigned" as const,
+]
 
 const ImportantTasks = () => {
-    const { t } = useTranslation(null, { keyPrefix: "today" })
+    const { t } = useTranslation("translation", { keyPrefix: "today" })
+
     const tz = useClientTimezone()
-    const theme = useTheme()
 
     const today = useMemo(() => DateTime.now().setZone(tz), [tz])
 
-    const [filter, setFilter] = useState("todayDue")
-    const [collapsed, setCollapsed] = useState(false)
+    const [filter, setFilter] = useState<filterContentsKey>("todayDue")
+    const [collapsed, setCollapsed] = useState<boolean>(false)
 
     const todayDueQuery = useTaskQuery("todayDue", getTasksTodayDue)
     const overDueQuery = useTaskQuery("overDue", getTasksOverDue)
@@ -84,7 +97,7 @@ const ImportantTasks = () => {
             .next !== null
 
     useEffect(() => {
-        for (const name in queries) {
+        for (const name of filterContents) {
             if (!queries[name].isEmpty) {
                 setFilter(name)
                 break
@@ -93,7 +106,13 @@ const ImportantTasks = () => {
     }, [todayDueQuery.tasks, overDueQuery.tasks, pastAssignedQuery.tasks])
 
     const patchMutation = useMutation({
-        mutationFn: ({ task, data }) => {
+        mutationFn: ({
+            task,
+            data,
+        }: {
+            task: Task
+            data: Partial<TaskPost>
+        }) => {
             return patchTask(task.id, data)
         },
         onSuccess: () => {
@@ -109,14 +128,14 @@ const ImportantTasks = () => {
         },
     })
 
-    const clickArrowDown = (task) => {
+    const clickArrowDown = (task: Task) => {
         const data = { assigned_at: today.toISODate() }
 
         patchMutation.mutate({ task, data })
         toast.success(t("due_change_today_success"))
     }
 
-    const clickArrowRight = (task) => {
+    const clickArrowRight = (task: Task) => {
         const tomorrow = today.plus({ days: 1 })
         const data = { assigned_at: tomorrow.toISODate() }
 
@@ -154,7 +173,7 @@ const ImportantTasks = () => {
                                 key={content}
                                 $isActive={filter === content}
                                 onClick={() => setFilter(content)}>
-                                {t("filter_" + content)}
+                                {t(`filter_${content}`)}
                             </FilterButton>
                         ))}
                     </FilterButtonBox>
@@ -168,20 +187,14 @@ const ImportantTasks = () => {
                             <SkeletonDueTasks taskCount={4} />
                         )}
                         {selectedQuery.tasks?.pages?.map((group) =>
-                            group.count === 0 ? (
-                                <NoTasksMessage key={group.count}>
-                                    {t("no_tasks_" + filter)}
+                            group.results.length === 0 ? (
+                                <NoTasksMessage key={group.results.length}>
+                                    {t(`no_tasks_${filter}`)}
                                 </NoTasksMessage>
                             ) : (
                                 group?.results?.map((task) => (
                                     <ImportantTaskBox key={task.id}>
-                                        <TaskBlock
-                                            task={task}
-                                            color={getPaletteColor(
-                                                theme.type,
-                                                task.project_color,
-                                            )}
-                                        />
+                                        <TaskBlock task={task} />
                                         <Icons>
                                             <FeatherIcon
                                                 icon="arrow-down"
@@ -204,7 +217,7 @@ const ImportantTasks = () => {
                     {hasNextPage ? (
                         <MoreText onClick={() => selectedQuery.fetchNextPage()}>
                             {t("button_load_more") + " "}(
-                            {selectedQuery.tasks?.pages[0].count})
+                            {selectedQuery.tasks?.pages[0].results.length})
                         </MoreText>
                     ) : null}
                 </>
@@ -271,11 +284,11 @@ const FilterButtonBox = styled.div`
     margin: 1em 0.6em 0em;
 `
 
-const FilterButton = styled.div`
+const FilterButton = styled.div<{ $isActive: boolean }>`
     width: fit-content;
     text-align: center;
     padding: 0.4em 0.6em;
-    border: 1px solid ${(p) => p.theme.borderColor};
+    border: 1px solid ${(p) => p.theme.project.borderColor};
     border-radius: 13px;
     color: ${(p) => p.theme.textColor};
     background-color: ${(p) => p.theme.backgroundColor};

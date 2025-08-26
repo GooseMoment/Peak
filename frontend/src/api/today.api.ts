@@ -9,34 +9,31 @@ export interface TaskGrouped {
     count: number
 }
 
-export const getTasksAssignedToday = async (date: string, page: number) => {
-    const res = await client.get<PaginationData<Task[]>>(`today/assigned/`, {
+export const getTasksAssignedToday = async (date: string, page: string) => {
+    const res = await client.get<PaginationData<Task>>(`today/assigned/`, {
         params: { date, page },
     })
     return res.data
 }
 
-export const getTasksTodayDue = async (page: number) => {
-    const res = await client.get<PaginationData<Task[]>>(`today/todayDue/`, {
+export const getTasksTodayDue = async (page: string) => {
+    const res = await client.get<PaginationData<Task>>(`today/todayDue/`, {
         params: { page },
     })
     return res.data
 }
 
-export const getTasksOverDue = async (page: number) => {
-    const res = await client.get<PaginationData<Task[]>>(`today/overDue/`, {
+export const getTasksOverDue = async (page: string) => {
+    const res = await client.get<PaginationData<Task>>(`today/overDue/`, {
         params: { page },
     })
     return res.data
 }
 
-export const getTasksPastAssigned = async (page: number) => {
-    const res = await client.get<PaginationData<Task[]>>(
-        `today/pastAssigned/`,
-        {
-            params: { page },
-        },
-    )
+export const getTasksPastAssigned = async (page: string) => {
+    const res = await client.get<PaginationData<Task>>(`today/pastAssigned/`, {
+        params: { page },
+    })
     return res.data
 }
 

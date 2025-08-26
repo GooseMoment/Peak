@@ -25,10 +25,7 @@ const TaskBlock = ({ task }: { task: Task }) => {
                 queryKey: ["projects", task.drawer.project.id],
             })
             queryClient.invalidateQueries({
-                queryKey: ["today", "overdue"],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["today", "assigned"],
+                queryKey: ["today"],
             })
         },
     })
