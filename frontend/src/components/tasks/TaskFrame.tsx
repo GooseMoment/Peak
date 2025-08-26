@@ -1,11 +1,13 @@
 import { Suspense, lazy, useState } from "react"
 
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import ModalLoader from "@components/common/ModalLoader"
 import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"
 import taskCalculation from "@components/tasks/utils/taskCalculation"
+
+import { type Task } from "@api/tasks.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
@@ -18,17 +20,24 @@ const TaskDetailElement = lazy(
     () => import("@components/project/taskDetails/TaskDetailElement"),
 )
 
+interface TaskFrameProps {
+    task: Task
+    isLoading: boolean
+    toComplete: () => void
+    showTaskDetail: boolean
+    isSocial?: boolean
+}
+
 const TaskFrame = ({
     task,
-    color,
-    showTaskDetail,
     isLoading,
     toComplete,
-    isSocial,
-}) => {
-    const [isDetailOpen, setDetailOpen] = useState(false)
-
-    const completedAt = isSocial ? null : task.completed_at
+    showTaskDetail,
+    isSocial = false,
+}: TaskFrameProps) => {
+    const [isDetailOpen, setDetailOpen] = useState<boolean>(false)
+    const theme = useTheme()
+    const isCompleted = !isSocial && task.completed_at != null
 
     const {
         due,
@@ -39,7 +48,7 @@ const TaskFrame = ({
         isOutOfAssigned,
     } = taskCalculation(task, isSocial)
 
-    const hasDate = task.due_type || task.assigned_at
+    const hasDate = task.due_type != null || task.assigned_at != null
 
     return (
         <Box>
@@ -49,18 +58,18 @@ const TaskFrame = ({
                         <Priority
                             hasDate={hasDate}
                             priority={task.priority}
-                            completed={task.completed_at}
+                            isCompleted={isCompleted}
                         />
                         <TaskCircle
-                            completed={task.completed_at}
-                            color={color}
+                            color={task?.drawer?.project?.color}
+                            isCompleted={isCompleted}
                             hasDate={hasDate}
                             isLoading={isLoading}
                             onClick={toComplete}
                         />
                     </Icons>
                     <TaskNameBox
-                        $completed={completedAt}
+                        $isCompleted={isCompleted}
                         onClick={() => {
                             if (showTaskDetail) {
                                 setDetailOpen(true)
@@ -74,29 +83,28 @@ const TaskFrame = ({
                     <Dates>
                         {task.assigned_at && (
                             <AssignedDate
-                                $completed={task.completed_at}
+                                $isCompleted={isCompleted}
                                 $isSocial={isSocial}
-                                $isOutOfDue={isOutOfAssigned}>
-                                <FeatherIcon
-                                    draggable="false"
-                                    icon="calendar"
-                                />
-                                {completedAt ? assigned : calculate_assigned}
+                                $isOutOfAssigned={isOutOfAssigned}>
+                                <FeatherIcon icon="calendar" />
+                                {isCompleted ? assigned : calculate_assigned}
                             </AssignedDate>
                         )}
                         {task.due_type && (
                             <DueDate
-                                $completed={task.completed_at}
+                                $isCompleted={isCompleted}
                                 $isSocial={isSocial}
                                 $isOutOfDue={isOutOfDue}>
                                 <Hourglass />
-                                {completedAt ? due : calculate_due}
+                                {isCompleted ? due : calculate_due}
                             </DueDate>
                         )}
                         {isSocial || task.reminders
                             ? task.reminders?.length !== 0 && (
-                                  <Reminder $completed={task.completed_at}>
-                                      <AlarmClock />
+                                  <Reminder $isCompleted={isCompleted}>
+                                      <AlarmClock
+                                          color={theme.project.reminderColor}
+                                      />
                                       {task.reminders?.length}
                                   </Reminder>
                               )
@@ -109,10 +117,8 @@ const TaskFrame = ({
                     key="task-detail-task-frame"
                     fallback={<ModalLoader />}>
                     <TaskDetailElement
-                        onClose={() => setDetailOpen(false)}
-                        projectType={task.projectType}
-                        color={color}
                         task={task}
+                        onClose={() => setDetailOpen(false)}
                     />
                 </Suspense>
             )}
@@ -135,11 +141,11 @@ const Content = styled.div`
     width: 100%;
 `
 
-const TaskNameBox = styled.div`
+const TaskNameBox = styled.div<{ $isCompleted: boolean }>`
     display: inline-block;
     font-size: 1.1em;
     font-style: normal;
-    color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};
+    color: ${(p) => (p.$isCompleted ? p.theme.grey : p.theme.textColor)};
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -174,7 +180,11 @@ const Dates = styled.div`
     margin-left: 3em;
 `
 
-const AssignedDate = styled.div`
+const AssignedDate = styled.div<{
+    $isCompleted: boolean
+    $isSocial: boolean
+    $isOutOfAssigned: boolean
+}>`
     display: flex;
     align-items: center;
     font-style: normal;
@@ -183,9 +193,9 @@ const AssignedDate = styled.div`
     color: ${(props) =>
         props.$isSocial
             ? props.theme.textColor
-            : props.$completed
+            : props.$isCompleted
               ? props.theme.grey
-              : props.$isOutOfDue
+              : props.$isOutOfAssigned
                 ? props.theme.project.danger
                 : props.theme.project.assignColor};
 
@@ -197,15 +207,19 @@ const AssignedDate = styled.div`
         color: ${(props) =>
             props.$isSocial
                 ? props.theme.textColor
-                : props.$completed
+                : props.$isCompleted
                   ? props.theme.grey
-                  : props.$isOutOfDue
+                  : props.$isOutOfAssigned
                     ? props.theme.project.danger
                     : props.theme.project.assignColor};
     }
 `
 
-const DueDate = styled.div`
+const DueDate = styled.div<{
+    $isCompleted: boolean
+    $isSocial: boolean
+    $isOutOfDue: boolean
+}>`
     display: flex;
     align-items: center;
     font-style: normal;
@@ -214,7 +228,7 @@ const DueDate = styled.div`
     color: ${(props) =>
         props.$isSocial
             ? props.theme.textColor
-            : props.$completed
+            : props.$isCompleted
               ? props.theme.grey
               : props.$isOutOfDue
                 ? props.theme.project.danger
@@ -227,7 +241,7 @@ const DueDate = styled.div`
         stroke: ${(props) =>
             props.$isSocial
                 ? props.theme.textColor
-                : props.$completed
+                : props.$isCompleted
                   ? props.theme.grey
                   : props.$isOutOfDue
                     ? props.theme.project.danger
@@ -235,14 +249,16 @@ const DueDate = styled.div`
     }
 `
 
-const Reminder = styled.div`
+const Reminder = styled.div<{
+    $isCompleted: boolean
+}>`
     display: flex;
     align-items: center;
     font-style: normal;
     font-size: 0.8em;
     margin-left: 0.5em;
     color: ${(props) =>
-        props.$completed
+        props.$isCompleted
             ? props.theme.grey
             : props.theme.project.reminderColor};
 
@@ -252,7 +268,7 @@ const Reminder = styled.div`
         margin-right: 0.2em;
         top: 0;
         stroke: ${(props) =>
-            props.$completed
+            props.$isCompleted
                 ? props.theme.grey
                 : props.theme.project.reminderColor};
     }

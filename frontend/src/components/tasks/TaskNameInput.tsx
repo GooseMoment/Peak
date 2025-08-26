@@ -1,21 +1,41 @@
-import { useEffect, useState } from "react"
+import {
+    ChangeEvent,
+    KeyboardEvent,
+    RefObject,
+    useEffect,
+    useState,
+} from "react"
 
 import styled from "styled-components"
 
 import TaskCircle from "@components/tasks/TaskCircle"
 
+import { type MinimalTask, type Task } from "@api/tasks.api"
+
+import { PaletteColorName } from "@assets/palettes"
+
 import { useTranslation } from "react-i18next"
+
+interface TaskNameInputProps {
+    task: Partial<Task>
+    name: string
+    setName: (name: string) => void
+    color: PaletteColorName
+    inputRef: RefObject<HTMLInputElement>
+    setFunc?: (diff: Partial<MinimalTask>) => void
+    isCreating?: boolean
+}
 
 const TaskNameInput = ({
     task,
     name,
     setName,
-    inputRef,
     color,
-    setFunc = () => {},
+    inputRef,
+    setFunc,
     isCreating = false,
-}) => {
-    const { t } = useTranslation(null, { keyPrefix: "task" })
+}: TaskNameInputProps) => {
+    const { t } = useTranslation("translation", { keyPrefix: "task" })
 
     const [isLoading, setIsLoading] = useState(false)
 
@@ -29,22 +49,24 @@ const TaskNameInput = ({
         setIsLoading(false)
     }, [task])
 
-    const onChange = (e) => {
-        const newName = e.target.value
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const newName = e.currentTarget.value
         setName(newName)
     }
 
-    const onEnter = (e) => {
+    const onEnter = (e: KeyboardEvent<HTMLInputElement>) => {
         if (isCreating) {
             return
         }
         if (e.code === "Enter") {
             e.preventDefault()
-            setName(e.target.value)
+            setName(e.currentTarget.value)
         }
     }
 
     const toComplete = () => {
+        if (setFunc === undefined) return
+
         setIsLoading(true)
         let completed_at = null
         if (!task.completed_at) {
@@ -56,14 +78,14 @@ const TaskNameInput = ({
     return (
         <Box>
             <TaskCircle
-                completed={task.completed_at}
                 color={color}
-                isLoading={isLoading}
-                onClick={isCreating ? null : toComplete}
+                isCompleted={task.completed_at != null}
                 isInput
+                isLoading={isLoading}
+                onClick={isCreating ? undefined : toComplete}
             />
             <InputText
-                $completed={task.completed_at}
+                $isCompleted={task.completed_at != null}
                 ref={inputRef}
                 type="text"
                 onChange={onChange}
@@ -81,10 +103,10 @@ const Box = styled.div`
     width: 100%;
 `
 
-const InputText = styled.input`
+const InputText = styled.input<{ $isCompleted: boolean }>`
     flex-grow: 1;
     font-size: 1.1em;
-    color: ${(p) => (p.$completed ? p.theme.grey : p.theme.textColor)};
+    color: ${(p) => (p.$isCompleted ? p.theme.grey : p.theme.textColor)};
     margin-top: 0.1em;
     line-height: 1.3em;
 `

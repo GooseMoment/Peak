@@ -1,53 +1,74 @@
-import styled, { css, keyframes } from "styled-components"
+import styled, { css, keyframes, useTheme } from "styled-components"
+
+import { type PaletteColorName } from "@assets/palettes"
+import { getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 
+interface TaskCircleProps {
+    color: PaletteColorName
+    isCompleted?: boolean
+    hasDate?: boolean
+    isInput?: boolean
+    isLoading?: boolean
+    onClick?: () => void
+}
+
+interface CircleProps {
+    color: string
+    $isCompleted: boolean
+    $hasDate: boolean
+    $isInput: boolean
+    $isLoading: boolean
+    $clickable: boolean
+}
+
 const TaskCircle = ({
-    completed = false,
     color,
-    hasDate = null,
+    isCompleted = false,
+    hasDate = false,
     isInput = false,
     isLoading = false,
-    onClick = null,
-}) => {
+    onClick,
+}: TaskCircleProps) => {
+    const theme = useTheme()
+
     return (
         <Circle
-            $completed={completed}
-            $color={color}
+            color={getPaletteColor(theme.type, color)}
+            $isCompleted={isCompleted}
             $hasDate={hasDate}
             $isInput={isInput}
             $isLoading={isLoading}
-            $clickable={!isLoading && onClick}
-            onClick={onClick}>
-            {completed && <FeatherIcon icon="check" />}
+            $clickable={!isLoading && onClick != undefined}
+            onClick={onClick && onClick}>
+            {isCompleted && <FeatherIcon icon="check" />}
         </Circle>
     )
 }
 
-const getTopOffset = ({ $isInput, $hasDate }) => {
+const getTopOffset = ($isInput: boolean, $hasDate: boolean) => {
     if ($isInput) return "0.05em"
     if ($hasDate) return "0.3em"
     return "0"
 }
 
-const getCircleColor = ({ $completed, $color, theme }) =>
-    $completed ? theme.grey : ($color ?? theme.goose)
-
-const Circle = styled.div`
+const Circle = styled.div<CircleProps>`
     display: flex;
     justify-content: center;
     align-items: center;
 
     position: relative;
-    top: ${(props) => getTopOffset(props)};
+    top: ${(props) => getTopOffset(props.$isInput, props.$hasDate)};
     height: 1.2em;
     aspect-ratio: 1;
     border-radius: 50%;
     margin-right: 0.6em;
     font-size: 1em;
 
-    border: 3px ${(p) => (p.$isLoading ? "dashed" : "solid")}
-        ${(p) => getCircleColor(p)};
+    border: 3px ${(p) => (p.$isLoading ? "dashed" : "solid")};
+    border-color: ${(p) =>
+        p.$isCompleted ? p.theme.grey : (p.color ?? p.theme.goose)};
 
     ${({ $isLoading }) =>
         $isLoading

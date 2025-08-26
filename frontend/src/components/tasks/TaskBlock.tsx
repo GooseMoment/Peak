@@ -2,13 +2,13 @@ import { useMutation } from "@tanstack/react-query"
 
 import TaskFrame from "./TaskFrame"
 
-import { patchTask } from "@api/tasks.api"
+import { type Task, patchTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
 
-const Task = ({ task, color }) => {
+const TaskBlock = ({ task }: { task: Task }) => {
     const mutation = useMutation({
-        mutationFn: (data) => {
+        mutationFn: (data: Partial<Task>) => {
             return patchTask(task.id, data)
         },
         onSuccess: () => {
@@ -16,13 +16,13 @@ const Task = ({ task, color }) => {
                 queryKey: ["task", { taskID: task.id }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: task.drawer }],
+                queryKey: ["tasks", { drawerID: task.drawer.id }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["drawers", { projectID: task.project_id }],
+                queryKey: ["drawers", { projectID: task.drawer.project.id }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["project", task.project_id],
+                queryKey: ["projects", task.drawer.project.id],
             })
             queryClient.invalidateQueries({
                 queryKey: ["today", "overdue"],
@@ -44,7 +44,6 @@ const Task = ({ task, color }) => {
     return (
         <TaskFrame
             task={task}
-            color={color}
             isLoading={mutation.isPending}
             toComplete={toComplete}
             showTaskDetail
@@ -52,4 +51,4 @@ const Task = ({ task, color }) => {
     )
 }
 
-export default Task
+export default TaskBlock

@@ -1,17 +1,35 @@
+import { type Task } from "@api/tasks.api"
+
 import { useClientLocale } from "@utils/clientSettings"
 import { useClientTimezone } from "@utils/clientSettings"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 
-const calculateDate = (name, date, today, isSocial) => {
-    const { t } = useTranslation(null, { keyPrefix: "task" })
+type CalcDateResult = [string | null, string | null, boolean]
+
+const calculateDate = (
+    isAssigned: boolean,
+    date: DateTime | null,
+    today: DateTime,
+    isSocial: boolean,
+): CalcDateResult => {
+    const { t } = useTranslation("translation", { keyPrefix: "task" })
 
     const locale = useClientLocale()
-    const option = { day: "numeric", month: "numeric" }
+
+    const fullDateOption: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        day: "numeric",
+        month: "numeric",
+    }
+    const shortDateOption: Intl.DateTimeFormatOptions = {
+        day: "numeric",
+        month: "numeric",
+    }
 
     if (date === null) {
-        return [null, null, null]
+        return [null, null, false]
     }
 
     const diff_years = date.year - today.year
@@ -19,14 +37,14 @@ const calculateDate = (name, date, today, isSocial) => {
 
     let newDate = null
     if (diff_years > 0) {
-        newDate = date.toLocaleString(locale)
+        newDate = date.toLocaleString(fullDateOption, { locale })
     } else {
-        newDate = date.toLocaleString(locale, option)
+        newDate = date.toLocaleString(shortDateOption, { locale })
     }
 
     let calculatedDue = ""
     if (!isSocial && diff_total_days < 0) {
-        calculatedDue = name === "assigned" ? t("missed") : t("overdue")
+        calculatedDue = isAssigned ? t("missed") : t("overdue")
         return [newDate, calculatedDue, true]
     } else if (diff_total_days === 0) {
         calculatedDue = t("due_today")
@@ -41,14 +59,17 @@ const calculateDate = (name, date, today, isSocial) => {
     return [newDate, calculatedDue, false]
 }
 
-const taskCalculation = (task, isSocial) => {
+const taskCalculation = (task: Task, isSocial: boolean) => {
     const tz = useClientTimezone()
 
     const today = DateTime.now().setZone(tz)
 
-    const taskAssignedAt = DateTime.fromISO(task.assigned_at, { zone: tz })
+    const taskAssignedAt = task.assigned_at
+        ? DateTime.fromISO(task.assigned_at, { zone: tz })
+        : null
+
     const [assigned, calculate_assigned, isOutOfAssigned] = calculateDate(
-        "assigned",
+        true,
         taskAssignedAt,
         today,
         isSocial,
@@ -61,7 +82,7 @@ const taskCalculation = (task, isSocial) => {
         taskDue = DateTime.fromISO(task.due_datetime, { zone: tz })
     }
     const [due, calculate_due, isOutOfDue] = calculateDate(
-        task.due_type,
+        false,
         taskDue,
         today,
         isSocial,
