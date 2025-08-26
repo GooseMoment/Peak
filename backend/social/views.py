@@ -21,6 +21,7 @@ from django.db.models import (
     IntegerField,
     Case,
     When,
+    CharField,
 )
 from django.db.models.query import QuerySet
 from django.db.models.functions import Coalesce
@@ -64,44 +65,181 @@ import emoji as emojilib
 
 class ExploreFeedPagination(CursorPagination):
     page_size = 8
-    ordering = "-followings_count"
+    ordering = ("-followings_count", "-id")
 
 
-class ExploreFeedView(mixins.ListModelMixin, generics.GenericAPIView):
-    serializer_class = UserSerializer
+class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = StatSerializer
     pagination_class = ExploreFeedPagination
 
+    PRIVACY_OPTIONS = (PrivacyMixin.FOR_PUBLIC, PrivacyMixin.FOR_PROTECTED)
+
     def get_queryset(self):
-        user: User = self.request.user  # pyright: ignore [reportAssignmentType]
-        followees = User.objects.filter(followers__follower=user)
-        recommendUserFilter = Q(followers__follower=user) | Q(id=user.id)
+        user: User = self.request.user  # pyright: ignore[reportAssignmentType]
 
-        feeds_queryset = (
-            User.objects.filter(followers__follower__in=followees)
-            .distinct()
-            .exclude(recommendUserFilter)
+        today = self.get_today()
+        today_range = self.get_today_range()
+
+        followees = User.objects.filter(
+            followers__follower=user, followers__status=Following.ACCEPTED
         )
-        # TODO: exclude private user
 
-        return feeds_queryset
+        base_qs = User.objects.exclude(id=user.id).exclude(
+            Q(blockers__blocker=user, blockers__deleted_at__isnull=True)  # 내가 차단
+            | Q(
+                blockees__blockee=user, blockees__deleted_at__isnull=True
+            )  # 상대가 나 차단
+            | Q(
+                followers__follower=user, followers__status=Following.ACCEPTED
+            )  # 이미 내가 팔로우
+            | Q(is_staff=True)
+        )
+
+        task_count_sq = (
+            Task.objects.filter(
+                user_id=OuterRef("id"),
+                completed_at__range=today_range,
+                privacy__in=self.PRIVACY_OPTIONS,
+            )
+            .order_by()
+            .values("user_id")
+            .annotate(cnt=Count("id"))
+            .values("cnt")
+        )
+
+        reaction_count_sq = (
+            TaskReaction.objects.filter(
+                task__user_id=OuterRef("id"),
+                task__completed_at__range=today_range,
+                task__privacy__in=self.PRIVACY_OPTIONS,
+            )
+            .order_by()
+            .values("task__user_id")
+            .annotate(cnt=Count("id"))
+            .values("cnt")
+        )
+
+        qs = (
+            base_qs.annotate(
+                # 나를 팔로우?
+                is_follower_count=Count(
+                    "followings",
+                    filter=Q(followings__followee=user),
+                    distinct=True,
+                ),
+                # 내가 그 유저를 팔로우?
+                i_follow_count=Count(
+                    "followers",
+                    filter=Q(
+                        followers__follower=user, followers__status=Following.ACCEPTED
+                    ),
+                    distinct=True,
+                ),
+                # 친구의 친구
+                fof_count=Count(
+                    "followers",
+                    filter=Q(followers__follower__in=followees),
+                    distinct=True,
+                ),
+            )
+            .annotate(
+                completed_task_count=Coalesce(
+                    Subquery(task_count_sq, output_field=IntegerField()),
+                    Value(0),
+                    output_field=IntegerField(),
+                ),
+                reaction_count=Coalesce(
+                    Subquery(reaction_count_sq, output_field=IntegerField()),
+                    Value(0),
+                    output_field=IntegerField(),
+                ),
+                date=Value(today, output_field=CharField()),
+            )
+            .annotate(
+                priority=Case(
+                    When(
+                        Q(is_follower_count__gt=0) & Q(i_follow_count=0), then=Value(2)
+                    ),  # 나를 팔로우하지만 나는 X
+                    When(Q(fof_count__gt=0), then=Value(1)),  # 친구의 친구
+                    default=Value(0),
+                    output_field=IntegerField(),
+                )
+            )
+            .order_by("-followings_count", "-id")
+        )
+
+        return qs
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
 
-class ExploreSearchView(mixins.ListModelMixin, generics.GenericAPIView):
-    serializer_class = UserSerializer
+class ExploreSearchView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = StatSerializer
     pagination_class = ExploreFeedPagination
+
+    PRIVACY_OPTIONS = (PrivacyMixin.FOR_PUBLIC, PrivacyMixin.FOR_PROTECTED)
 
     def get_queryset(self):
         keyword = self.request.GET.get("query")
-
         if keyword is None:
             raise RequiredFieldMissing
 
-        users_queryset = User.objects.filter(username__icontains=keyword)
+        user: User = self.request.user  # pyright: ignore[reportAssignmentType]
 
-        return users_queryset
+        base_qs = User.objects.exclude(id=user.id).exclude(
+            Q(blockers__blocker=user, blockers__deleted_at__isnull=True)  # 내가 차단
+            | Q(
+                blockees__blockee=user, blockees__deleted_at__isnull=True
+            )  # 상대가 나 차단
+            | Q(
+                followers__follower=user, followers__status=Following.ACCEPTED
+            )  # 이미 내가 팔로우
+            | Q(is_staff=True)
+        )
+
+        users_qs = base_qs.filter(username__icontains=keyword)
+
+        today = self.get_today()
+        today_range = self.get_today_range()
+
+        task_count_sq = (
+            Task.objects.filter(
+                user_id=OuterRef("id"),
+                completed_at__range=today_range,
+                privacy__in=(PrivacyMixin.FOR_PUBLIC, PrivacyMixin.FOR_PROTECTED),
+            )
+            .order_by()
+            .values("user_id")
+            .annotate(cnt=Count("id"))
+            .values("cnt")
+        )
+
+        reaction_count_sq = (
+            TaskReaction.objects.filter(
+                task__user_id=OuterRef("id"),
+                task__completed_at__range=today_range,
+                task__privacy__in=(PrivacyMixin.FOR_PUBLIC, PrivacyMixin.FOR_PROTECTED),
+            )
+            .order_by()
+            .values("task__user_id")
+            .annotate(cnt=Count("id"))
+            .values("cnt")
+        )
+
+        return users_qs.annotate(
+            completed_task_count=Coalesce(
+                Subquery(task_count_sq, output_field=IntegerField()),
+                Value(0),
+                output_field=IntegerField(),
+            ),
+            reaction_count=Coalesce(
+                Subquery(reaction_count_sq, output_field=IntegerField()),
+                Value(0),
+                output_field=IntegerField(),
+            ),
+            date=Value(today.isoformat(), output_field=CharField()),
+        )
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
