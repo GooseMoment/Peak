@@ -27,7 +27,7 @@ class DualityRelatedField(serializers.RelatedField):
     def to_internal_value(self, data):
         queryset = self.get_queryset()
         if not isinstance(data, str):
-            self.fail("incorrent_type", data_type=type(data).__name__)
+            self.fail("incorrect_type", data_type=type(data).__name__)
 
         try:
             return queryset.get(pk=data)
