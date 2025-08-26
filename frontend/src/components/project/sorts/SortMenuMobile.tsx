@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 import styled from "styled-components"
 
@@ -7,8 +7,23 @@ import ModalBottomSheet from "@components/common/ModalBottomSheet"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const SortMenuMobile = ({ title, items, onClose, ordering, setOrdering }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project.sort" })
+const SortMenuMobile = ({
+    title,
+    items,
+    onClose,
+    ordering,
+    setOrdering,
+}: {
+    title: string
+    items: {
+        display: string
+        context: string
+    }[]
+    onClose: () => void
+    ordering: string
+    setOrdering: Dispatch<SetStateAction<string>>
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "project.sort" })
 
     // ordering 임시 상태 추가
     const [temporaryOrdering, setTemporaryOrdering] = useState(ordering)
@@ -47,7 +62,7 @@ const ContentBox = styled.div`
     margin: 1em 2em;
 `
 
-const DisplayBox = styled.div`
+const DisplayBox = styled.div<{ $isSelected: boolean }>`
     display: flex;
     justify-content: flex-start;
     font-weight: normal;
