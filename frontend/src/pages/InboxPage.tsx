@@ -12,12 +12,13 @@ import { SkeletonInboxPage } from "@components/project/skeletons/SkeletonProject
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
 
-import { getProject } from "@api/projects.api"
+import { getDrawer } from "@api/drawers.api"
 
 import { ifMobile } from "@utils/useScreenType"
 import useScreenType from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
+import { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const SortMenuMobile = lazy(
@@ -40,9 +41,9 @@ const InboxPage = () => {
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
 
     const { isLoading, isError, data, refetch } = useQuery({
-        queryKey: ["projects", "inbox"],
+        queryKey: ["inbox"],
         async queryFn() {
-            return getProject("inbox")
+            return getDrawer("inbox")
         },
     })
 
@@ -60,7 +61,7 @@ const InboxPage = () => {
 
     if (isError) {
         return (
-            <ErrorBox $isTasks={false} onClick={onClickProjectErrorBox}>
+            <ErrorBox onClick={onClickProjectErrorBox}>
                 <FeatherIcon icon="alert-triangle" />
                 {t("error_load_inbox")}
             </ErrorBox>
@@ -94,14 +95,7 @@ const InboxPage = () => {
                     </SortIconBox>
                 </Icons>
             </TitleBox>
-            {data.drawers && (
-                <InboxDrawer
-                    project={data}
-                    drawer={data.drawers[0]}
-                    color={color}
-                    ordering={ordering}
-                />
-            )}
+            {data && <InboxDrawer drawer={data} ordering={ordering} />}
             {isSortMenuMobileOpen && (
                 <Suspense
                     key="sort-menu-mobile-inbox-page"
@@ -115,15 +109,13 @@ const InboxPage = () => {
                     />
                 </Suspense>
             )}
-            {isCreateOpen && (
+            {data && isCreateOpen && (
                 <Suspense
                     key="task-create-inbox-page"
                     fallback={<ModalLoader />}>
                     <TaskCreateElement
+                        drawer={data}
                         onClose={() => setCreateOpen(false)}
-                        project={data}
-                        drawer={data.drawers[0]}
-                        color={color}
                     />
                 </Suspense>
             )}
@@ -167,7 +159,7 @@ const SortIconBox = styled.div`
     }
 `
 
-const makeSortMenuItems = (t) => [
+const makeSortMenuItems = (t: TFunction<"translation", "project">) => [
     { display: t("sort.-priority"), context: "-priority" },
     { display: t("sort.due_date"), context: "due_date" },
     {

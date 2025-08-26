@@ -6,10 +6,11 @@ import styled from "styled-components"
 import Button, { ButtonGroup } from "@components/common/Button"
 import TaskCreateButton from "@components/drawers/TaskCreateButton"
 import { TaskErrorBox } from "@components/errors/ErrorProjectPage"
-import TaskCreateSimple from "@components/project/TaskCreateSimple"
 import { SkeletonInboxTask } from "@components/project/skeletons/SkeletonProjectPage"
+import TaskCreateSimple from "@components/project/taskCreateSimple"
 import DrawerTask from "@components/tasks/DrawerTask"
 
+import { type Drawer } from "@api/drawers.api"
 import { getTasksByDrawer } from "@api/tasks.api"
 
 import { getPageFromURL } from "@utils/pagination"
@@ -17,7 +18,12 @@ import { getPageFromURL } from "@utils/pagination"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const InboxDrawer = ({ project, drawer, color, ordering }) => {
+interface InboxDrawerProps {
+    drawer: Drawer
+    ordering: string
+}
+
+const InboxDrawer = ({ drawer, ordering }: InboxDrawerProps) => {
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
 
     const { t } = useTranslation("translation", { keyPrefix: "project" })
@@ -32,8 +38,8 @@ const InboxDrawer = ({ project, drawer, color, ordering }) => {
     } = useInfiniteQuery({
         queryKey: ["tasks", { drawerID: drawer.id, ordering: ordering }],
         queryFn: (pages) =>
-            getTasksByDrawer(drawer.id, ordering, pages.pageParam || 1),
-        initialPageParam: 1,
+            getTasksByDrawer(drawer.id, ordering, pages.pageParam),
+        initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
@@ -51,9 +57,9 @@ const InboxDrawer = ({ project, drawer, color, ordering }) => {
 
     if (isError) {
         return (
-            <TaskErrorBox onClick={refetch}>
+            <TaskErrorBox onClick={() => refetch()}>
                 <FeatherIcon icon="alert-triangle" />
-                {t("error_load_task")}
+                {t("error_load_inbox")}
             </TaskErrorBox>
         )
     }
@@ -63,22 +69,13 @@ const InboxDrawer = ({ project, drawer, color, ordering }) => {
             <TaskList>
                 {data?.pages?.map((group) =>
                     group?.results?.map((task) => (
-                        <DrawerTask
-                            key={task.id}
-                            task={task}
-                            color={color}
-                            projectType={project.type}
-                        />
+                        <DrawerTask key={task.id} task={task} />
                     )),
                 )}
             </TaskList>
             {isSimpleOpen && (
                 <TaskCreateSimple
-                    projectID={project.id}
-                    projectName={project.name}
-                    drawerID={drawer.id}
-                    drawerName={drawer.name}
-                    color={color}
+                    drawer={drawer}
                     onClose={() => setIsSimpleOpen(false)}
                 />
             )}
