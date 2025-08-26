@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import { useMutation } from "@tanstack/react-query"
 
-import { type Task, deleteTask } from "@api/tasks.api"
+import { type MinimalTaskWithID, deleteTask } from "@api/tasks.api"
 
 import { useClientSetting } from "@utils/clientSettings"
 
@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 interface useDeleteTaskProps {
-    task: NormalizedTask
+    task: MinimalTaskWithID
     setIsAlertOpen: Dispatch<SetStateAction<boolean>>
     goBack?: boolean
 }

@@ -49,7 +49,6 @@ const TaskForm = ({
     const { closeModal } = useModalWindowCloseContext()
     const { isDesktop } = useScreenType()
 
-    // FIX-ME
     const postReminderMutation = useMutation({
         mutationFn: (data: { task: string; delta_list: MinimalReminder[] }) => {
             return postReminder(data)
@@ -62,6 +61,12 @@ const TaskForm = ({
                 queryKey: ["tasks", { drawerID: newTask.drawer?.id }],
             })
             closeModal()
+        },
+        onError: () => {
+            if (isCreating) {
+                toast.error(t("edit.create_error"))
+            }
+            toast.error(t("edit.edit_error"))
         },
     })
 
@@ -115,7 +120,7 @@ const TaskForm = ({
                 <TaskNameInput
                     task={newTask}
                     name={newTask.name || ""}
-                    setName={(name) => handleChange({ name })}
+                    setName={(name: string) => handleChange({ name })}
                     color={newColor}
                     inputRef={inputRef}
                     setFunc={setFunc}

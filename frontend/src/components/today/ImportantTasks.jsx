@@ -7,7 +7,7 @@ import styled, { css, useTheme } from "styled-components"
 import CollapseButton from "@components/common/CollapseButton"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
-import Task from "@components/tasks/Task"
+import TaskBlock from "@components/tasks/TaskBlock"
 
 import { patchTask } from "@api/tasks.api"
 import {
@@ -175,7 +175,7 @@ const ImportantTasks = () => {
                             ) : (
                                 group?.results?.map((task) => (
                                     <ImportantTaskBox key={task.id}>
-                                        <Task
+                                        <TaskBlock
                                             task={task}
                                             color={getPaletteColor(
                                                 theme.type,

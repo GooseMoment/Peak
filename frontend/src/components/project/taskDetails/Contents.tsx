@@ -21,7 +21,7 @@ import TaskDetailMemo from "./TaskDetailMemo"
 import TaskDetailPriority from "./TaskDetailPriority"
 import TaskDetailReminder from "./TaskDetailReminder"
 
-import type { MinimalTask } from "@api/tasks.api"
+import type { MinimalTask, TaskContent } from "@api/tasks.api"
 
 import { PaletteColorName } from "@assets/palettes"
 import AlarmClock from "@assets/project/AlarmClock"
@@ -31,8 +31,6 @@ import FeatherIcon from "feather-icons-react"
 import { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-
-type ContentKey = "assigned" | "due" | "priority" | "drawer" | "memo"
 
 /// priority, drawer가 있어야함
 const Contents = ({
@@ -55,7 +53,7 @@ const Contents = ({
     )
 
     // text클릭 시 알맞는 component 띄우기
-    const [content, setContent] = useState<ContentKey | null>(null)
+    const [content, setContent] = useState<TaskContent | null>(null)
 
     const handleClickContent = (e: MouseEvent<HTMLElement>) => {
         const target = e.target as HTMLElement
@@ -65,7 +63,7 @@ const Contents = ({
         const name = el.dataset.name
         if (!name) return
 
-        setContent(name as ContentKey | null)
+        setContent(name as TaskContent | null)
         setIsComponentOpen(true)
     }
 

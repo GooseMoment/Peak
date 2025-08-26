@@ -4,7 +4,7 @@ import styled, { useTheme } from "styled-components"
 import Button from "@components/common/Button"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
-import Task from "@components/tasks/Task"
+import TaskBlock from "@components/tasks/TaskBlock"
 
 import { getTasksAssignedToday } from "@api/today.api"
 
@@ -56,7 +56,7 @@ const TodayAssignmentTasks = ({ selectedDate }) => {
                 ) : (
                     todayAssignmentTasks?.pages?.map((group) =>
                         group?.results?.map((task) => (
-                            <Task
+                            <TaskBlock
                                 key={task.id}
                                 task={task}
                                 color={getPaletteColor(

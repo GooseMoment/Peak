@@ -24,7 +24,7 @@ const TaskDetailDrawer = ({
 }: {
     setFunc: (diff: Partial<MinimalTask>) => void
     onClose: () => void
-    setNewColor: Dispatch<SetStateAction<PaletteColorName>>
+    setNewColor?: Dispatch<SetStateAction<PaletteColorName>>
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task.drawer" })
 
@@ -49,8 +49,10 @@ const TaskDetailDrawer = ({
             setFunc({
                 drawer: drawer,
             })
-            setNewColor(drawer.project.color)
             onClose()
+
+            if (setNewColor === undefined) return
+            setNewColor(drawer.project.color)
         }
     }
 
