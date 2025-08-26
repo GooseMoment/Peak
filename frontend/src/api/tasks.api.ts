@@ -24,32 +24,52 @@ interface MinimalTaskBase {
     deleted_at?: null | string
 }
 
-export interface MinimalTaskNoDue extends MinimalTaskBase {
+export interface MinimalTaskNoDue {
     due_type: null
     due_date: null
     due_datetime: null
 }
 
-export interface MinimalTaskDueDate extends MinimalTaskBase {
+export interface MinimalTaskDueDate {
     due_type: "due_date"
     due_date: string
     due_datetime: null
 }
 
-export interface MinimalTaskDueDatetime extends MinimalTaskBase {
+export interface MinimalTaskDueDatetime {
     due_type: "due_datetime"
     due_date: null
     due_datetime: string
 }
 
-export type MinimalTask =
-    | MinimalTaskNoDue
-    | MinimalTaskDueDate
-    | MinimalTaskDueDatetime
+export type MinimalTask = MinimalTaskBase &
+    (MinimalTaskNoDue | MinimalTaskDueDate | MinimalTaskDueDatetime)
 
 export type MinimalTaskWithID = MinimalTask & { id: string }
 
 export type Task = Required<MinimalTaskWithID>
+
+interface TaskPostBase {
+    name?: string
+    drawer: string
+    privacy?: Privacy
+    priority: number
+    completed_at?: null | string
+    assigned_at?: null | string
+    reminders?: MinimalReminder[]
+    memo?: string
+}
+
+export type TaskPost = TaskPostBase &
+    (MinimalTaskNoDue | MinimalTaskDueDate | MinimalTaskDueDatetime)
+
+export type TaskContent =
+    | "assigned"
+    | "due"
+    | "reminder"
+    | "priority"
+    | "drawer"
+    | "memo"
 
 export const getTasksByDrawer = async (
     drawerID: string,
@@ -67,7 +87,7 @@ export const getTask = async (id: string) => {
     return res.data
 }
 
-export const postTask = async (task: Partial<MinimalTask>) => {
+export const postTask = async (task: TaskPost) => {
     const res = await client.post<Task>("tasks/", task)
     return res.data
 }
