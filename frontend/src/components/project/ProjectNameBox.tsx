@@ -2,7 +2,11 @@ import styled, { css } from "styled-components"
 
 import { ifMobile } from "@utils/useScreenType"
 
-const ProjectNameBox = styled.div`
+const ProjectNameBox = styled.div<{
+    $demo?: boolean
+    $isDragging?: boolean
+    $isInbox?: boolean
+}>`
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -10,7 +14,7 @@ const ProjectNameBox = styled.div`
 
     ${(p) =>
         !p.$demo &&
-        css`
+        css<{ $isDragging?: boolean; $isInbox?: boolean }>`
             opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
             cursor: ${(props) => (props.$isInbox ? "auto" : "grab")};
         `}

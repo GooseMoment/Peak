@@ -9,17 +9,29 @@ import ProjectNameBox, {
     TypeText,
 } from "@components/project/ProjectNameBox"
 
+import { type Project } from "@api/projects.api"
+
 import { getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useDrag, useDrop } from "react-dnd"
 import { useTranslation } from "react-i18next"
 
-const ProjectName = ({ project, index, moveProject, dropProject }) => {
-    const { t } = useTranslation(null, { keyPrefix: "project_list" })
+const ProjectName = ({
+    project,
+    moveProject,
+    dropProject,
+    isPending,
+}: {
+    project: Project
+    moveProject: (dragIndex: number, hoverIndex: number) => void
+    dropProject: () => void
+    isPending: boolean
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "project_list" })
     const theme = useTheme()
 
-    const ref = useRef(null)
+    const ref = useRef<HTMLDivElement>(null)
     const isInbox = project.type === "inbox"
     const navigate = useNavigate()
 
@@ -28,10 +40,11 @@ const ProjectName = ({ project, index, moveProject, dropProject }) => {
             ? "/app/projects/inbox"
             : `/app/projects/${project.id}`
 
-    let name = project.type === "inbox" ? t("inbox") : project.name
+    const name = project.type === "inbox" ? t("inbox") : project.name
 
     const [{ handlerId }, drop] = useDrop({
         accept: "Project",
+        canDrop: (item: Project) => !isPending && item.order === project.order,
         collect(monitor) {
             return {
                 handlerId: monitor.getHandlerId(),
@@ -40,34 +53,38 @@ const ProjectName = ({ project, index, moveProject, dropProject }) => {
         hover: (item, monitor) => {
             if (!ref.current) return
 
-            const dragIndex = item.index
-            const hoverIndex = index
+            const dragOrder = item.order
+            const hoverOrder = project.order
 
-            if (dragIndex === hoverIndex) return
+            if (dragOrder === hoverOrder) return
 
             const hoverBoundingRect = ref.current.getBoundingClientRect()
             const hoverMiddleY =
                 (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
             const clientOffset = monitor.getClientOffset()
+
+            if (!clientOffset) return
             const hoverClientY = clientOffset.y - hoverBoundingRect.top
 
-            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return
-            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return
+            if (dragOrder < hoverOrder && hoverClientY < hoverMiddleY) return
+            if (dragOrder > hoverOrder && hoverClientY > hoverMiddleY) return
 
-            moveProject(dragIndex, hoverIndex)
-
-            item.index = hoverIndex
+            if (item.order !== hoverOrder) {
+                moveProject(dragOrder, hoverOrder)
+                item.order = hoverOrder
+            }
         },
         drop: (item) => {
+            if (isPending) return
             dropProject()
-            item.index = index
+            item.order = project.order
         },
     })
 
     const [{ isDragging }, drag] = useDrag({
         type: "Project",
         item: () => {
-            return { project, index }
+            return { project }
         },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),

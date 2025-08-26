@@ -104,13 +104,13 @@ const ProjectListPage = () => {
             {isError && <ErrorProjectList refetch={() => refetch()} />}
 
             <DndProvider options={HTML5toTouch}>
-                {projects.map((project, i) => (
+                {projects.map((project) => (
                     <ProjectName
                         key={project.id}
                         project={project}
-                        index={i}
                         moveProject={moveProject}
                         dropProject={dropProject}
+                        isPending={isPending}
                     />
                 ))}
             </DndProvider>
