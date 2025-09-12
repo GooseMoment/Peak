@@ -1,6 +1,6 @@
 import { QueryClient } from "@tanstack/react-query"
 
-import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister"
+import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister"
 import {
     persistQueryClient,
     removeOldestQuery,
@@ -28,7 +28,7 @@ const queryClient = new QueryClient({
     },
 })
 
-const localStoragePersister = createSyncStoragePersister({
+const localStoragePersister = createAsyncStoragePersister({
     storage: window.localStorage,
     retry: removeOldestQuery,
 })
