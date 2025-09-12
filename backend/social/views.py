@@ -452,7 +452,9 @@ class StatList(TimezoneMixin, generics.GenericAPIView):
             user_ids  # pyright: ignore [reportArgumentType] -- ValuesQuerySet is compatible with QuerySet
         )
         if not paginated_user_ids:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                self.paginator.get_paginated_data(paginated_user_ids)  # pyright: ignore[reportAttributeAccessIssue] -- StatListPagination has get_paginated_data method
+            )
 
         date = datetime.date.fromisoformat(date_iso)
         datetime_range = self.get_datetime_range(date)
