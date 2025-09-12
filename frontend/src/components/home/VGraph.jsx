@@ -2,21 +2,21 @@ import styled, { useTheme } from "styled-components"
 
 import { getPaletteColor } from "@assets/palettes"
 
-const VGraph = ({ items, countAll, loading }) => {
-    const theme = useTheme()
+export function VGraphSkeleton() {
+    return (
+        <Frame>
+            <Graph>
+                <Item $width="100" />
+            </Graph>
+            <Categories>
+                <CategoryCircle />
+            </Categories>
+        </Frame>
+    )
+}
 
-    if (loading) {
-        return (
-            <Frame>
-                <Graph>
-                    <Item $width="100" $color={theme.grey} />
-                </Graph>
-                <Categories>
-                    <CategoryCircle />
-                </Categories>
-            </Frame>
-        )
-    }
+export default function VGraph({ items, countAll }) {
+    const theme = useTheme()
 
     return (
         <Frame>
@@ -64,7 +64,7 @@ const Item = styled.div`
     display: inline-block;
     width: ${(p) => p.$width}%;
     height: 100%;
-    background-color: ${(p) => p.$color};
+    background-color: ${(p) => p.$color || p.theme.grey};
 
     transition:
         background-color 0.5s var(--cubic),
@@ -92,5 +92,3 @@ const CategoryCircle = styled.div`
     height: 1em;
     background-color: ${(p) => p.$color};
 `
-
-export default VGraph
