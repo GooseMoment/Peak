@@ -1,39 +1,39 @@
 import { useQuery } from "@tanstack/react-query"
 
 import Module, { Title } from "@components/home/Module"
-import VGraph from "@components/home/VGraph"
+import VGraph, { VGraphSkeleton } from "@components/home/VGraph"
 
 import { getTasksTodayAssignedGrouped } from "@api/today.api"
-
-import { useClientTimezone } from "@utils/clientSettings"
 
 import { useTranslation } from "react-i18next"
 
 const AssignedToday = () => {
-    const tz = useClientTimezone()
-
-    const { data, isLoading } = useQuery({
-        queryKey: ["home", "tasks", "today", { tz }],
-        queryFn: () => getTasksTodayAssignedGrouped(tz),
+    const { data, isPending, isError } = useQuery({
+        queryKey: ["home", "tasks", "today"],
+        queryFn: () => getTasksTodayAssignedGrouped(),
     })
 
     const { t } = useTranslation("home", { keyPrefix: "assigned_today" })
 
-    if (isLoading) {
+    if (isPending) {
         return (
             <Module>
                 <Title loading />
-                <VGraph loading />
+                <VGraphSkeleton />
             </Module>
         )
     }
 
-    const { items, countAll } = data
+    if (isError) {
+        return null
+    }
 
     return (
         <Module>
-            <Title to="/app/today">{t("title", { number: countAll })}</Title>
-            <VGraph items={items} countAll={countAll} />
+            <Title to="/app/today">
+                {t("title", { number: data.countAll })}
+            </Title>
+            <VGraph items={data.items} countAll={data.countAll} />
         </Module>
     )
 }
