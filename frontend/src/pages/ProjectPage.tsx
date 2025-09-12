@@ -102,6 +102,7 @@ const ProjectPage = () => {
     /// Drawers Drag And Drop
     useEffect(() => {
         if (!data) return
+        console.log("useEffect 1 - setDrawers")
         setDrawers(data.results)
     }, [data])
 
@@ -112,6 +113,7 @@ const ProjectPage = () => {
     })
 
     const moveDrawer = useCallback((dragIndex: number, hoverIndex: number) => {
+        console.log("moveDrawer", { dragIndex, hoverIndex })
         setDrawers((prevDrawers) => {
             const updatedDrawers = [...prevDrawers]
             const [moved] = updatedDrawers.splice(dragIndex, 1)
@@ -121,6 +123,7 @@ const ProjectPage = () => {
     }, [])
 
     const dropDrawer = useCallback(async () => {
+        console.log("dropDrawer")
         const changedDrawers = drawers
             .map((drawer, index) => ({ id: drawer.id, order: index }))
             .filter((drawer, index) => data?.results?.[index]?.id !== drawer.id)
@@ -129,7 +132,7 @@ const ProjectPage = () => {
 
         await patchMutation.mutateAsync(changedDrawers)
 
-        await queryClient.refetchQueries({
+        await queryClient.invalidateQueries({
             queryKey: ["drawers", { projectID: id, ordering: "order" }],
         })
         setOrdering("order")
@@ -291,7 +294,7 @@ const ProjectPage = () => {
                     key="task-create-project-page"
                     fallback={<ModalLoader />}>
                     <TaskCreateElement
-                        drawer={data.results[0]}
+                        drawer={data?.results[0]}
                         onClose={() => setCreateOpen(false)}
                     />
                 </Suspense>

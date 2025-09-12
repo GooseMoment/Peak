@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, post_delete,pre_save
 from django.dispatch import receiver
 
 from tasks.models import Task
@@ -28,9 +28,9 @@ def delete_task_count_for_Task(instance: Task, **kwargs):
     instance.drawer.save()
 
 
-@receiver(post_save, sender=Drawer)
-def set_new_drawer_order(instance: Drawer, created=False, **kwargs):
-    if not created:
+@receiver(pre_save, sender=Drawer)
+def set_new_drawer_order(instance: Drawer, **kwargs):
+    if instance.created_at is not None:
         return
 
     last_drawer = (
@@ -39,5 +39,3 @@ def set_new_drawer_order(instance: Drawer, created=False, **kwargs):
         .first()
     )
     instance.order = (last_drawer.order + 1) if last_drawer else 0
-
-    instance.save()

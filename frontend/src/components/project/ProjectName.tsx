@@ -44,13 +44,15 @@ const ProjectName = ({
 
     const [{ handlerId }, drop] = useDrop({
         accept: "Project",
-        canDrop: (item: Project) => !isPending && item.order === project.order,
+        canDrop: (item: Project) =>
+            !isPending && !isInbox && item.order !== project.order,
         collect(monitor) {
             return {
                 handlerId: monitor.getHandlerId(),
             }
         },
         hover: (item, monitor) => {
+            if (isInbox) return
             if (!ref.current) return
 
             const dragOrder = item.order
@@ -70,21 +72,22 @@ const ProjectName = ({
             if (dragOrder > hoverOrder && hoverClientY > hoverMiddleY) return
 
             if (item.order !== hoverOrder) {
-                moveProject(dragOrder, hoverOrder)
                 item.order = hoverOrder
+                moveProject(dragOrder, hoverOrder)
             }
         },
         drop: (item) => {
-            if (isPending) return
-            dropProject()
+            if (isPending || isInbox) return
             item.order = project.order
+            dropProject()
         },
     })
 
     const [{ isDragging }, drag] = useDrag({
         type: "Project",
+        canDrag: !isInbox,
         item: () => {
-            return { project }
+            return { id: project.id, order: project.order }
         },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),

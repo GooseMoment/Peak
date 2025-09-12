@@ -75,7 +75,8 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
 
     const patchMutation = useMutation({
         mutationFn: (data: Drawer) => {
-            return patchDrawer(data.id!, data)
+            const drawerData = { ...data, project: data.project.id }
+            return patchDrawer(data.id!, drawerData)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({

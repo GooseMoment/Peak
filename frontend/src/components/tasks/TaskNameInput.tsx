@@ -50,7 +50,7 @@ const TaskNameInput = ({
     }, [task])
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const newName = e.currentTarget.value
+        const newName = e.target.value
         setName(newName)
     }
 

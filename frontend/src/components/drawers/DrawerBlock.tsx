@@ -35,7 +35,6 @@ import queryClient from "@queries/queryClient"
 
 import { getPaletteColor } from "@assets/palettes"
 
-import type { Identifier } from "dnd-core"
 import FeatherIcon from "feather-icons-react"
 import { TFunction } from "i18next"
 import { useDrag, useDrop } from "react-dnd"
@@ -50,16 +49,6 @@ interface DrawerProps {
     drawer: Drawer
     moveDrawer: (dragIndex: number, hoverIndex: number) => void
     dropDrawer: () => void
-}
-
-type DragItem = {
-    type: "Drawer"
-    id: string
-    order: number
-}
-
-type Collected = {
-    handlerId: Identifier | null
 }
 
 const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
@@ -100,8 +89,9 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
     /// Drawer Drag and Drop
     const ref = useRef<HTMLDivElement>(null)
 
-    const [{ handlerId }, drop] = useDrop<DragItem, void, Collected>({
+    const [{ handlerId }, drop] = useDrop({
         accept: "Drawer",
+        canDrop: (item: Drawer) => item.order !== drawer.order,
         collect(monitor) {
             return {
                 handlerId: monitor.getHandlerId(),
@@ -126,13 +116,14 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
             if (dragOrder < hoverOrder && hoverClientY < hoverMiddleY) return
             if (dragOrder > hoverOrder && hoverClientY > hoverMiddleY) return
 
-            moveDrawer(dragOrder, hoverOrder)
-
-            item.order = hoverOrder
+            if (item.order !== hoverOrder) {
+                item.order = hoverOrder
+                moveDrawer(dragOrder, hoverOrder)
+            }
         },
         drop: (item) => {
-            dropDrawer()
             item.order = drawer.order
+            dropDrawer()
         },
     })
 
@@ -181,7 +172,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
 
         await patchMutation.mutateAsync(changedTasks)
 
-        await queryClient.refetchQueries({
+        await queryClient.invalidateQueries({
             queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
         })
         setOrdering("order")
@@ -242,7 +233,8 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
                 ref={ref}
                 data-handler-id={handlerId}
                 $color={color}
-                $isDragging={isDragging}>
+                $isDragging={isDragging}
+                $isDraggable={true}>
                 <DrawerTitleBox>
                     <DrawerName $color={color}>{drawer.name}</DrawerName>
                     <PrivacyIcon privacy={drawer.privacy} color={color} />

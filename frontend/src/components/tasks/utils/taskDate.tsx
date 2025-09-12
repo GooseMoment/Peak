@@ -14,7 +14,7 @@ const taskDate = (task: MinimalTask) => {
     const tz = useClientTimezone()
 
     const formatDate = (date: DateTime | null) => {
-        if (date === null) return null
+        if (date === null || !date.isValid) return null
 
         const formattedDate = date.setLocale(locale).toLocaleString()
         return formattedDate

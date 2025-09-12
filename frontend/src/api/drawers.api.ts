@@ -45,7 +45,10 @@ export const postDrawer = async (drawer: Partial<DrawerCreateInput>) => {
     return res.data
 }
 
-export const patchDrawer = async (id: string, edit: Partial<Drawer>) => {
+export const patchDrawer = async (
+    id: string,
+    edit: Partial<DrawerCreateInput>,
+) => {
     const res = await client.patch<Drawer>(`drawers/${id}/`, edit)
     return res.data
 }

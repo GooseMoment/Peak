@@ -56,7 +56,9 @@ const Contents = ({
     const [content, setContent] = useState<TaskContent | null>(null)
 
     const handleClickContent = (e: MouseEvent<HTMLElement>) => {
-        const target = e.target as HTMLElement
+        const target = e.target
+        if (!(target instanceof HTMLElement)) return
+
         const el = target.closest<HTMLElement>("[data-name]")
         if (!el) return
 

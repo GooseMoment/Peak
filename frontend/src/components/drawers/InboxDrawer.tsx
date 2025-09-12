@@ -90,7 +90,7 @@ const InboxDrawer = ({ drawer, ordering, setOrdering }: InboxDrawerProps) => {
 
         await patchMutation.mutateAsync(changedTasks)
 
-        await queryClient.refetchQueries({
+        await queryClient.invalidateQueries({
             queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
         })
         setOrdering("order")

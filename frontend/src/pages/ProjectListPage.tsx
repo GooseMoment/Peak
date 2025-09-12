@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useMutation } from "@tanstack/react-query"
@@ -72,7 +72,8 @@ const ProjectListPage = () => {
     }, [])
 
     const dropProject = useCallback(async () => {
-        const results = data?.pages?.flatMap((page) => page.results) || []
+        const results = data?.pages?.flatMap((page) => page.results ?? []) || []
+
         const changedProjects = projects
             .map((project, index) => ({ id: project.id, order: index }))
             .filter((project, index) => results[index]?.id !== project.id)
@@ -80,8 +81,7 @@ const ProjectListPage = () => {
         if (changedProjects.length === 0) return
 
         await patchMutation.mutateAsync(changedProjects)
-
-        await queryClient.refetchQueries({
+        await queryClient.invalidateQueries({
             queryKey: ["projects"],
         })
     }, [projects, data])
@@ -104,7 +104,7 @@ const ProjectListPage = () => {
             {isError && <ErrorProjectList refetch={() => refetch()} />}
 
             <DndProvider options={HTML5toTouch}>
-                {projects.map((project) => (
+                {projects?.map((project) => (
                     <ProjectName
                         key={project.id}
                         project={project}

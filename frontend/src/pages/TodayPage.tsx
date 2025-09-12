@@ -19,9 +19,7 @@ const TodayPage = () => {
     const locale = useClientLocale()
 
     const today = DateTime.now().setZone(tz)
-    const [selectedDate, setSelectedDate] = useState<string>(
-        today.toISODate() || "",
-    )
+    const [selectedDate, setSelectedDate] = useState<string>(today.toISODate()!)
 
     const isToday = selectedDate === today.toISODate()
     const selectedDateTime = DateTime.fromISO(selectedDate).setZone(tz)
