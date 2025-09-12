@@ -25,5 +25,9 @@
         "title": "{{ count }} tasks assigned today",
         "title_one": "One task assigned today",
         "title_zero": "No tasks assigned today"
+    },
+    "set_profile_img": {
+        "title": "Set your profile image",
+        "description": "Make your profile more personal by adding a profile image."
     }
 }

@@ -25,5 +25,9 @@
         "title": "오늘 {{ count }}개 작업이 있습니다",
         "title_one": "오늘 한 개 작업이 있습니다",
         "title_zero": "오늘 작업이 없습니다"
+    },
+    "set_profile_img": {
+        "title": "프로필 이미지 설정하기",
+        "description": "프로필 이미지를 추가하여 나만의 프로필을 만들어보세요."
     }
 }
