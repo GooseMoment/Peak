@@ -7,10 +7,11 @@ import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"
 import taskCalculation from "@components/tasks/utils/taskCalculation"
 
-import { type Task } from "@api/tasks.api"
+import type { DemoMinimalTask, Task } from "@api/tasks.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
+import { PaletteColorName } from "@assets/palettes"
 import AlarmClock from "@assets/project/AlarmClock"
 import Hourglass from "@assets/project/Hourglass"
 
@@ -126,6 +127,73 @@ const TaskFrame = ({
     )
 }
 
+export const DemoTaskFrame = ({
+    task,
+    color,
+    toComplete,
+}: {
+    task: DemoMinimalTask
+    color: PaletteColorName
+    toComplete?: () => void
+}) => {
+    const hasDate = task.due_type != null || task.assigned_at != null
+    const isCompleted = task.completed_at != null
+
+    const {
+        due,
+        assigned,
+        calculate_due,
+        calculate_assigned,
+        isOutOfDue,
+        isOutOfAssigned,
+    } = taskCalculation(task, false)
+
+    return (
+        <Box>
+            <Content>
+                <CircleName>
+                    <Icons>
+                        <Priority
+                            hasDate={hasDate}
+                            priority={task.priority}
+                            isCompleted={isCompleted}
+                        />
+                        <TaskCircle
+                            color={color}
+                            isCompleted={isCompleted}
+                            hasDate={hasDate}
+                            onClick={toComplete}
+                        />
+                    </Icons>
+                    <TaskNameBox $isCompleted={isCompleted}>
+                        {task?.name}
+                    </TaskNameBox>
+                </CircleName>
+                {hasDate && (
+                    <Dates>
+                        {task.assigned_at && (
+                            <AssignedDate
+                                $isCompleted={isCompleted}
+                                $isOutOfAssigned={isOutOfAssigned}>
+                                <FeatherIcon icon="calendar" />
+                                {isCompleted ? assigned : calculate_assigned}
+                            </AssignedDate>
+                        )}
+                        {task.due_type && (
+                            <DueDate
+                                $isCompleted={isCompleted}
+                                $isOutOfDue={isOutOfDue}>
+                                <Hourglass />
+                                {isCompleted ? due : calculate_due}
+                            </DueDate>
+                        )}
+                    </Dates>
+                )}
+            </Content>
+        </Box>
+    )
+}
+
 const Box = styled.div`
     display: flex;
     align-items: center;
@@ -182,7 +250,7 @@ const Dates = styled.div`
 
 const AssignedDate = styled.div<{
     $isCompleted: boolean
-    $isSocial: boolean
+    $isSocial?: boolean
     $isOutOfAssigned: boolean
 }>`
     display: flex;
@@ -217,7 +285,7 @@ const AssignedDate = styled.div<{
 
 const DueDate = styled.div<{
     $isCompleted: boolean
-    $isSocial: boolean
+    $isSocial?: boolean
     $isOutOfDue: boolean
 }>`
     display: flex;

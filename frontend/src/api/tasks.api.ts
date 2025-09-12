@@ -63,6 +63,14 @@ interface TaskPostBase {
 export type TaskPost = TaskPostBase &
     (MinimalTaskNoDue | MinimalTaskDueDate | MinimalTaskDueDatetime)
 
+export type DemoMinimalTaskBase = Pick<
+    MinimalTask,
+    "name" | "completed_at" | "assigned_at" | "priority"
+>
+
+export type DemoMinimalTask = DemoMinimalTaskBase &
+    (MinimalTaskNoDue | MinimalTaskDueDate | MinimalTaskDueDatetime)
+
 export type TaskContent =
     | "assigned"
     | "due"

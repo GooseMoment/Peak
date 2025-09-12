@@ -1,4 +1,4 @@
-import { type Task } from "@api/tasks.api"
+import type { DemoMinimalTask } from "@api/tasks.api"
 
 import { useClientLocale } from "@utils/clientSettings"
 import { useClientTimezone } from "@utils/clientSettings"
@@ -59,7 +59,7 @@ const calculateDate = (
     return [newDate, calculatedDue, false]
 }
 
-const taskCalculation = (task: Task, isSocial: boolean) => {
+const taskCalculation = (task: DemoMinimalTask, isSocial: boolean) => {
     const tz = useClientTimezone()
 
     const today = DateTime.now().setZone(tz)

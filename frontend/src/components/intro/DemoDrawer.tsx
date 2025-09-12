@@ -16,7 +16,9 @@ import {
     yesterday,
 } from "./todays"
 
-import { getPaletteColor } from "@assets/palettes"
+import { type DemoMinimalTask } from "@api/tasks.api"
+
+import { type PaletteColorName, getPaletteColor } from "@assets/palettes"
 
 import { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
@@ -44,7 +46,11 @@ const DemoDrawer = () => {
                         </DrawerName>
                     </DrawerBox>
                     {drawer.tasks?.map((task, i) => (
-                        <DemoTask color={color} task={task} key={i} />
+                        <DemoTask
+                            task={task}
+                            color={"deep_blue" as PaletteColorName}
+                            key={i}
+                        />
                     ))}
                 </Fragment>
             ))}
@@ -60,19 +66,10 @@ const DemoDrawer = () => {
     )
 }
 
-interface Task {
-    name: string
-    completed_at: null | boolean
-    due_type: "due_date" | "due_datetime"
-    due_date: null | string
-    assigned_at: null | string
-    priority: number
-}
-
 // tasks는 각 drawer별로 2-3개씩
 function makeDrawers(t: TFunction<"intro", "section_organize.demo_drawer">): {
     name: string
-    tasks: Task[]
+    tasks: DemoMinimalTask[]
 }[] {
     return [
         {
@@ -83,22 +80,25 @@ function makeDrawers(t: TFunction<"intro", "section_organize.demo_drawer">): {
                     completed_at: null,
                     due_type: "due_date",
                     due_date: tomorrow,
+                    due_datetime: null,
                     assigned_at: today,
                     priority: 1,
                 },
                 {
                     name: t("drawer0.sample1"),
-                    completed_at: true,
+                    completed_at: new Date().toISOString(),
                     due_type: "due_date",
                     due_date: today,
+                    due_datetime: null,
                     assigned_at: yesterday,
                     priority: 0,
                 },
                 {
                     name: t("drawer0.sample2"),
-                    completed_at: false,
+                    completed_at: null,
                     due_type: "due_date",
                     due_date: dayLongAfter,
+                    due_datetime: null,
                     assigned_at: null,
                     priority: 0,
                 },
@@ -112,14 +112,16 @@ function makeDrawers(t: TFunction<"intro", "section_organize.demo_drawer">): {
                     completed_at: null,
                     due_type: "due_date",
                     due_date: dayAfterTomorrow,
+                    due_datetime: null,
                     assigned_at: tomorrow,
                     priority: 2,
                 },
                 {
                     name: t("drawer1.sample1"),
-                    completed_at: true,
+                    completed_at: new Date().toISOString(),
                     due_type: "due_date",
                     due_date: yesterday,
+                    due_datetime: null,
                     assigned_at: yesterday,
                     priority: 2,
                 },
@@ -130,25 +132,28 @@ function makeDrawers(t: TFunction<"intro", "section_organize.demo_drawer">): {
             tasks: [
                 {
                     name: t("drawer2.sample0"),
-                    completed_at: false,
+                    completed_at: null,
                     due_type: "due_date",
                     due_date: dayAfterTomorrow,
+                    due_datetime: null,
                     assigned_at: null,
                     priority: 0,
                 },
                 {
                     name: t("drawer2.sample1"),
-                    completed_at: false,
+                    completed_at: null,
                     due_type: "due_date",
                     due_date: today,
+                    due_datetime: null,
                     assigned_at: null,
                     priority: 1,
                 },
                 {
                     name: t("drawer2.sample2"),
-                    completed_at: true,
+                    completed_at: new Date().toISOString(),
                     due_type: "due_date",
                     due_date: yesterday,
+                    due_datetime: null,
                     assigned_at: yesterday,
                     priority: 2,
                 },
