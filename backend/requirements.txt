@@ -12,6 +12,5 @@ pillow==11.3.0 # required by models.ImageField
 django-redis==6.0.0
 pywebpush==2.0.0
 django-rest-knox==5.0.2
-marko==2.2.0
 ua-parser[basic]>=1.0.1
 emoji==2.14.1

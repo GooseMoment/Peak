@@ -18,9 +18,6 @@
         "title": "Install Peak as an app",
         "description": "Here's how to."
     },
-    "announcements": {
-        "title": "Check these"
-    },
     "assigned_today": {
         "title": "{{ number }} task(s) assigned today"
     }

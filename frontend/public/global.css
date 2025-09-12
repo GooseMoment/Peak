@@ -252,13 +252,3 @@ body {
         top: unset;
     }
 }
-
-/*
-    Markdown
-*/
-
-.announcement_detail_content img {
-    display: block;
-    max-width: 600px;
-    margin: 1em;
-}
