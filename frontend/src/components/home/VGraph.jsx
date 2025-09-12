@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 import styled, { useTheme } from "styled-components"
 
 import { getPaletteColor } from "@assets/palettes"
@@ -24,6 +26,7 @@ export default function VGraph({ items, countAll }) {
                 {items?.map((item) => (
                     <Item
                         key={item.name}
+                        to={`/app/projects/${item.id}`}
                         $width={(item.count / countAll) * 100}
                         $color={getPaletteColor(theme.type, item.color)}
                         draggable="false"
@@ -32,7 +35,7 @@ export default function VGraph({ items, countAll }) {
             </Graph>
             <Categories>
                 {items?.map((item) => (
-                    <Category key={item.name}>
+                    <Category key={item.name} to={`/app/projects/${item.id}`}>
                         <CategoryCircle
                             $color={getPaletteColor(theme.type, item.color)}
                             draggable="false"
@@ -60,7 +63,7 @@ const Graph = styled.div`
     overflow: hidden;
 `
 
-const Item = styled.div`
+const Item = styled(Link)`
     display: inline-block;
     width: ${(p) => p.$width}%;
     height: 100%;
@@ -78,7 +81,7 @@ const Categories = styled.div`
     gap: 0.5em;
 `
 
-const Category = styled.div`
+const Category = styled(Link)`
     display: flex;
     gap: 0.25em;
 
