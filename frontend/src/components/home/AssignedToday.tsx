@@ -31,7 +31,7 @@ const AssignedToday = () => {
     return (
         <Module>
             <Title to="/app/today">
-                {t("title", { number: data.countAll })}
+                {t("title", { count: data.countAll })}
             </Title>
             <VGraph items={data.items} countAll={data.countAll} />
         </Module>

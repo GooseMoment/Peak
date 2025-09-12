@@ -22,6 +22,8 @@
         "title": "새 소식"
     },
     "assigned_today": {
-        "title": "오늘 {{ number }}개 작업이 있습니다"
+        "title": "오늘 {{ count }}개 작업이 있습니다",
+        "title_one": "오늘 한 개 작업이 있습니다",
+        "title_zero": "오늘 작업이 없습니다"
     }
 }

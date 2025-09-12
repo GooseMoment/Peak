@@ -22,6 +22,8 @@
         "title": "Check these"
     },
     "assigned_today": {
-        "title": "{{ number }} task(s) assigned today"
+        "title": "{{ count }} tasks assigned today",
+        "title_one": "One task assigned today",
+        "title_zero": "No tasks assigned today"
     }
 }
