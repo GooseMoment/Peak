@@ -102,7 +102,6 @@ const ProjectPage = () => {
     /// Drawers Drag And Drop
     useEffect(() => {
         if (!data) return
-        console.log("useEffect 1 - setDrawers")
         setDrawers(data.results)
     }, [data])
 
@@ -113,7 +112,6 @@ const ProjectPage = () => {
     })
 
     const moveDrawer = useCallback((dragIndex: number, hoverIndex: number) => {
-        console.log("moveDrawer", { dragIndex, hoverIndex })
         setDrawers((prevDrawers) => {
             const updatedDrawers = [...prevDrawers]
             const [moved] = updatedDrawers.splice(dragIndex, 1)
@@ -123,7 +121,6 @@ const ProjectPage = () => {
     }, [])
 
     const dropDrawer = useCallback(async () => {
-        console.log("dropDrawer")
         const changedDrawers = drawers
             .map((drawer, index) => ({ id: drawer.id, order: index }))
             .filter((drawer, index) => data?.results?.[index]?.id !== drawer.id)

@@ -22,7 +22,6 @@
         "@tanstack/react-query-persist-client": "^5.87.1",
         "@toss/impression-area": "^1.4.2",
         "axios": "^1.11.0",
-        "dnd-core": "^16.0.1",
         "emoji-picker-react": "^4.13.3",
         "feather-icons-react": "^0.9.0",
         "github-markdown-css": "^5.8.1",

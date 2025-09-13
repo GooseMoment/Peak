@@ -8,7 +8,7 @@ from .models import Task
 def set_new_task_order(instance: Task, **kwargs):
     if instance.created_at is not None:
         return
-    
+
     last_task = (
         Task.objects.filter(user=instance.user, drawer=instance.drawer)
         .order_by("-order")
