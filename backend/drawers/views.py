@@ -1,15 +1,13 @@
 from rest_framework import mixins, generics, status
 from rest_framework.response import Response
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter
 from rest_framework.exceptions import ValidationError
 
 from .models import Drawer
 from .serializers import DrawerSerializer, DrawerReorderSerializer
-from .exceptions import DrawerNameDuplicate
+from .exceptions import DrawerNameDuplicate, DrawerLimitExceeded
 
 from api.permissions import IsUserOwner
-from api.exceptions import UnknownError
 
 from projects.models import Project
 
@@ -35,16 +33,12 @@ class DrawerDetail(
         return self.destroy(request, *args, **kwargs)
 
 
-class DrawerListPagination(PageNumberPagination):
-    page_size = 20
-
-
 class DrawerList(
     mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
 ):
     permission_classes = [IsUserOwner]
     serializer_class = DrawerSerializer
-    pagination_class = DrawerListPagination
+    pagination_class = None
     filter_backends = [OrderingFilter]
     ordering_fields = [
         "order",
@@ -67,6 +61,14 @@ class DrawerList(
 
         return queryset
 
+    def perform_create(self, serializer):
+        project = serializer.validated_data.get("project")
+
+        if Drawer.objects.filter(user=self.request.user, project=project).count() >= 20:
+            raise DrawerLimitExceeded
+
+        serializer.save(user=self.request.user, project=project)
+
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
@@ -75,8 +77,6 @@ class DrawerList(
             return self.create(request, *args, **kwargs)
         except ValidationError:
             raise DrawerNameDuplicate
-        except Exception:
-            raise UnknownError
 
 
 class InboxDrawerDetail(

@@ -1,5 +1,5 @@
 import client from "@api/client"
-import type { Base, PaginationData, Privacy } from "@api/common"
+import type { Base, Privacy } from "@api/common"
 import type { Project } from "@api/projects.api"
 
 export interface Drawer extends Base {
@@ -22,16 +22,14 @@ export const getDrawersByProject = async (
     projectID: string,
     ordering: string,
 ) => {
-    const res = await client.get<PaginationData<Drawer>>(`drawers/`, {
+    const res = await client.get<Drawer[]>(`drawers/`, {
         params: { project: projectID, ordering: ordering },
     })
     return res.data
 }
 
-export const getAllDrawers = async (page: string) => {
-    const res = await client.get<PaginationData<Drawer>>("drawers/", {
-        params: { page },
-    })
+export const getAllDrawers = async () => {
+    const res = await client.get<Drawer[]>("drawers/")
     return res.data
 }
 

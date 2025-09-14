@@ -27,7 +27,6 @@ import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
 import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 
-import { PaginationData } from "@api/common"
 import {
     type Drawer,
     getDrawersByProject,
@@ -90,11 +89,11 @@ const ProjectPage = () => {
     }, [project, navigate])
 
     const {
+        data,
         isPending: isDrawersPending,
         isError: isDrawersError,
-        data,
         refetch: drawersRefetch,
-    } = useQuery<PaginationData<Drawer>>({
+    } = useQuery<Drawer[]>({
         queryKey: ["drawers", { projectID: id, ordering: ordering }],
         queryFn: () => getDrawersByProject(id!, ordering),
     })
@@ -102,7 +101,7 @@ const ProjectPage = () => {
     /// Drawers Drag And Drop
     useEffect(() => {
         if (!data) return
-        setDrawers(data.results)
+        setDrawers(data)
     }, [data])
 
     const patchMutation = useMutation({
@@ -121,9 +120,13 @@ const ProjectPage = () => {
     }, [])
 
     const dropDrawer = useCallback(async () => {
+        if (!data) return
         const changedDrawers = drawers
-            .map((drawer, index) => ({ id: drawer.id, order: index }))
-            .filter((drawer, index) => data?.results?.[index]?.id !== drawer.id)
+            .map((drawer, index) => ({
+                id: drawer.id,
+                order: index,
+            }))
+            .filter((drawer, index) => data[index].id !== drawer.id)
 
         if (changedDrawers.length === 0) return
 
@@ -291,7 +294,7 @@ const ProjectPage = () => {
                     key="task-create-project-page"
                     fallback={<ModalLoader />}>
                     <TaskCreateElement
-                        drawer={data?.results[0]}
+                        drawer={data[0]}
                         onClose={() => setCreateOpen(false)}
                     />
                 </Suspense>

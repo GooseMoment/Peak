@@ -49,8 +49,12 @@ const TaskDetail = ({ task }: { task: MinimalTaskWithID }) => {
                 queryKey: ["task", { taskID: newTask.id }],
             })
             queryClient.invalidateQueries({
-                queryKey: ["tasks", { drawerID: newTask.drawer }],
+                queryKey: ["tasks", { drawerID: task.drawer.id }],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["tasks", { drawerID: newTask.drawer.id }],
+            })
+
             toast.success(t("edit.edit_success"))
         },
         onError: () => {

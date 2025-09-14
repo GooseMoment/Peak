@@ -64,8 +64,11 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
                 const errorCode = (err as AxiosError<{ code: string }>).response
                     ?.data?.code
 
-                if (errorCode === "DRAWER_NAME_DUPLICATE") {
-                    toast.error(t("created_drawer_error.DRAWER_NAME_DUPLICATE"))
+                if (
+                    errorCode === "DRAWER_NAME_DUPLICATE" ||
+                    errorCode === "DRAWER_LIMIT_EXCEEDED"
+                ) {
+                    toast.error(t(`created_drawer_error.${errorCode}`))
                 } else {
                     toast.error(t("created_drawer_error.UNKNOWN_ERROR"))
                 }

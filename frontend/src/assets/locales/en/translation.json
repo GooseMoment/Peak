@@ -117,6 +117,7 @@
         "created_drawer": "Created a new drawer.",
         "created_drawer_error": {
             "DRAWER_NAME_DUPLICATE": "A drawer name you entered already exists.",
+            "DRAWER_LIMIT_EXCEEDED": "You can create up to 20 drawers per project.",
             "UNKNOWN_ERROR": "Please try later."
         },
         "edited": "Saved changes.",

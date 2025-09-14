@@ -1,16 +1,13 @@
 import { Dispatch, SetStateAction } from "react"
 
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import Button, { ButtonGroup } from "@components/common/Button"
 import Detail from "@components/project/common/Detail"
 import DrawerFolder from "@components/project/taskDetails/DrawerFolder"
 
 import { type Drawer, getAllDrawers } from "@api/drawers.api"
 import { type MinimalTask } from "@api/tasks.api"
-
-import { getPageFromURL } from "@utils/pagination"
 
 import { PaletteColorName } from "@assets/palettes"
 
@@ -33,16 +30,10 @@ const TaskDetailDrawer = ({
         isPending,
         isError,
         refetch,
-        fetchNextPage,
-        isFetchingNextPage,
-    } = useInfiniteQuery({
+    } = useQuery({
         queryKey: ["drawers"],
-        queryFn: (context) => getAllDrawers(context.pageParam),
-        initialPageParam: "1",
-        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
+        queryFn: () => getAllDrawers(),
     })
-
-    const hasNextPage = drawers?.pages[drawers?.pages?.length - 1].next !== null
 
     const changeDrawer = (drawer: Drawer) => {
         return () => {
@@ -69,21 +60,26 @@ const TaskDetailDrawer = ({
         )
     }
 
-    return (
-        <div>
-            <DrawerFolder drawers={drawers} changeDrawer={changeDrawer} />
+    const grouped: Record<string, Drawer[]> = {}
 
-            {hasNextPage ? (
-                <ButtonGroup $justifyContent="center" $margin="1em">
-                    <MoreButton
-                        disabled={isFetchingNextPage}
-                        loading={isFetchingNextPage}
-                        onClick={() => fetchNextPage()}>
-                        {isPending ? t("loading") : t("button_load_more")}
-                    </MoreButton>
-                </ButtonGroup>
-            ) : null}
-        </div>
+    for (const drawer of drawers) {
+        const pname = drawer.project.name
+        if (!grouped[pname]) {
+            grouped[pname] = []
+        }
+        grouped[pname].push(drawer)
+    }
+
+    return (
+        <>
+            {Object.entries(grouped).map(([projectName, projectDrawers]) => (
+                <DrawerFolder
+                    key={projectName}
+                    drawers={projectDrawers}
+                    changeDrawer={changeDrawer}
+                />
+            ))}
+        </>
     )
 }
 
@@ -105,10 +101,6 @@ const DrawerSettingLoadErrorBox = styled.div`
         margin: 0em 1em;
         color: ${(p) => p.theme.white};
     }
-`
-
-const MoreButton = styled(Button)`
-    width: 80%;
 `
 
 export default TaskDetailDrawer
