@@ -3,7 +3,7 @@ import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 
-const useCalculateDate = (name, date, today, isSocial) => {
+const calculateDate = (name, date, today, isSocial) => {
     const { t } = useTranslation(null, { keyPrefix: "task" })
 
     const locale = useClientLocale()
@@ -40,13 +40,13 @@ const useCalculateDate = (name, date, today, isSocial) => {
     return [newDate, calculatedDue, false]
 }
 
-const useTaskDateCalculation = (task, isSocial) => {
+const taskCalculation = (task, isSocial) => {
     const tz = useClientTimezone()
 
     const today = DateTime.now().setZone(tz)
 
     const taskAssignedAt = DateTime.fromISO(task.assigned_at, { zone: tz })
-    const [assigned, calculate_assigned, isOutOfAssigned] = useCalculateDate(
+    const [assigned, calculate_assigned, isOutOfAssigned] = calculateDate(
         "assigned",
         taskAssignedAt,
         today,
@@ -59,7 +59,7 @@ const useTaskDateCalculation = (task, isSocial) => {
     } else if (task.due_type === "due_datetime") {
         taskDue = DateTime.fromISO(task.due_datetime, { zone: tz })
     }
-    const [due, calculate_due, isOutOfDue] = useCalculateDate(
+    const [due, calculate_due, isOutOfDue] = calculateDate(
         task.due_type,
         taskDue,
         today,
@@ -76,4 +76,4 @@ const useTaskDateCalculation = (task, isSocial) => {
     }
 }
 
-export default useTaskDateCalculation
+export default taskCalculation
