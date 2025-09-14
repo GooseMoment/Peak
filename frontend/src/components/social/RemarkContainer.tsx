@@ -1,10 +1,4 @@
-import {
-    type KeyboardEvent,
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from "react"
+import { type KeyboardEvent, useEffect, useRef, useState } from "react"
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
@@ -21,7 +15,7 @@ import {
 import { type User } from "@api/users.api"
 
 import FeatherIcon from "feather-icons-react"
-import { type DateTime } from "luxon"
+import type { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -96,20 +90,14 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
 
     const { t } = useTranslation("translation")
 
-    // resizes the textarea automatically whenever the value changes
-    const resizeTextarea = useCallback(
-        (node: HTMLTextAreaElement | null) => {
-            if (!node) {
-                return
-            }
+    useEffect(() => {
+        if (!textareaRef.current) {
+            return
+        }
 
-            textareaRef.current = node
-
-            node.style.height = "auto"
-            node.style.height = `${node.scrollHeight + 10}px`
-        },
-        [content],
-    )
+        textareaRef.current.style.height = "auto"
+        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+    }, [content])
 
     // focuses on the textarea and puts the cursor on the end of the content
     // when the user enters the edit mode
@@ -133,7 +121,7 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
         setContent(remark?.content || "")
 
         return () => setEditing(false)
-    }, [date])
+    }, [date, remark])
 
     const client = useQueryClient()
     const mut = useMutation<null | Remark>({
@@ -215,7 +203,7 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
                           : t("social.remarks.title")}
                 </Title>
                 <TextArea
-                    ref={resizeTextarea}
+                    ref={textareaRef}
                     disabled={mut.isPending || !isEditing}
                     placeholder={
                         isEditing

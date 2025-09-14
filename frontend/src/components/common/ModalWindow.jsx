@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import {
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
+} from "react"
 
 import styled, { css } from "styled-components"
 
@@ -27,12 +33,34 @@ const ModalWindow = ({
 }) => {
     const [closing, setClosing] = useState(false)
 
-    const closeWithTransition = () => {
+    const closeWithTransition = useCallback(() => {
         setClosing(true)
         setTimeout(() => afterClose(), 100)
-    }
+    }, [afterClose])
 
     useStopScroll(true)
+
+    const handleOutsideClick = useCallback(
+        (e) => {
+            if (e.target !== el) {
+                return
+            }
+
+            e.stopPropagation()
+            closeWithTransition()
+        },
+        [closeWithTransition],
+    )
+
+    const handleKeyDown = useCallback(
+        (e) => {
+            if (closeESC && e.key === "Escape") {
+                e.preventDefault()
+                closeWithTransition()
+            }
+        },
+        [closeESC, closeWithTransition],
+    )
 
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)
@@ -50,23 +78,7 @@ const ModalWindow = ({
                 root.classList.remove("has-modal")
             }
         }
-    }, [])
-
-    const handleOutsideClick = (e) => {
-        if (e.target !== el) {
-            return
-        }
-
-        e.stopPropagation()
-        closeWithTransition()
-    }
-
-    const handleKeyDown = (e) => {
-        if (closeESC && e.key === "Escape") {
-            e.preventDefault()
-            closeWithTransition()
-        }
-    }
+    }, [additional, handleKeyDown, handleOutsideClick])
 
     return createPortal(
         <CloseContext.Provider value={{ closeModal: closeWithTransition }}>

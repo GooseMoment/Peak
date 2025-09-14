@@ -28,7 +28,7 @@ const SignPage = () => {
                 toast.error(t("sign_in_again"), { toastId: "flag401" })
                 break
         }
-    }, [])
+    }, [searchParams, t])
 
     const {
         data: serverEmojis,
@@ -51,7 +51,7 @@ const SignPage = () => {
         }
 
         setActivities(generateActivities(serverEmojis))
-    }, [serverEmojis])
+    }, [serverEmojis, isError, isFetching])
 
     return (
         <Root>

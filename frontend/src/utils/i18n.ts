@@ -31,7 +31,7 @@ export const I18nSetLocale = ({ i18n }: { i18n: i18nType }) => {
 
     useEffect(() => {
         i18n.changeLanguage(locale)
-    }, [locale])
+    }, [locale, i18n])
 
     return null
 }

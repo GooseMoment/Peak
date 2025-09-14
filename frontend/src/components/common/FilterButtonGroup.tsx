@@ -40,21 +40,18 @@ const FilterButtonGroup = <T extends string>({
             width: 0,
         })
 
-    const onRefChange = useCallback(
-        (node: HTMLElement | null) => {
-            if (!node) {
-                // node is null when this component is unmounted
-                return
-            }
+    const onRefChange = useCallback((node: HTMLElement | null) => {
+        if (!node) {
+            // node is null when this component is unmounted
+            return
+        }
 
-            setSelectedButtonPosition({
-                top: node.offsetTop,
-                left: node.offsetLeft,
-                width: node.offsetWidth,
-            })
-        },
-        [filters],
-    )
+        setSelectedButtonPosition({
+            top: node.offsetTop,
+            left: node.offsetLeft,
+            width: node.offsetWidth,
+        })
+    }, [])
 
     const filterEntries = useMemo(() => Object.entries(filters), [filters])
 

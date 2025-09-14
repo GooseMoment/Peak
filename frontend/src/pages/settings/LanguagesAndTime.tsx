@@ -24,7 +24,7 @@ const LanguagesAndTime = () => {
             },
             ...timezonesData,
         ],
-        [t, browserTz],
+        [t],
     )
 
     const languageChoices = useMemo(() => makeLanguageChoices(t), [t])
