@@ -2,10 +2,11 @@ import { useEffect, useState } from "react"
 
 import styled, { css } from "styled-components"
 
-import ModalWindow from "@components/common/ModalWindow"
 import FollowList from "@components/users/FollowList"
 
 import { User } from "@api/users.api"
+
+import useModal, { Portal } from "@utils/useModal"
 
 import { skeletonCSS } from "@assets/skeleton"
 
@@ -18,14 +19,18 @@ interface FollowsCount {
 
 const FollowsCount = ({ user, isLoading = false }: FollowsCount) => {
     const { t } = useTranslation("translation", { keyPrefix: "users" })
-    const [window, setWindow] = useState<"" | "followers" | "followings">("")
+    const followModal = useModal()
+    const [listType, setListType] = useState<"followers" | "followings">(
+        "followers",
+    )
 
-    const closeModal = () => {
-        setWindow("")
+    const openFollowModal = (type: "followers" | "followings") => {
+        setListType(type)
+        followModal.openModal()
     }
 
     useEffect(() => {
-        closeModal()
+        followModal.closeModal()
     }, [user])
 
     if (!user || isLoading) {
@@ -43,22 +48,16 @@ const FollowsCount = ({ user, isLoading = false }: FollowsCount) => {
 
     return (
         <Items>
-            <Item onClick={() => setWindow("followers")}>
+            <Item onClick={() => openFollowModal("followers")}>
                 {t("followers")} <Count>{user.followers_count}</Count>
             </Item>
-            <Item onClick={() => setWindow("followings")}>
+            <Item onClick={() => openFollowModal("followings")}>
                 {t("followings")} <Count>{user.followings_count}</Count>
             </Item>
-            {window !== "" && (
-                <ModalWindow afterClose={closeModal}>
-                    {window === "followers" && (
-                        <FollowList list="followers" user={user} />
-                    )}
-                    {window === "followings" && (
-                        <FollowList list="followings" user={user} />
-                    )}
-                </ModalWindow>
-            )}
+
+            <Portal modal={followModal}>
+                <FollowList list={listType} user={user} />
+            </Portal>
         </Items>
     )
 }
