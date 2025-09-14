@@ -114,7 +114,7 @@ html {
     z-index: 99;
 }
 
-#window-container.closing, 
+#window-container.closing,
 #window-container:has(.closing) {
     background-color: transparent;
 }
