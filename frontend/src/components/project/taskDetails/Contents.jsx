@@ -5,7 +5,7 @@ import styled, { css } from "styled-components"
 import ModalWindow from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 import ToolTip from "@components/project/common/ToolTip"
-import taskDate from "@components/tasks/utils/taskDate"
+import useTaskFormatDate from "@components/tasks/utils/taskDate"
 
 import Assigned from "./Assigned"
 import Drawer from "./Drawer"
@@ -42,7 +42,8 @@ const Contents = ({ task, setFunc, setNewColor }) => {
         setIsComponentOpen(false)
     }
 
-    const { formatted_due_datetime, formatted_assigned_date } = taskDate(task)
+    const { formatted_due_datetime, formatted_assigned_date } =
+        useTaskFormatDate(task)
 
     const items = [
         {

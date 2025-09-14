@@ -5,7 +5,7 @@ import styled from "styled-components"
 import ModalLoader from "@components/common/ModalLoader"
 import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"
-import taskCalculation from "@components/tasks/utils/taskCalculation"
+import useTaskDateCalculation from "@components/tasks/utils/taskCalculation"
 
 import { ifMobile } from "@utils/useScreenType"
 
@@ -37,7 +37,7 @@ const TaskFrame = ({
         calculate_assigned,
         isOutOfDue,
         isOutOfAssigned,
-    } = taskCalculation(task, isSocial)
+    } = useTaskDateCalculation(task, isSocial)
 
     const hasDate = task.due_type || task.assigned_at
 

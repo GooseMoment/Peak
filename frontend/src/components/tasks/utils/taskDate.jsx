@@ -6,7 +6,7 @@ import {
 
 import { DateTime } from "luxon"
 
-const taskDate = (task) => {
+const useTaskFormatDate = (task) => {
     const [setting] = useClientSetting()
     const locale = useClientLocale()
     const tz = useClientTimezone()
@@ -40,4 +40,4 @@ const taskDate = (task) => {
     return { formatted_due_datetime, formatted_assigned_date }
 }
 
-export default taskDate
+export default useTaskFormatDate

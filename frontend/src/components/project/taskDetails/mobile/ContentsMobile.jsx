@@ -8,7 +8,7 @@ import Due from "@components/project/taskDetails/Due"
 import Memo from "@components/project/taskDetails/Memo"
 import Priority from "@components/project/taskDetails/Priority"
 import Reminder from "@components/project/taskDetails/Reminder"
-import taskDate from "@components/tasks/utils/taskDate"
+import useTaskFormatDate from "@components/tasks/utils/taskDate"
 
 import AlarmClock from "@assets/project/AlarmClock"
 import Hourglass from "@assets/project/Hourglass"
@@ -37,7 +37,7 @@ const ContentsMobile = ({
     }
 
     const { formatted_due_datetime, formatted_assigned_date } =
-        taskDate(newTask)
+        useTaskFormatDate(newTask)
 
     const onClose = () => {
         setActiveContent(null)
