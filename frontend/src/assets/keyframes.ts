@@ -8,7 +8,7 @@ const SCALE_TRANSLATE_AMOUNT = 100
 
 export const scaleUp = keyframes`
     0% {
-        transform: scale(0.8) translateY(${SCALE_TRANSLATE_AMOUNT}px);
+        transform: scale(0.95) translateY(${SCALE_TRANSLATE_AMOUNT}px);
         opacity: 0;
     }
 
