@@ -81,7 +81,7 @@ html {
 }
 
 #root.has-modal > div > main {
-    transform: scale(0.95);
+    transform: scale(0.98);
 }
 
 #window-container {
@@ -114,7 +114,7 @@ html {
     z-index: 99;
 }
 
-#window-container:has(.closing) {
+#window-container.closing {
     background-color: transparent;
 }
 

@@ -1,4 +1,11 @@
-import { ReactNode, useEffect, useRef, useState } from "react"
+import {
+    ReactNode,
+    createContext,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react"
 
 import styled, { css } from "styled-components"
 
@@ -64,10 +71,11 @@ export default function useModal(options: useModalOptions = {}): Modal {
         }
 
         if (isClosing) {
-            root.classList.remove("has-modal")
+            el.classList.add("closing")
         }
 
         return () => {
+            el.classList.remove("closing")
             root.classList.remove("has-modal")
         }
     }, [isOpen, isClosing])
@@ -97,6 +105,10 @@ export default function useModal(options: useModalOptions = {}): Modal {
     }
 }
 
+const ModalContext = createContext<{ modal?: Modal }>({
+    modal: undefined,
+})
+
 export function Portal({
     modal,
     children,
@@ -107,11 +119,17 @@ export function Portal({
     if (!modal.isOpen) return null
 
     return createPortal(
-        <AnimationProvider id={modal.id} $closing={modal.isClosing}>
-            {children}
-        </AnimationProvider>,
+        <ModalContext.Provider value={{ modal }}>
+            <AnimationProvider id={modal.id} $closing={modal.isClosing}>
+                {children}
+            </AnimationProvider>
+        </ModalContext.Provider>,
         el,
     )
+}
+
+export function useModalContext() {
+    return useContext(ModalContext).modal
 }
 
 const AnimationProvider = styled.div<{ $closing?: boolean }>`
