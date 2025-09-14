@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react"
 
-import { useQuery } from "@tanstack/react-query"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import ModalWindow from "@components/common/ModalWindow"

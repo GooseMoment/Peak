@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
 
-import { useMutation } from "@tanstack/react-query"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled, { css, useTheme } from "styled-components"
 
 import CollapseButton from "@components/common/CollapseButton"

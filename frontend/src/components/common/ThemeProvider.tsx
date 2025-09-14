@@ -1,7 +1,7 @@
 import { type ReactNode, useEffect, useState } from "react"
 
 import { ThemeProvider } from "styled-components"
-import { type LightDark } from "styled-components"
+import type { LightDark } from "styled-components"
 
 import { useClientTheme } from "@utils/clientSettings"
 
