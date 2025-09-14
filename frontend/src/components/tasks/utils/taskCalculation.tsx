@@ -18,28 +18,18 @@ const calculateDate = (
 
     const locale = useClientLocale()
 
-    const fullDateOption: Intl.DateTimeFormatOptions = {
-        year: "numeric",
-        day: "numeric",
-        month: "numeric",
-    }
-    const shortDateOption: Intl.DateTimeFormatOptions = {
-        day: "numeric",
-        month: "numeric",
-    }
-
     if (date === null) {
         return [null, null, false]
     }
 
-    const diff_years = date.year - today.year
+    const diff_years = today.year - date.year
     const diff_total_days = Math.ceil(date.diff(today, "days").days)
 
     let newDate = null
     if (diff_years > 0) {
-        newDate = date.toLocaleString(fullDateOption, { locale })
+        newDate = date.setLocale(locale).toFormat("yyyy.MM.dd")
     } else {
-        newDate = date.toLocaleString(shortDateOption, { locale })
+        newDate = date.setLocale(locale).toFormat("MM.dd")
     }
 
     let calculatedDue = ""

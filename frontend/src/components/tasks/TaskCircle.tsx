@@ -41,7 +41,7 @@ const TaskCircle = ({
             $isInput={isInput}
             $isLoading={isLoading}
             $clickable={!isLoading && onClick != undefined}
-            onClick={onClick && onClick}>
+            onClick={onClick}>
             {isCompleted && <FeatherIcon icon="check" />}
         </Circle>
     )

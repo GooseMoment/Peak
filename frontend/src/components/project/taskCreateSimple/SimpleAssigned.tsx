@@ -79,7 +79,7 @@ const SimpleAssigned = ({
                         $color={color}
                         $isActive={assignedIndex === index}
                         onClick={() => setAssignedIndex(index)}>
-                        {assignedIndex === item.index && (
+                        {assignedIndex === index && (
                             <FeatherIcon icon="check" />
                         )}
                         {item.display}

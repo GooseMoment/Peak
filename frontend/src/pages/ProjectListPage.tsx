@@ -76,7 +76,12 @@ const ProjectListPage = () => {
 
         const changedProjects = projects
             .map((project, index) => ({ id: project.id, order: index }))
-            .filter((project, index) => results[index]?.id !== project.id)
+            .filter((project, index) => {
+                const originalIndex = results.findIndex(
+                    (p) => p.id === project.id,
+                )
+                return originalIndex !== index
+            })
 
         if (changedProjects.length === 0) return
 
