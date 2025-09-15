@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+// TODO: remove eslint-disable after merging #523
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
 import { DateTime } from "luxon"
