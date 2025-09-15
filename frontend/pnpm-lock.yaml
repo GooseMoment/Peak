@@ -32,9 +32,6 @@ importers:
       feather-icons-react:
         specifier: ^0.9.0
         version: 0.9.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      github-markdown-css:
-        specifier: ^5.8.1
-        version: 5.8.1
       grapheme-splitter:
         specifier: ^1.0.4
         version: 1.0.4
@@ -2032,10 +2029,6 @@ packages:
 
   get-user-locale@3.0.0:
     resolution: {integrity: sha512-iJfHSmdYV39UUBw7Jq6GJzeJxUr4U+S03qdhVuDsR9gCEnfbqLy9gYDJFBJQL1riqolFUKQvx36mEkp2iGgJ3g==}
-
-  github-markdown-css@5.8.1:
-    resolution: {integrity: sha512-8G+PFvqigBQSWLQjyzgpa2ThD9bo7+kDsriUIidGcRhXgmcaAWUIpCZf8DavJgc+xifjbCG+GvMyWr0XMXmc7g==}
-    engines: {node: '>=10'}
 
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
@@ -5381,8 +5374,6 @@ snapshots:
   get-user-locale@3.0.0:
     dependencies:
       memoize: 10.1.0
-
-  github-markdown-css@5.8.1: {}
 
   glob-parent@5.1.2:
     dependencies:
