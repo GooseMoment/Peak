@@ -28,6 +28,7 @@ interface Modal {
     isClosing: boolean
     openModal: () => void
     closeModal: () => void
+    toggleModal: () => void
 }
 
 const el = document.getElementById("window-container")!
@@ -96,12 +97,21 @@ export default function useModal(options: useModalOptions = {}): Modal {
         }, 100)
     }
 
+    const toggleModal = () => {
+        if (isOpen) {
+            closeModal()
+        } else {
+            openModal()
+        }
+    }
+
     return {
         id: id.current,
         isOpen,
         isClosing,
         openModal,
         closeModal,
+        toggleModal,
     }
 }
 
