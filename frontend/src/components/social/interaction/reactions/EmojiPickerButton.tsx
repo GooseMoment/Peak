@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { Suspense, useState } from "react"
 
 import { useQuery } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import ModalWindow from "@components/common/ModalWindow"
 import { ReactionButtonContainer } from "@components/social/interaction/reactions/ReactionButton"
@@ -10,7 +10,10 @@ import { Emoji, getEmojis } from "@api/social.api"
 
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
-import EmojiPicker, { type EmojiClickData } from "emoji-picker-react"
+import EmojiPicker, {
+    type EmojiClickData,
+    Theme as EmojiPickerTheme,
+} from "emoji-picker-react"
 import type { CustomEmoji } from "emoji-picker-react/dist/config/customEmojiConfig"
 import FeatherIcon from "feather-icons-react"
 
@@ -32,6 +35,7 @@ export default function EmojiPickerButton({
     className,
 }: EmojiPickerButtonProps) {
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const theme = useTheme()
 
     const { data: imageEmojis } = useQuery({
         queryKey: ["emojis"],
@@ -54,11 +58,19 @@ export default function EmojiPickerButton({
             </PickerButton>
             {isModalOpen && (
                 <ModalWindow afterClose={() => setIsModalOpen(false)}>
-                    <EmojiPicker
-                        open
-                        onEmojiClick={handleEmoji}
-                        customEmojis={imageEmojis}
-                    />
+                    <Suspense name="emoji-picker">
+                        <EmojiPicker
+                            open
+                            onEmojiClick={handleEmoji}
+                            customEmojis={imageEmojis}
+                            lazyLoadEmojis
+                            theme={
+                                theme.type === "dark"
+                                    ? EmojiPickerTheme.DARK
+                                    : EmojiPickerTheme.LIGHT
+                            }
+                        />
+                    </Suspense>
                 </ModalWindow>
             )}
         </div>
