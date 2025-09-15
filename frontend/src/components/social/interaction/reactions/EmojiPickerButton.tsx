@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import { ReactionButtonContainer } from "@components/social/interaction/reactions/ReactionButton"
 
@@ -9,7 +9,10 @@ import useModal, { Portal } from "@utils/useModal"
 
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
-import EmojiPicker, { type EmojiClickData } from "emoji-picker-react"
+import EmojiPicker, {
+    type EmojiClickData,
+    Theme as EmojiPickerTheme,
+} from "emoji-picker-react"
 import type { CustomEmoji } from "emoji-picker-react/dist/config/customEmojiConfig"
 import FeatherIcon from "feather-icons-react"
 
@@ -31,6 +34,7 @@ export default function EmojiPickerButton({
     className,
 }: EmojiPickerButtonProps) {
     const modal = useModal()
+    const theme = useTheme()
 
     const { data: imageEmojis } = useQuery({
         queryKey: ["emojis"],
@@ -56,6 +60,12 @@ export default function EmojiPickerButton({
                     open
                     onEmojiClick={handleEmoji}
                     customEmojis={imageEmojis}
+                    lazyLoadEmojis
+                    theme={
+                        theme.type === "dark"
+                            ? EmojiPickerTheme.DARK
+                            : EmojiPickerTheme.LIGHT
+                    }
                 />
             </Portal>
         </div>

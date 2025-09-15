@@ -147,8 +147,8 @@ const dark: DefaultTheme = {
         modalShadowColor: "rgba(210, 210, 210, 0.1)",
         modalCellHoverColor: "#383838",
         buttonColor: "#A9A9A9",
-        activeColor: "oklch(96.2% 0.018 272.314)",
-        activeBackgroundColor: "oklch(45.7% 0.24 277.023)",
+        activeColor: "oklch(87% 0.065 274.039)",
+        activeBackgroundColor: "oklch(37.1% 0 0)",
     },
     calendar: {
         backgroundColor: "#323232",

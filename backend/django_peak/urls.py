@@ -29,6 +29,5 @@ urlpatterns = [
     path("tasks/", include("tasks.urls")),
     path("today/", include("today.urls")),
     path("social/", include("social.urls")),
-    path("announcements/", include("announcements.urls")),
     path("search/", include("search.urls")),
 ]

@@ -18,9 +18,6 @@
         "title": "Peak을 앱처럼 사용하기",
         "description": "설치 방법을 알아봅시다."
     },
-    "announcements": {
-        "title": "새 소식"
-    },
     "assigned_today": {
         "title": "오늘 {{ number }}개 작업이 있습니다"
     }
