@@ -22,7 +22,7 @@ export default function SetProfileImg() {
     }
 
     return (
-        <Module to="/app/settings/notifications">
+        <Module to="/app/settings/profile">
             <Title displayArrow underline>
                 {t("title")}
             </Title>
