@@ -20,10 +20,8 @@ export const getTasksPastAssigned = async (page) => {
     return res.data
 }
 
-export const getTasksTodayAssignedGrouped = async (tz) => {
-    const res = await client.get(`today/assigned/grouped/`, {
-        params: { tz },
-    })
+export const getTasksTodayAssignedGrouped = async () => {
+    const res = await client.get(`today/assigned/grouped/`)
     const items = res.data
     let countAll = 0
 
