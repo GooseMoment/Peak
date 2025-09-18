@@ -140,6 +140,8 @@ html {
 }
 
 #confirmation:has(div) {
+    z-index: 100;
+
     background-color: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(1px);
     -webkit-backdrop-filter: blur(1px);
