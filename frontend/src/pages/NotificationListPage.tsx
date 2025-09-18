@@ -1,12 +1,5 @@
-import {
-    Fragment,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react"
-import { useSearchParams } from "react-router-dom"
+import { Fragment, useEffect, useMemo, useRef, useState } from "react"
+import { Outlet, useSearchParams } from "react-router-dom"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { css, keyframes } from "styled-components"
@@ -22,7 +15,7 @@ import { getCursorFromURL } from "@utils/pagination"
 
 import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
-import { type TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -36,7 +29,6 @@ const NotificationsPage = () => {
     const filters = useMemo(() => makeFilters(t), [t])
 
     const [searchParams, setSearchParams] = useSearchParams()
-    const focusID = searchParams.get("id")
     const paramActiveFilter = searchParams.get("active") || ""
 
     const [activeFilter, setActiveFilter] = useState<keyof typeof filters>(
@@ -44,10 +36,6 @@ const NotificationsPage = () => {
             ? (paramActiveFilter as keyof typeof filters)
             : defaultFilter,
     )
-
-    const scrollToBox = useCallback((node: HTMLElement | null) => {
-        node?.scrollIntoView({ block: "center", behavior: "smooth" })
-    }, [])
 
     const {
         data,
@@ -134,15 +122,7 @@ const NotificationsPage = () => {
                         return (
                             <Fragment key={notification.id}>
                                 {dateDelimiter}
-                                <Box
-                                    notification={notification}
-                                    highlight={notification.id === focusID}
-                                    ref={
-                                        notification.id === focusID
-                                            ? scrollToBox
-                                            : null
-                                    }
-                                />
+                                <Box notification={notification} />
                             </Fragment>
                         )
                     })}
@@ -165,6 +145,7 @@ const NotificationsPage = () => {
                 )}
             </ImpressionArea>
             {isNotificationEmpty && <NoMore>{t("empty")}</NoMore>}
+            <Outlet />
         </>
     )
 }
