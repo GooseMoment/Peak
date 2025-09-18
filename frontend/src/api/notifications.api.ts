@@ -92,6 +92,11 @@ export const getNotifications = async (
     return res.data
 }
 
+export const getNotification = async (id: string) => {
+    const res = await client.get<Notification>(`notifications/${id}/`)
+    return res.data
+}
+
 export const getRelatedUserFromNotification = (notification: Notification) => {
     return (
         (notification.type === "task_reaction" &&
