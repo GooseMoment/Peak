@@ -13,7 +13,7 @@ import ModalWindow from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 import ToolTip from "@components/project/common/ToolTip"
 import type { TaskContent } from "@components/tasks/Contents"
-import taskDate from "@components/tasks/utils/taskDate"
+import useTaskDateDisplay from "@components/tasks/utils/useTaskDateDisplay"
 
 import TaskDetailAssigned from "./TaskDetailAssigned"
 import TaskDetailDrawer from "./TaskDetailDrawer"
@@ -74,7 +74,8 @@ const Contents = ({
         setIsComponentOpen(false)
     }
 
-    const { formatted_due_datetime, formatted_assigned_date } = taskDate(task)
+    const { formatted_due_datetime, formatted_assigned_date } =
+        useTaskDateDisplay(task)
 
     const items = [
         {

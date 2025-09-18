@@ -5,7 +5,7 @@ import styled, { useTheme } from "styled-components"
 import ModalLoader from "@components/common/ModalLoader"
 import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"
-import taskCalculation from "@components/tasks/utils/taskCalculation"
+import useTaskDateStatus from "@components/tasks/utils/useTaskDateStatus"
 
 import type { DemoMinimalTask, Task } from "@api/tasks.api"
 
@@ -47,7 +47,7 @@ const TaskFrame = ({
         calculate_assigned,
         isOutOfDue,
         isOutOfAssigned,
-    } = taskCalculation(task, isSocial)
+    } = useTaskDateStatus(task, isSocial)
 
     const hasDate = task.due_type !== null || task.assigned_at !== null
 
@@ -146,7 +146,7 @@ export const DemoTaskFrame = ({
         calculate_assigned,
         isOutOfDue,
         isOutOfAssigned,
-    } = taskCalculation(task, false)
+    } = useTaskDateStatus(task, false)
 
     return (
         <Box>

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from "react"
+import { Dispatch, SetStateAction, useEffect, useMemo } from "react"
 
 import {
     ContentBox,
@@ -11,6 +11,7 @@ import type { MinimalTask } from "@api/tasks.api"
 import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const SimpleDue = ({
@@ -64,26 +65,7 @@ const SimpleDue = ({
         })
     }, [dueIndex])
 
-    const items = [
-        { index: 0, display: t("no_date"), set: null },
-        { index: 1, display: t("today"), set: { days: 0 } },
-        { index: 2, display: t("tomorrow"), set: { days: 1 } },
-        {
-            index: 3,
-            display: t("next_week"),
-            set: { days: 7 },
-        },
-        {
-            index: 4,
-            display: t("next_two_weeks"),
-            set: { days: 14 },
-        },
-        {
-            index: 5,
-            display: t("next_month"),
-            set: { months: 1 },
-        },
-    ]
+    const items = useMemo(() => makeDueItems(t), [t])
 
     return (
         <div onKeyDown={onKeyDown}>
@@ -104,5 +86,26 @@ const SimpleDue = ({
         </div>
     )
 }
+
+const makeDueItems = (t: TFunction<"translation", "task.due.quick">) => [
+    { index: 0, display: t("no_date"), set: null },
+    { index: 1, display: t("today"), set: { days: 0 } },
+    { index: 2, display: t("tomorrow"), set: { days: 1 } },
+    {
+        index: 3,
+        display: t("next_week"),
+        set: { days: 7 },
+    },
+    {
+        index: 4,
+        display: t("next_two_weeks"),
+        set: { days: 14 },
+    },
+    {
+        index: 5,
+        display: t("next_month"),
+        set: { months: 1 },
+    },
+]
 
 export default SimpleDue

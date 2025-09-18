@@ -9,7 +9,7 @@ import TaskDetailMemo from "@components/project/taskDetails/TaskDetailMemo"
 import TaskDetailPriority from "@components/project/taskDetails/TaskDetailPriority"
 import TaskDetailReminder from "@components/project/taskDetails/TaskDetailReminder"
 import type { TaskContent } from "@components/tasks/Contents"
-import taskDate from "@components/tasks/utils/taskDate"
+import useTaskDateDisplay from "@components/tasks/utils/useTaskDateDisplay"
 
 import type { MinimalTask } from "@api/tasks.api"
 
@@ -45,7 +45,8 @@ const ContentsMobile = ({
         }
     }
 
-    const { formatted_due_datetime, formatted_assigned_date } = taskDate(task)
+    const { formatted_due_datetime, formatted_assigned_date } =
+        useTaskDateDisplay(task)
 
     const onClose = () => {
         setActiveContent(null)
