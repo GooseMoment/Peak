@@ -89,8 +89,8 @@ export default function useModal(options: useModalOptions = {}): Modal {
     useEffect(() => {
         if (isOpen) {
             root.classList.add("has-modal")
+            options.afterOpen?.() // keep afterOpen here to ensure it runs after the modal is visible
         }
-        options.afterOpen?.() // keep afterOpen here to ensure it runs after the modal is visible
 
         return () => {
             root.classList.remove("has-modal")
