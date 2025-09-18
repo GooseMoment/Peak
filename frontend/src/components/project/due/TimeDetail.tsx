@@ -3,13 +3,9 @@ import { ChangeEvent, useState } from "react"
 import styled, { css } from "styled-components"
 
 import Button from "@components/common/Button"
+import type { TaskDueStrict } from "@components/tasks/Contents"
 
-import type {
-    MinimalTask,
-    MinimalTaskDueDate,
-    MinimalTaskDueDatetime,
-    TaskDueStrict,
-} from "@api/tasks.api"
+import type { DueDate, DueDatetime, MinimalTask } from "@api/tasks.api"
 
 import { useClientSetting } from "@utils/clientSettings"
 import { useClientTimezone } from "@utils/clientSettings"
@@ -22,7 +18,7 @@ const TimeDetail = ({
     task,
     setFunc,
 }: {
-    task: MinimalTaskDueDate | MinimalTaskDueDatetime
+    task: DueDate | DueDatetime
     setFunc: (diff: Partial<MinimalTask>) => void
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task.due.time" })

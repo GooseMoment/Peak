@@ -1,16 +1,12 @@
 import client from "@api/client"
 import type { PaginationData, Privacy } from "@api/common"
-import { type Drawer } from "@api/drawers.api"
-import { type MinimalReminder } from "@api/notifications.api"
+import type { Drawer } from "@api/drawers.api"
+import type { MinimalReminder } from "@api/notifications.api"
+import type { User } from "@api/users.api"
 
-export type TaskDueStrict =
-    | { due_type: null; due_date: null; due_datetime: null }
-    | { due_type: "due_date"; due_date: string; due_datetime: null }
-    | { due_type: "due_datetime"; due_date: null; due_datetime: string }
-
-interface MinimalTaskBase {
+interface MinimalTaskWithoutDue {
     name?: string
-    user_username?: string
+    user?: User
     drawer: Drawer
     privacy?: Privacy
     priority: number
@@ -24,26 +20,27 @@ interface MinimalTaskBase {
     deleted_at?: null | string
 }
 
-export interface MinimalTaskNoDue {
+export interface DueNone {
     due_type: null
     due_date: null
     due_datetime: null
 }
 
-export interface MinimalTaskDueDate {
+export interface DueDate {
     due_type: "due_date"
     due_date: string
     due_datetime: null
 }
 
-export interface MinimalTaskDueDatetime {
+export interface DueDatetime {
     due_type: "due_datetime"
     due_date: null
     due_datetime: string
 }
 
-export type MinimalTask = MinimalTaskBase &
-    (MinimalTaskNoDue | MinimalTaskDueDate | MinimalTaskDueDatetime)
+export type Due = DueNone | DueDate | DueDatetime
+
+export type MinimalTask = MinimalTaskWithoutDue & Due
 
 export type MinimalTaskWithID = MinimalTask & { id: string }
 
@@ -60,24 +57,14 @@ interface TaskPostBase {
     memo?: string
 }
 
-export type TaskPost = TaskPostBase &
-    (MinimalTaskNoDue | MinimalTaskDueDate | MinimalTaskDueDatetime)
+export type TaskPost = TaskPostBase & Due
 
 export type DemoMinimalTaskBase = Pick<
     MinimalTask,
     "name" | "completed_at" | "assigned_at" | "priority"
 >
 
-export type DemoMinimalTask = DemoMinimalTaskBase &
-    (MinimalTaskNoDue | MinimalTaskDueDate | MinimalTaskDueDatetime)
-
-export type TaskContent =
-    | "assigned"
-    | "due"
-    | "reminder"
-    | "priority"
-    | "drawer"
-    | "memo"
+export type DemoMinimalTask = DemoMinimalTaskBase & Due
 
 export const getTasksByDrawer = async (
     drawerID: string,

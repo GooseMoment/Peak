@@ -12,6 +12,7 @@ import styled, { css } from "styled-components"
 import ModalWindow from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 import ToolTip from "@components/project/common/ToolTip"
+import type { TaskContent } from "@components/tasks/Contents"
 import taskDate from "@components/tasks/utils/taskDate"
 
 import TaskDetailAssigned from "./TaskDetailAssigned"
@@ -21,14 +22,14 @@ import TaskDetailMemo from "./TaskDetailMemo"
 import TaskDetailPriority from "./TaskDetailPriority"
 import TaskDetailReminder from "./TaskDetailReminder"
 
-import type { MinimalTask, TaskContent } from "@api/tasks.api"
+import type { MinimalTask } from "@api/tasks.api"
 
-import { PaletteColorName } from "@assets/palettes"
+import type { PaletteColorName } from "@assets/palettes"
 import AlarmClock from "@assets/project/AlarmClock"
 import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
-import { TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
