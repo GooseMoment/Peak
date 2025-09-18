@@ -96,8 +96,8 @@ const Middle = () => {
                     </ProjectLoadErrorBox>
                 )}
 
-                {projects?.pages?.map((group) =>
-                    group?.results?.map((project) => (
+                {projects?.pages.map((group) =>
+                    group.results.map((project) => (
                         <SidebarLink
                             to={
                                 project.type === "inbox"
@@ -139,25 +139,25 @@ const Middle = () => {
     )
 }
 
-const getItems = (t: TFunction<"translation", "sidebar">) => [
+const getItems = (t: TFunction<"translation">) => [
     // end가 true:  경로가 to와 완전히 일치해야 active
     //       false: to의 하위 경로에 있어도 active
     {
         icon: "search" as const,
-        name: t("search"),
+        name: t("sidebar.search"),
         to: "search",
         end: false,
     },
-    { icon: "home" as const, name: t("home"), to: "home", end: true },
+    { icon: "home" as const, name: t("sidebar.home"), to: "home", end: true },
     {
         icon: "bell" as const,
-        name: t("notifications"),
+        name: t("sidebar.notifications"),
         to: "notifications",
         end: false,
     },
     {
         icon: "calendar" as const,
-        name: t("today"),
+        name: t("sidebar.today"),
         to: "today",
         end: false,
     },

@@ -9,7 +9,7 @@ import { ifMobile } from "@utils/useScreenType"
 import FeatherIcon, { type FeatherIconName } from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-interface EditMiddelProps {
+interface EditMiddleProps {
     name: string
     icon: FeatherIconName
     color?: string
@@ -17,7 +17,7 @@ interface EditMiddelProps {
     component: ReactNode
 }
 
-const Middle = ({ items }: { items: EditMiddelProps[] }) => {
+const Middle = ({ items }: { items: EditMiddleProps[] }) => {
     const { t } = useTranslation("translation", {
         keyPrefix: "project_drawer_edit",
     })

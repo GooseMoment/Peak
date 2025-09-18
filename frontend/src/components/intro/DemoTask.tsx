@@ -2,9 +2,9 @@ import { useState } from "react"
 
 import { DemoTaskFrame } from "@components/tasks/TaskFrame"
 
-import { type DemoMinimalTask } from "@api/tasks.api"
+import type { DemoMinimalTask } from "@api/tasks.api"
 
-import { PaletteColorName } from "@assets/palettes"
+import type { PaletteColorName } from "@assets/palettes"
 
 const DemoTask = ({
     task,

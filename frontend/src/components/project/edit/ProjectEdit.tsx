@@ -1,8 +1,7 @@
 import { KeyboardEvent, useMemo, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
-import { useTheme } from "styled-components"
-import { DefaultTheme } from "styled-components"
+import { type LightDark, useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import { useModalWindowCloseContext } from "@components/common/ModalWindow"
@@ -22,7 +21,7 @@ import queryClient from "@queries/queryClient"
 import { getPaletteColor } from "@assets/palettes"
 
 import { AxiosError } from "axios"
-import { TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -142,7 +141,7 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
     }
 
     const items = useMemo(
-        () => makeItems(t, theme, newProject, handleChange),
+        () => makeItems(t, theme.type, newProject, handleChange),
         [t, theme, newProject, handleChange],
     )
 
@@ -170,14 +169,14 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
 
 const makeItems = (
     t: TFunction<"translation", "project_drawer_edit">,
-    theme: DefaultTheme,
+    type: LightDark,
     project: Project | ProjectCreateInput,
     setFunc: (diff: Partial<Project>) => void,
 ) => [
     {
         name: "color",
         icon: "circle" as const,
-        color: getPaletteColor(theme.type, project.color),
+        color: getPaletteColor(type, project.color),
         display: t(`color.${project.color}`),
         component: <ColorEdit setColor={setFunc} />,
     },

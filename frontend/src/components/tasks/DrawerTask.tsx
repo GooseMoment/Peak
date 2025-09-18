@@ -94,13 +94,9 @@ const DrawerTask = ({
     drag(drop(ref))
     /// ---
 
-    if (!task) {
-        return null
-    }
-
     return (
         <>
-            <TaskBox
+            <TaskDragWrapper
                 ref={ref}
                 data-handler-id={handlerId}
                 $isDragging={isDragging}>
@@ -110,7 +106,7 @@ const DrawerTask = ({
                         <FeatherIcon icon="trash-2" onClick={handleAlert} />
                     </DeleteIcon>
                 )}
-            </TaskBox>
+            </TaskDragWrapper>
             {isAlertOpen && (
                 <DeleteAlert
                     title={t("alert_task_title", {
@@ -137,7 +133,7 @@ const DeleteIcon = styled.div`
     }
 `
 
-const TaskBox = styled.div<{ $isDragging: boolean }>`
+const TaskDragWrapper = styled.div<{ $isDragging: boolean }>`
     display: flex;
     align-items: center;
     cursor: grab;

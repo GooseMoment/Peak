@@ -58,7 +58,7 @@ const ProjectListPage = () => {
 
     useEffect(() => {
         if (!data) return
-        const results = data?.pages?.flatMap((page) => page.results ?? []) || []
+        const results = data.pages.flatMap((page) => page.results ?? []) || []
         setProjects(results)
     }, [data])
 
@@ -72,7 +72,7 @@ const ProjectListPage = () => {
     }, [])
 
     const dropProject = useCallback(async () => {
-        const results = data?.pages?.flatMap((page) => page.results ?? []) || []
+        const results = data?.pages.flatMap((page) => page.results ?? []) || []
 
         const changedProjects = projects
             .map((project, index) => ({ id: project.id, order: index }))
@@ -109,7 +109,7 @@ const ProjectListPage = () => {
             {isError && <ErrorProjectList refetch={() => refetch()} />}
 
             <DndProvider options={HTML5toTouch}>
-                {projects?.map((project) => (
+                {projects.map((project) => (
                     <ProjectName
                         key={project.id}
                         project={project}

@@ -36,7 +36,7 @@ import queryClient from "@queries/queryClient"
 import { getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
-import { TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { useDrag, useDrop } from "react-dnd"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -45,21 +45,20 @@ const TaskCreateElement = lazy(
     () => import("@components/project/taskDetails/TaskCreateElement"),
 )
 
-interface DrawerProps {
+interface DrawerBlockProps {
     drawer: Drawer
     moveDrawer: (dragIndex: number, hoverIndex: number) => void
     dropDrawer: () => void
 }
 
-const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
-    const [collapsed, setCollapsed] = useState<boolean>(false)
-    const [ordering, setOrdering] = useState<string>("order")
-    const [isSortMenuMobileOpen, setSortMenuMobileOpen] =
-        useState<boolean>(false)
-    const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
-    const [isDrawerEditOpen, setIsDrawerEditOpen] = useState<boolean>(false)
-    const [isSimpleOpen, setIsSimpleOpen] = useState<boolean>(false)
-    const [isCreateOpen, setCreateOpen] = useState<boolean>(false)
+const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
+    const [collapsed, setCollapsed] = useState(false)
+    const [ordering, setOrdering] = useState("order")
+    const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
+    const [isAlertOpen, setIsAlertOpen] = useState(false)
+    const [isDrawerEditOpen, setIsDrawerEditOpen] = useState(false)
+    const [isSimpleOpen, setIsSimpleOpen] = useState(false)
+    const [isCreateOpen, setCreateOpen] = useState(false)
 
     const theme = useTheme()
 

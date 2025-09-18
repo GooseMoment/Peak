@@ -36,7 +36,7 @@ const isTaskEmpty = (
 ) => !!(tasks?.pages[0]?.results.length === 0)
 
 const useTaskQuery = (
-    filter: filterContentsKey,
+    filter: FilterContentsKey,
     fetchFunction: (page: string) => Promise<PaginationData<Task>>,
 ) => {
     const {
@@ -62,12 +62,12 @@ const useTaskQuery = (
     }
 }
 
-type filterContentsKey = "todayDue" | "overDue" | "pastAssigned"
+type FilterContentsKey = "todayDue" | "overDue" | "pastAssigned"
 
-const filterContents = [
-    "todayDue" as const,
-    "overDue" as const,
-    "pastAssigned" as const,
+const filterContents: FilterContentsKey[] = [
+    "todayDue",
+    "overDue",
+    "pastAssigned",
 ]
 
 const ImportantTasks = () => {
@@ -77,7 +77,7 @@ const ImportantTasks = () => {
 
     const today = useMemo(() => DateTime.now().setZone(tz), [tz])
 
-    const [filter, setFilter] = useState<filterContentsKey>("todayDue")
+    const [filter, setFilter] = useState<FilterContentsKey>("todayDue")
     const [collapsed, setCollapsed] = useState<boolean>(false)
 
     const todayDueQuery = useTaskQuery("todayDue", getTasksTodayDue)

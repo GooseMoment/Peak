@@ -83,18 +83,17 @@ export default function RecordContainer({
                 page.results.map((task) => {
                     let drawerInsertion: null | ReactElement = null
 
-                    // TODO: replace task.drawer with task.drawer_id after Task fields modification
-                    if (lastDrawerID !== task.drawer) {
-                        lastDrawerID = task.drawer
+                    if (lastDrawerID !== task.drawer.id) {
+                        lastDrawerID = task.drawer.id
                         lastColor = getPaletteColor(
                             theme.type,
-                            task.project_color,
+                            task.drawer.project.color,
                         )
 
                         drawerInsertion = (
                             <DrawerBox $color={lastColor}>
                                 <DrawerName $color={lastColor}>
-                                    {task.drawer_name}
+                                    {task.drawer.name}
                                 </DrawerName>
                             </DrawerBox>
                         )

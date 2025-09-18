@@ -16,11 +16,11 @@ import {
     yesterday,
 } from "./todays"
 
-import { type DemoMinimalTask } from "@api/tasks.api"
+import type { DemoMinimalTask } from "@api/tasks.api"
 
 import { type PaletteColorName, getPaletteColor } from "@assets/palettes"
 
-import { TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const DemoDrawer = () => {

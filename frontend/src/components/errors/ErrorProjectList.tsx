@@ -1,12 +1,15 @@
 import styled from "styled-components"
 
 import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
 const ErrorProjectList = ({ refetch }: { refetch: () => void }) => {
+    const { t } = useTranslation("translation", { keyPrefix: "project_list" })
+
     return (
         <ProjectListErrorBox onClick={refetch}>
             <FeatherIcon icon="alert-triangle" />
-            프로젝트 리스트를 불러오지 못했습니다 😢
+            {t("error_load_project_list")}
         </ProjectListErrorBox>
     )
 }

@@ -1,7 +1,6 @@
 import styled, { css, keyframes, useTheme } from "styled-components"
 
-import { type PaletteColorName } from "@assets/palettes"
-import { getPaletteColor } from "@assets/palettes"
+import { type PaletteColorName, getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -47,9 +46,9 @@ const TaskCircle = ({
     )
 }
 
-const getTopOffset = ($isInput: boolean, $hasDate: boolean) => {
-    if ($isInput) return "0.05em"
-    if ($hasDate) return "0.3em"
+const getTopOffset = (isInput: boolean, hasDate: boolean) => {
+    if (isInput) return "0.05em"
+    if (hasDate) return "0.3em"
     return "0"
 }
 

@@ -14,9 +14,9 @@ const ProjectNameBox = styled.div<{
 
     ${(p) =>
         !p.$demo &&
-        css<{ $isDragging?: boolean; $isInbox?: boolean }>`
-            opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
-            cursor: ${(props) => (props.$isInbox ? "auto" : "grab")};
+        css`
+            opacity: ${p.$isDragging ? 0.5 : 1};
+            cursor: ${p.$isInbox ? "auto" : "grab"};
         `}
 
     ${ifMobile} {

@@ -6,10 +6,11 @@ import styled, { useTheme } from "styled-components"
 import Button, { ButtonGroup } from "@components/common/Button"
 import ModalBottomSheet from "@components/common/ModalBottomSheet"
 import ContentsMobile from "@components/project/taskDetails/mobile/ContentsMobile"
+import type { TaskContent } from "@components/tasks/Contents"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
 import { type MinimalReminder, postReminder } from "@api/notifications.api"
-import { type MinimalTask, type Task, type TaskContent } from "@api/tasks.api"
+import type { MinimalTask, Task } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
 

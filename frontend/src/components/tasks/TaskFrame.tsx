@@ -11,7 +11,7 @@ import type { DemoMinimalTask, Task } from "@api/tasks.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
-import { PaletteColorName } from "@assets/palettes"
+import type { PaletteColorName } from "@assets/palettes"
 import AlarmClock from "@assets/project/AlarmClock"
 import Hourglass from "@assets/project/Hourglass"
 
@@ -38,7 +38,7 @@ const TaskFrame = ({
 }: TaskFrameProps) => {
     const [isDetailOpen, setDetailOpen] = useState<boolean>(false)
     const theme = useTheme()
-    const isCompleted = !isSocial && task.completed_at != null
+    const isCompleted = !isSocial && task.completed_at !== null
 
     const {
         due,
@@ -49,7 +49,7 @@ const TaskFrame = ({
         isOutOfAssigned,
     } = taskCalculation(task, isSocial)
 
-    const hasDate = task.due_type != null || task.assigned_at != null
+    const hasDate = task.due_type !== null || task.assigned_at !== null
 
     return (
         <Box>
@@ -62,7 +62,7 @@ const TaskFrame = ({
                             isCompleted={isCompleted}
                         />
                         <TaskCircle
-                            color={task?.drawer?.project?.color}
+                            color={task.drawer.project.color}
                             isCompleted={isCompleted}
                             hasDate={hasDate}
                             isLoading={isLoading}
@@ -76,7 +76,7 @@ const TaskFrame = ({
                                 setDetailOpen(true)
                             }
                         }}>
-                        {task?.name}
+                        {task.name}
                     </TaskNameBox>
                 </CircleName>
 
