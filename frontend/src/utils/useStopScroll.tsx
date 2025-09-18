@@ -5,7 +5,6 @@ export default function useStopScroll(enabled: boolean) {
 
     const rollbackScroll = () => {
         document.body.style.overflow = previous.current
-        document.documentElement.scrollTop = 0
     }
 
     useEffect(() => {
@@ -18,8 +17,8 @@ export default function useStopScroll(enabled: boolean) {
         }
 
         previous.current = document.body.style.overflow
-        document.body.style.overflow = "hidden"
         document.documentElement.scrollTop = window.scrollY
+        document.body.style.overflow = "hidden"
 
         return rollbackScroll
     }, [enabled])
