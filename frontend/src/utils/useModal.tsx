@@ -1,6 +1,7 @@
 import {
     ReactNode,
     createContext,
+    startTransition,
     useCallback,
     useContext,
     useEffect,
@@ -50,8 +51,9 @@ export default function useModal(options: useModalOptions = {}): Modal {
 
     const openModal = useCallback(() => {
         options.beforeOpen?.()
-        setIsOpen(true)
-        options.afterOpen?.()
+        startTransition(() => {
+            setIsOpen(true)
+        })
     }, [options])
 
     const closeModal = useCallback(() => {
@@ -88,6 +90,7 @@ export default function useModal(options: useModalOptions = {}): Modal {
         if (isOpen) {
             root.classList.add("has-modal")
         }
+        options.afterOpen?.() // keep afterOpen here to ensure it runs after the modal is visible
 
         return () => {
             root.classList.remove("has-modal")
