@@ -8,8 +8,8 @@ from api.serializers import DualityRelatedField
 
 
 class DrawerSerializer(serializers.ModelSerializer):
-    user_id = serializers.PrimaryKeyRelatedField(
-        source="user",
+    user_username = serializers.PrimaryKeyRelatedField(
+        source="user.username",
         queryset=User.objects.all(),
         default=serializers.CurrentUserDefault(),
     )
@@ -22,7 +22,7 @@ class DrawerSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "user_id",
+            "user_username",
             "project",
             "privacy",
             "order",

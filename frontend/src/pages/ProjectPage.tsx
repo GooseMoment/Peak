@@ -43,7 +43,7 @@ import queryClient from "@queries/queryClient"
 import { getPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
-import { TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"

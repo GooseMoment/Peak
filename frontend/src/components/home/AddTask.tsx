@@ -26,7 +26,7 @@ const AddTask = () => {
     }
 
     const inboxQuery = useQuery({
-        queryKey: ["projects", "inbox"],
+        queryKey: ["drawers", "inbox"],
         async queryFn() {
             return getDrawer("inbox")
         },

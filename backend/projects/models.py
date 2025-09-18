@@ -41,7 +41,7 @@ class Project(Base, PrivacyMixin):
         db_table = "projects"
 
         constraints = [
-            UniqueConstraint(
+            models.UniqueConstraint(
                 fields=["name", "user"],
                 name="constraint_project_name_active",
             ),

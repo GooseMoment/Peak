@@ -5,8 +5,8 @@ from users.models import User
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    user_id = serializers.PrimaryKeyRelatedField(
-        source="user",
+    user_username = serializers.PrimaryKeyRelatedField(
+        source="user.username",
         queryset=User.objects.all(),
         default=serializers.CurrentUserDefault(),
     )
@@ -34,7 +34,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "user_id",
+            "user_username",
             "order",
             "privacy",
             "color",

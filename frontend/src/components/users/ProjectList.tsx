@@ -60,7 +60,7 @@ const ProjectList = ({
                         </Link>
                     )
                 })}
-                {projects?.results?.length === 0 && t("projects_empty")}
+                {projects?.results.length === 0 && t("projects_empty")}
             </Projects>
         </Section>
     )

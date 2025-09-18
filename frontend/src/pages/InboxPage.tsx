@@ -18,7 +18,7 @@ import { ifMobile } from "@utils/useScreenType"
 import useScreenType from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
-import { TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const SortMenuMobile = lazy(
@@ -41,7 +41,7 @@ const InboxPage = () => {
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
 
     const { isLoading, isError, data, refetch } = useQuery({
-        queryKey: ["inbox"],
+        queryKey: ["drawers", "inbox"],
         async queryFn() {
             return getDrawer("inbox")
         },

@@ -95,10 +95,10 @@ class ProjectReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
 
-        tasks_data = serializer.validated_data
+        projects_data = serializer.validated_data
 
-        ids = [item["id"] for item in tasks_data]
-        id_to_order = {item["id"]: item["order"] for item in tasks_data}
+        ids = [item["id"] for item in projects_data]
+        id_to_order = {item["id"]: item["order"] for item in projects_data}
 
         projects = self.get_queryset().filter(id__in=ids)
 

@@ -4,7 +4,7 @@ import type { Project } from "@api/projects.api"
 
 export interface Drawer extends Base {
     name: string
-    user_id: string
+    user_username: string
     project: Project
     privacy: Privacy
     order: number
@@ -52,7 +52,7 @@ export const patchDrawer = async (
 }
 
 export const patchReorderDrawer = async (data: Partial<Drawer>[]) => {
-    const res = await client.patch<Partial<Drawer>[]>(`drawers/reorder/`, data)
+    const res = await client.patch(`drawers/reorder/`, data)
     return res.data
 }
 

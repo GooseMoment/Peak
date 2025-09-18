@@ -5,7 +5,7 @@ import type { PaletteColorName } from "@assets/palettes"
 
 export interface Project extends Base {
     name: string
-    user_id: string
+    user_username: string
     order: number
     privacy: Privacy
     color: PaletteColorName
@@ -46,10 +46,7 @@ export const patchProject = async (id: string, edit: Partial<Project>) => {
 }
 
 export const patchReorderProject = async (data: Partial<Project>[]) => {
-    const res = await client.patch<Partial<Project>[]>(
-        `projects/reorder/`,
-        data,
-    )
+    const res = await client.patch(`projects/reorder/`, data)
     return res.data
 }
 

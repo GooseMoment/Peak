@@ -2,10 +2,12 @@ import client from "@api/client"
 import type { PaginationData, UUID } from "@api/common"
 import { Task } from "@api/tasks.api"
 
+import type { PaletteColorName } from "@assets/palettes"
+
 export interface TaskGrouped {
     id: UUID
     name: string
-    color: string
+    color: PaletteColorName
     count: number
 }
 

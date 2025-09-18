@@ -10,7 +10,7 @@ export type TaskDueStrict =
 
 interface MinimalTaskBase {
     name?: string
-    user_id?: string
+    user_username?: string
     drawer: Drawer
     privacy?: Privacy
     priority: number
@@ -106,7 +106,7 @@ export const patchTask = async (id: string, edit: Partial<TaskPost>) => {
 }
 
 export const patchReorderTask = async (data: Partial<Task>[]) => {
-    const res = await client.patch<Partial<Task>[]>(`tasks/reorder/`, data)
+    const res = await client.patch(`tasks/reorder/`, data)
     return res.data
 }
 
