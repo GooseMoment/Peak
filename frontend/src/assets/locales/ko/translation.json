@@ -35,6 +35,7 @@
         "type_regular": "상시",
         "type_goal": "목표",
         "inbox": "인박스",
+        "error_load_project_list": "프로젝트 리스트를 불러오지 못했습니다",
         "button_add_project": "새 프로젝트 추가"
     },
     "today": {
@@ -44,7 +45,7 @@
         "filter_overDue": "지난 기한",
         "filter_pastAssigned": "지난 할당",
         "no_today_assignment": "오늘 할 작업들을 추가하세요.",
-        "error_load_task": "작업을 불러오지 못했어요 😢",
+        "error_load_task": "작업을 불러오지 못했어요",
         "due_change_today_success": "작업을 오늘로 할당했습니다.",
         "due_change_tomorrow_success": "작업을 내일로 할당했습니다.",
         "due_change_error": "기한 변경에 실패했습니다.",
@@ -61,9 +62,9 @@
         "button_add": "추가하기",
         "button_save": "수정",
         "none": "없음",
-        "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요 😢",
-        "error_load_inbox": "인박스 프로젝트를 불러오지 못했어요 😢",
-        "error_load_task": "작업을 불러오지 못했어요 😢",
+        "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요",
+        "error_load_inbox": "인박스 프로젝트를 불러오지 못했어요",
+        "error_load_task": "작업을 불러오지 못했어요",
         "name_placeholder": "이름을 입력하세요",
         "edit": {
             "display": "수정"
@@ -160,7 +161,7 @@
         "name_placeholder": "작업의 이름을 입력하세요.",
         "name_change_success": "이름을 변경했습니다.",
         "none": "없음",
-        "error_load_task": "작업을 불러오지 못했어요 😢",
+        "error_load_task": "작업을 불러오지 못했어요",
         "edit": {
             "edit_title": "작업 수정",
             "edit_success": "변경 사항을 저장했습니다.",
@@ -404,7 +405,7 @@
         },
         "explore": {
             "searchbar": "새로운 인연을 찾아보세요.",
-            "no_result": "당신이 찾는 사람이 없습니다 😢",
+            "no_result": "당신이 찾는 사람이 없습니다",
             "suggestion": "새로운 사람과 새로운 인연은 어떤가요?"
         }
     },
@@ -419,7 +420,7 @@
             "privacy": "공개 범위",
             "memo": "메모"
         },
-        "no_result": "조건에 맞는 결과를 찾을 수 없습니다 🤔"
+        "no_result": "조건에 맞는 결과를 찾을 수 없습니다"
     },
     "update": {
         "message": "새로운 업데이트가 있습니다.",

@@ -35,6 +35,7 @@
         "type_regular": "Regular",
         "type_goal": "Goal",
         "inbox": "Inbox",
+        "error_load_project_list": "Couldn't load Project List",
         "button_add_project": "Add new project"
     },
     "today": {
@@ -44,7 +45,7 @@
         "filter_overDue": "Overdue",
         "filter_pastAssigned": "Missed",
         "no_today_assignment": "Add tasks to do today",
-        "error_load_task": "Couldn't load tasks 😢",
+        "error_load_task": "Couldn't load tasks",
         "due_change_today_success": "Assigned the task to today.",
         "due_change_tomorrow_success": "Assigned the task to tomorrow.",
         "due_change_error": "The due date change failed.",
@@ -61,9 +62,9 @@
         "button_add": "Add",
         "button_save": "Save",
         "none": "none",
-        "error_load_project_and_drawer": "Couldn't load project and drawers 😢",
-        "error_load_inbox": "Couldn't load inbox 😢",
-        "error_load_task": "Couldn't load tasks 😢",
+        "error_load_project_and_drawer": "Couldn't load project and drawers",
+        "error_load_inbox": "Couldn't load inbox",
+        "error_load_task": "Couldn't load tasks",
         "name_placeholder": "Enter a name",
         "edit": {
             "display": "Edit"
@@ -160,7 +161,7 @@
         "name_placeholder": "Enter a name for the task.",
         "name_change_success": "The name has changed.",
         "none": "none",
-        "error_load_task": "Couldn't load tasks 😢",
+        "error_load_task": "Couldn't load tasks",
         "edit": {
             "edit_title": "Edit task",
             "edit_success": "Saved changes.",
@@ -419,7 +420,7 @@
             "privacy": "Privacy",
             "memo": "Memo"
         },
-        "no_result": "Your search did not match any tasks 🤔"
+        "no_result": "Your search did not match any tasks"
     },
     "update": {
         "message": "New update available.",
