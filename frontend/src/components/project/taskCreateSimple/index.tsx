@@ -7,6 +7,7 @@ import SimpleAssigned from "@components/project/taskCreateSimple/SimpleAssigned"
 import SimpleDue from "@components/project/taskCreateSimple/SimpleDue"
 import SimplePriority from "@components/project/taskCreateSimple/SimplePriority"
 import TaskNameInput from "@components/tasks/TaskNameInput"
+import createInitialTask from "@components/tasks/utils/createInitialTask"
 
 import { type Drawer } from "@api/drawers.api"
 import { type MinimalTask, postTask } from "@api/tasks.api"
@@ -34,19 +35,9 @@ const TaskCreateSimple = ({
     const { t } = useTranslation("translation", { keyPrefix: "task.edit" })
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const [newTask, setNewTask] = useState<MinimalTask>({
-        name: "",
-        drawer: drawer,
-        privacy: "public",
-        priority: 0,
-        completed_at: null,
-        assigned_at: null,
-        due_type: null,
-        due_date: null,
-        due_datetime: null,
-        reminders: [],
-        memo: "",
-    })
+    const [newTask, setNewTask] = useState<MinimalTask>(
+        createInitialTask(drawer),
+    )
 
     const theme = useTheme()
 

@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 
 import TaskForm from "@components/project/taskDetails/TaskForm"
+import createInitialTask from "@components/tasks/utils/createInitialTask"
 
 import { type Drawer } from "@api/drawers.api"
 import { type MinimalTask, postTask } from "@api/tasks.api"
@@ -16,19 +17,9 @@ import { toast } from "react-toastify"
 const TaskCreate = ({ drawer }: { drawer: Drawer }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task" })
 
-    const [newTask, setNewTask] = useState<MinimalTask>({
-        name: "",
-        drawer: drawer,
-        privacy: "public",
-        priority: 0,
-        completed_at: null,
-        assigned_at: null,
-        due_type: null,
-        due_date: null,
-        due_datetime: null,
-        reminders: [],
-        memo: "",
-    })
+    const [newTask, setNewTask] = useState<MinimalTask>(
+        createInitialTask(drawer),
+    )
 
     const [newColor, setNewColor] = useState(drawer.project.color)
 

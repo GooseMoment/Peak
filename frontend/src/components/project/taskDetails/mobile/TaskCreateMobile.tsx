@@ -3,8 +3,9 @@ import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 
 import TaskFormMobile from "@components/project/taskDetails/mobile/TaskFormMobile"
+import createInitialTask from "@components/tasks/utils/createInitialTask"
 
-import { type Drawer } from "@api/drawers.api"
+import type { Drawer } from "@api/drawers.api"
 import { type MinimalTask, postTask } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
@@ -21,19 +22,9 @@ const TaskCreateMobile = ({
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task" })
 
-    const [newTask, setNewTask] = useState<MinimalTask>({
-        name: "",
-        drawer: drawer,
-        privacy: "public",
-        priority: 0,
-        completed_at: null,
-        assigned_at: null,
-        due_type: null,
-        due_date: null,
-        due_datetime: null,
-        reminders: [],
-        memo: "",
-    })
+    const [newTask, setNewTask] = useState<MinimalTask>(
+        createInitialTask(drawer),
+    )
 
     const postMutation = useMutation({
         mutationFn: (data: MinimalTask) => {
