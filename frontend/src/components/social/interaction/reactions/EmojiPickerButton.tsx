@@ -58,8 +58,8 @@ export default function EmojiPickerButton({
 
     return (
         <div className={className}>
-            <PickerButton onClick={modal.openModal}>
-                <FeatherIcon icon="plus" />
+            <PickerButton onClick={modal.toggleModal}>
+                <FeatherIcon icon={modal.isOpen ? "x" : "plus"} />
             </PickerButton>
             <Portal modal={modal}>
                 <MemoizedPicker
