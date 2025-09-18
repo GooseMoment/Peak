@@ -1,6 +1,6 @@
-import { Ref, Suspense, forwardRef } from "react"
+import { Suspense } from "react"
 
-import styled, { css, keyframes } from "styled-components"
+import styled from "styled-components"
 
 import Avatar from "@components/notifications/Avatar"
 import Content, { ContentSkeleton } from "@components/notifications/Content"
@@ -12,21 +12,11 @@ import {
 
 import { ifMobile } from "@utils/useScreenType"
 
-import { cubicBeizer } from "@assets/keyframes"
-
-interface BoxProps {
-    notification: Notification
-    highlight?: boolean
-}
-
-const Box = forwardRef(function BoxInternal(
-    { notification, highlight = false }: BoxProps,
-    ref: Ref<HTMLElement>,
-) {
+export default function Box({ notification }: { notification: Notification }) {
     const relatedUser = getRelatedUserFromNotification(notification)
 
     return (
-        <Frame ref={ref} $highlight={highlight}>
+        <Frame>
             <Avatar
                 projectColor={
                     (notification.type === "task_reminder" &&
@@ -51,9 +41,9 @@ const Box = forwardRef(function BoxInternal(
             </Suspense>
         </Frame>
     )
-})
+}
 
-export const BoxSkeleton = () => {
+export function BoxSkeleton() {
     return (
         <Frame>
             <Avatar skeleton />
@@ -62,19 +52,7 @@ export const BoxSkeleton = () => {
     )
 }
 
-const blink = keyframes`
-    0% {
-        border-color: transparent;
-    }
-    20%, 80% {
-        border-color: ${(p) => p.theme.accentColor};
-    }
-    100% {
-        border-color: transparent;
-    }
-`
-
-const Frame = styled.article<{ $highlight?: boolean }>`
+const Frame = styled.article`
     position: relative;
     box-sizing: border-box;
 
@@ -101,13 +79,4 @@ const Frame = styled.article<{ $highlight?: boolean }>`
         height: fit-content;
         padding: 0.5em;
     }
-
-    ${(p) =>
-        p.$highlight &&
-        css`
-            animation: ${blink} 1.5s ${cubicBeizer};
-            animation-delay: 0.5s;
-        `}
 `
-
-export default Box
