@@ -1,10 +1,11 @@
-import { Fragment, useEffect, useMemo, useState } from "react"
+import { Fragment, Suspense, useEffect, useMemo, useState } from "react"
 import { Outlet, useSearchParams } from "react-router-dom"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { css, keyframes } from "styled-components"
 
 import FilterButtonGroup from "@components/common/FilterButtonGroup"
+import ModalLoader from "@components/common/ModalLoader"
 import PageTitle from "@components/common/PageTitle"
 import Box, { BoxSkeleton } from "@components/notifications/Box"
 
@@ -142,7 +143,9 @@ const NotificationsPage = () => {
                 )}
             </ImpressionArea>
             {isNotificationEmpty && <NoMore>{t("empty")}</NoMore>}
-            <Outlet />
+            <Suspense name="notification-outlet" fallback={<ModalLoader />}>
+                <Outlet />
+            </Suspense>
         </>
     )
 }
