@@ -1,6 +1,7 @@
 import {
     ReactNode,
     createContext,
+    useCallback,
     useContext,
     useEffect,
     useRef,
@@ -11,7 +12,7 @@ import styled, { css } from "styled-components"
 
 import useStopScroll from "@utils/useStopScroll"
 
-import { cubicBeizer, scaleDown, scaleUp } from "@assets/keyframes"
+import { scaleDown, scaleUp } from "@assets/keyframes"
 
 import { createPortal } from "react-dom"
 
@@ -37,7 +38,7 @@ const root = document.getElementById("root")!
 export default function useModal(options: useModalOptions = {}): Modal {
     const id = useRef<string>()
     const [isOpen, setIsOpen] = useState(false)
-    const [isClosing, setIsClosing] = useState(false)
+    const [isClosing, setIsClosing] = useState(false) // for ChildrenAnimationWrapper
 
     useStopScroll(isOpen)
 
@@ -47,14 +48,51 @@ export default function useModal(options: useModalOptions = {}): Modal {
         }
     }, [])
 
-    const handleOutsideClick = (e: MouseEvent) => {
-        if (e.target !== el) {
-            return
+    const openModal = useCallback(() => {
+        options.beforeOpen?.()
+        setIsOpen(true)
+        options.afterOpen?.()
+    }, [options])
+
+    const closeModal = useCallback(() => {
+        setIsClosing(true)
+        options.beforeClose?.()
+        setTimeout(() => {
+            setIsOpen(false)
+            options.afterClose?.()
+            setIsClosing(false)
+        }, 100)
+    }, [options])
+
+    const toggleModal = useCallback(() => {
+        if (isOpen) {
+            closeModal()
+        } else {
+            openModal()
+        }
+    }, [isOpen, closeModal, openModal])
+
+    const handleOutsideClick = useCallback(
+        (e: MouseEvent) => {
+            if (e.target !== el) {
+                return
+            }
+
+            e.stopPropagation()
+            closeModal()
+        },
+        [closeModal],
+    )
+
+    useEffect(() => {
+        if (isOpen) {
+            root.classList.add("has-modal")
         }
 
-        e.stopPropagation()
-        closeModal()
-    }
+        return () => {
+            root.classList.remove("has-modal")
+        }
+    }, [isOpen])
 
     useEffect(() => {
         if (isOpen) {
@@ -65,45 +103,6 @@ export default function useModal(options: useModalOptions = {}): Modal {
             el.removeEventListener("click", handleOutsideClick)
         }
     }, [isOpen])
-
-    useEffect(() => {
-        if (isOpen) {
-            root.classList.add("has-modal")
-        }
-
-        if (isClosing) {
-            el.classList.add("closing")
-        }
-
-        return () => {
-            el.classList.remove("closing")
-            root.classList.remove("has-modal")
-        }
-    }, [isOpen, isClosing])
-
-    const openModal = () => {
-        options.beforeOpen?.()
-        setIsOpen(true)
-        options.afterOpen?.()
-    }
-
-    const closeModal = () => {
-        setIsClosing(true)
-        options.beforeClose?.()
-        setTimeout(() => {
-            setIsOpen(false)
-            options.afterClose?.()
-            setIsClosing(false)
-        }, 100)
-    }
-
-    const toggleModal = () => {
-        if (isOpen) {
-            closeModal()
-        } else {
-            openModal()
-        }
-    }
 
     return {
         id: id.current,
@@ -123,16 +122,20 @@ export function Portal({
     modal,
     children,
 }: {
-    children: ReactNode
+    children?: ReactNode
     modal: Modal
 }) {
-    if (!modal.isOpen) return null
+    if (!modal.isOpen) {
+        return null
+    }
 
     return createPortal(
         <ModalContext.Provider value={{ modal }}>
-            <AnimationProvider id={modal.id} $closing={modal.isClosing}>
+            <ModalChildrenAnimationWrapper
+                id={modal.id}
+                $closing={modal.isClosing}>
                 {children}
-            </AnimationProvider>
+            </ModalChildrenAnimationWrapper>
         </ModalContext.Provider>,
         el,
     )
@@ -142,13 +145,13 @@ export function useModalContext() {
     return useContext(ModalContext).modal
 }
 
-const AnimationProvider = styled.div<{ $closing?: boolean }>`
+export const ModalChildrenAnimationWrapper = styled.div<{ $closing?: boolean }>`
     ${(props) =>
         props.$closing
             ? css`
-                  animation: ${scaleDown} 0.5s ${cubicBeizer} forwards;
+                  animation: 0.5s var(--cubic) forwards ${scaleDown};
               `
             : css`
-                  animation: ${scaleUp} 0.5s ${cubicBeizer};
+                  animation: 0.5s var(--cubic) ${scaleUp};
               `}
 `
