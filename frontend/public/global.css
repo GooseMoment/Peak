@@ -103,16 +103,24 @@ html {
     background-color: transparent;
     pointer-events: none;
 
-    transition: background-color 0.25s var(--cubic);
-
     @media screen and (max-width: 500px) {
         flex-direction: column;
+    }
+}
+
+@keyframes window-container-background-dim {
+    0% {
+        background-color: transparent;
+    }
+    100% {
+        background-color: rgba(0, 0, 0, 0.3);
     }
 }
 
 #window-container:has(div) {
     pointer-events: initial;
     background-color: rgba(0, 0, 0, 0.3);
+    animation: 0.5s var(--cubic) window-container-background-dim;
 }
 
 #confirmation {
