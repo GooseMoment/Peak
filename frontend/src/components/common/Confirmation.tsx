@@ -4,7 +4,7 @@ import styled, { css } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 
-import useStopScroll from "@utils/useStopScroll"
+import useStopVerticalScroll from "@utils/useStopVerticalScroll"
 
 import { cubicBeizer, slideDown, slideUp } from "@assets/keyframes"
 
@@ -31,7 +31,7 @@ const Confirmation = ({
     const [visible, setVisible] = useState(true)
     const [closing, setClosing] = useState(false)
 
-    useStopScroll(true)
+    useStopVerticalScroll(true)
 
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)

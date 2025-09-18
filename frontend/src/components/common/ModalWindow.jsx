@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react"
 
 import { ModalChildrenAnimationWrapper } from "@utils/useModal"
-import useStopScroll from "@utils/useStopScroll"
+import useStopVerticalScroll from "@utils/useStopVerticalScroll"
 
 import { createPortal } from "react-dom"
 
@@ -35,7 +35,7 @@ const ModalWindow = ({
         setTimeout(() => afterClose(), 100)
     }
 
-    useStopScroll(true)
+    useStopVerticalScroll(true)
 
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)

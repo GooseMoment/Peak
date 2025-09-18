@@ -11,7 +11,7 @@ import {
 
 import styled, { css } from "styled-components"
 
-import useStopScroll from "@utils/useStopScroll"
+import useStopVerticalScroll from "@utils/useStopVerticalScroll"
 
 import { scaleDown, scaleUp } from "@assets/keyframes"
 
@@ -40,7 +40,7 @@ export default function useModal(options: useModalOptions = {}): Modal {
     const [isOpen, setIsOpen] = useState(false)
     const [isClosing, setIsClosing] = useState(false) // for ChildrenAnimationWrapper
 
-    useStopScroll(isOpen)
+    useStopVerticalScroll(isOpen)
 
     useEffect(() => {
         if (!id.current) {
