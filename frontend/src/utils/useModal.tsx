@@ -34,7 +34,6 @@ interface Modal {
 }
 
 const el = document.getElementById("window-container")!
-const root = document.getElementById("root")!
 
 export default function useModal(options: useModalOptions = {}): Modal {
     const id = useRef<string>()
@@ -88,12 +87,7 @@ export default function useModal(options: useModalOptions = {}): Modal {
 
     useEffect(() => {
         if (isOpen) {
-            root.classList.add("has-modal")
             options.afterOpen?.() // keep afterOpen here to ensure it runs after the modal is visible
-        }
-
-        return () => {
-            root.classList.remove("has-modal")
         }
     }, [isOpen])
 

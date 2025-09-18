@@ -75,15 +75,6 @@ html {
     -moz-osx-font-smoothing: grayscale;
 }
 
-#root > div > main {
-    transform: scale(1);
-    transition: transform 0.25s var(--cubic);
-}
-
-#root.has-modal > div > main {
-    transform: scale(0.98);
-}
-
 #window-container {
     position: fixed;
     top: 0;

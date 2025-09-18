@@ -15,7 +15,6 @@ export const useModalWindowCloseContext = () => {
 }
 
 const el = document.getElementById("window-container")
-const root = document.getElementById("root")
 
 // see: https://github.com/remix-run/react-router/discussions/9864#discussioncomment-6350903
 
@@ -25,6 +24,7 @@ const root = document.getElementById("root")
 const ModalWindow = ({
     children,
     afterClose,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     additional = false,
     closeESC = true,
 }) => {
@@ -41,17 +41,9 @@ const ModalWindow = ({
         el.addEventListener("click", handleOutsideClick)
         document.addEventListener("keydown", handleKeyDown)
 
-        if (!additional) {
-            root.classList.add("has-modal")
-        }
-
         return () => {
             el.removeEventListener("click", handleOutsideClick)
             document.removeEventListener("keydown", handleKeyDown)
-
-            if (!additional) {
-                root.classList.remove("has-modal")
-            }
         }
     }, [])
 
