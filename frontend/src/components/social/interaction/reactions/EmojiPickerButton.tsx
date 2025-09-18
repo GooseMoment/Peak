@@ -1,18 +1,20 @@
-import { Suspense, useState } from "react"
+import { memo, useCallback } from "react"
 
 import { useQuery } from "@tanstack/react-query"
-import styled, { useTheme } from "styled-components"
+import styled, { LightDark, useTheme } from "styled-components"
 
-import ModalWindow from "@components/common/ModalWindow"
 import { ReactionButtonContainer } from "@components/social/interaction/reactions/ReactionButton"
 
 import { Emoji, getEmojis } from "@api/social.api"
+
+import useModal, { Portal } from "@utils/useModal"
 
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import EmojiPicker, {
     type EmojiClickData,
     Theme as EmojiPickerTheme,
+    EmojiStyle,
 } from "emoji-picker-react"
 import type { CustomEmoji } from "emoji-picker-react/dist/config/customEmojiConfig"
 import FeatherIcon from "feather-icons-react"
@@ -34,7 +36,7 @@ export default function EmojiPickerButton({
     onSelectEmoji,
     className,
 }: EmojiPickerButtonProps) {
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    const modal = useModal()
     const theme = useTheme()
 
     const { data: imageEmojis } = useQuery({
@@ -46,36 +48,55 @@ export default function EmojiPickerButton({
         },
     })
 
-    const handleEmoji = (emoji: EmojiClickData) => {
-        onSelectEmoji(emoji.emoji, emoji.isCustom)
-        setIsModalOpen(false)
-    }
+    const handleEmoji = useCallback(
+        (emoji: EmojiClickData) => {
+            onSelectEmoji(emoji.emoji, emoji.isCustom)
+            modal.closeModal()
+        },
+        [onSelectEmoji, modal],
+    )
 
     return (
         <div className={className}>
-            <PickerButton onClick={() => setIsModalOpen(!isModalOpen)}>
+            <PickerButton onClick={modal.openModal}>
                 <FeatherIcon icon="plus" />
             </PickerButton>
-            {isModalOpen && (
-                <ModalWindow afterClose={() => setIsModalOpen(false)}>
-                    <Suspense name="emoji-picker">
-                        <EmojiPicker
-                            open
-                            onEmojiClick={handleEmoji}
-                            customEmojis={imageEmojis}
-                            lazyLoadEmojis
-                            theme={
-                                theme.type === "dark"
-                                    ? EmojiPickerTheme.DARK
-                                    : EmojiPickerTheme.LIGHT
-                            }
-                        />
-                    </Suspense>
-                </ModalWindow>
-            )}
+            <Portal modal={modal}>
+                <MemoizedPicker
+                    themeType={theme.type}
+                    handleEmoji={handleEmoji}
+                    imageEmojis={imageEmojis}
+                />
+            </Portal>
         </div>
     )
 }
+
+const MemoizedPicker = memo(function MemoizedPicker({
+    themeType,
+    handleEmoji,
+    imageEmojis,
+}: {
+    themeType: LightDark
+    handleEmoji: (emoji: EmojiClickData) => void
+    imageEmojis?: CustomEmoji[]
+}) {
+    return (
+        <EmojiPicker
+            open
+            lazyLoadEmojis
+            skinTonesDisabled
+            emojiStyle={EmojiStyle.NATIVE}
+            onEmojiClick={handleEmoji}
+            customEmojis={imageEmojis}
+            theme={
+                themeType === "dark"
+                    ? EmojiPickerTheme.DARK
+                    : EmojiPickerTheme.LIGHT
+            }
+        />
+    )
+})
 
 const PickerButton = styled(ReactionButtonContainer)`
     border-color: ${(p) => p.theme.textColor};
