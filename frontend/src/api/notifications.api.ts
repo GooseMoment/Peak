@@ -18,17 +18,8 @@ export interface TaskReminder extends Base {
     project_id: string
 }
 
-export interface MinimalReminder {
+export interface TaskReminderDelta {
     delta: number
-    id?: string
-    task?: Task
-    scheduled?: string
-    task_name?: string
-    project_color?: string
-    project_id?: string
-    created_at?: string
-    updated_at?: string
-    deleted_at?: null | string
 }
 
 export const getReminder = async (id: string) => {
@@ -46,7 +37,7 @@ export const postReminder = async (reminders: {
 
 export const patchReminder = async (
     id: string,
-    edit: Partial<MinimalReminder>,
+    edit: Partial<TaskReminderDelta>,
 ) => {
     const res = await client.patch(`notifications/reminders/${id}/`, edit)
     return res.data

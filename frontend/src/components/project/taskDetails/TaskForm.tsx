@@ -8,7 +8,7 @@ import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Contents from "@components/project/taskDetails/Contents"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
-import { type MinimalReminder, postReminder } from "@api/notifications.api"
+import { type TaskReminderDelta, postReminder } from "@api/notifications.api"
 import type { MinimalTask, Task } from "@api/tasks.api"
 
 import useScreenType from "@utils/useScreenType"
@@ -50,7 +50,10 @@ const TaskForm = ({
     const { isDesktop } = useScreenType()
 
     const postReminderMutation = useMutation({
-        mutationFn: (data: { task: string; reminders: MinimalReminder[] }) => {
+        mutationFn: (data: {
+            task: string
+            reminders: TaskReminderDelta[]
+        }) => {
             const deltaList = data.reminders.map((reminder) => reminder.delta)
             return postReminder({ task: data.task, delta_list: deltaList })
         },

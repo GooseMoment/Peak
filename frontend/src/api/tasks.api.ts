@@ -1,7 +1,7 @@
 import client from "@api/client"
 import type { PaginationData, Privacy } from "@api/common"
 import type { Drawer } from "@api/drawers.api"
-import type { MinimalReminder } from "@api/notifications.api"
+import type { TaskReminderDelta } from "@api/notifications.api"
 import type { User } from "@api/users.api"
 
 interface MinimalTaskWithoutDue {
@@ -13,7 +13,7 @@ interface MinimalTaskWithoutDue {
     order?: number
     completed_at?: null | string
     assigned_at?: null | string
-    reminders?: MinimalReminder[]
+    reminders?: TaskReminderDelta[]
     memo?: string
     created_at?: string
     updated_at?: string
@@ -53,7 +53,7 @@ interface TaskPostBase {
     priority: number
     completed_at?: null | string
     assigned_at?: null | string
-    reminders?: MinimalReminder[]
+    reminders?: TaskReminderDelta[]
     memo?: string
 }
 

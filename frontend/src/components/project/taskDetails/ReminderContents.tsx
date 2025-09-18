@@ -2,7 +2,7 @@ import { ReactNode, useState } from "react"
 
 import styled from "styled-components"
 
-import { type MinimalReminder } from "@api/notifications.api"
+import { type TaskReminderDelta } from "@api/notifications.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
@@ -19,7 +19,7 @@ const ReminderContents = ({
         content: string
         delta: number
     }
-    reminders: MinimalReminder[] | undefined
+    reminders: TaskReminderDelta[] | undefined
     handleReminder: (delta: number) => void
 }) => {
     const [isHovering, setIsHovering] = useState(false)

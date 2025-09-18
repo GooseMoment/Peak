@@ -9,7 +9,7 @@ import ContentsMobile from "@components/project/taskDetails/mobile/ContentsMobil
 import type { TaskContent } from "@components/tasks/Contents"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
-import { type MinimalReminder, postReminder } from "@api/notifications.api"
+import { type TaskReminderDelta, postReminder } from "@api/notifications.api"
 import type { MinimalTask, Task } from "@api/tasks.api"
 
 import queryClient from "@queries/queryClient"
@@ -57,7 +57,10 @@ const TaskFormMobile = ({
     }, [activeContent])
 
     const postReminderMutation = useMutation({
-        mutationFn: (data: { task: string; reminders: MinimalReminder[] }) => {
+        mutationFn: (data: {
+            task: string
+            reminders: TaskReminderDelta[]
+        }) => {
             const deltaList = data.reminders.map((reminder) => reminder.delta)
             return postReminder({ task: data.task, delta_list: deltaList })
         },
