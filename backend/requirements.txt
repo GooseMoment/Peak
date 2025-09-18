@@ -6,7 +6,7 @@ djangorestframework-types==0.9.0
 psycopg-binary==3.2.10
 psycopg==3.2.10
 gunicorn==23.0.0
-boto3==1.40.26
+boto3==1.40.33
 django-storages==1.14.6
 pillow==11.3.0 # required by models.ImageField 
 django-redis==6.0.0
