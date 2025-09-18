@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from "react"
+import { Fragment, useEffect, useMemo, useState } from "react"
 import { Outlet, useSearchParams } from "react-router-dom"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
@@ -61,9 +61,7 @@ const NotificationsPage = () => {
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
     const isNotificationEmpty = data?.pages[0]?.results?.length === 0
 
-    const lastDate = useRef<null | string>(null)
     useEffect(() => {
-        lastDate.current = null
         setSearchParams({ active: activeFilter }, { replace: true })
     }, [activeFilter])
 
@@ -98,6 +96,8 @@ const NotificationsPage = () => {
         )
     }
 
+    let lastDate: string | null = null
+
     return (
         <>
             {header}
@@ -111,12 +111,9 @@ const NotificationsPage = () => {
                             .setLocale(locale)
                             .toRelativeCalendar({ unit: "days" })
 
-                        if (
-                            (i === 0 && j === 0) ||
-                            thisDate !== lastDate.current
-                        ) {
+                        if ((i === 0 && j === 0) || thisDate !== lastDate) {
                             dateDelimiter = <Date>{thisDate}</Date>
-                            lastDate.current = thisDate
+                            lastDate = thisDate
                         }
 
                         return (
