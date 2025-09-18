@@ -4,6 +4,7 @@ import styled, { css } from "styled-components"
 
 import type { Notification } from "@api/notifications.api"
 import type { Quote } from "@api/social.api"
+import type { Task } from "@api/tasks.api"
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 import { ifMobile } from "@utils/useScreenType"
@@ -124,9 +125,7 @@ const getDisplayDateFromQuote = (
     return Math.abs(diffNow.days) > 7 ? date.toLocaleString() : relativeDate
 }
 
-// TODO: replace any with Task
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getPathToTaskDetail = (task: any) => {
+const getPathToTaskDetail = (task: Task) => {
     return `/app/projects/${task.project_id}`
 }
 

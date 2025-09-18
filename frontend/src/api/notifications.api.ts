@@ -10,9 +10,7 @@ import {
 } from "@utils/clientSettings"
 
 export interface TaskReminder extends Base {
-    // TODO: replace any with Task
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    task: any
+    task: Task
     delta: number
     scheduled: string
     task_name: string
