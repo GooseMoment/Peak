@@ -43,31 +43,31 @@ export const deleteReminder = async (id: string) => {
 }
 
 export interface NotificationTaskReminder extends Base {
-    user: User
+    username: User["username"]
     type: "task_reminder"
     task_reminder: TaskReminder
 }
 
 export interface NotificationTaskReaction extends Base {
-    user: User
+    username: User["username"]
     type: "task_reaction"
     task_reaction: TaskReaction
 }
 
 export interface NotificationFollowing extends Base {
-    user: User
+    username: User["username"]
     type: "follow" | "follow_request" | "follow_request_accepted"
     following: Following
 }
 
 export interface NotificationPeck extends Base {
-    user: User
+    username: User["username"]
     type: "peck"
     peck: Peck
 }
 
 export interface NotificationComment extends Base {
-    user: User
+    username: User["username"]
     type: "comment"
     comment: Comment
 }
