@@ -1,10 +1,11 @@
 import client from "@api/client"
 import type { Base, Privacy } from "@api/common"
 import type { Project } from "@api/projects.api"
+import type { User } from "@api/users.api"
 
 export interface Drawer extends Base {
     name: string
-    user_username: string
+    user: User
     project: Project
     privacy: Privacy
     order: number
@@ -12,11 +13,14 @@ export interface Drawer extends Base {
     completed_task_count: number
 }
 
-export interface DrawerCreateInput {
+export interface DrawerCreate {
     name: string
     project: string
     privacy: Privacy
 }
+
+export const DrawerNameDuplicate = "DRAWER_NAME_DUPLICATE"
+export const DrawerLimitExceeded = "DRAWER_LIMIT_EXCEEDED"
 
 export const getDrawersByProject = async (
     projectID: string,
@@ -38,15 +42,12 @@ export const getDrawer = async (id: string | string) => {
     return res.data
 }
 
-export const postDrawer = async (drawer: Partial<DrawerCreateInput>) => {
+export const postDrawer = async (drawer: Partial<DrawerCreate>) => {
     const res = await client.post<Drawer>("drawers/", drawer)
     return res.data
 }
 
-export const patchDrawer = async (
-    id: string,
-    edit: Partial<DrawerCreateInput>,
-) => {
+export const patchDrawer = async (id: string, edit: Partial<DrawerCreate>) => {
     const res = await client.patch<Drawer>(`drawers/${id}/`, edit)
     return res.data
 }

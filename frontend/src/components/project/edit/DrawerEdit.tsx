@@ -12,7 +12,9 @@ import TitleInput from "@components/project/edit/TitleInput"
 
 import {
     type Drawer,
-    type DrawerCreateInput,
+    type DrawerCreate,
+    DrawerLimitExceeded,
+    DrawerNameDuplicate,
     patchDrawer,
     postDrawer,
 } from "@api/drawers.api"
@@ -21,7 +23,7 @@ import useScreenType from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
-import { AxiosError } from "axios"
+import type { AxiosError } from "axios"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -40,14 +42,14 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
         project: projectID!,
     }
 
-    const [newDrawer, setNewDrawer] = useState<DrawerCreateInput | Drawer>(
+    const [newDrawer, setNewDrawer] = useState<DrawerCreate | Drawer>(
         drawer || drawerDefault,
     )
     const inputRef = useRef<HTMLInputElement>(null)
     const hasCreated = useRef(false)
 
     const postMutation = useMutation({
-        mutationFn: (data: DrawerCreateInput) => {
+        mutationFn: (data: DrawerCreate) => {
             return postDrawer(data)
         },
         onSuccess: () => {
@@ -65,8 +67,8 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
                     ?.data?.code
 
                 if (
-                    errorCode === "DRAWER_NAME_DUPLICATE" ||
-                    errorCode === "DRAWER_LIMIT_EXCEEDED"
+                    errorCode === DrawerLimitExceeded ||
+                    errorCode === DrawerNameDuplicate
                 ) {
                     toast.error(t(`created_drawer_error.${errorCode}`))
                 } else {
@@ -123,7 +125,7 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
         if (drawer) {
             patchMutation.mutate(newDrawer as Drawer)
         } else {
-            postMutation.mutate(newDrawer as DrawerCreateInput)
+            postMutation.mutate(newDrawer as DrawerCreate)
         }
     }
 
