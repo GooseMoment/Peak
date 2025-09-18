@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 import styled, { css } from "styled-components"
 
 import ContentDetail, {
@@ -37,9 +39,12 @@ const Content = ({ notification, relatedUser }: ContentProps) => {
                     notification={notification}
                     relatedUser={relatedUser}
                 />
-                <label title={datetime.toLocaleString(DateTime.DATETIME_MED)}>
-                    <Time>{datetime.toRelative({ style: "narrow" })}</Time>
-                </label>
+                <Link to={`${notification.id}`}>
+                    <label
+                        title={datetime.toLocaleString(DateTime.DATETIME_MED)}>
+                        <Time>{datetime.toRelative({ style: "narrow" })}</Time>
+                    </label>
+                </Link>
             </ContentTop>
             <ContentDetail notification={notification} />
         </Container>
