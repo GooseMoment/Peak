@@ -65,7 +65,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
 
     const [tasks, setTasks] = useState<Task[]>([])
 
-    const { t } = useTranslation("translation", { keyPrefix: "project" })
+    const { t } = useTranslation("translation")
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
 
@@ -185,7 +185,9 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
         },
         onSuccess: () => {
             toast.success(
-                t("delete.drawer_delete_success", { drawer_name: drawer.name }),
+                t("project.delete.drawer_delete_success", {
+                    drawer_name: drawer.name,
+                }),
             )
             queryClient.invalidateQueries({
                 queryKey: ["drawers", { projectID: drawer.project.id }],
@@ -196,7 +198,9 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
         },
         onError: () => {
             toast.success(
-                t("delete.drawer_delete_error", { drawer_name: drawer.name }),
+                t("project.delete.drawer_delete_error", {
+                    drawer_name: drawer.name,
+                }),
             )
         },
     })
@@ -222,7 +226,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
         return (
             <TaskErrorBox onClick={() => refetch()}>
                 <FeatherIcon icon="alert-triangle" />
-                {t("error_load_task")}
+                {t("project.error_load_task")}
             </TaskErrorBox>
         )
     }
@@ -284,13 +288,15 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
                             disabled={isFetchingNextPage}
                             loading={isFetchingNextPage}
                             onClick={() => fetchNextPage()}>
-                            {isLoading ? t("loading") : t("button_load_more")}
+                            {isLoading
+                                ? t("common.loading")
+                                : t("common.load_more")}
                         </MoreButton>
                     </ButtonGroup>
                 ) : null)}
             {isSortMenuMobileOpen && (
                 <SortMenuMobile
-                    title={t("sort.task_title")}
+                    title={t("project.sort.task_title")}
                     items={sortMenuItems}
                     onClose={() => setSortMenuMobileOpen(false)}
                     ordering={ordering}
@@ -299,7 +305,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerProps) => {
             )}
             {isAlertOpen && (
                 <DeleteAlert
-                    title={t("delete.alert_drawer_title", {
+                    title={t("project.delete.alert_drawer_title", {
                         drawer_name: drawer.name,
                     })}
                     onClose={() => {

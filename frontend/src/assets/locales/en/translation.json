@@ -8,9 +8,7 @@
         "projects": "Projects",
         "inbox": "Inbox",
         "projects_list_refetch": "Click to retry",
-        "user_error": "Unable to load your user information. Please restart the app.",
-        "loading": "Loading...",
-        "button_load_more": "Load more"
+        "user_error": "Unable to load your user information. Please restart the app."
     },
     "notifications": {
         "title": "Notifications",
@@ -37,9 +35,7 @@
         "type_regular": "Regular",
         "type_goal": "Goal",
         "inbox": "Inbox",
-        "button_add_project": "Add new project",
-        "loading": "Loading...",
-        "button_load_more": "Load more"
+        "button_add_project": "Add new project"
     },
     "today": {
         "title": "Today",
@@ -49,7 +45,6 @@
         "filter_pastAssigned": "Missed",
         "no_today_assignment": "Add tasks to do today",
         "error_load_task": "Couldn't load tasks 😢",
-        "button_load_more": "Load more",
         "due_change_today_success": "Assigned the task to today.",
         "due_change_tomorrow_success": "Assigned the task to tomorrow.",
         "due_change_error": "The due date change failed.",
@@ -61,12 +56,10 @@
         "inbox": "Inbox",
         "no_drawer": "Press + to add drawers",
         "progress": "Progress",
-        "button_load_more": "Load more",
         "button_add_task": "Add new task",
         "button_close_add_task": "Close",
         "button_add": "Add",
         "button_save": "Save",
-        "loading": "Loading...",
         "none": "none",
         "error_load_project_and_drawer": "Couldn't load project and drawers 😢",
         "error_load_inbox": "Couldn't load inbox 😢",
@@ -242,9 +235,7 @@
         "drawer": {
             "name": "Drawer",
             "title": "Select a drawer",
-            "fetching_error": "An error occurred while fetching data.",
-            "loading": "Loading...",
-            "button_load_more": "Load more"
+            "fetching_error": "An error occurred while fetching data."
         },
         "memo": {
             "name": "Memo",
@@ -441,6 +432,7 @@
         },
         "button_no": "No",
         "retry": "Retry",
+        "loading": "Loading...",
         "load_more": "Load more",
         "error_load": "Failed to load.",
         "error_something_wrong": "Something went wrong.",

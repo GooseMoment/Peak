@@ -39,7 +39,7 @@ const InboxDrawer = ({ drawer, ordering, setOrdering }: InboxDrawerProps) => {
 
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
 
-    const { t } = useTranslation("translation", { keyPrefix: "project" })
+    const { t } = useTranslation("translation")
 
     const {
         data,
@@ -109,7 +109,7 @@ const InboxDrawer = ({ drawer, ordering, setOrdering }: InboxDrawerProps) => {
         return (
             <TaskErrorBox onClick={() => refetch()}>
                 <FeatherIcon icon="alert-triangle" />
-                {t("error_load_inbox")}
+                {t("project.error_load_inbox")}
             </TaskErrorBox>
         )
     }
@@ -145,7 +145,9 @@ const InboxDrawer = ({ drawer, ordering, setOrdering }: InboxDrawerProps) => {
                         disabled={isFetchingNextPage}
                         loading={isFetchingNextPage}
                         onClick={() => fetchNextPage()}>
-                        {isLoading ? t("loading") : t("button_load_more")}
+                        {isLoading
+                            ? t("common.loading")
+                            : t("common.load_more")}
                     </MoreButton>
                 </ButtonGroup>
             ) : null}

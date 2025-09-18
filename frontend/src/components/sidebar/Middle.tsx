@@ -40,7 +40,7 @@ const Middle = () => {
     const hasNextPage =
         projects?.pages[projects?.pages?.length - 1].next !== null
 
-    const { t } = useTranslation("translation", { keyPrefix: "sidebar" })
+    const { t } = useTranslation("translation")
     const theme = useTheme()
     const items = useMemo(() => getItems(t), [t])
 
@@ -68,14 +68,14 @@ const Middle = () => {
                 end={false}>
                 <ItemBox $collapsed={isCollapsed}>
                     <FeatherIcon icon="users" />
-                    {isCollapsed ? null : t("social")}
+                    {isCollapsed ? null : t("sidebar.social")}
                 </ItemBox>
             </SidebarLink>
 
             <SidebarLink to="projects" key="projects" end>
                 <ItemBox $collapsed={isCollapsed}>
                     <FeatherIcon icon="archive" />
-                    {isCollapsed ? null : t("projects")}
+                    {isCollapsed ? null : t("sidebar.projects")}
                 </ItemBox>
             </SidebarLink>
 
@@ -92,7 +92,7 @@ const Middle = () => {
                         $collapsed={isCollapsed}
                         onClick={onClickErrorBox}>
                         <FeatherIcon icon="alert-triangle" />
-                        {!isCollapsed && t("projects_list_refetch")}
+                        {!isCollapsed && t("sidebar.projects_list_refetch")}
                     </ProjectLoadErrorBox>
                 )}
 
@@ -115,7 +115,7 @@ const Middle = () => {
                                 />
                                 {!isCollapsed &&
                                     (project.type === "inbox"
-                                        ? t("inbox")
+                                        ? t("sidebar.inbox")
                                         : project.name)}
                             </ProjectItemBox>
                         </SidebarLink>
@@ -128,7 +128,9 @@ const Middle = () => {
                             disabled={isFetchingNextPage}
                             loading={isFetchingNextPage}
                             onClick={() => fetchNextPage()}>
-                            {isPending ? t("loading") : t("button_load_more")}
+                            {isPending
+                                ? t("common.loading")
+                                : t("common.load_more")}
                         </MoreButton>
                     </ButtonGroup>
                 ) : null}

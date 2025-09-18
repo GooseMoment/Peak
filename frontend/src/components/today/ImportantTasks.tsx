@@ -71,7 +71,7 @@ const filterContents = [
 ]
 
 const ImportantTasks = () => {
-    const { t } = useTranslation("translation", { keyPrefix: "today" })
+    const { t } = useTranslation("translation")
 
     const tz = useClientTimezone()
 
@@ -124,7 +124,7 @@ const ImportantTasks = () => {
             })
         },
         onError: () => {
-            toast.error(t("due_change_error"))
+            toast.error(t("today.due_change_error"))
         },
     })
 
@@ -132,7 +132,7 @@ const ImportantTasks = () => {
         const data = { assigned_at: today.toISODate() }
 
         patchMutation.mutate({ task, data })
-        toast.success(t("due_change_today_success"))
+        toast.success(t("today.due_change_today_success"))
     }
 
     const clickArrowRight = (task: Task) => {
@@ -140,7 +140,7 @@ const ImportantTasks = () => {
         const data = { assigned_at: tomorrow.toISODate() }
 
         patchMutation.mutate({ task, data })
-        toast.success(t("due_change_tomorrow_success"))
+        toast.success(t("today.due_change_tomorrow_success"))
     }
 
     // 모든 tasks가 비어 있는지 검사
@@ -156,7 +156,7 @@ const ImportantTasks = () => {
         <ImportantTasksBlock>
             <ImportantTasksTitle>
                 <FeatherIcon icon="alert-circle" />
-                {t("important_title")}
+                {t("today.important_title")}
                 <CollapseButtonBlock>
                     <CollapseButton
                         collapsed={collapsed}
@@ -173,14 +173,14 @@ const ImportantTasks = () => {
                                 key={content}
                                 $isActive={filter === content}
                                 onClick={() => setFilter(content)}>
-                                {t(`filter_${content}`)}
+                                {t(`today.filter_${content}`)}
                             </FilterButton>
                         ))}
                     </FilterButtonBox>
                     <TasksBox>
                         {selectedQuery.isError && (
                             <ErrorBox onClick={() => selectedQuery.refetch()}>
-                                {t("error_load_task")}
+                                {t("today.error_load_task")}
                             </ErrorBox>
                         )}
                         {selectedQuery.isLoading && (
@@ -189,7 +189,7 @@ const ImportantTasks = () => {
                         {selectedQuery.tasks?.pages?.map((group) =>
                             group.results.length === 0 ? (
                                 <NoTasksMessage key={group.results.length}>
-                                    {t(`no_tasks_${filter}`)}
+                                    {t(`today.no_tasks_${filter}`)}
                                 </NoTasksMessage>
                             ) : (
                                 group?.results?.map((task) => (
@@ -216,7 +216,7 @@ const ImportantTasks = () => {
                     </TasksBox>
                     {hasNextPage ? (
                         <MoreText onClick={() => selectedQuery.fetchNextPage()}>
-                            {t("button_load_more") + " "}(
+                            {t("common.load_more") + " "}(
                             {selectedQuery.tasks?.pages[0].results.length})
                         </MoreText>
                     ) : null}

@@ -13,7 +13,7 @@ import { getPageFromURL } from "@utils/pagination"
 import { useTranslation } from "react-i18next"
 
 const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: string }) => {
-    const { t } = useTranslation("translation", { keyPrefix: "today" })
+    const { t } = useTranslation("translation")
 
     const {
         data: todayAssignmentTasks,
@@ -36,7 +36,7 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: string }) => {
     if (isTodayAssignmentError) {
         return (
             <ErrorBox onClick={() => todayAssignmentRefetch()}>
-                {t("error_load_task")}
+                {t("today.error_load_task")}
             </ErrorBox>
         )
     }
@@ -48,7 +48,7 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: string }) => {
                     <SkeletonDueTasks taskCount={10} />
                 )}
                 {todayAssignmentTasks?.pages[0].results.length === 0 ? (
-                    <NoTaskText>{t("no_today_assignment")}</NoTaskText>
+                    <NoTaskText>{t("today.no_today_assignment")}</NoTaskText>
                 ) : (
                     todayAssignmentTasks?.pages?.map((group) =>
                         group?.results?.map((task) => (
@@ -60,7 +60,7 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: string }) => {
             <FlexCenterBox>
                 {todayHasNextPage ? (
                     <MoreButton onClick={() => todayAssignmentFetchNextPage()}>
-                        {t("button_load_more")}
+                        {t("common.load_more")}
                     </MoreButton>
                 ) : null}
             </FlexCenterBox>

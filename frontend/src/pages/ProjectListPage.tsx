@@ -29,7 +29,7 @@ import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
 
 const ProjectListPage = () => {
-    const { t } = useTranslation("translation", { keyPrefix: "project_list" })
+    const { t } = useTranslation("translation")
 
     const [projects, setProjects] = useState<Project[]>([])
     const [isCreateOpen, setIsCreateOpen] = useState<boolean>(false)
@@ -94,7 +94,7 @@ const ProjectListPage = () => {
     return (
         <>
             <PageTitleBox>
-                <PageTitle>{t("title")}</PageTitle>
+                <PageTitle>{t("project_list.title")}</PageTitle>
                 {isPending || (
                     <PlusBox
                         onClick={() => {
@@ -126,7 +126,9 @@ const ProjectListPage = () => {
                         disabled={isFetchingNextPage}
                         loading={isFetchingNextPage}
                         onClick={() => fetchNextPage()}>
-                        {isPending ? t("loading") : t("button_load_more")}
+                        {isPending
+                            ? t("common.loading")
+                            : t("common.load_more")}
                     </MoreButton>
                 </ButtonGroup>
             ) : null}
@@ -138,7 +140,7 @@ const ProjectListPage = () => {
                     }}>
                     <FeatherIcon icon="plus-circle" />
                     <ProjectCreateText>
-                        {t("button_add_project")}
+                        {t("project_list.button_add_project")}
                     </ProjectCreateText>
                 </ProjectCreateButton>
             )}
