@@ -8,10 +8,10 @@ from api.serializers import DualityRelatedField
 
 
 class DrawerSerializer(serializers.ModelSerializer):
-    user_username = serializers.PrimaryKeyRelatedField(
-        source="user.username",
-        queryset=User.objects.all(),
+    user = serializers.PrimaryKeyRelatedField(
         default=serializers.CurrentUserDefault(),
+        queryset=User.objects.all(),
+        write_only=True,
     )
     project = DualityRelatedField(ProjectSerializer)
     uncompleted_task_count = serializers.IntegerField(default=0, read_only=True)
@@ -22,7 +22,7 @@ class DrawerSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "user_username",
+            "user",
             "project",
             "privacy",
             "order",

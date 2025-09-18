@@ -1,11 +1,12 @@
 import client from "@api/client"
 import type { Base, PaginationData, Privacy } from "@api/common"
+import type { User } from "@api/users.api"
 
 import type { PaletteColorName } from "@assets/palettes"
 
 export interface Project extends Base {
     name: string
-    user_username: string
+    user: User
     order: number
     privacy: Privacy
     color: PaletteColorName

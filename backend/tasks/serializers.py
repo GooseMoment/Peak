@@ -39,10 +39,10 @@ class TaskReminderSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    user_username = serializers.PrimaryKeyRelatedField(
-        source="user.username",
-        queryset=User.objects.all(),
+    user = serializers.PrimaryKeyRelatedField(
         default=serializers.CurrentUserDefault(),
+        queryset=User.objects.all(),
+        write_only=True,
     )
     reminders = TaskReminderSerializer(many=True, read_only=True)
     drawer = DualityRelatedField(DrawerSerializer)
@@ -52,7 +52,7 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "user_username",
+            "user",
             "drawer",
             "privacy",
             "priority",

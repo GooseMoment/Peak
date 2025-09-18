@@ -5,10 +5,10 @@ from users.models import User
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    user_username = serializers.PrimaryKeyRelatedField(
-        source="user.username",
-        queryset=User.objects.all(),
+    user = serializers.PrimaryKeyRelatedField(
         default=serializers.CurrentUserDefault(),
+        queryset=User.objects.all(),
+        write_only=True,
     )
     completed_task_count = serializers.SerializerMethodField()
     uncompleted_task_count = serializers.SerializerMethodField()
@@ -34,7 +34,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "user_username",
+            "user",
             "order",
             "privacy",
             "color",
