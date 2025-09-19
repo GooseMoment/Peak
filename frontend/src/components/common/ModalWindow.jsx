@@ -6,16 +6,16 @@ import {
     useState,
 } from "react"
 
-import styled, { css } from "styled-components"
-
+import { ModalChildrenAnimationWrapper } from "@utils/useModal"
 import useStopScroll from "@utils/useStopScroll"
-
-import { cubicBeizer, scaleDown, scaleUp } from "@assets/keyframes"
 
 import { createPortal } from "react-dom"
 
 const CloseContext = createContext({ closeModal: () => {} })
 
+/**
+ * @deprecated use {@link useModalContext} with {@link useModal}
+ */
 export const useModalWindowCloseContext = () => {
     return useContext(CloseContext)
 }
@@ -25,6 +25,9 @@ const root = document.getElementById("root")
 
 // see: https://github.com/remix-run/react-router/discussions/9864#discussioncomment-6350903
 
+/**
+ * @deprecated use {@link useModal} and {@link Portal} instead
+ */
 const ModalWindow = ({
     children,
     afterClose,
@@ -82,26 +85,14 @@ const ModalWindow = ({
 
     return createPortal(
         <CloseContext.Provider value={{ closeModal: closeWithTransition }}>
-            <AnimationProvider
+            <ModalChildrenAnimationWrapper
                 onKeyDown={handleKeyDown}
-                $closing={closing}
-                className={!additional && closing && "closing"}>
+                $closing={closing}>
                 {children}
-            </AnimationProvider>
+            </ModalChildrenAnimationWrapper>
         </CloseContext.Provider>,
         el,
     )
 }
-
-const AnimationProvider = styled.div`
-    ${(props) =>
-        props.$closing
-            ? css`
-                  animation: ${scaleDown} 0.5s ${cubicBeizer} forwards;
-              `
-            : css`
-                  animation: ${scaleUp} 0.5s ${cubicBeizer};
-              `}
-`
 
 export default ModalWindow

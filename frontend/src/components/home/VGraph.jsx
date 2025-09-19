@@ -1,22 +1,24 @@
+import { Link } from "react-router-dom"
+
 import styled, { useTheme } from "styled-components"
 
 import { getPaletteColor } from "@assets/palettes"
 
-const VGraph = ({ items, countAll, loading }) => {
-    const theme = useTheme()
+export function VGraphSkeleton() {
+    return (
+        <Frame>
+            <Graph>
+                <Item $width="100" />
+            </Graph>
+            <Categories>
+                <CategoryCircle />
+            </Categories>
+        </Frame>
+    )
+}
 
-    if (loading) {
-        return (
-            <Frame>
-                <Graph>
-                    <Item $width="100" $color={theme.grey} />
-                </Graph>
-                <Categories>
-                    <CategoryCircle />
-                </Categories>
-            </Frame>
-        )
-    }
+export default function VGraph({ items, countAll }) {
+    const theme = useTheme()
 
     return (
         <Frame>
@@ -24,6 +26,7 @@ const VGraph = ({ items, countAll, loading }) => {
                 {items?.map((item) => (
                     <Item
                         key={item.name}
+                        to={`/app/projects/${item.id}`}
                         $width={(item.count / countAll) * 100}
                         $color={getPaletteColor(theme.type, item.color)}
                         draggable="false"
@@ -32,7 +35,7 @@ const VGraph = ({ items, countAll, loading }) => {
             </Graph>
             <Categories>
                 {items?.map((item) => (
-                    <Category key={item.name}>
+                    <Category key={item.name} to={`/app/projects/${item.id}`}>
                         <CategoryCircle
                             $color={getPaletteColor(theme.type, item.color)}
                             draggable="false"
@@ -60,11 +63,11 @@ const Graph = styled.div`
     overflow: hidden;
 `
 
-const Item = styled.div`
+const Item = styled(Link)`
     display: inline-block;
     width: ${(p) => p.$width}%;
     height: 100%;
-    background-color: ${(p) => p.$color};
+    background-color: ${(p) => p.$color || p.theme.grey};
 
     transition:
         background-color 0.5s var(--cubic),
@@ -78,7 +81,7 @@ const Categories = styled.div`
     gap: 0.5em;
 `
 
-const Category = styled.div`
+const Category = styled(Link)`
     display: flex;
     gap: 0.25em;
 
@@ -92,5 +95,3 @@ const CategoryCircle = styled.div`
     height: 1em;
     background-color: ${(p) => p.$color};
 `
-
-export default VGraph

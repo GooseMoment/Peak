@@ -5,13 +5,13 @@ import styled, { css, keyframes } from "styled-components"
 
 import { skeletonCSS } from "@assets/skeleton"
 
-interface TitleProp {
+interface ModuleProp {
     className?: string
     children: ReactNode
     to?: string
 }
 
-const Module = ({ children, className, to }: TitleProp) => {
+const Module = ({ children, className, to }: ModuleProp) => {
     const module = <ModuleBox className={className}>{children}</ModuleBox>
 
     if (to === undefined) {
@@ -28,7 +28,7 @@ const ModuleBox = styled.article`
 
 interface TitleProp {
     className?: string
-    children: ReactNode
+    children?: ReactNode
     to?: string
     displayArrow?: boolean
     underline?: boolean
