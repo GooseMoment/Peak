@@ -1,14 +1,17 @@
 from rest_framework import mixins, generics, status
 from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter
+from rest_framework.exceptions import ValidationError
+
+from django.conf import settings
 
 from .models import Drawer
 from .serializers import DrawerSerializer, DrawerReorderSerializer
-from .utils import normalize_drawers_order
-from api.permissions import IsUserOwner
-from . import exceptions
-from api.exceptions import RequiredFieldMissing, UnknownError
+from .exceptions import DrawerNameDuplicate, DrawerLimitExceeded
 
-from rest_framework.exceptions import ValidationError
+from api.permissions import IsUserOwner
+
+from projects.models import Project
 
 
 class DrawerDetail(
@@ -35,31 +38,40 @@ class DrawerDetail(
 class DrawerList(
     mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
 ):
-    serializer_class = DrawerSerializer
     permission_classes = [IsUserOwner]
+    serializer_class = DrawerSerializer
+    filter_backends = [OrderingFilter]
+    ordering_fields = [
+        "order",
+        "name",
+        "created_at",
+        "uncompleted_task_count",
+        "completed_task_count",
+    ]
 
     def get_queryset(self):
-        queryset = Drawer.objects.filter(user=self.request.user).order_by("order").all()
+        queryset = (
+            Drawer.objects.filter(user=self.request.user)
+            .order_by("project", "order")
+            .all()
+        )
+
         project_id = self.request.query_params.get("project", None)
         if project_id is not None:
             queryset = queryset.filter(project__id=project_id)
 
-        ordering_fields = [
-            "order",
-            "name",
-            "created_at",
-            "uncompleted_task_count",
-            "completed_task_count",
-        ]
-        ordering = self.request.GET.get("ordering", None)
-
-        if ordering is None:
-            raise RequiredFieldMissing
-
-        if ordering.lstrip("-") in ordering_fields:
-            normalize_drawers_order(queryset, ordering)
-
         return queryset
+
+    def perform_create(self, serializer):
+        project = serializer.validated_data.get("project")
+
+        if (
+            Drawer.objects.filter(user=self.request.user, project=project).count()
+            >= settings.DRAWER_PER_PROJECT_MAX_COUNT
+        ):
+            raise DrawerLimitExceeded
+
+        serializer.save(user=self.request.user, project=project)
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -67,10 +79,26 @@ class DrawerList(
     def post(self, request, *args, **kwargs):
         try:
             return self.create(request, *args, **kwargs)
-        except ValidationError:
-            raise exceptions.DrawerNameDuplicate
-        except Exception:
-            raise UnknownError
+        except ValidationError as e:
+            if "unique constraint" in str(e):
+                raise DrawerNameDuplicate
+
+
+class InboxDrawerDetail(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    generics.GenericAPIView,
+):
+    serializer_class = DrawerSerializer
+    permission_classes = [IsUserOwner]
+
+    def get_object(self):
+        return Drawer.objects.filter(
+            user=self.request.user, project__type=Project.INBOX
+        ).first()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
 
 class DrawerReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):

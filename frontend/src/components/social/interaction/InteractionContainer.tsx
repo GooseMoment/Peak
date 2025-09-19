@@ -5,9 +5,9 @@ import CommentButton from "@components/social/interaction/comment/CommentButton"
 import PeckButton from "@components/social/interaction/peck/PeckButton"
 import ReactionContainer from "@components/social/interaction/reactions/ReactionContainer"
 
-// TODO: replace Task
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function InteractionContainer({ task }: { task: any }) {
+import type { Task } from "@api/tasks.api"
+
+export default function InteractionContainer({ task }: { task: Task }) {
     return (
         <Box>
             <ReactionContainer task={task} />
