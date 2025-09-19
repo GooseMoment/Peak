@@ -126,7 +126,7 @@ const getDisplayDateFromQuote = (
 }
 
 const getPathToTaskDetail = (task: Task) => {
-    return `/app/projects/${task.drawer.project.id}`
+    return `/app/projects/${task.drawer.project.id}?taskId=${task.id}`
 }
 
 const ellipsis = css`

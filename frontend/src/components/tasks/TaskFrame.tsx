@@ -1,4 +1,5 @@
-import { Suspense, lazy, useState } from "react"
+import { Suspense, lazy, useEffect, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
 
@@ -36,9 +37,22 @@ const TaskFrame = ({
     showTaskDetail,
     isSocial = false,
 }: TaskFrameProps) => {
-    const [isDetailOpen, setDetailOpen] = useState<boolean>(false)
+    const [isDetailOpen, setDetailOpen] = useState(false)
     const theme = useTheme()
     const isCompleted = !isSocial && task.completed_at !== null
+
+    const [searchParams] = useSearchParams()
+    const taskIdFromQuery = searchParams.get("taskId")
+
+    useEffect(() => {
+        if (taskIdFromQuery === task.id) {
+            const timer = setTimeout(() => {
+                setDetailOpen(true)
+            }, 200)
+
+            return () => clearTimeout(timer)
+        }
+    }, [taskIdFromQuery, task.id])
 
     const {
         due,
