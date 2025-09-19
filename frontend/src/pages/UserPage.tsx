@@ -24,7 +24,7 @@ const UserPage = () => {
         if (usernameWithAt!.at(0) !== "@") {
             navigate("/app/users/@" + usernameWithAt)
         }
-    }, [usernameWithAt])
+    }, [usernameWithAt, navigate])
 
     // usernameWithAt shouldn't be undefined
     const username = usernameWithAt!.slice(1)

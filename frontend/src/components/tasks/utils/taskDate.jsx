@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+// TODO: remove eslint-disable after #523
 import {
     useClientLocale,
     useClientSetting,

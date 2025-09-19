@@ -1,5 +1,4 @@
-import { type TouchEvent, useEffect, useMemo, useState } from "react"
-import { useRef } from "react"
+import { type TouchEvent, useEffect, useMemo, useRef, useState } from "react"
 
 import styled from "styled-components"
 

@@ -34,7 +34,7 @@ const Header = () => {
                 toastId: "home_header_user_load_error",
             })
         }
-    }, [isError])
+    }, [isError, t])
 
     return (
         <Frame>

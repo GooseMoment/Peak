@@ -17,7 +17,7 @@ const StartPage = () => {
 
     useEffect(() => {
         navigate("/app/" + to, { replace: true })
-    }, [])
+    }, [navigate, to])
 
     return null
 }

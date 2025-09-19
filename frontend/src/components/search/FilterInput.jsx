@@ -45,7 +45,7 @@ const FilterInput = ({
     const [isModalOpen, setIsModalOpen] = useState(true)
     useEffect(() => {
         if (!isModalOpen) setInputState(null)
-    }, [isModalOpen])
+    }, [isModalOpen, setInputState])
 
     if (filter.type === "text")
         return (
