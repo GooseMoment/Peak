@@ -146,9 +146,9 @@ export const ModalChildrenAnimationWrapper = styled.div<{ $closing?: boolean }>`
     ${(props) =>
         props.$closing
             ? css`
-                  animation: 0.5s var(--cubic) forwards ${scaleDown};
+                  animation: 0.25s var(--cubic) forwards ${scaleDown};
               `
             : css`
-                  animation: 0.5s var(--cubic) ${scaleUp};
+                  animation: 0.25s var(--cubic) ${scaleUp};
               `}
 `
