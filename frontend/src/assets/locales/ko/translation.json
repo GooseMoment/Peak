@@ -402,9 +402,10 @@
             "more": "그 외 {{count}}명"
         },
         "explore": {
-            "searchbar": "새로운 인연을 찾아보세요.",
-            "no_result": "당신이 찾는 사람이 없습니다 😢",
-            "suggestion": "새로운 사람과 새로운 인연은 어떤가요?"
+            "searchbar": "원하는 유저를 검색해보세요",
+            "no_result": "일치하는 유저를 찾지 못했어요 😢",
+            "suggestion": "새로운 사람과 새로운 인연은 어떤가요?",
+            "results_title": "‘{{query}}’에 대한 검색 결과"
         }
     },
     "search": {
