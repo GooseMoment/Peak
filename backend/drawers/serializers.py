@@ -1,18 +1,14 @@
 from rest_framework import serializers
 
 from .models import Drawer
-from users.models import User
 
 from projects.serializers import ProjectSerializer
 from api.serializers import DualityRelatedField
+from users.serializers import UserSerializer
 
 
 class DrawerSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        default=serializers.CurrentUserDefault(),
-        queryset=User.objects.all(),
-        write_only=True,
-    )
+    user = UserSerializer()
     project = DualityRelatedField(ProjectSerializer)
     uncompleted_task_count = serializers.IntegerField(default=0, read_only=True)
     completed_task_count = serializers.IntegerField(default=0, read_only=True)

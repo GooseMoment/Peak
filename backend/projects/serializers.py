@@ -1,15 +1,11 @@
 from rest_framework import serializers
 
 from .models import Project
-from users.models import User
+from users.serializers import UserSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        default=serializers.CurrentUserDefault(),
-        queryset=User.objects.all(),
-        write_only=True,
-    )
+    user = UserSerializer()
     completed_task_count = serializers.SerializerMethodField()
     uncompleted_task_count = serializers.SerializerMethodField()
 

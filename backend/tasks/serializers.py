@@ -2,12 +2,12 @@ from rest_framework import serializers
 
 from .models import Task
 from notifications.models import TaskReminder
-from users.models import User
 
 from datetime import datetime
 
 from api.serializers import DualityRelatedField
 from drawers.serializers import DrawerSerializer
+from users.serializers import UserSerializer
 
 
 class TaskReminderSerializer(serializers.ModelSerializer):
@@ -39,11 +39,7 @@ class TaskReminderSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        default=serializers.CurrentUserDefault(),
-        queryset=User.objects.all(),
-        write_only=True,
-    )
+    user = UserSerializer()
     reminders = TaskReminderSerializer(many=True, read_only=True)
     drawer = DualityRelatedField(DrawerSerializer)
 
