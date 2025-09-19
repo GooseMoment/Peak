@@ -1,18 +1,11 @@
-import {
-    Suspense,
-    lazy,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
-} from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
+import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
-import ModalLoader from "@components/common/ModalLoader"
 import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import DrawerBlock from "@components/drawers/DrawerBlock"
@@ -35,8 +28,8 @@ import {
 import { type Project, deleteProject, getProject } from "@api/projects.api"
 
 import HTML5toTouch from "@utils/html5ToTouch"
-import { ifMobile } from "@utils/useScreenType"
-import useScreenType from "@utils/useScreenType"
+import { getPageFromURL } from "@utils/pagination"
+import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
@@ -48,10 +41,6 @@ import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const TaskCreateElement = lazy(
-    () => import("@components/project/taskDetails/TaskCreateElement"),
-)
-
 const ProjectPage = () => {
     const { id } = useParams()
     const theme = useTheme()
@@ -60,15 +49,13 @@ const ProjectPage = () => {
 
     const [drawers, setDrawers] = useState<Drawer[]>([])
 
-    const [ordering, setOrdering] = useState<string>("order")
-    const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState<boolean>(false)
-    const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
-    const [isProjectEditOpen, setIsProjectEditOpen] = useState<boolean>(false)
-    const [isSortMenuMobileOpen, setSortMenuMobileOpen] =
-        useState<boolean>(false)
-    const [isCreateOpen, setCreateOpen] = useState<boolean>(false)
+    const [ordering, setOrdering] = useState("order")
+    const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
+    const [isAlertOpen, setIsAlertOpen] = useState(false)
+    const [isProjectEditOpen, setIsProjectEditOpen] = useState(false)
+    const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
 
-    const { t } = useTranslation("translation", { keyPrefix: "project" })
+    const { t } = useTranslation("translation")
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
 
@@ -93,16 +80,24 @@ const ProjectPage = () => {
         isPending: isDrawersPending,
         isError: isDrawersError,
         refetch: drawersRefetch,
-    } = useQuery<Drawer[]>({
+        fetchNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
         queryKey: ["drawers", { projectID: id, ordering: ordering }],
-        queryFn: () => getDrawersByProject(id!, ordering),
+        queryFn: (context) =>
+            getDrawersByProject(id!, ordering, context.pageParam),
+        initialPageParam: "1",
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
     /// Drawers Drag And Drop
     useEffect(() => {
         if (!data) return
-        setDrawers(data)
+        const results = data.pages.flatMap((page) => page.results ?? []) || []
+        setDrawers(results)
     }, [data])
+
+    const hasNextPage = data?.pages[data?.pages.length - 1].next !== null
 
     const patchMutation = useMutation({
         mutationFn: (data: Partial<Drawer>[]) => {
@@ -121,12 +116,10 @@ const ProjectPage = () => {
 
     const dropDrawer = useCallback(async () => {
         if (!data) return
+        const results = data.pages.flatMap((page) => page.results) || []
         const changedDrawers = drawers
-            .map((drawer, index) => ({
-                id: drawer.id,
-                order: index,
-            }))
-            .filter((drawer, index) => data[index].id !== drawer.id)
+            .map((task, index) => ({ id: task.id, order: index }))
+            .filter((task, index) => results[index]?.id !== task.id)
 
         if (changedDrawers.length === 0) return
 
@@ -145,7 +138,7 @@ const ProjectPage = () => {
         },
         onSuccess: () => {
             toast.success(
-                t("delete.project_delete_success", {
+                t("project.delete.project_delete_success", {
                     project_name: project?.name,
                 }),
             )
@@ -153,7 +146,7 @@ const ProjectPage = () => {
         },
         onError: () => {
             toast.error(
-                t("delete.project_delete_error", {
+                t("project.delete.project_delete_error", {
                     project_name: project?.name,
                 }),
             )
@@ -186,7 +179,7 @@ const ProjectPage = () => {
         return (
             <ErrorBox onClick={onClickProjectErrorBox}>
                 <FeatherIcon icon="alert-triangle" />
-                {t("error_load_project_and_drawer")}
+                {t("project.error_load_project_and_drawer")}
             </ErrorBox>
         )
     }
@@ -240,7 +233,7 @@ const ProjectPage = () => {
                 <Progress project={project} drawers={drawers} />
             )}
             {drawers && drawers.length === 0 ? (
-                <NoDrawerText>{t("no_drawer")}</NoDrawerText>
+                <NoDrawerText>{t("project.no_drawer")}</NoDrawerText>
             ) : (
                 <DndProvider options={HTML5toTouch}>
                     {drawers?.map((drawer) => (
@@ -253,9 +246,22 @@ const ProjectPage = () => {
                     ))}
                 </DndProvider>
             )}
+            {isDrawersPending ||
+                (hasNextPage ? (
+                    <ButtonGroup $justifyContent="center" $margin="1em">
+                        <MoreButton
+                            disabled={isFetchingNextPage}
+                            loading={isFetchingNextPage}
+                            onClick={() => fetchNextPage()}>
+                            {isDrawersPending
+                                ? t("common.loading")
+                                : t("common.load_more")}
+                        </MoreButton>
+                    </ButtonGroup>
+                ) : null)}
             {isAlertOpen && (
                 <DeleteAlert
-                    title={t("delete.alert_project_title", {
+                    title={t("project.delete.alert_project_title", {
                         project_name: project.name,
                     })}
                     onClose={() => {
@@ -266,7 +272,7 @@ const ProjectPage = () => {
             )}
             {isSortMenuMobileOpen && (
                 <SortMenuMobile
-                    title={t("sort.drawer_title")}
+                    title={t("project.sort.drawer_title")}
                     items={sortMenuItems}
                     onClose={() => setSortMenuMobileOpen(false)}
                     ordering={ordering}
@@ -288,16 +294,6 @@ const ProjectPage = () => {
                     }}>
                     <ProjectEdit project={project} />
                 </ModalWindow>
-            )}
-            {isCreateOpen && (
-                <Suspense
-                    key="task-create-project-page"
-                    fallback={<ModalLoader />}>
-                    <TaskCreateElement
-                        drawer={data[0]}
-                        onClose={() => setCreateOpen(false)}
-                    />
-                </Suspense>
             )}
         </>
     )
@@ -343,6 +339,10 @@ const NoDrawerText = styled.div`
     margin-top: 2em;
     font-weight: 600;
     font-size: 1.4em;
+`
+
+const MoreButton = styled(Button)`
+    width: 80%;
 `
 
 const makeSortMenuItems = (t: TFunction<"translation", "project">) => [

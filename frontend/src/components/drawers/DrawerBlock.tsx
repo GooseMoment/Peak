@@ -142,7 +142,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
     // Task Drag and Drop
     useEffect(() => {
         if (!data) return
-        const results = data?.pages?.flatMap((page) => page.results ?? []) || []
+        const results = data.pages.flatMap((page) => page.results ?? []) || []
         setTasks(results)
     }, [data])
 
@@ -162,7 +162,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
     }, [])
 
     const dropTask = useCallback(async () => {
-        const results = data?.pages?.flatMap((page) => page.results) || []
+        const results = data?.pages.flatMap((page) => page.results) || []
         const changedTasks = tasks
             .map((task, index) => ({ id: task.id, order: index }))
             .filter((task, index) => results[index]?.id !== task.id)

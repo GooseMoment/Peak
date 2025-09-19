@@ -1,5 +1,5 @@
 import client from "@api/client"
-import type { Base, Privacy } from "@api/common"
+import type { Base, PaginationData, Privacy } from "@api/common"
 import type { Project } from "@api/projects.api"
 import type { User } from "@api/users.api"
 
@@ -25,15 +25,18 @@ export const DrawerLimitExceeded = "DRAWER_LIMIT_EXCEEDED"
 export const getDrawersByProject = async (
     projectID: string,
     ordering: string,
+    page: string,
 ) => {
-    const res = await client.get<Drawer[]>(`drawers/`, {
-        params: { project: projectID, ordering: ordering },
+    const res = await client.get<PaginationData<Drawer>>(`drawers/`, {
+        params: { project: projectID, ordering, page },
     })
     return res.data
 }
 
-export const getAllDrawers = async () => {
-    const res = await client.get<Drawer[]>("drawers/")
+export const getAllDrawers = async (page: string) => {
+    const res = await client.get<PaginationData<Drawer>>("drawers/", {
+        params: { page },
+    })
     return res.data
 }
 

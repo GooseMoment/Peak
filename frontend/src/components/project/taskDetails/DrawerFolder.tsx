@@ -1,8 +1,10 @@
-import { Fragment, useState } from "react"
+import { Fragment, ReactElement, useState } from "react"
 
+import type { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
-import { type Drawer } from "@api/drawers.api"
+import type { PaginationData } from "@api/common"
+import type { Drawer } from "@api/drawers.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
@@ -14,41 +16,59 @@ const DrawerFolder = ({
     drawers,
     changeDrawer,
 }: {
-    drawers: Drawer[]
+    drawers:
+        | ReturnType<
+              typeof useInfiniteQuery<PaginationData<Drawer>, unknown>
+          >["data"]
+        | undefined
     changeDrawer: (drawer: Drawer) => () => void
 }) => {
     const [collapsed, setCollapsed] = useState(false)
     const theme = useTheme()
 
-    if (drawers.length === 0) return null
+    let lastProjectID: null | string = null
 
-    const project = drawers[0].project
+    return drawers?.pages?.map((group) =>
+        group?.results?.map((drawer) => {
+            let projectInsertion: null | ReactElement = null
 
-    return (
-        <>
-            <ItemBox
-                onClick={
-                    project.type === "inbox"
-                        ? changeDrawer(drawers[0])
-                        : () => setCollapsed((prev) => !prev)
-                }>
-                <Circle $color={getPaletteColor(theme.type, project.color)} />
-                <ItemText $isProject>{project.name}</ItemText>
-            </ItemBox>
+            if (lastProjectID !== drawer.project.id) {
+                lastProjectID = drawer.project.id
 
-            {!collapsed &&
-                project.type !== "inbox" &&
-                drawers.map((drawer) => (
-                    <Fragment key={drawer.id}>
+                projectInsertion = (
+                    <ItemBox
+                        onClick={
+                            drawer.project.type === "inbox"
+                                ? changeDrawer(drawer)
+                                : () => setCollapsed((prev) => !prev)
+                        }>
+                        <Circle
+                            $color={getPaletteColor(
+                                theme.type,
+                                drawer.project.color,
+                            )}
+                        />
+                        <ItemText $isProject={true}>
+                            {drawer.project.name}
+                        </ItemText>
+                    </ItemBox>
+                )
+            }
+
+            return (
+                <Fragment key={drawer.id}>
+                    {projectInsertion}
+                    {drawer.project.type === "inbox" || collapsed ? null : (
                         <ItemBox onClick={changeDrawer(drawer)}>
                             <FeatherIcon icon="arrow-right" />
                             <ItemText $isProject={false}>
                                 {drawer.name}
                             </ItemText>
                         </ItemBox>
-                    </Fragment>
-                ))}
-        </>
+                    )}
+                </Fragment>
+            )
+        }),
     )
 }
 

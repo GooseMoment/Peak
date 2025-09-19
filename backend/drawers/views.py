@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
 from rest_framework.exceptions import ValidationError
 
+from django.conf import settings
+
 from .models import Drawer
 from .serializers import DrawerSerializer, DrawerReorderSerializer
 from .exceptions import DrawerNameDuplicate, DrawerLimitExceeded
@@ -38,7 +40,6 @@ class DrawerList(
 ):
     permission_classes = [IsUserOwner]
     serializer_class = DrawerSerializer
-    pagination_class = None
     filter_backends = [OrderingFilter]
     ordering_fields = [
         "order",
@@ -64,7 +65,7 @@ class DrawerList(
     def perform_create(self, serializer):
         project = serializer.validated_data.get("project")
 
-        if Drawer.objects.filter(user=self.request.user, project=project).count() >= 20:
+        if Drawer.objects.filter(user=self.request.user, project=project).count() >= settings.DRAWER_PER_PROJECT_MAX_COUNT:
             raise DrawerLimitExceeded
 
         serializer.save(user=self.request.user, project=project)
