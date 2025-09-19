@@ -18,10 +18,13 @@
         "title": "Install Peak as an app",
         "description": "Here's how to."
     },
-    "announcements": {
-        "title": "Check these"
-    },
     "assigned_today": {
-        "title": "{{ number }} task(s) assigned today"
+        "title": "{{ count }} tasks assigned today",
+        "title_one": "One task assigned today",
+        "title_zero": "No tasks assigned today"
+    },
+    "set_profile_img": {
+        "title": "Set your profile image",
+        "description": "Make your profile more personal by adding a profile image."
     }
 }
