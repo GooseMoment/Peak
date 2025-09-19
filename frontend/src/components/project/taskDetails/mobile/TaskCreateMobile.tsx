@@ -22,7 +22,7 @@ const TaskCreateMobile = ({
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task" })
 
-    const [newTask, setNewTask] = useState<MinimalTask>(
+    const [newTask, setNewTask] = useState<MinimalTask>(() =>
         createInitialTask(drawer),
     )
 

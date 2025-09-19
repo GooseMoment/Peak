@@ -1,6 +1,7 @@
 import type { Drawer } from "@api/drawers.api"
+import type { MinimalTask } from "@api/tasks.api"
 
-const createInitialTask = (drawer: Drawer) => {
+const createInitialTask = (drawer: Drawer): MinimalTask => {
     return {
         name: "",
         drawer: drawer,

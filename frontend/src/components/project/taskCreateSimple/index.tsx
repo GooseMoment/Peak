@@ -35,7 +35,7 @@ const TaskCreateSimple = ({
     const { t } = useTranslation("translation", { keyPrefix: "task.edit" })
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const [newTask, setNewTask] = useState<MinimalTask>(
+    const [newTask, setNewTask] = useState<MinimalTask>(() =>
         createInitialTask(drawer),
     )
 

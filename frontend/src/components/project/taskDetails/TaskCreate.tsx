@@ -17,7 +17,7 @@ import { toast } from "react-toastify"
 const TaskCreate = ({ drawer }: { drawer: Drawer }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task" })
 
-    const [newTask, setNewTask] = useState<MinimalTask>(
+    const [newTask, setNewTask] = useState<MinimalTask>(() =>
         createInitialTask(drawer),
     )
 
