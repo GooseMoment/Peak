@@ -2,7 +2,6 @@ from django.db import models
 
 from api.models import Base, PrivacyMixin
 from users.models import User
-from django.db.models import UniqueConstraint
 
 from typing import TYPE_CHECKING
 
