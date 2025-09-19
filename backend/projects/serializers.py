@@ -5,7 +5,9 @@ from users.serializers import UserSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(
+        default=serializers.CurrentUserDefault(),
+    )
     completed_task_count = serializers.SerializerMethodField()
     uncompleted_task_count = serializers.SerializerMethodField()
 

@@ -39,7 +39,9 @@ class TaskReminderSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(
+        default=serializers.CurrentUserDefault(),
+    )
     reminders = TaskReminderSerializer(many=True, read_only=True)
     drawer = DualityRelatedField(DrawerSerializer)
 

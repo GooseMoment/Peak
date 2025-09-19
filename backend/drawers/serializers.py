@@ -8,7 +8,9 @@ from users.serializers import UserSerializer
 
 
 class DrawerSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(
+        default=serializers.CurrentUserDefault(),
+    )
     project = DualityRelatedField(ProjectSerializer)
     uncompleted_task_count = serializers.IntegerField(default=0, read_only=True)
     completed_task_count = serializers.IntegerField(default=0, read_only=True)

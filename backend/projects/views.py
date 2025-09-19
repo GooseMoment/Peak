@@ -52,8 +52,9 @@ class ProjectList(
     def post(self, request, *args, **kwargs):
         try:
             return self.create(request, *args, **kwargs)
-        except ValidationError:
-            raise ProjectNameDuplicate
+        except ValidationError as e:
+            if "unique constraint" in str(e):
+                raise ProjectNameDuplicate
         except Exception:
             raise UnknownError
 

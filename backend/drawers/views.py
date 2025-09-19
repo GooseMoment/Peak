@@ -79,8 +79,9 @@ class DrawerList(
     def post(self, request, *args, **kwargs):
         try:
             return self.create(request, *args, **kwargs)
-        except ValidationError:
-            raise DrawerNameDuplicate
+        except ValidationError as e:
+            if "unique constraint" in str(e):
+                raise DrawerNameDuplicate
 
 
 class InboxDrawerDetail(
