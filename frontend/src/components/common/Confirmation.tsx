@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useState } from "react"
+import { type ReactNode, useCallback, useEffect, useState } from "react"
 
 import styled, { css } from "styled-components"
 
@@ -33,32 +33,33 @@ const Confirmation = ({
 
     useStopVerticalScroll(true)
 
+    const closeWithDelay = useCallback(() => {
+        setClosing(true)
+        setTimeout(() => {
+            setVisible(false)
+            onClose()
+        }, 100)
+    }, [onClose])
+
+    const handleOutsideClick = useCallback(
+        (e: Event) => {
+            if (e.target !== el) {
+                return
+            }
+
+            e.stopPropagation()
+            closeWithDelay()
+        },
+        [closeWithDelay],
+    )
+
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)
 
         return () => {
             el.removeEventListener("click", handleOutsideClick)
         }
-    }, [])
-
-    const handleOutsideClick = (e: Event) => {
-        if (e.target !== el) {
-            return
-        }
-
-        e.stopPropagation()
-        closeWithDelay()
-    }
-
-    const close = () => {
-        setVisible(false)
-        onClose()
-    }
-
-    const closeWithDelay = () => {
-        setClosing(true)
-        setTimeout(close, 100)
-    }
+    }, [handleOutsideClick])
 
     return createPortal(
         visible && (

@@ -64,7 +64,7 @@ const NotificationsPage = () => {
 
     useEffect(() => {
         setSearchParams({ active: activeFilter }, { replace: true })
-    }, [activeFilter])
+    }, [activeFilter, setSearchParams])
 
     const header = (
         <>

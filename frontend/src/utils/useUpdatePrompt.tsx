@@ -38,7 +38,7 @@ export default function useUpdatePrompt() {
                 closeButton: false,
             },
         )
-    }, [needRefresh])
+    }, [needRefresh, setNeedRefresh, updateServiceWorker])
 }
 
 interface PromptProp {

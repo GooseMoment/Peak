@@ -31,8 +31,7 @@ import { getDrawersByProject, patchReorderDrawer } from "@api/drawers.api"
 import { deleteProject, getProject } from "@api/projects.api"
 
 import HTML5toTouch from "@utils/html5ToTouch"
-import { ifMobile } from "@utils/useScreenType"
-import useScreenType from "@utils/useScreenType"
+import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 

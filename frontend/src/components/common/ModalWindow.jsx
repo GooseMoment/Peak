@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import {
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
+} from "react"
 
 import { ModalChildrenAnimationWrapper } from "@utils/useModal"
 import useStopVerticalScroll from "@utils/useStopVerticalScroll"
@@ -30,12 +36,34 @@ const ModalWindow = ({
 }) => {
     const [closing, setClosing] = useState(false)
 
-    const closeWithTransition = () => {
+    const closeWithTransition = useCallback(() => {
         setClosing(true)
         setTimeout(() => afterClose(), 100)
-    }
+    }, [afterClose])
 
     useStopVerticalScroll(true)
+
+    const handleOutsideClick = useCallback(
+        (e) => {
+            if (e.target !== el) {
+                return
+            }
+
+            e.stopPropagation()
+            closeWithTransition()
+        },
+        [closeWithTransition],
+    )
+
+    const handleKeyDown = useCallback(
+        (e) => {
+            if (closeESC && e.key === "Escape") {
+                e.preventDefault()
+                closeWithTransition()
+            }
+        },
+        [closeESC, closeWithTransition],
+    )
 
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)
@@ -45,23 +73,7 @@ const ModalWindow = ({
             el.removeEventListener("click", handleOutsideClick)
             document.removeEventListener("keydown", handleKeyDown)
         }
-    }, [])
-
-    const handleOutsideClick = (e) => {
-        if (e.target !== el) {
-            return
-        }
-
-        e.stopPropagation()
-        closeWithTransition()
-    }
-
-    const handleKeyDown = (e) => {
-        if (closeESC && e.key === "Escape") {
-            e.preventDefault()
-            closeWithTransition()
-        }
-    }
+    }, [additional, handleKeyDown, handleOutsideClick])
 
     return createPortal(
         <CloseContext.Provider value={{ closeModal: closeWithTransition }}>

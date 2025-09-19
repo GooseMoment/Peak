@@ -1,5 +1,6 @@
-import { useClientLocale } from "@utils/clientSettings"
-import { useClientTimezone } from "@utils/clientSettings"
+/* eslint-disable react-hooks/rules-of-hooks */
+// TODO: remove eslint-disable after merging #523
+import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"

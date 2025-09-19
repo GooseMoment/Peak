@@ -10,7 +10,7 @@ const SocialRedirector = () => {
 
     useEffect(() => {
         navigate("/app/social/following", { replace: true })
-    }, [])
+    }, [navigate])
 
     return null
 }
