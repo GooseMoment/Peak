@@ -10,8 +10,7 @@ import { type MinimalTask } from "@api/tasks.api"
 import { useClientTimezone } from "@utils/clientSettings"
 import { ifMobile } from "@utils/useScreenType"
 
-import { cubicBeizer } from "@assets/keyframes"
-import { rotateToUnder, rotateToUp } from "@assets/keyframes"
+import { cubicBeizer, rotateToUnder, rotateToUp } from "@assets/keyframes"
 
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"

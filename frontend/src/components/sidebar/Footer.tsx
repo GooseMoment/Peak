@@ -35,7 +35,7 @@ const Footer = () => {
                 toastId: "sidebar_footer_user_load_error",
             })
         }
-    }, [isError])
+    }, [isError, t])
 
     const { isCollapsed } = useSidebarContext()
 

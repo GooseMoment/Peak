@@ -2,8 +2,7 @@ import { useMemo } from "react"
 
 import type { DemoMinimalTask } from "@api/tasks.api"
 
-import { useClientLocale } from "@utils/clientSettings"
-import { useClientTimezone } from "@utils/clientSettings"
+import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"

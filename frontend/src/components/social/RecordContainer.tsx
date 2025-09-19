@@ -1,4 +1,4 @@
-import { type ReactElement } from "react"
+import type { ReactElement } from "react"
 import { Fragment } from "react"
 
 import { useInfiniteQuery } from "@tanstack/react-query"

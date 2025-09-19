@@ -14,8 +14,7 @@ import SortMenu from "@components/project/sorts/SortMenu"
 
 import { getDrawer } from "@api/drawers.api"
 
-import { ifMobile } from "@utils/useScreenType"
-import useScreenType from "@utils/useScreenType"
+import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
 import type { TFunction } from "i18next"

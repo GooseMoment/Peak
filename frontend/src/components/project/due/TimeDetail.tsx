@@ -7,8 +7,7 @@ import type { TaskDueStrict } from "@components/tasks/Contents"
 
 import type { DueDate, DueDatetime, MinimalTask } from "@api/tasks.api"
 
-import { useClientSetting } from "@utils/clientSettings"
-import { useClientTimezone } from "@utils/clientSettings"
+import { useClientSetting, useClientTimezone } from "@utils/clientSettings"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
