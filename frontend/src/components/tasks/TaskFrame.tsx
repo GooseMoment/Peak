@@ -46,11 +46,7 @@ const TaskFrame = ({
 
     useEffect(() => {
         if (taskIdFromQuery === task.id) {
-            const timer = setTimeout(() => {
-                setDetailOpen(true)
-            }, 200)
-
-            return () => clearTimeout(timer)
+            setDetailOpen(true)
         }
     }, [taskIdFromQuery, task.id])
 
