@@ -1,9 +1,9 @@
-import { ReactNode, useState } from "react"
+import { ReactNode, useRef, useState } from "react"
 
 import styled from "styled-components"
 
 import FeatherIcon from "feather-icons-react"
-import { Sheet } from "react-modal-sheet"
+import { Sheet, type SheetRef } from "react-modal-sheet"
 
 interface BottomSheetProps {
     onClose: () => void
@@ -16,12 +16,13 @@ interface BottomSheetProps {
 
 const ModalBottomSheet = ({
     onClose,
-    initialSnap = 0,
+    initialSnap = 2,
     title,
     icon,
     handleBack,
     children,
 }: BottomSheetProps) => {
+    const ref = useRef<SheetRef>(null)
     const [isOpen, setIsOpen] = useState(true)
 
     const closeModal = () => {
@@ -34,10 +35,11 @@ const ModalBottomSheet = ({
 
     return (
         <StyledSheet
+            ref={ref}
             isOpen={isOpen}
-            onClose={closeModal}
+            onClose={() => setIsOpen(false)}
             onCloseEnd={handleAnimationEnd}
-            snapPoints={[600, 500, 200, 0]}
+            snapPoints={[0, 0.4, 0.8, 1]}
             initialSnap={initialSnap}>
             <Sheet.Container>
                 <Sheet.Header>
@@ -56,7 +58,7 @@ const ModalBottomSheet = ({
                         <FeatherIcon icon="x" onClick={closeModal} />
                     </HeaderBox>
                 </Sheet.Header>
-                <StyledScroller draggableAt="both">{children}</StyledScroller>
+                <Sheet.Content>{children}</Sheet.Content>
             </Sheet.Container>
             <Sheet.Backdrop onTap={closeModal} />
         </StyledSheet>
@@ -80,16 +82,11 @@ const StyledSheet = styled(Sheet)`
     }
 `
 
-const StyledScroller = styled(Sheet.Scroller)`
-    overflow-y: auto;
-    overflow-x: hidden;
-`
-
 const HeaderBox = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1em;
+    font-size: 1.1em;
     font-weight: bold;
     color: ${(p) => p.theme.textColor};
     margin: 1.5em 1em 0.5em;
