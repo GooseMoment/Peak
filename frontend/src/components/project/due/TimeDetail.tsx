@@ -3,9 +3,8 @@ import { ChangeEvent, useState } from "react"
 import styled, { css } from "styled-components"
 
 import Button from "@components/common/Button"
-import type { TaskDueStrict } from "@components/tasks/Contents"
 
-import type { DueDate, DueDatetime, MinimalTask } from "@api/tasks.api"
+import type { Due, DueDate, DueDatetime, MinimalTask } from "@api/tasks.api"
 
 import { useClientSetting, useClientTimezone } from "@utils/clientSettings"
 
@@ -64,7 +63,7 @@ const TimeDetail = ({
             due_type: "due_date",
             due_date: due_datetime.toISODate(),
             due_datetime: null,
-        } as TaskDueStrict)
+        } as Due)
         toast.error(t("time_remove"))
     }
 
