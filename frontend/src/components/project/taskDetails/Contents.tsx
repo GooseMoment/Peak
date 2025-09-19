@@ -12,7 +12,7 @@ import styled, { css } from "styled-components"
 import ModalWindow from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 import ToolTip from "@components/project/common/ToolTip"
-import type { TaskContent } from "@components/tasks/Contents"
+import type { TaskContent } from "@components/tasks/contents"
 import useTaskDateDisplay from "@components/tasks/utils/useTaskDateDisplay"
 
 import TaskDetailAssigned from "./TaskDetailAssigned"

@@ -8,7 +8,7 @@ import TaskDetailDue from "@components/project/taskDetails/TaskDetailDue"
 import TaskDetailMemo from "@components/project/taskDetails/TaskDetailMemo"
 import TaskDetailPriority from "@components/project/taskDetails/TaskDetailPriority"
 import TaskDetailReminder from "@components/project/taskDetails/TaskDetailReminder"
-import type { TaskContent } from "@components/tasks/Contents"
+import type { TaskContent } from "@components/tasks/contents"
 import useTaskDateDisplay from "@components/tasks/utils/useTaskDateDisplay"
 
 import type { MinimalTask } from "@api/tasks.api"
