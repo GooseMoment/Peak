@@ -57,7 +57,7 @@ export const patchDrawer = async (id: string, edit: Partial<DrawerCreate>) => {
 
 export const patchReorderDrawer = async (data: Partial<Drawer>[]) => {
     const res = await client.patch(`drawers/reorder/`, data)
-    return res.data
+    return res.status
 }
 
 export const deleteDrawer = async (id: string) => {

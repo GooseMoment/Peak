@@ -94,7 +94,7 @@ export const patchTask = async (id: string, edit: Partial<TaskPost>) => {
 
 export const patchReorderTask = async (data: Partial<Task>[]) => {
     const res = await client.patch(`tasks/reorder/`, data)
-    return res.data
+    return res.status
 }
 
 export const deleteTask = async (id: string) => {
