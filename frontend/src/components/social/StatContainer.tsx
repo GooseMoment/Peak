@@ -153,7 +153,9 @@ export function StatBox({
 }: {
     stat: Stat
     isSelected?: boolean
-    setSelectedUser?: (username: string) => void
+    setSelectedUser?: (
+        username: string,
+    ) => void | Dispatch<SetStateAction<User["username"]>>
     mine?: boolean
     from?: string
 }) {

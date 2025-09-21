@@ -72,8 +72,6 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
     serializer_class = StatSerializer
     pagination_class = ExploreFeedPagination
 
-    PRIVACY_OPTIONS = (PrivacyMixin.FOR_PUBLIC, PrivacyMixin.FOR_PROTECTED)
-
     def get_queryset(self):
         user: User = self.request.user  # pyright: ignore[reportAssignmentType]
 
@@ -99,7 +97,7 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
             Task.objects.filter(
                 user_id=OuterRef("id"),
                 completed_at__range=today_range,
-                privacy__in=self.PRIVACY_OPTIONS,
+                privacy__in=PrivacyMixin.FOR_PUBLIC,
             )
             .order_by()
             .values("user_id")
@@ -111,7 +109,7 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
             TaskReaction.objects.filter(
                 task__user_id=OuterRef("id"),
                 task__completed_at__range=today_range,
-                task__privacy__in=self.PRIVACY_OPTIONS,
+                task__privacy__in=PrivacyMixin.FOR_PUBLIC,
             )
             .order_by()
             .values("task__user_id")
@@ -177,8 +175,6 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
 class ExploreSearchView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = StatSerializer
     pagination_class = ExploreFeedPagination
-
-    PRIVACY_OPTIONS = (PrivacyMixin.FOR_PUBLIC, PrivacyMixin.FOR_PROTECTED)
 
     def get_queryset(self):
         keyword = self.request.GET.get("query")

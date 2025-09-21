@@ -31,7 +31,9 @@ const SocialExplorePage = () => {
 
     const handleSearch = (searchTerm: string) => {
         setSearchQuery(searchTerm.trim())
-        queryClient.removeQueries({ queryKey: ["explore", "found", "users"] })
+        queryClient.invalidateQueries({
+            queryKey: ["explore", "found", "users"],
+        })
     }
 
     return (
@@ -68,7 +70,7 @@ const Wrapper = styled.div`
     gap: 2rem;
 
     ${ifTablet} {
-        /* flex-direction: column; */
+        flex-direction: column;
         justify-content: center;
     }
 `
