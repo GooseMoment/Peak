@@ -149,11 +149,13 @@ export function StatBox({
     isSelected = false,
     setSelectedUser,
     mine,
+    from = "following",
 }: {
     stat: Stat
     isSelected?: boolean
     setSelectedUser?: (username: string) => void
     mine?: boolean
+    from?: string
 }) {
     const { isDesktop } = useScreenType()
     const theme = useTheme()
@@ -163,7 +165,7 @@ export function StatBox({
             $mine={mine}
             $isSelected={isSelected}
             $borderColor={getPastelPaletteColor(theme.type, stat.header_color)}
-            to={`/app/social/daily/@${stat.username}/${stat.date}`}
+            to={`/app/social/daily/@${stat.username}/${stat.date}?from=${from}`}
             draggable={false}
             onClick={(e) => {
                 if (isDesktop && setSelectedUser) {

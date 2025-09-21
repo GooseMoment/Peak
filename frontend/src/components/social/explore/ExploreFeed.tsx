@@ -88,6 +88,7 @@ const ExploreFeed = ({
                         stat={feedUser}
                         isSelected={feedUser.username === selectedUser}
                         setSelectedUser={setSelectedUser}
+                        from="explore"
                     />
                 ))
             )}
@@ -101,6 +102,7 @@ const ExploreFeed = ({
                             stat={feedUser}
                             isSelected={feedUser.username === selectedUser}
                             setSelectedUser={setSelectedUser}
+                            from="explore"
                         />
                     )),
                 )}

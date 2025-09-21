@@ -17,6 +17,9 @@ export default function DailyUserProfile({
     username,
     back = false,
 }: DailyUserProfileProps) {
+    const search = new URLSearchParams(location.search)
+    const from = search.get("from")
+
     const {
         data: user,
         isPending,
@@ -43,7 +46,7 @@ export default function DailyUserProfile({
     return (
         <Box>
             <Texts>
-                {back && <PageBack defaultTo="/app/social" />}
+                {back && <PageBack defaultTo={`/app/social/${from}`} />}
                 <Link to={userPagePath}>
                     <UsernameTitle $cursor="pointer">
                         {user.username}
