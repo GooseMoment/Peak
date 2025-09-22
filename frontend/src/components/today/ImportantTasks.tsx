@@ -84,11 +84,14 @@ const ImportantTasks = () => {
     const overDueQuery = useTaskQuery("overDue", getTasksOverDue)
     const pastAssignedQuery = useTaskQuery("pastAssigned", getTasksPastAssigned)
 
-    const queries = {
-        todayDue: todayDueQuery,
-        overDue: overDueQuery,
-        pastAssigned: pastAssignedQuery,
-    }
+    const queries = useMemo(
+        () => ({
+            todayDue: todayDueQuery,
+            overDue: overDueQuery,
+            pastAssigned: pastAssignedQuery,
+        }),
+        [todayDueQuery, overDueQuery, pastAssignedQuery],
+    )
 
     const selectedQuery = queries[filter]
 
@@ -103,7 +106,12 @@ const ImportantTasks = () => {
                 break
             }
         }
-    }, [todayDueQuery.tasks, overDueQuery.tasks, pastAssignedQuery.tasks])
+    }, [
+        todayDueQuery.tasks,
+        overDueQuery.tasks,
+        pastAssignedQuery.tasks,
+        queries,
+    ])
 
     const patchMutation = useMutation({
         mutationFn: ({

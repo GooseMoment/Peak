@@ -55,7 +55,7 @@ const useTaskDateDisplay = (task: MinimalTask) => {
         const formatted_assigned_date = formatDate(assigned_at_date)
 
         return { formatted_due_datetime, formatted_assigned_date }
-    }, [task, tz, locale, setting.time_as_24_hour])
+    }, [task, tz, formatDate, formatDateTime])
 
     return { formatted_due_datetime, formatted_assigned_date }
 }

@@ -99,7 +99,7 @@ const ProjectPage = () => {
 
     const hasNextPage = data?.pages[data?.pages.length - 1].next !== null
 
-    const patchMutation = useMutation({
+    const { mutateAsync } = useMutation({
         mutationFn: (data: Partial<Drawer>[]) => {
             return patchReorderDrawer(data)
         },
@@ -123,13 +123,13 @@ const ProjectPage = () => {
 
         if (changedDrawers.length === 0) return
 
-        await patchMutation.mutateAsync(changedDrawers)
+        await mutateAsync(changedDrawers)
 
         await queryClient.invalidateQueries({
             queryKey: ["drawers", { projectID: id, ordering: "order" }],
         })
         setOrdering("order")
-    }, [drawers, data])
+    }, [data, drawers, mutateAsync, id])
     /// ---
 
     const deleteMutation = useMutation({
