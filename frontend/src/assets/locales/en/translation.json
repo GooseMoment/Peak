@@ -157,7 +157,7 @@
         "overdue": "Overdue",
         "due_today": "Today",
         "due_tomorrow": "Tomorrow",
-        "days_left": "days left",
+        "days_left": "{{diff}} days left",
         "name_placeholder": "Enter a name for the task.",
         "name_change_success": "The name has changed.",
         "none": "none",
