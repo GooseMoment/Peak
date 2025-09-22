@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 import styled from "styled-components"
 
@@ -27,40 +27,45 @@ const DemoShare = () => {
     })
 
     const [selected, setSelected] = useState("alpaca")
-    const index = useMemo(() => {
-        return ["alpaca", "quokka", "sloth", "golden", "hamster"].indexOf(
-            selected,
-        )
-    }, [selected])
     const users = useMemo(() => makeDemoUsers(t), [t])
+    const userIndex = useMemo(() => {
+        return users.map((user) => user.username).indexOf(selected)
+    }, [selected, users])
     const stats = useMemo(() => makeStats(users), [users])
     const remarks = useMemo(() => makeRemarks(t, users), [t, users])
     const records = useMemo(() => makeRecords(t, users), [t, users])
 
+    const recordDivRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (userIndex === 0) return
+        recordDivRef.current?.scrollIntoView({ behavior: "smooth" })
+    }, [userIndex])
+
     return (
         <SubSectionFlex>
             <Container>
-                {stats.map((stat) => (
+                {stats.map((stat, index) => (
                     <StatBox
                         key={stat.username}
                         stat={stat}
                         isSelected={stat.username === selected}
                         setSelectedUser={setSelected}
-                        mine={stat.username === "alpaca"}
+                        mine={index === 0}
                         demo
                     />
                 ))}
             </Container>
-            <RightContainer>
+            <RecordSectionWrapper ref={recordDivRef}>
                 <DailyUserProfile
-                    username={users[index].username}
-                    displayName={users[index].display_name}
-                    profileImg={users[index].profile_img}
+                    username={users[userIndex].username}
+                    displayName={users[userIndex].display_name}
+                    profileImg={users[userIndex].profile_img}
                     noLink
                 />
-                <RemarkBox remark={remarks[index]} />
-                <DemoRecord record={records[index] || []} />
-            </RightContainer>
+                <RemarkBox remark={remarks[userIndex]} />
+                <DemoRecord record={records[userIndex] || []} />
+            </RecordSectionWrapper>
         </SubSectionFlex>
     )
 }
@@ -240,7 +245,7 @@ const SubSectionFlex = styled(SubSection)`
     display: flex;
     flex-wrap: nowrap;
     justify-content: stretch;
-    gap: 1.25em;
+    gap: 2em 4em;
 
     ${ifMobile} {
         flex-wrap: wrap;
@@ -257,10 +262,11 @@ const Container = styled.div`
     row-gap: 1em;
 `
 
-const RightContainer = styled.div`
+const RecordSectionWrapper = styled.div`
+    scroll-margin-top: 8em;
+
     width: 100%;
     box-sizing: border-box;
-    border-radius: 16px;
 
     display: flex;
     flex-direction: column;
