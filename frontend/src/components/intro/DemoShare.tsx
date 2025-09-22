@@ -4,6 +4,7 @@ import styled from "styled-components"
 
 import { DemoRecord } from "@components/intro/DemoRecord"
 import SubSection from "@components/intro/SubSection"
+import { today } from "@components/intro/todays"
 import { DailyUserProfile } from "@components/social/DailyUserProfileContainer"
 import { RemarkBox } from "@components/social/RemarkContainer"
 import { StatBox } from "@components/social/StatContainer"
@@ -138,7 +139,7 @@ function makeStats(users: User[]): Stat[] {
         ...user,
         completed_task_count: (index + 1) * 10 + user.username.length,
         reaction_count: (index + 1) * 10 + user.display_name.length,
-        date: new Date().toISOString(),
+        date: today,
     }))
 }
 
@@ -146,15 +147,14 @@ function makeRemarks(
     t: TFunction<"intro", "section_share.demo_share">,
     users: User[],
 ): Remark[] {
-    const mockDate = new Date().toISOString()
     return ([0, 1, 2, 3, 4] as const).map((uidx) => {
         return {
             id: `remark-${users[uidx].username}`,
             user: users[uidx],
             content: t(`records.${uidx}.remark`),
-            date: mockDate,
-            created_at: mockDate,
-            updated_at: mockDate,
+            date: today,
+            created_at: today,
+            updated_at: today,
             deleted_at: null,
         }
     })

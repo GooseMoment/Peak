@@ -3,6 +3,7 @@ import { useMemo, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 
 import SubSection from "@components/intro/SubSection"
+import { today } from "@components/intro/todays"
 import EmojiPickerButton from "@components/social/interaction/reactions/EmojiPickerButton"
 import ReactionButton from "@components/social/interaction/reactions/ReactionButton"
 import { ReactionButtonGroup } from "@components/social/interaction/reactions/ReactionContainer"
@@ -101,7 +102,7 @@ const DemoCheer = () => {
 
 const makeTask = (t: TFunction<"intro", "section_cheer.demo_cheer">) => ({
     name: t("task_name"),
-    completed_at: new Date().toISOString(),
+    completed_at: today,
     due_type: null,
     due_date: null,
     due_datetime: null,
