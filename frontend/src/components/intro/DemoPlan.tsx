@@ -3,8 +3,7 @@ import { useMemo, useState } from "react"
 import styled from "styled-components"
 
 import DemoTask from "@components/intro/DemoTask"
-import Radio from "@components/intro/Radio"
-import RadioGroup from "@components/intro/RadioGroup"
+import Radio, { RadioGroup } from "@components/intro/Radio"
 import SubSection from "@components/intro/SubSection"
 import {
     nextWeek,
