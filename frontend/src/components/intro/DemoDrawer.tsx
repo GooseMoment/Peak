@@ -1,7 +1,5 @@
 import { Fragment, useMemo, useState } from "react"
 
-import { useTheme } from "styled-components"
-
 import Button, { ButtonGroup } from "@components/common/Button"
 import PageTitle from "@components/common/PageTitle"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
@@ -18,7 +16,7 @@ import {
 
 import type { DemoMinimalTask } from "@api/tasks.api"
 
-import { type PaletteColorName, getPaletteColor } from "@assets/palettes"
+import { type PaletteColorName, usePaletteColor } from "@assets/palettes"
 
 import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
@@ -29,9 +27,8 @@ const DemoDrawer = () => {
     })
     const drawers = useMemo(() => makeDrawers(t), [t])
     const [count, setCount] = useState(1)
-    const theme = useTheme()
 
-    const color = getPaletteColor(theme.type, "deep_blue")
+    const color = usePaletteColor("deep_blue")
 
     return (
         <SubSection>

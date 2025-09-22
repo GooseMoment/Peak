@@ -1,12 +1,10 @@
-import { useTheme } from "styled-components"
-
 import ProjectNameBox, {
     NameBox,
     NameText,
     TypeText,
 } from "@components/project/ProjectNameBox"
 
-import { getPaletteColor } from "@assets/palettes"
+import { usePaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
@@ -14,8 +12,7 @@ import { useTranslation } from "react-i18next"
 const DemoProjectName = ({ project }) => {
     const { t } = useTranslation(null, { keyPrefix: "project_list" })
 
-    const theme = useTheme()
-    const color = getPaletteColor(theme.type, project.color)
+    const color = usePaletteColor(project.color)
 
     let name = project.type === "inbox" ? t("inbox") : project.name
 

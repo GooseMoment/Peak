@@ -1,7 +1,7 @@
 import { MouseEvent, useEffect, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
-import styled, { css, useTheme } from "styled-components"
+import styled, { css } from "styled-components"
 
 import SimpleAssigned from "@components/project/taskCreateSimple/SimpleAssigned"
 import SimpleDue from "@components/project/taskCreateSimple/SimpleDue"
@@ -16,7 +16,7 @@ import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
-import { getPaletteColor } from "@assets/palettes"
+import { usePaletteColor } from "@assets/palettes"
 import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
@@ -39,9 +39,7 @@ const TaskCreateSimple = ({
         createInitialTask(drawer),
     )
 
-    const theme = useTheme()
-
-    const color = getPaletteColor(theme.type, drawer.project.color)
+    const color = usePaletteColor(drawer.project.color)
 
     const [content, setContent] = useState<SimpleContentKey>("name")
     const [assignedIndex, setAssignedIndex] = useState<number>(0)
