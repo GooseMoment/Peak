@@ -70,7 +70,6 @@ export default [
                     allowSeparateTypeImports: true,
                 },
             ],
-            "react-hooks/exhaustive-deps": "off", // TODO: enable this after typing Task-related files
         },
     },
 ]
