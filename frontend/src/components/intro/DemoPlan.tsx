@@ -6,8 +6,15 @@ import DemoTask from "@components/intro/DemoTask"
 import Radio from "@components/intro/Radio"
 import RadioGroup from "@components/intro/RadioGroup"
 import SubSection from "@components/intro/SubSection"
+import {
+    nextWeek,
+    today,
+    tomorrow,
+    twoWeeksLater,
+    yesterday,
+} from "@components/intro/todays"
 
-import { nextWeek, today, tomorrow, twoWeeksLater, yesterday } from "./todays"
+import type { DemoMinimalTask } from "@api/tasks.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
@@ -18,64 +25,66 @@ import critical from "@assets/project/priority/critical.svg"
 import important from "@assets/project/priority/important.svg"
 import normal from "@assets/project/priority/normal.svg"
 
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
-const projectColor = "#ff4a03"
-
-const deadlineTable = {
+const deadlineTable: Record<string, string> = {
     today,
     tomorrow,
     nextWeek,
     twoWeeksLater,
 }
 
-const makeSampleTasks = (t) => [
+const makeSampleTasks = (
+    t: TFunction<"intro", "section_plan.demo">,
+): DemoMinimalTask[] => [
     {
-        id: 0,
         name: t("sample0"),
-        completed_at: true,
+        completed_at: today,
         priority: 0,
         due_type: "due_date",
         due_date: today,
+        due_datetime: null,
     },
     {
-        id: 2,
         name: t("sample2"),
-        completed_at: true,
+        completed_at: today,
         priority: 1,
         due_type: "due_date",
         due_date: yesterday,
+        due_datetime: null,
     },
     {
-        id: 3,
         name: t("sample3"),
-        completed_at: true,
+        completed_at: today,
         priority: 2,
         due_type: "due_date",
         due_date: tomorrow,
+        due_datetime: null,
     },
     {
-        id: 4,
         name: t("sample4"),
-        completed_at: true,
+        completed_at: today,
         priority: 0,
         due_type: "due_date",
         due_date: nextWeek,
+        due_datetime: null,
     },
 ]
 
 const DemoPlan = () => {
     const { t } = useTranslation("intro", { keyPrefix: "section_plan.demo" })
-    const { t: taskT } = useTranslation(null, { keyPrefix: "task" })
+    const { t: taskT } = useTranslation("translation", { keyPrefix: "task" })
 
     const [priority, setPriority] = useState("1")
     const [deadline, setDeadline] = useState("today")
 
-    const task = {
+    const task: DemoMinimalTask = {
         name: t("sample1"),
         priority: Number(priority),
         due_type: "due_date",
         due_date: deadlineTable[deadline],
+        due_datetime: null,
     }
 
     const sampleTasks = useMemo(() => makeSampleTasks(t), [t])
@@ -88,7 +97,7 @@ const DemoPlan = () => {
                         <RadioGroup
                             label={t("priority_selection")}
                             value={priority}
-                            onChange={setPriority}>
+                            onChange={(e) => setPriority(e.target.value)}>
                             <Radio value="0">
                                 <Icon src={normal} /> {taskT("priority.normal")}
                             </Radio>
@@ -106,7 +115,7 @@ const DemoPlan = () => {
                         <RadioGroup
                             label={t("deadline_selection")}
                             value={deadline}
-                            onChange={setDeadline}>
+                            onChange={(e) => setDeadline(e.target.value)}>
                             <Radio value="today">
                                 <Icon src={todayIcon} />{" "}
                                 {taskT("due.quick.today")}
@@ -129,13 +138,21 @@ const DemoPlan = () => {
                 <Tasks>
                     <BlurArea>
                         {sampleTasks.slice(0, 1).map((task) => (
-                            <DemoTask task={task} key={task.id} />
+                            <DemoTask
+                                task={task}
+                                color="grey"
+                                key={task.due_date}
+                            />
                         ))}
                     </BlurArea>
-                    <DemoTask id={2} task={task} color={projectColor} />
+                    <DemoTask task={task} color="red" />
                     <BlurArea>
                         {sampleTasks.slice(1).map((task) => (
-                            <DemoTask task={task} key={task.id} />
+                            <DemoTask
+                                task={task}
+                                color="grey"
+                                key={task.due_date}
+                            />
                         ))}
                     </BlurArea>
                 </Tasks>
