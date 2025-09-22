@@ -1,7 +1,5 @@
 import { Link, useNavigate, useRouteError } from "react-router-dom"
 
-import styled from "styled-components"
-
 import MildButton from "@components/common/MildButton"
 import ErrorLayout from "@components/errors/ErrorLayout"
 

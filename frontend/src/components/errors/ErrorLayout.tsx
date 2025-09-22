@@ -79,6 +79,7 @@ const ErrorMessage = styled.details`
 
 const ErrorType = styled.summary`
     font-weight: 600;
+    margin-bottom: 0.5em;
 `
 
 const ChildrenWrapper = styled.div`
