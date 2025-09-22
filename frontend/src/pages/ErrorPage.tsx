@@ -17,7 +17,7 @@ const ErrorPage = ({ is404 = false }: ErrorPageProp) => {
     const navigate = useNavigate()
 
     const handleClearCache = () => {
-        // use native confirm dialog just case of toast not working
+        // use native confirm dialog in case of Confirmation not working
         if (confirm(t("clear_cache_confirm"))) {
             queryClient.clear()
             document.location.reload()
