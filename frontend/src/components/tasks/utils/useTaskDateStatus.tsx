@@ -43,7 +43,7 @@ const useCalculateDate = (
         } else if (diff_total_days === 1) {
             calculatedDue = t("due_tomorrow")
         } else if (2 <= diff_total_days && diff_total_days <= 30) {
-            calculatedDue = `${diff_total_days}` + t("days_left")
+            calculatedDue = t("days_left", { diff: diff_total_days })
         } else {
             calculatedDue = newDate
         }
