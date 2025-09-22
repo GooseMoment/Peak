@@ -66,24 +66,27 @@ const Text = styled.h1`
     font-weight: bold;
 `
 
-const ErrorMessage = styled.div`
-    overflow-x: auto;
+const ErrorMessage = styled.details`
     padding: 0.75em;
     background-color: ${(p) => p.theme.thirdBackgroundColor};
-    max-width: 500px;
-    line-height: 1.2;
+    width: 100%;
+    line-height: 1.3;
 
     ${ifMobile} {
         max-width: 300px;
     }
 `
 
-const ErrorType = styled.span`
+const ErrorType = styled.summary`
     font-weight: 600;
 `
 
 const ChildrenWrapper = styled.div`
     font-size: 1em;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
 `
 
 export default ErrorLayout

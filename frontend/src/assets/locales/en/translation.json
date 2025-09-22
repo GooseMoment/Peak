@@ -302,6 +302,8 @@
         "unknown_error_code": "X_X",
         "unknown_error_text": "Oops.",
         "unknown_error_bottom": "Go to the home page",
+        "clear_cache": "Clear cache",
+        "clear_cache_confirm": "Would you like to clear cache?",
         "404_error_text": "The page you requested is not found.",
         "404_error_bottom": "Back to the previous page"
     },
