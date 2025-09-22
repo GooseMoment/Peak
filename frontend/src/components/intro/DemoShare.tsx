@@ -2,22 +2,21 @@ import { useEffect, useMemo, useRef, useState } from "react"
 
 import styled from "styled-components"
 
-import { DemoRecord } from "@components/intro/DemoRecord"
+import DemoRecordContainer, {
+    DemoRecord,
+} from "@components/intro/DemoRecordContainer"
 import SubSection from "@components/intro/SubSection"
 import { today } from "@components/intro/todays"
 import { DailyUserProfile } from "@components/social/DailyUserProfileContainer"
 import { RemarkBox } from "@components/social/RemarkContainer"
 import { StatBox } from "@components/social/StatContainer"
 
-import type { Drawer } from "@api/drawers.api"
-import type { Project } from "@api/projects.api"
 import type { Remark, Stat } from "@api/social.api"
-import type { Task } from "@api/tasks.api"
 import type { User } from "@api/users.api"
 
 import { ifMobile } from "@utils/useScreenType"
 
-import { PaletteColorName, palettes } from "@assets/palettes"
+import { palettes } from "@assets/palettes"
 
 import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
@@ -41,7 +40,7 @@ const DemoShare = () => {
     useEffect(() => {
         if (userIndex === 0) return
         recordDivRef.current?.scrollIntoView({ behavior: "smooth" })
-    }, [userIndex])
+    }, [recordDivRef, userIndex])
 
     return (
         <SubSectionFlex>
@@ -65,7 +64,7 @@ const DemoShare = () => {
                     noLink
                 />
                 <RemarkBox remark={remarks[userIndex]} />
-                <DemoRecord record={records[userIndex] || []} />
+                <DemoRecordContainer record={records[userIndex] || []} />
             </RecordSectionWrapper>
         </SubSectionFlex>
     )
@@ -160,82 +159,34 @@ function makeRemarks(
     })
 }
 
-function newMockProject(override: Partial<Project> = {}): Project {
-    return Object.assign(
-        {
-            name: "PROJECT",
-            color: "red",
-            id: "project1",
-            privacy: "public",
-            order: 1,
-            uncompleted_task_count: 0,
-            completed_task_count: 0,
-            type: "regular",
-        } as Project,
-        override,
-    )
-}
-
-function newMockDrawer(
-    name: string,
-    user: User,
-    color: PaletteColorName,
-): Drawer {
-    return {
-        name,
-        id: "demo-drawer",
-        order: 1,
-        privacy: "public",
-        uncompleted_task_count: 0,
-        completed_task_count: 0,
-        user,
-        project: newMockProject({ user, color }),
-    } as Drawer
-}
-
 function makeRecords(
     t: TFunction<"intro", "section_share.demo_share">,
     users: User[],
-): Task[][] {
+): DemoRecord[][] {
     const userIndexes = [0, 1, 2, 3, 4] as const
     const taskIndexes = [0, 1, 2] as const
 
-    const mockDate = new Date().toISOString()
-
-    const records: Task[][] = []
+    const records: DemoRecord[][] = []
     for (const uidx of userIndexes) {
         const user = users[uidx]
-        const userRecords: Task[] = []
+        const userRecord: DemoRecord[] = []
         for (const tidx of taskIndexes) {
-            userRecords.push({
-                id: `demo-${uidx}-${tidx}`,
-                name: t(`records.${uidx}.tasks.${tidx}`),
-                drawer: newMockDrawer(
-                    t(`records.${uidx}.drawers.${tidx}`),
-                    user,
-                    palettes.palette1[
-                        Math.floor(Math.random() * palettes.palette1.length)
-                    ],
-                ),
-                user,
-                priority: (tidx + uidx + user.username.length) % 3,
-                completed_at: (tidx + uidx) % 2 === 0 ? mockDate : null,
-                // fields below are not required for demo purposes
-                // however, ommitting them may cause future issues
-                privacy: "public",
-                order: 1,
-                due_type: null,
-                due_date: null,
-                due_datetime: null,
-                memo: "",
-                assigned_at: null,
-                reminders: [],
-                created_at: mockDate,
-                updated_at: mockDate,
-                deleted_at: null,
+            userRecord.push({
+                color: palettes.palette1[
+                    (uidx + tidx) % palettes.palette1.length
+                ],
+                drawerName: t(`records.${uidx}.drawers.${tidx}`),
+                task: {
+                    name: t(`records.${uidx}.tasks.${tidx}`),
+                    priority: (tidx + uidx + user.username.length) % 3,
+                    completed_at: (tidx + uidx) % 2 === 0 ? today : null,
+                    due_type: null,
+                    due_date: null,
+                    due_datetime: null,
+                },
             })
         }
-        records.push(userRecords)
+        records.push(userRecord)
     }
 
     return records
