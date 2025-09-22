@@ -11,9 +11,7 @@ import { DemoTaskFrame } from "@components/tasks/TaskFrame"
 
 import { getEmojis } from "@api/social.api"
 
-import { PaletteColorName } from "@assets/palettes"
-
-import { TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const DemoCheer = () => {
@@ -85,7 +83,7 @@ const DemoCheer = () => {
 
     return (
         <SubSection>
-            <DemoTaskFrame task={task} color={"blue" as PaletteColorName} />
+            <DemoTaskFrame task={task} color="blue" />
             <ReactionButtonGroup>
                 {Object.entries(reactionGroups).map(([key, group]) => (
                     <ReactionButton
