@@ -1,6 +1,6 @@
 import { DateTime } from "luxon"
 
-const construct = (diffDays) =>
+const construct = (diffDays: number) =>
     DateTime.now().plus({ days: diffDays }).toISODate()
 
 export const today = construct(0)

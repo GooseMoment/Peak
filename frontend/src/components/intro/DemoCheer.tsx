@@ -3,6 +3,7 @@ import { useMemo, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 
 import SubSection from "@components/intro/SubSection"
+import { today } from "@components/intro/todays"
 import EmojiPickerButton from "@components/social/interaction/reactions/EmojiPickerButton"
 import ReactionButton from "@components/social/interaction/reactions/ReactionButton"
 import { ReactionButtonGroup } from "@components/social/interaction/reactions/ReactionContainer"
@@ -11,9 +12,7 @@ import { DemoTaskFrame } from "@components/tasks/TaskFrame"
 
 import { getEmojis } from "@api/social.api"
 
-import { PaletteColorName } from "@assets/palettes"
-
-import { TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const DemoCheer = () => {
@@ -85,7 +84,7 @@ const DemoCheer = () => {
 
     return (
         <SubSection>
-            <DemoTaskFrame task={task} color={"blue" as PaletteColorName} />
+            <DemoTaskFrame task={task} color="blue" />
             <ReactionButtonGroup>
                 {Object.entries(reactionGroups).map(([key, group]) => (
                     <ReactionButton
@@ -103,7 +102,7 @@ const DemoCheer = () => {
 
 const makeTask = (t: TFunction<"intro", "section_cheer.demo_cheer">) => ({
     name: t("task_name"),
-    completed_at: new Date().toISOString(),
+    completed_at: today,
     due_type: null,
     due_date: null,
     due_datetime: null,

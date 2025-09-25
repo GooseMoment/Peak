@@ -8,15 +8,15 @@ import PageTitle from "@components/common/PageTitle"
 
 import { getUserByUsername } from "@api/users.api"
 
-interface DailyUserProfileProps {
+interface DailyUserProfileContainerProps {
     username: string
     back?: boolean
 }
 
-export default function DailyUserProfile({
+export default function DailyUserProfileContainer({
     username,
     back = false,
-}: DailyUserProfileProps) {
+}: DailyUserProfileContainerProps) {
     const {
         data: user,
         isPending,
@@ -39,20 +39,45 @@ export default function DailyUserProfile({
         )
     }
 
-    const userPagePath = `/app/users/@${user.username}`
+    return (
+        <DailyUserProfile
+            username={user.username}
+            displayName={user.display_name}
+            profileImg={user.profile_img}
+            back={back}
+        />
+    )
+}
+
+interface DailyUserProfileProps {
+    username: string
+    displayName: string
+    profileImg: string
+    back?: boolean
+    noLink?: boolean
+}
+
+export function DailyUserProfile({
+    username,
+    displayName,
+    profileImg,
+    back,
+    noLink,
+}: DailyUserProfileProps) {
+    const userPagePath = noLink ? "#" : `/app/users/@${username}`
     return (
         <Box>
             <Texts>
                 {back && <PageBack defaultTo="/app/social" />}
                 <Link to={userPagePath}>
-                    <UsernameTitle $cursor="pointer">
-                        {user.username}
+                    <UsernameTitle $cursor={noLink ? "default" : "pointer"}>
+                        @{username}
                     </UsernameTitle>
                 </Link>
-                {!back && <Link to={userPagePath}>{user.display_name}</Link>}
+                {!back && <Link to={userPagePath}>{displayName}</Link>}
             </Texts>
             <ProfileImgWrapper to={userPagePath}>
-                <ProfileImg src={user.profile_img} />
+                <ProfileImg src={profileImg} />
             </ProfileImgWrapper>
         </Box>
     )

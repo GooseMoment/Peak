@@ -86,7 +86,7 @@ function makeDrawers(t: TFunction<"intro", "section_organize.demo_drawer">): {
                 },
                 {
                     name: t("drawer0.sample1"),
-                    completed_at: new Date().toISOString(),
+                    completed_at: today,
                     due_type: "due_date",
                     due_date: today,
                     due_datetime: null,
@@ -118,7 +118,7 @@ function makeDrawers(t: TFunction<"intro", "section_organize.demo_drawer">): {
                 },
                 {
                     name: t("drawer1.sample1"),
-                    completed_at: new Date().toISOString(),
+                    completed_at: today,
                     due_type: "due_date",
                     due_date: yesterday,
                     due_datetime: null,
@@ -150,7 +150,7 @@ function makeDrawers(t: TFunction<"intro", "section_organize.demo_drawer">): {
                 },
                 {
                     name: t("drawer2.sample2"),
-                    completed_at: new Date().toISOString(),
+                    completed_at: today,
                     due_type: "due_date",
                     due_date: yesterday,
                     due_datetime: null,
