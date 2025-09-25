@@ -157,7 +157,7 @@
         "overdue": "기한 지남",
         "due_today": "오늘",
         "due_tomorrow": "내일",
-        "days_left": "일 남음",
+        "days_left": "{{diff}}일 남음",
         "name_placeholder": "작업의 이름을 입력하세요.",
         "name_change_success": "이름을 변경했습니다.",
         "none": "없음",
