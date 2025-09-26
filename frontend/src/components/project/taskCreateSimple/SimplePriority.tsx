@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from "react"
+import { Dispatch, SetStateAction, useCallback, useEffect } from "react"
 
 import {
     ContentBox,
@@ -23,16 +23,19 @@ const SimplePriority = ({
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task.priority" })
 
-    const onKeyDown = (e: KeyboardEvent | React.KeyboardEvent) => {
-        if (e.key === "ArrowRight") {
-            if (priorityIndex === 2) return
-            setPriorityIndex(priorityIndex + 1)
-        }
-        if (e.key === "ArrowLeft") {
-            if (priorityIndex === 0) return
-            setPriorityIndex(priorityIndex - 1)
-        }
-    }
+    const onKeyDown = useCallback(
+        (e: KeyboardEvent | React.KeyboardEvent) => {
+            if (e.key === "ArrowRight") {
+                if (priorityIndex === 2) return
+                setPriorityIndex(priorityIndex + 1)
+            }
+            if (e.key === "ArrowLeft") {
+                if (priorityIndex === 0) return
+                setPriorityIndex(priorityIndex - 1)
+            }
+        },
+        [priorityIndex, setPriorityIndex],
+    )
 
     useEffect(() => {
         document.addEventListener("keydown", onKeyDown)
@@ -40,11 +43,11 @@ const SimplePriority = ({
         return () => {
             document.removeEventListener("keydown", onKeyDown)
         }
-    }, [priorityIndex])
+    }, [priorityIndex, onKeyDown])
 
     useEffect(() => {
         editNewTask({ priority: priorityIndex })
-    }, [priorityIndex])
+    }, [priorityIndex, editNewTask])
 
     const items = [
         { index: 0, content: t("normal") },

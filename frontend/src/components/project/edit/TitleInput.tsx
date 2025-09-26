@@ -36,7 +36,7 @@ const TitleInput = ({
         if (inputRef.current) {
             inputRef.current.focus()
         }
-    }, [])
+    }, [isMobile, inputRef])
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newName = e.target.value

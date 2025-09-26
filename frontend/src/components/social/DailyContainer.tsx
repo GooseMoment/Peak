@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from "react"
 
 import styled from "styled-components"
 
-import DailyUserProfile from "@components/social/DailyUserProfile"
+import DailyUserProfileContainer from "@components/social/DailyUserProfileContainer"
 import RecordContainer from "@components/social/RecordContainer"
 import RemarkContainer from "@components/social/RemarkContainer"
 import DateBar from "@components/social/common/DateBar"
@@ -40,7 +40,7 @@ export default function DailyContainer({
 }: DailyContainerProps | DailyContainerPropsStandalone) {
     return (
         <Container className={className}>
-            <DailyUserProfile username={username} back={standalone} />
+            <DailyUserProfileContainer username={username} back={standalone} />
             {displayFollowButton && <FollowButton username={username} />}
             {standalone && <DateBar date={date} setDate={setDate} />}
             <RemarkContainer username={username} date={date} />

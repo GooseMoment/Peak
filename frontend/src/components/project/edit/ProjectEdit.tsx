@@ -1,4 +1,4 @@
-import { KeyboardEvent, useMemo, useRef, useState } from "react"
+import { KeyboardEvent, useCallback, useMemo, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import { type LightDark, useTheme } from "styled-components"
@@ -95,13 +95,16 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
         },
     })
 
-    const handleChange = (diff: Partial<Project>) => {
-        setNewProject(Object.assign({}, newProject, diff))
+    const handleChange = useCallback(
+        (diff: Partial<Project>) => {
+            setNewProject(Object.assign({}, newProject, diff))
 
-        if (isDesktop) {
-            inputRef.current?.focus()
-        }
-    }
+            if (isDesktop) {
+                inputRef.current?.focus()
+            }
+        },
+        [newProject, isDesktop],
+    )
 
     const submit = () => {
         if (mutation.isPending || hasCreated.current) {

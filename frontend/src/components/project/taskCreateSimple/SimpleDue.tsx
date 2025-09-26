@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useMemo } from "react"
+import {
+    Dispatch,
+    SetStateAction,
+    useCallback,
+    useEffect,
+    useMemo,
+} from "react"
 
 import {
     ContentBox,
@@ -27,16 +33,19 @@ const SimpleDue = ({
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task.due.quick" })
 
-    const onKeyDown = (e: KeyboardEvent | React.KeyboardEvent) => {
-        if (e.key === "ArrowRight") {
-            if (dueIndex === 5) return
-            setDueIndex(dueIndex + 1)
-        }
-        if (e.key === "ArrowLeft") {
-            if (dueIndex === 0) return
-            setDueIndex(dueIndex - 1)
-        }
-    }
+    const onKeyDown = useCallback(
+        (e: KeyboardEvent | React.KeyboardEvent) => {
+            if (e.key === "ArrowRight") {
+                if (dueIndex === 5) return
+                setDueIndex(dueIndex + 1)
+            }
+            if (e.key === "ArrowLeft") {
+                if (dueIndex === 0) return
+                setDueIndex(dueIndex - 1)
+            }
+        },
+        [dueIndex, setDueIndex],
+    )
 
     useEffect(() => {
         document.addEventListener("keydown", onKeyDown)
@@ -44,7 +53,9 @@ const SimpleDue = ({
         return () => {
             document.removeEventListener("keydown", onKeyDown)
         }
-    }, [dueIndex])
+    }, [dueIndex, onKeyDown])
+
+    const items = useMemo(() => makeDueItems(t), [t])
 
     useEffect(() => {
         const new_due_date = addDateFromToday(items[dueIndex].set)
@@ -63,9 +74,7 @@ const SimpleDue = ({
             due_date: new_due_date,
             due_datetime: null,
         })
-    }, [dueIndex])
-
-    const items = useMemo(() => makeDueItems(t), [t])
+    }, [dueIndex, editNewTask, items])
 
     return (
         <div onKeyDown={onKeyDown}>

@@ -49,7 +49,7 @@ const ProjectListPage = () => {
 
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
 
-    const patchMutation = useMutation({
+    const { mutateAsync } = useMutation({
         mutationFn: (data: Partial<Project>[]) => {
             return patchReorderProject(data)
         },
@@ -84,11 +84,11 @@ const ProjectListPage = () => {
 
         if (changedProjects.length === 0) return
 
-        await patchMutation.mutateAsync(changedProjects)
+        await mutateAsync(changedProjects)
         await queryClient.invalidateQueries({
             queryKey: ["projects"],
         })
-    }, [projects, data])
+    }, [data?.pages, projects, mutateAsync])
 
     return (
         <>
