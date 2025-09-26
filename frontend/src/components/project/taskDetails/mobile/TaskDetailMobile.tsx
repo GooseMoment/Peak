@@ -37,8 +37,11 @@ const TaskDetailMobile = ({
 
     const patchMutation = useMutation({
         mutationFn: (data: MinimalTaskWithID) => {
+            const { id, user, created_at, updated_at, deleted_at, ...rest } =
+                data
+
             const taskData = {
-                ...data,
+                ...rest,
                 drawer: data.drawer.id,
             }
             return patchTask(data.id, taskData)

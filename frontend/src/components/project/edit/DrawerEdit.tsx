@@ -80,7 +80,13 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
 
     const patchMutation = useMutation({
         mutationFn: (data: Drawer) => {
-            const drawerData = { ...data, project: data.project.id }
+            const { id, user, created_at, updated_at, deleted_at, ...rest } =
+                data
+
+            const drawerData = {
+                ...rest,
+                project: data.project.id,
+            }
             return patchDrawer(data.id!, drawerData)
         },
         onSuccess: () => {

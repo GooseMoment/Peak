@@ -51,7 +51,16 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
     const mutation = useMutation({
         mutationFn: (data: Partial<Project>) => {
             if (project) {
-                return patchProject(project.id, data)
+                const {
+                    id,
+                    user,
+                    created_at,
+                    updated_at,
+                    deleted_at,
+                    ...rest
+                } = data
+
+                return patchProject(project.id, rest)
             }
             return postProject(data)
         },
