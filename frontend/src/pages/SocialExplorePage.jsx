@@ -62,8 +62,7 @@ const SocialExplorePage = () => {
 
     useEffect(() => {
         if (searchQuery.length !== 0) refetchFound()
-        if (searchQuery.length !== 0) refetchFound()
-    }, [searchQuery])
+    }, [searchQuery, refetchFound])
 
     const handleSearch = (searchTerm) => {
         setSearchQuery(searchTerm.trim())

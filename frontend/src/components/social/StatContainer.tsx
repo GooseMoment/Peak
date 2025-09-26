@@ -148,12 +148,14 @@ export function StatBox({
     stat,
     isSelected = false,
     setSelectedUser,
-    mine,
+    mine = false,
+    demo = false,
 }: {
     stat: Stat
     isSelected?: boolean
     setSelectedUser?: Dispatch<SetStateAction<User["username"]>>
     mine?: boolean
+    demo?: boolean
 }) {
     const { isDesktop } = useScreenType()
     const color = usePastelPaletteColor(stat.header_color)
@@ -166,7 +168,7 @@ export function StatBox({
             to={`/app/social/daily/@${stat.username}/${stat.date}`}
             draggable={false}
             onClick={(e) => {
-                if (isDesktop && setSelectedUser) {
+                if (setSelectedUser && (demo || isDesktop)) {
                     e.preventDefault()
                     setSelectedUser(stat.username)
                 }
@@ -179,7 +181,7 @@ export function StatBox({
                 />
             </ProfileImgWrapper>
             <InfoContainer>
-                <Username>{stat.username}</Username>
+                <Username>@{stat.username}</Username>
                 <SimpleStats>
                     <StatsUnit key="task">
                         <StatusIconWrapper $type="task">

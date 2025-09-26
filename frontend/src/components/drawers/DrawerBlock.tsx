@@ -144,7 +144,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
         setTasks(results)
     }, [data])
 
-    const patchMutation = useMutation({
+    const { mutateAsync, isPending } = useMutation({
         mutationFn: (data: Partial<Task>[]) => {
             return patchReorderTask(data)
         },
@@ -167,13 +167,13 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
 
         if (changedTasks.length === 0) return
 
-        await patchMutation.mutateAsync(changedTasks)
+        await mutateAsync(changedTasks)
 
         await queryClient.invalidateQueries({
             queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
         })
         setOrdering("order")
-    }, [tasks, data])
+    }, [tasks, data, drawer.id, mutateAsync])
     // ---
 
     const deleteMutation = useMutation({
@@ -263,7 +263,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
                             task={task}
                             moveTask={moveTask}
                             dropTask={dropTask}
-                            isPending={patchMutation.isPending}
+                            isPending={isPending}
                         />
                     ))}
                 </TaskList>

@@ -89,12 +89,18 @@ export default function useModal(options: useModalOptions = {}): Modal {
     useEffect(() => {
         if (isOpen) {
             root.classList.add("has-modal")
-            options.afterOpen?.() // keep afterOpen here to ensure it runs after the modal is visible
         }
 
         return () => {
             root.classList.remove("has-modal")
         }
+    }, [isOpen])
+
+    useEffect(() => {
+        if (isOpen) {
+            options.afterOpen?.() // keep afterOpen here to ensure it runs after the modal is visible
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- only want to run after open
     }, [isOpen])
 
     useEffect(() => {
@@ -105,7 +111,7 @@ export default function useModal(options: useModalOptions = {}): Modal {
         return () => {
             el.removeEventListener("click", handleOutsideClick)
         }
-    }, [isOpen])
+    }, [isOpen, handleOutsideClick])
 
     return {
         id: id.current,

@@ -1,4 +1,11 @@
-import { MouseEvent, useEffect, useRef, useState } from "react"
+import {
+    MouseEvent,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import styled, { css } from "styled-components"
@@ -46,17 +53,92 @@ const TaskCreateSimple = ({
     const [dueIndex, setDueIndex] = useState<number>(0)
     const [priorityIndex, setPriorityIndex] = useState<number>(0)
 
-    const onKeyDownAlt = (e: KeyboardEvent) => {
-        if (!e.altKey) {
-            return
-        }
+    const editNewTask = useCallback(
+        (diff: Partial<MinimalTask>) => {
+            setNewTask(Object.assign({}, newTask, diff))
+        },
+        [newTask],
+    )
 
-        const selectedNumber = Number(e.code.slice(5))
-        if (selectedNumber && selectedNumber <= items.length) {
-            e.preventDefault()
-            setContent(items[selectedNumber - 1].name)
-        }
-    }
+    const items = useMemo(
+        () => [
+            {
+                name: "name" as const,
+                icon: <FeatherIcon icon="tag" />,
+                component: (
+                    <TaskNameInput
+                        task={newTask}
+                        name={newTask.name || ""}
+                        setName={(name) => editNewTask({ name })}
+                        color={drawer.project.color}
+                        inputRef={inputRef}
+                        setFunc={editNewTask}
+                        isCreating
+                    />
+                ),
+            },
+            {
+                name: "assigned" as const,
+                icon: <FeatherIcon icon="calendar" />,
+                component: (
+                    <SimpleAssigned
+                        assignedIndex={assignedIndex}
+                        setAssignedIndex={setAssignedIndex}
+                        editNewTask={editNewTask}
+                        color={color}
+                    />
+                ),
+            },
+            {
+                name: "due" as const,
+                icon: <Hourglass />,
+                component: (
+                    <SimpleDue
+                        dueIndex={dueIndex}
+                        setDueIndex={setDueIndex}
+                        editNewTask={editNewTask}
+                        color={color}
+                    />
+                ),
+            },
+            {
+                name: "priority" as const,
+                icon: <FeatherIcon icon="alert-circle" />,
+                component: (
+                    <SimplePriority
+                        priorityIndex={priorityIndex}
+                        setPriorityIndex={setPriorityIndex}
+                        editNewTask={editNewTask}
+                        color={color}
+                    />
+                ),
+            },
+        ],
+        [
+            newTask,
+            drawer.project.color,
+            editNewTask,
+            assignedIndex,
+            color,
+            dueIndex,
+            priorityIndex,
+        ],
+    )
+
+    const onKeyDownAlt = useCallback(
+        (e: KeyboardEvent) => {
+            if (!e.altKey) {
+                return
+            }
+
+            const selectedNumber = Number(e.code.slice(5))
+            if (selectedNumber && selectedNumber <= items.length) {
+                e.preventDefault()
+                setContent(items[selectedNumber - 1].name)
+            }
+        },
+        [items],
+    )
 
     useEffect(() => {
         document.addEventListener("keydown", onKeyDownAlt)
@@ -64,15 +146,11 @@ const TaskCreateSimple = ({
         return () => {
             document.removeEventListener("keydown", onKeyDownAlt)
         }
-    }, [])
+    }, [onKeyDownAlt])
 
     const handleClickContent = (e: MouseEvent<HTMLDivElement>) => {
         const name = e.currentTarget.getAttribute("name")
         setContent(name as SimpleContentKey)
-    }
-
-    const editNewTask = (diff: Partial<MinimalTask>) => {
-        setNewTask(Object.assign({}, newTask, diff))
     }
 
     const postMutation = useMutation({
@@ -121,60 +199,6 @@ const TaskCreateSimple = ({
 
         postMutation.mutate(newTask)
     }
-
-    const items = [
-        {
-            name: "name" as const,
-            icon: <FeatherIcon icon="tag" />,
-            component: (
-                <TaskNameInput
-                    task={newTask}
-                    name={newTask.name || ""}
-                    setName={(name) => editNewTask({ name })}
-                    color={drawer.project.color}
-                    inputRef={inputRef}
-                    setFunc={editNewTask}
-                    isCreating
-                />
-            ),
-        },
-        {
-            name: "assigned" as const,
-            icon: <FeatherIcon icon="calendar" />,
-            component: (
-                <SimpleAssigned
-                    assignedIndex={assignedIndex}
-                    setAssignedIndex={setAssignedIndex}
-                    editNewTask={editNewTask}
-                    color={color}
-                />
-            ),
-        },
-        {
-            name: "due" as const,
-            icon: <Hourglass />,
-            component: (
-                <SimpleDue
-                    dueIndex={dueIndex}
-                    setDueIndex={setDueIndex}
-                    editNewTask={editNewTask}
-                    color={color}
-                />
-            ),
-        },
-        {
-            name: "priority" as const,
-            icon: <FeatherIcon icon="alert-circle" />,
-            component: (
-                <SimplePriority
-                    priorityIndex={priorityIndex}
-                    setPriorityIndex={setPriorityIndex}
-                    editNewTask={editNewTask}
-                    color={color}
-                />
-            ),
-        },
-    ]
 
     return (
         <TaskCreateSimpleBlock onKeyDown={onKeyDownEnter}>

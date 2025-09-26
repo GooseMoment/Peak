@@ -68,8 +68,8 @@ table {
 }
 
 html {
-    height: 100dvh;
-    width: 100vw;
+    min-height: 100dvh;
+    width: 100%;
     scrollbar-width: thin;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
