@@ -64,7 +64,7 @@ const TaskDetailAssigned = ({
                 zone: tz,
             }).toISODate(),
         })
-    }, [selectedDate])
+    }, [selectedDate, setFunc, tz])
 
     const addComponent = [
         {

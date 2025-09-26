@@ -79,7 +79,7 @@ const TaskDetailDue = ({
             due_date: converted_date_str,
             due_datetime: null,
         })
-    }, [selectedDate])
+    }, [selectedDate, setFunc, task.due_type, task.due_datetime, tz])
 
     const handleAdditionalComp = (name: DueKey) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")

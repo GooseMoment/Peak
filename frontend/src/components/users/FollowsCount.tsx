@@ -31,6 +31,7 @@ const FollowsCount = ({ user, isLoading = false }: FollowsCount) => {
 
     useEffect(() => {
         followModal.closeModal()
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- including followModal leads to immediate close
     }, [user])
 
     if (!user || isLoading) {

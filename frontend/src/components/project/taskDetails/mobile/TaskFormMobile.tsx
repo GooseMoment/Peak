@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -44,17 +44,19 @@ const TaskFormMobile = ({
 
     const theme = useTheme()
 
-    const [title, setTitle] = useState<string | null>(null)
     const [activeContent, setActiveContent] = useState<TaskContent | null>(null)
 
-    useEffect(() => {
-        if (activeContent === null) {
-            if (isCreating) setTitle(t("edit.create_title"))
-            else setTitle(t("edit.edit_title"))
-        } else if (activeContent) {
-            setTitle(t(`${activeContent}.title`))
+    const title = useMemo(() => {
+        if (activeContent) {
+            return t(`${activeContent}.title`)
         }
-    }, [activeContent])
+
+        if (isCreating) {
+            return t("edit.create_title")
+        }
+
+        return t("edit.edit_title")
+    }, [activeContent, isCreating, t])
 
     const postReminderMutation = useMutation({
         mutationFn: (data: {
