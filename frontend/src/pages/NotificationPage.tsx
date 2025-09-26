@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react"
+import { useMemo } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
@@ -23,17 +23,13 @@ import { useTranslation } from "react-i18next"
 
 export default function NotificationPage() {
     const navigate = useNavigate()
+    const { id } = useParams<{ id: Notification["id"] }>()
     const modal = useModal({
+        initiallyOpen: !!id,
         afterClose() {
             navigate("/app/notifications")
         },
     })
-    const { id } = useParams<{ id: Notification["id"] }>()
-    useEffect(() => {
-        if (id) {
-            modal.openModal()
-        }
-    }, [id])
 
     if (!id) {
         return null
