@@ -5,18 +5,24 @@ import {
     persistQueryClient,
     removeOldestQuery,
 } from "@tanstack/react-query-persist-client"
+import { isAxiosError } from "axios"
 
-const retry = (count, err) => {
-    if (400 <= err.response?.status && err.response?.status <= 451) {
+function retry(count: number, err: Error) {
+    if (
+        isAxiosError(err) &&
+        !!err.response?.status &&
+        400 <= err.response?.status &&
+        err.response?.status <= 451
+    ) {
         return false
     }
 
     return count < 3
 }
 
-const seconds = (sec) => sec * 1000
-const minutes = (min) => min * seconds(60)
-const hours = (hour) => hour * minutes(60)
+const seconds = (sec: number) => sec * 1000
+const minutes = (min: number) => min * seconds(60)
+const hours = (hour: number) => hour * minutes(60)
 
 const queryClient = new QueryClient({
     defaultOptions: {
