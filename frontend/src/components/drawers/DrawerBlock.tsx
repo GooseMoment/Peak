@@ -9,7 +9,7 @@ import {
 } from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
-import styled, { useTheme } from "styled-components"
+import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
@@ -33,7 +33,7 @@ import { getPageFromURL } from "@utils/pagination"
 
 import queryClient from "@queries/queryClient"
 
-import { getPaletteColor } from "@assets/palettes"
+import { usePaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import type { TFunction } from "i18next"
@@ -59,8 +59,6 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
     const [isDrawerEditOpen, setIsDrawerEditOpen] = useState(false)
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
     const [isCreateOpen, setCreateOpen] = useState(false)
-
-    const theme = useTheme()
 
     const [tasks, setTasks] = useState<Task[]>([])
 
@@ -219,7 +217,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
         setCreateOpen(true)
     }
 
-    const color = getPaletteColor(theme.type, drawer.project.color)
+    const color = usePaletteColor(drawer.project.color)
 
     if (isError) {
         return (

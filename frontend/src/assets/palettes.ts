@@ -1,4 +1,7 @@
+import { useMemo } from "react"
+
 import type { LightDark } from "styled-components"
+import { useTheme } from "styled-components"
 
 export type PaletteColorName =
     | "grey"
@@ -139,9 +142,25 @@ export const getPaletteColor = (
     return themes[theme][colorName]
 }
 
+export const usePaletteColor = (colorName: PaletteColorName) => {
+    const theme = useTheme()
+    const color = useMemo(() => {
+        return themes[theme.type][colorName]
+    }, [theme, colorName])
+    return color
+}
+
 export const getPastelPaletteColor = (
     theme: LightDark,
     colorName: PaletteColorName,
 ) => {
     return pastelThemes[theme][colorName]
+}
+
+export const usePastelPaletteColor = (colorName: PaletteColorName) => {
+    const theme = useTheme()
+    const color = useMemo(() => {
+        return pastelThemes[theme.type][colorName]
+    }, [theme, colorName])
+    return color
 }

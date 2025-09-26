@@ -1,12 +1,12 @@
 import { generatePath, useNavigate } from "react-router-dom"
 
-import styled, { css, useTheme } from "styled-components"
+import styled, { css } from "styled-components"
 
 import { getCurrentUsername } from "@api/client"
 
 import useScreenType, { ifTablet } from "@utils/useScreenType"
 
-import { getPastelPaletteColor } from "@assets/palettes"
+import { usePastelPaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -16,7 +16,6 @@ const LogPreviewBox = ({
     setSelectedUser,
     // pageType = "following",
 }) => {
-    const theme = useTheme()
     const { isDesktop } = useScreenType()
     const navigate = useNavigate()
 
@@ -35,9 +34,7 @@ const LogPreviewBox = ({
         )
     }
 
-    // TODO: theme.grey 삭제
-    const boxColor =
-        getPastelPaletteColor(theme.type, log?.header_color) || theme.grey
+    const boxColor = usePastelPaletteColor(log?.header_color)
 
     return (
         <Box

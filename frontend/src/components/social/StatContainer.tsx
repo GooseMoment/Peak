@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from "react"
 import { Link } from "react-router-dom"
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import styled, { css, useTheme } from "styled-components"
+import styled, { css } from "styled-components"
 
 import ErrorBox from "@components/errors/ErrorBox"
 import LoadMoreButton from "@components/social/common/LoadMoreButton"
@@ -14,7 +14,7 @@ import type { User } from "@api/users.api"
 import { getPageFromURL } from "@utils/pagination"
 import useScreenType, { ifTablet } from "@utils/useScreenType"
 
-import { getPastelPaletteColor } from "@assets/palettes"
+import { usePastelPaletteColor } from "@assets/palettes"
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import FeatherIcon from "feather-icons-react"
@@ -158,13 +158,13 @@ export function StatBox({
     demo?: boolean
 }) {
     const { isDesktop } = useScreenType()
-    const theme = useTheme()
+    const color = usePastelPaletteColor(stat.header_color)
 
     return (
         <Box
             $mine={mine}
             $isSelected={isSelected}
-            $borderColor={getPastelPaletteColor(theme.type, stat.header_color)}
+            $borderColor={color}
             to={`/app/social/daily/@${stat.username}/${stat.date}`}
             draggable={false}
             onClick={(e) => {
