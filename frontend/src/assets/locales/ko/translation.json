@@ -38,7 +38,8 @@
         "body_follow_request": "나에게 팔로우 요청을 보냈습니다.",
         "body_follow_request_accepted": "내 팔로우 요청을 승인했습니다.",
         "follow_back": "맞팔로우하기",
-        "approve_follow_request": "팔로우 요청 승인하기"
+        "approve_follow_request": "팔로우 요청 승인하기",
+        "handled_follow_request": "이미 처리된 요청입니다."
     },
     "project_list": {
         "title": "프로젝트",

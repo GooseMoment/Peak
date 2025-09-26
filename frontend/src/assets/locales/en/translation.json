@@ -38,7 +38,8 @@
         "body_follow_request": "Sent a follow request to you.",
         "body_follow_request_accepted": "Approved your follow request.",
         "follow_back": "Follow back",
-        "approve_follow_request": "Approve this follow request"
+        "approve_follow_request": "Approve this follow request",
+        "handled_follow_request": "This request was already handled."
     },
     "project_list": {
         "title": "Projects",

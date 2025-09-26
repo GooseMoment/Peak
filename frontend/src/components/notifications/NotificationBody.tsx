@@ -12,6 +12,7 @@ import type {
     NotificationTaskReaction,
     NotificationTaskReminder,
 } from "@api/notifications.api"
+import { getFollowing } from "@api/social.api"
 import { getTask } from "@api/tasks.api"
 
 import { useTranslation } from "react-i18next"
@@ -93,11 +94,32 @@ function BodyFollowRequest({
     notification: NotificationFollowing
 }) {
     const { t } = useTranslation("translation", { keyPrefix: "notifications" })
+    const { data } = useSuspenseQuery({
+        queryKey: [
+            "followings",
+            notification.following.follower.username,
+            notification.following.followee.username,
+        ],
+        queryFn: () =>
+            getFollowing(
+                notification.following.follower.username,
+                notification.following.followee.username,
+            ),
+    })
+
     return (
         <Body>
             <BodyTitle>{t("body_follow_request")}</BodyTitle>
-            <SectionTitle>{t("approve_follow_request")}</SectionTitle>
-            <FollowRequestAction user={notification.following.follower} />
+            {data && data.status === "requested" ? (
+                <>
+                    <SectionTitle>{t("approve_follow_request")}</SectionTitle>
+                    <FollowRequestAction
+                        user={notification.following.follower}
+                    />
+                </>
+            ) : (
+                <SectionTitle>{t("handled_follow_request")}</SectionTitle>
+            )}
             <SectionTitle>{t("follow_back")}</SectionTitle>
             <FollowButton username={notification.following.follower.username} />
         </Body>
@@ -121,7 +143,7 @@ function BodyTaskReminder({
 }) {
     const { t } = useTranslation("translation", { keyPrefix: "notifications" })
     const { data } = useSuspenseQuery({
-        queryKey: ["tasks", notification.task_reminder.task],
+        queryKey: ["task", { taskID: notification.task_reminder.task }],
         queryFn: () => getTask(notification.task_reminder.task),
     })
 
