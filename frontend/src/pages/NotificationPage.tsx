@@ -75,7 +75,7 @@ function NotificationPageInner({ id }: { id: Notification["id"] }) {
         ]
     }, [data, locale, tz])
 
-    if (isPending || !relatedUser) {
+    if (isPending || (data?.type !== "task_reminder" && !relatedUser)) {
         return (
             <Frame>
                 <LoaderCircleBold />
@@ -103,19 +103,37 @@ function NotificationPageInner({ id }: { id: Notification["id"] }) {
                     <FeatherIcon icon="x" />
                 </CloseButton>
             )}
-            <Header>
-                <Link to={`/app/users/@${relatedUser.username}`}>
-                    <ProfileImg src={relatedUser.profile_img} />
-                </Link>
-                <Texts>
-                    <Username to={`/app/users/@${relatedUser.username}`}>
-                        @{relatedUser.username}
-                    </Username>
-                    <Time dateTime={data.created_at} title={data.created_at}>
-                        {dateLocale} ({dateRelative})
-                    </Time>
-                </Texts>
-            </Header>
+            {relatedUser && (
+                <Header>
+                    <Link to={`/app/users/@${relatedUser.username}`}>
+                        <ProfileImg src={relatedUser.profile_img} />
+                    </Link>
+                    <Texts>
+                        <Username to={`/app/users/@${relatedUser.username}`}>
+                            @{relatedUser.username}
+                        </Username>
+                        <Time
+                            dateTime={data.created_at}
+                            title={data.created_at}>
+                            {dateLocale} ({dateRelative})
+                        </Time>
+                    </Texts>
+                </Header>
+            )}
+            {!relatedUser && data.type === "task_reminder" && (
+                <Header>
+                    <Texts>
+                        <TaskReminderTaskName>
+                            {data.task_reminder.task_name}
+                        </TaskReminderTaskName>
+                        <Time
+                            dateTime={data.created_at}
+                            title={data.created_at}>
+                            {dateLocale} ({dateRelative})
+                        </Time>
+                    </Texts>
+                </Header>
+            )}
             <NotificationBody notification={data} />
         </Frame>
     )
@@ -174,6 +192,10 @@ const Texts = styled.div`
 `
 
 const Username = styled(Link)`
+    font-weight: 700;
+`
+
+const TaskReminderTaskName = styled.div`
     font-weight: 700;
 `
 
