@@ -14,6 +14,8 @@ import type {
 } from "@api/notifications.api"
 import { getTask } from "@api/tasks.api"
 
+import { useTranslation } from "react-i18next"
+
 export default function NotificationBody({
     notification,
 }: {
@@ -39,12 +41,14 @@ function BodyTaskReaction({
 }: {
     notification: NotificationTaskReaction
 }) {
+    const { t } = useTranslation("translation", { keyPrefix: "notifications" })
+
     const isImageEmoji = !!notification.task_reaction.image_emoji
 
     return (
         <Body>
-            <BodyTitle>내 작업에 반응했습니다.</BodyTitle>
-            <SectionTitle>에모지</SectionTitle>
+            <BodyTitle>{t("body_task_reaction")}</BodyTitle>
+            <SectionTitle>{t("emoji")}</SectionTitle>
             <EmojiBox>
                 <div>
                     {isImageEmoji ? (
@@ -61,7 +65,7 @@ function BodyTaskReaction({
                 </div>
                 {isImageEmoji && <p>{notification.task_reaction.emoji_name}</p>}
             </EmojiBox>
-            <SectionTitle>내 작업</SectionTitle>
+            <SectionTitle>{t("your_task")}</SectionTitle>
             <TaskBox
                 task={notification.task_reaction.task}
                 isFollowingPage
@@ -72,10 +76,12 @@ function BodyTaskReaction({
 }
 
 function BodyFollow({ notification }: { notification: NotificationFollowing }) {
+    const { t } = useTranslation("translation", { keyPrefix: "notifications" })
+
     return (
         <Body>
-            <BodyTitle>나를 팔로우합니다.</BodyTitle>
-            <SectionTitle>맞팔로우 하기</SectionTitle>
+            <BodyTitle>{t("body_follow")}</BodyTitle>
+            <SectionTitle>{t("follow_back")}</SectionTitle>
             <FollowButton username={notification.following.follower.username} />
         </Body>
     )
@@ -86,21 +92,24 @@ function BodyFollowRequest({
 }: {
     notification: NotificationFollowing
 }) {
+    const { t } = useTranslation("translation", { keyPrefix: "notifications" })
     return (
         <Body>
-            <BodyTitle>팔로우 요청을 받았습니다.</BodyTitle>
-            <SectionTitle>팔로우 요청 승인하기</SectionTitle>
+            <BodyTitle>{t("body_follow_request")}</BodyTitle>
+            <SectionTitle>{t("approve_follow_request")}</SectionTitle>
             <FollowRequestAction user={notification.following.follower} />
-            <SectionTitle>맞팔로우 하기</SectionTitle>
+            <SectionTitle>{t("follow_back")}</SectionTitle>
             <FollowButton username={notification.following.follower.username} />
         </Body>
     )
 }
 
 function BodyFollowRequestAccepted() {
+    const { t } = useTranslation("translation", { keyPrefix: "notifications" })
+
     return (
         <Body>
-            <BodyTitle>내 팔로우 요청을 수락했습니다.</BodyTitle>
+            <BodyTitle>{t("body_follow_request_accepted")}</BodyTitle>
         </Body>
     )
 }
@@ -110,6 +119,7 @@ function BodyTaskReminder({
 }: {
     notification: NotificationTaskReminder
 }) {
+    const { t } = useTranslation("translation", { keyPrefix: "notifications" })
     const { data } = useSuspenseQuery({
         queryKey: ["tasks", notification.task_reminder.task],
         queryFn: () => getTask(notification.task_reminder.task),
@@ -118,9 +128,11 @@ function BodyTaskReminder({
     return (
         <Body>
             <BodyTitle>
-                작업 마감 {notification.task_reminder.delta}분 전 알림입니다.
+                {t("body_task_reminder", {
+                    count: notification.task_reminder.delta,
+                })}
             </BodyTitle>
-            <SectionTitle>내 작업</SectionTitle>
+            <SectionTitle>{t("your_task")}</SectionTitle>
             <TaskBlock task={data} />
         </Body>
     )
