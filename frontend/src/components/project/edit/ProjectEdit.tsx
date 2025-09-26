@@ -52,11 +52,11 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
         mutationFn: (data: Partial<Project>) => {
             if (project) {
                 const {
-                    id,
-                    user,
-                    created_at,
-                    updated_at,
-                    deleted_at,
+                    id: _id,
+                    user: _user,
+                    created_at: _created_at,
+                    updated_at: _updated_at,
+                    deleted_at: _deleted_at,
                     ...rest
                 } = data
 
