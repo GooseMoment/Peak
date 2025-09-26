@@ -70,6 +70,7 @@ const ErrorMessage = styled.details`
     padding: 0.75em;
     background-color: ${(p) => p.theme.thirdBackgroundColor};
     width: 100%;
+    max-width: 600px;
     line-height: 1.3;
 
     ${ifMobile} {
