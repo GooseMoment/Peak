@@ -2,7 +2,7 @@ import type { ReactNode } from "react"
 
 import styled from "styled-components"
 
-import { ifMobile } from "@utils/useScreenType"
+import { ifMobile, ifTablet } from "@utils/useScreenType"
 
 import RoadSign from "@assets/errors/RoadSign"
 
@@ -72,6 +72,10 @@ const ErrorMessage = styled.details`
     width: 100%;
     max-width: 600px;
     line-height: 1.3;
+
+    ${ifTablet} {
+        max-width: 400px;
+    }
 
     ${ifMobile} {
         max-width: 300px;
