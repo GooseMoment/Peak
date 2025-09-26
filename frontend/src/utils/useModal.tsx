@@ -18,6 +18,7 @@ import { scaleDown, scaleUp } from "@assets/keyframes"
 import { createPortal } from "react-dom"
 
 interface useModalOptions {
+    initiallyOpen?: boolean
     beforeOpen?: () => void
     afterOpen?: () => void
     beforeClose?: () => void
@@ -37,7 +38,7 @@ const el = document.getElementById("window-container")!
 
 export default function useModal(options: useModalOptions = {}): Modal {
     const id = useRef<string>()
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(!!options.initiallyOpen)
     const [isClosing, setIsClosing] = useState(false) // for ChildrenAnimationWrapper
 
     useStopVerticalScroll(isOpen)
