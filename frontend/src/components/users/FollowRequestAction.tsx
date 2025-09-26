@@ -13,11 +13,13 @@ import queryClient from "@queries/queryClient"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-interface RequestsProp {
+interface FollowRequestActionProps {
     user: User
 }
 
-const Requests = ({ user }: RequestsProp) => {
+export default function FollowRequestAction({
+    user,
+}: FollowRequestActionProps) {
     const currentUsername = getCurrentUsername()
 
     const { t } = useTranslation("translation", { keyPrefix: "users" })
@@ -58,38 +60,43 @@ const Requests = ({ user }: RequestsProp) => {
 
     const isPending = acceptance.isPending || rejection.isPending
 
+    if (acceptance.isSuccess) {
+        return <AcceptedBox>{t("follow_request_accepted")}</AcceptedBox>
+    }
+    if (rejection.isSuccess) {
+        return <RejectedBox>{t("follow_request_rejected")}</RejectedBox>
+    }
+
+    return (
+        <Box>
+            {t("follow_request_sent_to_me")}
+            <ButtonGroup $margin="0.5em 0 0 0" $justifyContent="right">
+                <Button
+                    state="danger"
+                    onClick={() => rejection.mutate()}
+                    loading={rejection.isPending}
+                    disabled={isPending}>
+                    {t("button_follow_request_reject")}
+                </Button>
+                <Button
+                    state="success"
+                    onClick={() => acceptance.mutate()}
+                    loading={acceptance.isPending}
+                    disabled={isPending}>
+                    {t("button_follow_request_accept")}
+                </Button>
+            </ButtonGroup>
+        </Box>
+    )
+}
+
+export function SectionFollowRequestAction({ user }: FollowRequestActionProps) {
+    const { t } = useTranslation("translation", { keyPrefix: "users" })
     return (
         <Section>
             <SectionTitle>
                 {t("requests_exist", { username: user.username })}
             </SectionTitle>
-            {!acceptance.isSuccess && !rejection.isSuccess && (
-                <Box>
-                    {t("follow_request_sent_to_me")}
-                    <ButtonGroup $margin="none" $justifyContent="right">
-                        <Button
-                            state="danger"
-                            onClick={() => rejection.mutate()}
-                            loading={rejection.isPending}
-                            disabled={isPending}>
-                            {t("button_follow_request_reject")}
-                        </Button>
-                        <Button
-                            state="success"
-                            onClick={() => acceptance.mutate()}
-                            loading={acceptance.isPending}
-                            disabled={isPending}>
-                            {t("button_follow_request_accept")}
-                        </Button>
-                    </ButtonGroup>
-                </Box>
-            )}
-            {acceptance.isSuccess && (
-                <AcceptedBox>{t("follow_request_accepted")}</AcceptedBox>
-            )}
-            {rejection.isSuccess && (
-                <RejectedBox>{t("follow_request_rejected")}</RejectedBox>
-            )}
         </Section>
     )
 }
@@ -113,5 +120,3 @@ const AcceptedBox = styled(Box)`
 const RejectedBox = styled(Box)`
     border-color: ${(p) => p.theme.primaryColors.danger};
 `
-
-export default Requests
