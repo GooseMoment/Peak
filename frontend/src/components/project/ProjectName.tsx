@@ -1,7 +1,7 @@
 import { useRef } from "react"
 import { useNavigate } from "react-router-dom"
 
-import styled, { useTheme } from "styled-components"
+import styled from "styled-components"
 
 import ProjectNameBox, {
     NameBox,
@@ -11,7 +11,7 @@ import ProjectNameBox, {
 
 import { type Project } from "@api/projects.api"
 
-import { getPaletteColor } from "@assets/palettes"
+import { usePaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 import { useDrag, useDrop } from "react-dnd"
@@ -29,7 +29,7 @@ const ProjectName = ({
     isPending: boolean
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "project_list" })
-    const theme = useTheme()
+    const color = usePaletteColor(project.color)
 
     const ref = useRef<HTMLDivElement>(null)
     const isInbox = project.type === "inbox"
@@ -103,10 +103,7 @@ const ProjectName = ({
             $isDragging={isDragging}
             $isInbox={isInbox}>
             <NameBox>
-                <FeatherIcon
-                    icon="circle"
-                    fill={getPaletteColor(theme.type, project.color)}
-                />
+                <FeatherIcon icon="circle" fill={color} />
                 <div onClick={() => navigate(projectLink)} role="link">
                     <NameText>{name}</NameText>
                 </div>
