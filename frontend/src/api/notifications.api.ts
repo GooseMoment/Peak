@@ -1,6 +1,7 @@
 import client from "@api/client"
 import type { Base, PaginationData } from "@api/common"
 import type { Comment, Following, Peck, TaskReaction } from "@api/social.api"
+import type { Task } from "@api/tasks.api"
 import type { User } from "@api/users.api"
 
 import {
@@ -9,9 +10,7 @@ import {
 } from "@utils/clientSettings"
 
 export interface TaskReminder extends Base {
-    // TODO: replace any with Task
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    task: any
+    task: Task
     delta: number
     scheduled: string
     task_name: string
@@ -19,19 +18,26 @@ export interface TaskReminder extends Base {
     project_id: string
 }
 
+export interface TaskReminderDelta {
+    delta: number
+}
+
 export const getReminder = async (id: string) => {
-    const res = await client.get(`notifications/reminders/${id}/`)
+    const res = await client.get<TaskReminder>(`notifications/reminders/${id}/`)
     return res.data
 }
 
-export const postReminder = async (reminders: TaskReminder) => {
+export const postReminder = async (reminders: {
+    task: string
+    delta_list: number[]
+}) => {
     const res = await client.post(`notifications/reminders/`, reminders)
     return res.status
 }
 
 export const patchReminder = async (
     id: string,
-    edit: Partial<TaskReminder>,
+    edit: Partial<TaskReminderDelta>,
 ) => {
     const res = await client.patch(`notifications/reminders/${id}/`, edit)
     return res.data

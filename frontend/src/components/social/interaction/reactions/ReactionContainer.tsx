@@ -15,6 +15,7 @@ import {
     getTaskReactions,
     postTaskReaction,
 } from "@api/social.api"
+import type { Task } from "@api/tasks.api"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -47,9 +48,7 @@ function groupTaskReactions(data: TaskReaction[]) {
     return groups
 }
 
-// TODO: replace Task
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function ReactionContainer({ task }: { task: any }) {
+export default function ReactionContainer({ task }: { task: Task }) {
     const client = useQueryClient()
     const { t } = useTranslation("translation")
     const {

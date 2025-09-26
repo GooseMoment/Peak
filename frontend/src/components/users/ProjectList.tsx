@@ -4,15 +4,18 @@ import styled, { css, useTheme } from "styled-components"
 
 import { Section, SectionTitle } from "@components/users/Section"
 
+import type { PaginationData } from "@api/common"
+import type { Project } from "@api/projects.api"
+
 import { ifMobile } from "@utils/useScreenType"
 
-import { type PaletteColorName, getPaletteColor } from "@assets/palettes"
+import { getPaletteColor } from "@assets/palettes"
 import { skeletonCSS } from "@assets/skeleton"
 
 import { useTranslation } from "react-i18next"
 
 interface ProjectListProp {
-    projects: { id: string; name: string; color: PaletteColorName }[] // TODO: replace to Project
+    projects: PaginationData<Project> | undefined
     isMine?: boolean
     isLoading?: boolean
 }
@@ -32,8 +35,7 @@ const ProjectList = ({
             <Projects>
                 {isLoading &&
                     [...Array(10)].map((_, i) => <Project key={i} $loading />)}
-
-                {projects?.map((project) => {
+                {projects?.results.map((project) => {
                     const projectName = (
                         <Project key={project.id}>
                             <Circle
@@ -58,8 +60,7 @@ const ProjectList = ({
                         </Link>
                     )
                 })}
-
-                {projects?.length === 0 && t("projects_empty")}
+                {projects?.results.length === 0 && t("projects_empty")}
             </Projects>
         </Section>
     )

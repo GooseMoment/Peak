@@ -1,12 +1,12 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 from .models import Task
 
 
-@receiver(post_save, sender=Task)
-def set_new_task_order(instance: Task, created=False, **kwargs):
-    if not created:
+@receiver(pre_save, sender=Task)
+def set_new_task_order(instance: Task, **kwargs):
+    if instance.created_at is not None:
         return
 
     last_task = (
@@ -15,5 +15,3 @@ def set_new_task_order(instance: Task, created=False, **kwargs):
         .first()
     )
     instance.order = (last_task.order + 1) if last_task else 0
-
-    instance.save()

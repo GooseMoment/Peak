@@ -1,24 +1,21 @@
 import { useMemo, useState } from "react"
 
 import { useQuery } from "@tanstack/react-query"
-import { DefaultTheme, useTheme } from "styled-components"
 
 import SubSection from "@components/intro/SubSection"
+import { today } from "@components/intro/todays"
 import EmojiPickerButton from "@components/social/interaction/reactions/EmojiPickerButton"
 import ReactionButton from "@components/social/interaction/reactions/ReactionButton"
 import { ReactionButtonGroup } from "@components/social/interaction/reactions/ReactionContainer"
 import type { TaskReactionGroup } from "@components/social/interaction/reactions/ReactionGroupTooltip"
-import TaskFrame from "@components/tasks/TaskFrame"
+import { DemoTaskFrame } from "@components/tasks/TaskFrame"
 
 import { getEmojis } from "@api/social.api"
 
-import { getPaletteColor } from "@assets/palettes"
-
-import { TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const DemoCheer = () => {
-    const theme = useTheme()
     const { t } = useTranslation("intro", {
         keyPrefix: "section_cheer.demo_cheer",
     })
@@ -32,7 +29,7 @@ const DemoCheer = () => {
         }
     })
 
-    const task = useMemo(() => makeTask(t, theme), [t, theme])
+    const task = useMemo(() => makeTask(t), [t])
 
     const { data: imageEmojis, isSuccess } = useQuery({
         queryKey: ["emojis"],
@@ -87,14 +84,7 @@ const DemoCheer = () => {
 
     return (
         <SubSection>
-            <TaskFrame
-                task={task}
-                color={task.color}
-                isSocial
-                showTaskDetail={undefined}
-                isLoading={undefined}
-                toComplete={undefined}
-            />
+            <DemoTaskFrame task={task} color="blue" />
             <ReactionButtonGroup>
                 {Object.entries(reactionGroups).map(([key, group]) => (
                     <ReactionButton
@@ -110,13 +100,13 @@ const DemoCheer = () => {
     )
 }
 
-const makeTask = (
-    t: TFunction<"intro", "section_cheer.demo_cheer">,
-    theme: DefaultTheme,
-) => ({
+const makeTask = (t: TFunction<"intro", "section_cheer.demo_cheer">) => ({
     name: t("task_name"),
-    completed_at: new Date().toISOString(),
-    color: getPaletteColor(theme.type, "blue"),
+    completed_at: today,
+    due_type: null,
+    due_date: null,
+    due_datetime: null,
+    priority: 0,
 })
 
 export default DemoCheer
