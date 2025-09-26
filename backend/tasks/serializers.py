@@ -2,9 +2,12 @@ from rest_framework import serializers
 
 from .models import Task
 from notifications.models import TaskReminder
-from users.models import User
 
 from datetime import datetime
+
+from api.serializers import DualityRelatedField
+from drawers.serializers import DrawerSerializer
+from users.serializers import UserSerializer
 
 
 class TaskReminderSerializer(serializers.ModelSerializer):
@@ -36,51 +39,32 @@ class TaskReminderSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(), default=serializers.CurrentUserDefault()
+    user = UserSerializer(
+        default=serializers.CurrentUserDefault(),
     )
-    drawer_name = serializers.SerializerMethodField()
-    project_name = serializers.SerializerMethodField()
-    project_id = serializers.SerializerMethodField()
     reminders = TaskReminderSerializer(many=True, read_only=True)
-    project_color = serializers.SerializerMethodField()
-
-    def get_project_id(self, obj):
-        return obj.drawer.project.id
-
-    def get_drawer_name(self, obj):
-        return obj.drawer.name
-
-    def get_project_name(self, obj):
-        return obj.drawer.project.name
-
-    def get_project_color(self, obj):
-        return obj.drawer.project.color
+    drawer = DualityRelatedField(DrawerSerializer)
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Task
         fields = [
             "id",
             "name",
-            "privacy",
-            "completed_at",
+            "user",
             "drawer",
-            "drawer_name",
+            "privacy",
+            "priority",
+            "order",
+            "completed_at",
+            "assigned_at",
             "due_type",
             "due_date",
             "due_datetime",
-            "assigned_at",
-            "priority",
-            "memo",
             "reminders",
-            "user",
-            "order",
+            "memo",
             "created_at",
             "updated_at",
             "deleted_at",
-            "project_name",
-            "project_id",
-            "project_color",
         ]
 
 
@@ -89,8 +73,3 @@ class TaskGroupedSerializer(serializers.Serializer):
     name = serializers.CharField(source="drawer__project__name")
     color = serializers.CharField(source="drawer__project__color")
     count = serializers.IntegerField()
-
-
-class TaskReorderSerializer(serializers.Serializer):
-    id = serializers.UUIDField()
-    order = serializers.IntegerField(min_value=0)

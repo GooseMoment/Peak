@@ -25,8 +25,9 @@ class Project(Base, PrivacyMixin):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name="projects",
     )
-    order = models.IntegerField()
+    order = models.IntegerField(default=0)
     color = models.CharField(max_length=128)
     type = models.CharField(choices=PROJECT_TYPE_CHOICES, max_length=128)
 
@@ -40,6 +41,7 @@ class Project(Base, PrivacyMixin):
 
         constraints = [
             models.UniqueConstraint(
-                fields=["name", "user"], name="constraint_project_name"
+                fields=["name", "user"],
+                name="constraint_project_name_active",
             ),
         ]

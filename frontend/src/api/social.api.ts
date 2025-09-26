@@ -1,5 +1,6 @@
 import client, { getCurrentUsername, isAxiosErrorStatus } from "@api/client"
 import type { Base, PaginationData } from "@api/common"
+import type { Task } from "@api/tasks.api"
 import type { User } from "@api/users.api"
 
 export interface Emoji {
@@ -10,9 +11,7 @@ export interface Emoji {
 
 export interface Peck extends Base {
     user: User
-    // TODO: replace Task
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    task: any
+    task: Task
     count: number
 }
 
@@ -39,9 +38,7 @@ export interface Stat extends User {
 
 export interface TaskReactionUnicodeEmoji extends Base {
     user: User
-    // TODO: replace Task
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    task: any
+    task: Task
     unicode_emoji: string
     image_emoji: null
     emoji_name: string
@@ -49,9 +46,7 @@ export interface TaskReactionUnicodeEmoji extends Base {
 
 export interface TaskReactionImageEmoji extends Base {
     user: User
-    // TODO: replace Task
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    task: any
+    task: Task
     unicode_emoji: null
     image_emoji: Emoji
     emoji_name: string
@@ -62,9 +57,7 @@ export type TaskReaction = TaskReactionUnicodeEmoji | TaskReactionImageEmoji
 export interface CommentTask extends Base {
     user: User
     parent_type: "task"
-    // TODO: replace Task
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    task: any
+    task: Task
     comment: string
 }
 
@@ -232,9 +225,6 @@ export const getStats = async (date_iso: string, page: string) => {
     )
     return res.data
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Task = any
 
 export const getRecord = async (
     username: string,

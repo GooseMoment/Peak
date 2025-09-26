@@ -65,50 +65,77 @@
         "title": "Share",
         "description": "Share your daily things with your friends.",
         "demo_share": {
-            "logs": {
-                "log0": {
-                    "preview": "Completed Vaccination.",
-                    "blurb": "Spent too much for vaccination imaooo",
+            "users": {
+                "0": "Alpaca",
+                "1": "Quokka",
+                "2": "Sloth",
+                "3": "Golden Retriever",
+                "4": "Hamster"
+            },
+            "records": {
+                "0": {
+                    "remark": "Had a busy day",
+                    "drawers": {
+                        "0": "Health",
+                        "1": "Study",
+                        "2": "Travel"
+                    },
                     "tasks": {
-                        "task0": "Vaccination",
-                        "task1": "Submit docs to ISSS",
-                        "task2": "Register for the cource"
+                        "0": "Vaccination",
+                        "1": "Submit docs to ISSS",
+                        "2": "Register for the courses"
                     }
                 },
-                "log1": {
-                    "preview": "Completed Duolingo.",
-                    "blurb": "Finally Emerald League",
+                "1": {
+                    "remark": "A productive day",
+                    "drawers": {
+                        "0": "Language",
+                        "1": "Math",
+                        "2": "Courses"
+                    },
                     "tasks": {
-                        "task0": "Duolingo",
-                        "task1": "Linear Algebra Assignment",
-                        "task2": "Add courses"
+                        "0": "Duolingo",
+                        "1": "Linear Algebra Assignment",
+                        "2": "Add courses"
                     }
                 },
-                "log2": {
-                    "preview": "Completed Swimming Today.",
-                    "blurb": "Ate too much today",
+                "2": {
+                    "remark": "A fun day",
+                    "drawers": {
+                        "0": "Health",
+                        "1": "Travel",
+                        "2": "Food"
+                    },
                     "tasks": {
-                        "task0": "Swimming Today",
-                        "task1": "Going Atlanta",
-                        "task2": "Noodles"
+                        "0": "Swimming Today",
+                        "1": "Going Atlanta",
+                        "2": "Noodles"
                     }
                 },
-                "log3": {
-                    "preview": "Completed Checkup.",
-                    "blurb": "checkup results r so bad",
+                "3": {
+                    "remark": "A productive day",
+                    "drawers": {
+                        "0": "Health",
+                        "1": "Work",
+                        "2": "Emails"
+                    },
                     "tasks": {
-                        "task0": "Checkup",
-                        "task1": "some excel things",
-                        "task2": "reply to Alex"
+                        "0": "Checkup",
+                        "1": "some excel things",
+                        "2": "reply to Alex"
                     }
                 },
-                "log4": {
-                    "preview": "Completed Bookstore.",
-                    "blurb": "Satisfied by my choices",
+                "4": {
+                    "remark": "A creative day",
+                    "drawers": {
+                        "0": "Finance",
+                        "1": "Health",
+                        "2": "Design"
+                    },
                     "tasks": {
-                        "task0": "Bookstore",
-                        "task1": "Drawings",
-                        "task2": "Design icons"
+                        "0": "Create a budget for next month",
+                        "1": "Renew the gym membership",
+                        "2": "Design icons"
                     }
                 }
             }

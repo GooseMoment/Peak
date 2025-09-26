@@ -173,7 +173,7 @@ const SectionAllowList = () => {
         setSelectedItems(
             items.filter((item) => !query.data.includes(item.name)),
         )
-    }, [query.data])
+    }, [query.data, items])
 
     const mut = useMutation({
         mutationFn: () => {

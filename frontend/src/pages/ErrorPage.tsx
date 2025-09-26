@@ -3,6 +3,8 @@ import { Link, useNavigate, useRouteError } from "react-router-dom"
 import MildButton from "@components/common/MildButton"
 import ErrorLayout from "@components/errors/ErrorLayout"
 
+import queryClient from "@queries/queryClient"
+
 import { useTranslation } from "react-i18next"
 
 interface ErrorPageProp {
@@ -13,6 +15,14 @@ const ErrorPage = ({ is404 = false }: ErrorPageProp) => {
     const error = useRouteError() as Error
     const { t } = useTranslation("translation", { keyPrefix: "error-page" })
     const navigate = useNavigate()
+
+    const handleClearCache = () => {
+        // use native confirm dialog in case of Confirmation not working
+        if (confirm(t("clear_cache_confirm"))) {
+            queryClient.clear()
+            document.location.reload()
+        }
+    }
 
     if (is404) {
         return (
@@ -32,6 +42,9 @@ const ErrorPage = ({ is404 = false }: ErrorPageProp) => {
             <Link reloadDocument to="/app/">
                 {t("unknown_error_bottom")}
             </Link>
+            <MildButton onClick={handleClearCache}>
+                {t("clear_cache")}
+            </MildButton>
         </ErrorLayout>
     )
 }

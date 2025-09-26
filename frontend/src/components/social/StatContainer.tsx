@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from "react"
 import { Link } from "react-router-dom"
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import styled, { css, useTheme } from "styled-components"
+import styled, { css } from "styled-components"
 
 import ErrorBox from "@components/errors/ErrorBox"
 import LoadMoreButton from "@components/social/common/LoadMoreButton"
@@ -14,7 +14,7 @@ import type { User } from "@api/users.api"
 import { getPageFromURL } from "@utils/pagination"
 import useScreenType, { ifTablet } from "@utils/useScreenType"
 
-import { getPastelPaletteColor } from "@assets/palettes"
+import { usePastelPaletteColor } from "@assets/palettes"
 import { skeletonBreathingCSS } from "@assets/skeleton"
 
 import FeatherIcon from "feather-icons-react"
@@ -150,6 +150,7 @@ export function StatBox({
     setSelectedUser,
     mine,
     from = "following",
+    demo = false,
 }: {
     stat: Stat
     isSelected?: boolean
@@ -158,19 +159,20 @@ export function StatBox({
     ) => void | Dispatch<SetStateAction<User["username"]>>
     mine?: boolean
     from?: string
+    demo?: boolean
 }) {
     const { isDesktop } = useScreenType()
-    const theme = useTheme()
+    const color = usePastelPaletteColor(stat.header_color)
 
     return (
         <Box
             $mine={mine}
             $isSelected={isSelected}
-            $borderColor={getPastelPaletteColor(theme.type, stat.header_color)}
+            $borderColor={color}
             to={`/app/social/daily/@${stat.username}/${stat.date}?from=${from}`}
             draggable={false}
             onClick={(e) => {
-                if (isDesktop && setSelectedUser) {
+                if (setSelectedUser && (demo || isDesktop)) {
                     e.preventDefault()
                     setSelectedUser(stat.username)
                 }
@@ -183,7 +185,7 @@ export function StatBox({
                 />
             </ProfileImgWrapper>
             <InfoContainer>
-                <Username>{stat.username}</Username>
+                <Username>@{stat.username}</Username>
                 <SimpleStats>
                     <StatsUnit key="task">
                         <StatusIconWrapper $type="task">

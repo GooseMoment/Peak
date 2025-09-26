@@ -68,8 +68,8 @@ table {
 }
 
 html {
-    height: 100dvh;
-    width: 100vw;
+    min-height: 100dvh;
+    width: 100%;
     scrollbar-width: thin;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -81,16 +81,16 @@ html {
 }
 
 #root.has-modal > div > main {
-    transform: scale(0.95);
+    transform: scale(0.98);
 }
 
 #window-container {
     position: fixed;
     top: 0;
     left: 0;
+
     width: 100dvw;
     height: 100dvh;
-
     box-sizing: border-box;
 
     display: flex;
@@ -99,23 +99,28 @@ html {
     gap: 1em;
     padding: 0.5em;
 
-    z-index: -1;
+    z-index: 99;
     background-color: transparent;
-
-    transition: background-color 0.25s var(--cubic);
+    pointer-events: none;
 
     @media screen and (max-width: 500px) {
         flex-direction: column;
     }
 }
 
-#window-container:has(div) {
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 99;
+@keyframes window-container-background-dim {
+    0% {
+        background-color: transparent;
+    }
+    100% {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
 }
 
-#window-container:has(.closing) {
-    background-color: transparent;
+#window-container:has(div) {
+    pointer-events: initial;
+    background-color: rgba(0, 0, 0, 0.3);
+    animation: 0.5s var(--cubic) window-container-background-dim;
 }
 
 #confirmation {
@@ -251,14 +256,4 @@ body {
         margin-right: 10px;
         top: unset;
     }
-}
-
-/*
-    Markdown
-*/
-
-.announcement_detail_content img {
-    display: block;
-    max-width: 600px;
-    margin: 1em;
 }

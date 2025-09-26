@@ -28,7 +28,7 @@ const CalendarModal = ({
             startDate: startDate,
             endDate: endDate,
         })
-    }, [startDate, endDate])
+    }, [startDate, endDate, updateFilterValue])
 
     if (!isOpen) return null
 

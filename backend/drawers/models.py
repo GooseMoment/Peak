@@ -23,7 +23,7 @@ class Drawer(Base, PrivacyMixin):
         on_delete=models.CASCADE,
         related_name="drawers",
     )
-    order = models.IntegerField()
+    order = models.IntegerField(default=0)
     uncompleted_task_count = models.IntegerField(default=0)
     completed_task_count = models.IntegerField(default=0)
 

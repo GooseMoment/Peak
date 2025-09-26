@@ -71,7 +71,6 @@ INSTALLED_APPS = [
     "today",
     # 'search',
     "user_setting",
-    "announcements",
     "rest_framework",
     "corsheaders",
     "storages",
@@ -278,3 +277,5 @@ PASSWORD_RECOVERY_TOKEN_TTL = timedelta(minutes=10)
 TWO_FACTOR_AUTHENTICATION = {
     "ALLOWED_TRIES_PER_SIGN_IN": 3,
 }
+
+DRAWER_PER_PROJECT_MAX_COUNT = 20

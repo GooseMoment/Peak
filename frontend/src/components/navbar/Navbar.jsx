@@ -57,7 +57,7 @@ const Navbar = () => {
             setActiveItemVisible(true)
             setActiveItemLeft(node.offsetLeft)
         },
-        [location.pathname],
+        [transition],
     )
 
     return (
