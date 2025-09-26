@@ -10,7 +10,7 @@ import {
 } from "@utils/clientSettings"
 
 export interface TaskReminder extends Base {
-    task: Task
+    task: Task["id"]
     delta: number
     scheduled: string
     task_name: string
