@@ -30,7 +30,6 @@ const el = document.getElementById("window-container")
 const ModalWindow = ({
     children,
     afterClose,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     additional = false,
     closeESC = true,
 }) => {
