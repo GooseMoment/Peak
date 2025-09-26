@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useState } from "react"
 
 import styled, { css } from "styled-components"
 
@@ -56,15 +56,15 @@ const TaskDetailAssigned = ({
         }
     }
 
-    useEffect(() => {
-        if (selectedDate === null) return
+    const handleSelectedDateChange = (date: string) => {
+        setSelectedDate(date)
 
         setFunc({
-            assigned_at: DateTime.fromISO(selectedDate, {
+            assigned_at: DateTime.fromISO(date, {
                 zone: tz,
             }).toISODate(),
         })
-    }, [selectedDate, setFunc, tz])
+    }
 
     const addComponent = [
         {
@@ -82,7 +82,7 @@ const TaskDetailAssigned = ({
                     <CommonCalendar
                         isRangeSelectMode={false}
                         selectedStartDate={selectedDate}
-                        setSelectedStartDate={setSelectedDate}
+                        setSelectedStartDate={handleSelectedDateChange}
                         selectedEndDate={undefined}
                         setSelectedEndDate={undefined}
                         handleClose={undefined}

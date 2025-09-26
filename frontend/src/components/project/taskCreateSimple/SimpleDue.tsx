@@ -10,9 +10,6 @@ import {
     ContentBox,
     CreateSimpleBox,
 } from "@components/project/taskCreateSimple/CreateSimpleBox"
-import addDateFromToday from "@components/project/taskCreateSimple/addDateFromToday"
-
-import type { MinimalTask } from "@api/tasks.api"
 
 import Hourglass from "@assets/project/Hourglass"
 
@@ -23,12 +20,10 @@ import { useTranslation } from "react-i18next"
 const SimpleDue = ({
     dueIndex,
     setDueIndex,
-    editNewTask,
     color,
 }: {
     dueIndex: number
     setDueIndex: Dispatch<SetStateAction<number>>
-    editNewTask: (diff: Partial<MinimalTask>) => void
     color: string
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task.due.quick" })
@@ -57,38 +52,17 @@ const SimpleDue = ({
 
     const items = useMemo(() => makeDueItems(t), [t])
 
-    useEffect(() => {
-        const new_due_date = addDateFromToday(items[dueIndex].set)
-
-        if (dueIndex === 0 || new_due_date === null) {
-            editNewTask({
-                due_type: null,
-                due_date: null,
-                due_datetime: null,
-            })
-            return
-        }
-
-        editNewTask({
-            due_type: "due_date",
-            due_date: new_due_date,
-            due_datetime: null,
-        })
-    }, [dueIndex, editNewTask, items])
-
     return (
         <div onKeyDown={onKeyDown}>
             <CreateSimpleBox icon={<Hourglass />}>
-                {items.map((item) => (
+                {items.map((item, index) => (
                     <ContentBox
-                        key={item.index}
+                        key={item}
                         $color={color}
-                        $isActive={dueIndex === item.index}
-                        onClick={() => setDueIndex(item.index)}>
-                        {dueIndex === item.index && (
-                            <FeatherIcon icon="check" />
-                        )}
-                        {item.display}
+                        $isActive={dueIndex === index}
+                        onClick={() => setDueIndex(index)}>
+                        {dueIndex === index && <FeatherIcon icon="check" />}
+                        {item}
                     </ContentBox>
                 ))}
             </CreateSimpleBox>
@@ -97,24 +71,12 @@ const SimpleDue = ({
 }
 
 const makeDueItems = (t: TFunction<"translation", "task.due.quick">) => [
-    { index: 0, display: t("no_date"), set: null },
-    { index: 1, display: t("today"), set: { days: 0 } },
-    { index: 2, display: t("tomorrow"), set: { days: 1 } },
-    {
-        index: 3,
-        display: t("next_week"),
-        set: { days: 7 },
-    },
-    {
-        index: 4,
-        display: t("next_two_weeks"),
-        set: { days: 14 },
-    },
-    {
-        index: 5,
-        display: t("next_month"),
-        set: { months: 1 },
-    },
+    t("no_date"),
+    t("today"),
+    t("tomorrow"),
+    t("next_week"),
+    t("next_two_weeks"),
+    t("next_month"),
 ]
 
 export default SimpleDue
