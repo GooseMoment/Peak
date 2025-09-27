@@ -146,5 +146,5 @@ export const ReactionButtonGroup = styled.div`
     display: flex;
     gap: 0.5em;
     flex-wrap: wrap;
-    justify-content: right;
+    justify-content: flex-end;
 `
