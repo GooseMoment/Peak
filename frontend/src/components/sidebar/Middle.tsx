@@ -135,11 +135,7 @@ const Middle = () => {
                             loading={isFetchingNextPage}
                             onClick={() => fetchNextPage()}>
                             {!isCollapsed ? (
-                                isPending ? (
-                                    t("common.loading")
-                                ) : (
-                                    t("common.load_more")
-                                )
+                                t("common.load_more")
                             ) : (
                                 <FeatherIcon
                                     icon="chevrons-down"
