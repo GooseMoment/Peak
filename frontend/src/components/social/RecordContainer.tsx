@@ -8,7 +8,7 @@ import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import ErrorBox from "@components/errors/ErrorBox"
 import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
 import LoadMoreButton from "@components/social/common/LoadMoreButton"
-import ReactionContainer from "@components/social/interaction/reactions/ReactionContainer"
+import ReactionContainer from "@components/social/reactions/ReactionContainer"
 import TaskFrame from "@components/tasks/TaskFrame"
 
 import { getCurrentUsername } from "@api/client"

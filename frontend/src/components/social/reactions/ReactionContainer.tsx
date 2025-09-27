@@ -3,9 +3,9 @@ import styled from "styled-components"
 
 import EmojiPickerButton, {
     PickerButtonSkeleton,
-} from "@components/social/interaction/reactions/EmojiPickerButton"
-import ReactionButton from "@components/social/interaction/reactions/ReactionButton"
-import type { TaskReactionGroup } from "@components/social/interaction/reactions/ReactionGroupTooltip"
+} from "@components/social/reactions/EmojiPickerButton"
+import ReactionButton from "@components/social/reactions/ReactionButton"
+import type { TaskReactionGroup } from "@components/social/reactions/ReactionGroupTooltip"
 
 import { getCurrentUsername } from "@api/client"
 import {
