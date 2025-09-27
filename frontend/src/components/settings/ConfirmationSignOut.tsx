@@ -6,7 +6,11 @@ import Confirmation from "@components/common/Confirmation"
 
 import { useTranslation } from "react-i18next"
 
-const ConfirmationSignOut = ({ onClose }) => {
+export default function ConfirmationSignOut({
+    onClose,
+}: {
+    onClose: () => void
+}) {
     const navigate = useNavigate()
     const { t } = useTranslation("settings", { keyPrefix: "sign_out" })
     const [loading, setLoading] = useState(false)
@@ -35,5 +39,3 @@ const ConfirmationSignOut = ({ onClose }) => {
         />
     )
 }
-
-export default ConfirmationSignOut

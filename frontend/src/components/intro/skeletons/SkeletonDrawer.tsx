@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-const SkeletonDrawer = () => {
+export default function SkeletonDrawer() {
     return (
         <Frame>
             <DrawerName />
@@ -11,7 +11,7 @@ const SkeletonDrawer = () => {
     )
 }
 
-const SkeletonTask = () => {
+function SkeletonTask() {
     return (
         <TaskBox>
             <Circle />
@@ -62,5 +62,3 @@ const Bar = styled.div`
 
     background-color: ${(p) => p.theme.secondBackgroundColor};
 `
-
-export default SkeletonDrawer

@@ -1,8 +1,10 @@
+import type { ReactNode } from "react"
+
 import styled, { keyframes } from "styled-components"
 
 import { ifTablet } from "@utils/useScreenType"
 
-const Showcase = ({ activities }) => {
+export default function Showcase({ children }: { children: ReactNode }) {
     return (
         <Box>
             <DisplayArea>
@@ -10,8 +12,8 @@ const Showcase = ({ activities }) => {
                 <ScreenBottom />
 
                 {/* 무한 스크롤을 위해 ActivitiesBox가 두 개 필요 */}
-                <ActivitiesBox>{activities}</ActivitiesBox>
-                <ActivitiesBox>{activities}</ActivitiesBox>
+                <ActivitiesBox>{children}</ActivitiesBox>
+                <ActivitiesBox>{children}</ActivitiesBox>
             </DisplayArea>
         </Box>
     )
@@ -90,5 +92,3 @@ const ActivitiesBox = styled.div`
 
     animation: ${scroll} 50s linear infinite;
 `
-
-export default Showcase

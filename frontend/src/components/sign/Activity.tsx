@@ -1,7 +1,15 @@
+import { ReactNode } from "react"
+
 import styled from "styled-components"
 
+interface ActivityProps {
+    action: string
+    detail: ReactNode
+    ago: string
+}
+
 // Activity: 구 landing/sign.html의 log
-const Activity = ({ action, detail, ago }) => {
+export default function Activity({ action, detail, ago }: ActivityProps) {
     return (
         <ActivityBox>
             <Content>
@@ -28,7 +36,7 @@ const Content = styled.p`
     line-height: 1.25em;
 `
 
-const Emoji = styled.img`
+export const EmojiImg = styled.img`
     aspect-ratio: 1/1;
     height: 1.25em;
     vertical-align: middle;
@@ -55,6 +63,3 @@ const Ago = styled.p`
     text-overflow: ellipsis;
     line-height: 2rem;
 `
-
-export default Activity
-export { Emoji }
