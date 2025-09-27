@@ -126,6 +126,11 @@ const Middle = () => {
                     <ButtonGroup $justifyContent="center" $margin="1em">
                         <MoreButton
                             $collapsed={isCollapsed}
+                            type="button"
+                            aria-label={
+                                isCollapsed ? t("common.load_more") : undefined
+                            }
+                            aria-busy={isFetchingNextPage}
                             disabled={isFetchingNextPage}
                             loading={isFetchingNextPage}
                             onClick={() => fetchNextPage()}>
@@ -136,7 +141,10 @@ const Middle = () => {
                                     t("common.load_more")
                                 )
                             ) : (
-                                <FeatherIcon icon="chevrons-down" />
+                                <FeatherIcon
+                                    icon="chevrons-down"
+                                    aria-hidden="true"
+                                />
                             )}
                         </MoreButton>
                     </ButtonGroup>
