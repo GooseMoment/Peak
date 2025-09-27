@@ -42,6 +42,7 @@ const NotificationsPage = () => {
         data,
         isError,
         refetch,
+        hasNextPage,
         fetchNextPage,
         isPending,
         isFetching,
@@ -58,8 +59,6 @@ const NotificationsPage = () => {
         gcTime: 30 * 1000,
     })
 
-    // useInfiniteQuery에서 제공하는 hasNextPage가 제대로 작동 안함. 어째서?
-    const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
     const isNotificationEmpty = data?.pages[0]?.results?.length === 0
 
     useEffect(() => {
