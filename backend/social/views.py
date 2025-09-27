@@ -28,11 +28,8 @@ from django.db.utils import IntegrityError
 
 from .models import (
     Emoji,
-    Quote,
     TaskReaction,
     Remark,
-    Peck,
-    Comment,
     Following,
     Block,
 )
@@ -41,8 +38,6 @@ from .serializers import (
     StatSerializer,
     RemarkSerializer,
     TaskReactionSerializer,
-    PeckSerializer,
-    CommentSerializer,
     FollowingSerializer,
     BlockSerializer,
 )
@@ -653,115 +648,6 @@ class TaskReactionDetail(generics.RetrieveDestroyAPIView):
     serializer_class = TaskReactionSerializer
     lookup_url_kwarg = "reaction_id"
     permission_classes = (IsUserOwner,)
-
-
-class PeckView(APIView):
-    def get(self, request, id):
-        task = get_object_or_404(Task, id=id)
-        pecks = Peck.objects.filter(task=task)
-
-        serializer = PeckSerializer(pecks, many=True)
-        pecksCounts = self.countPeck(pecks)
-
-        data = {"pecks": serializer.data, "pecks_counts": pecksCounts}
-
-        return Response(data, status=status.HTTP_201_CREATED)
-
-    def post(self, request, id):
-        user = request.user
-        task = get_object_or_404(Task, id=id)
-        peck = Peck.objects.filter(user=user, task=task).first()
-
-        if peck:
-            peck.count += 1
-            peck.save()
-        else:
-            peck = Peck.objects.create(user=user, task=task, count=1)
-        pecks = Peck.objects.filter(task=task)
-
-        serializer = PeckSerializer(pecks, many=True)
-        # pecksCounts = self.countPeck(pecks)
-
-        # data = {"pecks": serializer.data, "pecks_counts": pecksCounts}
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def countPeck(self, pecks):
-        pecksCounts = 0
-        for peck in pecks:
-            pecksCounts += peck.count
-
-        return pecksCounts
-
-
-class CommentView(APIView):
-    def get(self, request, type, id):
-        if type == Comment.FOR_TASK:
-            task = get_object_or_404(Task, id=id)
-            comments = Comment.objects.filter(
-                parent_type=Comment.FOR_TASK, task=task
-            ).order_by("-created_at")
-        else:
-            quote = get_object_or_404(Quote, id=id)
-            comments = Comment.objects.filter(
-                parent_type=Comment.FOR_QUOTE, quote=quote
-            ).order_by("-created_at")
-
-        serializer = CommentSerializer(comments, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def post(self, request, type, id):
-        user = request.user
-        comment = request.data.get("comment")
-
-        # TODO: check block
-        if type == Comment.FOR_TASK:
-            task = get_object_or_404(Task, id=id)
-            created = Comment.objects.create(
-                user=user, parent_type=Comment.FOR_TASK, task=task, comment=comment
-            )
-        elif type == Comment.FOR_QUOTE:
-            quote = get_object_or_404(Quote, id=id)
-            created = Comment.objects.create(
-                user=user, parent_type=Comment.FOR_QUOTE, quote=quote, comment=comment
-            )
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = CommentSerializer(created, many=False)
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def patch(self, request, type, id):
-        user = request.user
-
-        commentID = request.data.get("id")
-        comment = get_object_or_404(Comment, id=commentID)
-        if comment.user != user:
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-
-        # 과거 코맨트 기록들을 저장할 필요가 있을까?
-        newComment = request.data.get("comment")
-        # serializer = CommentSerializer(comment, data={'comment': newComment}, partial=True)
-        comment.comment = newComment
-        comment.save()
-
-        serializer = CommentSerializer(comment)
-
-        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-
-    def delete(self, request, type, id):
-        user = request.user
-
-        commentID = request.data.get("id")
-        comment = get_object_or_404(Comment, id=commentID)
-        if comment.user != user:
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-        # TODO: soft delete
-        comment.delete()
-
-        return Response(status=status.HTTP_200_OK)
 
 
 class EmojiListPagination(PageNumberPagination):
