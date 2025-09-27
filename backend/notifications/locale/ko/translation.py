@@ -23,13 +23,5 @@ translation = {
             "title": "✅ @{username}",
             "body": "내 팔로우 요청을 승인했습니다.",
         },
-        Notification.FOR_PECK: {
-            "title": "👈 @{username}",
-            "body": "{count}번 쪼았습니다.\n\nRE: {task}",
-        },
-        Notification.FOR_COMMENT: {
-            "title": "💬 @{username}",
-            "body": "{comment}\n\nRE: {parent}",
-        },
     },
 }

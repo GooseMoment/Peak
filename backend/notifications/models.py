@@ -3,7 +3,7 @@ from django.db import models
 from api.models import Base
 from tasks.models import Task
 from users.models import User
-from social.models import TaskReaction, Following, Peck, Comment
+from social.models import TaskReaction, Following
 from peak_auth.models import AuthToken
 
 
@@ -29,8 +29,6 @@ class Notification(Base):
     FOR_FOLLOW = "follow"
     FOR_FOLLOW_REQUEST = "follow_request"
     FOR_FOLLOW_REQUEST_ACCEPTED = "follow_request_accepted"
-    FOR_PECK = "peck"
-    FOR_COMMENT = "comment"
 
     NOTIFICATION_TYPES = [
         (FOR_TASK_REMINDER, "for task reminder"),
@@ -38,8 +36,6 @@ class Notification(Base):
         (FOR_FOLLOW, "for follow"),
         (FOR_FOLLOW_REQUEST, "for follow request"),
         (FOR_FOLLOW_REQUEST_ACCEPTED, "for follow request accpeted"),
-        (FOR_PECK, "for peck"),
-        (FOR_COMMENT, "for comment"),
     ]
 
     FOLLOWING_TYPES = (
@@ -47,11 +43,7 @@ class Notification(Base):
         FOR_FOLLOW_REQUEST,
         FOR_FOLLOW_REQUEST_ACCEPTED,
     )
-    INTERACTION_TYPES = (
-        FOR_TASK_REACTION,
-        FOR_PECK,
-        FOR_COMMENT,
-    )
+    INTERACTION_TYPES = (FOR_TASK_REACTION,)
     SOCIAL_TYPES = INTERACTION_TYPES + FOLLOWING_TYPES
 
     type = models.CharField(choices=NOTIFICATION_TYPES, max_length=128)
@@ -79,21 +71,9 @@ class Notification(Base):
         null=True,
         blank=True,
     )
-    peck = models.ForeignKey(
-        Peck,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-    comment = models.ForeignKey(
-        Comment,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
 
     def __str__(self) -> str:
-        return f"Notification: {self.task_reminder or self.task_reaction or self.following or self.peck or self.comment}"
+        return f"Notification: {self.task_reminder or self.task_reaction or self.following}"
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "notifications"
