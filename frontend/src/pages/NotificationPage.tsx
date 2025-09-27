@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import { LoaderCircleBold } from "@components/common/LoaderCircle"
+import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import MildButton from "@components/common/MildButton"
 import NotificationBody from "@components/notifications/NotificationBody"
 
@@ -75,10 +75,17 @@ function NotificationPageInner({ id }: { id: Notification["id"] }) {
         ]
     }, [data, locale, tz])
 
-    if (isPending || (data?.type !== "task_reminder" && !relatedUser)) {
+    const closeSection = modal && (
+        <CloseButton onClick={() => modal.closeModal()}>
+            <FeatherIcon icon="x" />
+        </CloseButton>
+    )
+
+    if (isPending) {
         return (
             <Frame>
-                <LoaderCircleBold />
+                {closeSection}
+                <LoaderCircleFull height="7em" />
             </Frame>
         )
     }
@@ -86,23 +93,21 @@ function NotificationPageInner({ id }: { id: Notification["id"] }) {
     if (isError) {
         return (
             <Frame>
-                {modal && (
-                    <CloseButton onClick={() => modal.closeModal()}>
-                        <FeatherIcon icon="x" />
-                    </CloseButton>
-                )}
+                {closeSection}
                 {t("common.error_load")}
             </Frame>
         )
     }
 
+    const time = (
+        <Time dateTime={data.created_at} title={data.created_at}>
+            {dateLocale} ({dateRelative})
+        </Time>
+    )
+
     return (
         <Frame>
-            {modal && (
-                <CloseButton onClick={() => modal.closeModal()}>
-                    <FeatherIcon icon="x" />
-                </CloseButton>
-            )}
+            {closeSection}
             {relatedUser && (
                 <Header>
                     <Link to={`/app/users/@${relatedUser.username}`}>
@@ -112,25 +117,17 @@ function NotificationPageInner({ id }: { id: Notification["id"] }) {
                         <Username to={`/app/users/@${relatedUser.username}`}>
                             @{relatedUser.username}
                         </Username>
-                        <Time
-                            dateTime={data.created_at}
-                            title={data.created_at}>
-                            {dateLocale} ({dateRelative})
-                        </Time>
+                        {time}
                     </Texts>
                 </Header>
             )}
-            {!relatedUser && data.type === "task_reminder" && (
+            {data.type === "task_reminder" && (
                 <Header>
                     <Texts>
                         <TaskReminderTaskName>
                             {data.task_reminder.task_name}
                         </TaskReminderTaskName>
-                        <Time
-                            dateTime={data.created_at}
-                            title={data.created_at}>
-                            {dateLocale} ({dateRelative})
-                        </Time>
+                        {time}
                     </Texts>
                 </Header>
             )}
