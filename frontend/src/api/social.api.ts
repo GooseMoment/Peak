@@ -9,15 +9,6 @@ export interface Emoji {
     img: string
 }
 
-/**
- * @deprecated use {@link Remark} instead
- */
-export interface Quote extends Base {
-    user: User
-    content: string
-    date: string
-}
-
 export interface Remark extends Base {
     user: User
     content: string
