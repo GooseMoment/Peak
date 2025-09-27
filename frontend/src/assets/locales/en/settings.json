@@ -12,7 +12,6 @@
         "languages_and_time": "Languages & Time",
         "notifications": "Notifications",
         "appearance": "Appearance",
-        "reactions": "Reactions",
         "blocks": "Blocks",
         "info": "Info"
     },
@@ -174,16 +173,6 @@
         },
         "close_sidebar_on_startup": {
             "name": "Close sidebar on start up"
-        }
-    },
-    "reactions": {
-        "favorite_emojis": {
-            "name": "Favorite emojis",
-            "description": "Favorite these and react easily."
-        },
-        "dislikable_emojis": {
-            "name": "Emojis to avoid",
-            "description": "These emojis will not show up in front of you."
         }
     },
     "blocks": {
