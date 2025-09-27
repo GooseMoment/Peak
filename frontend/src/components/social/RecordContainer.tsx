@@ -8,7 +8,8 @@ import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import ErrorBox from "@components/errors/ErrorBox"
 import { SkeletonDrawer } from "@components/project/skeletons/SkeletonProjectPage"
 import LoadMoreButton from "@components/social/common/LoadMoreButton"
-import TaskBox from "@components/social/logDetails/TaskBox"
+import ReactionContainer from "@components/social/interaction/reactions/ReactionContainer"
+import TaskFrame from "@components/tasks/TaskFrame"
 
 import { getCurrentUsername } from "@api/client"
 import { getRecord } from "@api/social.api"
@@ -102,11 +103,8 @@ export default function RecordContainer({
                     return (
                         <Fragment key={task.id}>
                             {drawerInsertion}
-                            <TaskBox
-                                task={task}
-                                color={lastColor}
-                                isFollowingPage
-                            />
+                            <TaskFrame task={task} isSocial />
+                            <ReactionContainer task={task} />
                         </Fragment>
                     )
                 }),
