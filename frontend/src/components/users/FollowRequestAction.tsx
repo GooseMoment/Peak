@@ -45,7 +45,7 @@ export default function FollowRequestAction({
         mutationFn: () => patchFollowRequest(user.username, false),
         onSuccess: (data) => {
             queryClient.setQueryData(
-                ["followings", currentUsername, user.username],
+                ["followings", user.username, currentUsername],
                 data,
             )
         },
