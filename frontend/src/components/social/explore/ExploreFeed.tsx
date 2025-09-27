@@ -57,8 +57,6 @@ const ExploreFeed = ({
         else fetchNextFoundPage()
     }
 
-    const users = foundPage?.pages?.flatMap?.((g) => g?.results ?? []) ?? []
-
     if (isRecommendPending) {
         return (
             <LoaderCircleWrapper>
@@ -79,18 +77,20 @@ const ExploreFeed = ({
                 <LoaderCircleWrapper>
                     <LoaderCircleFull />
                 </LoaderCircleWrapper>
-            ) : isSearching && users.length === 0 ? (
+            ) : isSearching && foundPage?.pages[0].results.length === 0 ? (
                 <NoResult>{t("no_result")}</NoResult>
             ) : (
-                users.map((feedUser) => (
-                    <StatBox
-                        key={feedUser.username}
-                        stat={feedUser}
-                        isSelected={feedUser.username === selectedUser}
-                        setSelectedUser={setSelectedUser}
-                        from="explore"
-                    />
-                ))
+                foundPage?.pages.map((group) =>
+                    group.results.map((feedUser) => (
+                        <StatBox
+                            key={feedUser.username}
+                            stat={feedUser}
+                            isSelected={feedUser.username === selectedUser}
+                            setSelectedUser={setSelectedUser}
+                            from="explore"
+                        />
+                    )),
+                )
             )}
 
             {!isSearching && <Suggestion>{t("suggestion")}</Suggestion>}
