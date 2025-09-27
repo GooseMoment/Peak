@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 import styled, { css } from "styled-components"
 
 import ContentDetail, {
@@ -37,9 +39,12 @@ const Content = ({ notification, relatedUser }: ContentProps) => {
                     notification={notification}
                     relatedUser={relatedUser}
                 />
-                <label title={datetime.toLocaleString(DateTime.DATETIME_MED)}>
-                    <Time>{datetime.toRelative({ style: "narrow" })}</Time>
-                </label>
+                <Link to={`${notification.id}`}>
+                    <Time
+                        title={datetime.toLocaleString(DateTime.DATETIME_MED)}>
+                        {datetime.toRelative({ style: "narrow" })}
+                    </Time>
+                </Link>
             </ContentTop>
             <ContentDetail notification={notification} />
         </Container>
@@ -85,8 +90,7 @@ const Time = styled.time<{ $skeleton?: boolean }>`
     display: block;
     word-break: keep-all;
     white-space: nowrap;
-
-    cursor: help;
+    cursor: pointer;
 
     ${ifMobile} {
         font-size: 0.65em;
@@ -98,6 +102,7 @@ const Time = styled.time<{ $skeleton?: boolean }>`
             width: 70px;
             height: 1em;
             ${skeletonCSS()}
+            cursor: default;
         `}
 `
 

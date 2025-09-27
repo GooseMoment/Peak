@@ -7,7 +7,7 @@ import {
 } from "react"
 
 import { ModalChildrenAnimationWrapper } from "@utils/useModal"
-import useStopScroll from "@utils/useStopScroll"
+import useStopVerticalScroll from "@utils/useStopVerticalScroll"
 
 import { createPortal } from "react-dom"
 
@@ -21,7 +21,6 @@ export const useModalWindowCloseContext = () => {
 }
 
 const el = document.getElementById("window-container")
-const root = document.getElementById("root")
 
 // see: https://github.com/remix-run/react-router/discussions/9864#discussioncomment-6350903
 
@@ -41,7 +40,7 @@ const ModalWindow = ({
         setTimeout(() => afterClose(), 100)
     }, [afterClose])
 
-    useStopScroll(true)
+    useStopVerticalScroll(true)
 
     const handleOutsideClick = useCallback(
         (e) => {
@@ -69,17 +68,9 @@ const ModalWindow = ({
         el.addEventListener("click", handleOutsideClick)
         document.addEventListener("keydown", handleKeyDown)
 
-        if (!additional) {
-            root.classList.add("has-modal")
-        }
-
         return () => {
             el.removeEventListener("click", handleOutsideClick)
             document.removeEventListener("keydown", handleKeyDown)
-
-            if (!additional) {
-                root.classList.remove("has-modal")
-            }
         }
     }, [additional, handleKeyDown, handleOutsideClick])
 
