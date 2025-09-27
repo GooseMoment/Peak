@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from .models import Notification
-from social.models import TaskReaction, Peck, Following, Comment
+from social.models import TaskReaction, Following
 from .push import pushNotificationToUser
 
 # A receiver for post_save of TaskReminder is intentionally missed.
@@ -25,23 +25,6 @@ def create_notification_for_task_reaction(
         user=target_user,
         task_reaction=instance,
         type=Notification.FOR_TASK_REACTION,
-    )
-
-
-@receiver(post_save, sender=Peck)
-def create_notification_for_peck(instance: Peck, **kwargs):
-    # create peck notification when Peck is created & updated
-
-    target_user = instance.task.user
-    noti_type = Notification.FOR_PECK
-
-    if target_user == instance.user:
-        return
-
-    return Notification.objects.create(
-        user=target_user,
-        peck=instance,
-        type=noti_type,
     )
 
 
@@ -72,28 +55,6 @@ def create_notification_for_following(instance: Following, **kwargs):
         case Following.REJECTED, Following.CANCELED:
             # no notification for these types
             pass
-
-
-@receiver(post_save, sender=Comment)
-def create_notification_for_comment(instance: Comment, created=False, **kwargs):
-    if not created:
-        return
-
-    parent_owner = None
-    if instance.parent_type == Comment.FOR_TASK:
-        parent_owner = instance.task.user if instance.task else None
-    else:
-        parent_owner = instance.quote.user if instance.quote else None
-
-    if parent_owner == instance.user or parent_owner is None:
-        return
-
-    return Notification.objects.create(
-        user=parent_owner,
-        type=Notification.FOR_COMMENT,
-        comment=instance,
-        created_at=instance.created_at,
-    )
 
 
 @receiver(post_save, sender=Notification)

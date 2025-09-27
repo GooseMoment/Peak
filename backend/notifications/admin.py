@@ -29,7 +29,6 @@ class NotificationAdmin(admin.ModelAdmin):
         "task_reminder",
         "task_reaction",
         "following",
-        "peck",
     ]
     readonly_fields = readonly_fields_base
     fieldsets = [
@@ -46,7 +45,6 @@ class NotificationAdmin(admin.ModelAdmin):
                     "task_reminder",
                     "task_reaction",
                     "following",
-                    "peck",
                 ],
             },
         ),

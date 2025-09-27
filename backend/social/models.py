@@ -28,39 +28,6 @@ class Emoji(Base):
         db_table = "emojis"
 
 
-class Peck(Base):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-    )
-    task = models.ForeignKey(
-        Task,
-        on_delete=models.CASCADE,
-    )
-    count = models.IntegerField()
-
-    def __str__(self) -> str:
-        return f"{self.count} pecks by {self.user} → '{self.task.name}'"
-
-    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
-        db_table = "pecks"
-
-
-class Quote(Base):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-    )
-    content = models.TextField()
-    date = models.DateTimeField(null=True, blank=True)
-
-    def __str__(self) -> str:
-        return f"Quote of {self.date} by {self.user}"
-
-    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
-        db_table = "quotes"
-
-
 class Remark(Base):
     user = models.ForeignKey(
         User,
@@ -132,36 +99,6 @@ class TaskReaction(ReactionBase):
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ReactionBase
         db_table = "task_reactions"
         constraints = ReactionBase.Meta.constraints
-
-
-class Comment(Base):
-    FOR_TASK = "task"
-    FOR_QUOTE = "quote"
-
-    COMMENT_TYPE = [
-        (FOR_TASK, "For task"),
-        (FOR_QUOTE, "For quote"),
-    ]
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-    )
-    parent_type = models.CharField(choices=COMMENT_TYPE, max_length=128)
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, null=True, blank=True)
-    quote = models.ForeignKey(
-        Quote,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-    comment = models.TextField()
-
-    def __str__(self) -> str:
-        return f"Comment by {self.user} → {self.quote or self.task}"
-
-    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
-        db_table = "comments"
 
 
 class Following(models.Model):  # Base 상속 시 id가 생기므로 models.Model 유지

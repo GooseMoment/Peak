@@ -1,11 +1,8 @@
 from django.contrib import admin
 from .models import (
     Emoji,
-    Peck,
-    Quote,
     Remark,
     TaskReaction,
-    Comment,
     Following,
     Block,
 )
@@ -30,42 +27,8 @@ class EmojiAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(Peck)
-class PeckAdmin(admin.ModelAdmin):
-    ordering = ["-updated_at"]
-    search_fields = ["user__username", "task"]
-    autocomplete_fields = ["user", "task"]
-    readonly_fields = readonly_fields_base
-    fieldsets = [
-        (
-            None,
-            {
-                "fields": ["user", "task", "count"],
-            },
-        ),
-        fieldset_base,
-    ]
-
-
 @admin.register(Remark)
 class RemarkAdmin(admin.ModelAdmin):
-    ordering = ["-date", "updated_at"]
-    search_fields = ["user__username", "date"]
-    autocomplete_fields = ["user"]
-    readonly_fields = readonly_fields_base
-    fieldsets = [
-        (
-            None,
-            {
-                "fields": ["user", "content", "date"],
-            },
-        ),
-        fieldset_base,
-    ]
-
-
-@admin.register(Quote)
-class QuoteAdmin(admin.ModelAdmin):
     ordering = ["-date", "updated_at"]
     search_fields = ["user__username", "date"]
     autocomplete_fields = ["user"]
@@ -92,29 +55,6 @@ class TaskReactionSerializer(admin.ModelAdmin):
             None,
             {
                 "fields": ["user", "task", "image_emoji", "unicode_emoji"],
-            },
-        ),
-        fieldset_base,
-    ]
-
-
-@admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
-    ordering = ["-updated_at"]
-    search_fields = ["user__username", "task"]
-    autocomplete_fields = ["user", "task", "quote"]
-    readonly_fields = readonly_fields_base
-    fieldsets = [
-        (
-            None,
-            {
-                "fields": ["user", "parent_type", "comment"],
-            },
-        ),
-        (
-            "Payloads",
-            {
-                "fields": ["task", "quote"],
             },
         ),
         fieldset_base,

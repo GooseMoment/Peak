@@ -41,10 +41,8 @@ urlpatterns = [
         views.RemarkDetail.as_view(),
         name="remark-detail",
     ),
-    # interactions (reactions, comments, pecks)
+    # reactions
     path("task_reactions/<str:reaction_id>/", views.TaskReactionDetail.as_view()),
-    path("comments/<str:type>/<str:id>/", views.CommentView.as_view()),
-    path("pecks/<str:id>/", views.PeckView.as_view()),
     path("emojis/", views.EmojiList.as_view()),
 ]
 
