@@ -63,7 +63,7 @@ export default function useModal(options: useModalOptions = {}): Modal {
             setIsOpen(false)
             options.afterClose?.()
             setIsClosing(false)
-        }, 100)
+        }, 100) // intentionally shorter than animation duration
     }, [options])
 
     const toggleModal = useCallback(() => {
