@@ -55,7 +55,7 @@ const SimpleAssigned = ({
             <CreateSimpleBox icon={<FeatherIcon icon="calendar" />}>
                 {items.map((item, index) => (
                     <ContentBox
-                        key={item}
+                        key={index}
                         $color={color}
                         $isActive={assignedIndex === index}
                         onClick={() => setAssignedIndex(index)}>

@@ -57,7 +57,7 @@ const SimpleDue = ({
             <CreateSimpleBox icon={<Hourglass />}>
                 {items.map((item, index) => (
                     <ContentBox
-                        key={item}
+                        key={index}
                         $color={color}
                         $isActive={dueIndex === index}
                         onClick={() => setDueIndex(index)}>

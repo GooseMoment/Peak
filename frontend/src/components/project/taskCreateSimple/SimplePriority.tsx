@@ -55,7 +55,7 @@ const SimplePriority = ({
             <CreateSimpleBox icon={<FeatherIcon icon="alert-circle" />}>
                 {items.map((item, index) => (
                     <ContentBox
-                        key={item}
+                        key={index}
                         $color={color}
                         $isActive={priorityIndex === index}
                         onClick={() => setPriorityIndex(index)}>
