@@ -40,10 +40,10 @@ const Content = ({ notification, relatedUser }: ContentProps) => {
                     relatedUser={relatedUser}
                 />
                 <Link to={`${notification.id}`}>
-                    <label
+                    <Time
                         title={datetime.toLocaleString(DateTime.DATETIME_MED)}>
-                        <Time>{datetime.toRelative({ style: "narrow" })}</Time>
-                    </label>
+                        {datetime.toRelative({ style: "narrow" })}
+                    </Time>
                 </Link>
             </ContentTop>
             <ContentDetail notification={notification} />
@@ -90,8 +90,7 @@ const Time = styled.time<{ $skeleton?: boolean }>`
     display: block;
     word-break: keep-all;
     white-space: nowrap;
-
-    cursor: help;
+    cursor: pointer;
 
     ${ifMobile} {
         font-size: 0.65em;
@@ -103,6 +102,7 @@ const Time = styled.time<{ $skeleton?: boolean }>`
             width: 70px;
             height: 1em;
             ${skeletonCSS()}
+            cursor: default;
         `}
 `
 
