@@ -9,12 +9,6 @@ export interface Emoji {
     img: string
 }
 
-export interface Peck extends Base {
-    user: User
-    task: Task
-    count: number
-}
-
 /**
  * @deprecated use {@link Remark} instead
  */
@@ -53,22 +47,6 @@ export interface TaskReactionImageEmoji extends Base {
 }
 
 export type TaskReaction = TaskReactionUnicodeEmoji | TaskReactionImageEmoji
-
-export interface CommentTask extends Base {
-    user: User
-    parent_type: "task"
-    task: Task
-    comment: string
-}
-
-export interface CommentQuote extends Base {
-    user: User
-    parent_type: "quote"
-    quote: Quote
-    comment: string
-}
-
-export type Comment = CommentTask | CommentQuote
 
 export interface Following {
     follower: User
