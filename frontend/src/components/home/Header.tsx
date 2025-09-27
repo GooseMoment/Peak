@@ -47,9 +47,6 @@ const Header = () => {
                         <HeaderProfile src={me.profile_img} />
                     </Link>
                 )}
-                <Link to="/app/notifications">
-                    <FeatherIcon icon="bell" />
-                </Link>
                 <Link to="/app/settings/profile">
                     <FeatherIcon icon="settings" />
                 </Link>

@@ -1,6 +1,5 @@
 {
     "sidebar": {
-        "search": "Search",
         "home": "Home",
         "notifications": "Notifications",
         "today": "Today",
@@ -410,19 +409,6 @@
             "no_result": "No users matched your search",
             "suggestion": "Make new connections with new people!"
         }
-    },
-    "search": {
-        "title": "Search",
-        "filter_button": {
-            "search_terms": "Terms",
-            "project": "Project",
-            "drawer": "Drawer",
-            "assigned_at": "Assign",
-            "completed_at": "Completed",
-            "privacy": "Privacy",
-            "memo": "Memo"
-        },
-        "no_result": "Your search did not match any tasks"
     },
     "update": {
         "message": "New update available.",

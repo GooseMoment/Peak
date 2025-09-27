@@ -15,9 +15,8 @@
 - Add and manage **tasks**(todos).
 - Organize tasks with **drawers** and **projects**.
 - Get reminders with push notifications.
-- **Follow** your friends. (WIP)
-- Put **reactions** to your friends' tasks with fancy **emojis**. (WIP)
-- **Search** among your tasks. 
+- **Follow** your friends.
+- Put **reactions** to your friends' tasks with fancy **emojis**.
 
 ## Deployment
 

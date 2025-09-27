@@ -65,12 +65,6 @@ declare module "styled-components" {
             hoverColor: string
         }
         help: { addressBarShadowColor: string }
-        search: {
-            borderColor: string
-            buttonColor: string
-            activatedColor: string
-            activatedBackgroundColor: string
-        }
         toastTheme: LightDark
     }
 }

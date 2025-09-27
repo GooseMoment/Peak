@@ -69,7 +69,6 @@ INSTALLED_APPS = [
     "social",
     "notifications",
     "today",
-    # 'search',
     "user_setting",
     "rest_framework",
     "corsheaders",
