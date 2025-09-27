@@ -21,8 +21,6 @@ import {
     verifyEmail,
 } from "@api/auth.api"
 
-import sleep from "@utils/sleep"
-
 import FeatherIcon from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -49,7 +47,7 @@ export const SignInForm = () => {
             }
 
             toast.success(t("sign_in_success"))
-            await sleep(1000)
+            await new Promise((r) => setTimeout(r, 1000))
 
             navigate("/app/")
         } catch (err: unknown) {
