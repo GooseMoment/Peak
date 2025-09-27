@@ -95,8 +95,17 @@ const TaskDetailDue = ({
         }
     }
 
-    const handleSelectedDateChange = (date: string) => {
+    const handleSelectedDateChange = (date: string | null) => {
         setSelectedDate(date)
+
+        if (date == null) {
+            setFunc({
+                due_type: null,
+                due_date: null,
+                due_datetime: null,
+            })
+            return
+        }
 
         if (task.due_type === "due_datetime") {
             const converted_selectedDate = DateTime.fromISO(date, {

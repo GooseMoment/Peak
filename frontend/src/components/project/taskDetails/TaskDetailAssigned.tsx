@@ -56,8 +56,13 @@ const TaskDetailAssigned = ({
         }
     }
 
-    const handleSelectedDateChange = (date: string) => {
+    const handleSelectedDateChange = (date: string | null) => {
         setSelectedDate(date)
+
+        if (date == null) {
+            setFunc({ assigned_at: null })
+            return
+        }
 
         setFunc({
             assigned_at: DateTime.fromISO(date, {
