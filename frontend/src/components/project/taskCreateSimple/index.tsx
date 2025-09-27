@@ -13,6 +13,10 @@ import styled, { css } from "styled-components"
 import SimpleAssigned from "@components/project/taskCreateSimple/SimpleAssigned"
 import SimpleDue from "@components/project/taskCreateSimple/SimpleDue"
 import SimplePriority from "@components/project/taskCreateSimple/SimplePriority"
+import {
+    addAssignedDateFromToday,
+    addDueDateFromToday,
+} from "@components/project/taskCreateSimple/addDateFromToday"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 import createInitialTask from "@components/tasks/utils/createInitialTask"
 
@@ -46,12 +50,13 @@ const TaskCreateSimple = ({
         createInitialTask(drawer),
     )
 
-    const color = usePaletteColor(drawer.project.color)
-
     const [content, setContent] = useState<SimpleContentKey>("name")
-    const [assignedIndex, setAssignedIndex] = useState<number>(0)
-    const [dueIndex, setDueIndex] = useState<number>(0)
-    const [priorityIndex, setPriorityIndex] = useState<number>(0)
+    const [assignedIndex, setAssignedIndex] = useState(0)
+    const [dueIndex, setDueIndex] = useState(0)
+    const [priorityIndex, setPriorityIndex] = useState(0)
+
+    const color = usePaletteColor(drawer.project.color)
+    const dateOptions = useMemo(() => makeDateOptions(), [])
 
     const editNewTask = useCallback(
         (diff: Partial<MinimalTask>) => {
@@ -84,7 +89,6 @@ const TaskCreateSimple = ({
                     <SimpleAssigned
                         assignedIndex={assignedIndex}
                         setAssignedIndex={setAssignedIndex}
-                        editNewTask={editNewTask}
                         color={color}
                     />
                 ),
@@ -96,7 +100,6 @@ const TaskCreateSimple = ({
                     <SimpleDue
                         dueIndex={dueIndex}
                         setDueIndex={setDueIndex}
-                        editNewTask={editNewTask}
                         color={color}
                     />
                 ),
@@ -108,7 +111,6 @@ const TaskCreateSimple = ({
                     <SimplePriority
                         priorityIndex={priorityIndex}
                         setPriorityIndex={setPriorityIndex}
-                        editNewTask={editNewTask}
                         color={color}
                     />
                 ),
@@ -197,7 +199,13 @@ const TaskCreateSimple = ({
             return
         }
 
-        postMutation.mutate(newTask)
+        const taskData = {
+            ...newTask,
+            assigned_at: addAssignedDateFromToday(dateOptions[assignedIndex]),
+            ...addDueDateFromToday(dateOptions[dueIndex]),
+            priority: priorityIndex,
+        }
+        postMutation.mutate(taskData)
     }
 
     return (
@@ -228,6 +236,15 @@ const TaskCreateSimple = ({
         </TaskCreateSimpleBlock>
     )
 }
+
+const makeDateOptions = () => [
+    null,
+    { days: 0 },
+    { days: 1 },
+    { days: 7 },
+    { days: 14 },
+    { months: 1 },
+]
 
 const TaskCreateSimpleBlock = styled.div`
     margin: 0.5em 0em;

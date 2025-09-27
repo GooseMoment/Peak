@@ -38,8 +38,17 @@ const TaskDetail = ({ task }: { task: MinimalTaskWithID }) => {
 
     const patchMutation = useMutation({
         mutationFn: (data: MinimalTaskWithID) => {
+            const {
+                id: _id,
+                user: _user,
+                created_at: _created_at,
+                updated_at: _updated_at,
+                deleted_at: _deleted_at,
+                ...rest
+            } = data
+
             const taskData = {
-                ...data,
+                ...rest,
                 drawer: data.drawer.id,
             }
             return patchTask(data.id, taskData)
