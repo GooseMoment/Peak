@@ -120,7 +120,7 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
             Task.objects.filter(
                 user_id=OuterRef("id"),
                 completed_at__range=today_range,
-                privacy__in=PrivacyMixin.FOR_PUBLIC,
+                privacy__in=(PrivacyMixin.FOR_PUBLIC,),
             )
             .order_by()
             .values("user_id")
@@ -132,7 +132,7 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
             TaskReaction.objects.filter(
                 task__user_id=OuterRef("id"),
                 task__completed_at__range=today_range,
-                task__privacy__in=PrivacyMixin.FOR_PUBLIC,
+                task__privacy__in=(PrivacyMixin.FOR_PUBLIC,),
             )
             .order_by()
             .values("task__user_id")
@@ -180,15 +180,15 @@ class ExploreSearchView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAP
 
         user: User = self.request.user  # pyright: ignore[reportAssignmentType]
 
-        base_qs = User.objects.exclude(id=user.id).exclude(
-            Q(blockers__blocker=user, blockers__deleted_at__isnull=True)  # 내가 차단
-            | Q(
-                blockees__blockee=user, blockees__deleted_at__isnull=True
-            )  # 상대가 나 차단
-            | Q(
-                followers__follower=user, followers__status=Following.ACCEPTED
-            )  # 이미 내가 팔로우
-            | Q(is_staff=True)
+        base_qs = (
+            User.objects.exclude(id=user.id)
+            .exclude(
+                Q(blockers__blocker=user, blockers__deleted_at__isnull=True)
+                | Q(blockees__blockee=user, blockees__deleted_at__isnull=True)
+                | Q(followers__follower=user, followers__status=Following.ACCEPTED)
+                | Q(is_staff=True)
+            )
+            .order_by("-updated_at")
         )
 
         users_qs = base_qs.filter(username__icontains=keyword)

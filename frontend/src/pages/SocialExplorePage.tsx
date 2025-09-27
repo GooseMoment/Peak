@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 
 import { styled } from "styled-components"
 
@@ -18,11 +18,7 @@ import { DateTime } from "luxon"
 
 const SocialExplorePage = () => {
     const tz = useClientTimezone()
-    const [today] = useState(() =>
-        DateTime.now()
-            .setZone(tz)
-            .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }),
-    )
+    const today = useMemo(() => DateTime.now().setZone(tz).startOf("day"), [tz])
 
     const { isTablet } = useScreenType()
 

@@ -71,7 +71,11 @@ export function DailyUserProfile({
     return (
         <Box>
             <Texts>
-                {back && <PageBack defaultTo={`/app/social/${from}`} />}
+                {back && (
+                    <PageBack
+                        defaultTo={from ? `/app/social/${from}` : "/app/social"}
+                    />
+                )}
                 <Link to={userPagePath}>
                     <UsernameTitle $cursor={noLink ? "default" : "pointer"}>
                         @{username}
