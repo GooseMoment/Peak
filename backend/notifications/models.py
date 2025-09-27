@@ -35,7 +35,7 @@ class Notification(Base):
         (FOR_TASK_REACTION, "for task reaction"),
         (FOR_FOLLOW, "for follow"),
         (FOR_FOLLOW_REQUEST, "for follow request"),
-        (FOR_FOLLOW_REQUEST_ACCEPTED, "for follow request accpeted"),
+        (FOR_FOLLOW_REQUEST_ACCEPTED, "for follow request accepted"),
     ]
 
     FOLLOWING_TYPES = (

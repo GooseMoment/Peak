@@ -21,6 +21,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='notification',
             name='type',
-            field=models.CharField(choices=[('task_reminder', 'for task reminder'), ('task_reaction', 'for task reaction'), ('follow', 'for follow'), ('follow_request', 'for follow request'), ('follow_request_accepted', 'for follow request accpeted')], max_length=128),
+            field=models.CharField(choices=[('task_reminder', 'for task reminder'), ('task_reaction', 'for task reaction'), ('follow', 'for follow'), ('follow_request', 'for follow request'), ('follow_request_accepted', 'for follow request accepted')], max_length=128),
         ),
     ]
