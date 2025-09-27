@@ -28,21 +28,6 @@ class Emoji(Base):
         db_table = "emojis"
 
 
-class Quote(Base):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-    )
-    content = models.TextField()
-    date = models.DateTimeField(null=True, blank=True)
-
-    def __str__(self) -> str:
-        return f"Quote of {self.date} by {self.user}"
-
-    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
-        db_table = "quotes"
-
-
 class Remark(Base):
     user = models.ForeignKey(
         User,
