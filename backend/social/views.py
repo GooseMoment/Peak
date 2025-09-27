@@ -21,6 +21,7 @@ from django.db.models import (
     IntegerField,
     Case,
     When,
+    Exists,
     CharField,
 )
 from django.db.models.query import QuerySet
@@ -82,15 +83,37 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
             followers__follower=user, followers__status=Following.ACCEPTED
         )
 
-        base_qs = User.objects.exclude(id=user.id).exclude(
-            Q(blockers__blocker=user, blockers__deleted_at__isnull=True)  # 내가 차단
-            | Q(
-                blockees__blockee=user, blockees__deleted_at__isnull=True
-            )  # 상대가 나 차단
-            | Q(
-                followers__follower=user, followers__status=Following.ACCEPTED
-            )  # 이미 내가 팔로우
-            | Q(is_staff=True)
+        user_qs = (
+            User.objects.exclude(id=user.id)
+            .exclude(
+                Q(blockers__blocker=user, blockers__deleted_at__isnull=True)
+                | Q(blockees__blockee=user, blockees__deleted_at__isnull=True)
+                | Q(followers__follower=user, followers__status=Following.ACCEPTED)
+                | Q(is_staff=True)
+            )
+            .order_by("-updated_at")
+        )
+
+        paginated_users = self.paginate_queryset(user_qs)
+        if not paginated_users:
+            raise NotFound("No users found for explore feed.")
+
+        is_follower_sq = Following.objects.filter(
+            follower=OuterRef("id"),
+            followee=user,
+            status=Following.ACCEPTED,
+        )
+
+        i_follow_sq = Following.objects.filter(
+            follower=user,
+            followee=OuterRef("id"),
+            status=Following.ACCEPTED,
+        )
+
+        fof_sq = Following.objects.filter(
+            follower__in=followees,
+            followee=OuterRef("id"),
+            status=Following.ACCEPTED,
         )
 
         task_count_sq = (
@@ -117,54 +140,28 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
             .values("cnt")
         )
 
-        qs = (
-            base_qs.annotate(
-                # 나를 팔로우?
-                is_follower_count=Count(
-                    "followings",
-                    filter=Q(followings__followee=user),
-                    distinct=True,
-                ),
-                # 내가 그 유저를 팔로우?
-                i_follow_count=Count(
-                    "followers",
-                    filter=Q(
-                        followers__follower=user, followers__status=Following.ACCEPTED
-                    ),
-                    distinct=True,
-                ),
-                # 친구의 친구
-                fof_count=Count(
-                    "followers",
-                    filter=Q(followers__follower__in=followees),
-                    distinct=True,
-                ),
-            )
-            .annotate(
-                completed_task_count=Coalesce(
-                    Subquery(task_count_sq, output_field=IntegerField()),
-                    Value(0),
-                    output_field=IntegerField(),
-                ),
-                reaction_count=Coalesce(
-                    Subquery(reaction_count_sq, output_field=IntegerField()),
-                    Value(0),
-                    output_field=IntegerField(),
-                ),
-                date=Value(today, output_field=CharField()),
-            )
-            .annotate(
-                priority=Case(
-                    When(
-                        Q(is_follower_count__gt=0) & Q(i_follow_count=0), then=Value(2)
-                    ),  # 나를 팔로우하지만 나는 X
-                    When(Q(fof_count__gt=0), then=Value(1)),  # 친구의 친구
-                    default=Value(0),
-                    output_field=IntegerField(),
-                )
-            )
-            .order_by("-followings_count", "-id")
-        )
+        qs = user_qs.annotate(
+            is_follower=Exists(is_follower_sq),
+            i_follow=Exists(i_follow_sq),
+            fof=Exists(fof_sq),
+            completed_task_count=Coalesce(
+                Subquery(task_count_sq, output_field=IntegerField()),
+                Value(0),
+                output_field=IntegerField(),
+            ),
+            reaction_count=Coalesce(
+                Subquery(reaction_count_sq, output_field=IntegerField()),
+                Value(0),
+                output_field=IntegerField(),
+            ),
+            date=Value(today, output_field=CharField()),
+            priority=Case(
+                When(Q(is_follower=True) & Q(i_follow=False), then=Value(2)),
+                When(Q(fof=True), then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField(),
+            ),
+        ).order_by("-priority", "-id")
 
         return qs
 
