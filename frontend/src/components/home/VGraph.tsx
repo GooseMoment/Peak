@@ -2,22 +2,29 @@ import { Link } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
 
+import { TaskGrouped } from "@api/today.api"
+
 import { getPaletteColor } from "@assets/palettes"
 
 export function VGraphSkeleton() {
     return (
         <Frame>
             <Graph>
-                <Item $width="100" />
+                <Item to="#" $width={100} />
             </Graph>
             <Categories>
-                <CategoryCircle />
+                <CategoryCircle $color="gray" />
             </Categories>
         </Frame>
     )
 }
 
-export default function VGraph({ items, countAll }) {
+interface VGraphProps {
+    items: TaskGrouped[]
+    countAll: number
+}
+
+export default function VGraph({ items, countAll }: VGraphProps) {
     const theme = useTheme()
 
     return (
@@ -63,7 +70,7 @@ const Graph = styled.div`
     overflow: hidden;
 `
 
-const Item = styled(Link)`
+const Item = styled(Link)<{ $width: number; $color?: string }>`
     display: inline-block;
     width: ${(p) => p.$width}%;
     height: 100%;
@@ -89,7 +96,7 @@ const Category = styled(Link)`
     font-weight: bold;
 `
 
-const CategoryCircle = styled.div`
+const CategoryCircle = styled.div<{ $color: string }>`
     border-radius: 50%;
     aspect-ratio: 1/1;
     height: 1em;
