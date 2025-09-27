@@ -17,9 +17,6 @@ export default function DailyUserProfileContainer({
     username,
     back = false,
 }: DailyUserProfileContainerProps) {
-    const search = new URLSearchParams(location.search)
-    const from = search.get("from")
-
     const {
         data: user,
         isPending,
@@ -33,7 +30,7 @@ export default function DailyUserProfileContainer({
         return (
             <Box>
                 <Texts>
-                    {back && <PageBack defaultTo="/app/social/${from}" />}
+                    {back && <PageBack defaultTo="/app/social" />}
                     <UsernameTitle $loading />
                     {!back && <DisplayNameSkeleton />}
                 </Texts>
@@ -67,11 +64,14 @@ export function DailyUserProfile({
     back,
     noLink,
 }: DailyUserProfileProps) {
+    const search = new URLSearchParams(location.search)
+    const from = search.get("from")
+
     const userPagePath = noLink ? "#" : `/app/users/@${username}`
     return (
         <Box>
             <Texts>
-                {back && <PageBack defaultTo={`/app/social`} />}
+                {back && <PageBack defaultTo={`/app/social/${from}`} />}
                 <Link to={userPagePath}>
                     <UsernameTitle $cursor={noLink ? "default" : "pointer"}>
                         @{username}
