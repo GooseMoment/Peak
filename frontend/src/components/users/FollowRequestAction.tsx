@@ -97,6 +97,7 @@ export function SectionFollowRequestAction({ user }: FollowRequestActionProps) {
             <SectionTitle>
                 {t("requests_exist", { username: user.username })}
             </SectionTitle>
+            <FollowRequestAction user={user} />
         </Section>
     )
 }
