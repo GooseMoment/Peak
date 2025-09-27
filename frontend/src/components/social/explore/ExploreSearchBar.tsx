@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { ChangeEvent, KeyboardEvent, useRef, useState } from "react"
 
 import styled from "styled-components"
 
@@ -7,13 +7,17 @@ import MildButton from "@components/common/MildButton"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const ExploreSearchBar = ({ handleSearch }) => {
-    const { t } = useTranslation("", { keyPrefix: "social.explore" })
+const ExploreSearchBar = ({
+    handleSearch,
+}: {
+    handleSearch: (searchTerm: string) => void
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "social.explore" })
 
     const [searchTerm, setSearchTerm] = useState("")
-    const timer = useRef(null)
+    const timer = useRef<NodeJS.Timeout | null>(null)
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value)
 
         if (timer.current) clearTimeout(timer.current)
@@ -23,10 +27,12 @@ const ExploreSearchBar = ({ handleSearch }) => {
         }, 1500)
     }
 
-    const handleKeyDown = (e) => {
-        if (e.key == "Enter") {
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Enter") {
+            handleSearch(searchTerm)
+
+            if (!timer.current) return
             clearTimeout(timer.current)
-            handleSearch(e.target.value)
         }
     }
 
@@ -38,7 +44,7 @@ const ExploreSearchBar = ({ handleSearch }) => {
                 onKeyDown={handleKeyDown}
                 placeholder={t("searchbar")}
             />
-            <SearchButton onClick={() => handleSearch()}>
+            <SearchButton onClick={() => handleSearch(searchTerm)}>
                 <FeatherIcon icon={"search"} />
             </SearchButton>
         </Box>

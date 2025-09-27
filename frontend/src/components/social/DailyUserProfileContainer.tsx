@@ -64,11 +64,18 @@ export function DailyUserProfile({
     back,
     noLink,
 }: DailyUserProfileProps) {
+    const search = new URLSearchParams(location.search)
+    const from = search.get("from")
+
     const userPagePath = noLink ? "#" : `/app/users/@${username}`
     return (
         <Box>
             <Texts>
-                {back && <PageBack defaultTo="/app/social" />}
+                {back && (
+                    <PageBack
+                        defaultTo={from ? `/app/social/${from}` : "/app/social"}
+                    />
+                )}
                 <Link to={userPagePath}>
                     <UsernameTitle $cursor={noLink ? "default" : "pointer"}>
                         @{username}
