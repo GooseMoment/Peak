@@ -153,12 +153,6 @@ const Middle = () => {
 const getItems = (t: TFunction<"translation">) => [
     // end가 true:  경로가 to와 완전히 일치해야 active
     //       false: to의 하위 경로에 있어도 active
-    {
-        icon: "search" as const,
-        name: t("sidebar.search"),
-        to: "search",
-        end: false,
-    },
     { icon: "home" as const, name: t("sidebar.home"), to: "home", end: true },
     {
         icon: "bell" as const,

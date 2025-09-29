@@ -13,8 +13,7 @@
 - `drawers`: `Drawer` 모델과 뷰
 - `projects`: `Project` 모델과 뷰
 
-- `search`: 검색에 관한 모델과 뷰 (예정)
-- `today`: '오늘' 기능에 관한 모델과 뷰 (미사용)
+- `today`: '오늘' 기능에 관한 모델과 뷰
 - `social`: `Emoji`, `Peck`, `DailyComment`, `Reaction`, `Comment`, `Following` & `Block` 모델과 뷰
 - `notifications`: `Notification` & `TaskReminder` 모델과 뷰
 
