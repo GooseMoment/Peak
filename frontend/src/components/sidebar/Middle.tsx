@@ -125,12 +125,23 @@ const Middle = () => {
                 {hasNextPage ? (
                     <ButtonGroup $justifyContent="center" $margin="1em">
                         <MoreButton
+                            $collapsed={isCollapsed}
+                            type="button"
+                            aria-label={
+                                isCollapsed ? t("common.load_more") : undefined
+                            }
+                            aria-busy={isFetchingNextPage}
                             disabled={isFetchingNextPage}
                             loading={isFetchingNextPage}
                             onClick={() => fetchNextPage()}>
-                            {isPending
-                                ? t("common.loading")
-                                : t("common.load_more")}
+                            {!isCollapsed ? (
+                                t("common.load_more")
+                            ) : (
+                                <FeatherIcon
+                                    icon="chevrons-down"
+                                    aria-hidden="true"
+                                />
+                            )}
                         </MoreButton>
                     </ButtonGroup>
                 ) : null}
@@ -272,8 +283,15 @@ const ProjectLoadErrorBox = styled(ProjectItemBox)<StyledCollapsedProp>`
     }
 `
 
-const MoreButton = styled(Button)`
-    width: 80%;
+const MoreButton = styled(Button)<StyledCollapsedProp>`
+    width: ${(p) => (p.$collapsed ? "100%" : "80%")};
+    padding: ${(p) => (p.$collapsed ? "0.25em" : "0.5em 1em")};
+
+    & svg {
+        top: 0;
+        margin-right: 0;
+        font-size: 1.5em;
+    }
 `
 
 export default Middle
