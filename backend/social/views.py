@@ -66,7 +66,11 @@ import emoji as emojilib
 
 class ExploreFeedPagination(CursorPagination):
     page_size = 8
-    ordering = ("-followings_count", "-id")
+    ordering = ("-priority", "-id")
+
+class ExploreSearchPagination(CursorPagination):
+    page_size = 8
+    ordering = ("-updated_at", "-id")
 
 
 class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIView):
@@ -171,7 +175,7 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
 
 class ExploreSearchView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = StatSerializer
-    pagination_class = ExploreFeedPagination
+    pagination_class = ExploreSearchPagination
 
     def get_queryset(self):
         keyword = self.request.GET.get("query")
