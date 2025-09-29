@@ -15,7 +15,7 @@ import SimpleDue from "@components/project/taskCreateSimple/SimpleDue"
 import SimplePriority from "@components/project/taskCreateSimple/SimplePriority"
 import {
     addAssignedDateFromToday,
-    addDueDateFromToday,
+    addDueFromToday,
 } from "@components/project/taskCreateSimple/addDateFromToday"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 import createInitialTask from "@components/tasks/utils/createInitialTask"
@@ -202,7 +202,7 @@ const TaskCreateSimple = ({
         const taskData = {
             ...newTask,
             assigned_at: addAssignedDateFromToday(dateOptions[assignedIndex]),
-            ...addDueDateFromToday(dateOptions[dueIndex]),
+            ...addDueFromToday(dateOptions[dueIndex]),
             priority: priorityIndex,
         }
         postMutation.mutate(taskData)

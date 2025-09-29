@@ -1,4 +1,4 @@
-import { Due } from "@api/tasks.api"
+import type { Due } from "@api/tasks.api"
 
 import { getClientTimezone } from "@utils/clientSettings"
 
@@ -15,7 +15,7 @@ export const addAssignedDateFromToday = (
     return DateTime.now().setZone(tz).plus(set).toISODate()
 }
 
-export const addDueDateFromToday = (
+export const addDueFromToday = (
     set: { days: number } | { months: number } | null,
 ): Due => {
     if (!set) {

@@ -65,7 +65,7 @@ const TaskDetailDue = ({
                 const due_datetime = DateTime.fromISO(task.due_datetime, {
                     zone: tz,
                 })
-                const converted_datetime = due_datetime
+                const convertedDatetime = due_datetime
                     .set({
                         year: date.year,
                         month: date.month,
@@ -73,23 +73,23 @@ const TaskDetailDue = ({
                     })
                     .toISO()
 
-                if (converted_datetime === null) return
+                if (convertedDatetime === null) return
 
                 setFunc({
                     due_type: "due_datetime",
                     due_date: null,
-                    due_datetime: converted_datetime,
+                    due_datetime: convertedDatetime,
                 })
                 return
             }
 
-            const coverted_date = date.toISODate()
+            const covertedDate = date.toISODate()
 
-            if (coverted_date === null) return
+            if (covertedDate === null) return
 
             setFunc({
                 due_type: "due_date",
-                due_date: coverted_date,
+                due_date: covertedDate,
                 due_datetime: null,
             })
         }
@@ -108,10 +108,10 @@ const TaskDetailDue = ({
         }
 
         if (task.due_type === "due_datetime") {
-            const converted_selectedDate = DateTime.fromISO(date, {
+            const convertedSelectedDate = DateTime.fromISO(date, {
                 zone: tz,
             })
-            if (!converted_selectedDate.isValid) return
+            if (!convertedSelectedDate.isValid) return
             const due_datetime = DateTime.fromISO(task.due_datetime, {
                 zone: tz,
             })
@@ -119,9 +119,9 @@ const TaskDetailDue = ({
 
             const converted_datetime = due_datetime
                 .set({
-                    year: converted_selectedDate.year,
-                    month: converted_selectedDate.month,
-                    day: converted_selectedDate.day,
+                    year: convertedSelectedDate.year,
+                    month: convertedSelectedDate.month,
+                    day: convertedSelectedDate.day,
                 })
                 .toISO()
 
@@ -135,17 +135,17 @@ const TaskDetailDue = ({
             return
         }
 
-        const converted_date = DateTime.fromISO(date, {
+        const convertedDate = DateTime.fromISO(date, {
             zone: tz,
         })
-        if (!converted_date.isValid) return
+        if (!convertedDate.isValid) return
 
-        const converted_date_str = converted_date.toISODate()
-        if (converted_date_str === null) return
+        const convertedDateStr = convertedDate.toISODate()
+        if (convertedDateStr === null) return
 
         setFunc({
             due_type: "due_date",
-            due_date: converted_date_str,
+            due_date: convertedDateStr,
             due_datetime: null,
         })
     }
