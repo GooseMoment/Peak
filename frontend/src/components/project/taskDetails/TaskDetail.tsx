@@ -5,10 +5,12 @@ import { useMutation } from "@tanstack/react-query"
 import DeleteAlert from "@components/common/DeleteAlert"
 import { useDeleteTask } from "@components/project/common/useDeleteTask"
 import TaskForm from "@components/project/taskDetails/TaskForm"
+import omitCommonFields from "@components/tasks/utils/omitCommonFields"
 
 import {
     type MinimalTask,
     type MinimalTaskWithID,
+    type TaskPost,
     patchTask,
 } from "@api/tasks.api"
 
@@ -38,20 +40,12 @@ const TaskDetail = ({ task }: { task: MinimalTaskWithID }) => {
 
     const patchMutation = useMutation({
         mutationFn: (data: MinimalTaskWithID) => {
-            const {
-                id: _id,
-                user: _user,
-                created_at: _created_at,
-                updated_at: _updated_at,
-                deleted_at: _deleted_at,
-                ...rest
-            } = data
-
+            const rest = omitCommonFields(data)
             const taskData = {
                 ...rest,
                 drawer: data.drawer.id,
             }
-            return patchTask(data.id, taskData)
+            return patchTask(data.id, taskData as Partial<TaskPost>)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({

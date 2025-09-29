@@ -9,6 +9,7 @@ import EditBox from "@components/project/edit/EditBox"
 import Middle from "@components/project/edit/Middle"
 import PrivacyEdit from "@components/project/edit/PrivacyEdit"
 import TitleInput from "@components/project/edit/TitleInput"
+import omitCommonFields from "@components/tasks/utils/omitCommonFields"
 
 import {
     type Drawer,
@@ -80,15 +81,7 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
 
     const patchMutation = useMutation({
         mutationFn: (data: Drawer) => {
-            const {
-                id: _id,
-                user: _user,
-                created_at: _created_at,
-                updated_at: _updated_at,
-                deleted_at: _deleted_at,
-                ...rest
-            } = data
-
+            const rest = omitCommonFields(data)
             const drawerData = {
                 ...rest,
                 project: data.project.id,
