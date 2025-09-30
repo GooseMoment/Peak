@@ -19,7 +19,6 @@ import { getToken } from "@api/client"
 
 import { lazily } from "react-lazily"
 
-const SearchPage = lazy(() => import("@pages/SearchPage"))
 const HomePage = lazy(() => import("@pages/HomePage"))
 const NotificationsPage = lazy(() => import("@pages/NotificationsPage"))
 const TodayPage = lazy(() => import("@pages/TodayPage"))
@@ -118,10 +117,6 @@ const routes: RouteObject[] = [
             {
                 index: true,
                 element: <StartPage />,
-            },
-            {
-                path: "search",
-                element: <SearchPage />,
             },
             {
                 path: "notifications",

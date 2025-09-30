@@ -1,6 +1,5 @@
 {
     "sidebar": {
-        "search": "검색",
         "home": "홈",
         "notifications": "알림",
         "today": "오늘",
@@ -405,19 +404,6 @@
             "no_result": "당신이 찾는 사람이 없습니다",
             "suggestion": "새로운 사람과 새로운 인연은 어떤가요?"
         }
-    },
-    "search": {
-        "title": "검색",
-        "filter_button": {
-            "search_terms": "검색어",
-            "project": "프로젝트",
-            "drawer": "서랍",
-            "assigned_at": "할당 날짜",
-            "completed_at": "완수 날짜",
-            "privacy": "공개 범위",
-            "memo": "메모"
-        },
-        "no_result": "조건에 맞는 결과를 찾을 수 없습니다"
     },
     "update": {
         "message": "새로운 업데이트가 있습니다.",
