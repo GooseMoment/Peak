@@ -3,6 +3,8 @@ import { deleteSubscription } from "@api/notifications.api"
 
 import { getClientSettings } from "@utils/clientSettings"
 
+import { isAxiosError } from "axios"
+
 const TwoFactorAuthTokenKey = "two_factor_auth_token"
 
 // Types based on backend models and API responses
@@ -90,10 +92,7 @@ export const signIn = async (
     return false // signing in completed
 }
 
-export const authTOTP = async (
-    type: string,
-    code: string,
-): Promise<boolean> => {
+export const authTOTP = async (code: string): Promise<boolean> => {
     const token = localStorage.getItem(TwoFactorAuthTokenKey)
     if (!token) {
         throw new Error("No two-factor authentication token found")
@@ -110,13 +109,12 @@ export const authTOTP = async (
         setToken(res.data.token)
         setCurrentUsername(res.data.user.username)
         localStorage.removeItem(TwoFactorAuthTokenKey)
-    } catch (e: unknown) {
-        const error = e as ApiError
-        if (error?.response?.status === 403) {
+    } catch (error) {
+        if (isAxiosError(error) && error?.response?.status === 403) {
             localStorage.removeItem(TwoFactorAuthTokenKey)
         }
 
-        throw e
+        throw error
     }
 
     return true

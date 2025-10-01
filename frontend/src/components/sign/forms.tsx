@@ -139,7 +139,7 @@ export const TOTPAuthForm = () => {
                 return Promise.reject(new Error("ENTER_6_DIGIT"))
             }
 
-            return authTOTP("totp", totpCode)
+            return authTOTP(totpCode)
         },
         onSuccess: () => {
             toast.success(t("sign_in_success"))
