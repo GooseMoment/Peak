@@ -3,6 +3,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
+from django.conf import settings
+
 from .models import User
 from .serializers import UserSerializer
 from api.request import AuthenticatedRequest
@@ -73,6 +75,16 @@ def upload_profile_img(request: AuthenticatedRequest):
     uploaded = request.FILES.get(
         "profile_img", None
     )  # None: only removes old profile_img
+
+    # check file size
+    if uploaded is not None and uploaded.size > settings.USER_PROFILE_IMG_SIZE_LIMIT:
+        return Response(
+            {
+                "code": "UPLOADPROFILEIMG_FILE_TOO_LARGE",
+                "message": f"file size should be less than {settings.USER_PROFILE_IMG_SIZE_LIMIT / (1024 * 1024)}MB.",
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     old = request.user.profile_img
     if old:
