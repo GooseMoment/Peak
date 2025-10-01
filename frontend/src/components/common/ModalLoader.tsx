@@ -4,9 +4,9 @@ import { LoaderCircleBold } from "./LoaderCircle"
 
 import { createPortal } from "react-dom"
 
-const el = document.querySelector("#confirmation")
+const el = document.querySelector("#confirmation")!
 
-const ModalLoader = () => {
+export default function ModalLoader() {
     return createPortal(
         <Box>
             <LoaderCircleBold />
@@ -28,5 +28,3 @@ const Box = styled.div`
     justify-content: center;
     align-items: center;
 `
-
-export default ModalLoader

@@ -12,7 +12,6 @@
         "languages_and_time": "언어 및 시간",
         "notifications": "알림",
         "appearance": "테마",
-        "reactions": "리액션",
         "blocks": "차단",
         "info": "정보"
     },
@@ -26,7 +25,10 @@
         "profile_edited": "변경사항을 저장했습니다.",
         "profile_fail": "저장할 수 없습니다. 다시 시도하세요.",
         "button_apply": "자르기",
-        "button_cancel": "취소"
+        "button_cancel": "취소",
+        "uploading": "업로드 중...",
+        "upload_error": "이미지 업로드에 실패했습니다. 다른 이미지를 시도하세요.",
+        "upload_success": "프로필 이미지를 업데이트했습니다."
     },
     "general": {
         "startpage": {
@@ -172,16 +174,6 @@
         },
         "close_sidebar_on_startup": {
             "name": "앱 시작 시 사이드바 닫기"
-        }
-    },
-    "reactions": {
-        "favorite_emojis": {
-            "name": "즐겨찾는 에모지",
-            "description": "좋아하는 에모지를 즐겨찾기에 등록하면 빠르게 리액션을 달 수 있습니다."
-        },
-        "dislikable_emojis": {
-            "name": "피하고픈 에모지",
-            "description": "이 에모지는 내 앞에 나타나지 않습니다."
         }
     },
     "blocks": {

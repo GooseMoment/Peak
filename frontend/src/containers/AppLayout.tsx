@@ -6,7 +6,7 @@ import Layout from "@containers/Layout"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import { SidebarContextProvider } from "@components/sidebar/SidebarContext"
 
-const AppLayout = () => {
+export default function AppLayout() {
     return (
         <SidebarContextProvider>
             <Layout>
@@ -19,5 +19,3 @@ const AppLayout = () => {
         </SidebarContextProvider>
     )
 }
-
-export default AppLayout

@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 import LoaderCircle from "@components/common/LoaderCircle"
 
-const FullscreenLoader = () => {
+export default function FullscreenLoader() {
     return (
         <Container>
             <Box>
@@ -61,5 +61,3 @@ const Loader = styled(LoaderCircle)`
     opacity: 0.7;
     border-width: 3px;
 `
-
-export default FullscreenLoader

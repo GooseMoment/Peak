@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 import { ifTablet } from "@utils/useScreenType"
 
-const Box = styled.h1`
+export const Box = styled.h1`
     display: flex;
     align-items: center;
     gap: 0.25em;
@@ -27,7 +27,7 @@ const LogoBox = styled.img`
     border-radius: 6px;
 `
 
-const Brand = () => {
+export default function Brand() {
     return (
         <Box>
             <LogoBox src="/logo.svg" draggable="false" />
@@ -35,6 +35,3 @@ const Brand = () => {
         </Box>
     )
 }
-
-export default Brand
-export { Box }

@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 import { ifMobile } from "@utils/useScreenType"
 
-const SkeletonSidebar = () => {
+export default function SkeletonSidebar() {
     return (
         <Frame>
             <Items>
@@ -75,5 +75,3 @@ const ProfileName = styled.div`
     border-radius: 4px;
     background-color: ${(p) => p.theme.grey};
 `
-
-export default SkeletonSidebar

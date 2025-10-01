@@ -1,3 +1,5 @@
+import { CSSProperties } from "react"
+
 import styled, { keyframes } from "styled-components"
 
 const spin = keyframes`
@@ -28,7 +30,10 @@ export const LoaderCircleBold = styled(LoaderCircle)`
     border-width: 3px;
 `
 
-const FullContainer = styled.div`
+const FullContainer = styled.div<{
+    $width: CSSProperties["width"]
+    $height: CSSProperties["height"]
+}>`
     width: ${(p) => p.$width};
     height: ${(p) => p.$height};
 
@@ -39,7 +44,13 @@ const FullContainer = styled.div`
     align-items: center;
 `
 
-export const LoaderCircleFull = ({ width = "100%", height = "100%" }) => {
+export function LoaderCircleFull({
+    width = "100%",
+    height = "100%",
+}: {
+    width?: CSSProperties["width"]
+    height?: CSSProperties["height"]
+}) {
     return (
         <FullContainer $width={width} $height={height}>
             <LoaderCircleBold />

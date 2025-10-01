@@ -1,8 +1,12 @@
-import Activity, { Emoji } from "@components/sign/Activity"
+import { ReactNode } from "react"
+
+import Activity, { EmojiImg } from "@components/sign/Activity"
+
+import type { Emoji } from "@api/social.api"
 
 import GraphemeSplitter from "grapheme-splitter"
 
-const pick = (array) => {
+function pick<T>(array: Array<T>): T {
     const random = Math.floor(Math.random() * array.length)
     return array[random]
 }
@@ -136,7 +140,7 @@ const comments = [
     // TODO: add comments
 ]
 
-const timeUnitsMap = {
+const timeUnitsMap: Record<string, number> = {
     seconds: 59 - 2,
     minutes: 59 - 2,
     hours: 23 - 2,
@@ -144,14 +148,14 @@ const timeUnitsMap = {
     months: 11 - 2,
 }
 
-const generateActivities = (serverEmojis) => {
-    let emojis = serverEmojis
+const generateActivities = (serverEmojis: Emoji[]) => {
+    let emojis: Emoji[] | string[] = serverEmojis
 
     if (!serverEmojis) {
         emojis = systemEmojis
     }
 
-    const verbDetailMap = {
+    const verbDetailMap: Record<string, Array<Emoji | string>> = {
         reacted: emojis,
         "completed a task": tasks,
         "made a task": tasks,
@@ -159,7 +163,7 @@ const generateActivities = (serverEmojis) => {
         "put today's comment": comments,
     }
 
-    let activities = []
+    const activities: ReactNode[] = []
 
     for (let i = 0; i < 20; i++) {
         const username = pick(usernames)
@@ -169,9 +173,9 @@ const generateActivities = (serverEmojis) => {
             verb = "reacted"
         }
 
-        let detail = pick(verbDetailMap[verb])
-        if (detail?.name) {
-            detail = <Emoji src={detail.img} />
+        let detail: Emoji | ReactNode = pick(verbDetailMap[verb])
+        if (typeof detail === "object" && "img" in detail) {
+            detail = <EmojiImg src={detail.img} />
         }
 
         const timeUnit = pick(Object.keys(timeUnitsMap))

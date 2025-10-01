@@ -1,6 +1,18 @@
 // edited from: https://codesandbox.io/p/sandbox/react-easy-crop-demo-with-cropped-output-q8q1mnr01w?file=%2Fsrc%2FcropImage.js%3A1%2C1-102%2C1
 
-export const createImage = (url) =>
+interface PixelCrop {
+    x: number
+    y: number
+    width: number
+    height: number
+}
+
+interface Flip {
+    horizontal: boolean
+    vertical: boolean
+}
+
+export const createImage = (url: string): Promise<HTMLImageElement> =>
     new Promise((resolve, reject) => {
         const image = new Image()
         image.addEventListener("load", () => resolve(image))
@@ -13,11 +25,11 @@ export const createImage = (url) =>
  * This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
  */
 export default async function getCroppedImg(
-    imageSrc,
-    pixelCrop,
-    type = "image/jpeg",
-    flip = { horizontal: false, vertical: false },
-) {
+    imageSrc: string,
+    pixelCrop: PixelCrop,
+    type: string = "image/jpeg",
+    flip: Flip = { horizontal: false, vertical: false },
+): Promise<string | null> {
     const image = await createImage(imageSrc)
     const canvas = document.createElement("canvas")
     const ctx = canvas.getContext("2d")
@@ -67,9 +79,13 @@ export default async function getCroppedImg(
     // return croppedCanvas.toDataURL('image/jpeg');
 
     // As a blob
-    return new Promise((resolve) => {
+    return new Promise<string | null>((resolve) => {
         croppedCanvas.toBlob((file) => {
-            resolve(URL.createObjectURL(file))
+            if (file) {
+                resolve(URL.createObjectURL(file))
+            } else {
+                resolve(null)
+            }
         }, type)
     })
 }

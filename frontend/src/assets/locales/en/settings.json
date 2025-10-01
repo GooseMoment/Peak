@@ -12,7 +12,6 @@
         "languages_and_time": "Languages & Time",
         "notifications": "Notifications",
         "appearance": "Appearance",
-        "reactions": "Reactions",
         "blocks": "Blocks",
         "info": "Info"
     },
@@ -26,7 +25,10 @@
         "profile_edited": "Changes were saved.",
         "profile_fail": "Couldn't save. Try again.",
         "button_apply": "Crop",
-        "button_cancel": "Cancel"
+        "button_cancel": "Cancel",
+        "uploading": "Uploading...",
+        "upload_error": "Failed to upload the image. Try another one.",
+        "upload_success": "Profile image was updated."
     },
     "general": {
         "startpage": {
@@ -172,16 +174,6 @@
         },
         "close_sidebar_on_startup": {
             "name": "Close sidebar on start up"
-        }
-    },
-    "reactions": {
-        "favorite_emojis": {
-            "name": "Favorite emojis",
-            "description": "Favorite these and react easily."
-        },
-        "dislikable_emojis": {
-            "name": "Emojis to avoid",
-            "description": "These emojis will not show up in front of you."
         }
     },
     "blocks": {

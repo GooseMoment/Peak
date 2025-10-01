@@ -9,7 +9,7 @@ import { Trans, useTranslation } from "react-i18next"
 
 const siteDomain = window.location.host
 
-const InstallInstructionPage = () => {
+export default function InstallInstructionPage() {
     const { t } = useTranslation("docs", {
         keyPrefix: "install_instruction_ios",
     })
@@ -185,5 +185,3 @@ const SafariShareMenuItem = styled.div`
         top: 0.1em;
     }
 `
-
-export default InstallInstructionPage
