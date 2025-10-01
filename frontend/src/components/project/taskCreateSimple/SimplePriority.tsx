@@ -1,24 +1,27 @@
-import { Dispatch, SetStateAction, useCallback, useEffect } from "react"
+import {
+    Dispatch,
+    SetStateAction,
+    useCallback,
+    useEffect,
+    useMemo,
+} from "react"
 
 import {
     ContentBox,
     CreateSimpleBox,
 } from "@components/project/taskCreateSimple/CreateSimpleBox"
 
-import type { MinimalTask } from "@api/tasks.api"
-
 import FeatherIcon from "feather-icons-react"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const SimplePriority = ({
     priorityIndex,
     setPriorityIndex,
-    editNewTask,
     color,
 }: {
     priorityIndex: number
     setPriorityIndex: Dispatch<SetStateAction<number>>
-    editNewTask: (diff: Partial<MinimalTask>) => void
     color: string
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task.priority" })
@@ -45,34 +48,32 @@ const SimplePriority = ({
         }
     }, [priorityIndex, onKeyDown])
 
-    useEffect(() => {
-        editNewTask({ priority: priorityIndex })
-    }, [priorityIndex, editNewTask])
-
-    const items = [
-        { index: 0, content: t("normal") },
-        { index: 1, content: t("important") },
-        { index: 2, content: t("critical") },
-    ]
+    const items = useMemo(() => makePriorityItems(t), [t])
 
     return (
         <div onKeyDown={onKeyDown}>
             <CreateSimpleBox icon={<FeatherIcon icon="alert-circle" />}>
-                {items.map((item) => (
+                {items.map((item, index) => (
                     <ContentBox
-                        key={item.index}
+                        key={index}
                         $color={color}
-                        $isActive={priorityIndex === item.index}
-                        onClick={() => setPriorityIndex(item.index)}>
-                        {priorityIndex === item.index && (
+                        $isActive={priorityIndex === index}
+                        onClick={() => setPriorityIndex(index)}>
+                        {priorityIndex === index && (
                             <FeatherIcon icon="check" />
                         )}
-                        {item.content}
+                        {item}
                     </ContentBox>
                 ))}
             </CreateSimpleBox>
         </div>
     )
 }
+
+const makePriorityItems = (t: TFunction<"translation", "task.priority">) => [
+    t("normal"),
+    t("important"),
+    t("critical"),
+]
 
 export default SimplePriority

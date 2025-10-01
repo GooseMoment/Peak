@@ -101,18 +101,3 @@ export const deleteTask = async (id: string) => {
     const res = await client.delete(`tasks/${id}/`)
     return res.status
 }
-
-export const completeTask = async (id: string) => {
-    const date = new Date()
-    const edit = {
-        completed_at: date.toISOString(),
-    }
-    return await patchTask(id, edit)
-}
-
-export const uncompleteTask = async (id: string) => {
-    const edit = {
-        completed_at: null,
-    }
-    return await patchTask(id, edit)
-}
