@@ -211,7 +211,7 @@ export const getRecord = async (
 }
 
 export const getExploreRecommend = async (cursor: string) => {
-    const res = await client.get<PaginationData<User>>(`social/explore/`, {
+    const res = await client.get<PaginationData<Stat>>(`social/explore/`, {
         params: { cursor },
     })
 
@@ -220,7 +220,7 @@ export const getExploreRecommend = async (cursor: string) => {
 
 export const getExploreFound = async (query: string, cursor: string) => {
     const params = new URLSearchParams({ query, cursor })
-    const res = await client.get<PaginationData<User>>(
+    const res = await client.get<PaginationData<Stat>>(
         `social/explore/search/`,
         { params },
     )

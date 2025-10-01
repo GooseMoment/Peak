@@ -400,9 +400,10 @@
             "more": "With {{count}} more"
         },
         "explore": {
-            "searchbar": "Search for usernames to follow.",
-            "no_result": "No users matched your search",
-            "suggestion": "Make new connections with new people!"
+            "searchbar": "Search for a user",
+            "no_result": "No matching users found 😢",
+            "suggestion": "How about meeting new people and making new connections?",
+            "results_title": "Search results for ‘{{query}}’"
         }
     },
     "update": {
