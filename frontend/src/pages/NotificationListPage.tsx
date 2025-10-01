@@ -142,7 +142,7 @@ const NotificationsPage = () => {
                 )}
             </ImpressionArea>
             {isNotificationEmpty && <NoMore>{t("empty")}</NoMore>}
-            <Suspense name="notification-outlet" fallback={<ModalLoader />}>
+            <Suspense key="notification-outlet" fallback={<ModalLoader />}>
                 <Outlet />
             </Suspense>
         </>
