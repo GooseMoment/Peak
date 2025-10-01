@@ -1,8 +1,9 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import TaskBox from "@components/social/logDetails/TaskBox"
+import ReactionContainer from "@components/social/reactions/ReactionContainer"
 import TaskBlock from "@components/tasks/TaskBlock"
+import TaskFrame from "@components/tasks/TaskFrame"
 import FollowButton from "@components/users/FollowButton"
 import FollowRequestAction from "@components/users/FollowRequestAction"
 
@@ -67,11 +68,8 @@ function BodyTaskReaction({
                 {isImageEmoji && <p>{notification.task_reaction.emoji_name}</p>}
             </EmojiBox>
             <SectionTitle>{t("your_task")}</SectionTitle>
-            <TaskBox
-                task={notification.task_reaction.task}
-                isFollowingPage
-                color="black"
-            />
+            <TaskFrame task={notification.task_reaction.task} />
+            <ReactionContainer task={notification.task_reaction.task} />
         </Body>
     )
 }
