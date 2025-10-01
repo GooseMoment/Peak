@@ -88,7 +88,6 @@ const DetailLink = styled(Link)`
 
 const ParentContent = styled.span`
     color: ${(p) => p.theme.secondTextColor};
-    font-style: italic;
 
     display: inline-block;
     ${ellipsis}
