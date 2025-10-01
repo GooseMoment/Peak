@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom"
-
 import styled, { css } from "styled-components"
 
 import ContentDetail, {
@@ -9,8 +7,8 @@ import ContentTitle, {
     ContentTitleSkeleton,
 } from "@components/notifications/ContentTitle"
 
-import { type Notification } from "@api/notifications.api"
-import { type User } from "@api/users.api"
+import type { Notification } from "@api/notifications.api"
+import type { User } from "@api/users.api"
 
 import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 import { ifMobile } from "@utils/useScreenType"
@@ -39,12 +37,9 @@ const Content = ({ notification, relatedUser }: ContentProps) => {
                     notification={notification}
                     relatedUser={relatedUser}
                 />
-                <Link to={`${notification.id}`}>
-                    <Time
-                        title={datetime.toLocaleString(DateTime.DATETIME_MED)}>
-                        {datetime.toRelative({ style: "narrow" })}
-                    </Time>
-                </Link>
+                <Time title={datetime.toLocaleString(DateTime.DATETIME_MED)}>
+                    {datetime.toRelative({ style: "narrow" })}
+                </Time>
             </ContentTop>
             <ContentDetail notification={notification} />
         </Container>

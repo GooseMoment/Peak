@@ -1,4 +1,5 @@
 import { Suspense } from "react"
+import { Link } from "react-router-dom"
 
 import styled from "styled-components"
 
@@ -16,30 +17,32 @@ export default function Box({ notification }: { notification: Notification }) {
     const relatedUser = getRelatedUserFromNotification(notification)
 
     return (
-        <Frame>
-            <Avatar
-                projectColor={
-                    (notification.type === "task_reminder" &&
-                        notification.task_reminder.project_color) ||
-                    undefined
-                }
-                relatedUser={relatedUser}
-                emoji={
-                    (notification.type === "task_reaction" &&
-                        (notification.task_reaction.image_emoji ||
-                            notification.task_reaction.unicode_emoji)) ||
-                    undefined
-                }
-            />
-            <Suspense
-                key="notification-box-content"
-                fallback={<ContentSkeleton />}>
-                <Content
-                    notification={notification}
+        <Link to={`/app/notifications/${notification.id}`} draggable="false">
+            <Frame>
+                <Avatar
+                    projectColor={
+                        (notification.type === "task_reminder" &&
+                            notification.task_reminder.project_color) ||
+                        undefined
+                    }
                     relatedUser={relatedUser}
+                    emoji={
+                        (notification.type === "task_reaction" &&
+                            (notification.task_reaction.image_emoji ||
+                                notification.task_reaction.unicode_emoji)) ||
+                        undefined
+                    }
                 />
-            </Suspense>
-        </Frame>
+                <Suspense
+                    key="notification-box-content"
+                    fallback={<ContentSkeleton />}>
+                    <Content
+                        notification={notification}
+                        relatedUser={relatedUser}
+                    />
+                </Suspense>
+            </Frame>
+        </Link>
     )
 }
 
