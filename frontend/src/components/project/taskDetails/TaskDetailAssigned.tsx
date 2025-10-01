@@ -19,8 +19,10 @@ import { useTranslation } from "react-i18next"
 type AssignedKey = "quick" | "calendar"
 
 const TaskDetailAssigned = ({
+    assignedAt,
     setFunc,
 }: {
+    assignedAt: string | null | undefined
     setFunc: (diff: Partial<MinimalTask>) => void
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task" })
@@ -29,7 +31,7 @@ const TaskDetailAssigned = ({
     const today = DateTime.now().setZone(tz)
 
     const [selectedDate, setSelectedDate] = useState<string | null>(
-        today.toISODate(),
+        assignedAt || today.toISODate(),
     )
     const [isAdditionalComp, setIsAdditionalComp] =
         useState<AssignedKey | null>("quick")
@@ -78,16 +80,11 @@ const TaskDetailAssigned = ({
             display: t("due.calendar"),
             icon: "calendar" as const,
             component: (
-                <CalendarWrapper>
-                    <CommonCalendar
-                        isRangeSelectMode={false}
-                        selectedStartDate={selectedDate}
-                        setSelectedStartDate={setSelectedDate}
-                        selectedEndDate={undefined}
-                        setSelectedEndDate={undefined}
-                        handleClose={undefined}
-                    />
-                </CalendarWrapper>
+                <CommonCalendar
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                    isModal
+                />
             ),
         },
     ]
@@ -189,12 +186,6 @@ const CollapseButton = styled.div<{ $collapsed: boolean }>`
                 animation: ${rotateToUnder} 0.3s ${cubicBeizer} forwards;
             }
         `}
-`
-
-const CalendarWrapper = styled.div`
-    margin: 0.4em auto;
-    width: 90%;
-    font-size: 0.8em;
 `
 
 export default TaskDetailAssigned

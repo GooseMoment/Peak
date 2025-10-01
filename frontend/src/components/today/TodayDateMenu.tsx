@@ -44,12 +44,8 @@ const TodayDateMenu = ({
                 <DateMenuItem aria-disabled>
                     <CalendarWrapper onClick={(e) => e.stopPropagation()}>
                         <CommonCalendar
-                            isRangeSelectMode={false}
-                            selectedStartDate={selectedDate}
-                            setSelectedStartDate={handleChangeDate}
-                            selectedEndDate={undefined}
-                            setSelectedEndDate={undefined}
-                            handleClose={undefined}
+                            selectedDate={selectedDate}
+                            setSelectedDate={handleChangeDate}
                         />
                     </CalendarWrapper>
                 </DateMenuItem>

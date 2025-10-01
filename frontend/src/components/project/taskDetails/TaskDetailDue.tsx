@@ -32,7 +32,15 @@ const TaskDetailDue = ({
 
     const today = DateTime.now().setZone(tz)
 
-    const [selectedDate, setSelectedDate] = useState(today.toISODate())
+    const [selectedDate, setSelectedDate] = useState(() => {
+        if (task.due_type === "due_date") {
+            return task.due_date
+        } else if (task.due_type === "due_datetime") {
+            return task.due_datetime.split("T")[0]
+        } else {
+            return null
+        }
+    })
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
     useEffect(() => {
@@ -153,16 +161,11 @@ const TaskDetailDue = ({
             display: t("calendar"),
             icon: "calendar" as const,
             component: (
-                <CalendarWrapper>
-                    <CommonCalendar
-                        isRangeSelectMode={false}
-                        selectedStartDate={selectedDate}
-                        setSelectedStartDate={setSelectedDate}
-                        selectedEndDate={undefined}
-                        setSelectedEndDate={undefined}
-                        handleClose={undefined}
-                    />
-                </CalendarWrapper>
+                <CommonCalendar
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                    isModal
+                />
             ),
         },
         {
@@ -269,12 +272,6 @@ const CollapseButton = styled.div<{ $collapsed: boolean }>`
                 animation: ${rotateToUnder} 0.3s ${cubicBeizer} forwards;
             }
         `}
-`
-
-const CalendarWrapper = styled.div`
-    margin: 0.4em auto;
-    width: 90%;
-    font-size: 0.8em;
 `
 
 export default TaskDetailDue

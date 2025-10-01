@@ -60,14 +60,10 @@ export default function DateBar({ date, setDate }: DateBarProps) {
             {isCalendarOpen && (
                 <CalendarWrapper>
                     <CommonCalendar
-                        isRangeSelectMode={false}
-                        selectedStartDate={date.toISO()}
-                        setSelectedStartDate={(selectedDate: string) =>
+                        selectedDate={date.toISO()}
+                        setSelectedDate={(selectedDate: string) =>
                             setDate(DateTime.fromISO(selectedDate).setZone(tz))
                         }
-                        selectedEndDate={undefined}
-                        setSelectedEndDate={undefined}
-                        handleClose={undefined}
                     />
                 </CalendarWrapper>
             )}

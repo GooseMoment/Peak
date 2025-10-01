@@ -62,12 +62,8 @@ const SocialFollowingPage = () => {
                 <Container>
                     <CalendarWrapper>
                         <CommonCalendar
-                            isRangeSelectMode={false}
-                            selectedStartDate={date.toISO()}
-                            setSelectedStartDate={setDateFromISO}
-                            selectedEndDate={undefined}
-                            setSelectedEndDate={undefined}
-                            handleClose={undefined}
+                            selectedDate={date.toISO()}
+                            setSelectedDate={setDateFromISO}
                         />
                     </CalendarWrapper>
 
