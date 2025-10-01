@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
 
-import { TaskGrouped } from "@api/today.api"
+import type { TaskGrouped } from "@api/today.api"
 
 import { getPaletteColor } from "@assets/palettes"
 
@@ -27,6 +27,11 @@ interface VGraphProps {
 export default function VGraph({ items, countAll }: VGraphProps) {
     const theme = useTheme()
 
+    const totalCount =
+        countAll > 0
+            ? countAll
+            : items.reduce((sum, item) => sum + item.count, 0) || 1
+
     return (
         <Frame>
             <Graph draggable="false">
@@ -34,7 +39,7 @@ export default function VGraph({ items, countAll }: VGraphProps) {
                     <Item
                         key={item.name}
                         to={`/app/projects/${item.id}`}
-                        $width={(item.count / countAll) * 100}
+                        $width={(item.count / totalCount) * 100}
                         $color={getPaletteColor(theme.type, item.color)}
                         draggable="false"
                     />
