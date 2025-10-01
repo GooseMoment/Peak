@@ -19,14 +19,10 @@ export default function ContentDetail({
     const { t } = useTranslation("translation", { keyPrefix: "notifications" })
     switch (n.type) {
         case "task_reminder":
-            if (n.task_reminder.delta === 0) {
-                return <DetailBox>{t("content_task_reminder_now")}</DetailBox>
-            }
-
             return (
                 <DetailBox>
                     {t("content_task_reminder", {
-                        delta: n.task_reminder.delta,
+                        count: n.task_reminder.delta,
                     })}
                 </DetailBox>
             )
