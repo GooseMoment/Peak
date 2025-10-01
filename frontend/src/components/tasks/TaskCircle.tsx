@@ -1,6 +1,6 @@
-import styled, { css, keyframes, useTheme } from "styled-components"
+import styled, { css, keyframes } from "styled-components"
 
-import { type PaletteColorName, getPaletteColor } from "@assets/palettes"
+import { type PaletteColorName, usePaletteColor } from "@assets/palettes"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -30,11 +30,11 @@ const TaskCircle = ({
     isLoading = false,
     onClick,
 }: TaskCircleProps) => {
-    const theme = useTheme()
+    const paletteColor = usePaletteColor(color)
 
     return (
         <Circle
-            color={getPaletteColor(theme.type, color)}
+            color={paletteColor}
             $isCompleted={isCompleted}
             $hasDate={hasDate}
             $isInput={isInput}

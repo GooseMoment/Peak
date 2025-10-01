@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Emoji, Quote, Remark, TaskReaction, Peck, Comment, Following, Block
+from .models import Emoji, Remark, TaskReaction, Following, Block
 from users.serializers import UserSerializer
 from tasks.serializers import TaskSerializer
 
@@ -9,14 +9,6 @@ class EmojiSerializer(serializers.ModelSerializer):
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Emoji
         fields = ["id", "name", "img"]
-
-
-class QuoteSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-
-    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
-        model = Quote
-        fields = ["id", "user", "content", "date"]
 
 
 class RemarkSerializer(serializers.ModelSerializer):
@@ -67,25 +59,6 @@ class TaskReactionSerializer(serializers.ModelSerializer):
             "emoji_name",
             "created_at",
         ]
-
-
-class PeckSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-    task = TaskSerializer()
-
-    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
-        model = Peck
-        fields = ["id", "user", "task", "count"]
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-    task = TaskSerializer()
-    quote = QuoteSerializer()
-
-    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
-        model = Comment
-        fields = ["id", "user", "parent_type", "task", "quote", "created_at", "comment"]
 
 
 class FollowingSerializer(serializers.ModelSerializer):

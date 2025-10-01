@@ -78,12 +78,6 @@ const light: DefaultTheme = {
     help: {
         addressBarShadowColor: "rgba(0, 0, 0, 0.4)",
     },
-    search: {
-        borderColor: black,
-        buttonColor: black,
-        activatedColor: white,
-        activatedBackgroundColor: "#F78457",
-    },
     toastTheme: "light",
 }
 
@@ -158,12 +152,6 @@ const dark: DefaultTheme = {
     },
     help: {
         addressBarShadowColor: "rgba(0, 0, 0, 0.8)",
-    },
-    search: {
-        borderColor: white,
-        buttonColor: white,
-        activatedColor: black,
-        activatedBackgroundColor: "#F78457",
     },
     toastTheme: "dark",
 }

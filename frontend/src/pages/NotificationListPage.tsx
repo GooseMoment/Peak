@@ -213,13 +213,7 @@ const Date = styled.h2<{ $loading?: boolean }>`
         `}
 `
 
-type FilterChoice =
-    | "all"
-    | "tasks"
-    | "comments"
-    | "reactions"
-    | "pecking"
-    | "follow"
+type FilterChoice = "all" | "tasks" | "reactions" | "follow"
 
 type FilterValue = { display: string; types: Notification["type"][] }
 
@@ -234,25 +228,15 @@ const makeFilters = (
             "follow",
             "follow_request",
             "follow_request_accepted",
-            "comment",
-            "peck",
         ],
     },
     tasks: {
         display: t("type_tasks"),
         types: ["task_reminder"],
     },
-    comments: {
-        display: t("type_comments"),
-        types: ["comment"],
-    },
     reactions: {
         display: t("type_reactions"),
         types: ["task_reaction"],
-    },
-    pecking: {
-        display: t("type_pecking"),
-        types: ["peck"],
     },
     follow: {
         display: t("type_follow"),

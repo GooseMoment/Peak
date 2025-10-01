@@ -1,6 +1,5 @@
 {
     "sidebar": {
-        "search": "검색",
         "home": "홈",
         "notifications": "알림",
         "today": "오늘",
@@ -17,15 +16,10 @@
         "fail_to_load": "알림을 불러오지 못했습니다.",
         "type_all": "모두",
         "type_tasks": "작업",
-        "type_comments": "댓글",
         "type_reactions": "리액션",
-        "type_pecking": "콕 쪼기",
         "type_follow": "팔로우",
         "content_task_reminder": "{{delta}}분 전 리마인더",
         "content_task_reminder_now": "작업할 시간입니다.",
-        "content_peck": "{{count}}번 콕 쪼았습니다.",
-        "content_comment_quote": "{{date}}의 한마디",
-        "content_reaction_quote": "{{date}}의 한마디",
         "content_follow": "나를 팔로우 합니다.",
         "content_follow_request": "내게 팔로우 요청을 보냈습니다.",
         "content_follow_request_accepted": "내 팔로우 요청을 승인했습니다.",
@@ -313,6 +307,8 @@
         "unknown_error_code": "ㅠ_ㅠ",
         "unknown_error_text": "알 수 없는 오류가 발생했습니다.",
         "unknown_error_bottom": "시작 화면으로 돌아가기",
+        "clear_cache": "캐시 비우기",
+        "clear_cache_confirm": "저장된 캐시를 비울까요?",
         "404_error_text": "요청하신 페이지를 찾을 수 없습니다.",
         "404_error_bottom": "이전 화면으로 돌아가기"
     },
@@ -419,19 +415,6 @@
             "no_result": "당신이 찾는 사람이 없습니다",
             "suggestion": "새로운 사람과 새로운 인연은 어떤가요?"
         }
-    },
-    "search": {
-        "title": "검색",
-        "filter_button": {
-            "search_terms": "검색어",
-            "project": "프로젝트",
-            "drawer": "서랍",
-            "assigned_at": "할당 날짜",
-            "completed_at": "완수 날짜",
-            "privacy": "공개 범위",
-            "memo": "메모"
-        },
-        "no_result": "조건에 맞는 결과를 찾을 수 없습니다"
     },
     "update": {
         "message": "새로운 업데이트가 있습니다.",

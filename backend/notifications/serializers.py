@@ -3,10 +3,8 @@ from rest_framework import serializers
 from . import exceptions
 from .models import Notification, WebPushSubscription
 from social.serializers import (
-    CommentSerializer,
     TaskReactionSerializer,
     FollowingSerializer,
-    PeckSerializer,
 )
 from tasks.serializers import TaskReminderSerializer
 
@@ -18,9 +16,7 @@ class NotificatonSerializer(serializers.ModelSerializer):
 
     task_reminder = TaskReminderSerializer()
     task_reaction = TaskReactionSerializer()
-    comment = CommentSerializer()
     following = FollowingSerializer()
-    peck = PeckSerializer()
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Notification
@@ -31,9 +27,7 @@ class NotificatonSerializer(serializers.ModelSerializer):
             "username",
             "task_reminder",
             "task_reaction",
-            "comment",
             "following",
-            "peck",
             "created_at",
         ]
 
