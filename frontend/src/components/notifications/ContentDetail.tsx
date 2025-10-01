@@ -39,14 +39,7 @@ export default function ContentDetail({
         case "follow":
             return <DetailBox>{t("content_follow")}</DetailBox>
         case "follow_request":
-            return (
-                <DetailBox>
-                    <DetailLink
-                        to={`/app/users/@${n.following.follower.username}`}>
-                        {t("content_follow_request")}
-                    </DetailLink>
-                </DetailBox>
-            )
+            return <DetailBox>{t("content_follow_request")}</DetailBox>
         case "follow_request_accepted":
             return <DetailBox>{t("content_follow_request_accepted")}</DetailBox>
         default:
