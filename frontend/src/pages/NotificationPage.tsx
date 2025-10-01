@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { Suspense, useMemo } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
@@ -75,19 +75,21 @@ function NotificationPageInner({ id }: { id: Notification["id"] }) {
         ]
     }, [data, locale, tz])
 
-    const closeSection = modal && (
+    const closeSection = modal ? (
         <CloseButton onClick={() => modal.closeModal()}>
             <FeatherIcon icon="x" />
         </CloseButton>
+    ) : null
+
+    const loadingFallback = (
+        <Frame>
+            {closeSection}
+            <LoaderCircleFull height="7em" />
+        </Frame>
     )
 
     if (isPending) {
-        return (
-            <Frame>
-                {closeSection}
-                <LoaderCircleFull height="7em" />
-            </Frame>
-        )
+        return loadingFallback
     }
 
     if (isError) {
@@ -106,33 +108,36 @@ function NotificationPageInner({ id }: { id: Notification["id"] }) {
     )
 
     return (
-        <Frame>
-            {closeSection}
-            {relatedUser && (
-                <Header>
-                    <Link to={`/app/users/@${relatedUser.username}`}>
-                        <ProfileImg src={relatedUser.profile_img} />
-                    </Link>
-                    <Texts>
-                        <Username to={`/app/users/@${relatedUser.username}`}>
-                            @{relatedUser.username}
-                        </Username>
-                        {time}
-                    </Texts>
-                </Header>
-            )}
-            {data.type === "task_reminder" && (
-                <Header>
-                    <Texts>
-                        <TaskReminderTaskName>
-                            {data.task_reminder.task_name}
-                        </TaskReminderTaskName>
-                        {time}
-                    </Texts>
-                </Header>
-            )}
-            <NotificationBody notification={data} />
-        </Frame>
+        <Suspense fallback={loadingFallback}>
+            <Frame>
+                {closeSection}
+                {relatedUser && (
+                    <Header>
+                        <Link to={`/app/users/@${relatedUser.username}`}>
+                            <ProfileImg src={relatedUser.profile_img} />
+                        </Link>
+                        <Texts>
+                            <Username
+                                to={`/app/users/@${relatedUser.username}`}>
+                                @{relatedUser.username}
+                            </Username>
+                            {time}
+                        </Texts>
+                    </Header>
+                )}
+                {data.type === "task_reminder" && (
+                    <Header>
+                        <Texts>
+                            <TaskReminderTaskName>
+                                {data.task_reminder.task_name}
+                            </TaskReminderTaskName>
+                            {time}
+                        </Texts>
+                    </Header>
+                )}
+                <NotificationBody notification={data} />
+            </Frame>
+        </Suspense>
     )
 }
 
