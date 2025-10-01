@@ -89,6 +89,7 @@ export default function ProfileImg({ profile_img, username }: ProfileImgProps) {
         }
 
         const blob = await fetch(cropped).then((r) => r.blob())
+        URL.revokeObjectURL(cropped) // free up memory
         const croppedFile = new File([blob], fileName)
 
         const formData = new FormData()

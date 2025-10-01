@@ -30,7 +30,7 @@ export default function VGraph({ items, countAll }: VGraphProps) {
     return (
         <Frame>
             <Graph draggable="false">
-                {items?.map((item) => (
+                {items.map((item) => (
                     <Item
                         key={item.name}
                         to={`/app/projects/${item.id}`}
@@ -41,7 +41,7 @@ export default function VGraph({ items, countAll }: VGraphProps) {
                 ))}
             </Graph>
             <Categories>
-                {items?.map((item) => (
+                {items.map((item) => (
                     <Category key={item.name} to={`/app/projects/${item.id}`}>
                         <CategoryCircle
                             $color={getPaletteColor(theme.type, item.color)}

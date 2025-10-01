@@ -125,7 +125,7 @@ export const TOTPAuthForm = () => {
     const [totpCode, setTOTPCode] = useState("")
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.replace(/\D/g, "").slice(0, 6)
+        const value = e.currentTarget.value.replace(/\D/g, "").slice(0, 6)
         setTOTPCode(value)
 
         if (value.length >= 6) {
@@ -223,7 +223,7 @@ export const SignUpForm = () => {
         e.preventDefault()
         setIsLoading(true)
 
-        const formData = new FormData(e.target as HTMLFormElement)
+        const formData = new FormData(e.currentTarget)
         const email = formData.get("email") as string
         const password = formData.get("password") as string
         const username = formData.get("username") as string
@@ -350,7 +350,7 @@ export const EmailVerificationResendForm = () => {
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const formData = new FormData(e.target as HTMLFormElement)
+        const formData = new FormData(e.currentTarget)
         const email = formData.get("email") as string
         mutation.mutate({ email })
     }
@@ -463,7 +463,7 @@ export const PasswordRecoveryRequestForm = () => {
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const formData = new FormData(e.target as HTMLFormElement)
+        const formData = new FormData(e.currentTarget)
         const email = formData.get("email") as string
         mutation.mutate({ email })
     }
@@ -532,7 +532,7 @@ export const PasswordRecoveryForm = () => {
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const formData = new FormData(e.target as HTMLFormElement)
+        const formData = new FormData(e.currentTarget)
         const password = formData.get("password") as string
         const passwordAgain = formData.get("password_again") as string
 
