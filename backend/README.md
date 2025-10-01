@@ -14,7 +14,7 @@
 - `projects`: `Project` 모델과 뷰
 
 - `today`: '오늘' 기능에 관한 모델과 뷰
-- `social`: `Emoji`, `Peck`, `DailyComment`, `Reaction`, `Comment`, `Following` & `Block` 모델과 뷰
+- `social`: `Emoji`, `Remark`, `TaskReaction`, `Following` & `Block` 모델과 뷰
 - `notifications`: `Notification` & `TaskReminder` 모델과 뷰
 
 ## Linter/Formatter

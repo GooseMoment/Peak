@@ -9,21 +9,6 @@ export interface Emoji {
     img: string
 }
 
-export interface Peck extends Base {
-    user: User
-    task: Task
-    count: number
-}
-
-/**
- * @deprecated use {@link Remark} instead
- */
-export interface Quote extends Base {
-    user: User
-    content: string
-    date: string
-}
-
 export interface Remark extends Base {
     user: User
     content: string
@@ -53,22 +38,6 @@ export interface TaskReactionImageEmoji extends Base {
 }
 
 export type TaskReaction = TaskReactionUnicodeEmoji | TaskReactionImageEmoji
-
-export interface CommentTask extends Base {
-    user: User
-    parent_type: "task"
-    task: Task
-    comment: string
-}
-
-export interface CommentQuote extends Base {
-    user: User
-    parent_type: "quote"
-    quote: Quote
-    comment: string
-}
-
-export type Comment = CommentTask | CommentQuote
 
 export interface Following {
     follower: User
@@ -319,73 +288,4 @@ export const postTaskReaction = async (
 
 export const deleteTaskReaction = async (reactionID: TaskReaction["id"]) => {
     await client.delete(`social/task_reactions/${reactionID}/`)
-}
-
-export const getPeck = async (taskID: string) => {
-    const res = await client.get<Peck>(`social/pecks/${taskID}/`)
-
-    return res.data
-}
-
-export const postPeck = async (taskID: string) => {
-    const res = await client.post<Peck>(`social/pecks/${taskID}/`)
-
-    return res.data
-}
-
-export const getComment = async (
-    parentType: Comment["parent_type"],
-    parentID: string,
-) => {
-    const res = await client.get<Comment[]>(
-        `social/comments/${parentType}/${parentID}/`,
-    ) // TODO: use pagination
-
-    return res.data
-}
-
-export const postComment = async (
-    parentType: Comment["parent_type"],
-    parentID: string,
-    content: string,
-) => {
-    const res = await client.post<Comment>(
-        `social/comments/${parentType}/${parentID}/`,
-        {
-            comment: content,
-        },
-    )
-
-    return res.data
-}
-
-export const patchComment = async (
-    parentType: Comment["parent_type"],
-    parentID: string,
-    commentID: Comment["id"],
-    content: string,
-) => {
-    const res = await client.patch<Comment>(
-        `social/comments/${parentType}/${parentID}/`,
-        {
-            id: commentID,
-            comment: content,
-        },
-    )
-    return res.data
-}
-
-export const deleteComment = async (
-    parentType: Comment["parent_type"],
-    parentID: string,
-    commentID: Comment["id"],
-) => {
-    const res = await client.delete(
-        `social/comments/${parentType}/${parentID}/`,
-        {
-            data: { id: commentID },
-        },
-    )
-
-    return res.status
 }

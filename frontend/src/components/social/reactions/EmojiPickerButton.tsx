@@ -3,7 +3,7 @@ import { memo, useCallback } from "react"
 import { useQuery } from "@tanstack/react-query"
 import styled, { LightDark, useTheme } from "styled-components"
 
-import { ReactionButtonContainer } from "@components/social/interaction/reactions/ReactionButton"
+import { ReactionButtonContainer } from "@components/social/reactions/ReactionButton"
 
 import { Emoji, getEmojis } from "@api/social.api"
 

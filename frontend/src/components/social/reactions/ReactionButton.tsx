@@ -3,11 +3,11 @@ import { type TouchEvent, useEffect, useMemo, useRef, useState } from "react"
 import styled from "styled-components"
 
 import MildButton from "@components/common/MildButton"
-import AnimatedCount from "@components/social/interaction/reactions/AnimatedCount"
+import AnimatedCount from "@components/social/reactions/AnimatedCount"
 import ReactionGroupTooltip, {
     type TaskReactionGroup,
     TooltipBox,
-} from "@components/social/interaction/reactions/ReactionGroupTooltip"
+} from "@components/social/reactions/ReactionGroupTooltip"
 
 import type { TaskReaction } from "@api/social.api"
 
