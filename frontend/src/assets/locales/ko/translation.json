@@ -19,6 +19,7 @@
         "type_reactions": "리액션",
         "type_follow": "팔로우",
         "content_task_reminder": "{{count}}분 전 리마인더",
+        "content_task_reminder_one": "1분 전 리마인더",
         "content_task_reminder_zero": "작업할 시간입니다.",
         "content_follow": "나를 팔로우 합니다.",
         "content_follow_request": "내게 팔로우 요청을 보냈습니다.",
