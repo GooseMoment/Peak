@@ -420,6 +420,7 @@
             "back": "돌아가기"
         },
         "button_no": "아니요",
+        "button_today": "오늘로 이동",
         "retry": "재시도",
         "loading": "로딩 중",
         "load_more": "더 불러오기",
