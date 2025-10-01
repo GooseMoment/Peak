@@ -47,12 +47,13 @@ export default function ProfileImg({ profile_img, username }: ProfileImgProps) {
     }
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (!e.target || !e.target.files) {
+        const f = e.target?.files?.[0]
+        if (!f) {
             return
         }
 
-        setFileName(e.target.files[0].name)
-        setFileType(e.target.files[0].type)
+        setFileName(f.name)
+        setFileType(f.type)
 
         const reader = new FileReader()
         reader.addEventListener("loadend", (e: ProgressEvent<FileReader>) => {
@@ -62,7 +63,7 @@ export default function ProfileImg({ profile_img, username }: ProfileImgProps) {
             }
         })
 
-        reader.readAsDataURL(e.target.files[0])
+        reader.readAsDataURL(f)
         setOpenCropper(true)
     }
 
@@ -91,8 +92,13 @@ export default function ProfileImg({ profile_img, username }: ProfileImgProps) {
             throw new Error("Failed to crop image")
         }
 
-        const blob = await fetch(cropped).then((r) => r.blob())
-        URL.revokeObjectURL(cropped) // free up memory
+        let blob: Blob
+        try {
+            const res = await fetch(cropped)
+            blob = await res.blob()
+        } finally {
+            URL.revokeObjectURL(cropped) // free up memory
+        }
         const croppedFile = new File([blob], fileName, { type: fileType })
 
         const formData = new FormData()
@@ -101,6 +107,13 @@ export default function ProfileImg({ profile_img, username }: ProfileImgProps) {
         await uploadProfileImg(formData)
         queryClient.invalidateQueries({ queryKey: ["users", "me"] })
         queryClient.invalidateQueries({ queryKey: ["users", username] })
+        setFile(undefined)
+        setFileName("")
+        setFileType(undefined)
+        setCroppedAreaPixels(null)
+        if (input.current) {
+            input.current.value = ""
+        }
     }
 
     return (
