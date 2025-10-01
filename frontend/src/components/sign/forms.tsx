@@ -171,7 +171,11 @@ export const TOTPAuthForm = () => {
                 <Title>{t("two_factor_authentication")}</Title>
                 <Text>{t("two_factor_authentication_description")}</Text>
             </div>
-            <Form onSubmit={() => mut.mutate()}>
+            <Form
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    mut.mutate()
+                }}>
                 <Input
                     icon="hash"
                     value={totpCode}
