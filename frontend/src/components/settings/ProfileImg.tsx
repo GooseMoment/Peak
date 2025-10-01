@@ -13,6 +13,7 @@ import queryClient from "@queries/queryClient"
 import { cubicBeizer } from "@assets/keyframes"
 
 import { Image as ImageIcon } from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 interface CroppedAreaPixels {
@@ -38,6 +39,8 @@ export default function ProfileImg({ profile_img, username }: ProfileImgProps) {
         useState<CroppedAreaPixels | null>(null)
 
     const input = useRef<HTMLInputElement>(null)
+
+    const { t } = useTranslation("settings", { keyPrefix: "profile" })
 
     const clickInput = () => {
         input.current?.click()
@@ -66,10 +69,10 @@ export default function ProfileImg({ profile_img, username }: ProfileImgProps) {
     const onClickOk = async () => {
         setOpenCropper(false)
 
-        toast.promise(cropAndUpload, {
-            pending: "Uploading...",
-            error: "Error occured.",
-            success: "Upload success!",
+        await toast.promise(cropAndUpload, {
+            pending: t("uploading"),
+            error: t("upload_error"),
+            success: t("upload_success"),
         })
     }
 

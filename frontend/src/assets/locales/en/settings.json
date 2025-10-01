@@ -25,7 +25,10 @@
         "profile_edited": "Changes were saved.",
         "profile_fail": "Couldn't save. Try again.",
         "button_apply": "Crop",
-        "button_cancel": "Cancel"
+        "button_cancel": "Cancel",
+        "uploading": "Uploading...",
+        "upload_error": "Failed to upload the image. Try another one.",
+        "upload_success": "Profile image was updated."
     },
     "general": {
         "startpage": {

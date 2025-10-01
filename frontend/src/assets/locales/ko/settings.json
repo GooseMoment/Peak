@@ -25,7 +25,10 @@
         "profile_edited": "변경사항을 저장했습니다.",
         "profile_fail": "저장할 수 없습니다. 다시 시도하세요.",
         "button_apply": "자르기",
-        "button_cancel": "취소"
+        "button_cancel": "취소",
+        "uploading": "업로드 중...",
+        "upload_error": "이미지 업로드에 실패했습니다. 다른 이미지를 시도하세요.",
+        "upload_success": "프로필 이미지를 업데이트했습니다."
     },
     "general": {
         "startpage": {
