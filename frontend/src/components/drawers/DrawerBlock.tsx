@@ -1,19 +1,10 @@
-import {
-    Suspense,
-    lazy,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
-import ModalLoader from "@components/common/ModalLoader"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
 import TaskCreateButton from "@components/drawers/TaskCreateButton"
@@ -23,6 +14,7 @@ import DrawerEdit from "@components/project/edit/DrawerEdit"
 import { SkeletonTasks } from "@components/project/skeletons/SkeletonProjectPage"
 import SortMenuMobile from "@components/project/sorts/SortMenuMobile"
 import TaskCreateSimple from "@components/project/taskCreateSimple"
+import TaskCreateLazy from "@components/project/taskDetails/TaskCreateLazy"
 import DrawerTask from "@components/tasks/DrawerTask"
 
 import { type Drawer, deleteDrawer } from "@api/drawers.api"
@@ -40,10 +32,6 @@ import type { TFunction } from "i18next"
 import { useDrag, useDrop } from "react-dnd"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-
-const TaskCreateElement = lazy(
-    () => import("@components/project/taskDetails/TaskCreateElement"),
-)
 
 interface DrawerBlockProps {
     drawer: Drawer
@@ -314,9 +302,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
             <Portal modal={drawerEditModal}>
                 <DrawerEdit drawer={drawer} />
             </Portal>
-            <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
-                <TaskCreateElement drawer={drawer} modal={taskCreateModal} />
-            </Suspense>
+            <TaskCreateLazy drawer={drawer} modal={taskCreateModal} />
         </>
     )
 }

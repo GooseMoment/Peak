@@ -1,9 +1,9 @@
-import { Suspense, lazy, useEffect } from "react"
+import { useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
 
-import ModalLoader from "@components/common/ModalLoader"
+import TaskDetailLazy from "@components/project/taskDetails/TaskDetailLazy"
 import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"
 import useTaskDateStatus from "@components/tasks/utils/useTaskDateStatus"
@@ -18,10 +18,6 @@ import AlarmClock from "@assets/project/AlarmClock"
 import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
-
-const TaskDetailElement = lazy(
-    () => import("@components/project/taskDetails/TaskDetailElement"),
-)
 
 interface TaskFrameProps {
     task: Task
@@ -127,9 +123,7 @@ const TaskFrame = ({
                     </Dates>
                 )}
             </Content>
-            <Suspense key="task-detail-task-frame" fallback={<ModalLoader />}>
-                <TaskDetailElement task={task} modal={modal} />
-            </Suspense>
+            <TaskDetailLazy task={task} modal={modal} />
         </Box>
     )
 }

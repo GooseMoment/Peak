@@ -11,6 +11,7 @@ import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import { SkeletonInboxPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
+import TaskCreateLazy from "@components/project/taskDetails/TaskCreateLazy"
 
 import { getDrawer } from "@api/drawers.api"
 
@@ -23,9 +24,6 @@ import { useTranslation } from "react-i18next"
 
 const SortMenuMobile = lazy(
     () => import("@components/project/sorts/SortMenuMobile"),
-)
-const TaskCreateElement = lazy(
-    () => import("@components/project/taskDetails/TaskCreateElement"),
 )
 
 const InboxPage = () => {
@@ -115,13 +113,7 @@ const InboxPage = () => {
                     />
                 </Suspense>
             )}
-            {data && (
-                <Suspense
-                    key="task-create-inbox-page"
-                    fallback={<ModalLoader />}>
-                    <TaskCreateElement drawer={data} modal={modal} />
-                </Suspense>
-            )}
+            {data && <TaskCreateLazy drawer={data} modal={modal} />}
         </>
     )
 }
