@@ -70,7 +70,7 @@ const Profile = () => {
 
     const onClickOpenPalette = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
-        modal?.openModal()
+        modal.openModal()
     }
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
