@@ -57,8 +57,8 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
     const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
-    const [isCreateOpen, setCreateOpen] = useState(false)
-    const modal = useModal()
+    const taskCreateModal = useModal()
+    const drawerEditModal = useModal()
 
     const [tasks, setTasks] = useState<Task[]>([])
 
@@ -214,7 +214,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
     }
 
     const clickPlus = () => {
-        setCreateOpen(true)
+        taskCreateModal.openModal()
     }
 
     const color = usePaletteColor(drawer.project.color)
@@ -249,7 +249,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
                     openSortMenuMobile={() => setSortMenuMobileOpen(true)}
                     ordering={ordering}
                     setOrdering={setOrdering}
-                    handleEdit={() => modal.openModal()}
+                    handleEdit={() => drawerEditModal.openModal()}
                     handleAlert={() => setIsAlertOpen(true)}
                 />
             </DrawerBox>
@@ -311,17 +311,12 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
                     func={deleteMutation.mutate}
                 />
             )}
-            <Portal modal={modal}>
+            <Portal modal={drawerEditModal}>
                 <DrawerEdit drawer={drawer} />
             </Portal>
-            {isCreateOpen && (
-                <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
-                    <TaskCreateElement
-                        drawer={drawer}
-                        onClose={() => setCreateOpen(false)}
-                    />
-                </Suspense>
-            )}
+            <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
+                <TaskCreateElement drawer={drawer} modal={taskCreateModal} />
+            </Suspense>
         </>
     )
 }

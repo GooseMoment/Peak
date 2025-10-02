@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState } from "react"
+import { Suspense, lazy } from "react"
 
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
@@ -8,6 +8,8 @@ import ModalLoader from "@components/common/ModalLoader"
 import Module, { Title } from "@components/home/Module"
 
 import { getDrawer } from "@api/drawers.api"
+
+import useModal from "@utils/useModal"
 
 import PlusCircle from "@assets/home/PlusCircle"
 
@@ -19,10 +21,10 @@ const TaskCreateElement = lazy(
 
 const AddTask = () => {
     const { t } = useTranslation("home", { keyPrefix: "add_task" })
-    const [isOpen, setOpen] = useState(false)
+    const modal = useModal()
 
     const onClick = () => {
-        setOpen(true)
+        modal.openModal()
     }
 
     const inboxQuery = useQuery({
@@ -40,13 +42,10 @@ const AddTask = () => {
                 <div>{t(inboxQuery.isError ? "error" : "tap_to_open")}</div>
                 <PlusCircle />
             </ButtonOpen>
-            {isOpen && inboxQuery.isLoading && <ModalLoader />}
-            {isOpen && inboxQuery.isSuccess && (
+            {modal.isOpen && inboxQuery.isPending && <ModalLoader />}
+            {modal.isOpen && inboxQuery.isSuccess && (
                 <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
-                    <TaskCreateElement
-                        drawer={inboxQuery.data}
-                        onClose={() => setOpen(false)}
-                    />
+                    <TaskCreateElement drawer={inboxQuery.data} modal={modal} />
                 </Suspense>
             )}
         </Module>

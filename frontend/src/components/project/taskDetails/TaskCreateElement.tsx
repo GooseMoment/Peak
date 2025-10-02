@@ -1,27 +1,31 @@
-import ModalWindow from "@components/common/ModalWindow"
 import TaskCreate from "@components/project/taskDetails/TaskCreate"
 import TaskCreateMobile from "@components/project/taskDetails/mobile/TaskCreateMobile"
 
-import { type Drawer } from "@api/drawers.api"
+import type { Drawer } from "@api/drawers.api"
 
+import { Modal, Portal } from "@utils/useModal"
 import useScreenType from "@utils/useScreenType"
 
-const TaskCreateElement = ({
-    drawer,
-    onClose,
-}: {
+interface TaskCreateElementProps {
     drawer: Drawer
-    onClose: () => void
-}) => {
-    const { isMobile } = useScreenType()
-
-    return isMobile ? (
-        <TaskCreateMobile drawer={drawer} closeCreate={onClose} />
-    ) : (
-        <ModalWindow afterClose={onClose}>
-            <TaskCreate drawer={drawer} />
-        </ModalWindow>
-    )
+    modal: Modal
 }
 
-export default TaskCreateElement
+export default function TaskCreateElement({
+    drawer,
+    modal,
+}: TaskCreateElementProps) {
+    const { isMobile } = useScreenType()
+
+    if (isMobile) {
+        return modal.isOpen ? (
+            <TaskCreateMobile drawer={drawer} closeCreate={modal.closeModal} />
+        ) : null
+    }
+
+    return (
+        <Portal modal={modal}>
+            <TaskCreate drawer={drawer} />
+        </Portal>
+    )
+}
