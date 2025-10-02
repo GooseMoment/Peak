@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from "react"
+import { Suspense, lazy, useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
@@ -10,6 +10,7 @@ import useTaskDateStatus from "@components/tasks/utils/useTaskDateStatus"
 
 import type { DemoMinimalTask, Task } from "@api/tasks.api"
 
+import useModal from "@utils/useModal"
 import { ifMobile } from "@utils/useScreenType"
 
 import type { PaletteColorName } from "@assets/palettes"
@@ -37,17 +38,20 @@ const TaskFrame = ({
     showTaskDetail,
     isSocial = false,
 }: TaskFrameProps) => {
-    const [isDetailOpen, setDetailOpen] = useState(false)
     const theme = useTheme()
     const isCompleted = !isSocial && task.completed_at !== null
 
     const [searchParams] = useSearchParams()
     const taskIdFromQuery = searchParams.get("taskId")
 
+    const modal = useModal()
+
     useEffect(() => {
         if (taskIdFromQuery === task.id) {
-            setDetailOpen(true)
+            modal.openModal()
         }
+        // TODO: replace useEffect with useModal.initiallyOpen
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [taskIdFromQuery, task.id])
 
     const {
@@ -83,7 +87,7 @@ const TaskFrame = ({
                         $isCompleted={isCompleted}
                         onClick={() => {
                             if (showTaskDetail) {
-                                setDetailOpen(true)
+                                modal.openModal()
                             }
                         }}>
                         {task.name}
@@ -123,16 +127,9 @@ const TaskFrame = ({
                     </Dates>
                 )}
             </Content>
-            {isDetailOpen && (
-                <Suspense
-                    key="task-detail-task-frame"
-                    fallback={<ModalLoader />}>
-                    <TaskDetailElement
-                        task={task}
-                        onClose={() => setDetailOpen(false)}
-                    />
-                </Suspense>
-            )}
+            <Suspense key="task-detail-task-frame" fallback={<ModalLoader />}>
+                <TaskDetailElement task={task} modal={modal} />
+            </Suspense>
         </Box>
     )
 }
