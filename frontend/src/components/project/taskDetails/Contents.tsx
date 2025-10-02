@@ -47,8 +47,6 @@ const Contents = ({
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task" })
 
-    const modal = useModal()
-
     const priorities = useMemo(() => makePriorities(t), [t])
     const displayReminder: Record<number, string> = useMemo(
         () => makeDisplayReminder(t),
@@ -57,6 +55,9 @@ const Contents = ({
 
     // text클릭 시 알맞는 component 띄우기
     const [content, setContent] = useState<TaskContent | null>(null)
+    const modal = useModal({
+        afterClose: () => setContent(null),
+    })
 
     const handleClickContent = (e: MouseEvent<HTMLElement>) => {
         const target = e.target
