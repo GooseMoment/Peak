@@ -1,11 +1,10 @@
-import { Suspense, lazy } from "react"
-
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import MildButton from "@components/common/MildButton"
 import ModalLoader from "@components/common/ModalLoader"
 import Module, { Title } from "@components/home/Module"
+import TaskCreateLazy from "@components/project/taskDetails/TaskCreateLazy"
 
 import { getDrawer } from "@api/drawers.api"
 
@@ -14,10 +13,6 @@ import useModal from "@utils/useModal"
 import PlusCircle from "@assets/home/PlusCircle"
 
 import { useTranslation } from "react-i18next"
-
-const TaskCreateElement = lazy(
-    () => import("@components/project/taskDetails/TaskCreateElement"),
-)
 
 const AddTask = () => {
     const { t } = useTranslation("home", { keyPrefix: "add_task" })
@@ -43,10 +38,8 @@ const AddTask = () => {
                 <PlusCircle />
             </ButtonOpen>
             {modal.isOpen && inboxQuery.isPending && <ModalLoader />}
-            {modal.isOpen && inboxQuery.isSuccess && (
-                <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
-                    <TaskCreateElement drawer={inboxQuery.data} modal={modal} />
-                </Suspense>
+            {inboxQuery.isSuccess && (
+                <TaskCreateLazy drawer={inboxQuery.data} modal={modal} />
             )}
         </Module>
     )
