@@ -14,7 +14,6 @@ import styled from "styled-components"
 import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
 import ModalLoader from "@components/common/ModalLoader"
-import ModalWindow from "@components/common/ModalWindow"
 import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
 import DrawerIcons from "@components/drawers/DrawerIcons"
 import TaskCreateButton from "@components/drawers/TaskCreateButton"
@@ -30,6 +29,7 @@ import { type Drawer, deleteDrawer } from "@api/drawers.api"
 import { type Task, getTasksByDrawer, patchReorderTask } from "@api/tasks.api"
 
 import { getPageFromURL } from "@utils/pagination"
+import useModal, { Portal } from "@utils/useModal"
 
 import queryClient from "@queries/queryClient"
 
@@ -56,9 +56,9 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
     const [ordering, setOrdering] = useState("order")
     const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
-    const [isDrawerEditOpen, setIsDrawerEditOpen] = useState(false)
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
     const [isCreateOpen, setCreateOpen] = useState(false)
+    const modal = useModal()
 
     const [tasks, setTasks] = useState<Task[]>([])
 
@@ -249,7 +249,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
                     openSortMenuMobile={() => setSortMenuMobileOpen(true)}
                     ordering={ordering}
                     setOrdering={setOrdering}
-                    handleEdit={() => setIsDrawerEditOpen(true)}
+                    handleEdit={() => modal.openModal()}
                     handleAlert={() => setIsAlertOpen(true)}
                 />
             </DrawerBox>
@@ -311,14 +311,9 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
                     func={deleteMutation.mutate}
                 />
             )}
-            {isDrawerEditOpen && (
-                <ModalWindow
-                    afterClose={() => {
-                        setIsDrawerEditOpen(false)
-                    }}>
-                    <DrawerEdit drawer={drawer} />
-                </ModalWindow>
-            )}
+            <Portal modal={modal}>
+                <DrawerEdit drawer={drawer} />
+            </Portal>
             {isCreateOpen && (
                 <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
                     <TaskCreateElement
