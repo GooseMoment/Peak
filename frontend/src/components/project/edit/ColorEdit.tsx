@@ -2,10 +2,11 @@ import { Dispatch, SetStateAction, useState } from "react"
 
 import styled, { css, useTheme } from "styled-components"
 
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
 import type { Project } from "@api/projects.api"
+
+import { useModalContext } from "@utils/useModal"
 
 import { PaletteColorName, getPaletteColor, palettes } from "@assets/palettes"
 
@@ -28,12 +29,12 @@ const ColorEdit = ({
 
     const [activeTab, setActiveTab] = useState<PaletteType>("palette1")
 
-    const { closeModal } = useModalWindowCloseContext()
+    const modal = useModalContext()
 
     const changeColor = (color: PaletteColorName) => {
         return () => {
             setColor({ color })
-            closeModal()
+            modal?.closeModal()
         }
     }
 
@@ -42,7 +43,7 @@ const ColorEdit = ({
     ]
 
     return (
-        <Detail title={t("title")} onClose={closeModal}>
+        <Detail title={t("title")} onClose={() => modal?.closeModal()}>
             <TabBox>
                 {paletteChoices.map((choice) => (
                     <TabButton

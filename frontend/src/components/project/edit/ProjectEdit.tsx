@@ -4,7 +4,6 @@ import { useMutation } from "@tanstack/react-query"
 import { type LightDark, useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import ColorEdit from "@components/project/edit/ColorEdit"
 import EditBox from "@components/project/edit/EditBox"
 import Middle from "@components/project/edit/Middle"
@@ -14,6 +13,7 @@ import TitleInput from "@components/project/edit/TitleInput"
 
 import { type Project, patchProject, postProject } from "@api/projects.api"
 
+import { useModalContext } from "@utils/useModal"
 import useScreenType from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -39,7 +39,7 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
         keyPrefix: "project_drawer_edit",
     })
     const theme = useTheme()
-    const { closeModal } = useModalWindowCloseContext()
+    const modal = useModalContext()
     const { isDesktop } = useScreenType()
 
     const [newProject, setNewProject] = useState<ProjectCreateInput | Project>(
@@ -71,7 +71,7 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
             } else {
                 toast.success(t("created_project"))
             }
-            closeModal()
+            modal?.closeModal()
         },
         onError: (err) => {
             if (project) {
@@ -155,7 +155,7 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
                 setName={(name: string) => handleChange({ name })}
                 inputRef={inputRef}
                 icon="archive"
-                onClose={closeModal}
+                onClose={() => modal?.closeModal()}
             />
             <Middle items={items} />
             <ButtonGroup $justifyContent="right">

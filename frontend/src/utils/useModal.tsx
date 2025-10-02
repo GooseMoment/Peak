@@ -24,7 +24,7 @@ interface useModalOptions {
     afterClose?: () => void
 }
 
-interface Modal {
+export interface Modal {
     id?: string
     isOpen: boolean
     isClosing: boolean

@@ -1,15 +1,14 @@
-import { Fragment, ReactNode, useState } from "react"
+import { Fragment, ReactNode, useMemo, useState } from "react"
 
 import styled, { css } from "styled-components"
 
-import ModalWindow from "@components/common/ModalWindow"
-
+import useModal, { Portal } from "@utils/useModal"
 import { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon, { type FeatherIconName } from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-interface EditMiddleProps {
+interface MiddleItem {
     name: string
     icon: FeatherIconName
     color?: string
@@ -17,12 +16,19 @@ interface EditMiddleProps {
     component: ReactNode
 }
 
-const Middle = ({ items }: { items: EditMiddleProps[] }) => {
+const Middle = ({ items }: { items: MiddleItem[] }) => {
     const { t } = useTranslation("translation", {
         keyPrefix: "project_drawer_edit",
     })
 
     const [content, setContent] = useState<string | null>(null)
+    const modal = useModal({
+        afterClose: () => setContent(null),
+    })
+
+    const component = useMemo(() => {
+        return items.find((item) => item.name === content)?.component
+    }, [content, items])
 
     return (
         <Contents>
@@ -39,19 +45,17 @@ const Middle = ({ items }: { items: EditMiddleProps[] }) => {
                             <FeatherIcon icon={item.icon} />
                         )}
                         <VLine $end={i === 0 || i === items.length - 1} />
-                        <ContentText onClick={() => setContent(item.name)}>
+                        <ContentText
+                            onClick={() => {
+                                modal.openModal()
+                                setContent(item.name)
+                            }}>
                             {item.display ? item.display : t("none")}
                         </ContentText>
                     </ContentBox>
-                    {content === item.name && (
-                        <ModalWindow
-                            afterClose={() => setContent(null)}
-                            additional>
-                            {item.component}
-                        </ModalWindow>
-                    )}
                 </Fragment>
             ))}
+            <Portal modal={modal}>{component}</Portal>
         </Contents>
     )
 }

@@ -11,9 +11,11 @@ import PrivacyIcon from "@components/project/common/PrivacyIcon"
 import { SkeletonInboxPage } from "@components/project/skeletons/SkeletonProjectPage"
 import SortIcon from "@components/project/sorts/SortIcon"
 import SortMenu from "@components/project/sorts/SortMenu"
+import TaskCreateLazy from "@components/project/taskDetails/TaskCreateLazy"
 
 import { getDrawer } from "@api/drawers.api"
 
+import useModal from "@utils/useModal"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
@@ -23,9 +25,6 @@ import { useTranslation } from "react-i18next"
 const SortMenuMobile = lazy(
     () => import("@components/project/sorts/SortMenuMobile"),
 )
-const TaskCreateElement = lazy(
-    () => import("@components/project/taskDetails/TaskCreateElement"),
-)
 
 const InboxPage = () => {
     const theme = useTheme()
@@ -33,7 +32,7 @@ const InboxPage = () => {
 
     const [ordering, setOrdering] = useState("order")
     const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
-    const [isCreateOpen, setCreateOpen] = useState(false)
+    const modal = useModal()
 
     const { t } = useTranslation("translation", { keyPrefix: "project" })
 
@@ -47,7 +46,7 @@ const InboxPage = () => {
     })
 
     const openInboxTaskCreate = () => {
-        setCreateOpen(true)
+        modal.openModal()
     }
 
     const onClickProjectErrorBox = () => {
@@ -114,16 +113,7 @@ const InboxPage = () => {
                     />
                 </Suspense>
             )}
-            {data && isCreateOpen && (
-                <Suspense
-                    key="task-create-inbox-page"
-                    fallback={<ModalLoader />}>
-                    <TaskCreateElement
-                        drawer={data}
-                        onClose={() => setCreateOpen(false)}
-                    />
-                </Suspense>
-            )}
+            {data && <TaskCreateLazy drawer={data} modal={modal} />}
         </>
     )
 }

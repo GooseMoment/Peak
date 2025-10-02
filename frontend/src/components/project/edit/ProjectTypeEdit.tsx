@@ -1,9 +1,10 @@
 import styled from "styled-components"
 
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
 import { type Project, ProjectType } from "@api/projects.api"
+
+import { useModalContext } from "@utils/useModal"
 
 import goal from "@assets/project/type/goal.svg"
 import regular from "@assets/project/type/regular.svg"
@@ -19,12 +20,12 @@ const ProjectTypeEdit = ({
         keyPrefix: "project_drawer_edit.type",
     })
 
-    const { closeModal } = useModalWindowCloseContext()
+    const modal = useModalContext()
 
     const changeType = (type: ProjectType) => {
         return () => {
             setType({ type })
-            closeModal()
+            modal?.closeModal()
         }
     }
 
@@ -34,7 +35,7 @@ const ProjectTypeEdit = ({
     ]
 
     return (
-        <Detail title={t("title")} onClose={closeModal}>
+        <Detail title={t("title")} onClose={() => modal?.closeModal()}>
             {items.map((item) => (
                 <ItemBlock key={item.type}>
                     {item.icon}

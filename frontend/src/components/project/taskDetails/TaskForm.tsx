@@ -4,13 +4,13 @@ import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Contents from "@components/project/taskDetails/Contents"
 import TaskNameInput from "@components/tasks/TaskNameInput"
 
 import { type TaskReminderDelta, postReminder } from "@api/notifications.api"
 import type { MinimalTask, Task } from "@api/tasks.api"
 
+import { useModalContext } from "@utils/useModal"
 import useScreenType from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -46,7 +46,7 @@ const TaskForm = ({
     const { t } = useTranslation("translation", { keyPrefix: "task" })
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const { closeModal } = useModalWindowCloseContext()
+    const modal = useModalContext()
     const { isDesktop } = useScreenType()
 
     const postReminderMutation = useMutation({
@@ -64,7 +64,7 @@ const TaskForm = ({
             queryClient.invalidateQueries({
                 queryKey: ["tasks", { drawerID: newTask.drawer?.id }],
             })
-            closeModal()
+            modal?.closeModal()
         },
         onError: () => {
             if (isCreating) {
@@ -136,7 +136,7 @@ const TaskForm = ({
                             onClick={handleAlert && handleAlert}
                         />
                     )}
-                    <FeatherIcon icon="x" onClick={closeModal} />
+                    <FeatherIcon icon="x" onClick={() => modal?.closeModal()} />
                 </Icons>
             </TaskNameBox>
 
