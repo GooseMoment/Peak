@@ -31,7 +31,7 @@ const CommonCalendar = ({
     )
 
     const onSelect = (date: Date) => {
-        const dateTime = DateTime.fromJSDate(date)
+        const dateTime = DateTime.fromJSDate(date, { zone: tz })
         setSelected(date)
         setSelectedDate(dateTime)
     }

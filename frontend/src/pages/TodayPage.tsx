@@ -21,7 +21,7 @@ const TodayPage = () => {
     const today = DateTime.now().setZone(tz)
     const [selectedDate, setSelectedDate] = useState<DateTime>(today)
 
-    const isToday = selectedDate === today
+    const isToday = selectedDate.hasSame(today, "day")
 
     const titleText = isToday
         ? t("title")
