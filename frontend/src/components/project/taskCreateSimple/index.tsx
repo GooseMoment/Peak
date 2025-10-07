@@ -151,8 +151,10 @@ const TaskCreateSimple = ({
     }, [onKeyDownAlt])
 
     const handleClickContent = (e: MouseEvent<HTMLDivElement>) => {
-        const name = e.currentTarget.getAttribute("name")
-        setContent(name as SimpleContentKey)
+        const name = e.currentTarget.dataset.name as
+            | SimpleContentKey
+            | undefined
+        if (name) setContent(name)
     }
 
     const postMutation = useMutation({

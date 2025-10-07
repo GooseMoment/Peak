@@ -49,7 +49,11 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
     const inputRef = useRef<HTMLInputElement>(null)
     const hasCreated = useRef(false)
 
-    const mutation = useMutation({
+    const mutation = useMutation<
+        Project,
+        AxiosError<{ code: string }>,
+        Partial<Project>
+    >({
         mutationFn: (data: Partial<Project>) => {
             if (project) {
                 const rest = omitCommonFields(data)
