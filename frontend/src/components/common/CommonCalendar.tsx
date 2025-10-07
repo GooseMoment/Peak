@@ -30,7 +30,8 @@ const CommonCalendar = ({
         selectedDate ? selectedDate.toJSDate() : undefined,
     )
 
-    const onSelect = (date: Date) => {
+    const onSelect = (date: Date | undefined) => {
+        if (!date) return
         const dateTime = DateTime.fromJSDate(date, { zone: tz })
         setSelected(date)
         setSelectedDate(dateTime)
@@ -50,7 +51,7 @@ const CommonCalendar = ({
                 required
                 showOutsideDays
                 captionLayout="dropdown"
-                locale={locale == "ko" ? ko : enUS}
+                locale={locale === "ko" ? ko : enUS}
                 month={month}
                 onMonthChange={setMonth}
                 selected={selected}
@@ -116,7 +117,7 @@ const TodayButtonWrapper = styled.div`
 `
 
 const TodayButton = styled.button`
-    all: unset;
+    border: none;
 
     background-color: ${(p) => p.theme.backgroundColor};
     color: ${(p) => p.theme.textColor};
@@ -130,6 +131,10 @@ const TodayButton = styled.button`
 
     &:hover {
         color: ${(p) => p.theme.social.buttonColor};
+    }
+
+    &:focus-visible {
+        outline: 2px solid blue;
     }
 `
 
