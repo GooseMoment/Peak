@@ -137,7 +137,7 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
                 Value(0),
                 output_field=IntegerField(),
             ),
-            date=Value(today, output_field=CharField()),
+            date=Value(today.isoformat(), output_field=CharField()),
             priority=Case(
                 When(Q(fof=True), then=Value(1)),
                 default=Value(0),
@@ -170,7 +170,7 @@ class ExploreSearchView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAP
                 | Q(followers__follower=user, followers__status=Following.ACCEPTED)
                 | Q(is_staff=True)
             )
-            .order_by("-updated_at")
+            .order_by("-updated_at", "-id")
         )
 
         users_qs = base_qs.filter(username__icontains=keyword)
@@ -182,7 +182,7 @@ class ExploreSearchView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAP
             Task.objects.filter(
                 user_id=OuterRef("id"),
                 completed_at__range=today_range,
-                privacy__in=(PrivacyMixin.FOR_PUBLIC, PrivacyMixin.FOR_PROTECTED),
+                privacy__in=(PrivacyMixin.FOR_PUBLIC,),
             )
             .order_by()
             .values("user_id")
@@ -194,7 +194,7 @@ class ExploreSearchView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAP
             TaskReaction.objects.filter(
                 task__user_id=OuterRef("id"),
                 task__completed_at__range=today_range,
-                task__privacy__in=(PrivacyMixin.FOR_PUBLIC, PrivacyMixin.FOR_PROTECTED),
+                task__privacy__in=(PrivacyMixin.FOR_PUBLIC,),
             )
             .order_by()
             .values("task__user_id")

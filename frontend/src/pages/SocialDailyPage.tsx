@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react"
-import { generatePath, useNavigate, useParams } from "react-router-dom"
+import {
+    generatePath,
+    useLocation,
+    useNavigate,
+    useParams,
+} from "react-router-dom"
 
 import DailyContainer from "@components/social/DailyContainer"
 
@@ -9,6 +14,7 @@ import { DateTime } from "luxon"
 
 const SocialDailyPage = () => {
     const navigate = useNavigate()
+    const location = useLocation()
     const { username: usernameWithAt } = useParams()
 
     const search = new URLSearchParams(location.search)
