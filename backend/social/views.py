@@ -63,10 +63,9 @@ import datetime
 from typing import Optional
 import emoji as emojilib
 
-
 class ExploreFeedPagination(CursorPagination):
     page_size = 8
-    ordering = ("-priority", "-id")
+    ordering = ("-priority", "-updated_at", "-id")
 
 class ExploreSearchPagination(CursorPagination):
     page_size = 8
@@ -95,23 +94,6 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
                 | Q(followers__follower=user, followers__status=Following.ACCEPTED)
                 | Q(is_staff=True)
             )
-            .order_by("-updated_at")
-        )
-
-        paginated_users = self.paginate_queryset(user_qs)
-        if not paginated_users:
-            raise NotFound("No users found for explore feed.")
-
-        is_follower_sq = Following.objects.filter(
-            follower=OuterRef("id"),
-            followee=user,
-            status=Following.ACCEPTED,
-        )
-
-        i_follow_sq = Following.objects.filter(
-            follower=user,
-            followee=OuterRef("id"),
-            status=Following.ACCEPTED,
         )
 
         fof_sq = Following.objects.filter(
@@ -145,8 +127,6 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
         )
 
         qs = user_qs.annotate(
-            is_follower=Exists(is_follower_sq),
-            i_follow=Exists(i_follow_sq),
             fof=Exists(fof_sq),
             completed_task_count=Coalesce(
                 Subquery(task_count_sq, output_field=IntegerField()),
@@ -160,15 +140,14 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
             ),
             date=Value(today, output_field=CharField()),
             priority=Case(
-                When(Q(is_follower=True) & Q(i_follow=False), then=Value(2)),
                 When(Q(fof=True), then=Value(1)),
                 default=Value(0),
                 output_field=IntegerField(),
             ),
-        ).order_by("-priority", "-id")
+        ).order_by("-priority", "-updated_at", "-id")
 
         return qs
-
+    
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
