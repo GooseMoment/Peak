@@ -63,9 +63,11 @@ import datetime
 from typing import Optional
 import emoji as emojilib
 
+
 class ExploreFeedPagination(CursorPagination):
     page_size = 8
     ordering = ("-priority", "-updated_at", "-id")
+
 
 class ExploreSearchPagination(CursorPagination):
     page_size = 8
@@ -86,14 +88,11 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
             followers__follower=user, followers__status=Following.ACCEPTED
         )
 
-        user_qs = (
-            User.objects.exclude(id=user.id)
-            .exclude(
-                Q(blockers__blocker=user, blockers__deleted_at__isnull=True)
-                | Q(blockees__blockee=user, blockees__deleted_at__isnull=True)
-                | Q(followers__follower=user, followers__status=Following.ACCEPTED)
-                | Q(is_staff=True)
-            )
+        user_qs = User.objects.exclude(id=user.id).exclude(
+            Q(blockers__blocker=user, blockers__deleted_at__isnull=True)
+            | Q(blockees__blockee=user, blockees__deleted_at__isnull=True)
+            | Q(followers__follower=user, followers__status=Following.ACCEPTED)
+            | Q(is_staff=True)
         )
 
         fof_sq = Following.objects.filter(
@@ -147,7 +146,7 @@ class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIV
         ).order_by("-priority", "-updated_at", "-id")
 
         return qs
-    
+
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
