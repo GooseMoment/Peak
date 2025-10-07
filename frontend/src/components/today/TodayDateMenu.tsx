@@ -4,8 +4,6 @@ import styled from "styled-components"
 
 import CommonCalendar from "@components/common/CommonCalendar"
 
-import { useClientTimezone } from "@utils/clientSettings"
-
 import { Menu, MenuItem } from "@assets/menu"
 
 import { MenuButton } from "@szhsin/react-menu"
@@ -16,18 +14,9 @@ const TodayDateMenu = ({
     selectedDate,
     setSelectedDate,
 }: {
-    selectedDate: string
-    setSelectedDate: Dispatch<SetStateAction<string>>
+    selectedDate: DateTime
+    setSelectedDate: Dispatch<SetStateAction<DateTime>>
 }) => {
-    const tz = useClientTimezone()
-
-    const handleChangeDate = (date: string) => {
-        const iso = DateTime.fromISO(date, { zone: tz }).toISODate()
-
-        if (iso === null) return
-        setSelectedDate(iso)
-    }
-
     return (
         <div
             onClick={(e: MouseEvent<HTMLElement>) => {
@@ -45,7 +34,7 @@ const TodayDateMenu = ({
                     <CalendarWrapper onClick={(e) => e.stopPropagation()}>
                         <CommonCalendar
                             selectedDate={selectedDate}
-                            setSelectedDate={handleChangeDate}
+                            setSelectedDate={setSelectedDate}
                         />
                     </CalendarWrapper>
                 </DateMenuItem>

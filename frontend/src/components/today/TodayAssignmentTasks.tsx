@@ -10,9 +10,10 @@ import { getTasksAssignedToday } from "@api/today.api"
 
 import { getPageFromURL } from "@utils/pagination"
 
+import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 
-const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: string }) => {
+const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
     const { t } = useTranslation("translation")
 
     const {
@@ -24,7 +25,7 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: string }) => {
     } = useInfiniteQuery({
         queryKey: ["today", "assigned", selectedDate],
         queryFn: (pages) =>
-            getTasksAssignedToday(selectedDate, pages.pageParam),
+            getTasksAssignedToday(selectedDate.toISODate()!, pages.pageParam),
         initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })

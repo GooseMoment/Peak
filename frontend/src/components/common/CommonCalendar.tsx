@@ -2,9 +2,10 @@ import { useState } from "react"
 
 import styled from "styled-components"
 
-import { useClientLocale } from "@utils/clientSettings"
+import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 
 import { enUS, ko } from "date-fns/locale"
+import { DateTime } from "luxon"
 import { DayPicker } from "react-day-picker"
 import "react-day-picker/style.css"
 import { useTranslation } from "react-i18next"
@@ -14,29 +15,31 @@ const CommonCalendar = ({
     setSelectedDate,
     isModal = false,
 }: {
-    selectedDate: string | null
-    setSelectedDate: (dateISO: string) => void
+    selectedDate: DateTime | null
+    setSelectedDate: (dateTime: DateTime) => void
     isModal?: boolean
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "common" })
+    const tz = useClientTimezone()
 
     const locale = useClientLocale()
 
     const today = new Date()
     const [month, setMonth] = useState(today)
     const [selected, setSelected] = useState(
-        selectedDate ? new Date(selectedDate) : undefined,
+        selectedDate ? selectedDate.toJSDate() : undefined,
     )
 
     const onSelect = (date: Date) => {
+        const dateTime = DateTime.fromJSDate(date)
         setSelected(date)
-        setSelectedDate(date.toISOString())
+        setSelectedDate(dateTime)
     }
 
     const onTodayBtnClick = () => {
         setMonth(today)
         setSelected(today)
-        setSelectedDate(today.toISOString())
+        setSelectedDate(DateTime.now().setZone(tz))
     }
 
     return (

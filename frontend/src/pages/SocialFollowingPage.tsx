@@ -11,7 +11,6 @@ import DateBar from "@components/social/common/DateBar"
 
 import { getCurrentUsername } from "@api/client"
 
-import { useClientTimezone } from "@utils/clientSettings"
 import useDateParamState from "@utils/useDateParamState"
 import useScreenType, { ifMobile, ifTablet } from "@utils/useScreenType"
 
@@ -19,7 +18,6 @@ import { DateTime } from "luxon"
 
 const SocialFollowingPage = () => {
     const { isMobile, isTablet } = useScreenType()
-    const tz = useClientTimezone()
     const navigate = useNavigate()
 
     const me = getCurrentUsername()
@@ -36,9 +34,6 @@ const SocialFollowingPage = () => {
             )
         },
     })
-
-    const setDateFromISO = (dateISO: string) =>
-        setDate(DateTime.fromISO(dateISO, { zone: tz }))
 
     if (isMobile || isTablet) {
         return (
@@ -62,8 +57,8 @@ const SocialFollowingPage = () => {
                 <Container>
                     <CalendarWrapper>
                         <CommonCalendar
-                            selectedDate={date.toISO()}
-                            setSelectedDate={setDateFromISO}
+                            selectedDate={date}
+                            setSelectedDate={setDate}
                         />
                     </CalendarWrapper>
 

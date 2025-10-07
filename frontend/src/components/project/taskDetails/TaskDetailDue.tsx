@@ -34,9 +34,13 @@ const TaskDetailDue = ({
 
     const [selectedDate, setSelectedDate] = useState(() => {
         if (task.due_type === "due_date") {
-            return task.due_date
+            return DateTime.fromISO(task.due_date, {
+                zone: tz,
+            })
         } else if (task.due_type === "due_datetime") {
-            return task.due_datetime.split("T")[0]
+            return DateTime.fromISO(task.due_datetime.split("T")[0], {
+                zone: tz,
+            })
         } else {
             return null
         }
@@ -47,23 +51,16 @@ const TaskDetailDue = ({
         if (selectedDate === null) return
 
         if (task.due_type === "due_datetime") {
-            const converted_selectedDate = DateTime.fromISO(selectedDate, {
-                zone: tz,
-            })
-            if (!converted_selectedDate.isValid) return
             const due_datetime = DateTime.fromISO(task.due_datetime, {
                 zone: tz,
             })
-            if (!due_datetime.isValid) return
-
             const converted_datetime = due_datetime
                 .set({
-                    year: converted_selectedDate.year,
-                    month: converted_selectedDate.month,
-                    day: converted_selectedDate.day,
+                    year: selectedDate.year,
+                    month: selectedDate.month,
+                    day: selectedDate.day,
                 })
                 .toISO()
-
             if (converted_datetime === null) return
 
             setFunc({
@@ -74,17 +71,12 @@ const TaskDetailDue = ({
             return
         }
 
-        const converted_date = DateTime.fromISO(selectedDate, {
-            zone: tz,
-        })
-        if (!converted_date.isValid) return
-
-        const converted_date_str = converted_date.toISODate()
-        if (converted_date_str === null) return
+        const converted_date = selectedDate.toISODate()
+        if (converted_date === null) return
 
         setFunc({
             due_type: "due_date",
-            due_date: converted_date_str,
+            due_date: converted_date,
             due_datetime: null,
         })
     }, [selectedDate, setFunc, task.due_type, task.due_datetime, tz])

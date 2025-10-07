@@ -5,7 +5,7 @@ import styled from "styled-components"
 import CommonCalendar from "@components/common/CommonCalendar"
 import MildButton from "@components/common/MildButton"
 
-import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
+import { useClientLocale } from "@utils/clientSettings"
 import { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
@@ -18,7 +18,6 @@ interface DateBarProps {
 
 export default function DateBar({ date, setDate }: DateBarProps) {
     const locale = useClientLocale()
-    const tz = useClientTimezone()
 
     const handleDate = (diff: number) => {
         setDate(date.plus({ days: diff }))
@@ -60,10 +59,8 @@ export default function DateBar({ date, setDate }: DateBarProps) {
             {isCalendarOpen && (
                 <CalendarWrapper>
                     <CommonCalendar
-                        selectedDate={date.toISO()}
-                        setSelectedDate={(selectedDate: string) =>
-                            setDate(DateTime.fromISO(selectedDate).setZone(tz))
-                        }
+                        selectedDate={date}
+                        setSelectedDate={setDate}
                     />
                 </CalendarWrapper>
             )}
