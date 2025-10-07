@@ -57,9 +57,11 @@ const CommonCalendar = ({
                 onSelect={onSelect}
                 $isModal={isModal}
                 footer={
-                    <TodayButton onClick={onTodayBtnClick}>
-                        {t("button_today")}
-                    </TodayButton>
+                    <TodayButtonWrapper>
+                        <TodayButton onClick={onTodayBtnClick}>
+                            {t("button_today")}
+                        </TodayButton>
+                    </TodayButtonWrapper>
                 }
             />
         </CalendarWrapper>
@@ -107,7 +109,15 @@ const StyledDayPicker = styled(DayPicker)<{ $isModal?: boolean }>`
         `}
 `
 
-const TodayButton = styled.div`
+const TodayButtonWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+const TodayButton = styled.button`
+    all: unset;
+
     background-color: ${(p) => p.theme.backgroundColor};
     color: ${(p) => p.theme.textColor};
     font-size: 1rem;
@@ -117,6 +127,10 @@ const TodayButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &:hover {
+        color: ${(p) => p.theme.social.buttonColor};
+    }
 `
 
 export default CommonCalendar
