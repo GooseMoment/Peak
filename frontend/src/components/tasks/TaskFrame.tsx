@@ -258,7 +258,7 @@ const Icons = styled.div`
 const Dates = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 0.4em;
+    margin-top: 0.1em;
     margin-left: 3em;
 `
 
@@ -345,7 +345,7 @@ const Reminder = styled.div<{
             : props.theme.project.reminderColor};
 
     & svg {
-        width: 1em;
+        width: 1.2em;
         height: 1em;
         margin-right: 0.2em;
         top: 0;

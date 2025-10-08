@@ -106,12 +106,8 @@ const ImportantTasks = () => {
                 break
             }
         }
-    }, [
-        todayDueQuery.tasks,
-        overDueQuery.tasks,
-        pastAssignedQuery.tasks,
-        queries,
-    ])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [todayDueQuery.tasks, overDueQuery.tasks, pastAssignedQuery.tasks])
 
     const patchMutation = useMutation({
         mutationFn: ({
@@ -151,16 +147,9 @@ const ImportantTasks = () => {
         toast.success(t("today.due_change_tomorrow_success"))
     }
 
-    // 모든 tasks가 비어 있는지 검사
-    if (
-        todayDueQuery.isEmpty &&
+    return todayDueQuery.isEmpty &&
         overDueQuery.isEmpty &&
-        pastAssignedQuery.isEmpty
-    ) {
-        return null
-    }
-
-    return (
+        pastAssignedQuery.isEmpty ? null : (
         <ImportantTasksBlock>
             <ImportantTasksTitle>
                 <FeatherIcon icon="alert-circle" />
@@ -194,7 +183,7 @@ const ImportantTasks = () => {
                         {selectedQuery.isLoading && (
                             <SkeletonDueTasks taskCount={4} />
                         )}
-                        {selectedQuery.tasks?.pages?.map((group) =>
+                        {selectedQuery.tasks?.pages.map((group) =>
                             group.results.length === 0 ? (
                                 <NoTasksMessage key={group.results.length}>
                                     {t(`today.no_tasks_${filter}`)}
@@ -317,8 +306,8 @@ const FilterButton = styled.div<{ $isActive: boolean }>`
         props.$isActive &&
         css`
             color: ${(p) => p.theme.white};
-            border: 1.5px solid ${(p) => p.theme.goose};
-            background-color: ${(p) => p.theme.goose};
+            border: 1.5px solid ${(p) => p.theme.textColor};
+            background-color: ${(p) => p.theme.textColor};
         `}
 `
 
