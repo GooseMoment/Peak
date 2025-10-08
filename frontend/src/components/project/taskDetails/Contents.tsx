@@ -16,6 +16,7 @@ import type { TaskContent } from "@components/tasks/contents"
 import useTaskDateDisplay from "@components/tasks/utils/useTaskDateDisplay"
 
 import TaskDetailAssigned from "./TaskDetailAssigned"
+import TaskDetailCompleted from "./TaskDetailCompleted"
 import TaskDetailDrawer from "./TaskDetailDrawer"
 import TaskDetailDue from "./TaskDetailDue"
 import TaskDetailMemo from "./TaskDetailMemo"
@@ -74,10 +75,24 @@ const Contents = ({
         setIsComponentOpen(false)
     }
 
-    const { formatted_due_datetime, formatted_assigned_date } =
-        useTaskDateDisplay(task)
+    const {
+        formatted_due_datetime,
+        formatted_assigned_date,
+        formatted_completed_date,
+    } = useTaskDateDisplay(task)
 
     const items = [
+        ...(task.completed_at
+            ? [
+                  {
+                      id: 0,
+                      name: "completed" as const,
+                      icon: <FeatherIcon icon="check-circle" />,
+                      display: formatted_completed_date,
+                      component: <TaskDetailCompleted setFunc={setFunc} />,
+                  },
+              ]
+            : []),
         {
             id: 1,
             name: "assigned" as const,
@@ -196,6 +211,7 @@ const Contents = ({
                                     title={t(`${content}.title`)}
                                     onClose={closeComponent}
                                     special={
+                                        content === "completed" ||
                                         content === "assigned" ||
                                         content === "due"
                                     }>

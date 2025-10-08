@@ -172,6 +172,10 @@
             "delete_success": "\"{{task_name}}\" 작업을 삭제했습니다.",
             "delete_error": "\"{{task_name}}\" 작업 삭제에 실패했습니다."
         },
+        "completed": {
+            "name": "완료 날짜",
+            "title": "완료 날짜 설정"
+        },
         "assigned": {
             "name": "할당 날짜",
             "title": "할당 날짜 설정"

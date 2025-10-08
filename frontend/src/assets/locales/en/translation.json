@@ -172,6 +172,10 @@
             "delete_success": "Deleted the \"{{task_name}}\" task.",
             "delete_error": "Failed to delete \"{{task_name}}\" task."
         },
+        "completed": {
+            "name": "Completion Date",
+            "title": "Completion Date Settings"
+        },
         "assigned": {
             "name": "Assignment Date",
             "title": "Assignment date Settings"

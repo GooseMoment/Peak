@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction, useMemo } from "react"
 import styled, { css } from "styled-components"
 
 import TaskDetailAssigned from "@components/project/taskDetails/TaskDetailAssigned"
+import TaskDetailCompleted from "@components/project/taskDetails/TaskDetailCompleted"
 import TaskDetailDrawer from "@components/project/taskDetails/TaskDetailDrawer"
 import TaskDetailDue from "@components/project/taskDetails/TaskDetailDue"
 import TaskDetailMemo from "@components/project/taskDetails/TaskDetailMemo"
@@ -45,14 +46,28 @@ const ContentsMobile = ({
         }
     }
 
-    const { formatted_due_datetime, formatted_assigned_date } =
-        useTaskDateDisplay(task)
+    const {
+        formatted_due_datetime,
+        formatted_assigned_date,
+        formatted_completed_date,
+    } = useTaskDateDisplay(task)
 
     const onClose = () => {
         setActiveContent(null)
     }
 
     const items = [
+        ...(task.completed_at
+            ? [
+                  {
+                      id: 0,
+                      name: "completed" as const,
+                      icon: <FeatherIcon icon="check-circle" />,
+                      display: formatted_completed_date,
+                      component: <TaskDetailCompleted setFunc={setFunc} />,
+                  },
+              ]
+            : []),
         {
             id: 1,
             name: "assigned" as const,
