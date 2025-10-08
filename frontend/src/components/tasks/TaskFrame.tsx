@@ -39,7 +39,7 @@ const TaskFrame = ({
 }: TaskFrameProps) => {
     const [isDetailOpen, setDetailOpen] = useState(false)
     const theme = useTheme()
-    const isCompleted = !isSocial && task.completed_at !== null
+    const isCompleted = task.completed_at !== null
 
     const [searchParams] = useSearchParams()
     const taskIdFromQuery = searchParams.get("taskId")
@@ -81,6 +81,7 @@ const TaskFrame = ({
                     </Icons>
                     <TaskNameBox
                         $isCompleted={isCompleted}
+                        $isSocial={isSocial}
                         onClick={() => {
                             if (showTaskDetail) {
                                 setDetailOpen(true)
@@ -219,11 +220,14 @@ const Content = styled.div`
     width: 100%;
 `
 
-const TaskNameBox = styled.div<{ $isCompleted: boolean }>`
+const TaskNameBox = styled.div<{ $isCompleted: boolean; $isSocial?: boolean }>`
     display: inline-block;
     font-size: 1.1em;
     font-style: normal;
-    color: ${(p) => (p.$isCompleted ? p.theme.grey : p.theme.textColor)};
+    color: ${(p) => {
+        if (p.$isCompleted && !p.$isSocial) return p.theme.grey
+        return p.theme.textColor
+    }};
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
