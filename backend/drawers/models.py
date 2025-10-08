@@ -29,6 +29,12 @@ class Drawer(Base, PrivacyMixin):
 
     tasks: "RelatedManager[Task]"
 
+    def save(self, *args, **kwargs):
+        # privacy가 지정되지 않았으면 project의 privacy를 기본값으로 상속
+        if not self.privacy:
+            self.privacy = self.project.privacy
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:
         return f"{self.name} in {self.project}"
 

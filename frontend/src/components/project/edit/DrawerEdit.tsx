@@ -38,7 +38,7 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
 
     const drawerDefault = {
         name: "",
-        privacy: "public" as const,
+        privacy: null,
         project: projectID!,
     }
 
@@ -95,7 +95,7 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
         },
     })
 
-    const handleChange = (diff: Partial<Drawer>) => {
+    const handleChange = (diff: Partial<DrawerCreate>) => {
         setNewDrawer(Object.assign({}, newDrawer, diff))
 
         if (isDesktop) {
@@ -146,8 +146,8 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
         {
             name: "privacy",
             icon: "server" as const,
-            display: t(`privacy.${newDrawer.privacy}`),
-            component: <PrivacyEdit setPrivacy={handleChange} />,
+            display: t(`privacy.${newDrawer.privacy ?? "default"}`),
+            component: <PrivacyEdit setPrivacy={handleChange} isDrawer />,
         },
     ]
 

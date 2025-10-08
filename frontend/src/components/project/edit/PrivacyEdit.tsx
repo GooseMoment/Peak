@@ -4,9 +4,10 @@ import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
 import { type Privacy } from "@api/common"
-import { type Drawer } from "@api/drawers.api"
-import { type Project } from "@api/projects.api"
+import { type DrawerCreate } from "@api/drawers.api"
+import { type ProjectCreateInput } from "@api/projects.api"
 
+import defaultsvg from "@assets/project/privacy/default.svg"
 import privatesvg from "@assets/project/privacy/private.svg"
 import protectedsvg from "@assets/project/privacy/protected.svg"
 import publicsvg from "@assets/project/privacy/public.svg"
@@ -15,8 +16,12 @@ import { useTranslation } from "react-i18next"
 
 const PrivacyEdit = ({
     setPrivacy,
+    isDrawer,
 }: {
-    setPrivacy: (diff: Partial<Project> | Partial<Drawer>) => void
+    setPrivacy: (
+        diff: Partial<ProjectCreateInput> | Partial<DrawerCreate>,
+    ) => void
+    isDrawer?: boolean
 }) => {
     const { t } = useTranslation("translation", {
         keyPrefix: "project_drawer_edit.privacy",
@@ -24,14 +29,24 @@ const PrivacyEdit = ({
 
     const { closeModal } = useModalWindowCloseContext()
 
-    const changePrivacy = (privacy: Privacy) => {
+    const changePrivacy = (privacy: Privacy | "default") => {
         return () => {
-            setPrivacy({ privacy })
+            const valueToSend =
+                privacy === "default" ? null : (privacy as Privacy)
+            setPrivacy({ privacy: valueToSend })
             closeModal()
         }
     }
 
     const items = [
+        ...(isDrawer
+            ? [
+                  {
+                      icon: <img src={defaultsvg} />,
+                      privacy: "default" as const,
+                  },
+              ]
+            : []),
         { icon: <img src={publicsvg} />, privacy: "public" as const },
         { icon: <img src={protectedsvg} />, privacy: "protected" as const },
         { icon: <img src={privatesvg} />, privacy: "private" as const },

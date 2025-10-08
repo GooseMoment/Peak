@@ -135,6 +135,7 @@
         },
         "privacy": {
             "title": "Privacy Settings",
+            "default": "Same as project",
             "public": "Everyone",
             "protected": "Limit to my followers",
             "private": "Only me"

@@ -135,6 +135,7 @@
         },
         "privacy": {
             "title": "공개 범위 설정",
+            "default": "프로젝트와 동일",
             "public": "전체공개",
             "protected": "팔로워공개",
             "private": "비공개"
