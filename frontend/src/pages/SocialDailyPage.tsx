@@ -38,7 +38,7 @@ const SocialDailyPage = () => {
             })
 
             if (initialFrom) {
-                path += `?from=${initialFrom}`
+                path += `?from=${encodeURIComponent(initialFrom)}`
             }
 
             navigate(path, { replace: fallback })
