@@ -258,6 +258,7 @@ const Icons = styled.div`
 const Dates = styled.div`
     display: flex;
     align-items: center;
+    height: 1.1em;
     margin-top: 0.1em;
     margin-left: 3em;
 `
