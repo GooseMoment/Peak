@@ -79,7 +79,8 @@ const TaskDetailDue = ({
             due_date: converted_date,
             due_datetime: null,
         })
-    }, [selectedDate, setFunc, task.due_type, task.due_datetime, tz])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedDate, task.due_type, task.due_datetime, tz])
 
     const handleAdditionalComp = (name: DueKey) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
@@ -111,7 +112,7 @@ const TaskDetailDue = ({
                 const due_datetime = DateTime.fromISO(task.due_datetime, {
                     zone: tz,
                 })
-                const converted_datetime = due_datetime
+                const convertedDatetime = due_datetime
                     .set({
                         year: date.year,
                         month: date.month,
@@ -119,23 +120,23 @@ const TaskDetailDue = ({
                     })
                     .toISO()
 
-                if (converted_datetime === null) return
+                if (convertedDatetime === null) return
 
                 setFunc({
                     due_type: "due_datetime",
                     due_date: null,
-                    due_datetime: converted_datetime,
+                    due_datetime: convertedDatetime,
                 })
                 return
             }
 
-            const coverted_date = date.toISODate()
+            const covertedDate = date.toISODate()
 
-            if (coverted_date === null) return
+            if (covertedDate === null) return
 
             setFunc({
                 due_type: "due_date",
-                due_date: coverted_date,
+                due_date: covertedDate,
                 due_datetime: null,
             })
         }

@@ -67,7 +67,8 @@ const TaskDetailAssigned = ({
         setFunc({
             assigned_at: selectedDate.toISODate(),
         })
-    }, [selectedDate, setFunc, tz])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedDate, tz])
 
     const addComponent = [
         {

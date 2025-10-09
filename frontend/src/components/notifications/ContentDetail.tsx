@@ -19,14 +19,10 @@ export default function ContentDetail({
     const { t } = useTranslation("translation", { keyPrefix: "notifications" })
     switch (n.type) {
         case "task_reminder":
-            if (n.task_reminder.delta === 0) {
-                return <DetailBox>{t("content_task_reminder_now")}</DetailBox>
-            }
-
             return (
                 <DetailBox>
                     {t("content_task_reminder", {
-                        delta: n.task_reminder.delta,
+                        count: n.task_reminder.delta,
                     })}
                 </DetailBox>
             )
@@ -43,14 +39,7 @@ export default function ContentDetail({
         case "follow":
             return <DetailBox>{t("content_follow")}</DetailBox>
         case "follow_request":
-            return (
-                <DetailBox>
-                    <DetailLink
-                        to={`/app/users/@${n.following.follower.username}`}>
-                        {t("content_follow_request")}
-                    </DetailLink>
-                </DetailBox>
-            )
+            return <DetailBox>{t("content_follow_request")}</DetailBox>
         case "follow_request_accepted":
             return <DetailBox>{t("content_follow_request_accepted")}</DetailBox>
         default:
@@ -99,7 +88,6 @@ const DetailLink = styled(Link)`
 
 const ParentContent = styled.span`
     color: ${(p) => p.theme.secondTextColor};
-    font-style: italic;
 
     display: inline-block;
     ${ellipsis}

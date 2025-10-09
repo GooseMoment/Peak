@@ -5,8 +5,8 @@ import { useQuery } from "@tanstack/react-query"
 
 import ErrorLayout from "@components/errors/ErrorLayout"
 import Bio from "@components/users/Bio"
+import { SectionFollowRequestAction } from "@components/users/FollowRequestAction"
 import ProjectList from "@components/users/ProjectList"
-import Requests from "@components/users/Requests"
 import UserProfileHeader from "@components/users/UserProfileHeader"
 
 import { getCurrentUsername } from "@api/client"
@@ -85,7 +85,7 @@ const UserPage = () => {
                 isMine={isMine}
             />
             {user && followingQuery.data?.status === "requested" && (
-                <Requests user={user} />
+                <SectionFollowRequestAction user={user} />
             )}
             <Bio bio={user?.bio} isLoading={userPending} isMine={isMine} />
             <ProjectList

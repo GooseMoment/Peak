@@ -4,11 +4,12 @@ import { keyframes } from "styled-components"
 
 export const cubicBeizer = "cubic-bezier(0.165, 0.840, 0.440, 1.000)"
 
-const SCALE_TRANSLATE_AMOUNT = 100
+const SCALE_TRANSLATE_AMOUNT = 50
+const SCALE_SCALE_AMOUNT = 0.95
 
 export const scaleUp = keyframes`
     0% {
-        transform: scale(0.95) translateY(${SCALE_TRANSLATE_AMOUNT}px);
+        transform: scale(${SCALE_SCALE_AMOUNT}) translateY(${SCALE_TRANSLATE_AMOUNT}px);
         opacity: 0;
     }
 
@@ -25,7 +26,7 @@ export const scaleDown = keyframes`
     }
 
     100% {
-        transform: scale(0.9) translateY(${SCALE_TRANSLATE_AMOUNT}px);
+        transform: scale(${SCALE_SCALE_AMOUNT}) translateY(${SCALE_TRANSLATE_AMOUNT}px);
         opacity: 0;
     }
 `
