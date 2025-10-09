@@ -64,7 +64,7 @@ const TaskDetailAssigned = ({
     const handleSelectedDateChange = (date: DateTime) => {
         setSelectedDate(date)
 
-        if (date == null) {
+        if (date === null) {
             setFunc({ assigned_at: null })
             return
         }
