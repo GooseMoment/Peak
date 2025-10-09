@@ -38,8 +38,9 @@ const CommonCalendar = ({
     }
 
     const onTodayBtnClick = () => {
-        setMonth(today)
-        setSelected(today)
+        const now = new Date()
+        setMonth(now)
+        setSelected(now)
         setSelectedDate(DateTime.now().setZone(tz))
     }
 
@@ -134,7 +135,7 @@ const TodayButton = styled.button`
     }
 
     &:focus-visible {
-        outline: 2px solid blue;
+        outline: 2px solid ${(p) => p.theme.goose};
     }
 `
 
