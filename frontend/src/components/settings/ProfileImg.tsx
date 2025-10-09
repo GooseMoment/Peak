@@ -70,7 +70,7 @@ export default function ProfileImg({ profile_img, username }: ProfileImgProps) {
     const onClickOk = async () => {
         setOpenCropper(false)
 
-        await toast.promise(cropAndUpload, {
+        await toast.promise(cropAndUpload(), {
             pending: t("uploading"),
             error: t("upload_error"),
             success: t("upload_success"),

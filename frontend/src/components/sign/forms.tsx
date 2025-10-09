@@ -36,8 +36,14 @@ export const SignInForm = () => {
         setIsLoading(true)
 
         const formData = new FormData(e.currentTarget)
-        const email = formData.get("email") as string
-        const password = formData.get("password") as string
+        const email = formData.get("email")
+        const password = formData.get("password")
+
+        if (typeof email !== "string" || typeof password !== "string") {
+            toast.error(t("internal_error"))
+            setIsLoading(false)
+            return
+        }
 
         try {
             const twoFactorAuthEnabled = await signIn(email, password)
