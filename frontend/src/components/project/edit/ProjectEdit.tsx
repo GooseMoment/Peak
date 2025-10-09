@@ -144,6 +144,7 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
     }
 
     const items = useMemo(
+        // eslint-disable-next-line react-hooks/refs -- will be fixed after #548 is merged
         () => makeItems(t, theme.type, newProject, handleChange),
         [t, theme, newProject, handleChange],
     )
