@@ -3,7 +3,6 @@ import {
     useCallback,
     useEffect,
     useMemo,
-    useRef,
     useState,
 } from "react"
 import { useSearchParams } from "react-router-dom"
@@ -73,11 +72,43 @@ const NotificationsPage = () => {
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
     const isNotificationEmpty = data?.pages[0]?.results?.length === 0
 
-    const lastDate = useRef<null | string>(null)
     useEffect(() => {
-        lastDate.current = null
         setSearchParams({ active: activeFilter }, { replace: true })
     }, [activeFilter, setSearchParams])
+
+    // Create notifications with date delimiters
+    const notificationsWithDelimiters = useMemo(() => {
+        if (!data) return []
+        
+        let lastDate: string | null = null
+        const result: Array<{
+            notification: Notification
+            showDate: boolean
+            dateText: string | null
+        }> = []
+
+        for (const [i, group] of data.pages.entries()) {
+            for (const [j, notification] of group.results.entries()) {
+                const thisDate = DateTime.fromISO(notification.created_at)
+                    .setLocale(locale)
+                    .toRelativeCalendar({ unit: "days" })
+                
+                const showDate = (i === 0 && j === 0) || thisDate !== lastDate
+                
+                if (showDate) {
+                    lastDate = thisDate
+                }
+
+                result.push({
+                    notification,
+                    showDate,
+                    dateText: thisDate,
+                })
+            }
+        }
+
+        return result
+    }, [data, locale])
 
     const header = (
         <>
@@ -113,39 +144,18 @@ const NotificationsPage = () => {
     return (
         <>
             {header}
-            {data?.pages.map((group, i) => (
-                <Fragment key={i}>
-                    {group.results.map((notification, j) => {
-                        let dateDelimiter = null
-                        const thisDate = DateTime.fromISO(
-                            notification.created_at,
-                        )
-                            .setLocale(locale)
-                            .toRelativeCalendar({ unit: "days" })
-
-                        if (
-                            (i === 0 && j === 0) ||
-                            thisDate !== lastDate.current
-                        ) {
-                            dateDelimiter = <Date>{thisDate}</Date>
-                            lastDate.current = thisDate
+            {notificationsWithDelimiters.map(({ notification, showDate, dateText }) => (
+                <Fragment key={notification.id}>
+                    {showDate && <Date>{dateText}</Date>}
+                    <Box
+                        notification={notification}
+                        highlight={notification.id === focusID}
+                        ref={
+                            notification.id === focusID
+                                ? scrollToBox
+                                : null
                         }
-
-                        return (
-                            <Fragment key={notification.id}>
-                                {dateDelimiter}
-                                <Box
-                                    notification={notification}
-                                    highlight={notification.id === focusID}
-                                    ref={
-                                        notification.id === focusID
-                                            ? scrollToBox
-                                            : null
-                                    }
-                                />
-                            </Fragment>
-                        )
-                    })}
+                    />
                 </Fragment>
             ))}
             {isPending && !isFetchingNextPage ? (

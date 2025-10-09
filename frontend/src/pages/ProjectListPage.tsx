@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
@@ -30,7 +30,6 @@ import { useTranslation } from "react-i18next"
 const ProjectListPage = () => {
     const { t } = useTranslation("translation")
 
-    const [projects, setProjects] = useState<Project[]>([])
     const [isCreateOpen, setIsCreateOpen] = useState<boolean>(false)
 
     const {
@@ -49,31 +48,36 @@ const ProjectListPage = () => {
 
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
 
+    const projects = useMemo(() => {
+        if (!data) return []
+        return data.pages.flatMap((page) => page.results ?? []) || []
+    }, [data])
+
+    // Drag and drop state
+    const [tempProjectOrder, setTempProjectOrder] = useState<Project[]>([])
+    const displayProjects =
+        tempProjectOrder.length > 0 ? tempProjectOrder : projects
+
     const { mutateAsync } = useMutation({
         mutationFn: (data: Partial<Project>[]) => {
             return patchReorderProject(data)
         },
     })
 
-    useEffect(() => {
-        if (!data) return
-        const results = data.pages.flatMap((page) => page.results ?? []) || []
-        setProjects(results)
-    }, [data])
-
-    const moveProject = useCallback((dragIndex: number, hoverIndex: number) => {
-        setProjects((prevProjects) => {
-            const updatedProjects = [...prevProjects]
-            const [moved] = updatedProjects.splice(dragIndex, 1)
-            updatedProjects.splice(hoverIndex, 0, moved)
-            return updatedProjects
-        })
-    }, [])
+    const moveProject = useCallback(
+        (dragIndex: number, hoverIndex: number) => {
+            const updatedOrder = [...displayProjects]
+            const [moved] = updatedOrder.splice(dragIndex, 1)
+            updatedOrder.splice(hoverIndex, 0, moved)
+            setTempProjectOrder(updatedOrder)
+        },
+        [displayProjects],
+    )
 
     const dropProject = useCallback(async () => {
         const results = data?.pages.flatMap((page) => page.results ?? []) || []
 
-        const changedProjects = projects
+        const changedProjects = displayProjects
             .map((project, index) => ({ id: project.id, order: index }))
             .filter((project, index) => {
                 const originalIndex = results.findIndex(
@@ -88,7 +92,9 @@ const ProjectListPage = () => {
         await queryClient.invalidateQueries({
             queryKey: ["projects"],
         })
-    }, [data?.pages, projects, mutateAsync])
+        // Reset temp order after successful API update
+        setTempProjectOrder([])
+    }, [data?.pages, displayProjects, mutateAsync])
 
     return (
         <>
@@ -108,7 +114,7 @@ const ProjectListPage = () => {
             {isError && <ErrorProjectList refetch={() => refetch()} />}
 
             <DndProvider options={HTML5toTouch}>
-                {projects.map((project) => (
+                {displayProjects.map((project) => (
                     <ProjectName
                         key={project.id}
                         project={project}

@@ -1,4 +1,4 @@
-import { type FormEvent, type MouseEvent, useEffect, useState } from "react"
+import { type FormEvent, type MouseEvent, useMemo, useState } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -23,6 +23,8 @@ import { type PaletteColorName, getPaletteColor } from "@assets/palettes"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
+const DEFAULT_HEADER_COLOR: PaletteColorName = "grey"
+
 const Profile = () => {
     const { t } = useTranslation("settings", { keyPrefix: "profile" })
     const theme = useTheme()
@@ -39,11 +41,23 @@ const Profile = () => {
         queryFn: getMe,
     })
 
-    const [headerColor, setHeaderColor] = useState<{ color: PaletteColorName }>(
-        {
-            color: "grey",
-        },
-    )
+    // Local state for user color selection (UI interaction)
+    const [userSelectedColor, setUserSelectedColor] = useState<{
+        color: PaletteColorName
+    }>({ color: DEFAULT_HEADER_COLOR })
+
+    // Derived state for header color based on user data or user selection
+    const headerColor = useMemo(() => {
+        // If user data is loaded and user hasn't made a selection, use user data
+        if (
+            user?.header_color &&
+            userSelectedColor.color === DEFAULT_HEADER_COLOR
+        ) {
+            return { color: user.header_color }
+        }
+        return userSelectedColor
+    }, [user, userSelectedColor])
+
     const [paletteOpen, setPaletteOpen] = useState(false)
 
     const mutation = useMutation({
@@ -51,7 +65,9 @@ const Profile = () => {
             return patchUser(data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["users", "me"] })
+            queryClient.invalidateQueries({
+                queryKey: ["users", "me"],
+            })
             queryClient.invalidateQueries({
                 queryKey: ["users", user?.username],
             })
@@ -61,12 +77,6 @@ const Profile = () => {
             toast.error(t("profile_fail"))
         },
     })
-
-    useEffect(() => {
-        if (user) {
-            setHeaderColor({ color: user.header_color })
-        }
-    }, [user])
 
     const onClickOpenPalette = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
@@ -168,7 +178,7 @@ const Profile = () => {
                     </Value>
                     {paletteOpen && (
                         <ModalWindow afterClose={() => setPaletteOpen(false)}>
-                            <ColorEdit setColor={setHeaderColor} />
+                            <ColorEdit setColor={setUserSelectedColor} />
                         </ModalWindow>
                     )}
                 </Section>

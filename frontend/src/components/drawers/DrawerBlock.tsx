@@ -60,8 +60,6 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
     const [isCreateOpen, setCreateOpen] = useState(false)
 
-    const [tasks, setTasks] = useState<Task[]>([])
-
     const { t } = useTranslation("translation")
 
     const sortMenuItems = useMemo(() => makeSortMenuItems(t), [t])
@@ -80,6 +78,11 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
         initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
+
+    const tasks = useMemo(() => {
+        if (!data) return []
+        return data.pages.flatMap((page) => page.results ?? []) || []
+    }, [data])
 
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
 
@@ -134,15 +137,16 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
         }),
     })
 
-    drag(drop(ref))
+    useEffect(() => {
+        drag(drop(ref))
+    }, [drag, drop])
     /// ---
 
-    // Task Drag and Drop
-    useEffect(() => {
-        if (!data) return
-        const results = data.pages.flatMap((page) => page.results ?? []) || []
-        setTasks(results)
-    }, [data])
+    // Task Drag and Drop - using local state for temporary reordering
+    const [tempTaskOrder, setTempTaskOrder] = useState<Task[]>([])
+
+    // Use temp order if available, otherwise use derived tasks
+    const displayTasks = tempTaskOrder.length > 0 ? tempTaskOrder : tasks
 
     const { mutateAsync, isPending } = useMutation({
         mutationFn: (data: Partial<Task>[]) => {
@@ -150,30 +154,38 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
         },
     })
 
-    const moveTask = useCallback((dragIndex: number, hoverIndex: number) => {
-        setTasks((prevTasks) => {
-            const updatedTasks = [...prevTasks]
+    const moveTask = useCallback(
+        (dragIndex: number, hoverIndex: number) => {
+            const currentTasks =
+                tempTaskOrder.length > 0 ? tempTaskOrder : tasks
+            const updatedTasks = [...currentTasks]
             const [moved] = updatedTasks.splice(dragIndex, 1)
             updatedTasks.splice(hoverIndex, 0, moved)
-            return updatedTasks
-        })
-    }, [])
+            setTempTaskOrder(updatedTasks)
+        },
+        [tasks, tempTaskOrder],
+    )
 
     const dropTask = useCallback(async () => {
         const results = data?.pages.flatMap((page) => page.results) || []
-        const changedTasks = tasks
+        const currentTasks = tempTaskOrder.length > 0 ? tempTaskOrder : tasks
+        const changedTasks = currentTasks
             .map((task, index) => ({ id: task.id, order: index }))
             .filter((task, index) => results[index]?.id !== task.id)
 
-        if (changedTasks.length === 0) return
+        if (changedTasks.length === 0) {
+            setTempTaskOrder([]) // Reset temp order
+            return
+        }
 
         await mutateAsync(changedTasks)
+        setTempTaskOrder([]) // Reset temp order after successful update
 
         await queryClient.invalidateQueries({
             queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
         })
         setOrdering("order")
-    }, [tasks, data, drawer.id, mutateAsync])
+    }, [tasks, tempTaskOrder, data, drawer.id, mutateAsync])
     // ---
 
     const deleteMutation = useMutation({
@@ -257,7 +269,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
                 <SkeletonTasks taskCount={taskCount} />
             ) : (
                 <TaskList $isDragging={isDragging}>
-                    {tasks?.map((task) => (
+                    {displayTasks?.map((task) => (
                         <DrawerTask
                             key={task.id}
                             task={task}
