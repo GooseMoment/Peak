@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
-import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
 import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
@@ -35,6 +34,7 @@ import queryClient from "@queries/queryClient"
 
 import { getPaletteColor } from "@assets/palettes"
 
+import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
 import type { TFunction } from "i18next"
 import { DndProvider } from "react-dnd-multi-backend"
@@ -81,7 +81,6 @@ const ProjectPage = () => {
         isError: isDrawersError,
         refetch: drawersRefetch,
         fetchNextPage,
-        isFetchingNextPage,
     } = useInfiniteQuery({
         queryKey: ["drawers", { projectID: id, ordering: ordering }],
         queryFn: (context) =>
@@ -96,8 +95,6 @@ const ProjectPage = () => {
         const results = data.pages.flatMap((page) => page.results ?? []) || []
         setDrawers(results)
     }, [data])
-
-    const hasNextPage = data?.pages[data?.pages.length - 1].next !== null
 
     const { mutateAsync } = useMutation({
         mutationFn: (data: Partial<Drawer>[]) => {
@@ -246,19 +243,9 @@ const ProjectPage = () => {
                     ))}
                 </DndProvider>
             )}
-            {isDrawersPending ||
-                (hasNextPage ? (
-                    <ButtonGroup $justifyContent="center" $margin="1em">
-                        <MoreButton
-                            disabled={isFetchingNextPage}
-                            loading={isFetchingNextPage}
-                            onClick={() => fetchNextPage()}>
-                            {isDrawersPending
-                                ? t("common.loading")
-                                : t("common.load_more")}
-                        </MoreButton>
-                    </ButtonGroup>
-                ) : null)}
+            <ImpressionArea
+                onImpressionStart={() => fetchNextPage()}
+                timeThreshold={200}></ImpressionArea>
             {isAlertOpen && (
                 <DeleteAlert
                     title={t("project.delete.alert_project_title", {
@@ -339,10 +326,6 @@ const NoDrawerText = styled.div`
     margin-top: 2em;
     font-weight: 600;
     font-size: 1.4em;
-`
-
-const MoreButton = styled(Button)`
-    width: 80%;
 `
 
 const makeSortMenuItems = (t: TFunction<"translation">) => [
