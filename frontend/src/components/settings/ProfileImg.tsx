@@ -12,7 +12,7 @@ import queryClient from "@queries/queryClient"
 
 import { cubicBeizer } from "@assets/keyframes"
 
-import { Image as ImageIcon } from "feather-icons-react"
+import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -120,7 +120,7 @@ export default function ProfileImg({ profile_img, username }: ProfileImgProps) {
         <ProfileImgContainer>
             <Img src={profile_img} draggable="false" />
             <ProfileImgOverlay onClick={clickInput}>
-                <ImageIcon />
+                <FeatherIcon icon="image" />
             </ProfileImgOverlay>
             <HiddenInput
                 ref={input}
