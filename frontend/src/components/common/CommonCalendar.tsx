@@ -25,7 +25,9 @@ const CommonCalendar = ({
     const locale = useClientLocale()
 
     const today = new Date()
-    const [month, setMonth] = useState(today)
+    const [month, setMonth] = useState(
+        selectedDate ? selectedDate.toJSDate() : today,
+    )
     const [selected, setSelected] = useState(
         selectedDate ? selectedDate.toJSDate() : undefined,
     )
