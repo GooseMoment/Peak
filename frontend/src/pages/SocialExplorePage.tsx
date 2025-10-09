@@ -93,7 +93,6 @@ const Container = styled.div`
 `
 
 const StickyContainer = styled(Container)`
-    /* align-self: flex-start; */
     top: 2.5rem;
     gap: 0rem;
 `
