@@ -4,10 +4,10 @@ import LoaderCircle from "@components/common/LoaderCircle"
 
 export default function FullscreenLoader() {
     return (
-        <Container>
+        <Container role="status" aria-live="polite" aria-label="Loading">
             <Box>
                 <Logo>
-                    <Img src="/logo.svg" draggable="false" />
+                    <Img src="/logo.svg" alt="Peak logo" draggable="false" />
                     <Name>Peak</Name>
                 </Logo>
                 <Loader />

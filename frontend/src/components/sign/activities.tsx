@@ -151,7 +151,7 @@ const timeUnitsMap: Record<string, number> = {
 const generateActivities = (serverEmojis: Emoji[]) => {
     let emojis: Emoji[] | string[] = serverEmojis
 
-    if (!serverEmojis) {
+    if (serverEmojis.length === 0) {
         emojis = systemEmojis
     }
 

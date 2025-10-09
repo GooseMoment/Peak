@@ -42,12 +42,13 @@ export default function VGraph({ items, countAll }: VGraphProps) {
                         $width={(item.count / totalCount) * 100}
                         $color={getPaletteColor(theme.type, item.color)}
                         draggable="false"
+                        aria-label={`${item.name}: ${item.count} tasks`}
                     />
                 ))}
             </Graph>
             <Categories>
                 {items.map((item) => (
-                    <Category key={item.name} to={`/app/projects/${item.id}`}>
+                    <Category key={item.id} to={`/app/projects/${item.id}`}>
                         <CategoryCircle
                             $color={getPaletteColor(theme.type, item.color)}
                             draggable="false"

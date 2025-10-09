@@ -30,7 +30,7 @@ const LogoBox = styled.img`
 export default function Brand() {
     return (
         <Box>
-            <LogoBox src="/logo.svg" draggable="false" />
+            <LogoBox src="/logo.svg" alt="Peak logo" draggable="false" />
             Peak <By>by GooseMoment</By>
         </Box>
     )

@@ -134,7 +134,7 @@ export const TOTPAuthForm = () => {
         const value = e.currentTarget.value.replace(/\D/g, "").slice(0, 6)
         setTOTPCode(value)
 
-        if (value.length >= 6) {
+        if (value.length >= 6 && !mut.isPending) {
             return mut.mutate()
         }
     }
