@@ -79,7 +79,8 @@ const TaskDetailDue = ({
             due_date: converted_date_str,
             due_datetime: null,
         })
-    }, [selectedDate, setFunc, task.due_type, task.due_datetime, tz])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedDate, task.due_type, task.due_datetime, tz])
 
     const handleAdditionalComp = (name: DueKey) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
