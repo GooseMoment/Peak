@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import styled from "styled-components"
 
@@ -29,6 +29,16 @@ const CommonCalendar = ({
     const [selected, setSelected] = useState(
         selectedDate ? selectedDate.toJSDate() : undefined,
     )
+
+    useEffect(() => {
+        if (selectedDate) {
+            const jsDate = selectedDate.toJSDate()
+            setSelected(jsDate)
+            setMonth(jsDate)
+        } else {
+            setSelected(undefined)
+        }
+    }, [selectedDate])
 
     const onSelect = (date: Date | undefined) => {
         if (!date) return
