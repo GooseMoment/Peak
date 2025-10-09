@@ -1,10 +1,11 @@
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react"
-import { useSearchParams } from "react-router-dom"
+import { Fragment, Suspense, useEffect, useMemo, useState } from "react"
+import { Outlet, useSearchParams } from "react-router-dom"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { css, keyframes } from "styled-components"
 
 import FilterButtonGroup from "@components/common/FilterButtonGroup"
+import ModalLoader from "@components/common/ModalLoader"
 import PageTitle from "@components/common/PageTitle"
 import Box, { BoxSkeleton } from "@components/notifications/Box"
 
@@ -15,7 +16,7 @@ import { getCursorFromURL } from "@utils/pagination"
 
 import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
-import { type TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -29,7 +30,6 @@ const NotificationsPage = () => {
     const filters = useMemo(() => makeFilters(t), [t])
 
     const [searchParams, setSearchParams] = useSearchParams()
-    const focusID = searchParams.get("id")
     const paramActiveFilter = searchParams.get("active") || ""
 
     const [activeFilter, setActiveFilter] = useState<keyof typeof filters>(
@@ -38,14 +38,11 @@ const NotificationsPage = () => {
             : defaultFilter,
     )
 
-    const scrollToBox = useCallback((node: HTMLElement | null) => {
-        node?.scrollIntoView({ block: "center", behavior: "smooth" })
-    }, [])
-
     const {
         data,
         isError,
         refetch,
+        hasNextPage,
         fetchNextPage,
         isPending,
         isFetching,
@@ -62,8 +59,6 @@ const NotificationsPage = () => {
         gcTime: 30 * 1000,
     })
 
-    // useInfiniteQuery에서 제공하는 hasNextPage가 제대로 작동 안함. 어째서?
-    const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
     const isNotificationEmpty = data?.pages[0]?.results?.length === 0
 
     useEffect(() => {
@@ -142,13 +137,7 @@ const NotificationsPage = () => {
                 ({ notification, showDate, dateText }) => (
                     <Fragment key={notification.id}>
                         {showDate && <Date>{dateText}</Date>}
-                        <Box
-                            notification={notification}
-                            highlight={notification.id === focusID}
-                            ref={
-                                notification.id === focusID ? scrollToBox : null
-                            }
-                        />
+                        <Box notification={notification} />
                     </Fragment>
                 ),
             )}
@@ -169,6 +158,9 @@ const NotificationsPage = () => {
                 )}
             </ImpressionArea>
             {isNotificationEmpty && <NoMore>{t("empty")}</NoMore>}
+            <Suspense key="notification-outlet" fallback={<ModalLoader />}>
+                <Outlet />
+            </Suspense>
         </>
     )
 }

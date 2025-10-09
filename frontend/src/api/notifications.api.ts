@@ -10,7 +10,7 @@ import {
 } from "@utils/clientSettings"
 
 export interface TaskReminder extends Base {
-    task: Task
+    task: Task["id"]
     delta: number
     scheduled: string
     task_name: string
@@ -49,19 +49,19 @@ export const deleteReminder = async (id: string) => {
 }
 
 export interface NotificationTaskReminder extends Base {
-    user: User
+    username: User["username"]
     type: "task_reminder"
     task_reminder: TaskReminder
 }
 
 export interface NotificationTaskReaction extends Base {
-    user: User
+    username: User["username"]
     type: "task_reaction"
     task_reaction: TaskReaction
 }
 
 export interface NotificationFollowing extends Base {
-    user: User
+    username: User["username"]
     type: "follow" | "follow_request" | "follow_request_accepted"
     following: Following
 }
@@ -81,6 +81,11 @@ export const getNotifications = async (
             params: { cursor, types: types.join("|") },
         },
     )
+    return res.data
+}
+
+export const getNotification = async (id: string) => {
+    const res = await client.get<Notification>(`notifications/${id}/`)
     return res.data
 }
 
