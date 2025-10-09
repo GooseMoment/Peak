@@ -11,13 +11,14 @@ import {
 
 import styled, { css } from "styled-components"
 
-import useStopScroll from "@utils/useStopScroll"
+import useStopVerticalScroll from "@utils/useStopVerticalScroll"
 
 import { scaleDown, scaleUp } from "@assets/keyframes"
 
 import { createPortal } from "react-dom"
 
 interface useModalOptions {
+    initiallyOpen?: boolean
     beforeOpen?: () => void
     afterOpen?: () => void
     beforeClose?: () => void
@@ -34,14 +35,13 @@ export interface Modal {
 }
 
 const el = document.getElementById("window-container")!
-const root = document.getElementById("root")!
 
 export default function useModal(options: useModalOptions = {}): Modal {
     const id = useRef<string>()
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(!!options.initiallyOpen)
     const [isClosing, setIsClosing] = useState(false) // for ChildrenAnimationWrapper
 
-    useStopScroll(isOpen)
+    useStopVerticalScroll(isOpen)
 
     useEffect(() => {
         if (!id.current) {
@@ -63,7 +63,7 @@ export default function useModal(options: useModalOptions = {}): Modal {
             setIsOpen(false)
             options.afterClose?.()
             setIsClosing(false)
-        }, 100)
+        }, 100) // intentionally shorter than animation duration
     }, [options])
 
     const toggleModal = useCallback(() => {
@@ -85,16 +85,6 @@ export default function useModal(options: useModalOptions = {}): Modal {
         },
         [closeModal],
     )
-
-    useEffect(() => {
-        if (isOpen) {
-            root.classList.add("has-modal")
-        }
-
-        return () => {
-            root.classList.remove("has-modal")
-        }
-    }, [isOpen])
 
     useEffect(() => {
         if (isOpen) {
@@ -158,9 +148,9 @@ export const ModalChildrenAnimationWrapper = styled.div<{ $closing?: boolean }>`
     ${(props) =>
         props.$closing
             ? css`
-                  animation: 0.5s var(--cubic) forwards ${scaleDown};
+                  animation: 0.25s var(--cubic) forwards ${scaleDown};
               `
             : css`
-                  animation: 0.5s var(--cubic) ${scaleUp};
+                  animation: 0.25s var(--cubic) ${scaleUp};
               `}
 `

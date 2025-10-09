@@ -20,12 +20,15 @@ import { getToken } from "@api/client"
 import { lazily } from "react-lazily"
 
 const HomePage = lazy(() => import("@pages/HomePage"))
-const NotificationsPage = lazy(() => import("@pages/NotificationsPage"))
 const TodayPage = lazy(() => import("@pages/TodayPage"))
 const InboxPage = lazy(() => import("@pages/InboxPage"))
 const ProjectPage = lazy(() => import("@pages/ProjectPage"))
 const ProjectListPage = lazy(() => import("@pages/ProjectListPage"))
 const SettingsPage = lazy(() => import("@pages/SettingsPage"))
+
+const { NotificationListPage, NotificationPage } = lazily(
+    () => import("@pages/chunks/NotificationPages"),
+)
 
 const {
     SocialRedirector,
@@ -120,7 +123,13 @@ const routes: RouteObject[] = [
             },
             {
                 path: "notifications",
-                element: <NotificationsPage />,
+                element: <NotificationListPage />,
+                children: [
+                    {
+                        path: ":id",
+                        element: <NotificationPage />,
+                    },
+                ],
             },
             {
                 path: "today",

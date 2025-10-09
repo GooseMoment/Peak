@@ -10,6 +10,7 @@ import Middle from "@components/project/edit/Middle"
 import PrivacyEdit from "@components/project/edit/PrivacyEdit"
 import ProjectTypeEdit from "@components/project/edit/ProjectTypeEdit"
 import TitleInput from "@components/project/edit/TitleInput"
+import omitCommonFields from "@components/tasks/utils/omitCommonFields"
 
 import { type Project, patchProject, postProject } from "@api/projects.api"
 
@@ -48,10 +49,15 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
     const inputRef = useRef<HTMLInputElement>(null)
     const hasCreated = useRef(false)
 
-    const mutation = useMutation({
+    const mutation = useMutation<
+        Project,
+        AxiosError<{ code: string }>,
+        Partial<Project>
+    >({
         mutationFn: (data: Partial<Project>) => {
             if (project) {
-                return patchProject(project.id, data)
+                const rest = omitCommonFields(data)
+                return patchProject(project.id, rest)
             }
             return postProject(data)
         },
