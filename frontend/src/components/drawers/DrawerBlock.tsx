@@ -167,7 +167,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
     )
 
     const dropTask = useCallback(async () => {
-        const results = data?.pages.flatMap((page) => page.results) || []
+        const results = data?.pages.flatMap((page) => page.results ?? []) || []
         const currentTasks = tempTaskOrder.length > 0 ? tempTaskOrder : tasks
         const changedTasks = currentTasks
             .map((task, index) => ({ id: task.id, order: index }))
@@ -178,13 +178,15 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
             return
         }
 
-        await mutateAsync(changedTasks)
-        setTempTaskOrder([]) // Reset temp order after successful update
-
-        await queryClient.invalidateQueries({
-            queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
-        })
-        setOrdering("order")
+        try {
+            await mutateAsync(changedTasks)
+            await queryClient.invalidateQueries({
+                queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
+            })
+            setOrdering("order")
+        } finally {
+            setTempTaskOrder([]) // Ensure temp order is reset
+        }
     }, [tasks, tempTaskOrder, data, drawer.id, mutateAsync])
     // ---
 
@@ -269,7 +271,7 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
                 <SkeletonTasks taskCount={taskCount} />
             ) : (
                 <TaskList $isDragging={isDragging}>
-                    {displayTasks?.map((task) => (
+                    {displayTasks.map((task) => (
                         <DrawerTask
                             key={task.id}
                             task={task}

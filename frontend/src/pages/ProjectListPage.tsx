@@ -75,12 +75,10 @@ const ProjectListPage = () => {
     )
 
     const dropProject = useCallback(async () => {
-        const results = data?.pages.flatMap((page) => page.results ?? []) || []
-
         const changedProjects = displayProjects
             .map((project, index) => ({ id: project.id, order: index }))
             .filter((project, index) => {
-                const originalIndex = results.findIndex(
+                const originalIndex = projects.findIndex(
                     (p) => p.id === project.id,
                 )
                 return originalIndex !== index
@@ -94,7 +92,7 @@ const ProjectListPage = () => {
         })
         // Reset temp order after successful API update
         setTempProjectOrder([])
-    }, [data?.pages, displayProjects, mutateAsync])
+    }, [projects, displayProjects, mutateAsync])
 
     return (
         <>
