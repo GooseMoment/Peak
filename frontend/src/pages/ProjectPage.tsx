@@ -345,22 +345,22 @@ const MoreButton = styled(Button)`
     width: 80%;
 `
 
-const makeSortMenuItems = (t: TFunction<"translation", "project">) => [
-    { display: t("sort.my"), context: "order" },
-    { display: t("sort.name"), context: "name" },
-    { display: t("sort.-name"), context: "-name" },
-    { display: t("sort.created_at"), context: "created_at" },
-    { display: t("sort.-created_at"), context: "-created_at" },
+const makeSortMenuItems = (t: TFunction<"translation">) => [
+    { display: t("project.sort.my"), context: "order" },
+    { display: t("project.sort.name"), context: "name" },
+    { display: t("project.sort.-name"), context: "-name" },
+    { display: t("project.sort.created_at"), context: "created_at" },
+    { display: t("project.sort.-created_at"), context: "-created_at" },
     {
-        display: t("sort.-uncompleted_task_count"),
+        display: t("project.sort.-uncompleted_task_count"),
         context: "-uncompleted_task_count",
     },
     {
-        display: t("sort.-completed_task_count"),
+        display: t("project.sort.-completed_task_count"),
         context: "-completed_task_count",
     },
     {
-        display: t("sort.completed_task_count"),
+        display: t("project.sort.completed_task_count"),
         context: "completed_task_count",
     },
 ]

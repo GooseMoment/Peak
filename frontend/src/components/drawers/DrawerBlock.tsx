@@ -346,19 +346,19 @@ const MoreButton = styled(Button)`
     width: 80vw;
 `
 
-const makeSortMenuItems = (t: TFunction<"translation", "project">) => [
-    { display: t("sort.my"), context: "order" },
-    { display: t("sort.-priority"), context: "-priority" },
-    { display: t("sort.due_date"), context: "due_date" },
+const makeSortMenuItems = (t: TFunction<"translation">) => [
+    { display: t("project.sort.my"), context: "order" },
+    { display: t("project.sort.-priority"), context: "-priority" },
+    { display: t("project.sort.due_date"), context: "due_date" },
     {
-        display: t("sort.-due_date"),
+        display: t("project.sort.-due_date"),
         context: "-due_date",
     },
-    { display: t("sort.name"), context: "name" },
-    { display: t("sort.-name"), context: "-name" },
-    { display: t("sort.created_at"), context: "created_at" },
-    { display: t("sort.-created_at"), context: "-created_at" },
-    { display: t("sort.reminders"), context: "reminders" },
+    { display: t("project.sort.name"), context: "name" },
+    { display: t("project.sort.-name"), context: "-name" },
+    { display: t("project.sort.created_at"), context: "created_at" },
+    { display: t("project.sort.-created_at"), context: "-created_at" },
+    { display: t("project.sort.reminders"), context: "reminders" },
 ]
 
 export default DrawerBlock
