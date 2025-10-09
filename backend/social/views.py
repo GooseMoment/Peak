@@ -157,9 +157,10 @@ class ExploreSearchView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAP
 
     def get_queryset(self):
         keyword = self.request.GET.get("query")
-        if not keyword or not keyword.strip():
+        if keyword is None or not keyword.strip():
             raise RequiredFieldMissing
 
+        keyword = keyword.strip()
         user: User = self.request.user  # pyright: ignore[reportAssignmentType]
 
         base_qs = (
