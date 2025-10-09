@@ -243,7 +243,9 @@ export const SignUpForm = () => {
             navigate("/sign/up-complete")
         } catch (err) {
             const error = err as ApiError
-            toast.error(error.message)
+            if (error.message !== "ENTER_6_DIGIT") {
+                toast.error(t(`sign_up_errors.${error.message!}`))
+            }
             setIsLoading(false)
             return
         }

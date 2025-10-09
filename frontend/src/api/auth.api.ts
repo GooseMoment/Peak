@@ -7,6 +7,20 @@ import { isAxiosError } from "axios"
 
 const TwoFactorAuthTokenKey = "two_factor_auth_token"
 
+export type SignUpError =
+    | "NETWORK_ERROR"
+    | "USER_ALREADY_AUTHENTICATED"
+    | "REQUIRED_FIELD_MISSING"
+    | "EMAIL_INVALID"
+    | "USERNAME_INVALID_LENGTH"
+    | "USERNAME_INVALID_FORMAT"
+    | "USERNAME_DUPLICATE"
+    | "PASSWORD_INVALID"
+    | "INTERNAL_ERROR"
+    | "EMAIL_NOT_SENT"
+    | "UNKNOWN_ERROR"
+    | "ENTER_6_DIGIT"
+
 // Types based on backend models and API responses
 export interface SignInResponse {
     token?: string
@@ -64,7 +78,7 @@ export interface ApiError {
         }
     }
     code?: string
-    message?: string
+    message?: SignUpError
 }
 
 export const signIn = async (
