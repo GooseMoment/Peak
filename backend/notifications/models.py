@@ -88,7 +88,9 @@ class WebPushSubscription(Base):
     excluded_types = models.JSONField(default=list)
 
     # [PushSubscription](https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription)
-    endpoint = models.URLField()
+    endpoint = models.URLField(
+        max_length=1024  # to accommodate long endpoints from some browsers (e.g. Firefox)
+    )
     auth = models.CharField(max_length=128)
     p256dh = models.CharField(max_length=128)
     expiration_time = models.FloatField(null=True, blank=True)
