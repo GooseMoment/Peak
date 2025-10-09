@@ -279,16 +279,12 @@ const ContentText = styled.button<{ $isReminder: boolean }>`
     cursor: ${(props) => (props.$isReminder ? "normal" : "pointer")};
 `
 
-const RemindersBox = styled.button`
-    all: unset;
-    text-decoration: none;
+const RemindersBox = styled.div`
     display: flex;
     gap: 0.5em;
 `
 
-const ReminderBlock = styled.button`
-    all: unset;
-    text-decoration: none;
+const ReminderBlock = styled.div`
     width: auto;
     font-size: 0.9em;
     padding: 0.3em;
@@ -300,9 +296,7 @@ const ReminderBlock = styled.button`
     cursor: pointer;
 `
 
-const EmptyReminderBox = styled.button`
-    all: unset;
-    text-decoration: none;
+const EmptyReminderBox = styled.div`
     font-size: 0.9em;
     width: 1em;
     padding: 0.3em;
