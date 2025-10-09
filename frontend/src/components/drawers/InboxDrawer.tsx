@@ -1,10 +1,4 @@
-import {
-    Dispatch,
-    SetStateAction,
-    useCallback,
-    useEffect,
-    useState,
-} from "react"
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
@@ -16,7 +10,7 @@ import { SkeletonInboxTask } from "@components/project/skeletons/SkeletonProject
 import TaskCreateSimple from "@components/project/taskCreateSimple"
 import DrawerTask from "@components/tasks/DrawerTask"
 
-import { type Drawer } from "@api/drawers.api"
+import type { Drawer } from "@api/drawers.api"
 import { type Task, getTasksByDrawer, patchReorderTask } from "@api/tasks.api"
 
 import HTML5toTouch from "@utils/html5ToTouch"
@@ -35,8 +29,6 @@ interface InboxDrawerProps {
 }
 
 const InboxDrawer = ({ drawer, ordering, setOrdering }: InboxDrawerProps) => {
-    const [tasks, setTasks] = useState<Task[]>([])
-
     const [isSimpleOpen, setIsSimpleOpen] = useState(false)
 
     const { t } = useTranslation("translation")
@@ -58,12 +50,16 @@ const InboxDrawer = ({ drawer, ordering, setOrdering }: InboxDrawerProps) => {
 
     const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
 
-    // Task Drag and Drop
-    useEffect(() => {
-        if (!data) return
-        const results = data?.pages?.flatMap((page) => page.results ?? []) || []
-        setTasks(results)
+    const tasks = useMemo(() => {
+        if (!data) return []
+        return data?.pages?.flatMap((page) => page.results ?? []) || []
     }, [data])
+
+    // Task Drag and Drop - using local state for temporary reordering
+    const [tempTaskOrder, setTempTaskOrder] = useState<Task[]>([])
+
+    // Use temp order if available, otherwise use derived tasks
+    const displayTasks = tempTaskOrder.length > 0 ? tempTaskOrder : tasks
 
     const { mutateAsync, isPending } = useMutation({
         mutationFn: (data: Partial<Task>[]) => {
@@ -71,31 +67,36 @@ const InboxDrawer = ({ drawer, ordering, setOrdering }: InboxDrawerProps) => {
         },
     })
 
-    const moveTask = useCallback((dragIndex: number, hoverIndex: number) => {
-        setTasks((prevTasks) => {
-            const updatedTasks = [...prevTasks]
+    const moveTask = useCallback(
+        (dragIndex: number, hoverIndex: number) => {
+            const updatedTasks = [...displayTasks]
             const [moved] = updatedTasks.splice(dragIndex, 1)
             updatedTasks.splice(hoverIndex, 0, moved)
-            return updatedTasks
-        })
-    }, [])
+            setTempTaskOrder(updatedTasks)
+        },
+        [displayTasks],
+    )
 
     const dropTask = useCallback(async () => {
-        const results = data?.pages?.flatMap((page) => page.results) || []
-        const changedTasks = tasks
+        const changedTasks = displayTasks
             .map((task, index) => ({ id: task.id, order: index }))
-            .filter((task, index) => results[index]?.id !== task.id)
+            .filter((task, index) => tasks[index]?.id !== task.id)
 
-        if (changedTasks.length === 0) return
+        if (changedTasks.length === 0) {
+            setTempTaskOrder([])
+            return
+        }
 
-        await mutateAsync(changedTasks)
-
-        await queryClient.invalidateQueries({
-            queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
-        })
-        setOrdering("order")
-    }, [tasks, data, drawer.id, mutateAsync, setOrdering])
-    // ---
+        try {
+            await mutateAsync(changedTasks)
+            await queryClient.invalidateQueries({
+                queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
+            })
+        } finally {
+            setTempTaskOrder([])
+            setOrdering("order")
+        }
+    }, [tasks, displayTasks, drawer.id, mutateAsync, setOrdering])
 
     const handleToggleSimpleCreate = () => {
         setIsSimpleOpen((prev) => !prev)
@@ -118,7 +119,7 @@ const InboxDrawer = ({ drawer, ordering, setOrdering }: InboxDrawerProps) => {
         <>
             <DndProvider options={HTML5toTouch}>
                 <TaskList>
-                    {tasks?.map((task) => (
+                    {displayTasks.map((task) => (
                         <DrawerTask
                             key={task.id}
                             task={task}
