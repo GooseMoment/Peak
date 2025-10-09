@@ -101,7 +101,7 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
             return
         }
 
-        textareaRef.current.style.height = "inherit"
+        textareaRef.current.style.height = "auto"
 
         const computed = window.getComputedStyle(textareaRef.current)
         const height =

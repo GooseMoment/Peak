@@ -23,7 +23,7 @@ export default function ReactionButton({
     onDelete,
 }: ReactionButtonProps) {
     const [selected, setSelected] = useState(
-        () => group.currentUserReactionID !== undefined,
+        group.currentUserReactionID !== undefined,
     )
 
     const [mobileHovered, setMobileHovered] = useState(false)
