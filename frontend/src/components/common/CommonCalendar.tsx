@@ -25,9 +25,10 @@ const CommonCalendar = ({
     const locale = useClientLocale()
 
     const today = new Date()
-    const [month, setMonth] = useState(
-        selectedDate ? selectedDate.toJSDate() : today,
-    )
+    const [month, setMonth] = useState(() => {
+        const today = new Date()
+        return selectedDate ? selectedDate.toJSDate() : today
+    })
     const [selected, setSelected] = useState(
         selectedDate ? selectedDate.toJSDate() : undefined,
     )
@@ -69,6 +70,8 @@ const CommonCalendar = ({
                 onMonthChange={setMonth}
                 selected={selected}
                 onSelect={onSelect}
+                startMonth={new Date(today.getFullYear() - 2, 0)}
+                endMonth={new Date(today.getFullYear() + 2, 11)}
                 $isModal={isModal}
                 footer={
                     <TodayButtonWrapper>

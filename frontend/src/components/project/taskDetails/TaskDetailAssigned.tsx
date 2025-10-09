@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useState } from "react"
 
 import styled, { css } from "styled-components"
 
@@ -61,14 +61,17 @@ const TaskDetailAssigned = ({
         }
     }
 
-    useEffect(() => {
-        if (selectedDate === null) return
+    const handleSelectedDateChange = (date: DateTime) => {
+        setSelectedDate(date)
 
+        if (date == null) {
+            setFunc({ assigned_at: null })
+            return
+        }
         setFunc({
-            assigned_at: selectedDate.toISODate(),
+            assigned_at: date.toISODate(),
         })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedDate, tz])
+    }
 
     const addComponent = [
         {
@@ -84,7 +87,7 @@ const TaskDetailAssigned = ({
             component: (
                 <CommonCalendar
                     selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
+                    setSelectedDate={handleSelectedDateChange}
                     isModal
                 />
             ),

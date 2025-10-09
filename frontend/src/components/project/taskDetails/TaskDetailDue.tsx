@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import styled, { css } from "styled-components"
 
@@ -46,41 +46,6 @@ const TaskDetailDue = ({
         }
     })
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
-
-    useEffect(() => {
-        if (selectedDate === null) return
-
-        if (task.due_type === "due_datetime") {
-            const due_datetime = DateTime.fromISO(task.due_datetime, {
-                zone: tz,
-            })
-            const converted_datetime = due_datetime
-                .set({
-                    year: selectedDate.year,
-                    month: selectedDate.month,
-                    day: selectedDate.day,
-                })
-                .toISO()
-            if (converted_datetime === null) return
-
-            setFunc({
-                due_type: "due_datetime",
-                due_date: null,
-                due_datetime: converted_datetime,
-            })
-            return
-        }
-
-        const converted_date = selectedDate.toISODate()
-        if (converted_date === null) return
-
-        setFunc({
-            due_type: "due_date",
-            due_date: converted_date,
-            due_datetime: null,
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedDate, task.due_type, task.due_datetime, tz])
 
     const handleAdditionalComp = (name: DueKey) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
@@ -142,6 +107,52 @@ const TaskDetailDue = ({
         }
     }
 
+    const handleSelectedDateChange = (date: DateTime) => {
+        setSelectedDate(date)
+
+        if (date == null) {
+            setFunc({
+                due_type: null,
+                due_date: null,
+                due_datetime: null,
+            })
+            return
+        }
+
+        if (task.due_type === "due_datetime") {
+            const due_datetime = DateTime.fromISO(task.due_datetime, {
+                zone: tz,
+            })
+            if (!due_datetime.isValid) return
+
+            const converted_datetime = due_datetime
+                .set({
+                    year: date.year,
+                    month: date.month,
+                    day: date.day,
+                })
+                .toISO()
+
+            if (converted_datetime === null) return
+
+            setFunc({
+                due_type: "due_datetime",
+                due_date: null,
+                due_datetime: converted_datetime,
+            })
+            return
+        }
+
+        const convertedDateStr = date.toISODate()
+        if (convertedDateStr === null) return
+
+        setFunc({
+            due_type: "due_date",
+            due_date: convertedDateStr,
+            due_datetime: null,
+        })
+    }
+
     const addComponent = [
         {
             name: "quick" as const,
@@ -156,7 +167,7 @@ const TaskDetailDue = ({
             component: (
                 <CommonCalendar
                     selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
+                    setSelectedDate={handleSelectedDateChange}
                     isModal
                 />
             ),
