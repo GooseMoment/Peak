@@ -44,7 +44,6 @@ class Task(Base, PrivacyMixin):
     reactions: "RelatedManager[TaskReaction]"
 
     def save(self, *args, **kwargs):
-        # privacy가 지정되지 않았으면 drawer의 privacy를 기본값으로 상속
         if not self.privacy:
             self.privacy = self.drawer.privacy
         super().save(*args, **kwargs)
