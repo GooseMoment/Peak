@@ -1,10 +1,4 @@
-import {
-    Fragment,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
-} from "react"
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
@@ -79,7 +73,7 @@ const NotificationsPage = () => {
     // Create notifications with date delimiters
     const notificationsWithDelimiters = useMemo(() => {
         if (!data) return []
-        
+
         let lastDate: string | null = null
         const result: Array<{
             notification: Notification
@@ -92,9 +86,9 @@ const NotificationsPage = () => {
                 const thisDate = DateTime.fromISO(notification.created_at)
                     .setLocale(locale)
                     .toRelativeCalendar({ unit: "days" })
-                
+
                 const showDate = (i === 0 && j === 0) || thisDate !== lastDate
-                
+
                 if (showDate) {
                     lastDate = thisDate
                 }
@@ -144,20 +138,20 @@ const NotificationsPage = () => {
     return (
         <>
             {header}
-            {notificationsWithDelimiters.map(({ notification, showDate, dateText }) => (
-                <Fragment key={notification.id}>
-                    {showDate && <Date>{dateText}</Date>}
-                    <Box
-                        notification={notification}
-                        highlight={notification.id === focusID}
-                        ref={
-                            notification.id === focusID
-                                ? scrollToBox
-                                : null
-                        }
-                    />
-                </Fragment>
-            ))}
+            {notificationsWithDelimiters.map(
+                ({ notification, showDate, dateText }) => (
+                    <Fragment key={notification.id}>
+                        {showDate && <Date>{dateText}</Date>}
+                        <Box
+                            notification={notification}
+                            highlight={notification.id === focusID}
+                            ref={
+                                notification.id === focusID ? scrollToBox : null
+                            }
+                        />
+                    </Fragment>
+                ),
+            )}
             {isPending && !isFetchingNextPage ? (
                 <>
                     <Date $loading />

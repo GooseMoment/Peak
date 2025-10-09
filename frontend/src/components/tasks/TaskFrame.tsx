@@ -46,6 +46,7 @@ const TaskFrame = ({
 
     useEffect(() => {
         if (taskIdFromQuery === task.id) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setDetailOpen(true)
         }
     }, [taskIdFromQuery, task.id])

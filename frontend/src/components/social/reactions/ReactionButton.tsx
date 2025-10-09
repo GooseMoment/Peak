@@ -23,13 +23,14 @@ export default function ReactionButton({
     onDelete,
 }: ReactionButtonProps) {
     const [selected, setSelected] = useState(
-        group.currentUserReactionID !== undefined,
+        () => group.currentUserReactionID !== undefined,
     )
 
     const [mobileHovered, setMobileHovered] = useState(false)
     const mobileHoveredTimeout = useRef<NodeJS.Timeout | null>(null)
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- sync external state to local state
         setSelected(group.currentUserReactionID !== undefined)
     }, [group.currentUserReactionID])
 
