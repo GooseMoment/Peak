@@ -48,10 +48,9 @@ const TaskFrame = ({
         if (taskIdFromQuery === task.id) {
             // eslint-disable-next-line react-hooks/set-state-in-effect
             setDetailOpen(true)
-        } else if (taskIdFromQuery !== task.id && isDetailOpen) {
-            setDetailOpen(false)
         }
-    }, [taskIdFromQuery, task.id, isDetailOpen])
+        // as isDetailOpen does not rely on taskIdFromQuery, it is safe to omit here
+    }, [taskIdFromQuery, task.id])
 
     const {
         due,
