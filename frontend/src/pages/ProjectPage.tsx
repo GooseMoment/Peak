@@ -130,11 +130,13 @@ const ProjectPage = () => {
             await queryClient.invalidateQueries({
                 queryKey: ["drawers", { projectID: id, ordering: "order" }],
             })
+        } catch (_) {
+            toast.error(t("common.error_perform"))
         } finally {
             setOrdering("order")
             setTempDrawerOrder([])
         }
-    }, [data, displayDrawers, mutateAsync, id])
+    }, [data, displayDrawers, t, mutateAsync, id])
 
     const deleteMutation = useMutation({
         mutationFn: () => {

@@ -21,6 +21,7 @@ import queryClient from "@queries/queryClient"
 import FeatherIcon from "feather-icons-react"
 import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 interface InboxDrawerProps {
     drawer: Drawer
@@ -92,11 +93,13 @@ const InboxDrawer = ({ drawer, ordering, setOrdering }: InboxDrawerProps) => {
             await queryClient.invalidateQueries({
                 queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
             })
+        } catch (_) {
+            toast.error(t("common.error_perform"))
         } finally {
             setTempTaskOrder([])
             setOrdering("order")
         }
-    }, [tasks, displayTasks, drawer.id, mutateAsync, setOrdering])
+    }, [tasks, displayTasks, t, drawer.id, mutateAsync, setOrdering])
 
     const handleToggleSimpleCreate = () => {
         setIsSimpleOpen((prev) => !prev)

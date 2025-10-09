@@ -184,10 +184,12 @@ const DrawerBlock = ({ drawer, moveDrawer, dropDrawer }: DrawerBlockProps) => {
                 queryKey: ["tasks", { drawerID: drawer.id, ordering: "order" }],
             })
             setOrdering("order")
+        } catch (_) {
+            toast.error(t("common.error_perform"))
         } finally {
             setTempTaskOrder([]) // Ensure temp order is reset
         }
-    }, [tasks, tempTaskOrder, data, drawer.id, mutateAsync])
+    }, [tasks, tempTaskOrder, t, data, drawer.id, mutateAsync])
     // ---
 
     const deleteMutation = useMutation({
