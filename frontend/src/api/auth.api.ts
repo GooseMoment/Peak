@@ -91,7 +91,7 @@ export const signIn = async (
     })
 
     if (res.data.two_factor_auth !== undefined) {
-        localStorage.setItem(
+        sessionStorage.setItem(
             TwoFactorAuthTokenKey,
             res.data.two_factor_auth.token,
         )
@@ -107,7 +107,7 @@ export const signIn = async (
 }
 
 export const authTOTP = async (code: string): Promise<boolean> => {
-    const token = localStorage.getItem(TwoFactorAuthTokenKey)
+    const token = sessionStorage.getItem(TwoFactorAuthTokenKey)
     if (!token) {
         throw new Error("No two-factor authentication token found")
     }
@@ -122,10 +122,10 @@ export const authTOTP = async (code: string): Promise<boolean> => {
         )
         setToken(res.data.token)
         setCurrentUsername(res.data.user.username)
-        localStorage.removeItem(TwoFactorAuthTokenKey)
+        sessionStorage.removeItem(TwoFactorAuthTokenKey)
     } catch (error) {
         if (isAxiosError(error) && error?.response?.status === 403) {
-            localStorage.removeItem(TwoFactorAuthTokenKey)
+            sessionStorage.removeItem(TwoFactorAuthTokenKey)
         }
 
         throw error
