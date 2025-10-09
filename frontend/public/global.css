@@ -75,15 +75,6 @@ html {
     -moz-osx-font-smoothing: grayscale;
 }
 
-#root > div > main {
-    transform: scale(1);
-    transition: transform 0.25s var(--cubic);
-}
-
-#root.has-modal > div > main {
-    transform: scale(0.98);
-}
-
 #window-container {
     position: fixed;
     top: 0;
@@ -94,6 +85,7 @@ html {
     box-sizing: border-box;
 
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 1em;
@@ -102,10 +94,6 @@ html {
     z-index: 99;
     background-color: transparent;
     pointer-events: none;
-
-    @media screen and (max-width: 500px) {
-        flex-direction: column;
-    }
 }
 
 @keyframes window-container-background-dim {

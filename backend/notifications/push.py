@@ -40,7 +40,7 @@ def _notificationToPushData(notification: Notification, locale: str) -> PushData
     data = PushData()
 
     data.datetime = notification.created_at
-    data.click_url = "/app/notifications?id=" + str(notification.id)
+    data.click_url = "/app/notifications/" + str(notification.id)
 
     related_user: User | None = None
     t = get_translations(locale)["push"]
