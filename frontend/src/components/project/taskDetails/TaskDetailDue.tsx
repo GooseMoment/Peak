@@ -68,10 +68,12 @@ const TaskDetailDue = ({
         return async () => {
             if (set === null) {
                 setFunc({ due_type: null, due_date: null, due_datetime: null })
+                setSelectedDate(null)
                 return
             }
 
             const date = today.plus(set)
+            setSelectedDate(date)
 
             if (task.due_type === "due_datetime") {
                 const due_datetime = DateTime.fromISO(task.due_datetime, {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import styled from "styled-components"
 
@@ -29,31 +29,15 @@ const CommonCalendar = ({
         const today = new Date()
         return selectedDate ? selectedDate.toJSDate() : today
     })
-    const [selected, setSelected] = useState(
-        selectedDate ? selectedDate.toJSDate() : undefined,
-    )
-
-    useEffect(() => {
-        if (selectedDate) {
-            const jsDate = selectedDate.toJSDate()
-            setSelected(jsDate)
-            setMonth(jsDate)
-        } else {
-            setSelected(undefined)
-        }
-    }, [selectedDate])
 
     const onSelect = (date: Date | undefined) => {
         if (!date) return
         const dateTime = DateTime.fromJSDate(date, { zone: tz })
-        setSelected(date)
         setSelectedDate(dateTime)
     }
 
     const onTodayBtnClick = () => {
-        const now = new Date()
-        setMonth(now)
-        setSelected(now)
+        setMonth(new Date())
         setSelectedDate(DateTime.now().setZone(tz))
     }
 
@@ -68,7 +52,7 @@ const CommonCalendar = ({
                 locale={locale === "ko" ? ko : enUS}
                 month={month}
                 onMonthChange={setMonth}
-                selected={selected}
+                selected={selectedDate ? selectedDate.toJSDate() : undefined}
                 onSelect={onSelect}
                 startMonth={new Date(today.getFullYear() - 2, 0)}
                 endMonth={new Date(today.getFullYear() + 2, 11)}

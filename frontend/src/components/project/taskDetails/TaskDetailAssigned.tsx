@@ -52,12 +52,14 @@ const TaskDetailAssigned = ({
     ) => {
         return async () => {
             let assigned_at = null
+            let date: DateTime | null = null
 
             if (set !== null) {
-                const date = today.plus(set)
+                date = today.plus(set)
                 assigned_at = date.toISODate()
             }
             setFunc({ assigned_at })
+            setSelectedDate(date)
         }
     }
 
