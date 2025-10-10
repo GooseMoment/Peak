@@ -62,7 +62,7 @@ const CommonCalendar = ({
             <StyledDayPicker
                 animate
                 mode="single"
-                required
+                {...(!isModal && { required: true })}
                 showOutsideDays
                 captionLayout="dropdown"
                 locale={locale === "ko" ? ko : enUS}

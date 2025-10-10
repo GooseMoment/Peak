@@ -29,12 +29,12 @@ const TaskDetailAssigned = ({
     const tz = useClientTimezone()
 
     const today = DateTime.now().setZone(tz)
-    const [selectedDate, setSelectedDate] = useState<DateTime>(
+    const [selectedDate, setSelectedDate] = useState<DateTime | null>(
         assignedAt
             ? DateTime.fromISO(assignedAt, {
                   zone: tz,
               })
-            : today,
+            : null,
     )
     const [isAdditionalComp, setIsAdditionalComp] =
         useState<AssignedKey | null>("quick")
@@ -61,10 +61,10 @@ const TaskDetailAssigned = ({
         }
     }
 
-    const handleSelectedDateChange = (date: DateTime) => {
+    const handleSelectedDateChange = (date: DateTime | null) => {
         setSelectedDate(date)
 
-        if (!date) {
+        if (!date || !date.isValid) {
             setFunc({ assigned_at: null })
             return
         }

@@ -32,7 +32,7 @@ const TaskDetailDue = ({
 
     const today = DateTime.now().setZone(tz)
 
-    const [selectedDate, setSelectedDate] = useState(() => {
+    const [selectedDate, setSelectedDate] = useState<DateTime | null>(() => {
         if (task.due_type === "due_date") {
             return DateTime.fromISO(task.due_date, {
                 zone: tz,
@@ -107,10 +107,10 @@ const TaskDetailDue = ({
         }
     }
 
-    const handleSelectedDateChange = (date: DateTime) => {
+    const handleSelectedDateChange = (date: DateTime | null) => {
         setSelectedDate(date)
 
-        if (!date) {
+        if (!date || !date.isValid) {
             setFunc({
                 due_type: null,
                 due_date: null,
