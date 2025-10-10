@@ -110,7 +110,7 @@ const TaskDetailDue = ({
     const handleSelectedDateChange = (date: DateTime) => {
         setSelectedDate(date)
 
-        if (date == null) {
+        if (!date) {
             setFunc({
                 due_type: null,
                 due_date: null,
