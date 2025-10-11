@@ -1,6 +1,8 @@
 from rest_framework import status
 from rest_framework.exceptions import APIException as BaseAPIException
 
+from typing import Iterable, Optional
+
 
 class APIException(BaseAPIException):
     def __init__(self, detail=None, code=None, **kwargs):
@@ -29,8 +31,17 @@ class RequiredFieldMissing(APIException):
     default_detail = "Some fields are missing."
     default_code = "REQUIRED_FIELD_MISSING"
 
+    def __init__(
+        self,
+        missing_fields: Optional[Iterable[str]] = None,
+    ):
+        detail = ", ".join(missing_fields) if missing_fields else None
+        super().__init__(
+            detail=detail,
+        )
+
 
 class UnknownError(APIException):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-    default_detail = "Unknown error occuered."
+    default_detail = "Unknown error occurred."
     default_code = "UNKNOWN_ERROR"
