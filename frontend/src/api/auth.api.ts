@@ -199,7 +199,12 @@ export const signUp = async (
             throw new SignUpError("NETWORK_ERROR", "Network error occurred")
         }
 
-        throw new SignUpError(err.response.data.code, err.response.data.message)
+        const errorData = err.response.data
+        if (!errorData || !errorData.code) {
+            throw new SignUpError("UNKNOWN_ERROR", errorData?.message)
+        }
+
+        throw new SignUpError(errorData.code, errorData.message)
     }
 }
 
