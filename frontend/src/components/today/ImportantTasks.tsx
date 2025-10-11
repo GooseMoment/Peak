@@ -106,6 +106,7 @@ const ImportantTasks = () => {
                 break
             }
         }
+        // queries 객체 자체를 의존성에 포함하면 무한 루프가 발생하므로 .tasks 속성만 포함
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [todayDueQuery.tasks, overDueQuery.tasks, pastAssignedQuery.tasks])
 

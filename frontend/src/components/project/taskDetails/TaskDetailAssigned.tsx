@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react"
+import { useState } from "react"
 
 import styled, { css } from "styled-components"
 
@@ -97,7 +97,7 @@ const TaskDetailAssigned = ({
     ]
 
     return addComponent.map((comp, i) => (
-        <Fragment key={comp.name}>
+        <FlexCenterBox key={comp.name}>
             <FlexCenterBox>
                 <IndexBox
                     $start={i === 0}
@@ -115,7 +115,7 @@ const TaskDetailAssigned = ({
             </FlexCenterBox>
             {isAdditionalComp === comp.name && comp.component}
             {i !== 1 && <CLine />}
-        </Fragment>
+        </FlexCenterBox>
     ))
 }
 
