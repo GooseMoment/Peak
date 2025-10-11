@@ -32,7 +32,7 @@ const ProjectListPage = () => {
 
     const modal = useModal()
 
-    const { data, isPending, isError, refetch, fetchNextPage } =
+    const { data, isPending, isError, refetch, fetchNextPage, hasNextPage } =
         useInfiniteQuery({
             queryKey: ["projects"],
             queryFn: (context) => getProjectList(context.pageParam),
@@ -115,9 +115,12 @@ const ProjectListPage = () => {
                 ))}
             </DndProvider>
 
-            <ImpressionArea
-                onImpressionStart={() => fetchNextPage()}
-                timeThreshold={200}></ImpressionArea>
+            <StyledImpressionArea
+                onImpressionStart={() => {
+                    if (hasNextPage) fetchNextPage()
+                }}
+                timeThreshold={200}
+            />
 
             {isPending || (
                 <ProjectCreateButton
@@ -171,6 +174,12 @@ const ProjectCreateButton = styled.div`
         padding: 0.5em 0em;
         margin-left: 0em;
     }
+`
+
+const StyledImpressionArea = styled(ImpressionArea)`
+    display: "block";
+    min-height: 24;
+    min-width: 1;
 `
 
 const ProjectCreateText = styled.div`

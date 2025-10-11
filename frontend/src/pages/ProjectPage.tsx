@@ -82,6 +82,7 @@ const ProjectPage = () => {
         isError: isDrawersError,
         refetch: drawersRefetch,
         fetchNextPage,
+        hasNextPage,
     } = useInfiniteQuery({
         queryKey: ["drawers", { projectID: id, ordering: ordering }],
         queryFn: (context) =>
@@ -254,9 +255,14 @@ const ProjectPage = () => {
                     ))}
                 </DndProvider>
             )}
-            <ImpressionArea
-                onImpressionStart={() => fetchNextPage()}
-                timeThreshold={200}></ImpressionArea>
+
+            <StyledImpressionArea
+                onImpressionStart={() => {
+                    if (hasNextPage) fetchNextPage()
+                }}
+                timeThreshold={200}
+            />
+
             {isAlertOpen && (
                 <DeleteAlert
                     title={t("project.delete.alert_project_title", {
@@ -321,6 +327,12 @@ const SortIconBox = styled.div`
         top: 0.17em;
         margin-right: 0.5em;
     }
+`
+
+const StyledImpressionArea = styled(ImpressionArea)`
+    display: "block";
+    min-height: 24;
+    min-width: 1;
 `
 
 const NoDrawerText = styled.div`
