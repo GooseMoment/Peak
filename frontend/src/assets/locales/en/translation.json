@@ -326,8 +326,6 @@
         "sign_in_again": "You're signed out. Please sign in again.",
         "sign_in": "Sign In",
         "sign_in_success": "Signed in successfully. Welcome back!",
-        "internal_error": "Problem occured. Please try again.",
-        "network_error": "Problem occured. Check your network.",
         "loading": "Loading...",
         "button_sign_in": "Sign In",
         "button_create_account": "Create account",

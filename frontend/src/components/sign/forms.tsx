@@ -43,7 +43,7 @@ export const SignInForm = () => {
         const password = formData.get("password")
 
         if (typeof email !== "string" || typeof password !== "string") {
-            toast.error(t("internal_error"))
+            toast.error(t("INTERNAL_ERROR"))
             setIsLoading(false)
             return
         }
@@ -227,7 +227,7 @@ export const SignUpForm = () => {
             typeof password !== "string" ||
             typeof username !== "string"
         ) {
-            toast.error(t("internal_error"))
+            toast.error(t("INTERNAL_ERROR"))
             setIsLoading(false)
             return
         }
