@@ -131,6 +131,9 @@ const ProjectPage = () => {
             await queryClient.invalidateQueries({
                 queryKey: ["drawers", { projectID: id, ordering: "order" }],
             })
+            await queryClient.invalidateQueries({
+                queryKey: ["projects", id],
+            })
         } catch (_) {
             toast.error(t("common.error_perform"))
         } finally {
