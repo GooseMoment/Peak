@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import styled from "styled-components"
 
@@ -13,30 +13,31 @@ export default function AnimatedCount({
 }) {
     const [prev, setPrev] = useState(count)
     const [dir, setDir] = useState<"up" | "down" | null>(null)
-    const timerRef = useMemo<{ id: number | null }>(() => ({ id: null }), [])
+    const timerRef = useRef<number | null>(null)
 
     useEffect(() => {
         if (count === prev) {
             return
         }
 
-        if (timerRef.id) {
-            clearTimeout(timerRef.id)
-            timerRef.id = null
+        if (timerRef.current) {
+            clearTimeout(timerRef.current)
+            timerRef.current = null
         }
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setDir(count < prev ? "up" : "down")
-        timerRef.id = window.setTimeout(() => {
+        timerRef.current = window.setTimeout(() => {
             setPrev(count)
             setDir(null)
-            timerRef.id = null
+            timerRef.current = null
         }, DURATION)
 
         return () => {
-            if (timerRef.id) {
-                clearTimeout(timerRef.id)
+            if (timerRef.current) {
+                clearTimeout(timerRef.current)
             }
         }
-    }, [count, prev, timerRef])
+    }, [count, prev])
 
     return (
         <Wrapper $selected={selected} aria-live="polite" aria-atomic>

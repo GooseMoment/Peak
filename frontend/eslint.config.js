@@ -16,7 +16,7 @@ export default [
     pluginReact.configs.flat["jsx-runtime"],
     eslintConfigPrettier,
     ...pluginQuery.configs["flat/recommended"],
-    reactHooks.configs["recommended-latest"],
+    reactHooks.configs.flat.recommended,
     {
         files: ["**/*.{js,jsx,ts,tsx}"],
         languageOptions: {

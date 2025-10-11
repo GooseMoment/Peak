@@ -1,17 +1,11 @@
-import {
-    Fragment,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react"
-import { useSearchParams } from "react-router-dom"
+import { Fragment, Suspense, useEffect, useMemo, useState } from "react"
+import { Outlet, useSearchParams } from "react-router-dom"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { css, keyframes } from "styled-components"
 
 import FilterButtonGroup from "@components/common/FilterButtonGroup"
+import ModalLoader from "@components/common/ModalLoader"
 import PageTitle from "@components/common/PageTitle"
 import Box, { BoxSkeleton } from "@components/notifications/Box"
 
@@ -22,7 +16,7 @@ import { getCursorFromURL } from "@utils/pagination"
 
 import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
-import { type TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
@@ -36,7 +30,6 @@ const NotificationsPage = () => {
     const filters = useMemo(() => makeFilters(t), [t])
 
     const [searchParams, setSearchParams] = useSearchParams()
-    const focusID = searchParams.get("id")
     const paramActiveFilter = searchParams.get("active") || ""
 
     const [activeFilter, setActiveFilter] = useState<keyof typeof filters>(
@@ -45,14 +38,11 @@ const NotificationsPage = () => {
             : defaultFilter,
     )
 
-    const scrollToBox = useCallback((node: HTMLElement | null) => {
-        node?.scrollIntoView({ block: "center", behavior: "smooth" })
-    }, [])
-
     const {
         data,
         isError,
         refetch,
+        hasNextPage,
         fetchNextPage,
         isPending,
         isFetching,
@@ -69,15 +59,45 @@ const NotificationsPage = () => {
         gcTime: 30 * 1000,
     })
 
-    // useInfiniteQuery에서 제공하는 hasNextPage가 제대로 작동 안함. 어째서?
-    const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
     const isNotificationEmpty = data?.pages[0]?.results?.length === 0
 
-    const lastDate = useRef<null | string>(null)
     useEffect(() => {
-        lastDate.current = null
         setSearchParams({ active: activeFilter }, { replace: true })
     }, [activeFilter, setSearchParams])
+
+    // Create notifications with date delimiters
+    const notificationsWithDelimiters = useMemo(() => {
+        if (!data) return []
+
+        let lastDate: string | null = null
+        const result: Array<{
+            notification: Notification
+            showDate: boolean
+            dateText: string | null
+        }> = []
+
+        for (const [i, group] of data.pages.entries()) {
+            for (const [j, notification] of group.results.entries()) {
+                const thisDate = DateTime.fromISO(notification.created_at)
+                    .setLocale(locale)
+                    .toRelativeCalendar({ unit: "days" })
+
+                const showDate = (i === 0 && j === 0) || thisDate !== lastDate
+
+                if (showDate) {
+                    lastDate = thisDate
+                }
+
+                result.push({
+                    notification,
+                    showDate,
+                    dateText: thisDate,
+                })
+            }
+        }
+
+        return result
+    }, [data, locale])
 
     const header = (
         <>
@@ -113,41 +133,14 @@ const NotificationsPage = () => {
     return (
         <>
             {header}
-            {data?.pages.map((group, i) => (
-                <Fragment key={i}>
-                    {group.results.map((notification, j) => {
-                        let dateDelimiter = null
-                        const thisDate = DateTime.fromISO(
-                            notification.created_at,
-                        )
-                            .setLocale(locale)
-                            .toRelativeCalendar({ unit: "days" })
-
-                        if (
-                            (i === 0 && j === 0) ||
-                            thisDate !== lastDate.current
-                        ) {
-                            dateDelimiter = <Date>{thisDate}</Date>
-                            lastDate.current = thisDate
-                        }
-
-                        return (
-                            <Fragment key={notification.id}>
-                                {dateDelimiter}
-                                <Box
-                                    notification={notification}
-                                    highlight={notification.id === focusID}
-                                    ref={
-                                        notification.id === focusID
-                                            ? scrollToBox
-                                            : null
-                                    }
-                                />
-                            </Fragment>
-                        )
-                    })}
-                </Fragment>
-            ))}
+            {notificationsWithDelimiters.map(
+                ({ notification, showDate, dateText }) => (
+                    <Fragment key={notification.id}>
+                        {showDate && <Date>{dateText}</Date>}
+                        <Box notification={notification} />
+                    </Fragment>
+                ),
+            )}
             {isPending && !isFetchingNextPage ? (
                 <>
                     <Date $loading />
@@ -165,6 +158,9 @@ const NotificationsPage = () => {
                 )}
             </ImpressionArea>
             {isNotificationEmpty && <NoMore>{t("empty")}</NoMore>}
+            <Suspense key="notification-outlet" fallback={<ModalLoader />}>
+                <Outlet />
+            </Suspense>
         </>
     )
 }

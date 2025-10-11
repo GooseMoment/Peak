@@ -1,6 +1,7 @@
-import { Ref, Suspense, forwardRef } from "react"
+import { Suspense } from "react"
+import { Link } from "react-router-dom"
 
-import styled, { css, keyframes } from "styled-components"
+import styled from "styled-components"
 
 import Avatar from "@components/notifications/Avatar"
 import Content, { ContentSkeleton } from "@components/notifications/Content"
@@ -12,48 +13,40 @@ import {
 
 import { ifMobile } from "@utils/useScreenType"
 
-import { cubicBeizer } from "@assets/keyframes"
-
-interface BoxProps {
-    notification: Notification
-    highlight?: boolean
-}
-
-const Box = forwardRef(function BoxInternal(
-    { notification, highlight = false }: BoxProps,
-    ref: Ref<HTMLElement>,
-) {
+export default function Box({ notification }: { notification: Notification }) {
     const relatedUser = getRelatedUserFromNotification(notification)
 
     return (
-        <Frame ref={ref} $highlight={highlight}>
-            <Avatar
-                projectColor={
-                    (notification.type === "task_reminder" &&
-                        notification.task_reminder.project_color) ||
-                    undefined
-                }
-                relatedUser={relatedUser}
-                emoji={
-                    (notification.type === "task_reaction" &&
-                        (notification.task_reaction.image_emoji ||
-                            notification.task_reaction.unicode_emoji)) ||
-                    undefined
-                }
-            />
-            <Suspense
-                key="notification-box-content"
-                fallback={<ContentSkeleton />}>
-                <Content
-                    notification={notification}
+        <Link to={`/app/notifications/${notification.id}`} draggable="false">
+            <Frame>
+                <Avatar
+                    projectColor={
+                        (notification.type === "task_reminder" &&
+                            notification.task_reminder.project_color) ||
+                        undefined
+                    }
                     relatedUser={relatedUser}
+                    emoji={
+                        (notification.type === "task_reaction" &&
+                            (notification.task_reaction.image_emoji ||
+                                notification.task_reaction.unicode_emoji)) ||
+                        undefined
+                    }
                 />
-            </Suspense>
-        </Frame>
+                <Suspense
+                    key="notification-box-content"
+                    fallback={<ContentSkeleton />}>
+                    <Content
+                        notification={notification}
+                        relatedUser={relatedUser}
+                    />
+                </Suspense>
+            </Frame>
+        </Link>
     )
-})
+}
 
-export const BoxSkeleton = () => {
+export function BoxSkeleton() {
     return (
         <Frame>
             <Avatar skeleton />
@@ -62,19 +55,7 @@ export const BoxSkeleton = () => {
     )
 }
 
-const blink = keyframes`
-    0% {
-        border-color: transparent;
-    }
-    20%, 80% {
-        border-color: ${(p) => p.theme.accentColor};
-    }
-    100% {
-        border-color: transparent;
-    }
-`
-
-const Frame = styled.article<{ $highlight?: boolean }>`
+const Frame = styled.article`
     position: relative;
     box-sizing: border-box;
 
@@ -83,7 +64,7 @@ const Frame = styled.article<{ $highlight?: boolean }>`
     gap: 1.5em;
 
     min-width: 0; // for children's text-overflow: ellipsis
-    height: 7em;
+    min-height: 7em;
     padding: 1em;
     margin: 1em;
     margin-bottom: 2em;
@@ -101,13 +82,4 @@ const Frame = styled.article<{ $highlight?: boolean }>`
         height: fit-content;
         padding: 0.5em;
     }
-
-    ${(p) =>
-        p.$highlight &&
-        css`
-            animation: ${blink} 1.5s ${cubicBeizer};
-            animation-delay: 0.5s;
-        `}
 `
-
-export default Box

@@ -5,7 +5,6 @@ import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
 import DeleteAlert from "@components/common/DeleteAlert"
-import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import DrawerBlock from "@components/drawers/DrawerBlock"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
@@ -28,6 +27,7 @@ import { type Project, deleteProject, getProject } from "@api/projects.api"
 
 import HTML5toTouch from "@utils/html5ToTouch"
 import { getPageFromURL } from "@utils/pagination"
+import useModal, { Portal } from "@utils/useModal"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -47,13 +47,14 @@ const ProjectPage = () => {
     const navigate = useNavigate()
     const { isMobile } = useScreenType()
 
-    const [drawers, setDrawers] = useState<Drawer[]>([])
+    const [tempDrawerOrder, setTempDrawerOrder] = useState<Drawer[]>([])
 
     const [ordering, setOrdering] = useState("order")
-    const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
-    const [isProjectEditOpen, setIsProjectEditOpen] = useState(false)
     const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
+
+    const drawerModal = useModal()
+    const projectModal = useModal()
 
     const { t } = useTranslation("translation")
 
@@ -89,12 +90,14 @@ const ProjectPage = () => {
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
-    /// Drawers Drag And Drop
-    useEffect(() => {
-        if (!data) return
-        const results = data.pages.flatMap((page) => page.results ?? []) || []
-        setDrawers(results)
+    // Derived state for drawers with temp order during drag operations
+    const drawers = useMemo(() => {
+        if (!data) return []
+        return data.pages.flatMap((page) => page.results ?? []) || []
     }, [data])
+
+    const displayDrawers =
+        tempDrawerOrder.length > 0 ? tempDrawerOrder : drawers
 
     const { mutateAsync } = useMutation({
         mutationFn: (data: Partial<Drawer>[]) => {
@@ -102,32 +105,40 @@ const ProjectPage = () => {
         },
     })
 
-    const moveDrawer = useCallback((dragIndex: number, hoverIndex: number) => {
-        setDrawers((prevDrawers) => {
-            const updatedDrawers = [...prevDrawers]
-            const [moved] = updatedDrawers.splice(dragIndex, 1)
-            updatedDrawers.splice(hoverIndex, 0, moved)
-            return updatedDrawers
-        })
-    }, [])
+    const moveDrawer = useCallback(
+        (dragIndex: number, hoverIndex: number) => {
+            const updatedOrder = [...displayDrawers]
+            const [moved] = updatedOrder.splice(dragIndex, 1)
+            updatedOrder.splice(hoverIndex, 0, moved)
+            setTempDrawerOrder(updatedOrder)
+        },
+        [displayDrawers],
+    )
 
     const dropDrawer = useCallback(async () => {
         if (!data) return
         const results = data.pages.flatMap((page) => page.results) || []
-        const changedDrawers = drawers
+        const changedDrawers = displayDrawers
             .map((task, index) => ({ id: task.id, order: index }))
             .filter((task, index) => results[index]?.id !== task.id)
 
         if (changedDrawers.length === 0) return
 
-        await mutateAsync(changedDrawers)
-
-        await queryClient.invalidateQueries({
-            queryKey: ["drawers", { projectID: id, ordering: "order" }],
-        })
-        setOrdering("order")
-    }, [data, drawers, mutateAsync, id])
-    /// ---
+        try {
+            await mutateAsync(changedDrawers)
+            await queryClient.invalidateQueries({
+                queryKey: ["drawers", { projectID: id, ordering: "order" }],
+            })
+            await queryClient.invalidateQueries({
+                queryKey: ["projects", id],
+            })
+        } catch (_) {
+            toast.error(t("common.error_perform"))
+        } finally {
+            setOrdering("order")
+            setTempDrawerOrder([])
+        }
+    }, [data, displayDrawers, t, mutateAsync, id])
 
     const deleteMutation = useMutation({
         mutationFn: () => {
@@ -151,7 +162,7 @@ const ProjectPage = () => {
     })
 
     const handleEdit = () => {
-        setIsProjectEditOpen(true)
+        projectModal.openModal()
     }
 
     const handleAlert = () => {
@@ -197,7 +208,7 @@ const ProjectPage = () => {
                 <Icons>
                     <FeatherIcon
                         icon="plus"
-                        onClick={() => setIsDrawerCreateOpen(true)}
+                        onClick={() => drawerModal.openModal()}
                     />
                     {
                         <>
@@ -227,13 +238,13 @@ const ProjectPage = () => {
                 </Icons>
             </TitleBox>
             {project.type === "goal" && (
-                <Progress project={project} drawers={drawers} />
+                <Progress project={project} drawers={displayDrawers} />
             )}
-            {drawers && drawers.length === 0 ? (
+            {displayDrawers && displayDrawers.length === 0 ? (
                 <NoDrawerText>{t("project.no_drawer")}</NoDrawerText>
             ) : (
                 <DndProvider options={HTML5toTouch}>
-                    {drawers?.map((drawer) => (
+                    {displayDrawers?.map((drawer) => (
                         <DrawerBlock
                             key={drawer.id}
                             drawer={drawer}
@@ -266,22 +277,12 @@ const ProjectPage = () => {
                     setOrdering={setOrdering}
                 />
             )}
-            {isDrawerCreateOpen && (
-                <ModalWindow
-                    afterClose={() => {
-                        setIsDrawerCreateOpen(false)
-                    }}>
-                    <DrawerEdit />
-                </ModalWindow>
-            )}
-            {isProjectEditOpen && (
-                <ModalWindow
-                    afterClose={() => {
-                        setIsProjectEditOpen(false)
-                    }}>
-                    <ProjectEdit project={project} />
-                </ModalWindow>
-            )}
+            <Portal modal={drawerModal}>
+                <DrawerEdit />
+            </Portal>
+            <Portal modal={projectModal}>
+                <ProjectEdit project={project} />
+            </Portal>
         </>
     )
 }

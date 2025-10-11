@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import ErrorProjectList from "@components/errors/ErrorProjectList"
 import ProjectName from "@components/project/ProjectName"
@@ -18,6 +17,7 @@ import {
 
 import HTML5toTouch from "@utils/html5ToTouch"
 import { getPageFromURL } from "@utils/pagination"
+import useModal, { Portal } from "@utils/useModal"
 import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -30,8 +30,7 @@ import { useTranslation } from "react-i18next"
 const ProjectListPage = () => {
     const { t } = useTranslation("translation")
 
-    const [projects, setProjects] = useState<Project[]>([])
-    const [isCreateOpen, setIsCreateOpen] = useState<boolean>(false)
+    const modal = useModal()
 
     const { data, isPending, isError, refetch, fetchNextPage } =
         useInfiniteQuery({
@@ -41,34 +40,37 @@ const ProjectListPage = () => {
             getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
         })
 
+    const projects = useMemo(() => {
+        if (!data) return []
+        return data.pages.flatMap((page) => page.results ?? []) || []
+    }, [data])
+
+    // Drag and drop state
+    const [tempProjectOrder, setTempProjectOrder] = useState<Project[]>([])
+    const displayProjects =
+        tempProjectOrder.length > 0 ? tempProjectOrder : projects
+
     const { mutateAsync } = useMutation({
         mutationFn: (data: Partial<Project>[]) => {
             return patchReorderProject(data)
         },
     })
 
-    useEffect(() => {
-        if (!data) return
-        const results = data.pages.flatMap((page) => page.results ?? []) || []
-        setProjects(results)
-    }, [data])
-
-    const moveProject = useCallback((dragIndex: number, hoverIndex: number) => {
-        setProjects((prevProjects) => {
-            const updatedProjects = [...prevProjects]
-            const [moved] = updatedProjects.splice(dragIndex, 1)
-            updatedProjects.splice(hoverIndex, 0, moved)
-            return updatedProjects
-        })
-    }, [])
+    const moveProject = useCallback(
+        (dragIndex: number, hoverIndex: number) => {
+            const updatedOrder = [...displayProjects]
+            const [moved] = updatedOrder.splice(dragIndex, 1)
+            updatedOrder.splice(hoverIndex, 0, moved)
+            setTempProjectOrder(updatedOrder)
+        },
+        [displayProjects],
+    )
 
     const dropProject = useCallback(async () => {
-        const results = data?.pages.flatMap((page) => page.results ?? []) || []
-
-        const changedProjects = projects
+        const changedProjects = displayProjects
             .map((project, index) => ({ id: project.id, order: index }))
             .filter((project, index) => {
-                const originalIndex = results.findIndex(
+                const originalIndex = projects.findIndex(
                     (p) => p.id === project.id,
                 )
                 return originalIndex !== index
@@ -80,7 +82,9 @@ const ProjectListPage = () => {
         await queryClient.invalidateQueries({
             queryKey: ["projects"],
         })
-    }, [data?.pages, projects, mutateAsync])
+        // Reset temp order after successful API update
+        setTempProjectOrder([])
+    }, [projects, displayProjects, mutateAsync])
 
     return (
         <>
@@ -89,7 +93,7 @@ const ProjectListPage = () => {
                 {isPending || (
                     <PlusBox
                         onClick={() => {
-                            setIsCreateOpen(true)
+                            modal.openModal()
                         }}>
                         <FeatherIcon icon="plus" />
                     </PlusBox>
@@ -100,7 +104,7 @@ const ProjectListPage = () => {
             {isError && <ErrorProjectList refetch={() => refetch()} />}
 
             <DndProvider options={HTML5toTouch}>
-                {projects.map((project) => (
+                {displayProjects.map((project) => (
                     <ProjectName
                         key={project.id}
                         project={project}
@@ -118,7 +122,7 @@ const ProjectListPage = () => {
             {isPending || (
                 <ProjectCreateButton
                     onClick={() => {
-                        setIsCreateOpen(true)
+                        modal.openModal()
                     }}>
                     <FeatherIcon icon="plus-circle" />
                     <ProjectCreateText>
@@ -126,14 +130,9 @@ const ProjectListPage = () => {
                     </ProjectCreateText>
                 </ProjectCreateButton>
             )}
-            {isCreateOpen && (
-                <ModalWindow
-                    afterClose={() => {
-                        setIsCreateOpen(false)
-                    }}>
-                    <ProjectEdit />
-                </ModalWindow>
-            )}
+            <Portal modal={modal}>
+                <ProjectEdit />
+            </Portal>
         </>
     )
 }

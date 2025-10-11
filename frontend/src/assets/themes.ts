@@ -69,12 +69,6 @@ const light: DefaultTheme = {
         activeColor: "oklch(45.7% 0.24 277.023)",
         activeBackgroundColor: "oklch(96.2% 0.018 272.314)",
     },
-    calendar: {
-        backgroundColor: "#D9D9D9",
-        secondBackgroundColor: "#E6E6E6",
-        todayColor: white,
-        hoverColor: "#FFC6C6",
-    },
     help: {
         addressBarShadowColor: "rgba(0, 0, 0, 0.4)",
     },
@@ -143,12 +137,6 @@ const dark: DefaultTheme = {
         buttonColor: "#A9A9A9",
         activeColor: "oklch(87% 0.065 274.039)",
         activeBackgroundColor: "oklch(37.1% 0 0)",
-    },
-    calendar: {
-        backgroundColor: "#323232",
-        secondBackgroundColor: "#292929",
-        todayColor: white,
-        hoverColor: "#804A30",
     },
     help: {
         addressBarShadowColor: "rgba(0, 0, 0, 0.8)",

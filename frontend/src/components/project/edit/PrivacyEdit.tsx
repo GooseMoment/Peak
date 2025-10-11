@@ -1,11 +1,12 @@
 import styled from "styled-components"
 
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import Detail from "@components/project/common/Detail"
 
 import { type Privacy } from "@api/common"
 import { type DrawerCreate } from "@api/drawers.api"
 import { type ProjectCreateInput } from "@api/projects.api"
+
+import { useModalContext } from "@utils/useModal"
 
 import defaultsvg from "@assets/project/privacy/default.svg"
 import privatesvg from "@assets/project/privacy/private.svg"
@@ -27,14 +28,14 @@ const PrivacyEdit = ({
         keyPrefix: "project_drawer_edit.privacy",
     })
 
-    const { closeModal } = useModalWindowCloseContext()
+    const modal = useModalContext()
 
     const changePrivacy = (privacy: Privacy | "default") => {
         return () => {
             const valueToSend =
                 privacy === "default" ? null : (privacy as Privacy)
             setPrivacy({ privacy: valueToSend })
-            closeModal()
+            modal?.closeModal()
         }
     }
 
@@ -53,7 +54,7 @@ const PrivacyEdit = ({
     ]
 
     return (
-        <Detail title={t("title")} onClose={closeModal}>
+        <Detail title={t("title")} onClose={() => modal?.closeModal()}>
             {items.map((item) => (
                 <ItemBlock key={item.privacy}>
                     {item.icon}

@@ -30,6 +30,7 @@ export default function ReactionButton({
     const mobileHoveredTimeout = useRef<NodeJS.Timeout | null>(null)
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- sync external state to local state
         setSelected(group.currentUserReactionID !== undefined)
     }, [group.currentUserReactionID])
 
