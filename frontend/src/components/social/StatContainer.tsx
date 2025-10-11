@@ -255,13 +255,6 @@ const Box = styled(Link)<{
             border-color: ${p.$borderColor};
             background-color: ${p.theme.backgroundColor};
         `}
-
-    ${(p) =>
-        p.$skeleton &&
-        css`
-            background-color: ${p.theme.skeleton.defaultColor};
-            ${skeletonBreathingCSS}
-        `}
 `
 
 const ProfileImgWrapper = styled.div`
@@ -284,8 +277,9 @@ const ProfileImg = styled.img`
 const ProfileImgSkeleton = styled.div`
     aspect-ratio: 1;
     width: 100%;
-    background-color: ${(p) => p.theme.backgroundColor};
     border-radius: 50%;
+
+    ${skeletonBreathingCSS}
 `
 
 const InfoContainer = styled.div`
@@ -308,10 +302,10 @@ const Username = styled.div<{ $skeleton?: boolean }>`
     ${(props) =>
         props.$skeleton &&
         css`
-            background-color: ${props.theme.backgroundColor};
             width: 100%;
             height: 1.2em;
             border-radius: 0.3em;
+            ${skeletonBreathingCSS}
         `}
 `
 
@@ -370,9 +364,9 @@ const StatusCount = styled.div<{ $skeleton?: boolean }>`
     ${(p) =>
         p.$skeleton &&
         css`
-            background-color: ${p.theme.backgroundColor};
             width: 1em;
             height: 1.2em;
             border-radius: 0.3em;
+            ${skeletonBreathingCSS}
         `}
 `
