@@ -10,6 +10,10 @@ import { DayPicker } from "react-day-picker"
 import "react-day-picker/style.css"
 import { useTranslation } from "react-i18next"
 
+const today = new Date()
+const startMonth = new Date(today.getFullYear() - 2, 0)
+const endMonth = new Date(today.getFullYear() + 2, 11)
+
 const CommonCalendar = ({
     selectedDate,
     setSelectedDate,
@@ -24,9 +28,6 @@ const CommonCalendar = ({
 
     const locale = useClientLocale()
 
-    const today = new Date()
-    const startMonth = new Date(today.getFullYear() - 2, 0)
-    const endMonth = new Date(today.getFullYear() + 2, 11)
     const [month, setMonth] = useState(() => {
         const today = new Date()
         return selectedDate ? selectedDate.toJSDate() : today
