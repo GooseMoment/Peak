@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
