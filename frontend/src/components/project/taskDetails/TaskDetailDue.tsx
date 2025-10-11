@@ -32,7 +32,19 @@ const TaskDetailDue = ({
 
     const today = DateTime.now().setZone(tz)
 
-    const [selectedDate, setSelectedDate] = useState(today.toISODate())
+    const [selectedDate, setSelectedDate] = useState<DateTime | null>(() => {
+        if (task.due_type === "due_date") {
+            return DateTime.fromISO(task.due_date, {
+                zone: tz,
+            })
+        } else if (task.due_type === "due_datetime") {
+            return DateTime.fromISO(task.due_datetime.split("T")[0], {
+                zone: tz,
+            })
+        } else {
+            return null
+        }
+    })
     const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
     const handleAdditionalComp = (name: DueKey) => {
@@ -56,10 +68,12 @@ const TaskDetailDue = ({
         return async () => {
             if (set === null) {
                 setFunc({ due_type: null, due_date: null, due_datetime: null })
+                setSelectedDate(null)
                 return
             }
 
             const date = today.plus(set)
+            setSelectedDate(date)
 
             if (task.due_type === "due_datetime") {
                 const due_datetime = DateTime.fromISO(task.due_datetime, {
@@ -95,10 +109,10 @@ const TaskDetailDue = ({
         }
     }
 
-    const handleSelectedDateChange = (date: string | null) => {
+    const handleSelectedDateChange = (date: DateTime | null) => {
         setSelectedDate(date)
 
-        if (date == null) {
+        if (!date || !date.isValid) {
             setFunc({
                 due_type: null,
                 due_date: null,
@@ -108,10 +122,6 @@ const TaskDetailDue = ({
         }
 
         if (task.due_type === "due_datetime") {
-            const convertedSelectedDate = DateTime.fromISO(date, {
-                zone: tz,
-            })
-            if (!convertedSelectedDate.isValid) return
             const due_datetime = DateTime.fromISO(task.due_datetime, {
                 zone: tz,
             })
@@ -119,9 +129,9 @@ const TaskDetailDue = ({
 
             const converted_datetime = due_datetime
                 .set({
-                    year: convertedSelectedDate.year,
-                    month: convertedSelectedDate.month,
-                    day: convertedSelectedDate.day,
+                    year: date.year,
+                    month: date.month,
+                    day: date.day,
                 })
                 .toISO()
 
@@ -135,12 +145,7 @@ const TaskDetailDue = ({
             return
         }
 
-        const convertedDate = DateTime.fromISO(date, {
-            zone: tz,
-        })
-        if (!convertedDate.isValid) return
-
-        const convertedDateStr = convertedDate.toISODate()
+        const convertedDateStr = date.toISODate()
         if (convertedDateStr === null) return
 
         setFunc({
@@ -162,16 +167,11 @@ const TaskDetailDue = ({
             display: t("calendar"),
             icon: "calendar" as const,
             component: (
-                <CalendarWrapper>
-                    <CommonCalendar
-                        isRangeSelectMode={false}
-                        selectedStartDate={selectedDate}
-                        setSelectedStartDate={handleSelectedDateChange}
-                        selectedEndDate={undefined}
-                        setSelectedEndDate={undefined}
-                        handleClose={undefined}
-                    />
-                </CalendarWrapper>
+                <CommonCalendar
+                    selectedDate={selectedDate}
+                    setSelectedDate={handleSelectedDateChange}
+                    isModal
+                />
             ),
         },
         {
@@ -278,12 +278,6 @@ const CollapseButton = styled.div<{ $collapsed: boolean }>`
                 animation: ${rotateToUnder} 0.3s ${cubicBeizer} forwards;
             }
         `}
-`
-
-const CalendarWrapper = styled.div`
-    margin: 0.4em auto;
-    width: 90%;
-    font-size: 0.8em;
 `
 
 export default TaskDetailDue

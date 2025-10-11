@@ -428,6 +428,7 @@
             "back": "Go Back"
         },
         "button_no": "No",
+        "button_today": "Go to Today",
         "retry": "Retry",
         "loading": "Loading...",
         "load_more": "Load more",

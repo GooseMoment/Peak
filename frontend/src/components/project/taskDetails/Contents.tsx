@@ -87,7 +87,12 @@ const Contents = ({
                 name: "assigned" as const,
                 icon: <FeatherIcon icon="calendar" />,
                 display: task.assigned_at ? formatted_assigned_date : t("none"),
-                component: <TaskDetailAssigned setFunc={setFunc} />,
+                component: (
+                    <TaskDetailAssigned
+                        assignedAt={task.assigned_at}
+                        setFunc={setFunc}
+                    />
+                ),
             },
             {
                 id: 2,
