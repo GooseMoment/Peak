@@ -2,12 +2,12 @@ import styled from "styled-components"
 
 import LoaderCircle from "@components/common/LoaderCircle"
 
-const FullscreenLoader = () => {
+export default function FullscreenLoader() {
     return (
-        <Container>
+        <Container role="status" aria-live="polite" aria-label="Loading">
             <Box>
                 <Logo>
-                    <Img src="/logo.svg" draggable="false" />
+                    <Img src="/logo.svg" alt="Peak logo" draggable="false" />
                     <Name>Peak</Name>
                 </Logo>
                 <Loader />
@@ -61,5 +61,3 @@ const Loader = styled(LoaderCircle)`
     opacity: 0.7;
     border-width: 3px;
 `
-
-export default FullscreenLoader

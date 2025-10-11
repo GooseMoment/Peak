@@ -7,7 +7,6 @@ const {
     Privacy,
     LanguagesAndTime,
     Appearance,
-    Reactions,
     Notifications,
     Blocks,
     Info,
@@ -41,10 +40,6 @@ const settingsChildren = [
     {
         path: "appearance",
         element: <Appearance />,
-    },
-    {
-        path: "reactions",
-        element: <Reactions />,
     },
     {
         path: "notifications",

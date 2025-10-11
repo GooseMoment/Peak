@@ -1,3 +1,5 @@
+import type { ReactNode } from "react"
+
 import styled, { css } from "styled-components"
 
 import Navbar from "@components/navbar/Navbar"
@@ -7,7 +9,7 @@ import { useSidebarContext } from "@components/sidebar/SidebarContext"
 import { useClientSetting } from "@utils/clientSettings"
 import { ifMobile, ifTablet } from "@utils/useScreenType"
 
-const Layout = ({ children }) => {
+export default function Layout({ children }: { children: ReactNode }) {
     const [clientSetting] = useClientSetting()
 
     const contentPadding = clientSetting["main_width"] || "5rem"
@@ -31,7 +33,10 @@ const App = styled.div`
     background-color: ${(p) => p.theme.backgroundColor};
 `
 
-const Content = styled.main`
+const Content = styled.main<{
+    $sidePadding: string
+    $sidebarCollapsed: boolean
+}>`
     padding: 3rem ${(props) => props.$sidePadding};
     padding-left: calc(${(props) => props.$sidePadding} + 18rem);
 
@@ -60,5 +65,3 @@ const Content = styled.main`
 `
 
 // Reference: https://every-layout.dev/layouts/sidebar
-
-export default Layout

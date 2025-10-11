@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { ChangeEvent, FormEvent, useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -11,6 +11,10 @@ import ErrorLayout from "@components/errors/ErrorLayout"
 import Form from "@components/sign/Form"
 
 import {
+    ApiError,
+    SignInError,
+    SignUpError,
+    TOTPAuthError,
     authTOTP,
     patchPasswordWithPasswordRecoveryToken,
     requestPasswordRecoveryToken,
@@ -20,24 +24,29 @@ import {
     verifyEmail,
 } from "@api/auth.api"
 
-import sleep from "@utils/sleep"
-
 import FeatherIcon from "feather-icons-react"
 import { Trans, useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 export const SignInForm = () => {
-    const { t } = useTranslation(null, { keyPrefix: "sign" })
+    const { t } = useTranslation("translation", { keyPrefix: "sign" })
 
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
-    const onSubmit = async (e) => {
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
 
-        const email = e.target.email.value
-        const password = e.target.password.value
+        const formData = new FormData(e.currentTarget)
+        const email = formData.get("email")
+        const password = formData.get("password")
+
+        if (typeof email !== "string" || typeof password !== "string") {
+            toast.error(t("INTERNAL_ERROR"))
+            setIsLoading(false)
+            return
+        }
 
         try {
             const twoFactorAuthEnabled = await signIn(email, password)
@@ -47,22 +56,11 @@ export const SignInForm = () => {
             }
 
             toast.success(t("sign_in_success"))
-            await sleep(1000)
-
+            await new Promise((r) => setTimeout(r, 1000))
             navigate("/app/")
         } catch (err) {
-            const status = err?.response?.status
-
-            if (status === 400) {
-                toast.error(t("sign_in_failed"))
-            } else if (status === 403) {
-                toast.error(t("email_verify_required"))
-            } else if (status === 500) {
-                toast.error(t("internal_error"))
-            } else {
-                toast.error(t("network_error"))
-            }
-
+            const error = err as SignInError
+            toast.error(t(error.code))
             setIsLoading(false)
         }
     }
@@ -119,46 +117,41 @@ export const SignInForm = () => {
 }
 
 export const TOTPAuthForm = () => {
-    const { t } = useTranslation(null, { keyPrefix: "sign" })
+    const { t } = useTranslation("translation", { keyPrefix: "sign" })
     const navigate = useNavigate()
     const [totpCode, setTOTPCode] = useState("")
 
-    const onChange = (e) => {
-        const value = e.target.value.replace(/\D/g, "").slice(0, 6)
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.currentTarget.value.replace(/\D/g, "").slice(0, 6)
         setTOTPCode(value)
 
-        if (value.length >= 6) {
+        if (value.length >= 6 && !mut.isPending) {
             return mut.mutate()
         }
     }
 
-    const mut = useMutation({
-        mutationFn: (e) => {
-            e?.preventDefault()
-
+    const mut = useMutation<boolean, TOTPAuthError>({
+        mutationFn: () => {
             if (totpCode.length < 6) {
-                return toast.error(t("enter_6_digit"))
+                return Promise.reject(new Error("ENTER_6_DIGIT"))
             }
 
-            return authTOTP("totp", totpCode)
+            return authTOTP(totpCode)
         },
         onSuccess: () => {
             toast.success(t("sign_in_success"))
             return navigate("/app/")
         },
         onError: (err) => {
-            // TODO: elabroate error
-            if (err?.response?.status === 403) {
-                toast.error(t("session_invalid"))
+            toast.error(t(err.code))
+
+            if (
+                err.code === "TOKEN_REQUIRED" ||
+                err.code === "TOKEN_INVALID" ||
+                err.code === "TOKEN_OUT_OF_COUNTS"
+            ) {
                 return navigate("/sign/in")
             }
-
-            if (err?.response?.status === 429) {
-                toast.error(t("try_count_exceed"))
-                return navigate("/sign/in")
-            }
-
-            toast.error(t("wrong_code"))
         },
     })
 
@@ -168,14 +161,18 @@ export const TOTPAuthForm = () => {
                 <Title>{t("two_factor_authentication")}</Title>
                 <Text>{t("two_factor_authentication_description")}</Text>
             </div>
-            <Form onSubmit={mut.mutate}>
+            <Form
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    mut.mutate()
+                }}>
                 <Input
                     icon="hash"
                     value={totpCode}
                     onChange={onChange}
                     type="text"
                     inputMode="numeric"
-                    maxLength="6"
+                    maxLength={6}
                     pattern="^\d{6}$"
                     id="totp"
                     name="totp"
@@ -211,24 +208,36 @@ export const TOTPAuthForm = () => {
 }
 
 export const SignUpForm = () => {
-    const { t } = useTranslation(null, { keyPrefix: "sign" })
+    const { t } = useTranslation("translation", { keyPrefix: "sign" })
     const navigate = useNavigate()
 
     const [isLoading, setIsLoading] = useState(false)
 
-    const onSubmit = async (e) => {
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
 
-        const email = e.target.email.value
-        const password = e.target.password.value
-        const username = e.target.username.value
+        const formData = new FormData(e.currentTarget)
+        const email = formData.get("email")
+        const password = formData.get("password")
+        const username = formData.get("username")
+
+        if (
+            typeof email !== "string" ||
+            typeof password !== "string" ||
+            typeof username !== "string"
+        ) {
+            toast.error(t("INTERNAL_ERROR"))
+            setIsLoading(false)
+            return
+        }
 
         try {
             await signUp(email, password, username)
             navigate("/sign/up-complete")
         } catch (err) {
-            toast.error(t("sign_up_errors." + err.message))
+            const error = err as SignUpError
+            toast.error(t(error.code))
             setIsLoading(false)
             return
         }
@@ -250,7 +259,7 @@ export const SignUpForm = () => {
                     name="password"
                     type="password"
                     placeholder={t("password")}
-                    minLength="8"
+                    minLength={8}
                     required
                 />
                 <Input
@@ -259,7 +268,7 @@ export const SignUpForm = () => {
                     type="text"
                     placeholder={t("username")}
                     pattern="^[a-z0-9_]{4,15}$"
-                    minLength="4"
+                    minLength={4}
                     required
                 />
                 <TosAgreement>
@@ -291,7 +300,7 @@ export const SignUpForm = () => {
 }
 
 export const SignUpComplete = () => {
-    const { t } = useTranslation(null, { keyPrefix: "sign" })
+    const { t } = useTranslation("translation", { keyPrefix: "sign" })
 
     return (
         <>
@@ -318,20 +327,24 @@ export const SignUpComplete = () => {
 }
 
 export const EmailVerificationResendForm = () => {
-    const { t } = useTranslation(null, { keyPrefix: "email_verification" })
+    const { t } = useTranslation("translation", {
+        keyPrefix: "email_verification",
+    })
 
     const mutation = useMutation({
-        mutationFn: ({ email }) => resendVerificationEmail(email),
+        mutationFn: ({ email }: { email: string }) =>
+            resendVerificationEmail(email),
         onSuccess: () => {
             toast.success(t("resend_success"))
         },
-        onError: (e) => {
-            if (e.response.status === 425) {
-                const seconds = e.response.data.seconds
+        onError: (e: unknown) => {
+            const error = e as ApiError
+            if (error?.response?.status === 425) {
+                const seconds = error.response.data?.seconds || 0
                 const minutes = Math.floor(seconds / 60) + 1
 
                 return toast.error(t("resend_error_limit", { minutes }))
-            } else if (e.response.status === 400) {
+            } else if (error?.response?.status === 400) {
                 return toast.error(t("resend_error_bad_request"))
             }
 
@@ -339,9 +352,10 @@ export const EmailVerificationResendForm = () => {
         },
     })
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const email = e.target.email.value
+        const formData = new FormData(e.currentTarget)
+        const email = formData.get("email") as string
         mutation.mutate({ email })
     }
 
@@ -383,7 +397,9 @@ export const EmailVerificationResendForm = () => {
 }
 
 export const EmailVerificationForm = () => {
-    const { t } = useTranslation(null, { keyPrefix: "email_verification" })
+    const { t } = useTranslation("translation", {
+        keyPrefix: "email_verification",
+    })
 
     const [searchParams] = useSearchParams()
 
@@ -395,7 +411,7 @@ export const EmailVerificationForm = () => {
         isError,
     } = useQuery({
         queryKey: ["email_verifications", token],
-        queryFn: () => verifyEmail(token),
+        queryFn: () => verifyEmail(token!),
         enabled: !!token,
         refetchOnWindowFocus: false,
     })
@@ -427,17 +443,21 @@ export const EmailVerificationForm = () => {
 }
 
 export const PasswordRecoveryRequestForm = () => {
-    const { t } = useTranslation(null, { keyPrefix: "password_recovery" })
+    const { t } = useTranslation("translation", {
+        keyPrefix: "password_recovery",
+    })
 
     const mutation = useMutation({
-        mutationFn: ({ email }) => requestPasswordRecoveryToken(email),
+        mutationFn: ({ email }: { email: string }) =>
+            requestPasswordRecoveryToken(email),
         onSuccess: () => {
             toast.success(t("request_success"))
         },
-        onError: (e) => {
-            if (e.response.status === 429) {
+        onError: (e: unknown) => {
+            const error = e as ApiError
+            if (error?.response?.status === 429) {
                 return toast.error(t("request_error_limit"))
-            } else if (e.response.status === 400) {
+            } else if (error?.response?.status === 400) {
                 return toast.error(t("request_error_bad_request"))
             }
 
@@ -445,9 +465,10 @@ export const PasswordRecoveryRequestForm = () => {
         },
     })
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const email = e.target.email.value
+        const formData = new FormData(e.currentTarget)
+        const email = formData.get("email") as string
         mutation.mutate({ email })
     }
 
@@ -488,15 +509,22 @@ export const PasswordRecoveryRequestForm = () => {
 }
 
 export const PasswordRecoveryForm = () => {
-    const { t } = useTranslation(null, { keyPrefix: "password_recovery" })
+    const { t } = useTranslation("translation", {
+        keyPrefix: "password_recovery",
+    })
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
 
     const token = searchParams.get("token")
 
     const mutation = useMutation({
-        mutationFn: ({ token, password }) =>
-            patchPasswordWithPasswordRecoveryToken(token, password),
+        mutationFn: ({
+            token,
+            password,
+        }: {
+            token: string
+            password: string
+        }) => patchPasswordWithPasswordRecoveryToken(token, password),
         onSuccess: () => {
             toast.success(t("recovery_success"))
             navigate("/sign/in")
@@ -506,10 +534,11 @@ export const PasswordRecoveryForm = () => {
         },
     })
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const password = e.target.password.value
-        const passwordAgain = e.target.password_again.value
+        const formData = new FormData(e.currentTarget)
+        const password = formData.get("password") as string
+        const passwordAgain = formData.get("password_again") as string
 
         if (password.length < 8) {
             return toast.error(t("recovery_error_password_length"))
@@ -517,6 +546,10 @@ export const PasswordRecoveryForm = () => {
 
         if (password != passwordAgain) {
             return toast.error(t("recovery_error_password_unmatch"))
+        }
+
+        if (!token) {
+            return toast.error(t("recovery_error"))
         }
 
         mutation.mutate({ token, password })
@@ -532,7 +565,7 @@ export const PasswordRecoveryForm = () => {
                     name="password"
                     placeholder={t("placeholder_password")}
                     type="password"
-                    minLength="8"
+                    minLength={8}
                     required
                     disabled={mutation.isPending}
                 />

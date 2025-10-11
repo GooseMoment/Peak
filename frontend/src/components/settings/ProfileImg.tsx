@@ -1,10 +1,10 @@
-import { useRef, useState } from "react"
+import { ChangeEvent, useRef, useState } from "react"
 
 import styled from "styled-components"
 
 import ImageCropper from "@components/settings/ImageCropper"
 
-import { uploadProfileImg } from "@api/users.api"
+import { User, uploadProfileImg } from "@api/users.api"
 
 import getCroppedImg from "@utils/cropImage"
 
@@ -12,48 +12,68 @@ import queryClient from "@queries/queryClient"
 
 import { cubicBeizer } from "@assets/keyframes"
 
-import { Image as ImageIcon } from "feather-icons-react"
+import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const ProfileImg = ({ profile_img, username }) => {
-    const [file, setFile] = useState(null)
+interface CroppedAreaPixels {
+    x: number
+    y: number
+    width: number
+    height: number
+}
+
+interface ProfileImgProps {
+    profile_img: User["profile_img"]
+    username: User["username"]
+}
+
+export default function ProfileImg({ profile_img, username }: ProfileImgProps) {
+    const [file, setFile] = useState<string>()
     const [fileName, setFileName] = useState("")
-    const [fileType, setFileType] = useState(null)
+    const [fileType, setFileType] = useState<string>()
 
     const [openCropper, setOpenCropper] = useState(false)
 
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
+    const [croppedAreaPixels, setCroppedAreaPixels] =
+        useState<CroppedAreaPixels | null>(null)
 
-    const input = useRef(null)
+    const input = useRef<HTMLInputElement>(null)
+
+    const { t } = useTranslation("settings", { keyPrefix: "profile" })
 
     const clickInput = () => {
-        input.current.click()
+        input.current?.click()
     }
 
-    const handleFileChange = (e) => {
-        if (!e.target.files) {
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const f = e.target?.files?.[0]
+        if (!f) {
             return
         }
 
-        setFileName(e.target.files[0].name)
-        setFileType(e.target.files[0].type)
+        setFileName(f.name)
+        setFileType(f.type)
 
         const reader = new FileReader()
-        reader.addEventListener("loadend", (e) => {
-            setFile(e.target.result)
+        reader.addEventListener("loadend", (e: ProgressEvent<FileReader>) => {
+            const result = e.target?.result
+            if (typeof result === "string") {
+                setFile(result)
+            }
         })
 
-        reader.readAsDataURL(e.target.files[0])
+        reader.readAsDataURL(f)
         setOpenCropper(true)
     }
 
     const onClickOk = async () => {
         setOpenCropper(false)
 
-        toast.promise(cropAndUpload, {
-            pending: "Uploading...",
-            error: "Error occured.",
-            success: "Upload success!",
+        await toast.promise(cropAndUpload(), {
+            pending: t("uploading"),
+            error: t("upload_error"),
+            success: t("upload_success"),
         })
     }
 
@@ -62,24 +82,45 @@ const ProfileImg = ({ profile_img, username }) => {
     }
 
     const cropAndUpload = async () => {
+        if (!file || !croppedAreaPixels || !fileType) {
+            throw new Error("Missing required data for cropping")
+        }
+
         const cropped = await getCroppedImg(file, croppedAreaPixels, fileType)
 
-        let blob = await fetch(cropped).then((r) => r.blob())
-        const croppedFile = new File([blob], fileName)
+        if (!cropped) {
+            throw new Error("Failed to crop image")
+        }
 
-        let formData = new FormData()
+        let blob: Blob
+        try {
+            const res = await fetch(cropped)
+            blob = await res.blob()
+        } finally {
+            URL.revokeObjectURL(cropped) // free up memory
+        }
+        const croppedFile = new File([blob], fileName, { type: fileType })
+
+        const formData = new FormData()
         formData.append("profile_img", croppedFile)
 
         await uploadProfileImg(formData)
         queryClient.invalidateQueries({ queryKey: ["users", "me"] })
         queryClient.invalidateQueries({ queryKey: ["users", username] })
+        setFile(undefined)
+        setFileName("")
+        setFileType(undefined)
+        setCroppedAreaPixels(null)
+        if (input.current) {
+            input.current.value = ""
+        }
     }
 
     return (
         <ProfileImgContainer>
             <Img src={profile_img} draggable="false" />
             <ProfileImgOverlay onClick={clickInput}>
-                <ImageIcon />
+                <FeatherIcon icon="image" />
             </ProfileImgOverlay>
             <HiddenInput
                 ref={input}
@@ -151,5 +192,3 @@ const Img = styled.img`
 const HiddenInput = styled.input`
     display: none;
 `
-
-export default ProfileImg

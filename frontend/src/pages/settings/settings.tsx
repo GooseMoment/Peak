@@ -6,7 +6,6 @@ import LanguagesAndTime from "./LanguagesAndTime"
 import Notifications from "./Notifications"
 import Privacy from "./Privacy"
 import Profile from "./Profile"
-import Reactions from "./Reactions"
 import Security from "./Security"
 
 export {
@@ -16,7 +15,6 @@ export {
     Privacy,
     LanguagesAndTime,
     Appearance,
-    Reactions,
     Notifications,
     Blocks,
     Info,

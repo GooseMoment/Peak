@@ -13,7 +13,6 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import throttle_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.throttling import AnonRateThrottle
-from rest_framework.exceptions import ValidationError as APIValidationError
 
 from knox.views import LoginView as KnoxLoginView
 import uuid
@@ -34,6 +33,22 @@ from .totp import create_totp_secret, TOTP
 from . import exceptions, mails
 from api.utils import get_client_ip
 from api.exceptions import RequiredFieldMissing
+
+
+class TokenMixin:
+    request: Request
+
+    def get_token(self):
+        token_hex = self.request.data.get("token")
+        if token_hex is None:
+            raise exceptions.TokenRequired
+
+        try:
+            token = uuid.UUID(hex=token_hex)
+        except ValueError:
+            raise exceptions.TokenInvalid
+
+        return token
 
 
 class BaseLoginView(KnoxLoginView):
@@ -99,18 +114,14 @@ class SignInView(BaseLoginView):
         return super(SignInView, self).post(request, format=format)
 
 
-class TOTPAuthenticationView(BaseLoginView):
+class TOTPAuthenticationView(TokenMixin, BaseLoginView):
     def post(self, request: Request, format=None):
+        token = self.get_token()
+
         try:
-            token_hex = request.data["token"]
             code = request.data["code"]
         except KeyError:
             raise RequiredFieldMissing
-
-        try:
-            token = uuid.UUID(hex=token_hex)
-        except ValueError:
-            raise APIValidationError(["format of token is valid."])
 
         try:
             self.tfat = TwoFactorAuthToken.objects.filter(token=token).get()
@@ -140,7 +151,7 @@ class TOTPAuthenticationView(BaseLoginView):
 
         self.tfat.save()
 
-        raise exceptions.CredentialInvalid
+        raise exceptions.TOTPCodeInvalid
 
 
 class TOTPRegisterView(GenericAPIView):
@@ -306,22 +317,6 @@ class SignUpView(GenericAPIView):
         mails.send_mail_verification_email(new_user, verification)
 
         return Response(status=status.HTTP_200_OK)
-
-
-class TokenMixin:
-    request: Request
-
-    def get_token(self):
-        token_hex = self.request.data.get("token")
-        if token_hex is None:
-            raise APIValidationError(["token is required."])
-
-        try:
-            token = uuid.UUID(hex=token_hex)
-        except ValueError:
-            raise APIValidationError(["format of token is invalid."])
-
-        return token
 
 
 class VerifyEmailVerificationToken(TokenMixin, GenericAPIView):

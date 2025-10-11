@@ -11,7 +11,7 @@ import useUpdatePrompt from "@utils/useUpdatePrompt"
 
 import { Bounce, Slide, ToastContainer } from "react-toastify"
 
-const Root = () => {
+export default function Root() {
     const theme = useTheme()
     const { isMobile } = useScreenType()
     useUpdatePrompt()
@@ -33,5 +33,3 @@ const Root = () => {
         </>
     )
 }
-
-export default Root
