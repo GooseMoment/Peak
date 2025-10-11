@@ -322,9 +322,9 @@
         "resend_other_cases": "만약 이미 인증되었거나, 등록되지 않은 이메일이라면 다른 메일이 전송됩니다.",
         "resend_known_issues": "Outlook 등의 이메일 서비스에서는 스팸으로 간주되어 전송이 불가합니다. 해당 경우에는 다른 주소로 가입하여 주세요.",
         "resend_success": "메일을 전송했습니다. 메일함 또는 스팸함을 확인하세요.",
-        "resend_error_limit": "약 {{minutes}}분 후 다시 시도하세요.",
-        "resend_error_bad_request": "메일 형식이 올바르지 않습니다.",
-        "resend_error_any": "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        "UNKNOWN_ERROR": "에러가 발생했습니다. 다시 시도하세요.",
+        "EMAIL_INVALID": "이메일 주소가 올바르지 않습니다.",
+        "EMAIL_RATE_LIMIT_EXCEEDED": "너무 요청이 많습니다. {{minutes}}분 뒤 다시 시도하세요.",
         "placeholder_email": "이메일 주소 입력",
         "button_submit": "제출"
     },

@@ -12,6 +12,7 @@ import Form from "@components/sign/Form"
 
 import {
     ApiError,
+    ResendVerificationEmailError,
     SignInError,
     SignUpError,
     TOTPAuthError,
@@ -21,7 +22,7 @@ import {
     resendVerificationEmail,
     signIn,
     signUp,
-    verifyEmail,
+    verifyEmailVerificationToken,
 } from "@api/auth.api"
 
 import FeatherIcon from "feather-icons-react"
@@ -331,24 +332,25 @@ export const EmailVerificationResendForm = () => {
         keyPrefix: "email_verification",
     })
 
-    const mutation = useMutation({
+    const mutation = useMutation<
+        void,
+        ResendVerificationEmailError,
+        { email: string }
+    >({
         mutationFn: ({ email }: { email: string }) =>
             resendVerificationEmail(email),
         onSuccess: () => {
             toast.success(t("resend_success"))
         },
-        onError: (e: unknown) => {
-            const error = e as ApiError
-            if (error?.response?.status === 425) {
-                const seconds = error.response.data?.seconds || 0
+        onError: (err) => {
+            if (err.code === "EMAIL_RATE_LIMIT_EXCEEDED") {
+                const seconds = err.seconds || 0
                 const minutes = Math.floor(seconds / 60) + 1
 
-                return toast.error(t("resend_error_limit", { minutes }))
-            } else if (error?.response?.status === 400) {
-                return toast.error(t("resend_error_bad_request"))
+                return toast.error(t(err.code, { minutes }))
             }
 
-            return toast.error(t("resend_error_any"))
+            return toast.error(t(err.code))
         },
     })
 
@@ -411,7 +413,7 @@ export const EmailVerificationForm = () => {
         isError,
     } = useQuery({
         queryKey: ["email_verifications", token],
-        queryFn: () => verifyEmail(token!),
+        queryFn: () => verifyEmailVerificationToken(token!),
         enabled: !!token,
         refetchOnWindowFocus: false,
     })

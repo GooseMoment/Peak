@@ -25,7 +25,7 @@ class AbstractError<TErrorCode extends string> extends Error {
     ): AbstractError<TErrorCode> {
         if (isAxiosError<BaseErrorResponse<TErrorCode>>(err)) {
             if (!err.response) {
-                return new this<TErrorCode>(
+                return new this(
                     "NETWORK_ERROR" as TErrorCode,
                     "Network error occurred",
                 )
@@ -33,22 +33,16 @@ class AbstractError<TErrorCode extends string> extends Error {
 
             const errorData = err.response.data
             if (!errorData || !errorData.code) {
-                return new this<TErrorCode>(
+                return new this(
                     "UNKNOWN_ERROR" as TErrorCode,
                     errorData?.message,
                 )
             }
 
-            return new this<TErrorCode>(
-                errorData.code as TErrorCode,
-                errorData.message,
-            )
+            return new this(errorData.code, errorData.message)
         }
 
-        return new this<TErrorCode>(
-            "UNKNOWN_ERROR" as TErrorCode,
-            "Unknown error occurred",
-        )
+        return new this("UNKNOWN_ERROR" as TErrorCode, "Unknown error occurred")
     }
 }
 
@@ -74,25 +68,14 @@ export interface TOTPDeleteResponse {
     message: string
 }
 
-export interface EmailVerificationResponse {
-    email: string
-}
-
-export interface ResendResponse {
-    seconds?: number
-}
-
 // Error types for API responses
 export interface ApiError {
     response?: {
         status: number
         data?: {
-            code?: string
             seconds?: number
         }
     }
-    code?: string
-    message?: SignInErrorCode
 }
 
 export type SignInErrorCode =
@@ -250,8 +233,14 @@ export const signUp = async (
     }
 }
 
-export const verifyEmail = async (token: string): Promise<string> => {
-    const res = await client.post<EmailVerificationResponse>(
+export interface VerifyEmailVerificationResponse {
+    email: string
+}
+
+export const verifyEmailVerificationToken = async (
+    token: string,
+): Promise<string> => {
+    const res = await client.post<VerifyEmailVerificationResponse>(
         `auth/sign_up/verification/`,
         {
             token,
@@ -261,10 +250,51 @@ export const verifyEmail = async (token: string): Promise<string> => {
     return res.data.email
 }
 
+type ResendVerificationEmailErrorCode =
+    | "UNKNOWN_ERROR"
+    | "EMAIL_INVALID"
+    | "EMAIL_RATE_LIMIT_EXCEEDED"
+
+interface ResendVerificationEmailErrorResponse
+    extends BaseErrorResponse<ResendVerificationEmailErrorCode> {
+    seconds?: number
+}
+
+export class ResendVerificationEmailError extends Error {
+    code: ResendVerificationEmailErrorCode
+    seconds: number
+
+    constructor(
+        code: ResendVerificationEmailErrorCode,
+        seconds: number,
+        message?: string,
+    ) {
+        super(message)
+        this.code = code
+        this.seconds = seconds
+    }
+}
+
 export const resendVerificationEmail = async (email: string) => {
-    return client.post<ResendResponse>(`auth/sign_up/verification/resend/`, {
-        email,
-    })
+    try {
+        await client.post<null>(`auth/sign_up/verification/resend/`, {
+            email,
+        })
+    } catch (err) {
+        if (!isAxiosError<ResendVerificationEmailErrorResponse>(err)) {
+            throw new ResendVerificationEmailError("UNKNOWN_ERROR", 0)
+        }
+
+        if (!err.response || !err.response.data) {
+            throw new ResendVerificationEmailError("UNKNOWN_ERROR", 0)
+        }
+
+        const seconds = err.response?.data?.seconds
+        throw new ResendVerificationEmailError(
+            "EMAIL_RATE_LIMIT_EXCEEDED",
+            seconds || 0,
+        )
+    }
 }
 
 export const requestPasswordRecoveryToken = async (email: string) => {
