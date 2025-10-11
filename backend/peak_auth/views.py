@@ -357,7 +357,7 @@ class ResendEmailVerificationMail(GenericAPIView):
     def post(self, request: Request):
         email = request.data.get("email")
         if email is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise RequiredFieldMissing(missing_fields=("email",))
 
         try:
             validate_email(email)

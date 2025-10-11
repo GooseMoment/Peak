@@ -252,6 +252,7 @@ export const verifyEmailVerificationToken = async (
 
 type ResendVerificationEmailErrorCode =
     | "UNKNOWN_ERROR"
+    | "REQUIRED_FIELD_MISSING"
     | "EMAIL_INVALID"
     | "EMAIL_RATE_LIMIT_EXCEEDED"
 

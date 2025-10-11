@@ -323,6 +323,7 @@
         "resend_known_issues": "Outlook 등의 이메일 서비스에서는 스팸으로 간주되어 전송이 불가합니다. 해당 경우에는 다른 주소로 가입하여 주세요.",
         "resend_success": "메일을 전송했습니다. 메일함 또는 스팸함을 확인하세요.",
         "UNKNOWN_ERROR": "에러가 발생했습니다. 다시 시도하세요.",
+        "REQUIRED_FIELD_MISSING": "이메일 주소를 입력해주세요.",
         "EMAIL_INVALID": "이메일 주소가 올바르지 않습니다.",
         "EMAIL_RATE_LIMIT_EXCEEDED": "너무 요청이 많습니다. {{minutes}}분 뒤 다시 시도하세요.",
         "placeholder_email": "이메일 주소 입력",

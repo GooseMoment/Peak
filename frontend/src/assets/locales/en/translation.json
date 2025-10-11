@@ -323,6 +323,7 @@
         "resend_known_issues": "It is reported that some mail services like Outlook do not accept emails from Peak. If your mail service does so, please sign up with another mail address.",
         "resend_success": "A mail was sent. Please check your inbox or junk box.",
         "UNKNOWN_ERROR": "Error occurred. Try again later.",
+        "REQUIRED_FIELD_MISSING": "Please type your email address.",
         "EMAIL_INVALID": "Invalid email address.",
         "EMAIL_RATE_LIMIT_EXCEEDED": "Too many requests. Try again in {{minutes}} minute(s).",
         "placeholder_email": "Enter your email",
