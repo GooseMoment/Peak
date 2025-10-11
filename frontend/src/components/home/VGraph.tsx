@@ -7,13 +7,15 @@ import type { TaskGrouped } from "@api/today.api"
 import { getPaletteColor } from "@assets/palettes"
 
 export function VGraphSkeleton() {
+    const theme = useTheme()
+
     return (
         <Frame>
             <Graph>
                 <Item to="#" $width={100} />
             </Graph>
             <Categories>
-                <CategoryCircle $color="gray" />
+                <CategoryCircle $color={theme.grey} />
             </Categories>
         </Frame>
     )
@@ -37,7 +39,7 @@ export default function VGraph({ items, countAll }: VGraphProps) {
             <Graph draggable="false">
                 {items.map((item) => (
                     <Item
-                        key={item.name}
+                        key={item.id}
                         to={`/app/projects/${item.id}`}
                         $width={(item.count / totalCount) * 100}
                         $color={getPaletteColor(theme.type, item.color)}

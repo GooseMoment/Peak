@@ -77,7 +77,7 @@ export default function PasswordSection() {
                         name="password"
                         type="password"
                         placeholder={t("current_password")}
-                        autoComplete="password"
+                        autoComplete="current-password"
                         required
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
