@@ -235,9 +235,19 @@ export const SignUpForm = () => {
         setIsLoading(true)
 
         const formData = new FormData(e.currentTarget)
-        const email = formData.get("email") as string
-        const password = formData.get("password") as string
-        const username = formData.get("username") as string
+        const email = formData.get("email")
+        const password = formData.get("password")
+        const username = formData.get("username")
+
+        if (
+            typeof email !== "string" ||
+            typeof password !== "string" ||
+            typeof username !== "string"
+        ) {
+            toast.error(t("internal_error"))
+            setIsLoading(false)
+            return
+        }
 
         try {
             await signUp(email, password, username)
