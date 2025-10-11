@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
@@ -40,15 +39,9 @@ const TaskFrame = ({
     const [searchParams] = useSearchParams()
     const taskIdFromQuery = searchParams.get("taskId")
 
-    const modal = useModal()
-
-    useEffect(() => {
-        if (taskIdFromQuery === task.id) {
-            modal.openModal()
-        }
-        // TODO: replace useEffect with useModal.initiallyOpen
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [taskIdFromQuery, task.id])
+    const modal = useModal({
+        initiallyOpen: task.id === taskIdFromQuery,
+    })
 
     const {
         due,

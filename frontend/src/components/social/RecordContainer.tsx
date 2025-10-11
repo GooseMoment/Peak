@@ -1,5 +1,4 @@
-import type { ReactElement } from "react"
-import { Fragment } from "react"
+import { Fragment, useMemo } from "react"
 
 import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -13,6 +12,7 @@ import TaskFrame from "@components/tasks/TaskFrame"
 
 import { getCurrentUsername } from "@api/client"
 import { getRecord } from "@api/social.api"
+import type { Task } from "@api/tasks.api"
 import type { User } from "@api/users.api"
 
 import { getPageFromURL } from "@utils/pagination"
@@ -51,6 +51,40 @@ export default function RecordContainer({
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
+    // Create tasks with drawer insertions
+    const tasksWithDrawers = useMemo(() => {
+        if (!data) return []
+
+        let lastDrawerID: string | null = null
+        const result: Array<{
+            task: Task
+            showDrawer: boolean
+            drawerColor: string
+        }> = []
+
+        for (const page of data.pages) {
+            for (const task of page.results) {
+                const showDrawer = lastDrawerID !== task.drawer.id
+                const drawerColor = getPaletteColor(
+                    theme.type,
+                    task.drawer.project.color,
+                )
+
+                if (showDrawer) {
+                    lastDrawerID = task.drawer.id
+                }
+
+                result.push({
+                    task,
+                    showDrawer,
+                    drawerColor,
+                })
+            }
+        }
+
+        return result
+    }, [data, theme.type])
+
     if (isPending) {
         return (
             <>
@@ -65,8 +99,6 @@ export default function RecordContainer({
         return <ErrorBox onRetry={refetch} />
     }
 
-    let lastDrawerID: null | string = null
-    let lastColor = ""
     const isEmpty = data.pages.every((page) => page.results.length === 0)
 
     return (
@@ -80,35 +112,19 @@ export default function RecordContainer({
                     )}
                 </EmptyBox>
             )}
-            {data.pages.map((page) =>
-                page.results.map((task) => {
-                    let drawerInsertion: null | ReactElement = null
-
-                    if (lastDrawerID !== task.drawer.id) {
-                        lastDrawerID = task.drawer.id
-                        lastColor = getPaletteColor(
-                            theme.type,
-                            task.drawer.project.color,
-                        )
-
-                        drawerInsertion = (
-                            <DrawerBox $color={lastColor}>
-                                <DrawerName $color={lastColor}>
-                                    {task.drawer.name}
-                                </DrawerName>
-                            </DrawerBox>
-                        )
-                    }
-
-                    return (
-                        <Fragment key={task.id}>
-                            {drawerInsertion}
-                            <TaskFrame task={task} isSocial />
-                            <ReactionContainer task={task} />
-                        </Fragment>
-                    )
-                }),
-            )}
+            {tasksWithDrawers.map(({ task, showDrawer, drawerColor }) => (
+                <Fragment key={task.id}>
+                    {showDrawer && (
+                        <DrawerBox $color={drawerColor}>
+                            <DrawerName $color={drawerColor}>
+                                {task.drawer.name}
+                            </DrawerName>
+                        </DrawerBox>
+                    )}
+                    <TaskFrame task={task} isSocial />
+                    <ReactionContainer task={task} />
+                </Fragment>
+            ))}
             {hasNextPage && (
                 <LoadMoreButton
                     onClick={() => fetchNextPage()}

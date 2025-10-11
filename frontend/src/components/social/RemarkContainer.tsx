@@ -91,24 +91,31 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
     const { t } = useTranslation("translation")
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- sync external state to local state
+        setContent(remark?.content || "")
+        return () => setEditing(false)
+    }, [date, remark])
+
+    useEffect(() => {
         if (!textareaRef.current) {
             return
         }
 
         textareaRef.current.style.height = "auto"
-        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+
+        const computed = window.getComputedStyle(textareaRef.current)
+        const height =
+            parseInt(computed.getPropertyValue("border-top-width"), 10) +
+            parseInt(computed.getPropertyValue("padding-top"), 10) +
+            textareaRef.current.scrollHeight +
+            parseInt(computed.getPropertyValue("padding-bottom"), 10) +
+            parseInt(computed.getPropertyValue("border-bottom-width"), 10)
+
+        textareaRef.current.style.height = `${height}px`
     }, [content])
 
-    // focuses on the textarea and puts the cursor on the end of the content
-    // when the user enters the edit mode
     useEffect(() => {
-        if (!isEditing) {
-            return
-        }
-
-        if (!textareaRef.current) {
-            return
-        }
+        if (!isEditing || !textareaRef.current) return
 
         textareaRef.current.focus()
         textareaRef.current.setSelectionRange(
@@ -116,12 +123,6 @@ export const RemarkInput = ({ remark, date }: RemarkInputProps) => {
             textareaRef.current.value.length,
         )
     }, [isEditing])
-
-    useEffect(() => {
-        setContent(remark?.content || "")
-
-        return () => setEditing(false)
-    }, [date, remark])
 
     const client = useQueryClient()
     const mut = useMutation<null | Remark>({

@@ -46,6 +46,7 @@ const SignPage = () => {
         }
 
         if (isError) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect -- this line will be deleted at PR #553
             setActivities(generateActivities(null))
             return
         }

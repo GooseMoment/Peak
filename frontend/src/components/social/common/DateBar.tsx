@@ -26,6 +26,7 @@ export default function DateBar({ date, setDate }: DateBarProps) {
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- close calendar when date changes
         setIsCalendarOpen(false)
     }, [date])
 

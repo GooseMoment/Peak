@@ -47,7 +47,7 @@ const ProjectPage = () => {
     const navigate = useNavigate()
     const { isMobile } = useScreenType()
 
-    const [drawers, setDrawers] = useState<Drawer[]>([])
+    const [tempDrawerOrder, setTempDrawerOrder] = useState<Drawer[]>([])
 
     const [ordering, setOrdering] = useState("order")
     const [isAlertOpen, setIsAlertOpen] = useState(false)
@@ -82,6 +82,7 @@ const ProjectPage = () => {
         isError: isDrawersError,
         refetch: drawersRefetch,
         fetchNextPage,
+        hasNextPage,
         isFetchingNextPage,
     } = useInfiniteQuery({
         queryKey: ["drawers", { projectID: id, ordering: ordering }],
@@ -91,14 +92,14 @@ const ProjectPage = () => {
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
-    /// Drawers Drag And Drop
-    useEffect(() => {
-        if (!data) return
-        const results = data.pages.flatMap((page) => page.results ?? []) || []
-        setDrawers(results)
+    // Derived state for drawers with temp order during drag operations
+    const drawers = useMemo(() => {
+        if (!data) return []
+        return data.pages.flatMap((page) => page.results ?? []) || []
     }, [data])
 
-    const hasNextPage = data?.pages[data?.pages.length - 1].next !== null
+    const displayDrawers =
+        tempDrawerOrder.length > 0 ? tempDrawerOrder : drawers
 
     const { mutateAsync } = useMutation({
         mutationFn: (data: Partial<Drawer>[]) => {
@@ -106,32 +107,40 @@ const ProjectPage = () => {
         },
     })
 
-    const moveDrawer = useCallback((dragIndex: number, hoverIndex: number) => {
-        setDrawers((prevDrawers) => {
-            const updatedDrawers = [...prevDrawers]
-            const [moved] = updatedDrawers.splice(dragIndex, 1)
-            updatedDrawers.splice(hoverIndex, 0, moved)
-            return updatedDrawers
-        })
-    }, [])
+    const moveDrawer = useCallback(
+        (dragIndex: number, hoverIndex: number) => {
+            const updatedOrder = [...displayDrawers]
+            const [moved] = updatedOrder.splice(dragIndex, 1)
+            updatedOrder.splice(hoverIndex, 0, moved)
+            setTempDrawerOrder(updatedOrder)
+        },
+        [displayDrawers],
+    )
 
     const dropDrawer = useCallback(async () => {
         if (!data) return
         const results = data.pages.flatMap((page) => page.results) || []
-        const changedDrawers = drawers
+        const changedDrawers = displayDrawers
             .map((task, index) => ({ id: task.id, order: index }))
             .filter((task, index) => results[index]?.id !== task.id)
 
         if (changedDrawers.length === 0) return
 
-        await mutateAsync(changedDrawers)
-
-        await queryClient.invalidateQueries({
-            queryKey: ["drawers", { projectID: id, ordering: "order" }],
-        })
-        setOrdering("order")
-    }, [data, drawers, mutateAsync, id])
-    /// ---
+        try {
+            await mutateAsync(changedDrawers)
+            await queryClient.invalidateQueries({
+                queryKey: ["drawers", { projectID: id, ordering: "order" }],
+            })
+            await queryClient.invalidateQueries({
+                queryKey: ["projects", id],
+            })
+        } catch (_) {
+            toast.error(t("common.error_perform"))
+        } finally {
+            setOrdering("order")
+            setTempDrawerOrder([])
+        }
+    }, [data, displayDrawers, t, mutateAsync, id])
 
     const deleteMutation = useMutation({
         mutationFn: () => {
@@ -231,13 +240,13 @@ const ProjectPage = () => {
                 </Icons>
             </TitleBox>
             {project.type === "goal" && (
-                <Progress project={project} drawers={drawers} />
+                <Progress project={project} drawers={displayDrawers} />
             )}
-            {drawers && drawers.length === 0 ? (
+            {displayDrawers && displayDrawers.length === 0 ? (
                 <NoDrawerText>{t("project.no_drawer")}</NoDrawerText>
             ) : (
                 <DndProvider options={HTML5toTouch}>
-                    {drawers?.map((drawer) => (
+                    {displayDrawers?.map((drawer) => (
                         <DrawerBlock
                             key={drawer.id}
                             drawer={drawer}
