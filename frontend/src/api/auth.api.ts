@@ -12,34 +12,43 @@ interface BaseErrorResponse<T extends string> {
     message?: string
 }
 
-class AbstractError<T extends string> extends Error {
-    code: T
+class AbstractError<TErrorCode extends string> extends Error {
+    code: TErrorCode
 
-    constructor(code: T, message?: string) {
+    constructor(code: TErrorCode, message?: string) {
         super(message)
         this.code = code
     }
 
-    static fromAxiosUnknownError<T extends string>(
+    static fromAxiosUnknownError<TErrorCode extends string>(
         err: unknown,
-    ): AbstractError<T> {
-        if (isAxiosError<BaseErrorResponse<T>>(err)) {
+    ): AbstractError<TErrorCode> {
+        if (isAxiosError<BaseErrorResponse<TErrorCode>>(err)) {
             if (!err.response) {
-                return new this<T>(
-                    "NETWORK_ERROR" as T,
+                return new this<TErrorCode>(
+                    "NETWORK_ERROR" as TErrorCode,
                     "Network error occurred",
                 )
             }
 
             const errorData = err.response.data
             if (!errorData || !errorData.code) {
-                return new this<T>("UNKNOWN_ERROR" as T, errorData?.message)
+                return new this<TErrorCode>(
+                    "UNKNOWN_ERROR" as TErrorCode,
+                    errorData?.message,
+                )
             }
 
-            return new this<T>(errorData.code as T, errorData.message)
+            return new this<TErrorCode>(
+                errorData.code as TErrorCode,
+                errorData.message,
+            )
         }
 
-        return new this<T>("UNKNOWN_ERROR" as T, "Unknown error occurred")
+        return new this<TErrorCode>(
+            "UNKNOWN_ERROR" as TErrorCode,
+            "Unknown error occurred",
+        )
     }
 }
 
@@ -63,13 +72,6 @@ export interface TOTPVerifyResponse {
 export interface TOTPDeleteResponse {
     code: string
     message: string
-}
-
-export interface AuthTokenResponse {
-    token: string
-    user: {
-        username: string
-    }
 }
 
 export interface EmailVerificationResponse {
@@ -98,7 +100,7 @@ export type SignInErrorCode =
     | "CREDENTIAL_INVALID"
     | "MAIL_NOT_VERIFIED"
 
-interface SignInResponseWithout2FA {
+interface SignInResponseSuccess {
     token: string
     user: {
         username: string
@@ -106,13 +108,13 @@ interface SignInResponseWithout2FA {
     }
 }
 
-interface SignInResponseWith2FA {
+interface SignInResponse2FARequired {
     two_factor_auth: {
         token: string
     }
 }
 
-type SignInResponse = SignInResponseWithout2FA | SignInResponseWith2FA
+type SignInResponse = SignInResponseSuccess | SignInResponse2FARequired
 
 export class SignInError extends AbstractError<SignInErrorCode> {}
 
@@ -145,14 +147,25 @@ export const signIn = async (
     }
 }
 
+type TOTPAuthErrorCode =
+    | BaseErrorCode
+    | "TOTP_CODE_INVALID"
+    | "TOTP_CODE_LENGTH" // this code is for client-side validation
+    | "REQUIRED_FIELD_MISSING" // this won't be actually used, but the server might return this
+    | "TOKEN_REQUIRED"
+    | "TOKEN_INVALID"
+    | "TOKEN_OUT_OF_COUNTS"
+
+export class TOTPAuthError extends AbstractError<TOTPAuthErrorCode> {}
+
 export const authTOTP = async (code: string): Promise<boolean> => {
     const token = sessionStorage.getItem(TwoFactorAuthTokenKey)
     if (!token) {
-        throw new Error("No two-factor authentication token found")
+        throw new TOTPAuthError("TOKEN_REQUIRED", "A token is required.")
     }
 
     try {
-        const res = await client.post<AuthTokenResponse>(
+        const res = await client.post<SignInResponseSuccess>(
             "auth/two_factor/totp/",
             {
                 token,
@@ -162,12 +175,15 @@ export const authTOTP = async (code: string): Promise<boolean> => {
         setToken(res.data.token)
         setCurrentUsername(res.data.user.username)
         sessionStorage.removeItem(TwoFactorAuthTokenKey)
-    } catch (error) {
-        if (isAxiosError(error) && error?.response?.status === 403) {
+    } catch (err) {
+        if (
+            isAxiosError<BaseErrorResponse<TOTPAuthErrorCode>>(err) &&
+            err.response?.data.code !== "TOTP_CODE_INVALID"
+        ) {
             sessionStorage.removeItem(TwoFactorAuthTokenKey)
         }
 
-        throw error
+        throw TOTPAuthError.fromAxiosUnknownError<TOTPAuthErrorCode>(err)
     }
 
     return true

@@ -14,6 +14,7 @@ import {
     ApiError,
     SignInError,
     SignUpError,
+    TOTPAuthError,
     authTOTP,
     patchPasswordWithPasswordRecoveryToken,
     requestPasswordRecoveryToken,
@@ -129,7 +130,7 @@ export const TOTPAuthForm = () => {
         }
     }
 
-    const mut = useMutation({
+    const mut = useMutation<boolean, TOTPAuthError>({
         mutationFn: () => {
             if (totpCode.length < 6) {
                 return Promise.reject(new Error("ENTER_6_DIGIT"))
@@ -141,23 +142,16 @@ export const TOTPAuthForm = () => {
             toast.success(t("sign_in_success"))
             return navigate("/app/")
         },
-        onError: (err: unknown) => {
-            const error = err as ApiError
-            if (error?.response?.status === 403) {
-                toast.error(t("session_invalid"))
+        onError: (err) => {
+            toast.error(t(err.code))
+
+            if (
+                err.code === "TOKEN_REQUIRED" ||
+                err.code === "TOKEN_INVALID" ||
+                err.code === "TOKEN_OUT_OF_COUNTS"
+            ) {
                 return navigate("/sign/in")
             }
-
-            if (error?.response?.status === 429) {
-                toast.error(t("try_count_exceed"))
-                return navigate("/sign/in")
-            }
-
-            if (error?.message === "ENTER_6_DIGIT") {
-                return toast.error(t("enter_6_digit"))
-            }
-
-            toast.error(t("wrong_code"))
         },
     })
 

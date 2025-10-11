@@ -338,10 +338,6 @@
         "button_cancel": "Cancel",
         "button_email_authentication": "Email Authentication",
         "6-digit_code": "6-digit code",
-        "enter_6_digit": "Please enter 6 digits.",
-        "session_invalid": "Please sign in again.",
-        "try_count_exceed": "The try count for the authentication is exceeded. Please sign in again.",
-        "wrong_code": "Wrong code. Please try again.",
         "sign_up": "Sign Up",
         "email": "Email",
         "password": "Password",
@@ -356,7 +352,7 @@
         "MAIL_NOT_VERIFIED": "Your email address is not verified. Please check your inbox. (or spam)",
         "NETWORK_ERROR": "Please check your network.",
         "USER_ALREADY_AUTHENTICATED": "You already signed in.",
-        "REQUIRED_FIELD_MISSING": "Please enter email, password, username.",
+        "REQUIRED_FIELD_MISSING": "Please fill all fields.",
         "EMAIL_INVALID": "Please enter a valid email.",
         "USERNAME_INVALID_LENGTH": "Length of the username should be between 4 and 15.",
         "USERNAME_INVALID_FORMAT": "Username should only contain alphabets, underscore and digits.",
@@ -364,7 +360,12 @@
         "PASSWORD_INVALID": "Password should be 8 or more letters.",
         "INTERNAL_ERROR": "Something's wrong with our service. Please try again.",
         "EMAIL_NOT_SENT": "The server couldn't send a mail. Please try again after few minutes.",
-        "UNKNOWN_ERROR": "Please try later."
+        "UNKNOWN_ERROR": "Please try later.",
+        "TOTP_CODE_INVALID": "Wrong code. Please try again.",
+        "TOKEN_REQUIRED": "Please sign in first.",
+        "TOKEN_INVALID": "The session is expired. Please sign in again.",
+        "TOKEN_OUT_OF_COUNTS": "You exceeded the allowed try counts. Please sign in again.",
+        "TOTP_CODE_LENGTH": "Please enter 6 digits."
     },
     "password_recovery": {
         "request_title": "Forgot Password?",
