@@ -91,3 +91,12 @@ class NoPendingTOTPRegistration(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = "No pending TOTP registration."
     default_code = "NO_PENDING_TOTP_REGISTRATION"
+
+
+class EmailRateLimitExceeded(APIException):
+    status_code = status.HTTP_429_TOO_MANY_REQUESTS
+    default_detail = "Resend verification email rate limit exceeded."
+    default_code = "EMAIL_RATE_LIMIT_EXCEEDED"
+
+    def __init__(self, seconds: int = 0):
+        super().__init__(seconds=seconds)

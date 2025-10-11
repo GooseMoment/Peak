@@ -392,12 +392,7 @@ class ResendEmailVerificationMail(GenericAPIView):
             delta = now - verification.last_sent_at
 
             if delta <= settings.EMAIL_SEND_INTERVAL_MIN:
-                return Response(
-                    {
-                        "seconds": delta.seconds,
-                    },
-                    status=status.HTTP_425_TOO_EARLY,  # pyright: ignore [reportAttributeAccessIssue] -- djangorestframework-types missing type
-                )
+                raise exceptions.EmailRateLimitExceeded(seconds=delta.seconds)
 
         mails.send_mail_verification_email(verification.user, verification)
 
