@@ -23,13 +23,5 @@ translation = {
             "title": "✅ @{username}",
             "body": "accepted your follow request.",
         },
-        Notification.FOR_PECK: {
-            "title": "👈 @{username}",
-            "body": "pecked {count} time(s).\n\nRE: {task}",
-        },
-        Notification.FOR_COMMENT: {
-            "title": "💬 @{username}",
-            "body": "{comment}\n\nRE: {parent}",
-        },
     },
 }

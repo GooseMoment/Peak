@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 
 import styled from "styled-components"
@@ -94,7 +94,11 @@ const ProjectName = ({
         }),
     })
 
-    if (!isInbox) drag(drop(ref))
+    useEffect(() => {
+        if (!isInbox) {
+            drag(drop(ref))
+        }
+    }, [drag, drop, isInbox])
 
     return (
         <ProjectNameBox

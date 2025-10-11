@@ -4,11 +4,11 @@ import { useParams } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
 
 import Button, { ButtonGroup } from "@components/common/Button"
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import EditBox from "@components/project/edit/EditBox"
 import Middle from "@components/project/edit/Middle"
 import PrivacyEdit from "@components/project/edit/PrivacyEdit"
 import TitleInput from "@components/project/edit/TitleInput"
+import omitCommonFields from "@components/tasks/utils/omitCommonFields"
 
 import {
     type Drawer,
@@ -19,6 +19,7 @@ import {
     postDrawer,
 } from "@api/drawers.api"
 
+import { useModalContext } from "@utils/useModal"
 import useScreenType from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -31,7 +32,7 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
     const { t } = useTranslation("translation", {
         keyPrefix: "project_drawer_edit",
     })
-    const { closeModal } = useModalWindowCloseContext()
+    const modal = useModalContext()
     const { isDesktop } = useScreenType()
 
     const { id: projectID } = useParams()
@@ -57,7 +58,7 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
                 queryKey: ["drawers", { projectID: projectID }],
             })
             toast.success(t("created_drawer"))
-            closeModal()
+            modal?.closeModal()
         },
         onError: (err) => {
             hasCreated.current = false
@@ -80,7 +81,11 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
 
     const patchMutation = useMutation({
         mutationFn: (data: Drawer) => {
-            const drawerData = { ...data, project: data.project.id }
+            const rest = omitCommonFields(data)
+            const drawerData = {
+                ...rest,
+                project: data.project.id,
+            }
             return patchDrawer(data.id!, drawerData)
         },
         onSuccess: () => {
@@ -88,7 +93,7 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
                 queryKey: ["drawers", { projectID: projectID }],
             })
             toast.success(t("edited"))
-            closeModal()
+            modal?.closeModal()
         },
         onError: () => {
             toast.error(t("edited_error"))
@@ -158,7 +163,7 @@ const DrawerEdit = ({ drawer }: { drawer?: Drawer }) => {
                 setName={(name: string) => handleChange({ name })}
                 inputRef={inputRef}
                 icon="inbox"
-                onClose={closeModal}
+                onClose={() => modal?.closeModal()}
             />
             <Middle items={items} />
             <ButtonGroup $justifyContent="right">

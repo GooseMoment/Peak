@@ -143,11 +143,9 @@
             "name": "Types of notifications",
             "description": "Choose which types you want to receive on this device.",
             "values": {
-                "comment": "When you get a comment",
                 "follow": "When someone follows you",
                 "follow_request": "When you receive a follow request",
                 "follow_request_accepted": "When your follow request is accepted",
-                "peck": "When you get pecked",
                 "reaction": "When you receive a reaction",
                 "task_reminder": "When it's a time to remind a task",
                 "button_save": "Save"

@@ -143,11 +143,9 @@
             "name": "알림 유형",
             "description": "이 기기에서 받을 알림 유형을 선택합니다.",
             "values": {
-                "comment": "댓글이 달렸을 때",
                 "follow": "남이 팔로우했을 때",
                 "follow_request": "팔로우 요청을 받았을 때",
                 "follow_request_accepted": "내 팔로우 요청이 승낙되었을 때",
-                "peck": "콕 쪼였을 때",
                 "reaction": "리액션을 받았을 때",
                 "task_reminder": "작업의 리마인더 시간일 때",
                 "button_save": "저장"

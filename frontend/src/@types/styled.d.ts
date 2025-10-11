@@ -58,19 +58,7 @@ declare module "styled-components" {
             activeColor: string
             activeBackgroundColor: string
         }
-        calendar: {
-            backgroundColor: string
-            secondBackgroundColor: string
-            todayColor: string
-            hoverColor: string
-        }
         help: { addressBarShadowColor: string }
-        search: {
-            borderColor: string
-            buttonColor: string
-            activatedColor: string
-            activatedBackgroundColor: string
-        }
         toastTheme: LightDark
     }
 }

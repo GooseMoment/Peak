@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useState } from "react"
 
 import styled, { css } from "styled-components"
 
@@ -19,17 +19,22 @@ import { useTranslation } from "react-i18next"
 type AssignedKey = "quick" | "calendar"
 
 const TaskDetailAssigned = ({
+    assignedAt,
     setFunc,
 }: {
+    assignedAt: string | null | undefined
     setFunc: (diff: Partial<MinimalTask>) => void
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task" })
     const tz = useClientTimezone()
 
     const today = DateTime.now().setZone(tz)
-
-    const [selectedDate, setSelectedDate] = useState<string | null>(
-        today.toISODate(),
+    const [selectedDate, setSelectedDate] = useState<DateTime | null>(
+        assignedAt
+            ? DateTime.fromISO(assignedAt, {
+                  zone: tz,
+              })
+            : null,
     )
     const [isAdditionalComp, setIsAdditionalComp] =
         useState<AssignedKey | null>("quick")
@@ -47,24 +52,28 @@ const TaskDetailAssigned = ({
     ) => {
         return async () => {
             let assigned_at = null
+            let date: DateTime | null = null
 
             if (set !== null) {
-                const date = today.plus(set)
+                date = today.plus(set)
                 assigned_at = date.toISODate()
             }
             setFunc({ assigned_at })
+            setSelectedDate(date)
         }
     }
 
-    useEffect(() => {
-        if (selectedDate === null) return
+    const handleSelectedDateChange = (date: DateTime | null) => {
+        setSelectedDate(date)
 
+        if (!date || !date.isValid) {
+            setFunc({ assigned_at: null })
+            return
+        }
         setFunc({
-            assigned_at: DateTime.fromISO(selectedDate, {
-                zone: tz,
-            }).toISODate(),
+            assigned_at: date.toISODate(),
         })
-    }, [selectedDate, setFunc, tz])
+    }
 
     const addComponent = [
         {
@@ -78,16 +87,11 @@ const TaskDetailAssigned = ({
             display: t("due.calendar"),
             icon: "calendar" as const,
             component: (
-                <CalendarWrapper>
-                    <CommonCalendar
-                        isRangeSelectMode={false}
-                        selectedStartDate={selectedDate}
-                        setSelectedStartDate={setSelectedDate}
-                        selectedEndDate={undefined}
-                        setSelectedEndDate={undefined}
-                        handleClose={undefined}
-                    />
-                </CalendarWrapper>
+                <CommonCalendar
+                    selectedDate={selectedDate}
+                    setSelectedDate={handleSelectedDateChange}
+                    isModal
+                />
             ),
         },
     ]
@@ -189,12 +193,6 @@ const CollapseButton = styled.div<{ $collapsed: boolean }>`
                 animation: ${rotateToUnder} 0.3s ${cubicBeizer} forwards;
             }
         `}
-`
-
-const CalendarWrapper = styled.div`
-    margin: 0.4em auto;
-    width: 90%;
-    font-size: 0.8em;
 `
 
 export default TaskDetailAssigned

@@ -21,6 +21,8 @@ from django.db.models import (
     IntegerField,
     Case,
     When,
+    Exists,
+    CharField,
 )
 from django.db.models.query import QuerySet
 from django.db.models.functions import Coalesce
@@ -28,11 +30,8 @@ from django.db.utils import IntegrityError
 
 from .models import (
     Emoji,
-    Quote,
     TaskReaction,
     Remark,
-    Peck,
-    Comment,
     Following,
     Block,
 )
@@ -41,8 +40,6 @@ from .serializers import (
     StatSerializer,
     RemarkSerializer,
     TaskReactionSerializer,
-    PeckSerializer,
-    CommentSerializer,
     FollowingSerializer,
     BlockSerializer,
 )
@@ -64,44 +61,156 @@ import emoji as emojilib
 
 class ExploreFeedPagination(CursorPagination):
     page_size = 8
-    ordering = "-followings_count"
+    ordering = ("-priority", "-updated_at", "-id")
 
 
-class ExploreFeedView(mixins.ListModelMixin, generics.GenericAPIView):
-    serializer_class = UserSerializer
+class ExploreSearchPagination(CursorPagination):
+    page_size = 8
+    ordering = ("-updated_at", "-id")
+
+
+class ExploreFeedView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = StatSerializer
     pagination_class = ExploreFeedPagination
 
     def get_queryset(self):
-        user: User = self.request.user  # pyright: ignore [reportAssignmentType]
-        followees = User.objects.filter(followers__follower=user)
-        recommendUserFilter = Q(followers__follower=user) | Q(id=user.id)
+        user: User = self.request.user  # pyright: ignore[reportAssignmentType]
 
-        feeds_queryset = (
-            User.objects.filter(followers__follower__in=followees)
-            .distinct()
-            .exclude(recommendUserFilter)
+        today = self.get_today()
+        today_range = self.get_today_range()
+
+        followees = User.objects.filter(
+            followers__follower=user, followers__status=Following.ACCEPTED
         )
-        # TODO: exclude private user
 
-        return feeds_queryset
+        user_qs = User.objects.exclude(id=user.id).exclude(
+            Q(blockers__blocker=user, blockers__deleted_at__isnull=True)
+            | Q(blockees__blockee=user, blockees__deleted_at__isnull=True)
+            | Q(followers__follower=user, followers__status=Following.ACCEPTED)
+            | Q(is_staff=True)
+        )
+
+        fof_sq = Following.objects.filter(
+            follower__in=followees,
+            followee=OuterRef("id"),
+            status=Following.ACCEPTED,
+        )
+
+        task_count_sq = (
+            Task.objects.filter(
+                user_id=OuterRef("id"),
+                completed_at__range=today_range,
+                privacy__in=(PrivacyMixin.FOR_PUBLIC,),
+            )
+            .order_by()
+            .values("user_id")
+            .annotate(cnt=Count("id"))
+            .values("cnt")
+        )
+
+        reaction_count_sq = (
+            TaskReaction.objects.filter(
+                task__user_id=OuterRef("id"),
+                task__completed_at__range=today_range,
+                task__privacy__in=(PrivacyMixin.FOR_PUBLIC,),
+            )
+            .order_by()
+            .values("task__user_id")
+            .annotate(cnt=Count("id"))
+            .values("cnt")
+        )
+
+        qs = user_qs.annotate(
+            fof=Exists(fof_sq),
+            completed_task_count=Coalesce(
+                Subquery(task_count_sq, output_field=IntegerField()),
+                Value(0),
+                output_field=IntegerField(),
+            ),
+            reaction_count=Coalesce(
+                Subquery(reaction_count_sq, output_field=IntegerField()),
+                Value(0),
+                output_field=IntegerField(),
+            ),
+            date=Value(today.isoformat(), output_field=CharField()),
+            priority=Case(
+                When(Q(fof=True), then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField(),
+            ),
+        ).order_by("-priority", "-updated_at", "-id")
+
+        return qs
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
 
-class ExploreSearchView(mixins.ListModelMixin, generics.GenericAPIView):
-    serializer_class = UserSerializer
-    pagination_class = ExploreFeedPagination
+class ExploreSearchView(TimezoneMixin, mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = StatSerializer
+    pagination_class = ExploreSearchPagination
 
     def get_queryset(self):
         keyword = self.request.GET.get("query")
-
-        if keyword is None:
+        if keyword is None or not keyword.strip():
             raise RequiredFieldMissing
 
-        users_queryset = User.objects.filter(username__icontains=keyword)
+        keyword = keyword.strip()
+        user: User = self.request.user  # pyright: ignore[reportAssignmentType]
 
-        return users_queryset
+        base_qs = (
+            User.objects.exclude(id=user.id)
+            .exclude(
+                Q(blockers__blocker=user, blockers__deleted_at__isnull=True)
+                | Q(blockees__blockee=user, blockees__deleted_at__isnull=True)
+                | Q(followers__follower=user, followers__status=Following.ACCEPTED)
+                | Q(is_staff=True)
+            )
+            .order_by("-updated_at", "-id")
+        )
+
+        users_qs = base_qs.filter(username__icontains=keyword)
+
+        today = self.get_today()
+        today_range = self.get_today_range()
+
+        task_count_sq = (
+            Task.objects.filter(
+                user_id=OuterRef("id"),
+                completed_at__range=today_range,
+                privacy__in=(PrivacyMixin.FOR_PUBLIC,),
+            )
+            .order_by()
+            .values("user_id")
+            .annotate(cnt=Count("id"))
+            .values("cnt")
+        )
+
+        reaction_count_sq = (
+            TaskReaction.objects.filter(
+                task__user_id=OuterRef("id"),
+                task__completed_at__range=today_range,
+                task__privacy__in=(PrivacyMixin.FOR_PUBLIC,),
+            )
+            .order_by()
+            .values("task__user_id")
+            .annotate(cnt=Count("id"))
+            .values("cnt")
+        )
+
+        return users_qs.annotate(
+            completed_task_count=Coalesce(
+                Subquery(task_count_sq, output_field=IntegerField()),
+                Value(0),
+                output_field=IntegerField(),
+            ),
+            reaction_count=Coalesce(
+                Subquery(reaction_count_sq, output_field=IntegerField()),
+                Value(0),
+                output_field=IntegerField(),
+            ),
+            date=Value(today.isoformat(), output_field=CharField()),
+        )
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -653,115 +762,6 @@ class TaskReactionDetail(generics.RetrieveDestroyAPIView):
     serializer_class = TaskReactionSerializer
     lookup_url_kwarg = "reaction_id"
     permission_classes = (IsUserOwner,)
-
-
-class PeckView(APIView):
-    def get(self, request, id):
-        task = get_object_or_404(Task, id=id)
-        pecks = Peck.objects.filter(task=task)
-
-        serializer = PeckSerializer(pecks, many=True)
-        pecksCounts = self.countPeck(pecks)
-
-        data = {"pecks": serializer.data, "pecks_counts": pecksCounts}
-
-        return Response(data, status=status.HTTP_201_CREATED)
-
-    def post(self, request, id):
-        user = request.user
-        task = get_object_or_404(Task, id=id)
-        peck = Peck.objects.filter(user=user, task=task).first()
-
-        if peck:
-            peck.count += 1
-            peck.save()
-        else:
-            peck = Peck.objects.create(user=user, task=task, count=1)
-        pecks = Peck.objects.filter(task=task)
-
-        serializer = PeckSerializer(pecks, many=True)
-        # pecksCounts = self.countPeck(pecks)
-
-        # data = {"pecks": serializer.data, "pecks_counts": pecksCounts}
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def countPeck(self, pecks):
-        pecksCounts = 0
-        for peck in pecks:
-            pecksCounts += peck.count
-
-        return pecksCounts
-
-
-class CommentView(APIView):
-    def get(self, request, type, id):
-        if type == Comment.FOR_TASK:
-            task = get_object_or_404(Task, id=id)
-            comments = Comment.objects.filter(
-                parent_type=Comment.FOR_TASK, task=task
-            ).order_by("-created_at")
-        else:
-            quote = get_object_or_404(Quote, id=id)
-            comments = Comment.objects.filter(
-                parent_type=Comment.FOR_QUOTE, quote=quote
-            ).order_by("-created_at")
-
-        serializer = CommentSerializer(comments, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def post(self, request, type, id):
-        user = request.user
-        comment = request.data.get("comment")
-
-        # TODO: check block
-        if type == Comment.FOR_TASK:
-            task = get_object_or_404(Task, id=id)
-            created = Comment.objects.create(
-                user=user, parent_type=Comment.FOR_TASK, task=task, comment=comment
-            )
-        elif type == Comment.FOR_QUOTE:
-            quote = get_object_or_404(Quote, id=id)
-            created = Comment.objects.create(
-                user=user, parent_type=Comment.FOR_QUOTE, quote=quote, comment=comment
-            )
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = CommentSerializer(created, many=False)
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def patch(self, request, type, id):
-        user = request.user
-
-        commentID = request.data.get("id")
-        comment = get_object_or_404(Comment, id=commentID)
-        if comment.user != user:
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-
-        # 과거 코맨트 기록들을 저장할 필요가 있을까?
-        newComment = request.data.get("comment")
-        # serializer = CommentSerializer(comment, data={'comment': newComment}, partial=True)
-        comment.comment = newComment
-        comment.save()
-
-        serializer = CommentSerializer(comment)
-
-        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-
-    def delete(self, request, type, id):
-        user = request.user
-
-        commentID = request.data.get("id")
-        comment = get_object_or_404(Comment, id=commentID)
-        if comment.user != user:
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-        # TODO: soft delete
-        comment.delete()
-
-        return Response(status=status.HTTP_200_OK)
 
 
 class EmojiListPagination(PageNumberPagination):

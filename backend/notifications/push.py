@@ -2,7 +2,6 @@ from django.conf import settings
 
 from users.models import User
 from .models import Notification, WebPushSubscription
-from social.models import Comment
 from .locale import get_translations
 
 from pywebpush import webpush, WebPushException
@@ -41,7 +40,7 @@ def _notificationToPushData(notification: Notification, locale: str) -> PushData
     data = PushData()
 
     data.datetime = notification.created_at
-    data.click_url = "/app/notifications?id=" + str(notification.id)
+    data.click_url = "/app/notifications/" + str(notification.id)
 
     related_user: User | None = None
     t = get_translations(locale)["push"]
@@ -83,31 +82,6 @@ def _notificationToPushData(notification: Notification, locale: str) -> PushData
             t = t[Notification.FOR_FOLLOW_REQUEST_ACCEPTED]
             data.title = t["title"].format(username=related_user.username)
             data.body = t["body"]
-        case Notification.FOR_PECK:
-            assert notification.peck is not None
-            related_user = notification.peck.user
-            t = t[Notification.FOR_PECK]
-            data.title = t["title"].format(username=related_user.username)
-            data.body = t["body"].format(
-                task=notification.peck.task.name, count=notification.peck.count
-            )
-        case Notification.FOR_COMMENT:
-            assert notification.comment is not None
-            related_user = notification.comment.user
-            parent: str = ""
-
-            if notification.comment.parent_type == Comment.FOR_QUOTE:
-                assert notification.comment.quote is not None
-                parent = notification.comment.quote.content
-            else:
-                assert notification.comment.task is not None
-                parent = notification.comment.task.name
-
-            t = t[Notification.FOR_COMMENT]
-            data.title = t["title"].format(username=related_user.username)
-            data.body = t["body"].format(
-                parent=parent, comment=notification.comment.comment
-            )
 
     if related_user:
         if related_user.profile_img:

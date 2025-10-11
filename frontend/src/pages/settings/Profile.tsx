@@ -1,4 +1,4 @@
-import { type FormEvent, type MouseEvent, useEffect, useState } from "react"
+import { type FormEvent, type MouseEvent, useMemo, useState } from "react"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -7,13 +7,13 @@ import Button, { ButtonGroup } from "@components/common/Button"
 import Input from "@components/common/Input"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import MildButton from "@components/common/MildButton"
-import ModalWindow from "@components/common/ModalWindow"
 import ColorEdit from "@components/project/edit/ColorEdit"
 import ProfileImg from "@components/settings/ProfileImg"
 import Section, { Name, Value, ValueError } from "@components/settings/Section"
 
 import { type User, getMe, patchUser } from "@api/users.api"
 
+import useModal, { Portal } from "@utils/useModal"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -22,6 +22,8 @@ import { type PaletteColorName, getPaletteColor } from "@assets/palettes"
 
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+
+const DEFAULT_HEADER_COLOR: PaletteColorName = "grey"
 
 const Profile = () => {
     const { t } = useTranslation("settings", { keyPrefix: "profile" })
@@ -39,19 +41,33 @@ const Profile = () => {
         queryFn: getMe,
     })
 
-    const [headerColor, setHeaderColor] = useState<{ color: PaletteColorName }>(
-        {
-            color: "grey",
-        },
-    )
-    const [paletteOpen, setPaletteOpen] = useState(false)
+    // Local state for user color selection (UI interaction)
+    const [userSelectedColor, setUserSelectedColor] = useState<{
+        color: PaletteColorName
+    }>({ color: DEFAULT_HEADER_COLOR })
+
+    // Derived state for header color based on user data or user selection
+    const headerColor = useMemo(() => {
+        // If user data is loaded and user hasn't made a selection, use user data
+        if (
+            user?.header_color &&
+            userSelectedColor.color === DEFAULT_HEADER_COLOR
+        ) {
+            return { color: user.header_color }
+        }
+        return userSelectedColor
+    }, [user, userSelectedColor])
+
+    const modal = useModal()
 
     const mutation = useMutation({
         mutationFn: (data: Partial<User>) => {
             return patchUser(data)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["users", "me"] })
+            queryClient.invalidateQueries({
+                queryKey: ["users", "me"],
+            })
             queryClient.invalidateQueries({
                 queryKey: ["users", user?.username],
             })
@@ -62,15 +78,9 @@ const Profile = () => {
         },
     })
 
-    useEffect(() => {
-        if (user) {
-            setHeaderColor({ color: user.header_color })
-        }
-    }, [user])
-
     const onClickOpenPalette = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
-        setPaletteOpen(true)
+        modal.openModal()
     }
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -166,11 +176,9 @@ const Profile = () => {
                             value={headerColor.color || ""}
                         />
                     </Value>
-                    {paletteOpen && (
-                        <ModalWindow afterClose={() => setPaletteOpen(false)}>
-                            <ColorEdit setColor={setHeaderColor} />
-                        </ModalWindow>
-                    )}
+                    <Portal modal={modal}>
+                        <ColorEdit setColor={setUserSelectedColor} />
+                    </Portal>
                 </Section>
                 <Section>
                     <ButtonGroup $justifyContent="right">

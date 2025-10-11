@@ -1,6 +1,5 @@
 {
     "sidebar": {
-        "search": "Search",
         "home": "Home",
         "notifications": "Notifications",
         "today": "Today",
@@ -17,18 +16,25 @@
         "fail_to_load": "Fail to load notifications.",
         "type_all": "All",
         "type_tasks": "Tasks",
-        "type_comments": "Comments",
         "type_reactions": "Reactions",
-        "type_pecking": "Pecking",
         "type_follow": "Follow",
-        "content_task_reminder": "Reminder before {{delta}} minute(s).",
-        "content_task_reminder_now": "Time to work!",
-        "content_peck": "pecked {{count}} times.",
-        "content_comment_quote": "Quote of {{date}}.",
-        "content_reaction_quote": "Quote of {{date}}.",
-        "content_follow": "follows you.",
+        "content_task_reminder": "Reminder before {{count}} minutes.",
+        "content_task_reminder_one": "Reminder before 1 minute.",
+        "content_task_reminder_zero": "Time to work!",
+        "content_follow": "followed you.",
         "content_follow_request": "wants to follow you.",
-        "content_follow_request_accepted": "accepted follow request."
+        "content_follow_request_accepted": "approved your follow request.",
+        "body_task_reaction": "Reacted to your task with an emoji.",
+        "emoji": "Emoji",
+        "your_task": "Your task",
+        "body_task_reminder": "{{count}}-minute reminder before the task is due.",
+        "body_task_reminder_zero": "The task is due.",
+        "body_follow": "Followed you.",
+        "body_follow_request": "Sent you a follow request.",
+        "body_follow_request_accepted": "Approved your follow request.",
+        "follow_back": "Follow back",
+        "approve_follow_request": "Approve this follow request",
+        "handled_follow_request": "This request has already been handled."
     },
     "project_list": {
         "title": "Projects",
@@ -251,7 +257,7 @@
         "followings": "Followings",
         "followers": "Followers",
         "requests_exist": "Requests from @{{username}}",
-        "follow_request_sent_to_me": "Sends you follow request.",
+        "follow_request_sent_to_me": "Sent you a follow request.",
         "button_follow_request_accept": "Accept",
         "button_follow_request_reject": "Reject",
         "follow_request_accepted": "Accepted follow request.",
@@ -403,23 +409,11 @@
             "more": "With {{count}} more"
         },
         "explore": {
-            "searchbar": "Search for usernames to follow.",
-            "no_result": "No users matched your search",
-            "suggestion": "Make new connections with new people!"
+            "searchbar": "Search for a user",
+            "no_result": "No matching users found 😢",
+            "suggestion": "How about meeting new people and making new connections?",
+            "results_title": "Search results for ‘{{query}}’"
         }
-    },
-    "search": {
-        "title": "Search",
-        "filter_button": {
-            "search_terms": "Terms",
-            "project": "Project",
-            "drawer": "Drawer",
-            "assigned_at": "Assign",
-            "completed_at": "Completed",
-            "privacy": "Privacy",
-            "memo": "Memo"
-        },
-        "no_result": "Your search did not match any tasks"
     },
     "update": {
         "message": "New update available.",
@@ -431,6 +425,7 @@
             "back": "Go Back"
         },
         "button_no": "No",
+        "button_today": "Go to Today",
         "retry": "Retry",
         "loading": "Loading...",
         "load_more": "Load more",

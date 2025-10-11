@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import styled, { css } from "styled-components"
 
@@ -32,54 +32,20 @@ const TaskDetailDue = ({
 
     const today = DateTime.now().setZone(tz)
 
-    const [selectedDate, setSelectedDate] = useState(today.toISODate())
-    const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
-
-    useEffect(() => {
-        if (selectedDate === null) return
-
-        if (task.due_type === "due_datetime") {
-            const converted_selectedDate = DateTime.fromISO(selectedDate, {
+    const [selectedDate, setSelectedDate] = useState<DateTime | null>(() => {
+        if (task.due_type === "due_date") {
+            return DateTime.fromISO(task.due_date, {
                 zone: tz,
             })
-            if (!converted_selectedDate.isValid) return
-            const due_datetime = DateTime.fromISO(task.due_datetime, {
+        } else if (task.due_type === "due_datetime") {
+            return DateTime.fromISO(task.due_datetime.split("T")[0], {
                 zone: tz,
             })
-            if (!due_datetime.isValid) return
-
-            const converted_datetime = due_datetime
-                .set({
-                    year: converted_selectedDate.year,
-                    month: converted_selectedDate.month,
-                    day: converted_selectedDate.day,
-                })
-                .toISO()
-
-            if (converted_datetime === null) return
-
-            setFunc({
-                due_type: "due_datetime",
-                due_date: null,
-                due_datetime: converted_datetime,
-            })
-            return
+        } else {
+            return null
         }
-
-        const converted_date = DateTime.fromISO(selectedDate, {
-            zone: tz,
-        })
-        if (!converted_date.isValid) return
-
-        const converted_date_str = converted_date.toISODate()
-        if (converted_date_str === null) return
-
-        setFunc({
-            due_type: "due_date",
-            due_date: converted_date_str,
-            due_datetime: null,
-        })
-    }, [selectedDate, setFunc, task.due_type, task.due_datetime, tz])
+    })
+    const [isAdditionalComp, setIsAdditionalComp] = useState("quick")
 
     const handleAdditionalComp = (name: DueKey) => {
         if (isAdditionalComp === name) setIsAdditionalComp("")
@@ -102,16 +68,18 @@ const TaskDetailDue = ({
         return async () => {
             if (set === null) {
                 setFunc({ due_type: null, due_date: null, due_datetime: null })
+                setSelectedDate(null)
                 return
             }
 
             const date = today.plus(set)
+            setSelectedDate(date)
 
             if (task.due_type === "due_datetime") {
                 const due_datetime = DateTime.fromISO(task.due_datetime, {
                     zone: tz,
                 })
-                const converted_datetime = due_datetime
+                const convertedDatetime = due_datetime
                     .set({
                         year: date.year,
                         month: date.month,
@@ -119,26 +87,72 @@ const TaskDetailDue = ({
                     })
                     .toISO()
 
-                if (converted_datetime === null) return
+                if (convertedDatetime === null) return
 
                 setFunc({
                     due_type: "due_datetime",
                     due_date: null,
-                    due_datetime: converted_datetime,
+                    due_datetime: convertedDatetime,
                 })
                 return
             }
 
-            const coverted_date = date.toISODate()
+            const covertedDate = date.toISODate()
 
-            if (coverted_date === null) return
+            if (covertedDate === null) return
 
             setFunc({
                 due_type: "due_date",
-                due_date: coverted_date,
+                due_date: covertedDate,
                 due_datetime: null,
             })
         }
+    }
+
+    const handleSelectedDateChange = (date: DateTime | null) => {
+        setSelectedDate(date)
+
+        if (!date || !date.isValid) {
+            setFunc({
+                due_type: null,
+                due_date: null,
+                due_datetime: null,
+            })
+            return
+        }
+
+        if (task.due_type === "due_datetime") {
+            const due_datetime = DateTime.fromISO(task.due_datetime, {
+                zone: tz,
+            })
+            if (!due_datetime.isValid) return
+
+            const converted_datetime = due_datetime
+                .set({
+                    year: date.year,
+                    month: date.month,
+                    day: date.day,
+                })
+                .toISO()
+
+            if (converted_datetime === null) return
+
+            setFunc({
+                due_type: "due_datetime",
+                due_date: null,
+                due_datetime: converted_datetime,
+            })
+            return
+        }
+
+        const convertedDateStr = date.toISODate()
+        if (convertedDateStr === null) return
+
+        setFunc({
+            due_type: "due_date",
+            due_date: convertedDateStr,
+            due_datetime: null,
+        })
     }
 
     const addComponent = [
@@ -153,16 +167,11 @@ const TaskDetailDue = ({
             display: t("calendar"),
             icon: "calendar" as const,
             component: (
-                <CalendarWrapper>
-                    <CommonCalendar
-                        isRangeSelectMode={false}
-                        selectedStartDate={selectedDate}
-                        setSelectedStartDate={setSelectedDate}
-                        selectedEndDate={undefined}
-                        setSelectedEndDate={undefined}
-                        handleClose={undefined}
-                    />
-                </CalendarWrapper>
+                <CommonCalendar
+                    selectedDate={selectedDate}
+                    setSelectedDate={handleSelectedDateChange}
+                    isModal
+                />
             ),
         },
         {
@@ -269,12 +278,6 @@ const CollapseButton = styled.div<{ $collapsed: boolean }>`
                 animation: ${rotateToUnder} 0.3s ${cubicBeizer} forwards;
             }
         `}
-`
-
-const CalendarWrapper = styled.div`
-    margin: 0.4em auto;
-    width: 90%;
-    font-size: 0.8em;
 `
 
 export default TaskDetailDue

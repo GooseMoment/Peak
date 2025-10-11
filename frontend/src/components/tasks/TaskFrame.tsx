@@ -1,15 +1,15 @@
-import { Suspense, lazy, useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 
 import styled, { useTheme } from "styled-components"
 
-import ModalLoader from "@components/common/ModalLoader"
+import TaskDetailLazy from "@components/project/taskDetails/TaskDetailLazy"
 import Priority from "@components/tasks/Priority"
 import TaskCircle from "@components/tasks/TaskCircle"
 import useTaskDateStatus from "@components/tasks/utils/useTaskDateStatus"
 
 import type { DemoMinimalTask, Task } from "@api/tasks.api"
 
+import useModal from "@utils/useModal"
 import { ifMobile } from "@utils/useScreenType"
 
 import type { PaletteColorName } from "@assets/palettes"
@@ -17,10 +17,6 @@ import AlarmClock from "@assets/project/AlarmClock"
 import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
-
-const TaskDetailElement = lazy(
-    () => import("@components/project/taskDetails/TaskDetailElement"),
-)
 
 interface TaskFrameProps {
     task: Task
@@ -37,18 +33,15 @@ const TaskFrame = ({
     showTaskDetail,
     isSocial = false,
 }: TaskFrameProps) => {
-    const [isDetailOpen, setDetailOpen] = useState(false)
     const theme = useTheme()
     const isCompleted = !isSocial && task.completed_at !== null
 
     const [searchParams] = useSearchParams()
     const taskIdFromQuery = searchParams.get("taskId")
 
-    useEffect(() => {
-        if (taskIdFromQuery === task.id) {
-            setDetailOpen(true)
-        }
-    }, [taskIdFromQuery, task.id])
+    const modal = useModal({
+        initiallyOpen: task.id === taskIdFromQuery,
+    })
 
     const {
         due,
@@ -83,7 +76,7 @@ const TaskFrame = ({
                         $isCompleted={isCompleted}
                         onClick={() => {
                             if (showTaskDetail) {
-                                setDetailOpen(true)
+                                modal.openModal()
                             }
                         }}>
                         {task.name}
@@ -123,16 +116,7 @@ const TaskFrame = ({
                     </Dates>
                 )}
             </Content>
-            {isDetailOpen && (
-                <Suspense
-                    key="task-detail-task-frame"
-                    fallback={<ModalLoader />}>
-                    <TaskDetailElement
-                        task={task}
-                        onClose={() => setDetailOpen(false)}
-                    />
-                </Suspense>
-            )}
+            <TaskDetailLazy task={task} modal={modal} />
         </Box>
     )
 }

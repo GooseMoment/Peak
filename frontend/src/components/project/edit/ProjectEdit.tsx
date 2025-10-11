@@ -4,16 +4,17 @@ import { useMutation } from "@tanstack/react-query"
 import { type LightDark, useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import ColorEdit from "@components/project/edit/ColorEdit"
 import EditBox from "@components/project/edit/EditBox"
 import Middle from "@components/project/edit/Middle"
 import PrivacyEdit from "@components/project/edit/PrivacyEdit"
 import ProjectTypeEdit from "@components/project/edit/ProjectTypeEdit"
 import TitleInput from "@components/project/edit/TitleInput"
+import omitCommonFields from "@components/tasks/utils/omitCommonFields"
 
 import { type Project, patchProject, postProject } from "@api/projects.api"
 
+import { useModalContext } from "@utils/useModal"
 import useScreenType from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -39,7 +40,7 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
         keyPrefix: "project_drawer_edit",
     })
     const theme = useTheme()
-    const { closeModal } = useModalWindowCloseContext()
+    const modal = useModalContext()
     const { isDesktop } = useScreenType()
 
     const [newProject, setNewProject] = useState<ProjectCreateInput | Project>(
@@ -48,10 +49,15 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
     const inputRef = useRef<HTMLInputElement>(null)
     const hasCreated = useRef(false)
 
-    const mutation = useMutation({
+    const mutation = useMutation<
+        Project,
+        AxiosError<{ code: string }>,
+        Partial<Project>
+    >({
         mutationFn: (data: Partial<Project>) => {
             if (project) {
-                return patchProject(project.id, data)
+                const rest = omitCommonFields(data)
+                return patchProject(project.id, rest)
             }
             return postProject(data)
         },
@@ -71,7 +77,7 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
             } else {
                 toast.success(t("created_project"))
             }
-            closeModal()
+            modal?.closeModal()
         },
         onError: (err) => {
             if (project) {
@@ -144,6 +150,7 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
     }
 
     const items = useMemo(
+        // eslint-disable-next-line react-hooks/refs -- will be fixed after #548 is merged
         () => makeItems(t, theme.type, newProject, handleChange),
         [t, theme, newProject, handleChange],
     )
@@ -155,7 +162,7 @@ const ProjectEdit = ({ project }: { project?: Project }) => {
                 setName={(name: string) => handleChange({ name })}
                 inputRef={inputRef}
                 icon="archive"
-                onClose={closeModal}
+                onClose={() => modal?.closeModal()}
             />
             <Middle items={items} />
             <ButtonGroup $justifyContent="right">

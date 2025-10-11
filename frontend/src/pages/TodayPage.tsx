@@ -19,14 +19,13 @@ const TodayPage = () => {
     const locale = useClientLocale()
 
     const today = DateTime.now().setZone(tz)
-    const [selectedDate, setSelectedDate] = useState<string>(today.toISODate()!)
+    const [selectedDate, setSelectedDate] = useState<DateTime>(today)
 
-    const isToday = selectedDate === today.toISODate()
-    const selectedDateTime = DateTime.fromISO(selectedDate).setZone(tz)
+    const isToday = selectedDate.hasSame(today, "day")
 
     const titleText = isToday
         ? t("title")
-        : selectedDateTime.setLocale(locale).toLocaleString({
+        : selectedDate.setLocale(locale).toLocaleString({
               weekday: "short",
               month: "short",
               day: "numeric",

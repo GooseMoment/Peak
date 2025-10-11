@@ -25,7 +25,11 @@ const ContentTitle = ({ notification, relatedUser }: ContentTitleProps) => {
             </TitleBox>
         )
     } else if (notification.type === "task_reminder") {
-        const taskURL = "/app/projects/" + notification.task_reminder.project_id
+        const taskURL =
+            "/app/projects/" +
+            notification.task_reminder.project_id +
+            "?taskId=" +
+            notification.task_reminder.task
         return (
             <TitleBox>
                 <ContentTitleLink to={taskURL}>

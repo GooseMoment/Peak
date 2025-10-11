@@ -125,12 +125,23 @@ const Middle = () => {
                 {hasNextPage ? (
                     <ButtonGroup $justifyContent="center" $margin="1em">
                         <MoreButton
+                            $collapsed={isCollapsed}
+                            type="button"
+                            aria-label={
+                                isCollapsed ? t("common.load_more") : undefined
+                            }
+                            aria-busy={isFetchingNextPage}
                             disabled={isFetchingNextPage}
                             loading={isFetchingNextPage}
                             onClick={() => fetchNextPage()}>
-                            {isPending
-                                ? t("common.loading")
-                                : t("common.load_more")}
+                            {!isCollapsed ? (
+                                t("common.load_more")
+                            ) : (
+                                <FeatherIcon
+                                    icon="chevrons-down"
+                                    aria-hidden="true"
+                                />
+                            )}
                         </MoreButton>
                     </ButtonGroup>
                 ) : null}
@@ -142,12 +153,6 @@ const Middle = () => {
 const getItems = (t: TFunction<"translation">) => [
     // end가 true:  경로가 to와 완전히 일치해야 active
     //       false: to의 하위 경로에 있어도 active
-    {
-        icon: "search" as const,
-        name: t("sidebar.search"),
-        to: "search",
-        end: false,
-    },
     { icon: "home" as const, name: t("sidebar.home"), to: "home", end: true },
     {
         icon: "bell" as const,
@@ -272,8 +277,15 @@ const ProjectLoadErrorBox = styled(ProjectItemBox)<StyledCollapsedProp>`
     }
 `
 
-const MoreButton = styled(Button)`
-    width: 80%;
+const MoreButton = styled(Button)<StyledCollapsedProp>`
+    width: ${(p) => (p.$collapsed ? "100%" : "80%")};
+    padding: ${(p) => (p.$collapsed ? "0.25em" : "0.5em 1em")};
+
+    & svg {
+        top: 0;
+        margin-right: 0;
+        font-size: 1.5em;
+    }
 `
 
 export default Middle

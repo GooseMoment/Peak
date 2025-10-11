@@ -1,6 +1,6 @@
 import client from "@api/client"
 import type { Base, PaginationData } from "@api/common"
-import type { Comment, Following, Peck, TaskReaction } from "@api/social.api"
+import type { Following, TaskReaction } from "@api/social.api"
 import type { Task } from "@api/tasks.api"
 import type { User } from "@api/users.api"
 
@@ -10,7 +10,7 @@ import {
 } from "@utils/clientSettings"
 
 export interface TaskReminder extends Base {
-    task: Task
+    task: Task["id"]
     delta: number
     scheduled: string
     task_name: string
@@ -49,41 +49,27 @@ export const deleteReminder = async (id: string) => {
 }
 
 export interface NotificationTaskReminder extends Base {
-    user: User
+    username: User["username"]
     type: "task_reminder"
     task_reminder: TaskReminder
 }
 
 export interface NotificationTaskReaction extends Base {
-    user: User
+    username: User["username"]
     type: "task_reaction"
     task_reaction: TaskReaction
 }
 
 export interface NotificationFollowing extends Base {
-    user: User
+    username: User["username"]
     type: "follow" | "follow_request" | "follow_request_accepted"
     following: Following
-}
-
-export interface NotificationPeck extends Base {
-    user: User
-    type: "peck"
-    peck: Peck
-}
-
-export interface NotificationComment extends Base {
-    user: User
-    type: "comment"
-    comment: Comment
 }
 
 export type Notification =
     | NotificationTaskReminder
     | NotificationTaskReaction
     | NotificationFollowing
-    | NotificationPeck
-    | NotificationComment
 
 export const getNotifications = async (
     cursor: string,
@@ -98,12 +84,15 @@ export const getNotifications = async (
     return res.data
 }
 
+export const getNotification = async (id: string) => {
+    const res = await client.get<Notification>(`notifications/${id}/`)
+    return res.data
+}
+
 export const getRelatedUserFromNotification = (notification: Notification) => {
     return (
         (notification.type === "task_reaction" &&
             notification.task_reaction.user) ||
-        (notification.type === "peck" && notification.peck.user) ||
-        (notification.type === "comment" && notification.comment.user) ||
         (notification.type === "follow" && notification.following?.follower) ||
         (notification.type === "follow_request" &&
             notification.following?.follower) ||

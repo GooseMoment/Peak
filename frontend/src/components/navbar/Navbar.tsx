@@ -5,18 +5,18 @@ import styled, { css } from "styled-components"
 
 import { ifMobile } from "@utils/useScreenType"
 
-import FeatherIcon from "feather-icons-react"
+import FeatherIcon, { FeatherIconName } from "feather-icons-react"
 
-const items = [
+const items: Array<{ to: string; match: string; icon: FeatherIconName }> = [
     {
-        to: "search",
-        match: "search",
-        icon: "search",
+        to: "notifications?active=all",
+        match: "notifications",
+        icon: "bell",
     },
     {
-        to: "today",
-        match: "today",
-        icon: "calendar",
+        to: "social/following",
+        match: "social",
+        icon: "users",
     },
     {
         to: "home",
@@ -24,18 +24,18 @@ const items = [
         icon: "home",
     },
     {
+        to: "today",
+        match: "today",
+        icon: "calendar",
+    },
+    {
         to: "projects",
         match: "projects",
         icon: "archive",
     },
-    {
-        to: "social/following",
-        match: "social",
-        icon: "users",
-    },
 ]
 
-const Navbar = () => {
+export default function Navbar() {
     const navigate = useNavigate()
     const location = useLocation()
 
@@ -44,7 +44,7 @@ const Navbar = () => {
     const [transition, setTransition] = useState(false)
 
     const onRefChange = useCallback(
-        (node) => {
+        (node: HTMLElement | null) => {
             if (!node) {
                 setActiveItemVisible(false)
                 return
@@ -171,7 +171,11 @@ const Item = styled.div`
     }
 `
 
-const ActiveItemBackground = styled.div`
+const ActiveItemBackground = styled.div<{
+    $left: number
+    $visible?: boolean
+    $transition?: boolean
+}>`
     position: absolute;
 
     background-color: ${(p) => p.theme.navbar.activeBackgroundColor};
@@ -192,5 +196,3 @@ const ActiveItemBackground = styled.div`
 
     border-radius: 50px;
 `
-
-export default Navbar
