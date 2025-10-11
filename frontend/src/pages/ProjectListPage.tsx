@@ -4,7 +4,6 @@ import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
-import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import ErrorProjectList from "@components/errors/ErrorProjectList"
 import ProjectName from "@components/project/ProjectName"
@@ -19,6 +18,7 @@ import {
 
 import HTML5toTouch from "@utils/html5ToTouch"
 import { getPageFromURL } from "@utils/pagination"
+import useModal, { Portal } from "@utils/useModal"
 import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -30,7 +30,7 @@ import { useTranslation } from "react-i18next"
 const ProjectListPage = () => {
     const { t } = useTranslation("translation")
 
-    const [isCreateOpen, setIsCreateOpen] = useState<boolean>(false)
+    const modal = useModal()
 
     const {
         data,
@@ -101,7 +101,7 @@ const ProjectListPage = () => {
                 {isPending || (
                     <PlusBox
                         onClick={() => {
-                            setIsCreateOpen(true)
+                            modal.openModal()
                         }}>
                         <FeatherIcon icon="plus" />
                     </PlusBox>
@@ -139,7 +139,7 @@ const ProjectListPage = () => {
             {isPending || (
                 <ProjectCreateButton
                     onClick={() => {
-                        setIsCreateOpen(true)
+                        modal.openModal()
                     }}>
                     <FeatherIcon icon="plus-circle" />
                     <ProjectCreateText>
@@ -147,14 +147,9 @@ const ProjectListPage = () => {
                     </ProjectCreateText>
                 </ProjectCreateButton>
             )}
-            {isCreateOpen && (
-                <ModalWindow
-                    afterClose={() => {
-                        setIsCreateOpen(false)
-                    }}>
-                    <ProjectEdit />
-                </ModalWindow>
-            )}
+            <Portal modal={modal}>
+                <ProjectEdit />
+            </Portal>
         </>
     )
 }

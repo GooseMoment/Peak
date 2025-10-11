@@ -7,13 +7,13 @@ import Button, { ButtonGroup } from "@components/common/Button"
 import Input from "@components/common/Input"
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import MildButton from "@components/common/MildButton"
-import ModalWindow from "@components/common/ModalWindow"
 import ColorEdit from "@components/project/edit/ColorEdit"
 import ProfileImg from "@components/settings/ProfileImg"
 import Section, { Name, Value, ValueError } from "@components/settings/Section"
 
 import { type User, getMe, patchUser } from "@api/users.api"
 
+import useModal, { Portal } from "@utils/useModal"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -58,7 +58,7 @@ const Profile = () => {
         return userSelectedColor
     }, [user, userSelectedColor])
 
-    const [paletteOpen, setPaletteOpen] = useState(false)
+    const modal = useModal()
 
     const mutation = useMutation({
         mutationFn: (data: Partial<User>) => {
@@ -80,7 +80,7 @@ const Profile = () => {
 
     const onClickOpenPalette = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
-        setPaletteOpen(true)
+        modal.openModal()
     }
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -176,11 +176,9 @@ const Profile = () => {
                             value={headerColor.color || ""}
                         />
                     </Value>
-                    {paletteOpen && (
-                        <ModalWindow afterClose={() => setPaletteOpen(false)}>
-                            <ColorEdit setColor={setUserSelectedColor} />
-                        </ModalWindow>
-                    )}
+                    <Portal modal={modal}>
+                        <ColorEdit setColor={setUserSelectedColor} />
+                    </Portal>
                 </Section>
                 <Section>
                     <ButtonGroup $justifyContent="right">

@@ -6,7 +6,6 @@ import styled, { useTheme } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
-import ModalWindow from "@components/common/ModalWindow"
 import PageTitle from "@components/common/PageTitle"
 import DrawerBlock from "@components/drawers/DrawerBlock"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
@@ -29,6 +28,7 @@ import { type Project, deleteProject, getProject } from "@api/projects.api"
 
 import HTML5toTouch from "@utils/html5ToTouch"
 import { getPageFromURL } from "@utils/pagination"
+import useModal, { Portal } from "@utils/useModal"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
@@ -50,10 +50,11 @@ const ProjectPage = () => {
     const [tempDrawerOrder, setTempDrawerOrder] = useState<Drawer[]>([])
 
     const [ordering, setOrdering] = useState("order")
-    const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
     const [isAlertOpen, setIsAlertOpen] = useState(false)
-    const [isProjectEditOpen, setIsProjectEditOpen] = useState(false)
     const [isSortMenuMobileOpen, setSortMenuMobileOpen] = useState(false)
+
+    const drawerModal = useModal()
+    const projectModal = useModal()
 
     const { t } = useTranslation("translation")
 
@@ -160,7 +161,7 @@ const ProjectPage = () => {
     })
 
     const handleEdit = () => {
-        setIsProjectEditOpen(true)
+        projectModal.openModal()
     }
 
     const handleAlert = () => {
@@ -206,7 +207,7 @@ const ProjectPage = () => {
                 <Icons>
                     <FeatherIcon
                         icon="plus"
-                        onClick={() => setIsDrawerCreateOpen(true)}
+                        onClick={() => drawerModal.openModal()}
                     />
                     {
                         <>
@@ -285,22 +286,12 @@ const ProjectPage = () => {
                     setOrdering={setOrdering}
                 />
             )}
-            {isDrawerCreateOpen && (
-                <ModalWindow
-                    afterClose={() => {
-                        setIsDrawerCreateOpen(false)
-                    }}>
-                    <DrawerEdit />
-                </ModalWindow>
-            )}
-            {isProjectEditOpen && (
-                <ModalWindow
-                    afterClose={() => {
-                        setIsProjectEditOpen(false)
-                    }}>
-                    <ProjectEdit project={project} />
-                </ModalWindow>
-            )}
+            <Portal modal={drawerModal}>
+                <DrawerEdit />
+            </Portal>
+            <Portal modal={projectModal}>
+                <ProjectEdit project={project} />
+            </Portal>
         </>
     )
 }

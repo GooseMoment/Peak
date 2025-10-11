@@ -148,13 +148,17 @@ export function StatBox({
     stat,
     isSelected = false,
     setSelectedUser,
-    mine = false,
+    mine,
+    from = "following",
     demo = false,
 }: {
     stat: Stat
     isSelected?: boolean
-    setSelectedUser?: Dispatch<SetStateAction<User["username"]>>
+    setSelectedUser?: (
+        username: string,
+    ) => void | Dispatch<SetStateAction<User["username"]>>
     mine?: boolean
+    from?: string
     demo?: boolean
 }) {
     const { isDesktop } = useScreenType()
@@ -165,7 +169,7 @@ export function StatBox({
             $mine={mine}
             $isSelected={isSelected}
             $borderColor={color}
-            to={`/app/social/daily/@${stat.username}/${stat.date}`}
+            to={`/app/social/daily/@${stat.username}/${stat.date}?from=${from}`}
             draggable={false}
             onClick={(e) => {
                 if (setSelectedUser && (demo || isDesktop)) {
