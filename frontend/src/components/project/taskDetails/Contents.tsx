@@ -93,7 +93,12 @@ const Contents = ({
                           name: "completed" as const,
                           icon: <FeatherIcon icon="check-circle" />,
                           display: formatted_completed_date,
-                          component: <TaskDetailCompleted setFunc={setFunc} />,
+                          component: (
+                              <TaskDetailCompleted
+                                  completedAt={task.completed_at}
+                                  setFunc={setFunc}
+                              />
+                          ),
                       },
                   ]
                 : []),
@@ -200,6 +205,7 @@ const Contents = ({
             displayReminder,
             formatted_assigned_date,
             formatted_due_datetime,
+            formatted_completed_date,
             priorities,
             setFunc,
             setNewColor,
@@ -238,7 +244,11 @@ const Contents = ({
                 <Detail
                     title={content ? t(`${content}.title`) : t("none")}
                     onClose={closeComponent}
-                    special={content === "assigned" || content === "due"}>
+                    special={
+                        content === "completed" ||
+                        content === "assigned" ||
+                        content === "due"
+                    }>
                     {component}
                 </Detail>
             </Portal>

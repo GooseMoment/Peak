@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import styled from "styled-components"
 
@@ -12,39 +12,41 @@ import { ifMobile } from "@utils/useScreenType"
 import { DateTime } from "luxon"
 
 const TaskDetailCompleted = ({
+    completedAt,
     setFunc,
 }: {
+    completedAt: string | null | undefined
     setFunc: (diff: Partial<MinimalTask>) => void
 }) => {
     const tz = useClientTimezone()
 
-    const today = DateTime.now().setZone(tz)
-
-    const [selectedDate, setSelectedDate] = useState<string | null>(
-        today.toISODate(),
+    const [selectedDate, setSelectedDate] = useState<DateTime | null>(
+        completedAt
+            ? DateTime.fromISO(completedAt, {
+                  zone: tz,
+              })
+            : null,
     )
 
-    useEffect(() => {
-        if (selectedDate === null) return
+    const handleSelectedDateChange = (date: DateTime | null) => {
+        setSelectedDate(date)
 
+        if (!date || !date.isValid) {
+            setFunc({ completed_at: null })
+            return
+        }
         setFunc({
-            completed_at: DateTime.fromISO(selectedDate, {
-                zone: tz,
-            }).toISODate(),
+            completed_at: date.toISODate(),
         })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedDate, tz])
+    }
 
     return (
         <FlexCenterBox>
             <CalendarWrapper>
                 <CommonCalendar
-                    isRangeSelectMode={false}
-                    selectedStartDate={selectedDate}
-                    setSelectedStartDate={setSelectedDate}
-                    selectedEndDate={undefined}
-                    setSelectedEndDate={undefined}
-                    handleClose={undefined}
+                    selectedDate={selectedDate}
+                    setSelectedDate={handleSelectedDateChange}
+                    isModal
                 />
             </CalendarWrapper>
         </FlexCenterBox>

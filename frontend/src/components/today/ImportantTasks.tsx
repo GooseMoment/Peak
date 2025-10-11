@@ -102,7 +102,6 @@ const ImportantTasks = () => {
     useEffect(() => {
         for (const name of filterContents) {
             if (!queries[name].isEmpty) {
-                // eslint-disable-next-line react-hooks/set-state-in-effect -- set the first non-empty filter
                 setFilter(name)
                 break
             }
