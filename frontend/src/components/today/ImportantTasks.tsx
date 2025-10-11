@@ -47,7 +47,7 @@ const useTaskQuery = (
         refetch,
     } = useInfiniteQuery({
         queryKey: ["today", filter],
-        queryFn: (pages) => fetchFunction(pages.pageParam),
+        queryFn: (pages) => fetchFunction(pages?.pageParam),
         initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
@@ -184,7 +184,7 @@ const ImportantTasks = () => {
                         {selectedQuery.isLoading && (
                             <SkeletonDueTasks taskCount={4} />
                         )}
-                        {selectedQuery.tasks?.pages.map((group) =>
+                        {selectedQuery.tasks?.pages?.map((group) =>
                             group.results.length === 0 ? (
                                 <NoTasksMessage key={group.results.length}>
                                     {t(`today.no_tasks_${filter}`)}
@@ -215,7 +215,7 @@ const ImportantTasks = () => {
                     {hasNextPage ? (
                         <MoreText onClick={() => selectedQuery.fetchNextPage()}>
                             {t("common.load_more") + " "}(
-                            {selectedQuery.tasks?.pages[0].results.length})
+                            {selectedQuery.tasks?.pages[0]?.results.length})
                         </MoreText>
                     ) : null}
                 </>

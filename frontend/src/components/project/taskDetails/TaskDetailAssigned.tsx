@@ -98,21 +98,19 @@ const TaskDetailAssigned = ({
 
     return addComponent.map((comp, i) => (
         <FlexCenterBox key={comp.name}>
-            <FlexCenterBox>
-                <IndexBox
-                    $start={i === 0}
-                    $end={i === 1}
-                    onClick={() => handleAdditionalComp(comp.name)}>
-                    <EmptyBlock />
-                    <Box>
-                        <FeatherIcon icon={comp.icon} />
-                        {comp.display}
-                    </Box>
-                    <CollapseButton $collapsed={isAdditionalComp === comp.name}>
-                        <FeatherIcon icon="chevron-down" />
-                    </CollapseButton>
-                </IndexBox>
-            </FlexCenterBox>
+            <IndexBox
+                $start={i === 0}
+                $end={i === 1}
+                onClick={() => handleAdditionalComp(comp.name)}>
+                <EmptyBlock />
+                <Box>
+                    <FeatherIcon icon={comp.icon} />
+                    {comp.display}
+                </Box>
+                <CollapseButton $collapsed={isAdditionalComp === comp.name}>
+                    <FeatherIcon icon="chevron-down" />
+                </CollapseButton>
+            </IndexBox>
             {isAdditionalComp === comp.name && comp.component}
             {i !== 1 && <CLine />}
         </FlexCenterBox>
