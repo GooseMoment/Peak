@@ -7,19 +7,7 @@ import { isAxiosError } from "axios"
 
 const TwoFactorAuthTokenKey = "two_factor_auth_token"
 
-export type SignUpError =
-    | "NETWORK_ERROR"
-    | "USER_ALREADY_AUTHENTICATED"
-    | "REQUIRED_FIELD_MISSING"
-    | "EMAIL_INVALID"
-    | "USERNAME_INVALID_LENGTH"
-    | "USERNAME_INVALID_FORMAT"
-    | "USERNAME_DUPLICATE"
-    | "PASSWORD_INVALID"
-    | "INTERNAL_ERROR"
-    | "EMAIL_NOT_SENT"
-    | "UNKNOWN_ERROR"
-    | "ENTER_6_DIGIT"
+export type SignInErrorCode = "ENTER_6_DIGIT"
 
 // Types based on backend models and API responses
 export interface SignInResponse {
@@ -78,7 +66,7 @@ export interface ApiError {
         }
     }
     code?: string
-    message?: SignUpError
+    message?: SignInErrorCode
 }
 
 export const signIn = async (
@@ -165,32 +153,53 @@ export const deleteTOTP = async (): Promise<TOTPDeleteResponse> => {
     return res.data
 }
 
+export type SignUpErrorCode =
+    | "NETWORK_ERROR"
+    | "USER_ALREADY_AUTHENTICATED"
+    | "REQUIRED_FIELD_MISSING"
+    | "EMAIL_INVALID"
+    | "USERNAME_INVALID_LENGTH"
+    | "USERNAME_INVALID_FORMAT"
+    | "USERNAME_DUPLICATE"
+    | "PASSWORD_INVALID"
+    | "INTERNAL_ERROR"
+    | "EMAIL_NOT_SENT"
+    | "UNKNOWN_ERROR"
+
+interface SignUpErrorResponse {
+    code: SignUpErrorCode
+    message: string
+}
+export class SignUpError extends Error {
+    code: SignUpErrorCode
+
+    constructor(code: SignUpErrorCode, message?: string) {
+        super(message)
+        this.code = code
+    }
+}
+
 export const signUp = async (
     email: string,
     password: string,
     username: string,
 ) => {
     try {
-        const res = await client.post("auth/sign_up/", {
+        await client.post<null>("auth/sign_up/", {
             email,
             password,
             username,
         })
-        return res
-    } catch (err: unknown) {
-        const error = err as ApiError
-        let code = ""
-        if (error && error.code === "ERR_NETWORK") {
-            code = "SIGNUP_NETWORK_ERROR"
-        } else if (error && error.response && error.response.status === 400) {
-            code = error.response.data?.code || "SIGNUP_BAD_REQUEST"
-        } else if (error && error.response && error.response.status === 500) {
-            code = error?.response?.data?.code || "SIGNUP_INTERNAL_ERROR"
-        } else {
-            code = "SIGNUP_UNKNOWN_ERROR"
+    } catch (err) {
+        if (!isAxiosError<SignUpErrorResponse>(err)) {
+            throw new SignUpError("UNKNOWN_ERROR", "Unknown error occurred")
         }
 
-        throw new Error(code)
+        if (!err.response) {
+            throw new SignUpError("NETWORK_ERROR", "Network error occurred")
+        }
+
+        throw new SignUpError(err.response.data.code, err.response.data.message)
     }
 }
 

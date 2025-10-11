@@ -12,6 +12,7 @@ import Form from "@components/sign/Form"
 
 import {
     ApiError,
+    SignUpError,
     authTOTP,
     patchPasswordWithPasswordRecoveryToken,
     requestPasswordRecoveryToken,
@@ -242,10 +243,8 @@ export const SignUpForm = () => {
             await signUp(email, password, username)
             navigate("/sign/up-complete")
         } catch (err) {
-            const error = err as ApiError
-            if (error.message !== "ENTER_6_DIGIT") {
-                toast.error(t(`sign_up_errors.${error.message!}`))
-            }
+            const error = err as SignUpError
+            toast.error(t(`sign_up_errors.${error.code}`))
             setIsLoading(false)
             return
         }

@@ -361,7 +361,7 @@
             "EMAIL_INVALID": "Please enter a valid email.",
             "USERNAME_INVALID_LENGTH": "Length of the username should be between 4 and 15.",
             "USERNAME_INVALID_FORMAT": "Username should only contain alphabets, underscore and digits.",
-            "USERNAME_DUPLICATE": "An username you entered already exists.",
+            "USERNAME_DUPLICATE": "The username you entered already exists.",
             "PASSWORD_INVALID": "Password should be 8 or more letters.",
             "INTERNAL_ERROR": "Something's wrong with our service. Please try again.",
             "EMAIL_NOT_SENT": "The server couldn't send a mail. Please try again after few minutes.",
