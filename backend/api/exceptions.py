@@ -3,13 +3,13 @@ from rest_framework.exceptions import APIException as BaseAPIException
 
 
 class APIException(BaseAPIException):
-    def __init__(self, detail=None, code=None):
+    def __init__(self, detail=None, code=None, **kwargs):
         if detail is None:
             detail = self.default_detail
         if code is None:
             code = self.default_code
 
-        self.detail = {"detail": detail, "code": code}
+        self.detail = {"detail": detail, "code": code, **kwargs}
 
 
 class ClientTimezoneMissing(APIException):
