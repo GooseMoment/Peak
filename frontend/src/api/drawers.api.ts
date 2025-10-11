@@ -16,7 +16,7 @@ export interface Drawer extends Base {
 export interface DrawerCreate {
     name: string
     project: string
-    privacy: Privacy
+    privacy: Privacy | null
 }
 
 export const DrawerNameDuplicate = "DRAWER_NAME_DUPLICATE"

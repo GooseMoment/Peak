@@ -8,12 +8,17 @@ export interface Project extends Base {
     name: string
     user: User
     order: number
-    privacy: Privacy
+    privacy: Privacy | null
     color: PaletteColorName
     type: ProjectType
     completed_task_count: number
     uncompleted_task_count: number
 }
+
+export type ProjectCreateInput = Pick<
+    Project,
+    "name" | "color" | "privacy" | "type"
+>
 
 export type ProjectType = "inbox" | "regular" | "goal"
 

@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react"
+import { useState } from "react"
 
 import styled, { css } from "styled-components"
 
@@ -97,25 +97,23 @@ const TaskDetailAssigned = ({
     ]
 
     return addComponent.map((comp, i) => (
-        <Fragment key={comp.name}>
-            <FlexCenterBox>
-                <IndexBox
-                    $start={i === 0}
-                    $end={i === 1}
-                    onClick={() => handleAdditionalComp(comp.name)}>
-                    <EmptyBlock />
-                    <Box>
-                        <FeatherIcon icon={comp.icon} />
-                        {comp.display}
-                    </Box>
-                    <CollapseButton $collapsed={isAdditionalComp === comp.name}>
-                        <FeatherIcon icon="chevron-down" />
-                    </CollapseButton>
-                </IndexBox>
-            </FlexCenterBox>
+        <FlexCenterBox key={comp.name}>
+            <IndexBox
+                $start={i === 0}
+                $end={i === 1}
+                onClick={() => handleAdditionalComp(comp.name)}>
+                <EmptyBlock />
+                <Box>
+                    <FeatherIcon icon={comp.icon} />
+                    {comp.display}
+                </Box>
+                <CollapseButton $collapsed={isAdditionalComp === comp.name}>
+                    <FeatherIcon icon="chevron-down" />
+                </CollapseButton>
+            </IndexBox>
             {isAdditionalComp === comp.name && comp.component}
             {i !== 1 && <CLine />}
-        </Fragment>
+        </FlexCenterBox>
     ))
 }
 

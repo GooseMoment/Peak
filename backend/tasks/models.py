@@ -43,6 +43,11 @@ class Task(Base, PrivacyMixin):
     reminders: "RelatedManager[TaskReminder]"
     reactions: "RelatedManager[TaskReaction]"
 
+    def save(self, *args, **kwargs):
+        if self.privacy is None:
+            self.privacy = self.drawer.privacy
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:
         return f"{self.name} by {self.user}"
 

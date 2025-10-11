@@ -1,4 +1,5 @@
 export type TaskContent =
+    | "completed"
     | "assigned"
     | "due"
     | "reminder"

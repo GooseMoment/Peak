@@ -3,7 +3,6 @@ import { useCallback, useMemo, useState } from "react"
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import Button, { ButtonGroup } from "@components/common/Button"
 import PageTitle from "@components/common/PageTitle"
 import ErrorProjectList from "@components/errors/ErrorProjectList"
 import ProjectName from "@components/project/ProjectName"
@@ -23,6 +22,7 @@ import { ifMobile } from "@utils/useScreenType"
 
 import queryClient from "@queries/queryClient"
 
+import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
 import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
@@ -32,21 +32,13 @@ const ProjectListPage = () => {
 
     const modal = useModal()
 
-    const {
-        data,
-        isPending,
-        isError,
-        refetch,
-        fetchNextPage,
-        isFetchingNextPage,
-    } = useInfiniteQuery({
-        queryKey: ["projects"],
-        queryFn: (context) => getProjectList(context.pageParam),
-        initialPageParam: "1",
-        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
-    })
-
-    const hasNextPage = data?.pages[data?.pages?.length - 1].next !== null
+    const { data, isPending, isError, refetch, fetchNextPage, hasNextPage } =
+        useInfiniteQuery({
+            queryKey: ["projects"],
+            queryFn: (context) => getProjectList(context.pageParam),
+            initialPageParam: "1",
+            getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
+        })
 
     const projects = useMemo(() => {
         if (!data) return []
@@ -123,18 +115,12 @@ const ProjectListPage = () => {
                 ))}
             </DndProvider>
 
-            {hasNextPage ? (
-                <ButtonGroup $justifyContent="center" $margin="1em">
-                    <MoreButton
-                        disabled={isFetchingNextPage}
-                        loading={isFetchingNextPage}
-                        onClick={() => fetchNextPage()}>
-                        {isPending
-                            ? t("common.loading")
-                            : t("common.load_more")}
-                    </MoreButton>
-                </ButtonGroup>
-            ) : null}
+            <StyledImpressionArea
+                onImpressionStart={() => {
+                    if (hasNextPage) fetchNextPage()
+                }}
+                timeThreshold={200}
+            />
 
             {isPending || (
                 <ProjectCreateButton
@@ -171,11 +157,6 @@ const PlusBox = styled.div`
     }
 `
 
-const MoreButton = styled(Button)`
-    max-width: 25em;
-    width: 80vw;
-`
-
 const ProjectCreateButton = styled.div`
     display: flex;
     align-items: center;
@@ -193,6 +174,12 @@ const ProjectCreateButton = styled.div`
         padding: 0.5em 0em;
         margin-left: 0em;
     }
+`
+
+const StyledImpressionArea = styled(ImpressionArea)`
+    display: block;
+    min-height: 24px;
+    min-width: 1px;
 `
 
 const ProjectCreateText = styled.div`

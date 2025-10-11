@@ -47,7 +47,7 @@ const useTaskQuery = (
         refetch,
     } = useInfiniteQuery({
         queryKey: ["today", filter],
-        queryFn: (pages) => fetchFunction(pages.pageParam),
+        queryFn: (pages) => fetchFunction(pages?.pageParam),
         initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
@@ -102,17 +102,13 @@ const ImportantTasks = () => {
     useEffect(() => {
         for (const name of filterContents) {
             if (!queries[name].isEmpty) {
-                // eslint-disable-next-line react-hooks/set-state-in-effect -- set the first non-empty filter
                 setFilter(name)
                 break
             }
         }
-    }, [
-        todayDueQuery.tasks,
-        overDueQuery.tasks,
-        pastAssignedQuery.tasks,
-        queries,
-    ])
+        // queries 객체 자체를 의존성에 포함하면 무한 루프가 발생하므로 .tasks 속성만 포함
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [todayDueQuery.tasks, overDueQuery.tasks, pastAssignedQuery.tasks])
 
     const patchMutation = useMutation({
         mutationFn: ({
@@ -152,16 +148,9 @@ const ImportantTasks = () => {
         toast.success(t("today.due_change_tomorrow_success"))
     }
 
-    // 모든 tasks가 비어 있는지 검사
-    if (
-        todayDueQuery.isEmpty &&
+    return todayDueQuery.isEmpty &&
         overDueQuery.isEmpty &&
-        pastAssignedQuery.isEmpty
-    ) {
-        return null
-    }
-
-    return (
+        pastAssignedQuery.isEmpty ? null : (
         <ImportantTasksBlock>
             <ImportantTasksTitle>
                 <FeatherIcon icon="alert-circle" />
@@ -226,7 +215,7 @@ const ImportantTasks = () => {
                     {hasNextPage ? (
                         <MoreText onClick={() => selectedQuery.fetchNextPage()}>
                             {t("common.load_more") + " "}(
-                            {selectedQuery.tasks?.pages[0].results.length})
+                            {selectedQuery.tasks?.pages[0]?.results.length})
                         </MoreText>
                     ) : null}
                 </>
@@ -318,8 +307,8 @@ const FilterButton = styled.div<{ $isActive: boolean }>`
         props.$isActive &&
         css`
             color: ${(p) => p.theme.white};
-            border: 1.5px solid ${(p) => p.theme.goose};
-            background-color: ${(p) => p.theme.goose};
+            border: 1.5px solid ${(p) => p.theme.textColor};
+            background-color: ${(p) => p.theme.textColor};
         `}
 `
 

@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import { Privacy } from "@api/common"
+import type { Privacy } from "@api/common"
 
 import FeatherIcon from "feather-icons-react"
 
@@ -9,11 +9,11 @@ const PrivacyIcon = ({
     color,
     isProject = false,
 }: {
-    privacy: Privacy
+    privacy: Privacy | null
     color: string
     isProject?: boolean
 }) => {
-    if (privacy === "public") {
+    if (privacy === "public" || privacy === null) {
         return null
     }
 

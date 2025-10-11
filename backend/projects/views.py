@@ -53,7 +53,7 @@ class ProjectList(
         try:
             return self.create(request, *args, **kwargs)
         except ValidationError as e:
-            if "unique constraint" in str(e):
+            if "unique" in str(e):
                 raise ProjectNameDuplicate
         except Exception:
             raise UnknownError

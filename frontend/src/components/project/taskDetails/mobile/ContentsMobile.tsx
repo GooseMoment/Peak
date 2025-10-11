@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction, useMemo } from "react"
+import { Dispatch, SetStateAction, useCallback, useMemo } from "react"
 
 import styled, { css } from "styled-components"
 
 import TaskDetailAssigned from "@components/project/taskDetails/TaskDetailAssigned"
+import TaskDetailCompleted from "@components/project/taskDetails/TaskDetailCompleted"
 import TaskDetailDrawer from "@components/project/taskDetails/TaskDetailDrawer"
 import TaskDetailDue from "@components/project/taskDetails/TaskDetailDue"
 import TaskDetailMemo from "@components/project/taskDetails/TaskDetailMemo"
@@ -45,100 +46,137 @@ const ContentsMobile = ({
         }
     }
 
-    const { formatted_due_datetime, formatted_assigned_date } =
-        useTaskDateDisplay(task)
+    const {
+        formatted_due_datetime,
+        formatted_assigned_date,
+        formatted_completed_date,
+    } = useTaskDateDisplay(task)
 
-    const onClose = () => {
+    const onClose = useCallback(() => {
         setActiveContent(null)
-    }
+    }, [setActiveContent])
 
-    const items = [
-        {
-            id: 1,
-            name: "assigned" as const,
-            icon: <FeatherIcon icon="calendar" />,
-            display: task.assigned_at ? formatted_assigned_date : t("none"),
-            component: (
-                <TaskDetailAssigned
-                    assignedAt={task.assigned_at}
-                    setFunc={setFunc}
-                />
-            ),
-        },
-        {
-            id: 2,
-            name: "due" as const,
-            icon: <Hourglass />,
-            display:
-                task.due_type && (task.due_date || task.due_datetime)
-                    ? formatted_due_datetime
-                    : t("none"),
-            component: <TaskDetailDue task={task} setFunc={setFunc} />,
-        },
-        {
-            id: 3,
-            name: "reminder" as const,
-            icon: <AlarmClock />,
-            display:
-                task?.reminders && task.reminders?.length !== 0 ? (
-                    <RemindersBox data-name="reminder">
-                        {task.reminders.map((reminder, i) => (
-                            <ReminderBlock key={i} data-name="reminder">
-                                {displayReminder[reminder.delta]}
-                            </ReminderBlock>
-                        ))}
-                    </RemindersBox>
-                ) : task.due_type ? (
-                    <EmptyReminderBox data-name="reminder">+</EmptyReminderBox>
-                ) : (
-                    <EmptyReminderBox
-                        data-name="none"
-                        onClick={() => {
-                            toast.error(
-                                t("reminder.reminder_before_due_date"),
-                                { toastId: "reminder_before_due_date" },
-                            )
-                        }}>
-                        -
-                    </EmptyReminderBox>
+    const items = useMemo(
+        () => [
+            ...(task.completed_at
+                ? [
+                      {
+                          id: 0,
+                          name: "completed" as const,
+                          icon: <FeatherIcon icon="check-circle" />,
+                          display: formatted_completed_date,
+                          component: (
+                              <TaskDetailCompleted
+                                  completedAt={task.completed_at}
+                                  setFunc={setFunc}
+                              />
+                          ),
+                      },
+                  ]
+                : []),
+            {
+                id: 1,
+                name: "assigned" as const,
+                icon: <FeatherIcon icon="calendar" />,
+                display: task.assigned_at ? formatted_assigned_date : t("none"),
+                component: (
+                    <TaskDetailAssigned
+                        assignedAt={task.assigned_at}
+                        setFunc={setFunc}
+                    />
                 ),
-            component: <TaskDetailReminder task={task} setFunc={setFunc} />,
-        },
-        {
-            id: 4,
-            name: "priority" as const,
-            icon: <FeatherIcon icon="alert-circle" />,
-            display: priorities[task.priority],
-            component: (
-                <TaskDetailPriority setFunc={setFunc} onClose={onClose} />
-            ),
-        },
-        {
-            id: 5,
-            name: "drawer" as const,
-            icon: <FeatherIcon icon="archive" />,
-            display:
-                task.drawer.project.type === "inbox"
-                    ? `${task.drawer.project.name}`
-                    : task.drawer.name
-                      ? `${task.drawer.project.name} / ${task.drawer.name}`
-                      : t("none"),
-            component: <TaskDetailDrawer setFunc={setFunc} onClose={onClose} />,
-        },
-        {
-            id: 6,
-            name: "memo" as const,
-            icon: <FeatherIcon icon="edit" />,
-            display: task.memo ? task.memo : t("none"),
-            component: (
-                <TaskDetailMemo
-                    previousMemo={task.memo}
-                    setFunc={setFunc}
-                    onClose={onClose}
-                />
-            ),
-        },
-    ]
+            },
+            {
+                id: 2,
+                name: "due" as const,
+                icon: <Hourglass />,
+                display:
+                    task.due_type && (task.due_date || task.due_datetime)
+                        ? formatted_due_datetime
+                        : t("none"),
+                component: <TaskDetailDue task={task} setFunc={setFunc} />,
+            },
+            {
+                id: 3,
+                name: "reminder" as const,
+                icon: <AlarmClock />,
+                display:
+                    task.reminders && task.reminders.length !== 0 ? (
+                        <RemindersBox data-name="reminder">
+                            {task.reminders.map((reminder, i) => (
+                                <ReminderBlock key={i} data-name="reminder">
+                                    {displayReminder[reminder.delta]}
+                                </ReminderBlock>
+                            ))}
+                        </RemindersBox>
+                    ) : task.due_type ? (
+                        <EmptyReminderBox data-name="reminder">
+                            +
+                        </EmptyReminderBox>
+                    ) : (
+                        <EmptyReminderBox
+                            data-name="none"
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                toast.error(
+                                    t("reminder.reminder_before_due_date"),
+                                    { toastId: "reminder_before_due_date" },
+                                )
+                            }}>
+                            -
+                        </EmptyReminderBox>
+                    ),
+                component: <TaskDetailReminder task={task} setFunc={setFunc} />,
+            },
+            {
+                id: 4,
+                name: "priority" as const,
+                icon: <FeatherIcon icon="alert-circle" />,
+                display: priorities[task.priority],
+                component: (
+                    <TaskDetailPriority setFunc={setFunc} onClose={onClose} />
+                ),
+            },
+            {
+                id: 5,
+                name: "drawer" as const,
+                icon: <FeatherIcon icon="archive" />,
+                display:
+                    task.drawer.project.type === "inbox"
+                        ? `${task.drawer.project.name}`
+                        : task.drawer.name
+                          ? `${task.drawer.project.name} / ${task.drawer.name}`
+                          : t("none"),
+                component: (
+                    <TaskDetailDrawer setFunc={setFunc} onClose={onClose} />
+                ),
+            },
+            {
+                id: 6,
+                name: "memo" as const,
+                icon: <FeatherIcon icon="edit" />,
+                display: task.memo ? task.memo : t("none"),
+                component: (
+                    <TaskDetailMemo
+                        previousMemo={task.memo}
+                        setFunc={setFunc}
+                        onClose={onClose}
+                    />
+                ),
+            },
+        ],
+        [
+            onClose,
+            displayReminder,
+            formatted_assigned_date,
+            formatted_due_datetime,
+            formatted_completed_date,
+            priorities,
+            t,
+            task,
+            setFunc,
+        ],
+    )
 
     return (
         <ContentBlock>

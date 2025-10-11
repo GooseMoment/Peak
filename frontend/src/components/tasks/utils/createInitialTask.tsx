@@ -5,7 +5,7 @@ const createInitialTask = (drawer: Drawer): MinimalTask => {
     return {
         name: "",
         drawer: drawer,
-        privacy: "public" as const,
+        privacy: null,
         priority: 0,
         completed_at: null,
         assigned_at: null,

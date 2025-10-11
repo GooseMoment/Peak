@@ -33,22 +33,42 @@ const TimeDetail = ({
         task.due_type === "due_datetime" ? task.due_datetime : task.due_date
     const due_datetime = DateTime.fromISO(due, { zone: tz })
 
-    const [ampm, setAmpm] = useState<string>(ampms[0].name)
-    const [hour, setHour] = useState<number>(
-        task.due_type === "due_datetime" ? due_datetime.hour : 0,
-    )
-    const [min, setMin] = useState<number>(
+    const [ampm, setAmpm] = useState(() => {
+        if (task.due_type === "due_datetime" && !setting.time_as_24_hour) {
+            const hour = due_datetime.hour
+            return hour >= 12 ? ampms[1].name : ampms[0].name
+        }
+        return ampms[0].name
+    })
+    const [hour, setHour] = useState(() => {
+        if (task.due_type === "due_datetime") {
+            const baseHour = due_datetime.hour
+            return !setting.time_as_24_hour && baseHour > 12
+                ? baseHour - 12
+                : baseHour
+        }
+        return 0
+    })
+    const [min, setMin] = useState(
         task.due_type === "due_datetime" ? due_datetime.minute : 0,
     )
 
     const changeTime = () => {
-        const converted_hour =
-            !setting.time_as_24_hour && ampm === "pm" ? hour + 12 : hour
+        let converted_hour = hour
+
+        if (!setting.time_as_24_hour) {
+            if (ampm === "pm" && hour !== 12) {
+                converted_hour = hour + 12
+            } else if (ampm === "am" && hour === 12) {
+                converted_hour = 0
+            }
+        }
+
         const converted_datetime = due_datetime
             .set({ hour: converted_hour, minute: min })
             .toISO()
 
-        if (converted_datetime === null) return
+        if (!converted_datetime) return
 
         setFunc({
             due_type: "due_datetime",
@@ -82,7 +102,11 @@ const TimeDetail = ({
                 toast.error(t("acceptable_numbers", { max: 12 }), {
                     toastId: "handle_hour",
                 })
-                validInputValue = validInputValue % 12
+                validInputValue = (validInputValue % 12) + 1
+            }
+
+            if (validInputValue === 0) {
+                validInputValue = 12
             }
             setHour(validInputValue)
         }

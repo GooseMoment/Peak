@@ -111,6 +111,7 @@ const DrawerSettingLoadErrorBox = styled.div`
 
 const MoreButton = styled(Button)`
     width: 80%;
+    margin-bottom: 2.5rem;
 `
 
 export default TaskDetailDrawer

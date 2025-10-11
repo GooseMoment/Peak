@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
@@ -77,9 +77,12 @@ const TaskFormMobile = ({
         },
     })
 
-    const setFunc = (diff: Partial<MinimalTask>) => {
-        handleChange(diff)
-    }
+    const setFunc = useCallback(
+        (diff: Partial<MinimalTask>) => {
+            handleChange(diff)
+        },
+        [handleChange],
+    )
 
     const submit = async () => {
         if (newTask.name === undefined || newTask.name.trim() === "") {
