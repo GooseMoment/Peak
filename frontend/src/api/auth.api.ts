@@ -5,21 +5,45 @@ import { getClientSettings } from "@utils/clientSettings"
 
 import { isAxiosError } from "axios"
 
-const TwoFactorAuthTokenKey = "two_factor_auth_token"
+type BaseErrorCode = "NETWORK_ERROR" | "UNKNOWN_ERROR"
 
-export type SignInErrorCode = "ENTER_6_DIGIT"
+interface BaseErrorResponse<T extends string> {
+    code: T
+    message?: string
+}
 
-// Types based on backend models and API responses
-export interface SignInResponse {
-    token?: string
-    user?: {
-        username: string
-        email: string
+class AbstractError<T extends string> extends Error {
+    code: T
+
+    constructor(code: T, message?: string) {
+        super(message)
+        this.code = code
     }
-    two_factor_auth?: {
-        token: string
+
+    static fromAxiosUnknownError<T extends string>(
+        err: unknown,
+    ): AbstractError<T> {
+        if (isAxiosError<BaseErrorResponse<T>>(err)) {
+            if (!err.response) {
+                return new this<T>(
+                    "NETWORK_ERROR" as T,
+                    "Network error occurred",
+                )
+            }
+
+            const errorData = err.response.data
+            if (!errorData || !errorData.code) {
+                return new this<T>("UNKNOWN_ERROR" as T, errorData?.message)
+            }
+
+            return new this<T>(errorData.code as T, errorData.message)
+        }
+
+        return new this<T>("UNKNOWN_ERROR" as T, "Unknown error occurred")
     }
 }
+
+const TwoFactorAuthTokenKey = "two_factor_auth_token"
 
 export interface TOTPRegisterResponse {
     enabled: boolean
@@ -69,29 +93,56 @@ export interface ApiError {
     message?: SignInErrorCode
 }
 
+export type SignInErrorCode =
+    | BaseErrorCode
+    | "CREDENTIAL_INVALID"
+    | "MAIL_NOT_VERIFIED"
+
+interface SignInResponseWithout2FA {
+    token: string
+    user: {
+        username: string
+        email: string
+    }
+}
+
+interface SignInResponseWith2FA {
+    two_factor_auth: {
+        token: string
+    }
+}
+
+type SignInResponse = SignInResponseWithout2FA | SignInResponseWith2FA
+
+export class SignInError extends AbstractError<SignInErrorCode> {}
+
 export const signIn = async (
     email: string,
     password: string,
 ): Promise<boolean> => {
-    const res = await client.post<SignInResponse>("auth/sign_in/", {
-        email: email,
-        password: password,
-    })
+    try {
+        const res = await client.post<SignInResponse>("auth/sign_in/", {
+            email,
+            password,
+        })
 
-    if (res.data.two_factor_auth !== undefined) {
-        sessionStorage.setItem(
-            TwoFactorAuthTokenKey,
-            res.data.two_factor_auth.token,
-        )
-        return true // two-factor authentication required
+        if ("two_factor_auth" in res.data) {
+            sessionStorage.setItem(
+                TwoFactorAuthTokenKey,
+                res.data.two_factor_auth.token,
+            )
+            return true // two-factor authentication required
+        }
+
+        if ("token" in res.data && "user" in res.data) {
+            setToken(res.data.token)
+            setCurrentUsername(res.data.user.username)
+        }
+
+        return false // signing in completed
+    } catch (err) {
+        throw SignInError.fromAxiosUnknownError<SignInErrorCode>(err)
     }
-
-    if (res.data.token && res.data.user) {
-        setToken(res.data.token)
-        setCurrentUsername(res.data.user.username)
-    }
-
-    return false // signing in completed
 }
 
 export const authTOTP = async (code: string): Promise<boolean> => {
@@ -154,7 +205,7 @@ export const deleteTOTP = async (): Promise<TOTPDeleteResponse> => {
 }
 
 export type SignUpErrorCode =
-    | "NETWORK_ERROR"
+    | BaseErrorCode
     | "USER_ALREADY_AUTHENTICATED"
     | "REQUIRED_FIELD_MISSING"
     | "EMAIL_INVALID"
@@ -164,20 +215,8 @@ export type SignUpErrorCode =
     | "PASSWORD_INVALID"
     | "INTERNAL_ERROR"
     | "EMAIL_NOT_SENT"
-    | "UNKNOWN_ERROR"
 
-interface SignUpErrorResponse {
-    code: SignUpErrorCode
-    message: string
-}
-export class SignUpError extends Error {
-    code: SignUpErrorCode
-
-    constructor(code: SignUpErrorCode, message?: string) {
-        super(message)
-        this.code = code
-    }
-}
+export class SignUpError extends AbstractError<SignUpErrorCode> {}
 
 export const signUp = async (
     email: string,
@@ -191,20 +230,7 @@ export const signUp = async (
             username,
         })
     } catch (err) {
-        if (!isAxiosError<SignUpErrorResponse>(err)) {
-            throw new SignUpError("UNKNOWN_ERROR", "Unknown error occurred")
-        }
-
-        if (!err.response) {
-            throw new SignUpError("NETWORK_ERROR", "Network error occurred")
-        }
-
-        const errorData = err.response.data
-        if (!errorData || !errorData.code) {
-            throw new SignUpError("UNKNOWN_ERROR", errorData?.message)
-        }
-
-        throw new SignUpError(errorData.code, errorData.message)
+        throw SignUpError.fromAxiosUnknownError<SignUpErrorCode>(err)
     }
 }
 

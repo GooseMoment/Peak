@@ -12,6 +12,7 @@ import Form from "@components/sign/Form"
 
 import {
     ApiError,
+    SignInError,
     SignUpError,
     authTOTP,
     patchPasswordWithPasswordRecoveryToken,
@@ -55,22 +56,10 @@ export const SignInForm = () => {
 
             toast.success(t("sign_in_success"))
             await new Promise((r) => setTimeout(r, 1000))
-
             navigate("/app/")
-        } catch (err: unknown) {
-            const error = err as ApiError
-            const status = error?.response?.status
-
-            if (status === 400) {
-                toast.error(t("sign_in_failed"))
-            } else if (status === 403) {
-                toast.error(t("email_verify_required"))
-            } else if (status === 500) {
-                toast.error(t("internal_error"))
-            } else {
-                toast.error(t("network_error"))
-            }
-
+        } catch (err) {
+            const error = err as SignInError
+            toast.error(t(error.code))
             setIsLoading(false)
         }
     }
@@ -254,7 +243,7 @@ export const SignUpForm = () => {
             navigate("/sign/up-complete")
         } catch (err) {
             const error = err as SignUpError
-            toast.error(t(`sign_up_errors.${error.code}`))
+            toast.error(t(error.code))
             setIsLoading(false)
             return
         }
