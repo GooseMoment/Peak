@@ -51,10 +51,22 @@ class EmailNotVerified(APIException):
     default_code = "MAIL_NOT_VERIFIED"
 
 
+class TokenRequired(APIException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    default_detail = "A token is required."
+    default_code = "TOKEN_REQUIRED"
+
+
 class TokenInvalid(APIException):
     status_code = status.HTTP_403_FORBIDDEN
     default_detail = "The given token is invalid, expired or not found."
     default_code = "TOKEN_INVALID"
+
+
+class TOTPCodeInvalid(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "The given code is invalid."
+    default_code = "TOTP_CODE_INVALID"
 
 
 class TokenOutOfCounts(APIException):

@@ -41,7 +41,7 @@ class TokenMixin:
     def get_token(self):
         token_hex = self.request.data.get("token")
         if token_hex is None:
-            raise RequiredFieldMissing
+            raise exceptions.TokenRequired
 
         try:
             token = uuid.UUID(hex=token_hex)
@@ -151,7 +151,7 @@ class TOTPAuthenticationView(TokenMixin, BaseLoginView):
 
         self.tfat.save()
 
-        raise exceptions.CredentialInvalid
+        raise exceptions.TOTPCodeInvalid
 
 
 class TOTPRegisterView(GenericAPIView):
