@@ -35,6 +35,22 @@ from api.utils import get_client_ip
 from api.exceptions import RequiredFieldMissing
 
 
+class TokenMixin:
+    request: Request
+
+    def get_token(self):
+        token_hex = self.request.data.get("token")
+        if token_hex is None:
+            raise RequiredFieldMissing
+
+        try:
+            token = uuid.UUID(hex=token_hex)
+        except ValueError:
+            raise exceptions.TokenInvalid
+
+        return token
+
+
 class BaseLoginView(KnoxLoginView):
     permission_classes = (AllowAny,)
 
@@ -98,18 +114,14 @@ class SignInView(BaseLoginView):
         return super(SignInView, self).post(request, format=format)
 
 
-class TOTPAuthenticationView(BaseLoginView):
+class TOTPAuthenticationView(TokenMixin, BaseLoginView):
     def post(self, request: Request, format=None):
+        token = self.get_token()
+
         try:
-            token_hex = request.data["token"]
             code = request.data["code"]
         except KeyError:
             raise RequiredFieldMissing
-
-        try:
-            token = uuid.UUID(hex=token_hex)
-        except ValueError:
-            raise exceptions.TokenInvalid
 
         try:
             self.tfat = TwoFactorAuthToken.objects.filter(token=token).get()
@@ -305,22 +317,6 @@ class SignUpView(GenericAPIView):
         mails.send_mail_verification_email(new_user, verification)
 
         return Response(status=status.HTTP_200_OK)
-
-
-class TokenMixin:
-    request: Request
-
-    def get_token(self):
-        token_hex = self.request.data.get("token")
-        if token_hex is None:
-            raise RequiredFieldMissing
-
-        try:
-            token = uuid.UUID(hex=token_hex)
-        except ValueError:
-            raise exceptions.TokenInvalid
-
-        return token
 
 
 class VerifyEmailVerificationToken(TokenMixin, GenericAPIView):
