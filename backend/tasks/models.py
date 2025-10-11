@@ -44,7 +44,7 @@ class Task(Base, PrivacyMixin):
     reactions: "RelatedManager[TaskReaction]"
 
     def save(self, *args, **kwargs):
-        if not self.privacy:
+        if self.privacy is None:
             self.privacy = self.drawer.privacy
         super().save(*args, **kwargs)
 

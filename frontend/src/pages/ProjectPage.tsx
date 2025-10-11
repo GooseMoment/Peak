@@ -330,9 +330,9 @@ const SortIconBox = styled.div`
 `
 
 const StyledImpressionArea = styled(ImpressionArea)`
-    display: "block";
-    min-height: 24;
-    min-width: 1;
+    display: block;
+    min-height: 24px;
+    min-width: 1px;
 `
 
 const NoDrawerText = styled.div`

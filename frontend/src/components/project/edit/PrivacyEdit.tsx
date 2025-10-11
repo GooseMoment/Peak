@@ -43,14 +43,23 @@ const PrivacyEdit = ({
         ...(isDrawer
             ? [
                   {
-                      icon: <img src={defaultsvg} />,
+                      icon: <img src={defaultsvg} alt="default privacy" />,
                       privacy: "default" as const,
                   },
               ]
             : []),
-        { icon: <img src={publicsvg} />, privacy: "public" as const },
-        { icon: <img src={protectedsvg} />, privacy: "protected" as const },
-        { icon: <img src={privatesvg} />, privacy: "private" as const },
+        {
+            icon: <img src={publicsvg} alt="public privacy" />,
+            privacy: "public" as const,
+        },
+        {
+            icon: <img src={protectedsvg} alt="protected privacy" />,
+            privacy: "protected" as const,
+        },
+        {
+            icon: <img src={privatesvg} alt="private privacy" />,
+            privacy: "private" as const,
+        },
     ]
 
     return (
