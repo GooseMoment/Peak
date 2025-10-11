@@ -53,7 +53,7 @@ class EmailNotVerified(APIException):
 
 class TokenInvalid(APIException):
     status_code = status.HTTP_403_FORBIDDEN
-    default_detail = "The given token is expired or not found."
+    default_detail = "The given token is invalid, expired or not found."
     default_code = "TOKEN_INVALID"
 
 

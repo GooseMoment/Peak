@@ -13,7 +13,6 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import throttle_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.throttling import AnonRateThrottle
-from rest_framework.exceptions import ValidationError as APIValidationError
 
 from knox.views import LoginView as KnoxLoginView
 import uuid
@@ -110,7 +109,7 @@ class TOTPAuthenticationView(BaseLoginView):
         try:
             token = uuid.UUID(hex=token_hex)
         except ValueError:
-            raise APIValidationError(["format of token is valid."])
+            raise exceptions.TokenInvalid
 
         try:
             self.tfat = TwoFactorAuthToken.objects.filter(token=token).get()
@@ -314,12 +313,12 @@ class TokenMixin:
     def get_token(self):
         token_hex = self.request.data.get("token")
         if token_hex is None:
-            raise APIValidationError(["token is required."])
+            raise RequiredFieldMissing
 
         try:
             token = uuid.UUID(hex=token_hex)
         except ValueError:
-            raise APIValidationError(["format of token is invalid."])
+            raise exceptions.TokenInvalid
 
         return token
 
