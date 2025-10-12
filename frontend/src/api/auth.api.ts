@@ -254,7 +254,7 @@ class AbstractErrorWithSeconds<TErrorCode extends string> extends Error {
 
     static fromAxiosUnknownError<TErrorCode extends string>(
         err: unknown,
-    ): AbstractError<TErrorCode> {
+    ): AbstractErrorWithSeconds<TErrorCode> {
         if (!isAxiosError<BaseErrorResponseWithSeconds<TErrorCode>>(err)) {
             return new this(
                 "UNKNOWN_ERROR" as TErrorCode,

@@ -30,7 +30,7 @@ export default function TOTPAuthForm() {
     const mut = useMutation<boolean, TOTPAuthError>({
         mutationFn: () => {
             if (totpCode.length < 6) {
-                return Promise.reject(new Error("ENTER_6_DIGIT"))
+                return Promise.reject(new TOTPAuthError("TOTP_CODE_LENGTH"))
             }
 
             return authTOTP(totpCode)

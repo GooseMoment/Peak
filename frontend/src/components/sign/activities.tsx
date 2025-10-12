@@ -131,7 +131,7 @@ const projects = [
     "알바",
 ]
 
-const comments = [
+const remarks = [
     "아ㅏㅏ 공부하기 싫어",
     "젤다깨고만다",
     "개발은 언제 끝나는걸까",
@@ -148,6 +148,15 @@ const timeUnitsMap: Record<string, number> = {
     months: 11 - 2,
 }
 
+function isEmoji(value: unknown): value is Emoji {
+    return (
+        typeof value === "object" &&
+        value !== null &&
+        "img" in value &&
+        typeof (value as Emoji).img === "string"
+    )
+}
+
 const generateActivities = (serverEmojis: Emoji[]) => {
     let emojis: Emoji[] | string[] = serverEmojis
 
@@ -160,7 +169,7 @@ const generateActivities = (serverEmojis: Emoji[]) => {
         "completed a task": tasks,
         "made a task": tasks,
         "made a project": projects,
-        "put today's comment": comments,
+        "put today's remark": remarks,
     }
 
     const activities: ReactNode[] = []
@@ -174,7 +183,7 @@ const generateActivities = (serverEmojis: Emoji[]) => {
         }
 
         let detail: Emoji | ReactNode = pick(verbDetailMap[verb])
-        if (typeof detail === "object" && "img" in detail) {
+        if (isEmoji(detail)) {
             detail = <EmojiImg src={detail.img} />
         }
 

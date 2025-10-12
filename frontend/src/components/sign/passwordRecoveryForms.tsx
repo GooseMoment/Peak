@@ -51,7 +51,10 @@ export function PasswordRecoveryRequestForm() {
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
-        const email = formData.get("email") as string
+        const email = formData.get("email")
+        if (typeof email !== "string") {
+            return toast.error(t("UNKNOWN_ERROR"))
+        }
         mutation.mutate({ email })
     }
 
@@ -155,7 +158,8 @@ export function PasswordRecoveryForm() {
                     icon="key"
                     name="password"
                     placeholder={t("placeholder_password")}
-                    type="new-password"
+                    type="password"
+                    autoComplete="new-password"
                     minLength={8}
                     required
                     disabled={mutation.isPending}
@@ -164,7 +168,8 @@ export function PasswordRecoveryForm() {
                     icon="rotate-cw"
                     name="password_again"
                     placeholder={t("placeholder_password_again")}
-                    type="new-password"
+                    type="password"
+                    autoComplete="new-password"
                     required
                     disabled={mutation.isPending}
                 />

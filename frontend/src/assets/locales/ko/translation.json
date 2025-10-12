@@ -391,7 +391,7 @@
         "NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
         "UNKNOWN_ERROR": "에러가 발생했습니다. 다시 시도하세요.",
         "REQUIRED_FIELD_MISSING": "이메일 주소를 입력해주세요.",
-        "TOKEN_INVALID": "세션이 만료되었습니다. 다시 요쳥해주세요.",
+        "TOKEN_INVALID": "세션이 만료되었습니다. 다시 요청해주세요.",
         "TOKEN_REQUIRED": "메일 속 링크를 다시 열어주세요.",
         "RATE_LIMIT_EXCEEDED": "{{minutes}}분 뒤 다시 시도하세요.",
         "PASSWORD_INVALID": "암호는 8글자 이상이어야 합니다.",

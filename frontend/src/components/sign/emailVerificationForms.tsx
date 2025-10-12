@@ -5,10 +5,10 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import Input from "@components/common/Input"
+import { LoaderCircleFull } from "@components/common/LoaderCircle"
 import ErrorLayout from "@components/errors/ErrorLayout"
 import {
     Content,
-    FullLoader,
     LinkText,
     Links,
     Text,
@@ -56,7 +56,10 @@ export const EmailVerificationResendForm = () => {
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
-        const email = formData.get("email") as string
+        const email = formData.get("email")
+        if (typeof email !== "string") {
+            return toast.error(t("UNKNOWN_ERROR"))
+        }
         mutation.mutate({ email })
     }
 
@@ -117,12 +120,12 @@ export const EmailVerificationForm = () => {
         refetchOnWindowFocus: false,
     })
 
-    if (isPending) {
-        return <FullLoader />
+    if (!token || isError) {
+        return <ErrorLayout code="?_?" text={t("invalid_access")} />
     }
 
-    if (isError) {
-        return <ErrorLayout code="?_?" text={t("invalid_access")} />
+    if (isPending) {
+        return <LoaderCircleFull />
     }
 
     return (

@@ -1,7 +1,5 @@
 import styled from "styled-components"
 
-import LoaderCircle from "@components/common/LoaderCircle"
-
 export const Form = styled.form`
     display: flex;
     flex-direction: column;
@@ -55,12 +53,4 @@ export const TosAgreement = styled.p`
         display: inline-block;
         text-decoration: underline;
     }
-`
-
-export const FullLoader = styled(LoaderCircle)`
-    width: 3em;
-    color: inherit;
-    opacity: 0.7;
-
-    border-width: 0.35em;
 `
