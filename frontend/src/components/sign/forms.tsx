@@ -521,7 +521,11 @@ export const PasswordRecoveryForm = () => {
 
     const token = searchParams.get("token")
 
-    const mutation = useMutation({
+    const mutation = useMutation<
+        void,
+        PasswordRecoveryError,
+        { token: string; password: string }
+    >({
         mutationFn: ({
             token,
             password,
@@ -533,16 +537,20 @@ export const PasswordRecoveryForm = () => {
             toast.success(t("recovery_success"))
             navigate("/sign/in")
         },
-        onError: () => {
-            return toast.error(t("recovery_error"))
+        onError: (err) => {
+            return toast.error(t(err.code))
         },
     })
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
-        const password = formData.get("password") as string
-        const passwordAgain = formData.get("password_again") as string
+        const password = formData.get("password")
+        const passwordAgain = formData.get("password_again")
+
+        if (typeof password !== "string" || typeof passwordAgain !== "string") {
+            return toast.error(t("UNKNOWN_ERROR"))
+        }
 
         if (password.length < 8) {
             return toast.error(t("recovery_error_password_length"))
@@ -553,7 +561,7 @@ export const PasswordRecoveryForm = () => {
         }
 
         if (!token) {
-            return toast.error(t("recovery_error"))
+            return toast.error(t("TOKEN_REQUIRED"))
         }
 
         mutation.mutate({ token, password })
@@ -568,7 +576,7 @@ export const PasswordRecoveryForm = () => {
                     icon="key"
                     name="password"
                     placeholder={t("placeholder_password")}
-                    type="password"
+                    type="new-password"
                     minLength={8}
                     required
                     disabled={mutation.isPending}
@@ -577,7 +585,7 @@ export const PasswordRecoveryForm = () => {
                     icon="rotate-cw"
                     name="password_again"
                     placeholder={t("placeholder_password_again")}
-                    type="password"
+                    type="new-password"
                     required
                     disabled={mutation.isPending}
                 />
