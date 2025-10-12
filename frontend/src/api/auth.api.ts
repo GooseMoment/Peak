@@ -145,50 +145,72 @@ export interface TOTPRegisterResponse {
     created_at: string | null
 }
 
+export class TOTPGetError extends AbstractError<BaseErrorCode> {}
+
 export const getTOTP = async (): Promise<TOTPRegisterResponse> => {
-    const res = await client.get<TOTPRegisterResponse>(
-        `auth/two_factor/totp/register/`,
-    )
-    return res.data
+    try {
+        const res = await client.get<TOTPRegisterResponse>(
+            `auth/two_factor/totp/register/`,
+        )
+        return res.data
+    } catch (err) {
+        throw TOTPGetError.fromAxiosUnknownError<BaseErrorCode>(err)
+    }
 }
 
+export class TOTPCreateError extends AbstractError<BaseErrorCode> {}
 export interface TOTPCreateResponse {
     secret: string
     uri: string
 }
 
 export const createTOTP = async (): Promise<TOTPCreateResponse> => {
-    const res = await client.post<TOTPCreateResponse>(
-        `auth/two_factor/totp/register/`,
-    )
-    return res.data
+    try {
+        const res = await client.post<TOTPCreateResponse>(
+            `auth/two_factor/totp/register/`,
+        )
+        return res.data
+    } catch (err) {
+        throw TOTPCreateError.fromAxiosUnknownError<BaseErrorCode>(err)
+    }
 }
 
-export interface TOTPVerifyResponse {
-    code: string
-    message: string
+type TOTPVerifyErrorCode =
+    | "NO_PENDING_TOTP_REGISTRATION"
+    | "REQUIRED_FIELD_MISSING" // this won't be actually used, but the server might return this
+    | "CREDENTIAL_INVALID"
+
+export class TOTPVerifyError extends AbstractError<TOTPVerifyErrorCode> {}
+
+interface TOTPSuccessResponse {
+    code: "SUCCESS"
 }
 
-export const verifyTOTP = async (code: string): Promise<TOTPVerifyResponse> => {
-    const res = await client.patch<TOTPVerifyResponse>(
-        `auth/two_factor/totp/register/`,
-        {
-            code,
-        },
-    )
-    return res.data
+export const verifyTOTP = async (code: string) => {
+    try {
+        const res = await client.patch<TOTPSuccessResponse>(
+            `auth/two_factor/totp/register/`,
+            {
+                code,
+            },
+        )
+        return res.data
+    } catch (err) {
+        throw TOTPVerifyError.fromAxiosUnknownError<TOTPVerifyErrorCode>(err)
+    }
 }
 
-export interface TOTPDeleteResponse {
-    code: string
-    message: string
-}
+export class TOTPDeleteError extends AbstractError<BaseErrorCode> {}
 
-export const deleteTOTP = async (): Promise<TOTPDeleteResponse> => {
-    const res = await client.delete<TOTPDeleteResponse>(
-        `auth/two_factor/totp/register/`,
-    )
-    return res.data
+export const deleteTOTP = async () => {
+    try {
+        const res = await client.delete<TOTPSuccessResponse>(
+            `auth/two_factor/totp/register/`,
+        )
+        return res.data
+    } catch (err) {
+        throw TOTPDeleteError.fromAxiosUnknownError<BaseErrorCode>(err)
+    }
 }
 
 export type SignUpErrorCode =

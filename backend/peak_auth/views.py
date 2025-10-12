@@ -228,7 +228,7 @@ class TOTPRegisterView(GenericAPIView):
         return Response(
             {
                 "code": "SUCCESS",
-                "message": "TOTP two-factor authentication was successfully added.",
+                "message": "TOTP two-factor authentication has been successfully enabled.",
             },
             status=status.HTTP_200_OK,
         )
@@ -240,7 +240,7 @@ class TOTPRegisterView(GenericAPIView):
         return Response(
             {
                 "code": "SUCCESS",
-                "message": "Your TOTP two-factor authentication was successfully disabled and deleted.",
+                "message": "Your TOTP two-factor authentication has been successfully disabled and deleted.",
             },
             status=status.HTTP_200_OK,
         )
