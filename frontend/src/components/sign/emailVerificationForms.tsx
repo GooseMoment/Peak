@@ -43,8 +43,7 @@ export const EmailVerificationResendForm = () => {
         },
         onError: (err) => {
             if (err.code === "RATE_LIMIT_EXCEEDED") {
-                const seconds = err.seconds || 0
-                const minutes = Math.floor(seconds / 60) + 1
+                const minutes = Math.ceil(err.seconds / 60)
 
                 return toast.error(t(err.code, { minutes }))
             }

@@ -41,7 +41,8 @@ export function PasswordRecoveryRequestForm() {
         },
         onError: (err) => {
             if (err.code === "RATE_LIMIT_EXCEEDED") {
-                return toast.error(t(err.code, { minutes: 60 }))
+                const minutes = Math.ceil(err.seconds / 60)
+                return toast.error(t(err.code, { minutes }))
             }
 
             return toast.error(t(err.code))

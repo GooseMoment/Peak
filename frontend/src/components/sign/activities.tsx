@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 
 import Activity, { EmojiImg } from "@components/sign/Activity"
 
@@ -153,6 +153,8 @@ function isEmoji(value: unknown): value is Emoji {
         typeof value === "object" &&
         value !== null &&
         "img" in value &&
+        typeof (value as Emoji).id === "string" &&
+        typeof (value as Emoji).name === "string" &&
         typeof (value as Emoji).img === "string"
     )
 }

@@ -23,17 +23,17 @@ export default function TOTPAuthForm() {
         setTOTPCode(value)
 
         if (value.length >= 6 && !mut.isPending) {
-            return mut.mutate()
+            return mut.mutate(value)
         }
     }
 
-    const mut = useMutation<boolean, TOTPAuthError>({
-        mutationFn: () => {
-            if (totpCode.length < 6) {
+    const mut = useMutation<boolean, TOTPAuthError, string>({
+        mutationFn: (code) => {
+            if (code.length < 6) {
                 return Promise.reject(new TOTPAuthError("TOTP_CODE_LENGTH"))
             }
 
-            return authTOTP(totpCode)
+            return authTOTP(code)
         },
         onSuccess: () => {
             toast.success(t("sign_in_success"))
@@ -61,7 +61,7 @@ export default function TOTPAuthForm() {
             <Form
                 onSubmit={(e) => {
                     e.preventDefault()
-                    mut.mutate()
+                    mut.mutate(totpCode)
                 }}>
                 <Input
                     icon="hash"
