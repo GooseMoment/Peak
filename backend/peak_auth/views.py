@@ -10,7 +10,6 @@ from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-from rest_framework.decorators import throttle_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.throttling import AnonRateThrottle
 
@@ -19,7 +18,7 @@ import uuid
 import re
 from datetime import datetime, UTC
 from ua_parser import parse as ua_parse
-from typing import Optional
+from typing import NoReturn, Optional
 
 from users.models import User
 from .models import (
@@ -32,7 +31,7 @@ from .models import (
 from .totp import create_totp_secret, TOTP
 from . import exceptions, mails
 from api.utils import get_client_ip
-from api.exceptions import RequiredFieldMissing
+from api.exceptions import RequiredFieldMissing, UnknownError, RateLimitExceeded
 
 
 class TokenMixin:
@@ -121,7 +120,7 @@ class TOTPAuthenticationView(TokenMixin, BaseLoginView):
         try:
             code = request.data["code"]
         except KeyError:
-            raise RequiredFieldMissing
+            raise RequiredFieldMissing(missing_fields=("code",))
 
         try:
             self.tfat = TwoFactorAuthToken.objects.filter(token=token).get()
@@ -217,7 +216,7 @@ class TOTPRegisterView(GenericAPIView):
         try:
             code = request.data["code"]
         except KeyError:
-            raise RequiredFieldMissing
+            raise RequiredFieldMissing(missing_fields=("code",))
 
         totp = TOTP(secret)
         codes = totp.totp_with_offsets()
@@ -260,11 +259,16 @@ class SignUpView(GenericAPIView):
         payload = self.request.data
 
         new_user = User()
+        missing_fields = []
         for field in self.required_fields:
             if field not in payload:
-                raise RequiredFieldMissing
+                missing_fields.append(field)
+                continue
 
             setattr(new_user, field, payload[field])
+
+        if len(missing_fields) > 0:
+            raise RequiredFieldMissing(missing_fields=missing_fields)
 
         try:
             validate_email(payload["email"])
@@ -288,7 +292,7 @@ class SignUpView(GenericAPIView):
             user.save()
         except IntegrityError as e:
             if "unique constraint" not in str(e):
-                raise exceptions.UnknownError
+                raise UnknownError
 
             if "email" in str(e):
                 mails.send_mail_already_registered(user, locale)
@@ -297,7 +301,7 @@ class SignUpView(GenericAPIView):
             if "username" in str(e):
                 raise exceptions.UsernameDuplicate
 
-            raise exceptions.UnknownError
+            raise UnknownError
 
     @transaction.atomic
     def post(self, request: Request):
@@ -392,7 +396,7 @@ class ResendEmailVerificationMail(GenericAPIView):
             delta = now - verification.last_sent_at
 
             if delta <= settings.EMAIL_SEND_INTERVAL_MIN:
-                raise exceptions.EmailRateLimitExceeded(seconds=delta.seconds)
+                raise RateLimitExceeded(seconds=delta.seconds)
 
         mails.send_mail_verification_email(verification.user, verification)
 
@@ -400,19 +404,28 @@ class ResendEmailVerificationMail(GenericAPIView):
 
 
 class PasswordRecoveryAnonRateThrottle(AnonRateThrottle):
-    rate = "5/minute"  # up to 5 times a hour
+    rate = "5/hour"  # up to 5 times a hour
+
+    def allow_request(self, request, view):
+        if request.method == "PATCH":
+            return True
+
+        return super().allow_request(request, view)
 
 
 class PasswordRecoveryView(TokenMixin, GenericAPIView):
     permission_classes = (AllowAny,)
+    throttle_classes = (PasswordRecoveryAnonRateThrottle,)
+
+    def throttled(self, request: Request, wait: float) -> NoReturn:
+        raise RateLimitExceeded(seconds=int(wait))
 
     # generate a token
-    @throttle_classes((PasswordRecoveryAnonRateThrottle,))
     def post(self, request: Request):
         email: str | None = request.data.get("email")
 
         if email is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise RequiredFieldMissing(missing_fields=("email",))
 
         try:
             validate_email(email)

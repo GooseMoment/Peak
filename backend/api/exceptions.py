@@ -45,3 +45,12 @@ class UnknownError(APIException):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
     default_detail = "Unknown error occurred."
     default_code = "UNKNOWN_ERROR"
+
+
+class RateLimitExceeded(APIException):
+    status_code = status.HTTP_429_TOO_MANY_REQUESTS
+    default_detail = "Your rate limit has been exceeded."
+    default_code = "RATE_LIMIT_EXCEEDED"
+
+    def __init__(self, seconds: int = 0):
+        super().__init__(seconds=seconds)
