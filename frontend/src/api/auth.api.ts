@@ -50,7 +50,7 @@ class AbstractError<TErrorCode extends string> extends Error {
 
 const TwoFactorAuthTokenKey = "two_factor_auth_token"
 
-export type SignInErrorCode =
+type SignInErrorCode =
     | BaseErrorCode
     | "CREDENTIAL_INVALID"
     | "MAIL_NOT_VERIFIED"
@@ -140,7 +140,7 @@ export const authTOTP = async (code: string): Promise<boolean> => {
 
     return true
 }
-export interface TOTPRegisterResponse {
+interface TOTPRegisterResponse {
     enabled: boolean
     created_at: string | null
 }
@@ -159,7 +159,8 @@ export const getTOTP = async (): Promise<TOTPRegisterResponse> => {
 }
 
 export class TOTPCreateError extends AbstractError<BaseErrorCode> {}
-export interface TOTPCreateResponse {
+
+interface TOTPCreateResponse {
     secret: string
     uri: string
 }
@@ -213,7 +214,7 @@ export const deleteTOTP = async () => {
     }
 }
 
-export type SignUpErrorCode =
+type SignUpErrorCode =
     | BaseErrorCode
     | "USER_ALREADY_AUTHENTICATED"
     | "REQUIRED_FIELD_MISSING"
@@ -243,21 +244,31 @@ export const signUp = async (
     }
 }
 
-export interface VerifyEmailVerificationResponse {
+interface VerifyEmailVerificationResponse {
     email: string
 }
+
+export class VerifyEmailVerificationTokenError extends AbstractError<
+    BaseErrorCode | TokenErrorCode
+> {}
 
 export const verifyEmailVerificationToken = async (
     token: string,
 ): Promise<string> => {
-    const res = await client.post<VerifyEmailVerificationResponse>(
-        `auth/sign_up/verification/`,
-        {
-            token,
-        },
-    )
+    try {
+        const res = await client.post<VerifyEmailVerificationResponse>(
+            `auth/sign_up/verification/`,
+            {
+                token,
+            },
+        )
 
-    return res.data.email
+        return res.data.email
+    } catch (err) {
+        throw VerifyEmailVerificationTokenError.fromAxiosUnknownError<
+            BaseErrorCode | TokenErrorCode
+        >(err)
+    }
 }
 interface BaseErrorResponseWithSeconds<TErrorCode extends string>
     extends BaseErrorResponse<TErrorCode> {
