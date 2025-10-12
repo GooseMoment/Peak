@@ -12,6 +12,7 @@ import Form from "@components/sign/Form"
 
 import {
     ApiError,
+    PasswordRecoveryError,
     ResendVerificationEmailError,
     SignInError,
     SignUpError,
@@ -343,7 +344,7 @@ export const EmailVerificationResendForm = () => {
             toast.success(t("resend_success"))
         },
         onError: (err) => {
-            if (err.code === "EMAIL_RATE_LIMIT_EXCEEDED") {
+            if (err.code === "RATE_LIMIT_EXCEEDED") {
                 const seconds = err.seconds || 0
                 const minutes = Math.floor(seconds / 60) + 1
 
@@ -449,21 +450,22 @@ export const PasswordRecoveryRequestForm = () => {
         keyPrefix: "password_recovery",
     })
 
-    const mutation = useMutation({
+    const mutation = useMutation<
+        void,
+        PasswordRecoveryError,
+        { email: string }
+    >({
         mutationFn: ({ email }: { email: string }) =>
             requestPasswordRecoveryToken(email),
         onSuccess: () => {
             toast.success(t("request_success"))
         },
-        onError: (e: unknown) => {
-            const error = e as ApiError
-            if (error?.response?.status === 429) {
-                return toast.error(t("request_error_limit"))
-            } else if (error?.response?.status === 400) {
-                return toast.error(t("request_error_bad_request"))
+        onError: (err) => {
+            if (err.code === "RATE_LIMIT_EXCEEDED") {
+                return toast.error(t(err.code, { minutes: 60 }))
             }
 
-            return toast.error(t("request_error_any"))
+            return toast.error(t(err.code))
         },
     })
 

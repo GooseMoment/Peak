@@ -325,7 +325,7 @@
         "UNKNOWN_ERROR": "에러가 발생했습니다. 다시 시도하세요.",
         "REQUIRED_FIELD_MISSING": "이메일 주소를 입력해주세요.",
         "EMAIL_INVALID": "이메일 주소가 올바르지 않습니다.",
-        "EMAIL_RATE_LIMIT_EXCEEDED": "너무 요청이 많습니다. {{minutes}}분 뒤 다시 시도하세요.",
+        "RATE_LIMIT_EXCEEDED": "너무 요청이 많습니다. {{minutes}}분 뒤 다시 시도하세요.",
         "placeholder_email": "이메일 주소 입력",
         "button_submit": "제출"
     },
@@ -378,9 +378,6 @@
         "placeholder_email": "이메일 주소 입력",
         "button_submit": "제출",
         "request_success": "암호 재설정 메일이 전송되었습니다. 메일함을 확인하세요.",
-        "request_error_limit": "한 시간 후에 다시 시도해주세요.",
-        "request_error_bad_request": "잘못된 요청입니다. 페이지 새로고침 후 다시 시도하세요.",
-        "request_error_any": "오류가 발생했습니다. 네트워크 상황을 확인하세요.",
         "link_sign_in": "로그인",
         "recovery_title": "암호 재설정",
         "recovery_description": "새 암호는 8자 이상이어야 합니다.",
@@ -390,7 +387,15 @@
         "recovery_success": "암호를 변경했습니다. 새 암호로 로그인하세요.",
         "recovery_error_password_length": "암호는 8자 이상이어야 합니다.",
         "recovery_error_password_unmatch": "새 암호가 서로 다릅니다.",
-        "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다."
+        "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다.",
+        "NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
+        "UNKNOWN_ERROR": "에러가 발생했습니다. 다시 시도하세요.",
+        "REQUIRED_FIELD_MISSING": "이메일 주소를 입력해주세요.",
+        "TOKEN_INVALID": "세션이 만료되었습니다. 다시 요쳥해주세요.",
+        "TOKEN_REQUIRED": "메일 속 링크를 다시 열어주세요.",
+        "RATE_LIMIT_EXCEEDED": "{{minutes}}분 뒤 다시 시도하세요.",
+        "PASSWORD_INVALID": "암호는 8글자 이상이어야 합니다.",
+        "EMAIL_INVALID": "올바른 이메일 주소를 입력해주세요."
     },
     "social": {
         "following_title": "팔로잉",

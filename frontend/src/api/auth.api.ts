@@ -7,6 +7,8 @@ import { isAxiosError } from "axios"
 
 type BaseErrorCode = "NETWORK_ERROR" | "UNKNOWN_ERROR"
 
+type TokenErrorCode = "TOKEN_REQUIRED" | "TOKEN_INVALID"
+
 interface BaseErrorResponse<T extends string> {
     code: T
     message?: string
@@ -135,8 +137,7 @@ type TOTPAuthErrorCode =
     | "TOTP_CODE_INVALID"
     | "TOTP_CODE_LENGTH" // this code is for client-side validation
     | "REQUIRED_FIELD_MISSING" // this won't be actually used, but the server might return this
-    | "TOKEN_REQUIRED"
-    | "TOKEN_INVALID"
+    | TokenErrorCode
     | "TOKEN_OUT_OF_COUNTS"
 
 export class TOTPAuthError extends AbstractError<TOTPAuthErrorCode> {}
@@ -159,14 +160,12 @@ export const authTOTP = async (code: string): Promise<boolean> => {
         setCurrentUsername(res.data.user.username)
         sessionStorage.removeItem(TwoFactorAuthTokenKey)
     } catch (err) {
-        if (
-            isAxiosError<BaseErrorResponse<TOTPAuthErrorCode>>(err) &&
-            err.response?.data.code !== "TOTP_CODE_INVALID"
-        ) {
+        const error =
+            TOTPAuthError.fromAxiosUnknownError<TOTPAuthErrorCode>(err)
+        if (error.code !== "TOTP_CODE_INVALID") {
             sessionStorage.removeItem(TwoFactorAuthTokenKey)
         }
-
-        throw TOTPAuthError.fromAxiosUnknownError<TOTPAuthErrorCode>(err)
+        throw error
     }
 
     return true
@@ -249,32 +248,68 @@ export const verifyEmailVerificationToken = async (
 
     return res.data.email
 }
+interface BaseErrorResponseWithSeconds<TErrorCode extends string>
+    extends BaseErrorResponse<TErrorCode> {
+    seconds?: number
+}
+
+class AbstractErrorWithSeconds<TErrorCode extends string> extends Error {
+    code: TErrorCode
+    seconds: number
+
+    constructor(code: TErrorCode, seconds: number, message?: string) {
+        super(message)
+        this.code = code
+        this.seconds = seconds
+    }
+
+    static fromAxiosUnknownError<TErrorCode extends string>(
+        err: unknown,
+    ): AbstractError<TErrorCode> {
+        if (isAxiosError<BaseErrorResponseWithSeconds<TErrorCode>>(err)) {
+            if (!err.response) {
+                return new this(
+                    "NETWORK_ERROR" as TErrorCode,
+                    0,
+                    "Network error occurred",
+                )
+            }
+
+            const errorData = err.response.data
+            if (!errorData || !errorData.code) {
+                return new this(
+                    "UNKNOWN_ERROR" as TErrorCode,
+                    0,
+                    errorData?.message,
+                )
+            }
+
+            if ("seconds" in errorData && errorData.seconds) {
+                return new this(
+                    errorData.code,
+                    errorData.seconds,
+                    errorData.message,
+                )
+            }
+
+            return new this(errorData.code, 0, errorData.message)
+        }
+
+        return new this(
+            "UNKNOWN_ERROR" as TErrorCode,
+            0,
+            "Unknown error occurred",
+        )
+    }
+}
 
 type ResendVerificationEmailErrorCode =
     | "UNKNOWN_ERROR"
     | "REQUIRED_FIELD_MISSING"
     | "EMAIL_INVALID"
-    | "EMAIL_RATE_LIMIT_EXCEEDED"
+    | "RATE_LIMIT_EXCEEDED"
 
-interface ResendVerificationEmailErrorResponse
-    extends BaseErrorResponse<ResendVerificationEmailErrorCode> {
-    seconds?: number
-}
-
-export class ResendVerificationEmailError extends Error {
-    code: ResendVerificationEmailErrorCode
-    seconds: number
-
-    constructor(
-        code: ResendVerificationEmailErrorCode,
-        seconds: number,
-        message?: string,
-    ) {
-        super(message)
-        this.code = code
-        this.seconds = seconds
-    }
-}
+export class ResendVerificationEmailError extends AbstractErrorWithSeconds<ResendVerificationEmailErrorCode> {}
 
 export const resendVerificationEmail = async (email: string) => {
     try {
@@ -282,36 +317,48 @@ export const resendVerificationEmail = async (email: string) => {
             email,
         })
     } catch (err) {
-        if (!isAxiosError<ResendVerificationEmailErrorResponse>(err)) {
-            throw new ResendVerificationEmailError("UNKNOWN_ERROR", 0)
-        }
-
-        if (!err.response || !err.response.data) {
-            throw new ResendVerificationEmailError("UNKNOWN_ERROR", 0)
-        }
-
-        const seconds = err.response?.data?.seconds
-        throw new ResendVerificationEmailError(
-            "EMAIL_RATE_LIMIT_EXCEEDED",
-            seconds || 0,
+        throw ResendVerificationEmailError.fromAxiosUnknownError<ResendVerificationEmailErrorCode>(
+            err,
         )
     }
 }
 
+type PasswordRecoveryErrorCode =
+    | BaseErrorCode
+    | "REQUIRED_FIELD_MISSING"
+    | "EMAIL_INVALID"
+    | TokenErrorCode
+    | "PASSWORD_INVALID"
+    | "RATE_LIMIT_EXCEEDED"
+
+export class PasswordRecoveryError extends AbstractErrorWithSeconds<PasswordRecoveryErrorCode> {}
+
 export const requestPasswordRecoveryToken = async (email: string) => {
-    return client.post(`auth/password_recovery/`, {
-        email,
-    })
+    try {
+        await client.post(`auth/password_recovery/`, {
+            email,
+        })
+    } catch (err) {
+        throw PasswordRecoveryError.fromAxiosUnknownError<PasswordRecoveryErrorCode>(
+            err,
+        )
+    }
 }
 
 export const patchPasswordWithPasswordRecoveryToken = async (
     token: string,
     newPassword: string,
 ) => {
-    return client.patch(`auth/password_recovery/`, {
-        token,
-        new_password: newPassword,
-    })
+    try {
+        await client.patch(`auth/password_recovery/`, {
+            token,
+            new_password: newPassword,
+        })
+    } catch (err) {
+        throw PasswordRecoveryError.fromAxiosUnknownError<PasswordRecoveryErrorCode>(
+            err,
+        )
+    }
 }
 
 export const signOut = async (): Promise<null> => {

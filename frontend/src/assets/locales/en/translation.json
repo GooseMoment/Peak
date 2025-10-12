@@ -325,7 +325,7 @@
         "UNKNOWN_ERROR": "Error occurred. Try again later.",
         "REQUIRED_FIELD_MISSING": "Please type your email address.",
         "EMAIL_INVALID": "Invalid email address.",
-        "EMAIL_RATE_LIMIT_EXCEEDED": "Too many requests. Try again in {{minutes}} minute(s).",
+        "RATE_LIMIT_EXCEEDED": "Too many requests. Try again in {{minutes}} minute(s).",
         "placeholder_email": "Enter your email",
         "button_submit": "Submit"
     },
@@ -378,9 +378,6 @@
         "placeholder_email": "Enter your email",
         "button_submit": "Submit",
         "request_success": "A password recovery mail was sent to your inbox.",
-        "request_error_limit": "Retry in an hour.",
-        "request_error_bad_request": "Invalid request. Retry after refresh.",
-        "request_error_any": "Something went wrong. Check your network.",
         "link_sign_in": "Sign In",
         "recovery_title": "Password Recovery",
         "recovery_description": "A password should have more than 8 letters.",
@@ -390,7 +387,15 @@
         "recovery_success": "Password has changed. Please sign in with your new password.",
         "recovery_error_password_length": "Password should be more than 8 letters.",
         "recovery_error_password_unmatch": "Two forms have different values.",
-        "recovery_error": "Oops. Perhaps this link is invalid or expired."
+        "recovery_error": "Oops. Perhaps this link is invalid or expired.",
+        "NETWORK_ERROR": "Please check your network.",
+        "UNKNOWN_ERROR": "Error occurred. Try again later.",
+        "REQUIRED_FIELD_MISSING": "Please type your email address.",
+        "TOKEN_INVALID": "The session is expired. Please request a recovery token again.",
+        "TOKEN_REQUIRED": "Please open the link on your mail again.",
+        "RATE_LIMIT_EXCEEDED": "Retry in {{minutes}} minute(s).",
+        "PASSWORD_INVALID": "Password should be 8 or more letters.",
+        "EMAIL_INVALID": "Please enter a valid email."
     },
     "social": {
         "following_title": "Following",
