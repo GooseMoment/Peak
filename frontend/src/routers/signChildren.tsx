@@ -28,7 +28,7 @@ const signChildren = [
         element: <SignInForm />,
     },
     {
-        path: "two_factor/totp",
+        path: "two-factor/totp",
         element: <TOTPAuthForm />,
     },
     {

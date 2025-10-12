@@ -35,7 +35,7 @@ export default function SignInForm() {
             const twoFactorAuthEnabled = await signIn(email, password)
 
             if (twoFactorAuthEnabled) {
-                return navigate("/sign/two_factor/totp")
+                return navigate("/sign/two-factor/totp")
             }
 
             toast.success(t("sign_in_success"))
