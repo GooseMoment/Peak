@@ -11,7 +11,6 @@ import ErrorLayout from "@components/errors/ErrorLayout"
 import Form from "@components/sign/Form"
 
 import {
-    ApiError,
     PasswordRecoveryError,
     ResendVerificationEmailError,
     SignInError,

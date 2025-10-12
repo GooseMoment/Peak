@@ -25,60 +25,30 @@ class AbstractError<TErrorCode extends string> extends Error {
     static fromAxiosUnknownError<TErrorCode extends string>(
         err: unknown,
     ): AbstractError<TErrorCode> {
-        if (isAxiosError<BaseErrorResponse<TErrorCode>>(err)) {
-            if (!err.response) {
-                return new this(
-                    "NETWORK_ERROR" as TErrorCode,
-                    "Network error occurred",
-                )
-            }
-
-            const errorData = err.response.data
-            if (!errorData || !errorData.code) {
-                return new this(
-                    "UNKNOWN_ERROR" as TErrorCode,
-                    errorData?.message,
-                )
-            }
-
-            return new this(errorData.code, errorData.message)
+        if (!isAxiosError<BaseErrorResponse<TErrorCode>>(err)) {
+            return new this(
+                "UNKNOWN_ERROR" as TErrorCode,
+                "Unknown error occurred",
+            )
         }
 
-        return new this("UNKNOWN_ERROR" as TErrorCode, "Unknown error occurred")
+        if (!err.response) {
+            return new this(
+                "NETWORK_ERROR" as TErrorCode,
+                "Network error occurred",
+            )
+        }
+
+        const errorData = err.response.data
+        if (!errorData || !errorData.code) {
+            return new this("UNKNOWN_ERROR" as TErrorCode, errorData?.message)
+        }
+
+        return new this(errorData.code, errorData.message)
     }
 }
 
 const TwoFactorAuthTokenKey = "two_factor_auth_token"
-
-export interface TOTPRegisterResponse {
-    enabled: boolean
-    created_at: string | null
-}
-
-export interface TOTPCreateResponse {
-    secret: string
-    uri: string
-}
-
-export interface TOTPVerifyResponse {
-    code: string
-    message: string
-}
-
-export interface TOTPDeleteResponse {
-    code: string
-    message: string
-}
-
-// Error types for API responses
-export interface ApiError {
-    response?: {
-        status: number
-        data?: {
-            seconds?: number
-        }
-    }
-}
 
 export type SignInErrorCode =
     | BaseErrorCode
@@ -170,6 +140,10 @@ export const authTOTP = async (code: string): Promise<boolean> => {
 
     return true
 }
+export interface TOTPRegisterResponse {
+    enabled: boolean
+    created_at: string | null
+}
 
 export const getTOTP = async (): Promise<TOTPRegisterResponse> => {
     const res = await client.get<TOTPRegisterResponse>(
@@ -178,11 +152,21 @@ export const getTOTP = async (): Promise<TOTPRegisterResponse> => {
     return res.data
 }
 
+export interface TOTPCreateResponse {
+    secret: string
+    uri: string
+}
+
 export const createTOTP = async (): Promise<TOTPCreateResponse> => {
     const res = await client.post<TOTPCreateResponse>(
         `auth/two_factor/totp/register/`,
     )
     return res.data
+}
+
+export interface TOTPVerifyResponse {
+    code: string
+    message: string
 }
 
 export const verifyTOTP = async (code: string): Promise<TOTPVerifyResponse> => {
@@ -193,6 +177,11 @@ export const verifyTOTP = async (code: string): Promise<TOTPVerifyResponse> => {
         },
     )
     return res.data
+}
+
+export interface TOTPDeleteResponse {
+    code: string
+    message: string
 }
 
 export const deleteTOTP = async (): Promise<TOTPDeleteResponse> => {
@@ -266,40 +255,40 @@ class AbstractErrorWithSeconds<TErrorCode extends string> extends Error {
     static fromAxiosUnknownError<TErrorCode extends string>(
         err: unknown,
     ): AbstractError<TErrorCode> {
-        if (isAxiosError<BaseErrorResponseWithSeconds<TErrorCode>>(err)) {
-            if (!err.response) {
-                return new this(
-                    "NETWORK_ERROR" as TErrorCode,
-                    0,
-                    "Network error occurred",
-                )
-            }
-
-            const errorData = err.response.data
-            if (!errorData || !errorData.code) {
-                return new this(
-                    "UNKNOWN_ERROR" as TErrorCode,
-                    0,
-                    errorData?.message,
-                )
-            }
-
-            if ("seconds" in errorData && errorData.seconds) {
-                return new this(
-                    errorData.code,
-                    errorData.seconds,
-                    errorData.message,
-                )
-            }
-
-            return new this(errorData.code, 0, errorData.message)
+        if (!isAxiosError<BaseErrorResponseWithSeconds<TErrorCode>>(err)) {
+            return new this(
+                "UNKNOWN_ERROR" as TErrorCode,
+                0,
+                "Unknown error occurred",
+            )
         }
 
-        return new this(
-            "UNKNOWN_ERROR" as TErrorCode,
-            0,
-            "Unknown error occurred",
-        )
+        if (!err.response) {
+            return new this(
+                "NETWORK_ERROR" as TErrorCode,
+                0,
+                "Network error occurred",
+            )
+        }
+
+        const errorData = err.response.data
+        if (!errorData || !errorData.code) {
+            return new this(
+                "UNKNOWN_ERROR" as TErrorCode,
+                0,
+                errorData?.message,
+            )
+        }
+
+        if ("seconds" in errorData && errorData.seconds) {
+            return new this(
+                errorData.code,
+                errorData.seconds,
+                errorData.message,
+            )
+        }
+
+        return new this(errorData.code, 0, errorData.message)
     }
 }
 
