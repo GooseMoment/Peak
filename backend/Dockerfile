@@ -4,7 +4,7 @@
 # https://blog.annotation-ai.com/python-docker-img-optimization/
 # https://www.psycopg.org/psycopg3/docs/basic/install.html
 
-FROM python:3.13.7-alpine3.21
+FROM python:3.14.0-alpine3.21
 
 WORKDIR /backend
 
@@ -20,8 +20,10 @@ COPY . .
 
 # copy static files
 WORKDIR /static
-RUN cp -r /usr/local/lib/python3.13/site-packages/django/contrib/admin/static/ /static
-RUN cp -r /usr/local/lib/python3.13/site-packages/rest_framework/static/ /static
+# Using site-packages discovery
+RUN SITE_PACKAGES=$(python -c "import site; print(site.getsitepackages()[0])") && \
+    cp -r "$SITE_PACKAGES/django/contrib/admin/static/" . && \
+    cp -r "$SITE_PACKAGES/rest_framework/static/" .
 
 WORKDIR /backend
 
