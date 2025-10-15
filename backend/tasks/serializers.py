@@ -15,7 +15,6 @@ class TaskReminderSerializer(serializers.ModelSerializer):
     task_name = serializers.SerializerMethodField()
     project_color = serializers.SerializerMethodField()
     project_id = serializers.SerializerMethodField()
-    privacy = serializers.CharField(allow_null=True, required=False)
 
     def get_task_name(self, obj):
         return obj.task.name
@@ -43,6 +42,7 @@ class TaskSerializer(serializers.ModelSerializer):
     user = UserSerializer(
         default=serializers.CurrentUserDefault(),
     )
+    privacy = serializers.CharField(allow_null=True, required=False)
     reminders = TaskReminderSerializer(many=True, read_only=True)
     drawer = DualityRelatedField(DrawerSerializer)
 
