@@ -14,6 +14,7 @@ class DrawerSerializer(serializers.ModelSerializer):
     project = DualityRelatedField(ProjectSerializer)
     uncompleted_task_count = serializers.IntegerField(default=0, read_only=True)
     completed_task_count = serializers.IntegerField(default=0, read_only=True)
+    privacy = serializers.CharField(allow_null=True, required=False)
 
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Drawer

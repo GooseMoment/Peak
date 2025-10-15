@@ -30,11 +30,6 @@ class Project(Base, PrivacyMixin):
     order = models.IntegerField(default=0)
     color = models.CharField(max_length=128)
     type = models.CharField(choices=PROJECT_TYPE_CHOICES, max_length=128)
-    privacy = models.CharField(
-        choices=PrivacyMixin.PRIVACY_TYPES,
-        max_length=128,
-        default=PrivacyMixin.FOR_PUBLIC,
-    )
 
     drawers: "RelatedManager[Drawer]"
 
