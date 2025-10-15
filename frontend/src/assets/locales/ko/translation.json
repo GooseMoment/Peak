@@ -435,7 +435,7 @@
         "button_no": "아니요",
         "button_today": "오늘로 이동",
         "retry": "재시도",
-        "loading": "로딩 중",
+        "loading": "로딩 중...",
         "load_more": "더 불러오기",
         "error_load": "불러오지 못했습니다.",
         "error_something_wrong": "문제가 발생했습니다.",

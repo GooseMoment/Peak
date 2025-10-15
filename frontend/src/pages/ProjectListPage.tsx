@@ -32,13 +32,20 @@ const ProjectListPage = () => {
 
     const modal = useModal()
 
-    const { data, isPending, isError, refetch, fetchNextPage, hasNextPage } =
-        useInfiniteQuery({
-            queryKey: ["projects"],
-            queryFn: (context) => getProjectList(context.pageParam),
-            initialPageParam: "1",
-            getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
-        })
+    const {
+        data,
+        isPending,
+        isError,
+        refetch,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
+        queryKey: ["projects"],
+        queryFn: (context) => getProjectList(context.pageParam),
+        initialPageParam: "1",
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
+    })
 
     const projects = useMemo(() => {
         if (!data) return []
@@ -119,8 +126,9 @@ const ProjectListPage = () => {
                 onImpressionStart={() => {
                     if (hasNextPage) fetchNextPage()
                 }}
-                timeThreshold={200}
-            />
+                timeThreshold={200}>
+                {isFetchingNextPage && t("common.loading")}
+            </StyledImpressionArea>
 
             {isPending || (
                 <ProjectCreateButton
@@ -177,9 +185,12 @@ const ProjectCreateButton = styled.div`
 `
 
 const StyledImpressionArea = styled(ImpressionArea)`
-    display: block;
     min-height: 24px;
     min-width: 1px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 
 const ProjectCreateText = styled.div`

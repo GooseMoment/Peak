@@ -83,6 +83,7 @@ const ProjectPage = () => {
         refetch: drawersRefetch,
         fetchNextPage,
         hasNextPage,
+        isFetchingNextPage,
     } = useInfiniteQuery({
         queryKey: ["drawers", { projectID: id, ordering: ordering }],
         queryFn: (context) =>
@@ -260,8 +261,9 @@ const ProjectPage = () => {
                 onImpressionStart={() => {
                     if (hasNextPage) fetchNextPage()
                 }}
-                timeThreshold={200}
-            />
+                timeThreshold={200}>
+                {isFetchingNextPage && t("common.loading")}
+            </StyledImpressionArea>
 
             {isAlertOpen && (
                 <DeleteAlert
@@ -330,9 +332,12 @@ const SortIconBox = styled.div`
 `
 
 const StyledImpressionArea = styled(ImpressionArea)`
-    display: block;
     min-height: 24px;
     min-width: 1px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 
 const NoDrawerText = styled.div`
