@@ -59,7 +59,10 @@ export default function DateBar({ date, setDate }: DateBarProps) {
                 <ModalCalendarWrapper>
                     <CommonCalendar
                         selectedDate={date}
-                        setSelectedDate={setDate}
+                        setSelectedDate={(date) => {
+                            setDate(date)
+                            modal.closeModal()
+                        }}
                         isModal
                     />
                 </ModalCalendarWrapper>
