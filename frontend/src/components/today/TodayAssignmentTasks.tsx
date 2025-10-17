@@ -25,7 +25,7 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
         isError,
         refetch,
     } = useInfiniteQuery({
-        queryKey: ["today", "assigned", selectedDate],
+        queryKey: ["today", "assigned", selectedDate.toISODate()],
         queryFn: (pages) =>
             getTasksAssignedToday(selectedDate.toISODate()!, pages.pageParam),
         initialPageParam: "1",
@@ -61,16 +61,16 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
                     )
                 )}
             </TasksBox>
-            <ButtonGroup $margin="1.3em 0em">
-                {hasNextPage ? (
+            {hasNextPage ? (
+                <ButtonGroup $margin="1.3em 0em">
                     <MoreButton
                         disabled={isFetchingNextPage}
                         loading={isFetchingNextPage}
                         onClick={() => fetchNextPage()}>
                         {t("common.load_more")}
                     </MoreButton>
-                ) : null}
-            </ButtonGroup>
+                </ButtonGroup>
+            ) : null}
         </>
     )
 }
