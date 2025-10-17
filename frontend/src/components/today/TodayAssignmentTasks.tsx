@@ -16,51 +16,50 @@ import { useTranslation } from "react-i18next"
 const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
     const { t } = useTranslation("translation")
 
-    const {
-        data: todayAssignmentTasks,
-        fetchNextPage: todayAssignmentFetchNextPage,
-        isLoading: isTodayAssignmentLoading,
-        isError: isTodayAssignmentError,
-        refetch: todayAssignmentRefetch,
-    } = useInfiniteQuery({
-        queryKey: ["today", "assigned", selectedDate],
-        queryFn: (pages) =>
-            getTasksAssignedToday(selectedDate.toISODate()!, pages.pageParam),
-        initialPageParam: "1",
-        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
-    })
+    const { data, hasNextPage, fetchNextPage, isPending, isError, refetch } =
+        useInfiniteQuery({
+            queryKey: ["today", "assigned", selectedDate],
+            queryFn: (pages) =>
+                getTasksAssignedToday(
+                    selectedDate.toISODate()!,
+                    pages.pageParam,
+                ),
+            initialPageParam: "1",
+            getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
+        })
 
-    const todayHasNextPage =
-        todayAssignmentTasks?.pages[todayAssignmentTasks?.pages?.length - 1]
-            .next !== null
-
-    if (isTodayAssignmentError) {
+    if (isError) {
         return (
-            <ErrorBox onClick={() => todayAssignmentRefetch()}>
+            <ErrorBox onClick={() => refetch()}>
                 {t("today.error_load_task")}
             </ErrorBox>
+        )
+    }
+
+    if (isPending) {
+        return (
+            <TasksBox>
+                <SkeletonDueTasks taskCount={10} />
+            </TasksBox>
         )
     }
 
     return (
         <>
             <TasksBox>
-                {isTodayAssignmentLoading && (
-                    <SkeletonDueTasks taskCount={10} />
-                )}
-                {todayAssignmentTasks?.pages[0].results.length === 0 ? (
+                {data.pages[0].results.length === 0 ? (
                     <NoTaskText>{t("today.no_today_assignment")}</NoTaskText>
                 ) : (
-                    todayAssignmentTasks?.pages?.map((group) =>
-                        group?.results?.map((task) => (
+                    data.pages.map((group) =>
+                        group.results.map((task) => (
                             <TaskBlock key={task.id} task={task} />
                         )),
                     )
                 )}
             </TasksBox>
             <FlexCenterBox>
-                {todayHasNextPage ? (
-                    <MoreButton onClick={() => todayAssignmentFetchNextPage()}>
+                {hasNextPage ? (
+                    <MoreButton onClick={() => fetchNextPage()}>
                         {t("common.load_more")}
                     </MoreButton>
                 ) : null}
