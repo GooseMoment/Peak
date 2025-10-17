@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction, useEffect, useState } from "react"
+import { type Dispatch, type SetStateAction, useMemo } from "react"
 
 import styled from "styled-components"
 
@@ -6,7 +6,7 @@ import CommonCalendar from "@components/common/CommonCalendar"
 import MildButton from "@components/common/MildButton"
 
 import { useClientLocale } from "@utils/clientSettings"
-import { ifMobile } from "@utils/useScreenType"
+import useModal, { Portal } from "@utils/useModal"
 
 import FeatherIcon from "feather-icons-react"
 import { DateTime } from "luxon"
@@ -18,53 +18,49 @@ interface DateBarProps {
 
 export default function DateBar({ date, setDate }: DateBarProps) {
     const locale = useClientLocale()
+    const modal = useModal()
 
     const handleDate = (diff: number) => {
         setDate(date.plus({ days: diff }))
     }
 
-    const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- close calendar when date changes
-        setIsCalendarOpen(false)
-    }, [date])
+    const dateLocaleString = useMemo(() => {
+        return date.setLocale(locale).toLocaleString({
+            year: date.year === DateTime.now().year ? undefined : "numeric",
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+        })
+    }, [date, locale])
 
     return (
         <Frame>
-            <CalendarNavigator>
+            <Navigator>
                 <NavButton onClick={() => handleDate(-7)}>
                     <FeatherIcon icon="chevrons-left" />
                 </NavButton>
                 <NavButton onClick={() => handleDate(-1)}>
                     <FeatherIcon icon="chevron-left" />
                 </NavButton>
-                <DateBox
-                    onClick={() => {
-                        setIsCalendarOpen((prev) => !prev)
-                    }}>
-                    {date.setLocale(locale).toLocaleString({
-                        weekday: "short",
-                        month: "short",
-                        day: "numeric",
-                    })}
-                </DateBox>
+                <CalendarButton onClick={() => modal.openModal()}>
+                    {dateLocaleString}
+                </CalendarButton>
                 <NavButton onClick={() => handleDate(1)}>
                     <FeatherIcon icon="chevron-right" />
                 </NavButton>
                 <NavButton onClick={() => handleDate(7)}>
                     <FeatherIcon icon="chevrons-right" />
                 </NavButton>
-            </CalendarNavigator>
-
-            {isCalendarOpen && (
-                <CalendarWrapper>
+            </Navigator>
+            <Portal modal={modal}>
+                <ModalCalendarWrapper>
                     <CommonCalendar
                         selectedDate={date}
                         setSelectedDate={setDate}
+                        isModal
                     />
-                </CalendarWrapper>
-            )}
+                </ModalCalendarWrapper>
+            </Portal>
         </Frame>
     )
 }
@@ -77,7 +73,7 @@ const Frame = styled.div`
     align-items: center;
 `
 
-const CalendarNavigator = styled.div`
+const Navigator = styled.div`
     margin: 0.5em 1em 0.5em;
     width: 100%;
     max-width: 35rem;
@@ -102,22 +98,16 @@ const NavButton = styled(MildButton)`
     }
 `
 
-const DateBox = styled.div`
+const CalendarButton = styled(MildButton)`
     min-width: 7em;
     flex-grow: 1;
 
     text-align: center;
-    font-weight: 500; // Bold: 700
+    font-weight: 500;
 `
 
-const CalendarWrapper = styled.div`
-    margin: 0 auto;
-    width: 80%;
-    max-width: 35rem;
-
-    ${ifMobile} {
-        min-width: 310px;
-
-        font-size: 0.9em;
-    }
+const ModalCalendarWrapper = styled.div`
+    padding: 1em;
+    background-color: ${(p) => p.theme.backgroundColor};
+    border-radius: 16px;
 `
