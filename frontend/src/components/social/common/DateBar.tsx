@@ -5,7 +5,7 @@ import styled from "styled-components"
 import CommonCalendar from "@components/common/CommonCalendar"
 import MildButton from "@components/common/MildButton"
 
-import { useClientLocale } from "@utils/clientSettings"
+import { useClientLocale, useClientTimezone } from "@utils/clientSettings"
 import useModal, { Portal } from "@utils/useModal"
 
 import FeatherIcon from "feather-icons-react"
@@ -18,6 +18,7 @@ interface DateBarProps {
 
 export default function DateBar({ date, setDate }: DateBarProps) {
     const locale = useClientLocale()
+    const tz = useClientTimezone()
     const modal = useModal()
 
     const handleDate = (diff: number) => {
@@ -25,13 +26,15 @@ export default function DateBar({ date, setDate }: DateBarProps) {
     }
 
     const dateLocaleString = useMemo(() => {
+        const now = DateTime.now().setZone(tz)
+
         return date.setLocale(locale).toLocaleString({
-            year: date.year === DateTime.now().year ? undefined : "numeric",
+            year: date.hasSame(now, "year") ? undefined : "numeric",
             weekday: "short",
             month: "short",
             day: "numeric",
         })
-    }, [date, locale])
+    }, [date, locale, tz])
 
     return (
         <Frame>
