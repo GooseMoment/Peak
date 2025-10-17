@@ -11,6 +11,8 @@ import {
 
 import styled, { css } from "styled-components"
 
+import "./useModal.css"
+
 import useStopVerticalScroll from "@utils/useStopVerticalScroll"
 
 import { scaleDown, scaleUp } from "@assets/keyframes"
