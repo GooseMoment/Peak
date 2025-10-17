@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 
 import styled from "styled-components"
 
@@ -18,23 +18,27 @@ const TodayPage = () => {
     const tz = useClientTimezone()
     const locale = useClientLocale()
 
-    const today = DateTime.now().setZone(tz)
-    const [selectedDate, setSelectedDate] = useState<DateTime>(today)
+    const [selectedDate, setSelectedDate] = useState(() =>
+        DateTime.now().setZone(tz).startOf("day"),
+    )
 
-    const isToday = selectedDate.hasSame(today, "day")
-
-    const titleText = isToday
-        ? t("title")
-        : selectedDate.setLocale(locale).toLocaleString({
-              weekday: "short",
-              month: "short",
-              day: "numeric",
-          })
+    const title = useMemo(() => {
+        const now = DateTime.now().setZone(tz)
+        if (selectedDate.hasSame(now, "day")) {
+            return t("title")
+        }
+        return selectedDate.setLocale(locale).toLocaleString({
+            year: selectedDate.hasSame(now, "year") ? undefined : "numeric",
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+        })
+    }, [selectedDate, t, locale, tz])
 
     return (
         <>
             <TitleBox>
-                <PageTitle>{titleText}</PageTitle>
+                <PageTitle>{title}</PageTitle>
                 <TodayDateMenu
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
