@@ -1,4 +1,4 @@
-import { Dispatch, MouseEvent, SetStateAction } from "react"
+import { Dispatch, SetStateAction } from "react"
 
 import styled from "styled-components"
 
@@ -18,28 +18,23 @@ const TodayDateMenu = ({
     setSelectedDate: Dispatch<SetStateAction<DateTime>>
 }) => {
     return (
-        <div
-            onClick={(e: MouseEvent<HTMLElement>) => {
-                e.stopPropagation()
-            }}>
-            <DateMenu
-                menuButton={
-                    <DateMenuBtn>
-                        <FeatherIcon icon="calendar" />
-                    </DateMenuBtn>
-                }
-                transition
-                align="end">
-                <DateMenuItem aria-disabled>
-                    <CalendarWrapper onClick={(e) => e.stopPropagation()}>
-                        <CommonCalendar
-                            selectedDate={selectedDate}
-                            setSelectedDate={setSelectedDate}
-                        />
-                    </CalendarWrapper>
-                </DateMenuItem>
-            </DateMenu>
-        </div>
+        <DateMenu
+            menuButton={
+                <DateMenuBtn>
+                    <FeatherIcon icon="calendar" />
+                </DateMenuBtn>
+            }
+            transition
+            align="end">
+            <DateMenuItem aria-disabled>
+                <CalendarWrapper onClick={(e) => e.stopPropagation()}>
+                    <CommonCalendar
+                        selectedDate={selectedDate}
+                        setSelectedDate={setSelectedDate}
+                    />
+                </CalendarWrapper>
+            </DateMenuItem>
+        </DateMenu>
     )
 }
 
