@@ -130,7 +130,6 @@ const Middle = () => {
                             aria-label={
                                 isCollapsed ? t("common.load_more") : undefined
                             }
-                            aria-busy={isFetchingNextPage}
                             disabled={isFetchingNextPage}
                             loading={isFetchingNextPage}
                             onClick={() => fetchNextPage()}>
