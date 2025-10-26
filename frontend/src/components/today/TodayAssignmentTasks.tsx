@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import Button from "@components/common/Button"
+import Button, { ButtonGroup } from "@components/common/Button"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
 import TaskBlock from "@components/tasks/TaskBlock"
@@ -17,63 +17,63 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
     const { t } = useTranslation("translation")
 
     const {
-        data: todayAssignmentTasks,
-        fetchNextPage: todayAssignmentFetchNextPage,
-        isLoading: isTodayAssignmentLoading,
-        isError: isTodayAssignmentError,
-        refetch: todayAssignmentRefetch,
+        data,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage,
+        isPending,
+        isError,
+        refetch,
     } = useInfiniteQuery({
-        queryKey: ["today", "assigned", selectedDate],
+        queryKey: ["today", "assigned", selectedDate.toISODate()],
         queryFn: (pages) =>
             getTasksAssignedToday(selectedDate.toISODate()!, pages.pageParam),
         initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
-    const todayHasNextPage =
-        todayAssignmentTasks?.pages[todayAssignmentTasks?.pages?.length - 1]
-            .next !== null
-
-    if (isTodayAssignmentError) {
+    if (isError) {
         return (
-            <ErrorBox onClick={() => todayAssignmentRefetch()}>
+            <ErrorBox onClick={() => refetch()}>
                 {t("today.error_load_task")}
             </ErrorBox>
+        )
+    }
+
+    if (isPending) {
+        return (
+            <TasksBox>
+                <SkeletonDueTasks taskCount={10} />
+            </TasksBox>
         )
     }
 
     return (
         <>
             <TasksBox>
-                {isTodayAssignmentLoading && (
-                    <SkeletonDueTasks taskCount={10} />
-                )}
-                {todayAssignmentTasks?.pages[0].results.length === 0 ? (
+                {data.pages[0].results.length === 0 ? (
                     <NoTaskText>{t("today.no_today_assignment")}</NoTaskText>
                 ) : (
-                    todayAssignmentTasks?.pages?.map((group) =>
-                        group?.results?.map((task) => (
+                    data.pages.map((group) =>
+                        group.results.map((task) => (
                             <TaskBlock key={task.id} task={task} />
                         )),
                     )
                 )}
             </TasksBox>
-            <FlexCenterBox>
-                {todayHasNextPage ? (
-                    <MoreButton onClick={() => todayAssignmentFetchNextPage()}>
+            {hasNextPage ? (
+                <ButtonGroup $margin="1.3em 0em">
+                    <MoreButton
+                        disabled={isFetchingNextPage}
+                        loading={isFetchingNextPage}
+                        onClick={() => fetchNextPage()}>
                         {t("common.load_more")}
                     </MoreButton>
-                ) : null}
-            </FlexCenterBox>
+                </ButtonGroup>
+            ) : null}
         </>
     )
 }
-
-const FlexCenterBox = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`
 
 const TasksBox = styled.div`
     display: flex;
@@ -85,7 +85,6 @@ const TasksBox = styled.div`
 
 const MoreButton = styled(Button)`
     width: 25em;
-    margin-top: 1.3em;
 `
 
 const NoTaskText = styled.div`
