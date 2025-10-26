@@ -9,7 +9,7 @@ import PageTitle from "@components/common/PageTitle"
 import { cubicBeizer } from "@assets/keyframes"
 
 import FeatherIcon, { type FeatherIconName } from "feather-icons-react"
-import { TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 
 const pathRoot = "/app/settings/"
@@ -79,11 +79,6 @@ const getMenuItems = (t: TFunction<"settings", "menus">) =>
             display: t("appearance"),
             to: "appearance",
         },
-        // {
-        //     icon: "heart",
-        //     display: t("reactions"),
-        //     to: "reactions",
-        // },
         {
             icon: "slash",
             display: t("blocks"),

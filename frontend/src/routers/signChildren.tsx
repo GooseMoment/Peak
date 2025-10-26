@@ -1,17 +1,22 @@
+import { lazy } from "react"
 import { redirect } from "react-router-dom"
 
 import { lazily } from "react-lazily"
 
-const {
-    SignInForm,
-    TOTPAuthForm,
-    SignUpForm,
-    SignUpComplete,
-    PasswordRecoveryForm,
-    PasswordRecoveryRequestForm,
-    EmailVerificationForm,
-    EmailVerificationResendForm,
-} = lazily(() => import("@components/sign/forms"))
+const SignInForm = lazy(() => import("@components/sign/SignInForm"))
+const TOTPAuthForm = lazy(() => import("@components/sign/TOTPAuthForm"))
+
+const { SignUpForm, SignUpComplete } = lazily(
+    () => import("@components/sign/signUpForms"),
+)
+
+const { PasswordRecoveryForm, PasswordRecoveryRequestForm } = lazily(
+    () => import("@components/sign/passwordRecoveryForms"),
+)
+
+const { EmailVerificationForm, EmailVerificationResendForm } = lazily(
+    () => import("@components/sign/emailVerificationForms"),
+)
 
 const signChildren = [
     {
@@ -23,7 +28,7 @@ const signChildren = [
         element: <SignInForm />,
     },
     {
-        path: "two_factor/totp",
+        path: "two-factor/totp",
         element: <TOTPAuthForm />,
     },
     {

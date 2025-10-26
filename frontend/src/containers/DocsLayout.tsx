@@ -5,7 +5,7 @@ import styled from "styled-components"
 
 import { LoaderCircleFull } from "@components/common/LoaderCircle"
 
-const DocsLayout = () => {
+export default function DocsLayout() {
     return (
         <Page>
             <Suspense
@@ -28,5 +28,3 @@ const Page = styled.div`
 
     color: ${(p) => p.theme.textColor};
 `
-
-export default DocsLayout

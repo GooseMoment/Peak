@@ -1,6 +1,6 @@
-import { css, keyframes } from "styled-components"
+import { DefaultTheme, css, keyframes } from "styled-components"
 
-const shineLines = (start, end) => keyframes`
+const shineLines = (start: string, end: string) => keyframes`
     0% {
         background-position: ${start}
     }
@@ -25,7 +25,7 @@ export const skeletonCSS = (
     animation: ${shineLines(start, end)} ${interval} infinite linear;
 `
 
-const breathing = (p) => keyframes`
+const breathing = (p: { theme: DefaultTheme }) => keyframes`
     0%, 100% {
         background-color: ${p.theme.skeleton.defaultColor};
     }

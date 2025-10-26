@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react"
+import { Suspense, useEffect } from "react"
 import { Link, Outlet, useSearchParams } from "react-router-dom"
 
 import { useQuery } from "@tanstack/react-query"
@@ -17,9 +17,8 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const SignPage = () => {
-    const { t } = useTranslation(null, { keyPrefix: "sign" })
+    const { t } = useTranslation("translation", { keyPrefix: "sign" })
     const [searchParams] = useSearchParams()
-    const [activities, setActivities] = useState([])
 
     useEffect(() => {
         const flag = searchParams.get("flag")
@@ -30,36 +29,19 @@ const SignPage = () => {
         }
     }, [searchParams, t])
 
-    const {
-        data: serverEmojis,
-        isError,
-        isFetching,
-    } = useQuery({
+    const { data: activities } = useQuery({
         queryKey: ["emojis"],
         queryFn: () => getEmojis(),
         staleTime: 1000 * 60 * 60 * 5,
+        select: (data) => generateActivities(data),
     })
-
-    useEffect(() => {
-        if (isFetching) {
-            return
-        }
-
-        if (isError) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect -- this line will be deleted at PR #553
-            setActivities(generateActivities(null))
-            return
-        }
-
-        setActivities(generateActivities(serverEmojis))
-    }, [serverEmojis, isError, isFetching])
 
     return (
         <Root>
             <Link to="/">
                 <Brand />
             </Link>
-            <Showcase activities={activities} />
+            <Showcase>{activities}</Showcase>
             <ContentBox>
                 <Suspense key="sign-page" fallback={<LoaderCircleFull />}>
                     <Outlet />

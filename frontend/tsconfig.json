@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         "alwaysStrict": true,
-        "allowJs": true,
         "baseUrl": ".",
         "resolveJsonModule": true,
         "esModuleInterop": true,

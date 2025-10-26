@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { FormEvent, useState } from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
@@ -9,10 +9,11 @@ import Section, { Name, Value } from "@components/settings/Section"
 
 import { patchPassword } from "@api/users.api"
 
+import { isAxiosError } from "axios"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
-const PasswordSection = () => {
+export default function PasswordSection() {
     const { t } = useTranslation("settings", {
         keyPrefix: "security.password_change",
     })
@@ -34,8 +35,9 @@ const PasswordSection = () => {
         },
         onError: (e) => {
             if (
+                isAxiosError(e) &&
                 e.response?.data?.code ===
-                "PATCHPASSWORD_WRONG_CURRENT_PASSWORD"
+                    "PATCHPASSWORD_WRONG_CURRENT_PASSWORD"
             ) {
                 toast.error(t("password_wrong"))
                 return
@@ -44,7 +46,7 @@ const PasswordSection = () => {
         },
     })
 
-    const changePassword = async (e) => {
+    const changePassword = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         if (newPassword.length < 8) {
@@ -75,7 +77,7 @@ const PasswordSection = () => {
                         name="password"
                         type="password"
                         placeholder={t("current_password")}
-                        autoComplete="password"
+                        autoComplete="current-password"
                         required
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
@@ -124,5 +126,3 @@ const PasswordChangeForm = styled.form`
     flex-direction: column;
     gap: 1em;
 `
-
-export default PasswordSection
