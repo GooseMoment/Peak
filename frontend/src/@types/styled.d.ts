@@ -29,7 +29,6 @@ declare module "styled-components" {
         scrollbarColor: string
         introTextColor: string
         introBackgroundColor: string
-        imgIconFilter: string
         sidebar: {
             activeColor: string
             activeBackgroundColor: string
@@ -51,9 +50,6 @@ declare module "styled-components" {
         skeleton: { defaultColor: string; shineColor: string }
         notifications: { boxShadowColor: string }
         social: {
-            borderColor: string
-            modalShadowColor: string
-            modalCellHoverColor: string
             buttonColor: string
             activeColor: string
             activeBackgroundColor: string
