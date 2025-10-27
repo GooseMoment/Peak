@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 import { Link, To, useLocation } from "react-router-dom"
 
 import styled from "styled-components"
@@ -6,12 +6,12 @@ import styled from "styled-components"
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-interface PageBack {
+interface PageBackProps {
     defaultTo: To
     children?: ReactNode
 }
 
-const PageBack = ({ defaultTo, children }: PageBack) => {
+export default function PageBack({ defaultTo, children }: PageBackProps) {
     const location = useLocation()
     const { t } = useTranslation("translation", {
         keyPrefix: "common.header",
@@ -37,5 +37,3 @@ const BackLink = styled(Link)`
         stroke-width: 3px;
     }
 `
-
-export default PageBack
