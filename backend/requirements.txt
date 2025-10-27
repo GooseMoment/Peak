@@ -8,7 +8,7 @@ psycopg==3.2.11
 gunicorn==23.0.0
 boto3==1.40.56
 django-storages==1.14.6
-pillow==11.3.0 # required by models.ImageField 
+pillow==12.0.0 # required by models.ImageField 
 django-redis==6.0.0
 pywebpush==2.1.0
 django-rest-knox==5.0.2
