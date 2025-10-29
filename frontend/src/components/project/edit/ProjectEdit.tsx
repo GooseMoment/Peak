@@ -12,7 +12,12 @@ import ProjectTypeEdit from "@components/project/edit/ProjectTypeEdit"
 import TitleInput from "@components/project/edit/TitleInput"
 import omitCommonFields from "@components/tasks/utils/omitCommonFields"
 
-import { type Project, patchProject, postProject } from "@api/projects.api"
+import {
+    type Project,
+    type ProjectCreateInput,
+    patchProject,
+    postProject,
+} from "@api/projects.api"
 
 import { useModalContext } from "@utils/useModal"
 import useScreenType from "@utils/useScreenType"
@@ -25,8 +30,6 @@ import { AxiosError } from "axios"
 import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
-
-type ProjectCreateInput = Pick<Project, "name" | "color" | "privacy" | "type">
 
 const projectDefault = {
     name: "",
@@ -181,7 +184,7 @@ const makeItems = (
     t: TFunction<"translation", "project_drawer_edit">,
     type: LightDark,
     project: Project | ProjectCreateInput,
-    setFunc: (diff: Partial<Project>) => void,
+    setFunc: (diff: Partial<ProjectCreateInput>) => void,
 ) => [
     {
         name: "color",
@@ -193,7 +196,7 @@ const makeItems = (
     {
         name: "privacy",
         icon: "server" as const,
-        display: t(`privacy.${project.privacy}`),
+        display: t(`privacy.${project.privacy ?? "default"}`),
         component: <PrivacyEdit setPrivacy={setFunc} />,
     },
     {

@@ -8,7 +8,7 @@ interface MinimalTaskWithoutDue {
     name?: string
     user?: User
     drawer: Drawer
-    privacy?: Privacy
+    privacy?: Privacy | null
     priority: number
     order?: number
     completed_at?: null | string
@@ -49,7 +49,7 @@ export type Task = Required<MinimalTaskWithID>
 interface TaskPostBase {
     name?: string
     drawer: string
-    privacy?: Privacy
+    privacy?: Privacy | null
     priority: number
     completed_at?: null | string
     assigned_at?: null | string

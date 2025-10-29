@@ -147,6 +147,7 @@
         },
         "privacy": {
             "title": "Privacy Settings",
+            "default": "Same as project",
             "public": "Everyone",
             "protected": "Limit to my followers",
             "private": "Only me"
@@ -183,6 +184,10 @@
             "alert_task_title": "the \"{{task_name}}\" task",
             "delete_success": "Deleted the \"{{task_name}}\" task.",
             "delete_error": "Failed to delete \"{{task_name}}\" task."
+        },
+        "completed": {
+            "name": "Completion Date",
+            "title": "Completion Date Settings"
         },
         "assigned": {
             "name": "Assignment Date",

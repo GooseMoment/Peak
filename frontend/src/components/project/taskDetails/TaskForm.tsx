@@ -1,4 +1,10 @@
-import { Dispatch, KeyboardEvent, SetStateAction, useRef } from "react"
+import {
+    Dispatch,
+    KeyboardEvent,
+    SetStateAction,
+    useCallback,
+    useRef,
+} from "react"
 
 import { useMutation } from "@tanstack/react-query"
 import styled from "styled-components"
@@ -74,13 +80,16 @@ const TaskForm = ({
         },
     })
 
-    const setFunc = (diff: Partial<MinimalTask>) => {
-        handleChange(diff)
+    const setFunc = useCallback(
+        (diff: Partial<MinimalTask>) => {
+            handleChange(diff)
 
-        if (isDesktop) {
-            inputRef.current?.focus()
-        }
-    }
+            if (isDesktop) {
+                inputRef.current?.focus()
+            }
+        },
+        [handleChange, isDesktop],
+    )
 
     const submit = async () => {
         if (newTask.name === undefined || newTask.name.trim() === "") {

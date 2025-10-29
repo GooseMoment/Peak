@@ -16,6 +16,7 @@ import type { TaskContent } from "@components/tasks/contents"
 import useTaskDateDisplay from "@components/tasks/utils/useTaskDateDisplay"
 
 import TaskDetailAssigned from "./TaskDetailAssigned"
+import TaskDetailCompleted from "./TaskDetailCompleted"
 import TaskDetailDrawer from "./TaskDetailDrawer"
 import TaskDetailDue from "./TaskDetailDue"
 import TaskDetailMemo from "./TaskDetailMemo"
@@ -77,11 +78,30 @@ const Contents = ({
         modal.closeModal()
     }, [modal])
 
-    const { formatted_due_datetime, formatted_assigned_date } =
-        useTaskDateDisplay(task)
+    const {
+        formatted_due_datetime,
+        formatted_assigned_date,
+        formatted_completed_date,
+    } = useTaskDateDisplay(task)
 
     const items = useMemo(
         () => [
+            ...(task.completed_at
+                ? [
+                      {
+                          id: 0,
+                          name: "completed" as const,
+                          icon: <FeatherIcon icon="check-circle" />,
+                          display: formatted_completed_date,
+                          component: (
+                              <TaskDetailCompleted
+                                  completedAt={task.completed_at}
+                                  setFunc={setFunc}
+                              />
+                          ),
+                      },
+                  ]
+                : []),
             {
                 id: 1,
                 name: "assigned" as const,
@@ -185,6 +205,7 @@ const Contents = ({
             displayReminder,
             formatted_assigned_date,
             formatted_due_datetime,
+            formatted_completed_date,
             priorities,
             setFunc,
             setNewColor,
@@ -223,7 +244,11 @@ const Contents = ({
                 <Detail
                     title={content ? t(`${content}.title`) : t("none")}
                     onClose={closeComponent}
-                    special={content === "assigned" || content === "due"}>
+                    special={
+                        content === "completed" ||
+                        content === "assigned" ||
+                        content === "due"
+                    }>
                     {component}
                 </Detail>
             </Portal>
@@ -284,16 +309,12 @@ const ContentText = styled.button<{ $isReminder: boolean }>`
     cursor: ${(props) => (props.$isReminder ? "normal" : "pointer")};
 `
 
-const RemindersBox = styled.button`
-    all: unset;
-    text-decoration: none;
+const RemindersBox = styled.div`
     display: flex;
     gap: 0.5em;
 `
 
-const ReminderBlock = styled.button`
-    all: unset;
-    text-decoration: none;
+const ReminderBlock = styled.div`
     width: auto;
     font-size: 0.9em;
     padding: 0.3em;
@@ -305,9 +326,7 @@ const ReminderBlock = styled.button`
     cursor: pointer;
 `
 
-const EmptyReminderBox = styled.button`
-    all: unset;
-    text-decoration: none;
+const EmptyReminderBox = styled.div`
     font-size: 0.9em;
     width: 1em;
     padding: 0.3em;

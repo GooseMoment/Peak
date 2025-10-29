@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
-import Button, { ButtonGroup } from "@components/common/Button"
 import DeleteAlert from "@components/common/DeleteAlert"
 import PageTitle from "@components/common/PageTitle"
 import DrawerBlock from "@components/drawers/DrawerBlock"
@@ -35,6 +34,7 @@ import queryClient from "@queries/queryClient"
 
 import { getPaletteColor } from "@assets/palettes"
 
+import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
 import type { TFunction } from "i18next"
 import { DndProvider } from "react-dnd-multi-backend"
@@ -256,19 +256,15 @@ const ProjectPage = () => {
                     ))}
                 </DndProvider>
             )}
-            {isDrawersPending ||
-                (hasNextPage ? (
-                    <ButtonGroup $justifyContent="center" $margin="1em">
-                        <MoreButton
-                            disabled={isFetchingNextPage}
-                            loading={isFetchingNextPage}
-                            onClick={() => fetchNextPage()}>
-                            {isDrawersPending
-                                ? t("common.loading")
-                                : t("common.load_more")}
-                        </MoreButton>
-                    </ButtonGroup>
-                ) : null)}
+
+            <StyledImpressionArea
+                onImpressionStart={() => {
+                    if (hasNextPage) fetchNextPage()
+                }}
+                timeThreshold={200}>
+                {isFetchingNextPage && t("common.loading")}
+            </StyledImpressionArea>
+
             {isAlertOpen && (
                 <DeleteAlert
                     title={t("project.delete.alert_project_title", {
@@ -335,32 +331,37 @@ const SortIconBox = styled.div`
     }
 `
 
+const StyledImpressionArea = styled(ImpressionArea)`
+    min-height: 24px;
+    min-width: 1px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
 const NoDrawerText = styled.div`
     margin-top: 2em;
     font-weight: 600;
     font-size: 1.4em;
 `
 
-const MoreButton = styled(Button)`
-    width: 80%;
-`
-
-const makeSortMenuItems = (t: TFunction<"translation", "project">) => [
-    { display: t("sort.my"), context: "order" },
-    { display: t("sort.name"), context: "name" },
-    { display: t("sort.-name"), context: "-name" },
-    { display: t("sort.created_at"), context: "created_at" },
-    { display: t("sort.-created_at"), context: "-created_at" },
+const makeSortMenuItems = (t: TFunction<"translation">) => [
+    { display: t("project.sort.my"), context: "order" },
+    { display: t("project.sort.name"), context: "name" },
+    { display: t("project.sort.-name"), context: "-name" },
+    { display: t("project.sort.created_at"), context: "created_at" },
+    { display: t("project.sort.-created_at"), context: "-created_at" },
     {
-        display: t("sort.-uncompleted_task_count"),
+        display: t("project.sort.-uncompleted_task_count"),
         context: "-uncompleted_task_count",
     },
     {
-        display: t("sort.-completed_task_count"),
+        display: t("project.sort.-completed_task_count"),
         context: "-completed_task_count",
     },
     {
-        display: t("sort.completed_task_count"),
+        display: t("project.sort.completed_task_count"),
         context: "completed_task_count",
     },
 ]

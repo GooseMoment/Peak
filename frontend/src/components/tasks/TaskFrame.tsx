@@ -34,7 +34,7 @@ const TaskFrame = ({
     isSocial = false,
 }: TaskFrameProps) => {
     const theme = useTheme()
-    const isCompleted = !isSocial && task.completed_at !== null
+    const isCompleted = task.completed_at !== null
 
     const [searchParams] = useSearchParams()
     const taskIdFromQuery = searchParams.get("taskId")
@@ -74,6 +74,7 @@ const TaskFrame = ({
                     </Icons>
                     <TaskNameBox
                         $isCompleted={isCompleted}
+                        $isSocial={isSocial}
                         onClick={() => {
                             if (showTaskDetail) {
                                 modal.openModal()
@@ -203,11 +204,14 @@ const Content = styled.div`
     width: 100%;
 `
 
-const TaskNameBox = styled.div<{ $isCompleted: boolean }>`
+const TaskNameBox = styled.div<{ $isCompleted: boolean; $isSocial?: boolean }>`
     display: inline-block;
     font-size: 1.1em;
     font-style: normal;
-    color: ${(p) => (p.$isCompleted ? p.theme.grey : p.theme.textColor)};
+    color: ${(p) => {
+        if (p.$isCompleted && !p.$isSocial) return p.theme.grey
+        return p.theme.textColor
+    }};
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -238,7 +242,8 @@ const Icons = styled.div`
 const Dates = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 0.4em;
+    height: 1.1em;
+    margin-top: 0.1em;
     margin-left: 3em;
 `
 
@@ -325,7 +330,7 @@ const Reminder = styled.div<{
             : props.theme.project.reminderColor};
 
     & svg {
-        width: 1em;
+        width: 1.2em;
         height: 1em;
         margin-right: 0.2em;
         top: 0;

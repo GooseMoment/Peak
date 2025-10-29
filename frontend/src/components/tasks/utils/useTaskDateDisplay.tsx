@@ -39,7 +39,11 @@ const useTaskDateDisplay = (task: MinimalTask) => {
         [locale, setting.time_as_24_hour],
     )
 
-    const { formatted_due_datetime, formatted_assigned_date } = useMemo(() => {
+    const {
+        formatted_due_datetime,
+        formatted_assigned_date,
+        formatted_completed_date,
+    } = useMemo(() => {
         let formatted_due_datetime = null
         if (task.due_type === "due_date") {
             const task_due = DateTime.fromISO(task.due_date, { zone: tz })
@@ -54,10 +58,23 @@ const useTaskDateDisplay = (task: MinimalTask) => {
             : null
         const formatted_assigned_date = formatDate(assigned_at_date)
 
-        return { formatted_due_datetime, formatted_assigned_date }
+        const completed_at_date = task.completed_at
+            ? DateTime.fromISO(task.completed_at, { zone: tz })
+            : null
+        const formatted_completed_date = formatDate(completed_at_date)
+
+        return {
+            formatted_due_datetime,
+            formatted_assigned_date,
+            formatted_completed_date,
+        }
     }, [task, tz, formatDate, formatDateTime])
 
-    return { formatted_due_datetime, formatted_assigned_date }
+    return {
+        formatted_due_datetime,
+        formatted_assigned_date,
+        formatted_completed_date,
+    }
 }
 
 export default useTaskDateDisplay

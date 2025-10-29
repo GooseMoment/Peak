@@ -80,7 +80,7 @@ class DrawerList(
         try:
             return self.create(request, *args, **kwargs)
         except ValidationError as e:
-            if "unique constraint" in str(e):
+            if "unique" in str(e):
                 raise DrawerNameDuplicate
 
 

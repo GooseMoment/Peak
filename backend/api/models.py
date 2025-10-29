@@ -26,7 +26,11 @@ class PrivacyMixin(
         (FOR_PRIVATE, "for private"),
     ]
 
-    privacy = models.CharField(choices=PRIVACY_TYPES, max_length=128)
+    privacy = models.CharField(
+        choices=PRIVACY_TYPES,
+        max_length=128,
+        default=FOR_PUBLIC,
+    )
 
     class Meta:
         abstract = True

@@ -29,6 +29,11 @@ class Drawer(Base, PrivacyMixin):
 
     tasks: "RelatedManager[Task]"
 
+    def save(self, *args, **kwargs):
+        if not self.privacy:
+            self.privacy = self.project.privacy
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:
         return f"{self.name} in {self.project}"
 
