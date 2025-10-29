@@ -30,9 +30,7 @@ def update_follow_count_for_following(sender, instance: Following, **kwargs):
 
 
 @receiver(pre_save, sender=Following)
-def accept_follow_request_based_on_user_setting(
-    sender, instance: Following, created: bool, **kwargs
-):
+def accept_follow_request_based_on_user_setting(instance: Following, **kwargs):
     if instance.status != Following.REQUESTED:
         return
 
