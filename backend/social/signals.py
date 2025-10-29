@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 
 from .models import Block, Following
@@ -29,7 +29,7 @@ def update_follow_count_for_following(sender, instance: Following, **kwargs):
     instance.followee.save()
 
 
-@receiver(post_save, sender=Following)
+@receiver(pre_save, sender=Following)
 def accept_follow_request_based_on_user_setting(
     sender, instance: Following, created: bool, **kwargs
 ):
@@ -42,7 +42,6 @@ def accept_follow_request_based_on_user_setting(
 
     if not followee_setting.follow_request_approval_manually:
         instance.status = Following.ACCEPTED
-        instance.save()
         return
 
     if not followee_setting.follow_request_approval_for_followings:
@@ -59,4 +58,3 @@ def accept_follow_request_based_on_user_setting(
         return
 
     instance.status = Following.ACCEPTED
-    instance.save()
