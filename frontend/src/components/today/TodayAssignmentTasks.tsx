@@ -6,8 +6,8 @@ import styled from "styled-components"
 import Button, { ButtonGroup } from "@components/common/Button"
 import TaskCreateButton from "@components/drawers/TaskCreateButton"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
-import TaskCreateSimple from "@components/project/TaskCreateSimple"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
+import TaskCreateSimple from "@components/project/taskCreateSimple"
 import TaskBlock from "@components/tasks/TaskBlock"
 
 import { getDrawer } from "@api/drawers.api"
@@ -55,15 +55,19 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
         setIsSimpleOpen((prev) => !prev)
     }
 
-    if (isError) {
+    if (isError || isInboxError) {
         return (
-            <ErrorBox onClick={() => refetch()}>
+            <ErrorBox
+                onClick={() => {
+                    refetch()
+                    isInboxRefetch()
+                }}>
                 {t("today.error_load_task")}
             </ErrorBox>
         )
     }
 
-    if (isPending) {
+    if (isPending || isInboxLoading) {
         return (
             <TasksBox>
                 <SkeletonDueTasks taskCount={10} />
