@@ -32,7 +32,6 @@ const light: DefaultTheme = {
     scrollbarColor: "#FFC6C6",
     introTextColor: goose,
     introBackgroundColor: "#FFD7C7",
-    imgIconFilter: "invert(0%)",
     sidebar: {
         activeColor: black,
         activeBackgroundColor: "#D9D9D9",
@@ -62,9 +61,6 @@ const light: DefaultTheme = {
         boxShadowColor: "rgba(149, 157, 165, 0.2)",
     },
     social: {
-        borderColor: black,
-        modalShadowColor: "rgba(123, 123, 123, 0.1)",
-        modalCellHoverColor: "#F0F0F0",
         buttonColor: "#A9A9A9",
         activeColor: "oklch(45.7% 0.24 277.023)",
         activeBackgroundColor: "oklch(96.2% 0.018 272.314)",
@@ -101,7 +97,6 @@ const dark: DefaultTheme = {
     scrollbarColor: "#4A4A4A",
     introTextColor: "#FFD7C7",
     introBackgroundColor: "#77371F",
-    imgIconFilter: "invert(100%)",
     sidebar: {
         activeColor: white,
         activeBackgroundColor: black,
@@ -131,9 +126,6 @@ const dark: DefaultTheme = {
         boxShadowColor: "rgba(0, 0, 0, 0.4)",
     },
     social: {
-        borderColor: white,
-        modalShadowColor: "rgba(210, 210, 210, 0.1)",
-        modalCellHoverColor: "#383838",
         buttonColor: "#A9A9A9",
         activeColor: "oklch(87% 0.065 274.039)",
         activeBackgroundColor: "oklch(37.1% 0 0)",
