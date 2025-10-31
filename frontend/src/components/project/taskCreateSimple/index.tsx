@@ -31,6 +31,7 @@ import { usePaletteColor } from "@assets/palettes"
 import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
+import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -39,19 +40,27 @@ type SimpleContentKey = "name" | "assigned" | "due" | "priority"
 const TaskCreateSimple = ({
     drawer,
     onClose,
+    init_assigned_at = null,
 }: {
     drawer: Drawer
     onClose: () => void
+    init_assigned_at?: DateTime | null
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task.edit" })
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const [newTask, setNewTask] = useState<MinimalTask>(() =>
-        createInitialTask(drawer),
-    )
+    const [newTask, setNewTask] = useState<MinimalTask>(() => {
+        const converted_init_assigend_at = init_assigned_at
+            ? init_assigned_at.toISODate()
+            : null
+
+        return createInitialTask(drawer, converted_init_assigend_at)
+    })
 
     const [content, setContent] = useState<SimpleContentKey>("name")
-    const [assignedIndex, setAssignedIndex] = useState(0)
+    const [assignedIndex, setAssignedIndex] = useState(
+        init_assigned_at !== null ? 1 : 0,
+    )
     const [dueIndex, setDueIndex] = useState(0)
     const [priorityIndex, setPriorityIndex] = useState(0)
 
@@ -174,6 +183,9 @@ const TaskCreateSimple = ({
             })
             queryClient.invalidateQueries({
                 queryKey: ["projects", drawer.project.id],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["today", "assigned"],
             })
             toast.success(t("create_success"))
             onClose()

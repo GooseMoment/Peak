@@ -52,6 +52,7 @@
         "filter_pastAssigned": "지난 할당",
         "no_today_assignment": "오늘 할 작업들을 추가하세요.",
         "error_load_task": "작업을 불러오지 못했어요",
+        "error_load_inbox": "인박스 프로젝트를 불러오지 못했어요",
         "due_change_today_success": "작업을 오늘로 할당했습니다.",
         "due_change_tomorrow_success": "작업을 내일로 할당했습니다.",
         "due_change_error": "기한 변경에 실패했습니다.",

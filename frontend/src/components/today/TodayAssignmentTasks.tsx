@@ -1,11 +1,16 @@
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useState } from "react"
+
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
+import TaskCreateButton from "@components/drawers/TaskCreateButton"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
+import TaskCreateSimple from "@components/project/taskCreateSimple"
 import TaskBlock from "@components/tasks/TaskBlock"
 
+import { getDrawer } from "@api/drawers.api"
 import { getTasksAssignedToday } from "@api/today.api"
 
 import { getPageFromURL } from "@utils/pagination"
@@ -15,6 +20,8 @@ import { useTranslation } from "react-i18next"
 
 const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
     const { t } = useTranslation("translation")
+
+    const [isSimpleOpen, setIsSimpleOpen] = useState(false)
 
     const {
         data,
@@ -32,15 +39,38 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
-    if (isError) {
+    const {
+        isLoading: isInboxLoading,
+        isError: isInboxError,
+        data: inboxData,
+        refetch: inboxRefetch,
+    } = useQuery({
+        queryKey: ["drawers", "inbox"],
+        async queryFn() {
+            return getDrawer("inbox")
+        },
+        enabled: isSimpleOpen,
+    })
+
+    const handleToggleSimpleCreate = () => {
+        setIsSimpleOpen((prev) => !prev)
+    }
+
+    if (isError || isInboxError) {
         return (
-            <ErrorBox onClick={() => refetch()}>
-                {t("today.error_load_task")}
+            <ErrorBox
+                onClick={() => {
+                    refetch()
+                    inboxRefetch()
+                }}>
+                {isError
+                    ? t("today.error_load_task")
+                    : t("today.error_load_inbox")}
             </ErrorBox>
         )
     }
 
-    if (isPending) {
+    if (isPending || isInboxLoading) {
         return (
             <TasksBox>
                 <SkeletonDueTasks taskCount={10} />
@@ -60,6 +90,17 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
                         )),
                     )
                 )}
+                {inboxData && isSimpleOpen && (
+                    <TaskCreateSimple
+                        drawer={inboxData}
+                        onClose={() => setIsSimpleOpen(false)}
+                        init_assigned_at={selectedDate}
+                    />
+                )}
+                <TaskCreateButton
+                    isOpen={isSimpleOpen}
+                    onClick={handleToggleSimpleCreate}
+                />
             </TasksBox>
             {hasNextPage ? (
                 <ButtonGroup $margin="1.3em 0em">
