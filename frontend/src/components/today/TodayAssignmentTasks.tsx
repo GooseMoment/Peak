@@ -49,6 +49,7 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
         async queryFn() {
             return getDrawer("inbox")
         },
+        enabled: isSimpleOpen,
     })
 
     const handleToggleSimpleCreate = () => {
@@ -62,7 +63,9 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
                     refetch()
                     inboxRefetch()
                 }}>
-                {t("today.error_load_task")}
+                {isError
+                    ? t("today.error_load_task")
+                    : t("today.error_load_inbox")}
             </ErrorBox>
         )
     }
