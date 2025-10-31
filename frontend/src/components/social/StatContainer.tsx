@@ -127,15 +127,11 @@ export function StatBoxSkeleton({ mine }: { mine?: boolean }) {
                 <Username $skeleton />
                 <SimpleStats>
                     <StatsUnit key="task">
-                        <StatusIconWrapper $type="task">
-                            <FeatherIcon icon="check" />
-                        </StatusIconWrapper>
+                        <SkeletonStatusIconWrapper />
                         <StatusCount $skeleton />
                     </StatsUnit>
                     <StatsUnit key="reaction">
-                        <StatusIconWrapper $type="reaction">
-                            <FeatherIcon icon="heart" />
-                        </StatusIconWrapper>
+                        <SkeletonStatusIconWrapper />
                         <StatusCount $skeleton />
                     </StatsUnit>
                 </SimpleStats>
@@ -303,7 +299,7 @@ const Username = styled.div<{ $skeleton?: boolean }>`
         props.$skeleton &&
         css`
             width: 100%;
-            height: 1.2em;
+            height: 1.15em;
             border-radius: 0.3em;
             ${skeletonBreathingCSS}
         `}
@@ -355,6 +351,21 @@ const StatusIconWrapper = styled.div<{ $type: "task" | "reaction" }>`
                 fill: ${(p) => p.theme.textColor};
             `}
     }
+`
+
+const SkeletonStatusIconWrapper = styled.div`
+    box-sizing: border-box;
+    aspect-ratio: 1;
+    height: 18px;
+    padding: 0;
+
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    ${skeletonBreathingCSS}
 `
 
 const StatusCount = styled.div<{ $skeleton?: boolean }>`
