@@ -1,34 +1,31 @@
-import { Suspense, lazy, useState } from "react"
-
 import { useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import MildButton from "@components/common/MildButton"
 import ModalLoader from "@components/common/ModalLoader"
 import Module, { Title } from "@components/home/Module"
+import TaskCreateLazy from "@components/project/taskDetails/TaskCreateLazy"
 
-import { getProject } from "@api/projects.api"
+import { getDrawer } from "@api/drawers.api"
+
+import useModal from "@utils/useModal"
 
 import PlusCircle from "@assets/home/PlusCircle"
 
 import { useTranslation } from "react-i18next"
 
-const TaskCreateElement = lazy(
-    () => import("@components/project/taskDetails/TaskCreateElement"),
-)
-
 const AddTask = () => {
     const { t } = useTranslation("home", { keyPrefix: "add_task" })
-    const [isOpen, setOpen] = useState(false)
+    const modal = useModal()
 
     const onClick = () => {
-        setOpen(true)
+        modal.openModal()
     }
 
     const inboxQuery = useQuery({
-        queryKey: ["projects", "inbox"],
+        queryKey: ["drawers", "inbox"],
         async queryFn() {
-            return getProject("inbox")
+            return getDrawer("inbox")
         },
         refetchOnWindowFocus: false,
     })
@@ -40,16 +37,9 @@ const AddTask = () => {
                 <div>{t(inboxQuery.isError ? "error" : "tap_to_open")}</div>
                 <PlusCircle />
             </ButtonOpen>
-            {isOpen && inboxQuery.isLoading && <ModalLoader />}
-            {isOpen && inboxQuery.isSuccess && (
-                <Suspense key="task-create-drawer" fallback={<ModalLoader />}>
-                    <TaskCreateElement
-                        onClose={() => setOpen(false)}
-                        project={inboxQuery.data}
-                        drawer={inboxQuery.data.drawers[0]}
-                        color={inboxQuery.data.color}
-                    />
-                </Suspense>
+            {modal.isOpen && inboxQuery.isPending && <ModalLoader />}
+            {inboxQuery.isSuccess && (
+                <TaskCreateLazy drawer={inboxQuery.data} modal={modal} />
             )}
         </Module>
     )

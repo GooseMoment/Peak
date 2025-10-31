@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         "alwaysStrict": true,
-        "allowJs": true,
         "baseUrl": ".",
         "resolveJsonModule": true,
         "esModuleInterop": true,
@@ -19,6 +18,7 @@
         },
         "strict": true,
         "skipLibCheck": true,
+        "lib": ["ES2022", "DOM"],
         "module": "ES2022",
         "moduleResolution": "node",
         "target": "ES2016",

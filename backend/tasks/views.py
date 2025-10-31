@@ -1,12 +1,15 @@
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
 from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter
+
+from .models import Task
+from .serializers import TaskSerializer
 
 from api.mixins import TimezoneMixin
 from api.permissions import IsUserOwner
-from .models import Task
-from .serializers import TaskSerializer
+from api.serializers import ReorderSerializer
+
 from notifications.serializers import TaskReminderSerializer
-from drawers.utils import normalize_drawer_order
 
 
 class TaskDetail(
@@ -54,26 +57,23 @@ class TaskDetail(
 
 class TaskList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = TaskSerializer
+    filter_backends = [OrderingFilter]
+    ordering_fields = [
+        "order",
+        "name",
+        "assigned_at",
+        "due_date",
+        "due_datetime",
+        "priority",
+        "created_at",
+        "reminders",
+    ]
 
     def get_queryset(self):
         queryset = Task.objects.filter(user=self.request.user).order_by("order").all()
         drawer_id = self.request.query_params.get("drawer", None)
         if drawer_id is not None:
             queryset = queryset.filter(drawer__id=drawer_id)
-
-        ordering_fields = [
-            "name",
-            "assigned_at",
-            "due_date",
-            "due_datetime",
-            "priority",
-            "created_at",
-            "reminders",
-        ]
-        ordering = self.request.GET.get("ordering", None)
-
-        if ordering is not None and ordering.lstrip("-") in ordering_fields:
-            normalize_drawer_order(queryset, ordering)
 
         return queryset
 
@@ -82,3 +82,26 @@ class TaskList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+
+class TaskReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
+    serializer_class = ReorderSerializer
+    queryset = Task.objects.all()
+
+    def patch(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+
+        tasks_data = serializer.validated_data
+
+        ids = [item["id"] for item in tasks_data]
+        id_to_order = {item["id"]: item["order"] for item in tasks_data}
+
+        tasks = self.get_queryset().filter(id__in=ids)
+
+        for task in tasks:
+            task.order = id_to_order[task.id]
+
+        Task.objects.bulk_update(tasks, ["order"])
+
+        return Response(status=status.HTTP_200_OK)

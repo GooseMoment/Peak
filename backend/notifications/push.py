@@ -2,128 +2,136 @@ from django.conf import settings
 
 from users.models import User
 from .models import Notification, WebPushSubscription
-from social.models import Reaction, Comment
 from .locale import get_translations
 
 from pywebpush import webpush, WebPushException
 from json import dumps
 from urllib3.util import parse_url
+from datetime import datetime, UTC
+
+
+class PushData:
+    def __init__(self) -> None:
+        self.title = ""
+        self.body = ""
+        self.icon = ""
+        self.datetime: datetime | None = None
+        self.click_url = ""
+
+    def to_json(self) -> str:
+        # https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
+        return dumps(
+            {
+                "title": self.title,
+                "body": self.body,
+                "icon": self.icon,
+                "timestamp": int(self.datetime.timestamp() * 1e3)
+                if self.datetime is not None
+                else None,
+                "data": {"click_url": self.click_url},
+            }
+        )
+
 
 SUBSCRIPTION_MAX_FAILURE = 10
 
 
-def _notificationToPushData(notification: Notification, locale: str) -> dict[str, any]:
-    # FYI: https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
-    data = {
-        # Texts
-        "title": "",
-        "body": "",
-        # URLS
-        "icon": "",
-        # Unix timestamp (only int)
-        "timestamp": 0,
-        # any structure
-        "data": {
-            "click_url": "",
-        },
-    }
+def _notificationToPushData(notification: Notification, locale: str) -> PushData:
+    data = PushData()
 
-    data["timestamp"] = int(notification.created_at.timestamp() * 1e3)
-    data["data"]["click_url"] = "/app/notifications?id=" + str(notification.id)
+    data.datetime = notification.created_at
+    data.click_url = "/app/notifications/" + str(notification.id)
 
-    related_user: User = None
+    related_user: User | None = None
     t = get_translations(locale)["push"]
 
     match notification.type:
         case Notification.FOR_TASK_REMINDER:
+            assert notification.task_reminder is not None
             t = t[Notification.FOR_TASK_REMINDER]
-            data["title"] = t["title"].format(task=notification.task_reminder.task.name)
-
+            data.title = t["title"].format(task=notification.task_reminder.task.name)
             if notification.task_reminder.delta == 0:
-                data["body"] = t["body_now"]
+                data.body = t["body_now"]
             else:
-                data["body"] = t["body"].format(delta=notification.task_reminder.delta)
-
-        case Notification.FOR_REACTION:
-            parent: str = ""
-            related_user = notification.reaction.user
-
-            if notification.reaction.parent_type == Reaction.FOR_QUOTE:
-                parent = notification.reaction.quote.content
-            else:
-                parent = notification.reaction.task.name
-
-            t = t[Notification.FOR_REACTION]
-            data["title"] = t["title"].format(
-                emoji=notification.reaction.emoji.name, username=related_user.username
+                data.body = t["body"].format(delta=notification.task_reminder.delta)
+        case Notification.FOR_TASK_REACTION:
+            assert notification.task_reaction is not None
+            t = t[Notification.FOR_TASK_REACTION]
+            data.title = t["title"].format(
+                notification.task_reaction.image_emoji is not None
+                and notification.task_reaction.image_emoji.name,
+                emoji=notification.task_reaction.unicode_emoji,
+                username=notification.task_reaction.user,
             )
-            data["body"] = t["body"].format(parent=parent)
+            data.body = t["body"].format(task_name=notification.task_reaction.task.name)
         case Notification.FOR_FOLLOW:
+            assert notification.following is not None
             related_user = notification.following.follower
             t = t[Notification.FOR_FOLLOW]
-            data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"]
+            data.title = t["title"].format(username=related_user.username)
+            data.body = t["body"]
         case Notification.FOR_FOLLOW_REQUEST:
+            assert notification.following is not None
             related_user = notification.following.follower
             t = t[Notification.FOR_FOLLOW_REQUEST]
-            data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"]
+            data.title = t["title"].format(username=related_user.username)
+            data.body = t["body"]
         case Notification.FOR_FOLLOW_REQUEST_ACCEPTED:
+            assert notification.following is not None
             related_user = notification.following.followee
             t = t[Notification.FOR_FOLLOW_REQUEST_ACCEPTED]
-            data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"]
-        case Notification.FOR_PECK:
-            related_user = notification.peck.user
-            t = t[Notification.FOR_PECK]
-            data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"].format(
-                task=notification.peck.task.name, count=notification.peck.count
-            )
-        case Notification.FOR_COMMENT:
-            related_user = notification.comment.user
-            parent: str = ""
-
-            if notification.comment.parent_type == Comment.FOR_QUOTE:
-                parent = notification.comment.quote.content
-            else:
-                parent = notification.comment.task.name
-
-            t = t[Notification.FOR_COMMENT]
-            data["title"] = t["title"].format(username=related_user.username)
-            data["body"] = t["body"].format(
-                parent=parent, comment=notification.comment.comment
-            )
+            data.title = t["title"].format(username=related_user.username)
+            data.body = t["body"]
 
     if related_user:
         if related_user.profile_img:
-            data["icon"] = related_user.profile_img.url
+            data.icon = related_user.profile_img.url
         else:
-            data["icon"] = settings.USER_DEFAULT_PROFILE_IMG
+            data.icon = settings.USER_DEFAULT_PROFILE_IMG
 
     return data
 
 
 def pushNotificationToUser(user: User, notification: Notification) -> None:
-    subscriptions = WebPushSubscription.objects.filter(user=user).all()
-    dumped_datas_per_locale = dict()
+    subscriptions = WebPushSubscription.objects.filter(token__user=user).all()
+    dumped_datas_per_locale: dict[str, str] = dict()
 
     for subscription in subscriptions:
         if notification.type in subscription.excluded_types:
             continue
 
-        endpoint = parse_url(subscription.subscription_info.get("endpoint"))
+        if subscription.expiration_time and datetime.fromtimestamp(
+            subscription.expiration_time, tz=UTC
+        ) < datetime.now(UTC):
+            subscription.delete()
+            continue
+
+        endpoint = parse_url(subscription.endpoint)
+        if endpoint.scheme is None or endpoint.host is None:
+            subscription.delete()
+            continue
+
         aud = endpoint.scheme + "://" + endpoint.host
+
+        locale = (
+            subscription.locale
+            if subscription.locale is not None
+            else settings.LANGUAGE_CODE
+        )
 
         if subscription.locale in dumped_datas_per_locale:
             data = dumped_datas_per_locale[subscription.locale]
         else:
-            data = dumps(_notificationToPushData(notification, subscription.locale))
-            dumped_datas_per_locale[subscription.locale] = data
+            try:
+                data = _notificationToPushData(notification, locale).to_json()
+            except AssertionError:
+                return
+
+            dumped_datas_per_locale[locale] = data
 
         try:
             webpush(
-                subscription.subscription_info,
+                subscription.to_push_subscription(),
                 data,
                 vapid_private_key=settings.WEBPUSH.get("vapid_private_key"),
                 vapid_claims={

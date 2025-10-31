@@ -12,7 +12,6 @@
         "languages_and_time": "Languages & Time",
         "notifications": "Notifications",
         "appearance": "Appearance",
-        "reactions": "Reactions",
         "blocks": "Blocks",
         "info": "Info"
     },
@@ -26,7 +25,10 @@
         "profile_edited": "Changes were saved.",
         "profile_fail": "Couldn't save. Try again.",
         "button_apply": "Crop",
-        "button_cancel": "Cancel"
+        "button_cancel": "Cancel",
+        "uploading": "Uploading...",
+        "upload_error": "Failed to upload the image. Try another one.",
+        "upload_success": "Profile image was updated."
     },
     "general": {
         "startpage": {
@@ -98,10 +100,10 @@
         },
         "follow_list_privacy": {
             "name": "Visibility of my followings & followers list",
-            "description": "You can set who can see your personal connections.",
+            "description": "Choose who can see your followers and following lists. Everyone can still see the follower and following counts.",
             "values": {
                 "public": "Everyone",
-                "protected": "Limit to my followers",
+                "protected": "My followers",
                 "private": "Only me"
             }
         },
@@ -141,11 +143,9 @@
             "name": "Types of notifications",
             "description": "Choose which types you want to receive on this device.",
             "values": {
-                "comment": "When you get a comment",
                 "follow": "When someone follows you",
                 "follow_request": "When you receive a follow request",
                 "follow_request_accepted": "When your follow request is accepted",
-                "peck": "When you get pecked",
                 "reaction": "When you receive a reaction",
                 "task_reminder": "When it's a time to remind a task",
                 "button_save": "Save"
@@ -174,16 +174,6 @@
         },
         "close_sidebar_on_startup": {
             "name": "Close sidebar on start up"
-        }
-    },
-    "reactions": {
-        "favorite_emojis": {
-            "name": "Favorite emojis",
-            "description": "Favorite these and react easily."
-        },
-        "dislikable_emojis": {
-            "name": "Emojis to avoid",
-            "description": "These emojis will not show up in front of you."
         }
     },
     "blocks": {

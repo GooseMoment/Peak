@@ -1,9 +1,9 @@
-FROM node:24-slim
+FROM node:lts-alpine
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN npm install -g corepack@latest
-RUN corepack use pnpm@9.x
+RUN corepack use pnpm@10.x
 RUN corepack enable
 
 WORKDIR /frontend
@@ -18,5 +18,5 @@ COPY . .
 ARG BUILD_DATE
 ENV VITE_BUILD_TIMESTAMP=${BUILD_DATE}
 
-SHELL ["/bin/bash", "-c"]
+SHELL ["/bin/sh", "-c"]
 ENTRYPOINT VITE_BUILD_TIMESTAMP=${VITE_BUILD_TIMESTAMP} pnpm build

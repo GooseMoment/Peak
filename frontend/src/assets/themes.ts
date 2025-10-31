@@ -32,7 +32,6 @@ const light: DefaultTheme = {
     scrollbarColor: "#FFC6C6",
     introTextColor: goose,
     introBackgroundColor: "#FFD7C7",
-    imgIconFilter: "invert(0%)",
     sidebar: {
         activeColor: black,
         activeBackgroundColor: "#D9D9D9",
@@ -62,26 +61,12 @@ const light: DefaultTheme = {
         boxShadowColor: "rgba(149, 157, 165, 0.2)",
     },
     social: {
-        borderColor: black,
-        activeBackgroundColor: "rgb(255 74 3 / 0.35)",
-        modalShadowColor: "rgba(123, 123, 123, 0.1)",
-        modalCellHoverColor: "#F0F0F0",
         buttonColor: "#A9A9A9",
-    },
-    calendar: {
-        backgroundColor: "#D9D9D9",
-        secondBackgroundColor: "#E6E6E6",
-        todayColor: white,
-        hoverColor: "#FFC6C6",
+        activeColor: "oklch(45.7% 0.24 277.023)",
+        activeBackgroundColor: "oklch(96.2% 0.018 272.314)",
     },
     help: {
         addressBarShadowColor: "rgba(0, 0, 0, 0.4)",
-    },
-    search: {
-        borderColor: black,
-        buttonColor: black,
-        activatedColor: white,
-        activatedBackgroundColor: "#F78457",
     },
     toastTheme: "light",
 }
@@ -112,7 +97,6 @@ const dark: DefaultTheme = {
     scrollbarColor: "#4A4A4A",
     introTextColor: "#FFD7C7",
     introBackgroundColor: "#77371F",
-    imgIconFilter: "invert(100%)",
     sidebar: {
         activeColor: white,
         activeBackgroundColor: black,
@@ -142,26 +126,12 @@ const dark: DefaultTheme = {
         boxShadowColor: "rgba(0, 0, 0, 0.4)",
     },
     social: {
-        borderColor: white,
-        activeBackgroundColor: "rgb(255 74 3 / 0.35)",
-        modalShadowColor: "rgba(210, 210, 210, 0.1)",
-        modalCellHoverColor: "#383838",
         buttonColor: "#A9A9A9",
-    },
-    calendar: {
-        backgroundColor: "#323232",
-        secondBackgroundColor: "#292929",
-        todayColor: white,
-        hoverColor: "#804A30",
+        activeColor: "oklch(87% 0.065 274.039)",
+        activeBackgroundColor: "oklch(37.1% 0 0)",
     },
     help: {
         addressBarShadowColor: "rgba(0, 0, 0, 0.8)",
-    },
-    search: {
-        borderColor: white,
-        buttonColor: white,
-        activatedColor: black,
-        activatedBackgroundColor: "#F78457",
     },
     toastTheme: "dark",
 }

@@ -1,20 +1,17 @@
-from .models import Project
 from rest_framework import serializers
 
-from drawers.serializers import DrawerSerializer
-from users.models import User
+from .models import Project
+from users.serializers import UserSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    drawers = DrawerSerializer(many=True, read_only=True)
-    user = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(), default=serializers.CurrentUserDefault()
+    user = UserSerializer(
+        default=serializers.CurrentUserDefault(),
     )
-    order = serializers.IntegerField(min_value=0, default=0)
     completed_task_count = serializers.SerializerMethodField()
     uncompleted_task_count = serializers.SerializerMethodField()
 
-    def get_completed_task_count(self, obj):
+    def get_completed_task_count(self, obj: Project):
         completed_task_count = 0
 
         for drawer in obj.drawers.all():
@@ -22,7 +19,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
         return completed_task_count
 
-    def get_uncompleted_task_count(self, obj):
+    def get_uncompleted_task_count(self, obj: Project):
         uncompleted_task_count = 0
 
         for drawer in obj.drawers.all():
@@ -30,7 +27,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
         return uncompleted_task_count
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Project
         fields = [
             "id",
@@ -40,16 +37,15 @@ class ProjectSerializer(serializers.ModelSerializer):
             "privacy",
             "color",
             "type",
+            "completed_task_count",
+            "uncompleted_task_count",
             "created_at",
             "updated_at",
             "deleted_at",
-            "completed_task_count",
-            "uncompleted_task_count",
-            "drawers",
         ]
 
 
 class ProjectSerializerForUserProjectList(serializers.ModelSerializer):
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Project
         exclude = ()

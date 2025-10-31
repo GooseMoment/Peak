@@ -1,11 +1,40 @@
 from django.contrib import admin
 
 from .models import (
+    AuthToken,
     EmailVerificationToken,
     PasswordRecoveryToken,
     TwoFactorAuthToken,
     TOTPSecret,
 )
+
+
+@admin.register(AuthToken)
+class AuthTokenAdmin(admin.ModelAdmin):
+    ordering = ("-created",)
+    search_fields = (
+        "digest",
+        "token_key",
+        "user__username",
+        "user__email",
+    )
+    autocomplete_fields = ("user",)
+    readonly_fields = ("created",)
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": (
+                    "user",
+                    "digest",
+                    "token_key",
+                    "created",
+                    "expiry",
+                ),
+            },
+        ),
+        ("User Agent", {"fields": ("initial_ip", "browser", "os", "device")}),
+    ]
 
 
 @admin.register(EmailVerificationToken)
@@ -15,6 +44,7 @@ class EmailVerificationTokenAdmin(admin.ModelAdmin):
         "user__username",
         "user__email",
     )
+    autocomplete_fields = ("user",)
     readonly_fields = (
         "created_at",
         "token",
@@ -47,6 +77,7 @@ class PasswordRecoveryTokenAdmin(admin.ModelAdmin):
         "token",
         "link",
     )
+    autocomplete_fields = ("user",)
     fieldsets = [
         (
             None,
@@ -64,7 +95,7 @@ class PasswordRecoveryTokenAdmin(admin.ModelAdmin):
 
 
 @admin.register(TwoFactorAuthToken)
-class TwoFactorAuthToken(admin.ModelAdmin):
+class TwoFactorAuthTokenAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
     search_fields = (
         "user__username",
@@ -74,6 +105,7 @@ class TwoFactorAuthToken(admin.ModelAdmin):
         "created_at",
         "token",
     )
+    autocomplete_fields = ("user",)
     fieldsets = [
         (
             None,
@@ -97,6 +129,7 @@ class TOTPSecretAdmin(admin.ModelAdmin):
         "user__email",
     )
     readonly_fields = ("created_at",)
+    autocomplete_fields = ("user",)
     fieldsets = [
         (
             None,

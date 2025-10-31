@@ -1,0 +1,36 @@
+#window-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100dvw;
+    height: 100dvh;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 1em;
+    padding: 0.5em;
+
+    z-index: 99;
+    background-color: transparent;
+    pointer-events: none;
+}
+
+@keyframes window-container-background-dim {
+    0% {
+        background-color: transparent;
+    }
+    100% {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+}
+
+#window-container:has(div) {
+    pointer-events: initial;
+    background-color: rgba(0, 0, 0, 0.3);
+    animation: 0.5s var(--cubic) window-container-background-dim;
+}

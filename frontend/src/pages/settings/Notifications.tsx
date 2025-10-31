@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 import CheckboxGroup, {
@@ -9,7 +9,7 @@ import CheckboxGroup, {
 import Section, { Description, Name, Value } from "@components/settings/Section"
 
 import {
-    NotificationType,
+    type Notification,
     WebPushSubscription,
     deleteSubscription,
     getSubscription,
@@ -19,34 +19,24 @@ import {
 
 import { useClientSetting } from "@utils/clientSettings"
 
-import { TFunction } from "i18next"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
 
-const urlB64ToUint8Array = (base64String: string) => {
-    const padding = "=".repeat((4 - (base64String.length % 4)) % 4)
-    const base64 = (base64String + padding)
-        .replace(/-/g, "+")
-        .replace(/_/g, "/")
-    const rawData = atob(base64)
-    const outputArray = new Uint8Array(rawData.length)
-    for (let i = 0; i < rawData.length; ++i) {
-        outputArray[i] = rawData.charCodeAt(i)
-    }
-    return outputArray
+export default function Notifications() {
+    const [setting] = useClientSetting()
+
+    return (
+        <>
+            <SectionNotification />
+            {setting.push_notification_subscription && <SectionAllowList />}
+        </>
+    )
 }
 
-const subscribePush = async () => {
-    const registration = await navigator.serviceWorker.ready
-    const publicKey = urlB64ToUint8Array(VAPID_PUBLIC_KEY)
-    const options = { applicationServerKey: publicKey, userVisibleOnly: true }
-    const subscription = await registration.pushManager.subscribe(options)
-    return postSubscription(subscription)
-}
-
-const SectionNotification = () => {
+function SectionNotification() {
     const [setting, updateSetting] = useClientSetting()
     const { t } = useTranslation("settings", { keyPrefix: "notifications" })
 
@@ -137,13 +127,13 @@ const SectionNotification = () => {
     )
 }
 
-const SectionAllowList = () => {
+function SectionAllowList() {
     const [setting, updateSetting] = useClientSetting()
     const { t } = useTranslation("settings", {
         keyPrefix: "notifications.allowed_types",
     })
+    const queryClient = useQueryClient()
 
-    const [selectedItems, setSelectedItems] = useState<ICheckboxItem[]>([])
     const items = useMemo(() => makeAllowlistItems(t), [t])
 
     const query = useQuery<
@@ -165,15 +155,16 @@ const SectionAllowList = () => {
         refetchOnWindowFocus: false,
     })
 
-    useEffect(() => {
-        if (!query.data) {
-            return
-        }
-
-        setSelectedItems(
-            items.filter((item) => !query.data.includes(item.name)),
-        )
-    }, [query.data])
+    const [selectedItems, setSelectedItems] = useState<ICheckboxItem[]>(() =>
+        items.filter(
+            (item) =>
+                !(
+                    query.data ||
+                    setting.push_notification_excluded_types ||
+                    []
+                ).includes(item.name),
+        ),
+    )
 
     const mut = useMutation({
         mutationFn: () => {
@@ -191,6 +182,13 @@ const SectionAllowList = () => {
             })
         },
         onSuccess: (data) => {
+            queryClient.invalidateQueries({
+                queryKey: [
+                    "subscriptions",
+                    setting.push_notification_subscription,
+                    "excluded_types",
+                ],
+            })
             updateSetting(
                 "push_notification_excluded_types",
                 data.excluded_types,
@@ -225,31 +223,38 @@ const SectionAllowList = () => {
     )
 }
 
-const Notifications = () => {
-    const [setting] = useClientSetting()
-
-    return (
-        <>
-            <SectionNotification />
-            {setting.push_notification_subscription && <SectionAllowList />}
-        </>
-    )
+function urlB64ToUint8Array(base64String: string): Uint8Array<ArrayBuffer> {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4)
+    const base64 = (base64String + padding)
+        .replace(/-/g, "+")
+        .replace(/_/g, "/")
+    const rawData = atob(base64)
+    const outputArray = new Uint8Array(rawData.length)
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i)
+    }
+    return outputArray
 }
 
-const makeAllowlistItems = (
+async function subscribePush() {
+    const registration = await navigator.serviceWorker.ready
+    const publicKey = urlB64ToUint8Array(VAPID_PUBLIC_KEY)
+    const options = { applicationServerKey: publicKey, userVisibleOnly: true }
+    const subscription = await registration.pushManager.subscribe(options)
+    return postSubscription(subscription)
+}
+
+function makeAllowlistItems(
     t: TFunction<"settings", "notifications.allowed_types">,
-) =>
-    [
-        { name: "comment", display: t("values.comment") },
+): { name: Notification["type"]; display: string }[] {
+    return [
         { name: "follow", display: t("values.follow") },
         { name: "follow_request", display: t("values.follow_request") },
         {
             name: "follow_request_accepted",
             display: t("values.follow_request_accepted"),
         },
-        { name: "peck", display: t("values.peck") },
-        { name: "reaction", display: t("values.reaction") },
+        { name: "task_reaction", display: t("values.reaction") },
         { name: "task_reminder", display: t("values.task_reminder") },
-    ] as { name: NotificationType; display: string }[]
-
-export default Notifications
+    ]
+}

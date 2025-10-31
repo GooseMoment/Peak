@@ -57,7 +57,7 @@ cp .env.example .env
 다른 터미널(또는 VSCode +버튼 눌러서 터미널 탭 추가)에서 `./frontend`에서
 
 ```bash
-npm install -g pnpm@9 # install pnpm v9
+npm install -g pnpm # install pnpm 
 pnpm i # install dependencies
 pnpm dev # start dev server
 ```

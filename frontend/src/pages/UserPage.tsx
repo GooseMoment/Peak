@@ -5,27 +5,26 @@ import { useQuery } from "@tanstack/react-query"
 
 import ErrorLayout from "@components/errors/ErrorLayout"
 import Bio from "@components/users/Bio"
+import { SectionFollowRequestAction } from "@components/users/FollowRequestAction"
 import ProjectList from "@components/users/ProjectList"
-import Requests from "@components/users/Requests"
 import UserProfileHeader from "@components/users/UserProfileHeader"
 
 import { getCurrentUsername } from "@api/client"
 import { getProjectListByUser } from "@api/projects.api"
-import { type Block } from "@api/social"
-import { getBlock, getFollow } from "@api/social.api"
+import { getBlock, getFollowing } from "@api/social.api"
 import { getUserByUsername } from "@api/users.api"
 
 import { useTranslation } from "react-i18next"
 
 const UserPage = () => {
     const navigate = useNavigate()
-    const { username: usernameWithAt } = useParams()
+    const { username: usernameWithAt } = useParams<{ username: string }>()
 
     useEffect(() => {
         if (usernameWithAt!.at(0) !== "@") {
-            navigate("/app/users/@" + usernameWithAt)
+            navigate("/app/users/@" + usernameWithAt, { replace: true })
         }
-    }, [usernameWithAt])
+    }, [usernameWithAt, navigate])
 
     // usernameWithAt shouldn't be undefined
     const username = usernameWithAt!.slice(1)
@@ -34,11 +33,11 @@ const UserPage = () => {
 
     const followingQuery = useQuery({
         queryKey: ["followings", username, currentUsername],
-        queryFn: () => getFollow(username, currentUsername),
+        queryFn: () => getFollowing(username, currentUsername!),
         enabled: currentUsername !== username,
     })
 
-    const blockQuery = useQuery<Block | null>({
+    const blockQuery = useQuery({
         queryKey: ["blocks", getCurrentUsername(), username],
         queryFn() {
             return getBlock(username)
@@ -48,14 +47,14 @@ const UserPage = () => {
 
     const {
         data: user,
-        isLoading: userLoading,
+        isPending: userPending,
         isError: userError,
     } = useQuery({
         queryKey: ["users", username],
         queryFn: () => getUserByUsername(username),
     })
 
-    const { data: projects, isLoading: projectLoading } = useQuery({
+    const { data: projects, isPending: projectPending } = useQuery({
         queryKey: ["userProjects", username],
         queryFn: () => getProjectListByUser(username),
     })
@@ -79,19 +78,19 @@ const UserPage = () => {
                 followingYou={followingQuery.data}
                 block={blockQuery.data}
                 isLoading={
-                    userLoading ||
+                    userPending ||
                     followingQuery.isLoading ||
-                    blockQuery.isLoading
+                    blockQuery.isLoading // followingQuery and blockQuery should use isLoading as they are disabled when isMine
                 }
                 isMine={isMine}
             />
             {user && followingQuery.data?.status === "requested" && (
-                <Requests user={user} />
+                <SectionFollowRequestAction user={user} />
             )}
-            <Bio bio={user?.bio} isLoading={userLoading} isMine={isMine} />
+            <Bio bio={user?.bio} isLoading={userPending} isMine={isMine} />
             <ProjectList
                 projects={projects}
-                isLoading={projectLoading}
+                isLoading={projectPending}
                 isMine={isMine}
             />
         </>

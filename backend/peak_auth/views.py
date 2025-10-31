@@ -10,18 +10,19 @@ from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-from rest_framework.decorators import throttle_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.throttling import AnonRateThrottle
-from rest_framework.exceptions import ValidationError as APIValidationError
 
 from knox.views import LoginView as KnoxLoginView
 import uuid
 import re
 from datetime import datetime, UTC
+from ua_parser import parse as ua_parse
+from typing import NoReturn, Optional
 
 from users.models import User
 from .models import (
+    AuthToken,
     EmailVerificationToken,
     PasswordRecoveryToken,
     TOTPSecret,
@@ -29,16 +30,62 @@ from .models import (
 )
 from .totp import create_totp_secret, TOTP
 from . import exceptions, mails
+from api.utils import get_client_ip
+from api.exceptions import RequiredFieldMissing, UnknownError, RateLimitExceeded
 
 
-class SignInView(KnoxLoginView):
+class TokenMixin:
+    request: Request
+
+    def get_token(self):
+        token_hex = self.request.data.get("token")
+        if token_hex is None:
+            raise exceptions.TokenRequired
+
+        try:
+            token = uuid.UUID(hex=token_hex)
+        except ValueError:
+            raise exceptions.TokenInvalid
+
+        return token
+
+
+class BaseLoginView(KnoxLoginView):
     permission_classes = (AllowAny,)
 
-    def post(self, request):
+    def get_device_and_browser(
+        self, ua: str
+    ) -> tuple[Optional[str], Optional[str], Optional[str]]:
+        result = ua_parse(ua)
+
+        browser = result.user_agent.family if result.user_agent else None
+        os = result.os.family if result.os else None
+        device = result.device.family if result.device else None
+        return (browser, os, device)
+
+    def create_token(self):
+        token_prefix = self.get_token_prefix()
+
+        user_agent = self.request.headers.get("User-Agent", "")
+        (browser, os, device) = self.get_device_and_browser(user_agent)
+
+        return AuthToken.objects.create(
+            user=self.request.user,
+            expiry=self.get_token_ttl(),
+            prefix=token_prefix,
+            initial_ip=get_client_ip(self.request),
+            browser=browser,
+            os=os,
+            device=device,
+        )
+
+
+class SignInView(BaseLoginView):
+    def post(self, request: Request, format=None):
         email: str = request.data["email"]
         password: str = request.data["password"]
 
-        user: User | None = authenticate(request, email=email, password=password)
+        user = authenticate(request, email=email, password=password)
 
         if user is None:
             raise exceptions.CredentialInvalid
@@ -63,23 +110,17 @@ class SignInView(KnoxLoginView):
             )
 
         login(request, user)
-        return super(SignInView, self).post(request, format=None)
+        return super(SignInView, self).post(request, format=format)
 
 
-class TOTPAuthenticationView(KnoxLoginView):
-    permission_classes = (AllowAny,)
+class TOTPAuthenticationView(TokenMixin, BaseLoginView):
+    def post(self, request: Request, format=None):
+        token = self.get_token()
 
-    def post(self, request: Request):
         try:
-            token_hex = request.data["token"]
             code = request.data["code"]
         except KeyError:
-            raise exceptions.RequiredFieldMissing
-
-        try:
-            token = uuid.UUID(hex=token_hex)
-        except ValueError:
-            raise APIValidationError(["format of token is valid."])
+            raise RequiredFieldMissing(missing_fields=("code",))
 
         try:
             self.tfat = TwoFactorAuthToken.objects.filter(token=token).get()
@@ -91,11 +132,11 @@ class TOTPAuthenticationView(KnoxLoginView):
             return self.process_fail(request)
 
         self.tfat.delete()
-        return self.process_login(request, user)
+        return self.process_login(request, user, format)
 
-    def process_login(self, request: Request, user: User):
+    def process_login(self, request: Request, user, format):
         login(request, user)
-        return super(TOTPAuthenticationView, self).post(request, format=None)
+        return super(TOTPAuthenticationView, self).post(request, format=format)
 
     def process_fail(self, request: Request):
         self.tfat.try_count += 1
@@ -109,7 +150,7 @@ class TOTPAuthenticationView(KnoxLoginView):
 
         self.tfat.save()
 
-        raise exceptions.CredentialInvalid
+        raise exceptions.TOTPCodeInvalid
 
 
 class TOTPRegisterView(GenericAPIView):
@@ -117,7 +158,7 @@ class TOTPRegisterView(GenericAPIView):
     cache_timeout = 60 * 30  # 30 minutes
 
     def get_cache_key(self) -> str:
-        return self.key_prefix + "-" + self.request.user.username
+        return self.key_prefix + "-" + self.request.user.get_username()
 
     def get_cached_secret(self) -> str | None:
         key = self.get_cache_key()
@@ -161,7 +202,7 @@ class TOTPRegisterView(GenericAPIView):
         return Response(
             {
                 "secret": secret,
-                "uri": totp.get_uri(request.user.username, "Peak"),
+                "uri": totp.get_uri(request.user.get_username(), "Peak"),
             },
             status=status.HTTP_200_OK,
         )
@@ -175,7 +216,7 @@ class TOTPRegisterView(GenericAPIView):
         try:
             code = request.data["code"]
         except KeyError:
-            raise exceptions.RequiredFieldMissing
+            raise RequiredFieldMissing(missing_fields=("code",))
 
         totp = TOTP(secret)
         codes = totp.totp_with_offsets()
@@ -187,7 +228,7 @@ class TOTPRegisterView(GenericAPIView):
         return Response(
             {
                 "code": "SUCCESS",
-                "message": "TOTP two-factor authentication was successfully added.",
+                "message": "TOTP two-factor authentication has been successfully enabled.",
             },
             status=status.HTTP_200_OK,
         )
@@ -199,7 +240,7 @@ class TOTPRegisterView(GenericAPIView):
         return Response(
             {
                 "code": "SUCCESS",
-                "message": "Your TOTP two-factor authentication was successfully disabled and deleted.",
+                "message": "Your TOTP two-factor authentication has been successfully disabled and deleted.",
             },
             status=status.HTTP_200_OK,
         )
@@ -218,11 +259,16 @@ class SignUpView(GenericAPIView):
         payload = self.request.data
 
         new_user = User()
+        missing_fields = []
         for field in self.required_fields:
             if field not in payload:
-                raise exceptions.RequiredFieldMissing
+                missing_fields.append(field)
+                continue
 
             setattr(new_user, field, payload[field])
+
+        if len(missing_fields) > 0:
+            raise RequiredFieldMissing(missing_fields=missing_fields)
 
         try:
             validate_email(payload["email"])
@@ -246,7 +292,7 @@ class SignUpView(GenericAPIView):
             user.save()
         except IntegrityError as e:
             if "unique constraint" not in str(e):
-                raise exceptions.UnknownError
+                raise UnknownError
 
             if "email" in str(e):
                 mails.send_mail_already_registered(user, locale)
@@ -255,7 +301,7 @@ class SignUpView(GenericAPIView):
             if "username" in str(e):
                 raise exceptions.UsernameDuplicate
 
-            raise exceptions.UnknownError
+            raise UnknownError
 
     @transaction.atomic
     def post(self, request: Request):
@@ -277,21 +323,7 @@ class SignUpView(GenericAPIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class TokenView:
-    def get_token(self):
-        token_hex = self.request.data.get("token")
-        if token_hex is None:
-            raise APIValidationError(["token is required."])
-
-        try:
-            token = uuid.UUID(hex=token_hex)
-        except ValueError:
-            raise APIValidationError(["format of token is invalid."])
-
-        return token
-
-
-class VerifyEmailVerificationToken(TokenView, GenericAPIView):
+class VerifyEmailVerificationToken(TokenMixin, GenericAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request: Request):
@@ -329,7 +361,7 @@ class ResendEmailVerificationMail(GenericAPIView):
     def post(self, request: Request):
         email = request.data.get("email")
         if email is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise RequiredFieldMissing(missing_fields=("email",))
 
         try:
             validate_email(email)
@@ -364,12 +396,7 @@ class ResendEmailVerificationMail(GenericAPIView):
             delta = now - verification.last_sent_at
 
             if delta <= settings.EMAIL_SEND_INTERVAL_MIN:
-                return Response(
-                    {
-                        "seconds": delta.seconds,
-                    },
-                    status=status.HTTP_425_TOO_EARLY,
-                )
+                raise RateLimitExceeded(seconds=delta.seconds)
 
         mails.send_mail_verification_email(verification.user, verification)
 
@@ -377,19 +404,28 @@ class ResendEmailVerificationMail(GenericAPIView):
 
 
 class PasswordRecoveryAnonRateThrottle(AnonRateThrottle):
-    rate = "5/minute"  # up to 5 times a hour
+    rate = "5/hour"  # up to 5 times a hour
+
+    def allow_request(self, request, view):
+        if request.method == "PATCH":
+            return True
+
+        return super().allow_request(request, view)
 
 
-class PasswordRecoveryView(TokenView, GenericAPIView):
+class PasswordRecoveryView(TokenMixin, GenericAPIView):
     permission_classes = (AllowAny,)
+    throttle_classes = (PasswordRecoveryAnonRateThrottle,)
+
+    def throttled(self, request: Request, wait: float) -> NoReturn:
+        raise RateLimitExceeded(seconds=int(wait))
 
     # generate a token
-    @throttle_classes((PasswordRecoveryAnonRateThrottle,))
     def post(self, request: Request):
         email: str | None = request.data.get("email")
 
         if email is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            raise RequiredFieldMissing(missing_fields=("email",))
 
         try:
             validate_email(email)
@@ -426,7 +462,7 @@ class PasswordRecoveryView(TokenView, GenericAPIView):
         except PasswordRecoveryToken.DoesNotExist:
             raise exceptions.TokenInvalid
 
-        if token.expires_at < datetime.now(UTC):
+        if token.expires_at is not None and token.expires_at < datetime.now(UTC):
             raise exceptions.TokenInvalid
 
         new_password = request.data.get("new_password")

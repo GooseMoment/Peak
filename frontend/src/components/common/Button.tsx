@@ -1,4 +1,9 @@
-import type { ButtonHTMLAttributes, ElementType, ReactNode } from "react"
+import type {
+    ButtonHTMLAttributes,
+    CSSProperties,
+    ElementType,
+    ReactNode,
+} from "react"
 
 import styled from "styled-components"
 
@@ -28,20 +33,20 @@ export default function Button({
     const SelectedButton = buttons[form]
 
     return (
-        <SelectedButton {...htmlProps} $state={state}>
-            {loading && <ButtonLoader />} {children}
+        <SelectedButton {...htmlProps} $state={state} aria-busy={loading}>
+            {loading && <ButtonLoader aria-hidden />} {children}
         </SelectedButton>
     )
 }
 
 export const ButtonGroup = styled.div<{
-    $justifyContent?: string
-    $margin?: string
+    $justifyContent?: CSSProperties["justifyContent"]
+    $margin?: CSSProperties["margin"]
 }>`
     display: flex;
     gap: 1em;
     justify-content: ${(p) => p.$justifyContent || "center"};
-    margin: ${(p) => p.$margin || "none"};
+    margin: ${(p) => p.$margin ?? 0};
 `
 
 const CommonButton = styled(MildButton)`

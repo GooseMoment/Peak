@@ -22,17 +22,17 @@ interface Filter {
     display: string
 }
 
-interface FilterButtonGroupProp {
-    active: string
-    setActive: Dispatch<SetStateAction<string>>
+interface FilterButtonGroupProp<T> {
+    active: T
+    setActive: Dispatch<SetStateAction<T>>
     filters: { [name: string]: Filter }
 }
 
-const FilterButtonGroup = ({
+const FilterButtonGroup = <T extends string>({
     active,
     setActive,
     filters,
-}: FilterButtonGroupProp) => {
+}: FilterButtonGroupProp<T>) => {
     const [selectedButtonPosition, setSelectedButtonPosition] =
         useState<ButtonPosition>({
             top: 0,
@@ -40,21 +40,18 @@ const FilterButtonGroup = ({
             width: 0,
         })
 
-    const onRefChange = useCallback(
-        (node: HTMLElement | null) => {
-            if (!node) {
-                // node is null when this component is unmounted
-                return
-            }
+    const onRefChange = useCallback((node: HTMLElement | null) => {
+        if (!node) {
+            // node is null when this component is unmounted
+            return
+        }
 
-            setSelectedButtonPosition({
-                top: node.offsetTop,
-                left: node.offsetLeft,
-                width: node.offsetWidth,
-            })
-        },
-        [filters],
-    )
+        setSelectedButtonPosition({
+            top: node.offsetTop,
+            left: node.offsetLeft,
+            width: node.offsetWidth,
+        })
+    }, [])
 
     const filterEntries = useMemo(() => Object.entries(filters), [filters])
 
@@ -68,7 +65,7 @@ const FilterButtonGroup = ({
                     <FilterButton
                         ref={active === name ? onRefChange : undefined}
                         key={name}
-                        onClick={() => setActive(name)}>
+                        onClick={() => setActive(name as T)}>
                         {display}
                     </FilterButton>
                 ))}

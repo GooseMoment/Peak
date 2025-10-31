@@ -1,14 +1,13 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
-import { useModalWindowCloseContext } from "@components/common/ModalWindow"
 import ListUserProfile from "@components/users/ListUserProfile"
 
-import { type PaginationData } from "@api/client"
 import { getFollowersByUser, getFollowingsByUser } from "@api/social.api"
 import { type User } from "@api/users.api"
 
 import { getPageFromURL } from "@utils/pagination"
+import { useModalContext } from "@utils/useModal"
 import { ifMobile } from "@utils/useScreenType"
 
 import { ImpressionArea } from "@toss/impression-area"
@@ -25,10 +24,10 @@ const FollowList = ({ user, list }: FollowListProp) => {
         keyPrefix: `users.${list}_list`,
     })
 
-    const { closeModal } = useModalWindowCloseContext()
+    const modal = useModalContext()
 
-    const { data, isLoading, hasNextPage, fetchNextPage, isError } =
-        useInfiniteQuery<PaginationData<User>>({
+    const { data, isPending, isError, isSuccess, hasNextPage, fetchNextPage } =
+        useInfiniteQuery({
             queryKey: ["users", user.username, list],
             queryFn: ({ pageParam }) => {
                 if (list === "followers") {
@@ -52,20 +51,23 @@ const FollowList = ({ user, list }: FollowListProp) => {
                         values={{ username: user?.username }}
                     />
                 </Title>
-                <CloseButton onClick={closeModal}>
-                    <FeatherIcon icon="x" />
-                </CloseButton>
+                {modal?.closeModal && (
+                    <CloseButton onClick={modal.closeModal}>
+                        <FeatherIcon icon="x" />
+                    </CloseButton>
+                )}
             </TitleBar>
             <List>
-                {isLoading &&
+                {isPending &&
                     [...Array(10)].map((_, i) => <ListUserProfile key={i} />)}
                 {isError && <Message>{t("error")}</Message>}
                 {isEmpty && <Message>{t("empty")}</Message>}
-                {data?.pages.map((group) =>
-                    group.results.map((user) => (
-                        <ListUserProfile user={user} key={user.username} />
-                    )),
-                )}
+                {isSuccess &&
+                    data.pages.map((group) =>
+                        group.results.map((user) => (
+                            <ListUserProfile user={user} key={user.username} />
+                        )),
+                    )}
                 {hasNextPage && (
                     <ImpressionArea
                         onImpressionStart={() => fetchNextPage()}

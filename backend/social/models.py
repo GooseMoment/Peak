@@ -24,111 +24,81 @@ class Emoji(Base):
     def __str__(self) -> str:
         return f":{self.name}:"
 
-    class Meta:
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
         db_table = "emojis"
 
 
-class Peck(Base):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-    )
-    task = models.ForeignKey(
-        Task,
-        on_delete=models.CASCADE,
-    )
-    count = models.IntegerField()
-
-    def __str__(self) -> str:
-        return f"{self.count} pecks by {self.user} → '{self.task.name}'"
-
-    class Meta:
-        db_table = "pecks"
-
-
-class Quote(Base):
+class Remark(Base):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
     )
     content = models.TextField()
-    date = models.DateTimeField(null=True, blank=True)
+    date = models.DateField()
 
     def __str__(self) -> str:
-        return f"Quote of {self.date} by {self.user}"
+        return f"Remark: {self.user}/{self.date}"
 
-    class Meta:
-        db_table = "quotes"
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
+        db_table = "remarks"
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "date"], name="constraint_user_date"
+            ),
+        ]
 
 
-class Reaction(Base):
-    FOR_TASK = "task"
-    FOR_QUOTE = "quote"
-
-    REACTION_TYPE = [
-        (FOR_TASK, "For task"),
-        (FOR_QUOTE, "For quote"),
-    ]
-
+class ReactionBase(Base):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
     )
-    parent_type = models.CharField(choices=REACTION_TYPE, max_length=128)
-    task = models.ForeignKey(
-        Task,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-    quote = models.ForeignKey(
-        Quote,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-    emoji = models.ForeignKey(
+
+    image_emoji = models.ForeignKey(
         Emoji,
         null=True,
         blank=True,
         on_delete=models.CASCADE,
     )
+    # currently length of the longest emoji is 8, but as joined emojis can be defined with longer combinations, we set this to 16
+    # assert len("👩🏼‍❤️‍👨🏾") == 8
+    unicode_emoji = models.CharField(max_length=16, null=True, blank=True)
 
-    def __str__(self) -> str:
-        return f"{self.emoji} by {self.user} → {self.quote or self.task}"
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- Base.Meta
+        abstract = True
+        constraints = [
+            models.UniqueConstraint(
+                fields=("user", "task", "unicode_emoji"),
+                condition=models.Q(image_emoji__isnull=True),
+                name="%(app_label)s_%(class)s_user_task_unicode_emoji_unique",
+            ),
+            models.UniqueConstraint(
+                fields=("user", "task", "image_emoji"),
+                condition=models.Q(unicode_emoji__isnull=True),
+                name="%(app_label)s_%(class)s_user_task_image_emoji_unique",
+            ),
+            models.CheckConstraint(
+                check=models.Q(image_emoji__isnull=True, unicode_emoji__isnull=False)
+                | models.Q(image_emoji__isnull=False, unicode_emoji__isnull=True),
+                name="%(app_label)s_%(class)s_emojis_exclusive",
+            ),
+        ]
 
-    class Meta:
-        db_table = "reactions"
 
-
-class Comment(Base):
-    FOR_TASK = "task"
-    FOR_QUOTE = "quote"
-
-    COMMENT_TYPE = [
-        (FOR_TASK, "For task"),
-        (FOR_QUOTE, "For quote"),
-    ]
-
-    user = models.ForeignKey(
-        User,
+class TaskReaction(ReactionBase):
+    task = models.ForeignKey(
+        Task,
+        related_name="reactions",
         on_delete=models.CASCADE,
     )
-    parent_type = models.CharField(choices=COMMENT_TYPE, max_length=128)
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, null=True, blank=True)
-    quote = models.ForeignKey(
-        Quote,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-    comment = models.TextField()
 
     def __str__(self) -> str:
-        return f"Comment by {self.user} → {self.quote or self.task}"
+        return f"TaskReaction: {self.user}/{self.task}/{self.unicode_emoji or self.image_emoji}"
 
-    class Meta:
-        db_table = "comments"
+    class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ReactionBase
+        db_table = "task_reactions"
+        constraints = ReactionBase.Meta.constraints
 
 
 class Following(models.Model):  # Base 상속 시 id가 생기므로 models.Model 유지

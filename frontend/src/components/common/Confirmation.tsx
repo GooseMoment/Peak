@@ -1,10 +1,10 @@
-import { type ReactNode, useEffect, useState } from "react"
+import { type ReactNode, useCallback, useEffect, useState } from "react"
 
 import styled, { css } from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
 
-import useStopScroll from "@utils/useStopScroll"
+import useStopVerticalScroll from "@utils/useStopVerticalScroll"
 
 import { cubicBeizer, slideDown, slideUp } from "@assets/keyframes"
 
@@ -31,7 +31,27 @@ const Confirmation = ({
     const [visible, setVisible] = useState(true)
     const [closing, setClosing] = useState(false)
 
-    useStopScroll(true)
+    useStopVerticalScroll(true)
+
+    const closeWithDelay = useCallback(() => {
+        setClosing(true)
+        setTimeout(() => {
+            setVisible(false)
+            onClose()
+        }, 100)
+    }, [onClose])
+
+    const handleOutsideClick = useCallback(
+        (e: Event) => {
+            if (e.target !== el) {
+                return
+            }
+
+            e.stopPropagation()
+            closeWithDelay()
+        },
+        [closeWithDelay],
+    )
 
     useEffect(() => {
         el.addEventListener("click", handleOutsideClick)
@@ -39,26 +59,7 @@ const Confirmation = ({
         return () => {
             el.removeEventListener("click", handleOutsideClick)
         }
-    }, [])
-
-    const handleOutsideClick = (e: Event) => {
-        if (e.target !== el) {
-            return
-        }
-
-        e.stopPropagation()
-        closeWithDelay()
-    }
-
-    const close = () => {
-        setVisible(false)
-        onClose()
-    }
-
-    const closeWithDelay = () => {
-        setClosing(true)
-        setTimeout(close, 100)
-    }
+    }, [handleOutsideClick])
 
     return createPortal(
         visible && (

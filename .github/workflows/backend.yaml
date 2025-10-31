@@ -10,7 +10,7 @@ jobs:
   format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: astral-sh/ruff-action@v3
         with:
           args: "format --check"
@@ -18,31 +18,79 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: astral-sh/ruff-action@v3
         with:
           src: "./backend"
   makemigrations:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup Python 3.12
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - name: Setup Python 3.13
+        uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: '3.13'
           cache: 'pip' # caching pip dependencies
       - name: Install dependencies
         run: pip install -r requirements.txt
         working-directory: ./backend
       - name: Check makemigrations
-        run: DJANGO_DUMMYDB=true python manage.py makemigrations --check
+        run: python manage.py makemigrations --check
+        env:
+          DEBUG: 1
+          SQL_ENGINE: django.db.backends.dummy
         working-directory: ./backend
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Build the Docker image
       run: >-
         docker build
         --file ./backend/Dockerfile
         --tag peak-api:$(date +%s) ./backend
+  type:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+      - name: Setup venv & Install dependencies
+        run: | 
+          python3 -m venv .venv 
+          source .venv/bin/activate
+          pip install -r backend/requirements.txt
+          echo "$PWD/.venv/bin" >> $GITHUB_PATH
+      - uses: jakebailey/pyright-action@v2
+        with:
+          pylance-version: latest-release
+  test:
+    runs-on: ubuntu-latest
+    container: python:3.13.5-alpine3.21
+    services:
+      postgres:
+        image: postgres:16.2-alpine3.19
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+        working-directory: ./backend
+      - name: Run test
+        run: python manage.py test
+        env:
+          DEBUG: 1
+          SQL_ENGINE: django.db.backends.postgresql
+          SQL_HOST: postgres
+          SQL_USER: postgres
+          SQL_PASSWORD: postgres
+        working-directory: ./backend

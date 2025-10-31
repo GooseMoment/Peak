@@ -69,9 +69,7 @@ INSTALLED_APPS = [
     "social",
     "notifications",
     "today",
-    # 'search',
     "user_setting",
-    "announcements",
     "rest_framework",
     "corsheaders",
     "storages",
@@ -82,6 +80,7 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 10,
     "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "TEST_REQUIRED_DEFAULT_FORMAT": "json",
 }
 
 MIDDLEWARE = [
@@ -98,6 +97,7 @@ MIDDLEWARE = [
 
 AUTH_USER_MODEL = "users.User"
 USER_DEFAULT_PROFILE_IMG = os.environ.get("USER_DEFAULT_PROFILE_IMG")
+USER_PROFILE_IMG_SIZE_LIMIT = 3 * 1024 * 1024  # 3MB
 
 ROOT_URLCONF = "django_peak.urls"
 
@@ -135,13 +135,6 @@ DATABASES = {
         "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
-
-if os.environ.get("DJANGO_DUMMYDB", "false") == "true":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.dummy",
-        }
-    }
 
 
 # Password validation
@@ -266,11 +259,13 @@ WEBPUSH = {
 }
 
 # Token Authentication
+KNOX_TOKEN_MODEL = "peak_auth.AuthToken"
 
 REST_KNOX = {
     "TOKEN_TTL": timedelta(days=14),
     "USER_SERIALIZER": "users.serializers.UserSerializer",
     "AUTO_REFRESH": True,
+    "TOKEN_MODEL": "peak_auth.AuthToken",
 }
 
 # Password Recovery Token
@@ -282,3 +277,5 @@ PASSWORD_RECOVERY_TOKEN_TTL = timedelta(minutes=10)
 TWO_FACTOR_AUTHENTICATION = {
     "ALLOWED_TRIES_PER_SIGN_IN": 3,
 }
+
+DRAWER_PER_PROJECT_MAX_COUNT = 20

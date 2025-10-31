@@ -1,9 +1,15 @@
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
+from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 
 from .models import Project
 from .serializers import ProjectSerializer, ProjectSerializerForUserProjectList
+from .exceptions import ProjectNameDuplicate
+
 from api.permissions import IsUserOwner
+from api.exceptions import UnknownError
+from api.serializers import ReorderSerializer
 
 
 class ProjectDetail(
@@ -27,7 +33,33 @@ class ProjectDetail(
         return self.destroy(request, *args, **kwargs)
 
 
-class InboxDetail(
+class ProjectListPagination(PageNumberPagination):
+    page_size = 20
+
+
+class ProjectList(
+    mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
+):
+    serializer_class = ProjectSerializer
+    pagination_class = ProjectListPagination
+
+    def get_queryset(self):
+        return Project.objects.filter(user=self.request.user).order_by("order").all()
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.create(request, *args, **kwargs)
+        except ValidationError as e:
+            if "unique" in str(e):
+                raise ProjectNameDuplicate
+        except Exception:
+            raise UnknownError
+
+
+class InboxProjectDetail(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     generics.GenericAPIView,
@@ -44,28 +76,6 @@ class InboxDetail(
         return self.retrieve(request, *args, **kwargs)
 
 
-class ProjectListPagination(PageNumberPagination):
-    page_size = 1000
-
-
-class ProjectList(
-    mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
-):
-    serializer_class = ProjectSerializer
-    pagination_class = ProjectListPagination
-
-    def get_queryset(self):
-        return (
-            Project.objects.filter(user=self.request.user).order_by("created_at").all()
-        )
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-
 class UserProjectList(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = ProjectSerializerForUserProjectList
     pagination_class = ProjectListPagination
@@ -76,3 +86,26 @@ class UserProjectList(mixins.ListModelMixin, generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+class ProjectReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
+    serializer_class = ReorderSerializer
+    queryset = Project.objects.all()
+
+    def patch(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+
+        projects_data = serializer.validated_data
+
+        ids = [item["id"] for item in projects_data]
+        id_to_order = {item["id"]: item["order"] for item in projects_data}
+
+        projects = self.get_queryset().filter(id__in=ids)
+
+        for project in projects:
+            project.order = id_to_order[project.id]
+
+        Project.objects.bulk_update(projects, ["order"])
+
+        return Response(status=status.HTTP_200_OK)

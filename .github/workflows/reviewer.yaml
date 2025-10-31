@@ -3,7 +3,6 @@ name: Random Reviewer Discord
 on:
   pull_request:
     types:
-      - opened
       - review_requested
       - ready_for_review
   pull_request_review:
@@ -20,7 +19,7 @@ jobs:
     if: ${{ github.actor != 'dependabot[bot]' }}
     steps:
       - name: Run random-reviewer-discord
-        uses: JedBeom/random-reviewer-discord@v0.2.1
+        uses: JedBeom/random-reviewer-discord@v0.2.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

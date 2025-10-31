@@ -1,11 +1,17 @@
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
+from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
+from rest_framework.exceptions import ValidationError
+
+from django.conf import settings
 
 from .models import Drawer
-from .serializers import DrawerSerializer
-from .utils import reorder_tasks, normalize_drawer_order
-from tasks.models import Task
+from .serializers import DrawerSerializer, DrawerReorderSerializer
+from .exceptions import DrawerNameDuplicate, DrawerLimitExceeded
+
 from api.permissions import IsUserOwner
+
+from projects.models import Project
 
 
 class DrawerDetail(
@@ -23,19 +29,6 @@ class DrawerDetail(
         return self.retrieve(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        try:
-            task_id = request.data["task_id"]
-            dragged_order = int(request.data["dragged_order"])
-            target_order = int(request.data["target_order"])
-            closest_edge = request.data["closest_edge"]
-        except (ValueError, TypeError, KeyError):
-            pass
-        else:
-            if (dragged_order is not None) or (target_order is not None):
-                drawer: Drawer = Task.objects.filter(id=task_id).get().drawer
-                reorder_tasks(drawer.tasks, dragged_order, target_order, closest_edge)
-                normalize_drawer_order(drawer.tasks, "order")
-
         return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, id, *args, **kwargs):
@@ -45,28 +38,87 @@ class DrawerDetail(
 class DrawerList(
     mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
 ):
-    serializer_class = DrawerSerializer
     permission_classes = [IsUserOwner]
+    serializer_class = DrawerSerializer
     filter_backends = [OrderingFilter]
     ordering_fields = [
+        "order",
         "name",
         "created_at",
         "uncompleted_task_count",
         "completed_task_count",
     ]
-    ordering = ["created_at"]
 
     def get_queryset(self):
         queryset = (
-            Drawer.objects.filter(user=self.request.user).order_by("created_at").all()
+            Drawer.objects.filter(user=self.request.user)
+            .order_by("project", "order")
+            .all()
         )
+
         project_id = self.request.query_params.get("project", None)
         if project_id is not None:
             queryset = queryset.filter(project__id=project_id)
+
         return queryset
+
+    def perform_create(self, serializer):
+        project = serializer.validated_data.get("project")
+
+        if (
+            Drawer.objects.filter(user=self.request.user, project=project).count()
+            >= settings.DRAWER_PER_PROJECT_MAX_COUNT
+        ):
+            raise DrawerLimitExceeded
+
+        serializer.save(user=self.request.user, project=project)
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        try:
+            return self.create(request, *args, **kwargs)
+        except ValidationError as e:
+            if "unique" in str(e):
+                raise DrawerNameDuplicate
+
+
+class InboxDrawerDetail(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    generics.GenericAPIView,
+):
+    serializer_class = DrawerSerializer
+    permission_classes = [IsUserOwner]
+
+    def get_object(self):
+        return Drawer.objects.filter(
+            user=self.request.user, project__type=Project.INBOX
+        ).first()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
+class DrawerReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
+    serializer_class = DrawerReorderSerializer
+    queryset = Drawer.objects.all()
+
+    def patch(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+
+        drawers_data = serializer.validated_data
+
+        ids = [item["id"] for item in drawers_data]
+        id_to_order = {item["id"]: item["order"] for item in drawers_data}
+
+        drawers = self.get_queryset().filter(id__in=ids)
+
+        for drawer in drawers:
+            drawer.order = id_to_order[drawer.id]
+
+        Drawer.objects.bulk_update(drawers, ["order"])
+
+        return Response(status=status.HTTP_200_OK)

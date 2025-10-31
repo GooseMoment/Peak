@@ -1,6 +1,5 @@
 {
     "sidebar": {
-        "search": "검색",
         "home": "홈",
         "notifications": "알림",
         "today": "오늘",
@@ -17,24 +16,32 @@
         "fail_to_load": "알림을 불러오지 못했습니다.",
         "type_all": "모두",
         "type_tasks": "작업",
-        "type_comments": "댓글",
         "type_reactions": "리액션",
-        "type_pecking": "콕 쪼기",
         "type_follow": "팔로우",
-        "content_task_reminder": "{{delta}}분 전 리마인더",
-        "content_task_reminder_now": "작업할 시간입니다.",
-        "content_peck": "{{count}}번 콕 쪼았습니다.",
-        "content_comment_quote": "{{date}}의 한마디",
-        "content_reaction_quote": "{{date}}의 한마디",
+        "content_task_reminder": "{{count}}분 전 리마인더",
+        "content_task_reminder_one": "1분 전 리마인더",
+        "content_task_reminder_zero": "작업할 시간입니다.",
         "content_follow": "나를 팔로우 합니다.",
         "content_follow_request": "내게 팔로우 요청을 보냈습니다.",
-        "content_follow_request_accepted": "내 팔로우 요청을 승인했습니다."
+        "content_follow_request_accepted": "내 팔로우 요청을 승인했습니다.",
+        "body_task_reaction": "내 작업에 이모지로 반응했습니다.",
+        "emoji": "이모지",
+        "your_task": "내 작업",
+        "body_task_reminder": "작업 마감 {{count}}분 전 리마인더입니다.",
+        "body_task_reminder_zero": "작업 마감입니다.",
+        "body_follow": "나를 팔로우합니다.",
+        "body_follow_request": "나에게 팔로우 요청을 보냈습니다.",
+        "body_follow_request_accepted": "내 팔로우 요청을 승인했습니다.",
+        "follow_back": "맞팔로우하기",
+        "approve_follow_request": "팔로우 요청 승인하기",
+        "handled_follow_request": "이미 처리된 요청입니다."
     },
     "project_list": {
         "title": "프로젝트",
         "type_regular": "상시",
         "type_goal": "목표",
         "inbox": "인박스",
+        "error_load_project_list": "프로젝트 리스트를 불러오지 못했습니다",
         "button_add_project": "새 프로젝트 추가"
     },
     "today": {
@@ -44,8 +51,7 @@
         "filter_overDue": "지난 기한",
         "filter_pastAssigned": "지난 할당",
         "no_today_assignment": "오늘 할 작업들을 추가하세요.",
-        "error_load_task": "작업을 불러오지 못했어요 😢",
-        "button_load_more": "더보기",
+        "error_load_task": "작업을 불러오지 못했어요",
         "due_change_today_success": "작업을 오늘로 할당했습니다.",
         "due_change_tomorrow_success": "작업을 내일로 할당했습니다.",
         "due_change_error": "기한 변경에 실패했습니다.",
@@ -57,15 +63,14 @@
         "inbox": "인박스",
         "no_drawer": "+ 버튼을 눌러서 서랍을 추가하세요.",
         "progress": "진행 상황",
-        "button_load_more": "더보기",
         "button_add_task": "새 작업 추가",
         "button_close_add_task": "닫기",
         "button_add": "추가하기",
         "button_save": "수정",
-        "loading": "로딩 중",
         "none": "없음",
-        "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요 😢",
-        "error_load_inbox": "인박스 프로젝트를 불러오지 못했어요 😢",
+        "error_load_project_and_drawer": "프로젝트와 서랍을 불러오지 못했어요",
+        "error_load_inbox": "인박스 프로젝트를 불러오지 못했어요",
+        "error_load_task": "작업을 불러오지 못했어요",
         "name_placeholder": "이름을 입력하세요",
         "edit": {
             "display": "수정"
@@ -85,6 +90,7 @@
             "title": "{{title}} 목록 정렬 기준",
             "drawer_title": "서랍",
             "task_title": "작업",
+            "my": "나만의 정렬",
             "name": "이름 사전순",
             "-name": "이름 사전 역순",
             "created_at": "생성일자 최신순",
@@ -104,9 +110,16 @@
         "button_save": "저장",
         "name_placeholder": "이름을 입력하세요",
         "created_project": "새 프로젝트를 생성했습니다.",
-        "created_project_error": "프로젝트 생성에 실패했습니다.",
+        "created_project_error": {
+            "PROJECT_NAME_DUPLICATE": "이미 존재하는 프로젝트 이름입니다.",
+            "UNKNOWN_ERROR": "알 수 없는 문제가 발생했습니다. 나중에 시도해 주세요."
+        },
         "created_drawer": "새 서랍을 생성했습니다.",
-        "created_drawer_error": "서랍 생성에 실패했습니다.",
+        "created_drawer_error": {
+            "DRAWER_NAME_DUPLICATE": "이미 존재하는 서랍 이름입니다.",
+            "DRAWER_LIMIT_EXCEEDED": "프로젝트에서 생성 가능한 서랍의 최대 개수를 초과했습니다.",
+            "UNKNOWN_ERROR": "알 수 없는 문제가 발생했습니다. 나중에 시도해 주세요."
+        },
         "edited": "변경 사항을 저장했습니다.",
         "edited_error": "변경 사항 저장에 실패했습니다.",
         "project_cannot_name_inbox": "프로젝트의 이름을 Inbox로 지을 수 없습니다.",
@@ -114,6 +127,7 @@
         "color": {
             "title": "색깔 설정",
             "palette1": "기본",
+            "grey": "회색",
             "red": "빨간색",
             "red_orange": "레드오렌지",
             "orange": "주황색",
@@ -133,12 +147,14 @@
         },
         "privacy": {
             "title": "공개 범위 설정",
+            "default": "프로젝트와 동일",
             "public": "전체공개",
             "protected": "팔로워공개",
             "private": "비공개"
         },
         "type": {
             "title": "프로젝트 종류 설정",
+            "inbox": "인박스",
             "regular": "상시 프로젝트",
             "goal": "목표 프로젝트"
         }
@@ -148,11 +164,11 @@
         "overdue": "기한 지남",
         "due_today": "오늘",
         "due_tomorrow": "내일",
-        "days_left": "일 남음",
+        "days_left": "{{diff}}일 남음",
         "name_placeholder": "작업의 이름을 입력하세요.",
         "name_change_success": "이름을 변경했습니다.",
         "none": "없음",
-        "error_load_task": "작업을 불러오지 못했어요 😢",
+        "error_load_task": "작업을 불러오지 못했어요",
         "edit": {
             "edit_title": "작업 수정",
             "edit_success": "변경 사항을 저장했습니다.",
@@ -168,6 +184,10 @@
             "alert_task_title": "\"{{task_name}}\" 작업을",
             "delete_success": "\"{{task_name}}\" 작업을 삭제했습니다.",
             "delete_error": "\"{{task_name}}\" 작업 삭제에 실패했습니다."
+        },
+        "completed": {
+            "name": "완료 날짜",
+            "title": "완료 날짜 설정"
         },
         "assigned": {
             "name": "할당 날짜",
@@ -293,6 +313,8 @@
         "unknown_error_code": "ㅠ_ㅠ",
         "unknown_error_text": "알 수 없는 오류가 발생했습니다.",
         "unknown_error_bottom": "시작 화면으로 돌아가기",
+        "clear_cache": "캐시 비우기",
+        "clear_cache_confirm": "저장된 캐시를 비울까요?",
         "404_error_text": "요청하신 페이지를 찾을 수 없습니다.",
         "404_error_bottom": "이전 화면으로 돌아가기"
     },
@@ -305,9 +327,10 @@
         "resend_other_cases": "만약 이미 인증되었거나, 등록되지 않은 이메일이라면 다른 메일이 전송됩니다.",
         "resend_known_issues": "Outlook 등의 이메일 서비스에서는 스팸으로 간주되어 전송이 불가합니다. 해당 경우에는 다른 주소로 가입하여 주세요.",
         "resend_success": "메일을 전송했습니다. 메일함 또는 스팸함을 확인하세요.",
-        "resend_error_limit": "약 {{minutes}}분 후 다시 시도하세요.",
-        "resend_error_bad_request": "메일 형식이 올바르지 않습니다.",
-        "resend_error_any": "오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        "UNKNOWN_ERROR": "에러가 발생했습니다. 다시 시도하세요.",
+        "REQUIRED_FIELD_MISSING": "이메일 주소를 입력해주세요.",
+        "EMAIL_INVALID": "이메일 주소가 올바르지 않습니다.",
+        "RATE_LIMIT_EXCEEDED": "너무 요청이 많습니다. {{minutes}}분 뒤 다시 시도하세요.",
         "placeholder_email": "이메일 주소 입력",
         "button_submit": "제출"
     },
@@ -315,10 +338,6 @@
         "sign_in_again": "로그아웃 되었습니다. 다시 로그인하세요.",
         "sign_in": "로그인",
         "sign_in_success": "로그인 성공! 다시 만나서 기뻐요.",
-        "sign_in_failed": "로그인 실패. 유저네임과 암호를 다시 확인하세요.",
-        "network_error": "문제가 발생했습니다. 네트워크 상황을 확인하세요.",
-        "internal_error": "문제가 발생했습니다. 다시 시도해 주세요.",
-        "email_verify_required": "이메일 인증이 아직 진행되지 않았습니다. 메일함 또는 스팸함을 확인해주세요.",
         "loading": "로딩 중",
         "button_sign_in": "로그인",
         "button_create_account": "계정 생성",
@@ -329,10 +348,6 @@
         "button_cancel": "취소",
         "button_email_authentication": "이메일 인증",
         "6-digit_code": "6자리 코드",
-        "enter_6_digit": "6자리 숫자를 입력하세요.",
-        "session_invalid": "다시 로그인하세요.",
-        "try_count_exceed": "2단계 인증 시도 횟수를 초과했습니다. 다시 로그인하세요.",
-        "wrong_code": "잘못된 코드입니다. 다시 시도하세요.",
         "sign_up": "회원가입",
         "email": "이메일 주소",
         "password": "암호",
@@ -343,19 +358,24 @@
         "link_sign_in": "로그인",
         "sign_up_completed": "메일 인증 필요",
         "check_inbox": "이메일 인증 메일이 전송되었습니다. 메일함 또는 스팸함을 확인하세요.",
-        "sign_up_errors": {
-            "NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
-            "USER_ALREADY_AUTHENTICATED": "이미 로그인되어 있습니다.",
-            "REQUIRED_FIELD_MISSING": "이메일 주소, 암호, 사용자 이름을 모두 입력해주세요.",
-            "EMAIL_INVALID": "올바른 이메일 주소를 입력해주세요.",
-            "USERNAME_INVALID_LENGTH": "사용자 이름은 4글자 이상, 15글자 이하여야 합니다.",
-            "USERNAME_INVALID_FORMAT": "사용자 이름은 알파벳, 언더스코어(_), 숫자만 포함할 수 있습니다.",
-            "USERNAME_DUPLICATE": "이미 존재하는 사용자 이름입니다.",
-            "PASSWORD_INVALID": "암호는 8글자 이상이어야 합니다.",
-            "INTERNAL_ERROR": "문제가 발생했습니다. 다시 시도해 주세요.",
-            "EMAIL_NOT_SENT": "이메일을 전송할 수 없습니다. 몇 분 뒤에 다시 시도해주세요.",
-            "UNKNOWN_ERROR": "알 수 없는 문제가 발생했습니다. 나중에 시도해 주세요."
-        }
+        "CREDENTIAL_INVALID": "로그인 실패. 유저네임과 암호를 다시 확인하세요.",
+        "MAIL_NOT_VERIFIED": "이메일 인증이 아직 진행되지 않았습니다. 메일함 또는 스팸함을 확인해주세요.",
+        "NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
+        "USER_ALREADY_AUTHENTICATED": "이미 로그인되어 있습니다.",
+        "REQUIRED_FIELD_MISSING": "모든 칸에 내용을 입력해주세요.",
+        "EMAIL_INVALID": "올바른 이메일 주소를 입력해주세요.",
+        "USERNAME_INVALID_LENGTH": "사용자 이름은 4글자 이상, 15글자 이하여야 합니다.",
+        "USERNAME_INVALID_FORMAT": "사용자 이름은 알파벳, 언더스코어(_), 숫자만 포함할 수 있습니다.",
+        "USERNAME_DUPLICATE": "이미 존재하는 사용자 이름입니다.",
+        "PASSWORD_INVALID": "암호는 8글자 이상이어야 합니다.",
+        "INTERNAL_ERROR": "문제가 발생했습니다. 다시 시도해 주세요.",
+        "EMAIL_NOT_SENT": "이메일을 전송할 수 없습니다. 몇 분 뒤에 다시 시도해주세요.",
+        "UNKNOWN_ERROR": "알 수 없는 문제가 발생했습니다. 나중에 시도해 주세요.",
+        "TOTP_CODE_INVALID": "잘못된 코드입니다. 다시 입력하세요.",
+        "TOKEN_REQUIRED": "먼저 로그인 해주세요.",
+        "TOKEN_INVALID": "세션이 만료되었습니다. 다시 로그인 해주세요.",
+        "TOKEN_OUT_OF_COUNTS": "허용된 횟수를 초과했습니다. 다시 로그인 해주세요.",
+        "TOTP_CODE_LENGTH": "숫자 6자리를 입력하세요."
     },
     "password_recovery": {
         "request_title": "암호를 잊었나요?",
@@ -363,9 +383,6 @@
         "placeholder_email": "이메일 주소 입력",
         "button_submit": "제출",
         "request_success": "암호 재설정 메일이 전송되었습니다. 메일함을 확인하세요.",
-        "request_error_limit": "한 시간 후에 다시 시도해주세요.",
-        "request_error_bad_request": "잘못된 요청입니다. 페이지 새로고침 후 다시 시도하세요.",
-        "request_error_any": "오류가 발생했습니다. 네트워크 상황을 확인하세요.",
         "link_sign_in": "로그인",
         "recovery_title": "암호 재설정",
         "recovery_description": "새 암호는 8자 이상이어야 합니다.",
@@ -375,40 +392,39 @@
         "recovery_success": "암호를 변경했습니다. 새 암호로 로그인하세요.",
         "recovery_error_password_length": "암호는 8자 이상이어야 합니다.",
         "recovery_error_password_unmatch": "새 암호가 서로 다릅니다.",
-        "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다."
+        "recovery_error": "이런. 올바르지 않거나 만료된 링크입니다.",
+        "NETWORK_ERROR": "네트워크 상황을 확인해주세요.",
+        "UNKNOWN_ERROR": "에러가 발생했습니다. 다시 시도하세요.",
+        "REQUIRED_FIELD_MISSING": "이메일 주소를 입력해주세요.",
+        "TOKEN_INVALID": "세션이 만료되었습니다. 다시 요청해주세요.",
+        "TOKEN_REQUIRED": "메일 속 링크를 다시 열어주세요.",
+        "RATE_LIMIT_EXCEEDED": "{{minutes}}분 뒤 다시 시도하세요.",
+        "PASSWORD_INVALID": "암호는 8글자 이상이어야 합니다.",
+        "EMAIL_INVALID": "올바른 이메일 주소를 입력해주세요."
     },
     "social": {
         "following_title": "팔로잉",
         "explore_title": "탐험",
-        "log_preview_completed": "완료!",
-        "log_details": {
-            "no_content": "작업이 없습니다."
+        "records": {
+            "empty": "아무 것도 없습니다.",
+            "empty_mine": "오늘 완료했거나 할당했거나 기한인 작업이 여기 표시됩니다."
         },
-        "quote": {
-            "empty_self_quote": "오늘의 한마디를 남겨주세요.",
-            "empty_others_quote": "아직 상대방이 작성하지 않았습니다."
+        "remarks": {
+            "title": "오늘의 한마디",
+            "title_edit": "수정 중",
+            "title_create": "한마디를 적어주세요",
+            "placeholder": "연필 버튼을 눌러 작성하세요",
+            "placeholder_edit": "이곳에 작성하세요..."
         },
-        "emoji_modal": {
-            "searchbar": "이모지 찾기"
+        "reactions": {
+            "more": "그 외 {{count}}명"
         },
         "explore": {
-            "searchbar": "새로운 인연을 찾아보세요.",
-            "no_result": "당신이 찾는 사람이 없습니다 😢",
-            "suggestion": "새로운 사람과 새로운 인연은 어떤가요?"
+            "searchbar": "원하는 사용자를 검색해보세요",
+            "no_result": "일치하는 사용자를 찾지 못했어요",
+            "suggestion": "새로운 사람과 새로운 인연은 어떤가요?",
+            "results_title": "‘{{query}}’에 대한 검색 결과"
         }
-    },
-    "search": {
-        "title": "검색",
-        "filter_button": {
-            "search_terms": "검색어",
-            "project": "프로젝트",
-            "drawer": "서랍",
-            "assigned_at": "할당 날짜",
-            "completed_at": "완수 날짜",
-            "privacy": "공개 범위",
-            "memo": "메모"
-        },
-        "no_result": "조건에 맞는 결과를 찾을 수 없습니다 🤔"
     },
     "update": {
         "message": "새로운 업데이트가 있습니다.",
@@ -419,6 +435,14 @@
         "header": {
             "back": "돌아가기"
         },
-        "button_no": "아니요"
+        "button_no": "아니요",
+        "button_today": "오늘로 이동",
+        "retry": "재시도",
+        "loading": "로딩 중...",
+        "load_more": "더 불러오기",
+        "error_load": "불러오지 못했습니다.",
+        "error_something_wrong": "문제가 발생했습니다.",
+        "error_something_wrong_description": "나중에 다시 시도해 주세요.",
+        "error_perform": "실행하지 못했습니다."
     }
 }

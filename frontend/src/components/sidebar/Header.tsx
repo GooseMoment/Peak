@@ -43,7 +43,7 @@ const Header = () => {
         }
 
         previousScreenSize.current = screenSize
-    }, [screenSize])
+    }, [screenSize, setCollapsed])
 
     const onClickCollapseButton = () => {
         setCollapsed((previous) => {

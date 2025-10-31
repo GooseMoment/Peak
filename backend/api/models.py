@@ -13,7 +13,9 @@ class Base(models.Model):
         abstract = True
 
 
-class PrivacyMixin(models.Model):
+class PrivacyMixin(
+    models.Model
+):  # inheriting models.Model is required to make the `privacy` field JSON serializable
     FOR_PUBLIC = "public"
     FOR_PROTECTED = "protected"  # followers only
     FOR_PRIVATE = "private"  # me
@@ -24,7 +26,11 @@ class PrivacyMixin(models.Model):
         (FOR_PRIVATE, "for private"),
     ]
 
-    privacy = models.CharField(choices=PRIVACY_TYPES, max_length=128)
+    privacy = models.CharField(
+        choices=PRIVACY_TYPES,
+        max_length=128,
+        default=FOR_PUBLIC,
+    )
 
     class Meta:
         abstract = True

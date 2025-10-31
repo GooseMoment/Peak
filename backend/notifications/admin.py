@@ -24,7 +24,12 @@ class TaskReminderAdmin(admin.ModelAdmin):
 class NotificationAdmin(admin.ModelAdmin):
     ordering = ["-updated_at"]
     search_fields = ["user__username"]
-    autocomplete_fields = ["user", "task_reminder", "reaction", "following", "peck"]
+    autocomplete_fields = [
+        "user",
+        "task_reminder",
+        "task_reaction",
+        "following",
+    ]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
@@ -36,7 +41,11 @@ class NotificationAdmin(admin.ModelAdmin):
         (
             "Payloads",
             {
-                "fields": ["task_reminder", "reaction", "following", "peck"],
+                "fields": [
+                    "task_reminder",
+                    "task_reaction",
+                    "following",
+                ],
             },
         ),
         fieldset_base,
@@ -46,20 +55,20 @@ class NotificationAdmin(admin.ModelAdmin):
 @admin.register(WebPushSubscription)
 class WebPushSubscriptionAdmin(admin.ModelAdmin):
     ordering = ["-updated_at"]
-    search_fields = ["user__username"]
-    autocomplete_fields = ["user"]
+    search_fields = ["token__digest"]
+    autocomplete_fields = ["token"]
     readonly_fields = readonly_fields_base
     fieldsets = [
         (
             None,
             {
-                "fields": ["user"],
+                "fields": ["token", "locale", "excluded_types", "fail_cnt"],
             },
         ),
         (
-            None,
+            "PushSubscription",
             {
-                "fields": ["subscription_info", "locale", "device", "user_agent"],
+                "fields": ["endpoint", "auth", "p256dh", "expiration_time"],
             },
         ),
         fieldset_base,

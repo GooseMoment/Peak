@@ -29,7 +29,6 @@ declare module "styled-components" {
         scrollbarColor: string
         introTextColor: string
         introBackgroundColor: string
-        imgIconFilter: string
         sidebar: {
             activeColor: string
             activeBackgroundColor: string
@@ -51,25 +50,11 @@ declare module "styled-components" {
         skeleton: { defaultColor: string; shineColor: string }
         notifications: { boxShadowColor: string }
         social: {
-            borderColor: string
-            activeBackgroundColor: string
-            modalShadowColor: string
-            modalCellHoverColor: string
             buttonColor: string
-        }
-        calendar: {
-            backgroundColor: string
-            secondBackgroundColor: string
-            todayColor: string
-            hoverColor: string
+            activeColor: string
+            activeBackgroundColor: string
         }
         help: { addressBarShadowColor: string }
-        search: {
-            borderColor: string
-            buttonColor: string
-            activatedColor: string
-            activatedBackgroundColor: string
-        }
         toastTheme: LightDark
     }
 }

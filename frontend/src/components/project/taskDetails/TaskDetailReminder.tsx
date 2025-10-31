@@ -1,0 +1,93 @@
+import ReminderContents from "@components/project/taskDetails/ReminderContents"
+
+import { type TaskReminderDelta } from "@api/notifications.api"
+import { type MinimalTask } from "@api/tasks.api"
+
+import before_1D from "@assets/project/reminder/before_1D.svg"
+import before_1h from "@assets/project/reminder/before_1h.svg"
+import before_2D from "@assets/project/reminder/before_2D.svg"
+import before_5 from "@assets/project/reminder/before_5.svg"
+import before_15 from "@assets/project/reminder/before_15.svg"
+import before_30 from "@assets/project/reminder/before_30.svg"
+import before_D from "@assets/project/reminder/before_D.svg"
+
+import { useTranslation } from "react-i18next"
+
+const TaskDetailReminder = ({
+    task,
+    setFunc,
+}: {
+    task: MinimalTask
+    setFunc: (diff: Partial<MinimalTask>) => void
+}) => {
+    const { t } = useTranslation("translation", { keyPrefix: "task.reminder" })
+
+    const handleReminder = (delta: number) => {
+        const current: TaskReminderDelta[] = task.reminders ?? []
+
+        const exists = current.some((r) => r.delta === delta)
+
+        if (exists) {
+            setFunc({
+                reminders: current.filter((r) => r.delta !== delta),
+            })
+            return
+        }
+
+        const next: TaskReminderDelta[] = [...current, { delta }]
+        next.sort((a, b) => a.delta - b.delta)
+
+        setFunc({ reminders: next })
+    }
+
+    const items = [
+        { id: 0, icon: <img src={before_D} />, content: t("then"), delta: 0 },
+        {
+            id: 1,
+            icon: <img src={before_5} />,
+            content: t("5_minutes_before"),
+            delta: 5,
+        },
+        {
+            id: 2,
+            icon: <img src={before_15} />,
+            content: t("15_minutes_before"),
+            delta: 15,
+        },
+        {
+            id: 3,
+            icon: <img src={before_30} />,
+            content: t("30_minutes_before"),
+            delta: 30,
+        },
+        {
+            id: 4,
+            icon: <img src={before_1h} />,
+            content: t("1_hour_before"),
+            delta: 60,
+        },
+        {
+            id: 5,
+            icon: <img src={before_1D} />,
+            content: t("1_day_before"),
+            delta: 1440,
+        },
+        {
+            id: 6,
+            icon: <img src={before_2D} />,
+            content: t("2_days_before"),
+            delta: 2880,
+        },
+    ]
+
+    return items.map((item) => (
+        <ReminderContents
+            key={item.id}
+            item={item}
+            reminders={task.reminders}
+            handleReminder={handleReminder}
+        />
+    ))
+}
+
+export default TaskDetailReminder

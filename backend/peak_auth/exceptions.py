@@ -9,12 +9,6 @@ class UserAlreadyAuthenticated(APIException):
     default_code = "USER_ALREADY_AUTHENTICATED"
 
 
-class RequiredFieldMissing(APIException):
-    status_code = status.HTTP_400_BAD_REQUEST
-    default_detail = "Some fields are missing."
-    default_code = "REQUIRED_FIELD_MISSING"
-
-
 class EmailInvalid(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = "Invalid email format."
@@ -57,22 +51,28 @@ class EmailNotVerified(APIException):
     default_code = "MAIL_NOT_VERIFIED"
 
 
+class TokenRequired(APIException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    default_detail = "A token is required."
+    default_code = "TOKEN_REQUIRED"
+
+
 class TokenInvalid(APIException):
     status_code = status.HTTP_403_FORBIDDEN
-    default_detail = "The given token is expired or not found."
+    default_detail = "The given token is invalid, expired or not found."
     default_code = "TOKEN_INVALID"
+
+
+class TOTPCodeInvalid(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "The given code is invalid."
+    default_code = "TOTP_CODE_INVALID"
 
 
 class TokenOutOfCounts(APIException):
     status_code = status.HTTP_403_FORBIDDEN
     default_detail = "Out of try counts."
     default_code = "TOKEN_OUT_OF_COUNTS"
-
-
-class UnknownError(APIException):
-    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-    default_detail = "Unknown error occuered."
-    default_code = "UNKNOWN_ERROR"
 
 
 class EmailNotSent(APIException):

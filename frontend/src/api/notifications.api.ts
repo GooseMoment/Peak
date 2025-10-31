@@ -1,28 +1,43 @@
 import client from "@api/client"
+import type { Base, PaginationData } from "@api/common"
+import type { Following, TaskReaction } from "@api/social.api"
+import type { Task } from "@api/tasks.api"
+import type { User } from "@api/users.api"
 
 import {
     getClientSettings,
     setClientSettingsByName,
 } from "@utils/clientSettings"
-import getDeviceType from "@utils/getDeviceType"
 
-// TODO: Define TaskReminder properly
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type TaskReminder = any
+export interface TaskReminder extends Base {
+    task: Task["id"]
+    delta: number
+    scheduled: string
+    task_name: string
+    project_color: string
+    project_id: string
+}
+
+export interface TaskReminderDelta {
+    delta: number
+}
 
 export const getReminder = async (id: string) => {
-    const res = await client.get(`notifications/reminders/${id}/`)
+    const res = await client.get<TaskReminder>(`notifications/reminders/${id}/`)
     return res.data
 }
 
-export const postReminder = async (reminders: TaskReminder) => {
+export const postReminder = async (reminders: {
+    task: string
+    delta_list: number[]
+}) => {
     const res = await client.post(`notifications/reminders/`, reminders)
     return res.status
 }
 
 export const patchReminder = async (
     id: string,
-    edit: Partial<TaskReminder>,
+    edit: Partial<TaskReminderDelta>,
 ) => {
     const res = await client.patch(`notifications/reminders/${id}/`, edit)
     return res.data
@@ -33,54 +48,69 @@ export const deleteReminder = async (id: string) => {
     return res.data
 }
 
-export type NotificationType =
-    | "task_reminder"
-    | "reaction"
-    | "follow"
-    | "follow_request"
-    | "follow_request_accepted"
-    | "comment"
-    | "peck"
-
-export interface Notification {
-    // TODO: Replace user after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    user: any
-    type: NotificationType
+export interface NotificationTaskReminder extends Base {
+    username: User["username"]
+    type: "task_reminder"
     task_reminder: TaskReminder
-    // TODO: Replace reaction after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    reaction?: any
-    // TODO: Replace following after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    following?: any
-    // TODO: Replace peck after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    peck?: any
-    // TODO: Replace comment after declaring User
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    comment?: any
 }
+
+export interface NotificationTaskReaction extends Base {
+    username: User["username"]
+    type: "task_reaction"
+    task_reaction: TaskReaction
+}
+
+export interface NotificationFollowing extends Base {
+    username: User["username"]
+    type: "follow" | "follow_request" | "follow_request_accepted"
+    following: Following
+}
+
+export type Notification =
+    | NotificationTaskReminder
+    | NotificationTaskReaction
+    | NotificationFollowing
 
 export const getNotifications = async (
     cursor: string,
-    types: NotificationType[],
+    types: Notification["type"][],
 ) => {
-    const res = await client.get<Notification>(`notifications/`, {
-        params: { cursor, types: types.join("|") },
-    })
+    const res = await client.get<PaginationData<Notification>>(
+        `notifications/`,
+        {
+            params: { cursor, types: types.join("|") },
+        },
+    )
     return res.data
+}
+
+export const getNotification = async (id: string) => {
+    const res = await client.get<Notification>(`notifications/${id}/`)
+    return res.data
+}
+
+export const getRelatedUserFromNotification = (notification: Notification) => {
+    return (
+        (notification.type === "task_reaction" &&
+            notification.task_reaction.user) ||
+        (notification.type === "follow" && notification.following?.follower) ||
+        (notification.type === "follow_request" &&
+            notification.following?.follower) ||
+        (notification.type === "follow_request_accepted" &&
+            notification?.following?.followee) ||
+        undefined
+    )
 }
 
 export interface WebPushSubscription {
     id: string
-    user: object
-    subscription_info: PushSubscription
+    auth: string
+    p256dh: string
+    endpoint: PushSubscription["endpoint"]
+    expiration_time: PushSubscription["expirationTime"]
     locale: string
-    device: string
-    user_agent: (typeof navigator)["userAgent"]
     fail_cnt: number
-    excluded_types: NotificationType[]
+    excluded_types: Notification["type"][]
 }
 
 export const getSubscription = async (id: string) => {
@@ -96,11 +126,14 @@ export const postSubscription = async (subscription: PushSubscription) => {
         locale = navigator.language.startsWith("ko") ? "ko" : "en"
     }
 
+    const subscriptionJSON = subscription.toJSON()
+
     const data: Partial<WebPushSubscription> = {
-        subscription_info: subscription,
+        auth: subscriptionJSON.keys?.auth,
+        p256dh: subscriptionJSON.keys?.p256dh,
+        endpoint: subscription.endpoint,
+        expiration_time: subscription.expirationTime,
         locale,
-        device: getDeviceType(),
-        user_agent: navigator.userAgent,
     }
 
     const res = await client.post<WebPushSubscription>(
