@@ -43,7 +43,7 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
         isLoading: isInboxLoading,
         isError: isInboxError,
         data: inboxData,
-        refetch: isInboxRefetch,
+        refetch: inboxRefetch,
     } = useQuery({
         queryKey: ["drawers", "inbox"],
         async queryFn() {
@@ -60,7 +60,7 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
             <ErrorBox
                 onClick={() => {
                     refetch()
-                    isInboxRefetch()
+                    inboxRefetch()
                 }}>
                 {t("today.error_load_task")}
             </ErrorBox>

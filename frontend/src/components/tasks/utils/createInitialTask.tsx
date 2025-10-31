@@ -3,7 +3,7 @@ import type { MinimalTask } from "@api/tasks.api"
 
 const createInitialTask = (
     drawer: Drawer,
-    coverted_init_assigend_at?: string | null,
+    converted_init_assigend_at?: string | null,
 ): MinimalTask => {
     return {
         name: "",
@@ -11,7 +11,7 @@ const createInitialTask = (
         privacy: null,
         priority: 0,
         completed_at: null,
-        assigned_at: coverted_init_assigend_at || null,
+        assigned_at: converted_init_assigend_at || null,
         due_type: null,
         due_date: null,
         due_datetime: null,

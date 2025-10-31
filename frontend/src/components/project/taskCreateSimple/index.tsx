@@ -50,11 +50,11 @@ const TaskCreateSimple = ({
     const inputRef = useRef<HTMLInputElement>(null)
 
     const [newTask, setNewTask] = useState<MinimalTask>(() => {
-        const coverted_init_assigend_at = init_assigned_at
+        const converted_init_assigend_at = init_assigned_at
             ? init_assigned_at.toISODate()
             : null
 
-        return createInitialTask(drawer, coverted_init_assigend_at)
+        return createInitialTask(drawer, converted_init_assigend_at)
     })
 
     const [content, setContent] = useState<SimpleContentKey>("name")
