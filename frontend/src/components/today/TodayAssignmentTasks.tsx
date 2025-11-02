@@ -58,19 +58,13 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
         setIsSimpleOpen((prev) => !prev)
     }
 
-    if (isError || isInboxError) {
+    if (isError) {
         return (
             <ErrorBox
                 onClick={() => {
-                    if (isInboxError) {
-                        setIsSimpleOpen(true)
-                    }
                     refetch()
-                    inboxRefetch()
                 }}>
-                {isError
-                    ? t("today.error_load_task")
-                    : t("today.error_load_inbox")}
+                {t("today.error_load_task")}
             </ErrorBox>
         )
     }
@@ -101,6 +95,10 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
                             <LoaderCircle />
                             {t("common.loading")}
                         </TaskCreateLoadingBox>
+                    ) : isInboxError ? (
+                        <ErrorBox onClick={() => inboxRefetch()}>
+                            {t("today.error_load_inbox")}
+                        </ErrorBox>
                     ) : inboxData ? (
                         <TaskCreateSimple
                             drawer={inboxData}
