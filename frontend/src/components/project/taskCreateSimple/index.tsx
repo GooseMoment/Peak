@@ -40,26 +40,27 @@ type SimpleContentKey = "name" | "assigned" | "due" | "priority"
 const TaskCreateSimple = ({
     drawer,
     onClose,
-    init_assigned_at = null,
+    initAssignedAt = null,
 }: {
     drawer: Drawer
     onClose: () => void
-    init_assigned_at?: DateTime | null
+    initAssignedAt?: DateTime | null
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task.edit" })
     const inputRef = useRef<HTMLInputElement>(null)
+    const isSubmittingRef = useRef(false)
 
     const [newTask, setNewTask] = useState<MinimalTask>(() => {
-        const converted_init_assigend_at = init_assigned_at
-            ? init_assigned_at.toISODate()
+        const convertedInitAssignedAt = initAssignedAt
+            ? initAssignedAt.toISODate()
             : null
 
-        return createInitialTask(drawer, converted_init_assigend_at)
+        return createInitialTask(drawer, convertedInitAssignedAt)
     })
 
     const [content, setContent] = useState<SimpleContentKey>("name")
     const [assignedIndex, setAssignedIndex] = useState(
-        init_assigned_at !== null ? 1 : 0,
+        initAssignedAt !== null ? 1 : 0,
     )
     const [dueIndex, setDueIndex] = useState(0)
     const [priorityIndex, setPriorityIndex] = useState(0)
@@ -196,7 +197,7 @@ const TaskCreateSimple = ({
     })
 
     const onKeyDownEnter = (e: KeyboardEvent | React.KeyboardEvent) => {
-        if (postMutation.isPending) {
+        if (isSubmittingRef.current || postMutation.isPending) {
             e.preventDefault()
             return
         }
@@ -219,7 +220,12 @@ const TaskCreateSimple = ({
             ...addDueFromToday(dateOptions[dueIndex]),
             priority: priorityIndex,
         }
-        postMutation.mutate(taskData)
+        isSubmittingRef.current = true
+        postMutation.mutate(taskData, {
+            onSettled: () => {
+                isSubmittingRef.current = false
+            },
+        })
     }
 
     return (

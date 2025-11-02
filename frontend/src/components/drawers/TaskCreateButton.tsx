@@ -37,6 +37,7 @@ const TaskCreateButtonBox = styled.div`
     margin-top: 1em;
     margin-left: 1.9em;
     cursor: pointer;
+
     & svg {
         width: 1.1em;
         height: 1.1em;

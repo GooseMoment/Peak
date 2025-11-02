@@ -4,6 +4,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
+import LoaderCircle from "@components/common/LoaderCircle"
 import TaskCreateButton from "@components/drawers/TaskCreateButton"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
@@ -14,6 +15,7 @@ import { getDrawer } from "@api/drawers.api"
 import { getTasksAssignedToday } from "@api/today.api"
 
 import { getPageFromURL } from "@utils/pagination"
+import { ifMobile } from "@utils/useScreenType"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
@@ -40,7 +42,7 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
     })
 
     const {
-        isLoading: isInboxLoading,
+        isPending: isInboxPending,
         isError: isInboxError,
         data: inboxData,
         refetch: inboxRefetch,
@@ -70,7 +72,7 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
         )
     }
 
-    if (isPending || isInboxLoading) {
+    if (isPending) {
         return (
             <TasksBox>
                 <SkeletonDueTasks taskCount={10} />
@@ -90,13 +92,19 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
                         )),
                     )
                 )}
-                {inboxData && isSimpleOpen && (
-                    <TaskCreateSimple
-                        drawer={inboxData}
-                        onClose={() => setIsSimpleOpen(false)}
-                        init_assigned_at={selectedDate}
-                    />
-                )}
+                {isSimpleOpen &&
+                    (isInboxPending ? (
+                        <TaskCreateLoadingBox>
+                            <LoaderCircle />
+                            {t("common.loading")}
+                        </TaskCreateLoadingBox>
+                    ) : inboxData ? (
+                        <TaskCreateSimple
+                            drawer={inboxData}
+                            onClose={() => setIsSimpleOpen(false)}
+                            initAssignedAt={selectedDate}
+                        />
+                    ) : null)}
                 <TaskCreateButton
                     isOpen={isSimpleOpen}
                     onClick={handleToggleSimpleCreate}
@@ -133,6 +141,23 @@ const NoTaskText = styled.div`
     margin: 1em 0em;
     font-size: 1em;
     color: ${(p) => p.theme.secondTextColor};
+`
+
+const TaskCreateLoadingBox = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    height: 3.8em;
+    margin: 0.5em 0em;
+    margin-left: 1.7em;
+    padding: 0 1.2em;
+    border: 1.5px dashed ${(p) => p.theme.grey};
+    border-radius: 15px;
+    color: ${(p) => p.theme.secondTextColor};
+
+    ${ifMobile} {
+        margin-left: 0.8em;
+    }
 `
 
 export default TodayAssignmentTasks
