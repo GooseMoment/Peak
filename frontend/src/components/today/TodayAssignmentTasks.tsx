@@ -62,6 +62,9 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
         return (
             <ErrorBox
                 onClick={() => {
+                    if (isInboxError) {
+                        setIsSimpleOpen(true)
+                    }
                     refetch()
                     inboxRefetch()
                 }}>

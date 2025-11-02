@@ -11,7 +11,7 @@ const createInitialTask = (
         privacy: null,
         priority: 0,
         completed_at: null,
-        assigned_at: convertedInitAssignedAt || null,
+        assigned_at: convertedInitAssignedAt ?? null,
         due_type: null,
         due_date: null,
         due_datetime: null,

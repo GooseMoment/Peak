@@ -306,7 +306,7 @@ const FilterButton = styled.div<{ $isActive: boolean }>`
     ${(props) =>
         props.$isActive &&
         css`
-            color: ${(p) => p.theme.white};
+            color: ${(p) => p.theme.backgroundColor};
             border: 1.5px solid ${(p) => p.theme.textColor};
             background-color: ${(p) => p.theme.textColor};
         `}
