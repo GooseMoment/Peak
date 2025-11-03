@@ -1,20 +1,29 @@
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useState } from "react"
+
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import Button, { ButtonGroup } from "@components/common/Button"
+import LoaderCircle from "@components/common/LoaderCircle"
+import TaskCreateButton from "@components/drawers/TaskCreateButton"
 import { ErrorBox } from "@components/errors/ErrorProjectPage"
 import { SkeletonDueTasks } from "@components/project/skeletons/SkeletonTodayPage"
+import TaskCreateSimple from "@components/project/taskCreateSimple"
 import TaskBlock from "@components/tasks/TaskBlock"
 
+import { getDrawer } from "@api/drawers.api"
 import { getTasksAssignedToday } from "@api/today.api"
 
 import { getPageFromURL } from "@utils/pagination"
+import { ifMobile } from "@utils/useScreenType"
 
 import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 
 const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
     const { t } = useTranslation("translation")
+
+    const [isSimpleOpen, setIsSimpleOpen] = useState(false)
 
     const {
         data,
@@ -32,9 +41,29 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
 
+    const {
+        isPending: isInboxPending,
+        isError: isInboxError,
+        data: inboxData,
+        refetch: inboxRefetch,
+    } = useQuery({
+        queryKey: ["drawers", "inbox"],
+        async queryFn() {
+            return getDrawer("inbox")
+        },
+        enabled: isSimpleOpen,
+    })
+
+    const handleToggleSimpleCreate = () => {
+        setIsSimpleOpen((prev) => !prev)
+    }
+
     if (isError) {
         return (
-            <ErrorBox onClick={() => refetch()}>
+            <ErrorBox
+                onClick={() => {
+                    refetch()
+                }}>
                 {t("today.error_load_task")}
             </ErrorBox>
         )
@@ -60,6 +89,27 @@ const TodayAssignmentTasks = ({ selectedDate }: { selectedDate: DateTime }) => {
                         )),
                     )
                 )}
+                {isSimpleOpen &&
+                    (isInboxPending ? (
+                        <TaskCreateLoadingBox>
+                            <LoaderCircle />
+                            {t("common.loading")}
+                        </TaskCreateLoadingBox>
+                    ) : isInboxError ? (
+                        <ErrorBox onClick={() => inboxRefetch()}>
+                            {t("today.error_load_inbox")}
+                        </ErrorBox>
+                    ) : inboxData ? (
+                        <TaskCreateSimple
+                            drawer={inboxData}
+                            onClose={() => setIsSimpleOpen(false)}
+                            initAssignedAt={selectedDate}
+                        />
+                    ) : null)}
+                <TaskCreateButton
+                    isOpen={isSimpleOpen}
+                    onClick={handleToggleSimpleCreate}
+                />
             </TasksBox>
             {hasNextPage ? (
                 <ButtonGroup $margin="1.3em 0em">
@@ -92,6 +142,23 @@ const NoTaskText = styled.div`
     margin: 1em 0em;
     font-size: 1em;
     color: ${(p) => p.theme.secondTextColor};
+`
+
+const TaskCreateLoadingBox = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    height: 3.8em;
+    margin: 0.5em 0em;
+    margin-left: 1.7em;
+    padding: 0 1.2em;
+    border: 1.5px dashed ${(p) => p.theme.grey};
+    border-radius: 15px;
+    color: ${(p) => p.theme.secondTextColor};
+
+    ${ifMobile} {
+        margin-left: 0.8em;
+    }
 `
 
 export default TodayAssignmentTasks

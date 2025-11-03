@@ -31,6 +31,7 @@ import { usePaletteColor } from "@assets/palettes"
 import Hourglass from "@assets/project/Hourglass"
 
 import FeatherIcon from "feather-icons-react"
+import { DateTime } from "luxon"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 
@@ -39,19 +40,28 @@ type SimpleContentKey = "name" | "assigned" | "due" | "priority"
 const TaskCreateSimple = ({
     drawer,
     onClose,
+    initAssignedAt = null,
 }: {
     drawer: Drawer
     onClose: () => void
+    initAssignedAt?: DateTime | null
 }) => {
     const { t } = useTranslation("translation", { keyPrefix: "task.edit" })
     const inputRef = useRef<HTMLInputElement>(null)
+    const isSubmittingRef = useRef(false)
 
-    const [newTask, setNewTask] = useState<MinimalTask>(() =>
-        createInitialTask(drawer),
-    )
+    const [newTask, setNewTask] = useState<MinimalTask>(() => {
+        const convertedInitAssignedAt = initAssignedAt
+            ? initAssignedAt.toISODate()
+            : null
+
+        return createInitialTask(drawer, convertedInitAssignedAt)
+    })
 
     const [content, setContent] = useState<SimpleContentKey>("name")
-    const [assignedIndex, setAssignedIndex] = useState(0)
+    const [assignedIndex, setAssignedIndex] = useState(
+        initAssignedAt !== null ? 1 : 0,
+    )
     const [dueIndex, setDueIndex] = useState(0)
     const [priorityIndex, setPriorityIndex] = useState(0)
 
@@ -175,6 +185,9 @@ const TaskCreateSimple = ({
             queryClient.invalidateQueries({
                 queryKey: ["projects", drawer.project.id],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["today", "assigned"],
+            })
             toast.success(t("create_success"))
             onClose()
         },
@@ -184,7 +197,7 @@ const TaskCreateSimple = ({
     })
 
     const onKeyDownEnter = (e: KeyboardEvent | React.KeyboardEvent) => {
-        if (postMutation.isPending) {
+        if (isSubmittingRef.current || postMutation.isPending) {
             e.preventDefault()
             return
         }
@@ -207,7 +220,12 @@ const TaskCreateSimple = ({
             ...addDueFromToday(dateOptions[dueIndex]),
             priority: priorityIndex,
         }
-        postMutation.mutate(taskData)
+        isSubmittingRef.current = true
+        postMutation.mutate(taskData, {
+            onSettled: () => {
+                isSubmittingRef.current = false
+            },
+        })
     }
 
     return (
