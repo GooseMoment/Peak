@@ -24,7 +24,7 @@
         "axios": "^1.13.1",
         "date-fns": "^4.1.0",
         "emoji-picker-react": "^4.15.0",
-        "feather-icons-react": "^0.9.0",
+        "feather-icons-react": "^1.0.0",
         "grapheme-splitter": "^1.0.4",
         "i18next": "^25.6.0",
         "i18next-resources-to-backend": "^1.2.1",
