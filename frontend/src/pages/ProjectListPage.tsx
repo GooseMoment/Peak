@@ -7,6 +7,7 @@ import PageTitle from "@components/common/PageTitle"
 import ErrorProjectList from "@components/errors/ErrorProjectList"
 import ProjectName from "@components/project/ProjectName"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
+import Search from "@components/project/search/Search"
 import SkeletonProjectList from "@components/project/skeletons/SkeletonProjectList"
 
 import {
@@ -105,6 +106,7 @@ const ProjectListPage = () => {
                         <FeatherIcon icon="plus" />
                     </PlusBox>
                 )}
+                <Search />
             </PageTitleBox>
 
             {isPending && <SkeletonProjectList />}
