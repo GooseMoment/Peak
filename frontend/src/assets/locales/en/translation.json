@@ -427,6 +427,9 @@
             "results_title": "Search results for ‘{{query}}’"
         }
     },
+    "search": {
+        "placeholder": "Search your task"
+    },
     "update": {
         "message": "New update available.",
         "update": "Update",

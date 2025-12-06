@@ -5,8 +5,11 @@ import styled, { useTheme } from "styled-components"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
+import { useTranslation } from "react-i18next"
 
 const Search = () => {
+    const { t } = useTranslation("translation", { keyPrefix: "search" })
+
     const [searchQuery, setSearchQuery] = useState("")
 
     const inputRef = useRef<HTMLInputElement>(null)
@@ -31,12 +34,12 @@ const Search = () => {
         setSearchQuery(query)
     }
 
-    // Start get input process
+    // Start input process
     const handleClick = () => {
         inputRef.current?.focus()
     }
 
-    // Edit input process
+    // Edit query
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const trimmed = e.target.value.trim()
         setSearchQuery(trimmed)
@@ -77,7 +80,7 @@ const Search = () => {
                 <InputBox
                     ref={inputRef}
                     type="text"
-                    placeholder="할 일을 검색해 보세요"
+                    placeholder={t("placeholder")}
                     value={searchQuery}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
