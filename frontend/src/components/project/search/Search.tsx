@@ -14,56 +14,54 @@ const Search = () => {
     const lastSearchRef = useRef<{ q: string; ts: number } | null>(null)
 
     // temporary stub
-    const handleExecuteSearch = () => {
-        const trimmed = searchQuery.trim()
-
+    const handleExecuteSearch = (query: string) => {
         const now = Date.now()
 
-        // 최근 300ms 내에 같은 쿼리로 서칭되면 무시 (중복 방지)
+        // 최근 같은 쿼리로 서칭되면 무시 (중복 방지)
+        // TODO: ref 대신 실 search 천에 퀴리만 이전과 비교하며, 같은 쿼리에 새로운 결과를 얻고 싶어하는 경우를 고려할 것.
         if (
             lastSearchRef.current &&
-            lastSearchRef.current.q === trimmed &&
-            now - lastSearchRef.current.ts < 300
+            lastSearchRef.current.q === query
         ) {
             return
         }
+        lastSearchRef.current = { q: query, ts: now }
 
-        lastSearchRef.current = { q: trimmed, ts: now }
-
-        console.log(trimmed)
-        setSearchQuery(trimmed)
+        console.log(query)
+        setSearchQuery(query)
     }
 
-    // 입력창 시작
+    // Start get input process
     const handleClick = () => {
         inputRef.current?.focus()
     }
 
-    // 입력창 처리
+    // Edit input process
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log("value: ", e.target.value)
-        setSearchQuery(e.target.value)
+        const trimmed = e.target.value.trim()
+        setSearchQuery(trimmed)
 
-        
+        // Debounce
         if (debounceTimerRef.current !== null) {
             window.clearTimeout(debounceTimerRef.current)
         }
 
         debounceTimerRef.current = window.setTimeout(() => {
-            console.log("debounce: ", searchQuery)
-            handleExecuteSearch()
+            handleExecuteSearch(trimmed)
         }, 1500)
     }
 
-    // 입력창 끝
+    // End and search
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key == "Enter") {            
-            handleExecuteSearch()
+        if (e.key == "Enter") {
+            const trimed = searchQuery.trim()
+            handleExecuteSearch(trimed)
         }
     }
 
-    const handleBlur = () => {
-        handleExecuteSearch()
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        const trimed = e.target.value.trim()
+        handleExecuteSearch(trimed)
     }
 
     return (
@@ -92,7 +90,7 @@ const Search = () => {
 
 const SearchWrapper = styled.div`
     flex: 1;
-    
+
     display: flex;
     align-items: flex-start;
 `
