@@ -10,6 +10,7 @@ import ProjectEdit from "@components/project/edit/ProjectEdit"
 import Search from "@components/project/search/Search"
 import SkeletonProjectList from "@components/project/skeletons/SkeletonProjectList"
 
+import { getSearchResults } from "@api/search.api"
 import {
     type Project,
     getProjectList,
@@ -94,6 +95,31 @@ const ProjectListPage = () => {
         setTempProjectOrder([])
     }, [projects, displayProjects, mutateAsync])
 
+    // Search
+    const [searchQuery, setSearchQuery] = useState("")
+
+    const {
+        data: searchData,
+        // isSearchPending,
+        // isSearchError,
+        // refetchSearch,
+        // fetchSearchNextPage,
+        // hasSearchNextPage,
+        // isSearchFetchingNextPage,
+    } = useInfiniteQuery({
+        queryKey: ["search", searchQuery],
+        // enabled: false,
+        enabled: searchQuery.length > 0,    // TODO: searchQuery 타입에 따라 enable 조건이 변경되어야 함.
+        queryFn: ({pageParam, queryKey}) => {
+            const [, q] = queryKey
+            return getSearchResults(q, pageParam)
+        },
+        initialPageParam: "1",
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
+    })
+
+    const searchResults = searchData?.pages.flatMap((page) => page.results) ?? [];
+
     return (
         <>
             <PageTitleBox>
@@ -106,11 +132,21 @@ const ProjectListPage = () => {
                         <FeatherIcon icon="plus" />
                     </PlusBox>
                 )}
-                <Search />
+                <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
             </PageTitleBox>
 
             {isPending && <SkeletonProjectList />}
             {isError && <ErrorProjectList refetch={() => refetch()} />}
+
+            {/* Search 관련 부분 */}
+            <SearchResultContainer>
+                {searchResults.map((project) =>
+                    <SearchResultBox key={project.id}>
+                        {project.name} + " " + {project.type}
+                    </SearchResultBox>
+                )}
+            </SearchResultContainer>
+            {/* Search 관련 부분 끝 */}
 
             <DndProvider options={HTML5toTouch}>
                 {displayProjects.map((project) => (
@@ -200,6 +236,16 @@ const ProjectCreateText = styled.div`
     font-weight: medium;
     color: ${(p) => p.theme.textColor};
     margin-top: 0em;
+`
+
+const SearchResultContainer = styled.div`
+    border: solid black;
+
+    display: flex;
+    flex-direction: column;
+`
+
+const SearchResultBox = styled.div`
 `
 
 export default ProjectListPage

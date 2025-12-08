@@ -1,50 +1,24 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react"
+import { ChangeEvent, useRef, useState } from "react"
 
-import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
-
-import PageTitle from "@components/common/PageTitle"
-
-import {
-    type Project,
-    getSearchResults
-} from "@api/search.api"
-
-import { getPageFromURL } from "@utils/pagination"
-import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
 
-const Search = () => {
+interface SearchProps {
+    searchQuery: string
+    setSearchQuery: React.Dispatch<React.SetStateAction<string>>
+}
+
+const Search = ({searchQuery, setSearchQuery}: SearchProps) => {
     const { t } = useTranslation("translation", { keyPrefix: "search" })
 
     const [searchInput, setSearchInput] = useState("")
-    const [searchQuery, setSearchQuery] = useState("")
+    
 
     const inputRef = useRef<HTMLInputElement>(null)
     const debounceTimerRef = useRef<number | null>(null)
     const lastSearchRef = useRef<{ q: string; ts: number } | null>(null)
-
-    const {
-        data,
-        isPending,
-        isError,
-        refetch,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
-    } = useInfiniteQuery({
-        queryKey: ["search", searchQuery],
-        // enabled: false,
-        enabled: searchQuery.length > 0,    // TODO: searchQuery 타입에 따라 enable 조건이 변경되어야 함.
-        queryFn: ({pageParam, queryKey}) => {
-            const [, q] = queryKey
-            return getSearchResults(q, pageParam)
-        },
-        initialPageParam: "1",
-        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
-    })
 
     // temporary stub
     const handleExecuteSearch = (query: string) => {
@@ -63,8 +37,6 @@ const Search = () => {
         lastSearchRef.current = { q: query, ts: now }
 
         setSearchQuery(query)
-
-        console.log(data)
     }
 
     // Start input process
