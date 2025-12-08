@@ -3,7 +3,6 @@ from rest_framework import serializers
 from .models import Project
 from users.serializers import UserSerializer
 
-
 class ProjectSerializer(serializers.ModelSerializer):
     user = UserSerializer(
         default=serializers.CurrentUserDefault(),
@@ -47,5 +46,10 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class ProjectSerializerForUserProjectList(serializers.ModelSerializer):
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
+        model = Project
+        exclude = ()
+
+class ProjectSearchSerializer(serializers.ModelSerializer):
+    class Meta:
         model = Project
         exclude = ()

@@ -2,9 +2,12 @@ from rest_framework import mixins, generics, status
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.filters import SearchFilter
+
+from django.db.models import (Q)
 
 from .models import Project
-from .serializers import ProjectSerializer, ProjectSerializerForUserProjectList
+from .serializers import ProjectSerializer, ProjectSerializerForUserProjectList, ProjectSearchSerializer
 from .exceptions import ProjectNameDuplicate
 
 from api.permissions import IsUserOwner
@@ -109,3 +112,28 @@ class ProjectReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
         Project.objects.bulk_update(projects, ["order"])
 
         return Response(status=status.HTTP_200_OK)
+
+class ProjectSearchPagination(PageNumberPagination):
+    page_size = 20
+
+# 나중에 검색 결과 창에서 수정도 할 거면 mixins.ListModelMixin, generics.GenericAPIView 로 변경
+class ProjectSearchView(generics.ListAPIView):
+    serializer_class = ProjectSearchSerializer
+    pagination_class = ProjectSearchPagination
+
+    search_fields = ["name"]
+
+    def get_queryset(self, **kwargs):
+        qs = Project.objects.all()
+        query = self.request.query_params.get("query")
+
+        print(query)
+
+        if query:
+            qs = qs.filter(
+                Q(name__icontains=query)
+            )
+        
+        return qs
+
+        # return Response(serializer.data, status=status.HTTP_200_OK)

@@ -1,7 +1,16 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react"
 
+import { useInfiniteQuery } from "@tanstack/react-query"
 import styled, { useTheme } from "styled-components"
 
+import PageTitle from "@components/common/PageTitle"
+
+import {
+    type Project,
+    getSearchResults
+} from "@api/search.api"
+
+import { getPageFromURL } from "@utils/pagination"
 import useScreenType, { ifMobile } from "@utils/useScreenType"
 
 import FeatherIcon from "feather-icons-react"
@@ -10,15 +19,38 @@ import { useTranslation } from "react-i18next"
 const Search = () => {
     const { t } = useTranslation("translation", { keyPrefix: "search" })
 
+    const [searchInput, setSearchInput] = useState("")
     const [searchQuery, setSearchQuery] = useState("")
 
     const inputRef = useRef<HTMLInputElement>(null)
     const debounceTimerRef = useRef<number | null>(null)
     const lastSearchRef = useRef<{ q: string; ts: number } | null>(null)
 
+    const {
+        data,
+        isPending,
+        isError,
+        refetch,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
+        queryKey: ["search", searchQuery],
+        // enabled: false,
+        enabled: searchQuery.length > 0,    // TODO: searchQuery 타입에 따라 enable 조건이 변경되어야 함.
+        queryFn: ({pageParam, queryKey}) => {
+            const [, q] = queryKey
+            return getSearchResults(q, pageParam)
+        },
+        initialPageParam: "1",
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
+    })
+
     // temporary stub
     const handleExecuteSearch = (query: string) => {
         const now = Date.now()
+        
+        setSearchInput(query)
 
         // 최근 같은 쿼리로 서칭되면 무시 (중복 방지)
         // TODO: ref 대신 실 search 천에 퀴리만 이전과 비교하며, 같은 쿼리에 새로운 결과를 얻고 싶어하는 경우를 고려할 것.
@@ -30,8 +62,9 @@ const Search = () => {
         }
         lastSearchRef.current = { q: query, ts: now }
 
-        console.log(query)
         setSearchQuery(query)
+
+        console.log(data)
     }
 
     // Start input process
@@ -41,8 +74,7 @@ const Search = () => {
 
     // Edit query
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const trimmed = e.target.value.trim()
-        setSearchQuery(trimmed)
+        setSearchInput(e.target.value)
 
         // Debounce
         if (debounceTimerRef.current !== null) {
@@ -50,14 +82,15 @@ const Search = () => {
         }
 
         debounceTimerRef.current = window.setTimeout(() => {
+            const trimmed = e.target.value.trim()
             handleExecuteSearch(trimmed)
-        }, 1500)
+        }, 1000)
     }
 
     // End and search
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key == "Enter") {
-            const trimed = searchQuery.trim()
+            const trimed = searchInput.trim()
             handleExecuteSearch(trimed)
         }
     }
@@ -76,17 +109,15 @@ const Search = () => {
                 />
             </SearchIcon>
 
-            {
-                <InputBox
-                    ref={inputRef}
-                    type="text"
-                    placeholder={t("placeholder")}
-                    value={searchQuery}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    onBlur={handleBlur}
-                />
-            }
+            <InputBox
+                ref={inputRef}
+                type="text"
+                placeholder={t("placeholder")}
+                value={searchInput}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                onBlur={handleBlur}
+            />
         </SearchWrapper>
     )
 }
