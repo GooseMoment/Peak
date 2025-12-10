@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react"
 
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
 import PageTitle from "@components/common/PageTitle"
@@ -98,6 +98,7 @@ const ProjectListPage = () => {
     // Search
     const [searchQuery, setSearchQuery] = useState("")
 
+    /*
     const {
         data: searchData,
         // isSearchPending,
@@ -108,8 +109,8 @@ const ProjectListPage = () => {
         // isSearchFetchingNextPage,
     } = useInfiniteQuery({
         queryKey: ["search", searchQuery],
-        // enabled: false,
-        enabled: searchQuery.length > 0,    // TODO: searchQuery 타입에 따라 enable 조건이 변경되어야 함.
+        enabled: false,//
+        // enabled: searchQuery.length > 0,    // TODO: searchQuery 타입에 따라 enable 조건이 변경되어야 함.
         queryFn: ({pageParam, queryKey}) => {
             const [, q] = queryKey
             return getSearchResults(q, pageParam)
@@ -117,8 +118,22 @@ const ProjectListPage = () => {
         initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
+*/
+    const {
+        data: searchData
+    } = useQuery({
+        queryKey: ["search", searchQuery],
+        // enabled: false,
+        enabled: searchQuery.length > 0,
+        queryFn: ({queryKey}) => {
+            const [, q] = queryKey
+            return getSearchResults(q)
+        }
+    })
 
-    const searchResults = searchData?.pages.flatMap((page) => page.results) ?? [];
+    // const searchResults = searchData?.pages.flatMap((page) => page.results) ?? [];
+    const searchResults = searchData
+    console.log(searchResults)
 
     return (
         <>
@@ -140,11 +155,20 @@ const ProjectListPage = () => {
 
             {/* Search 관련 부분 */}
             <SearchResultContainer>
+            {/*
                 {searchResults.map((project) =>
                     <SearchResultBox key={project.id}>
                         {project.name} + " " + {project.type}
                     </SearchResultBox>
                 )}
+            */}
+                {searchResults && Object.entries(searchResults).map(([type, resultsArray]) => (
+                    resultsArray && resultsArray.map((result) => 
+                        <SearchResultBox key={result.id}>
+                            {type + ": " + result.name}
+                        </SearchResultBox>
+                    )
+                ))}
             </SearchResultContainer>
             {/* Search 관련 부분 끝 */}
 

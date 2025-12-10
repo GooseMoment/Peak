@@ -2,12 +2,14 @@ from rest_framework import mixins, generics, status
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.filters import SearchFilter
+from rest_framework.views import APIView
 
-from django.db.models import (Q)
+from django.db.models import Q, F, Value
 
 from .models import Project
-from .serializers import ProjectSerializer, ProjectSerializerForUserProjectList, ProjectSearchSerializer
+from drawers.models import Drawer
+from tasks.models import Task
+from .serializers import ProjectSerializer, ProjectSerializerForUserProjectList, ProjectSearchSerializer, DrawerSearchSerializer, TaskSearchSerializer
 from .exceptions import ProjectNameDuplicate
 
 from api.permissions import IsUserOwner
@@ -116,24 +118,39 @@ class ProjectReorderView(mixins.UpdateModelMixin, generics.GenericAPIView):
 class ProjectSearchPagination(PageNumberPagination):
     page_size = 20
 
-# 나중에 검색 결과 창에서 수정도 할 거면 mixins.ListModelMixin, generics.GenericAPIView 로 변경
-class ProjectSearchView(generics.ListAPIView):
-    serializer_class = ProjectSearchSerializer
-    pagination_class = ProjectSearchPagination
+# 하나의 view에서 여러 serializer를 부를 거라 복잡해도 그냥 APIView가 적합할 거 같음
+# 파라미터 종류가 많아지면 django-filter를 적극적으로 고려해 보자...
+class ProjectSearchView(APIView):
+    def get(self, request, *args, **kwargs):
+        q = request.query_params.get("query", "").strip()
 
-    search_fields = ["name"]
+        # query가 비어있으면 빈 결과 반환
+        # TODO: 나중에 프로젝트 페이지와 합치게 되면 전부 보이는 걸로 바뀌어야 할 지도?
+        if not q:
+            return Response({
+                "projects": [],
+                "drawers": [],
+                "tasks": [],
+            })
 
-    def get_queryset(self, **kwargs):
-        qs = Project.objects.all()
-        query = self.request.query_params.get("query")
+        project_qs = Project.objects.filter(
+            Q(name__icontains=q)
+        )
 
-        print(query)
+        drawer_qs = Drawer.objects.filter(
+            Q(name__icontains=q)
+        )
 
-        if query:
-            qs = qs.filter(
-                Q(name__icontains=query)
-            )
-        
-        return qs
+        task_qs = Task.objects.filter(
+            Q(name__icontains=q)
+        )
 
-        # return Response(serializer.data, status=status.HTTP_200_OK)
+        project_data = ProjectSearchSerializer(project_qs, many=True).data
+        drawer_data = DrawerSearchSerializer(drawer_qs, many=True).data
+        task_data = TaskSearchSerializer(task_qs, many=True).data
+
+        return Response({
+            "projects": project_data,
+            "drawers": drawer_data,
+            "tasks": task_data,
+        })

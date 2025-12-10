@@ -17,10 +17,11 @@ export interface Project extends Base {
 
 export type ProjectType = "inbox" | "regular" | "goal"
 
-export const getSearchResults = async (query: string, page: string) => {
+//export const getSearchResults = async (query: string, page: string) => {
+export const getSearchResults = async (query: string) => {
     const search = query
-    const res = await client.get<PaginationData<Project>>(`projects/search/`, {
-        params: { search, query, page },
+    const res = await client.get(`projects/search/`, {
+        params: { search, query},
     })
 
     return res.data
