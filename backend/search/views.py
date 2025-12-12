@@ -10,6 +10,7 @@ from projects.models import Project
 from drawers.models import Drawer
 from tasks.models import Task
 from .serializers import ProjectSearchSerializer, DrawerSearchSerializer, TaskSearchSerializer
+from .service import global_search
 from projects.exceptions import ProjectNameDuplicate
 
 from api.permissions import IsUserOwner
@@ -29,7 +30,6 @@ class ProjectSearchView(APIView):
     def get(self, request, *args, **kwargs):
         q = request.query_params.get("query", "").strip()
 
-        print(q)
         # query가 비어있으면 빈 결과 반환
         # TODO: 나중에 프로젝트 페이지와 합치게 되면 전부 보이는 걸로 바뀌어야 할 지도?
         if not q:
@@ -50,7 +50,7 @@ class ProjectSearchView(APIView):
         task_qs = Task.objects.filter(
             Q(name__icontains=q)
         )
-        
+
         project_data = ProjectSearchSerializer(project_qs, many=True).data
         drawer_data = DrawerSearchSerializer(drawer_qs, many=True).data
         task_data = TaskSearchSerializer(task_qs, many=True).data
@@ -60,3 +60,30 @@ class ProjectSearchView(APIView):
             "drawers": drawer_data,
             "tasks": task_data,
         })
+
+# GlobalSearchView는 pagination X
+class GlobalSearchView(APIView):
+    def get(self, request, *args, **kwargs):
+        query = request.query_params.get("query", "").strip()
+        # bitmask: project / drawer / task
+        scope = request.query_params.get("scope", "7").strip()
+
+        try:
+            scope = int(scope)
+        except ValueError:
+            return Response(
+                {"detail": "search_range must be an integer"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # query가 비어있으면 빈 결과 반환
+        if not query:
+            return Response({
+                "projects": [],
+                "drawers": [],
+                "tasks": [],
+            })
+
+        results = global_search(query, scope)
+
+        return Response(results)

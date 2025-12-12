@@ -21,7 +21,7 @@ export type ProjectType = "inbox" | "regular" | "goal"
 export const getSearchResults = async (query: string) => {
     const search = query
     const res = await client.get(`search/`, {
-        params: { search, query},
+        params: { search },
     })
 
     return res.data
