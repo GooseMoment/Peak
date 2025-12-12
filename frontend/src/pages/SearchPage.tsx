@@ -3,11 +3,11 @@ import { useCallback, useMemo, useState } from "react"
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import Search from "@components/search/Search"
 import PageTitle from "@components/common/PageTitle"
 import ErrorProjectList from "@components/errors/ErrorProjectList"
 import ProjectName from "@components/project/ProjectName"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
-import Search from "@components/project/search/Search"
 import SkeletonProjectList from "@components/project/skeletons/SkeletonProjectList"
 
 import { getSearchResults } from "@api/search.api"

@@ -20,7 +20,7 @@ export type ProjectType = "inbox" | "regular" | "goal"
 //export const getSearchResults = async (query: string, page: string) => {
 export const getSearchResults = async (query: string) => {
     const search = query
-    const res = await client.get(`projects/search/`, {
+    const res = await client.get(`search/`, {
         params: { search, query},
     })
 
