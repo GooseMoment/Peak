@@ -64,7 +64,7 @@ class ProjectSearchView(APIView):
 # GlobalSearchView는 pagination X
 class GlobalSearchView(APIView):
     def get(self, request, *args, **kwargs):
-        query = request.query_params.get("query", "").strip()
+        query = request.query_params.get("keyword", "").strip()
         # bitmask: project / drawer / task
         scope = request.query_params.get("scope", "7").strip()
 
@@ -79,11 +79,10 @@ class GlobalSearchView(APIView):
         # query가 비어있으면 빈 결과 반환
         if not query:
             return Response({
-                "projects": [],
-                "drawers": [],
-                "tasks": [],
+                "projects": {"data": [], "count": 0},
+                "drawers": {"data": [], "count": 0},
+                "tasks": {"data": [], "count": 0},
             })
-
         results = global_search(query, scope)
 
         return Response(results)

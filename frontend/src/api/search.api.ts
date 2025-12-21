@@ -3,25 +3,28 @@ import type { Base, PaginationData, Privacy } from "@api/common"
 import type { User } from "@api/users.api"
 
 import type { PaletteColorName } from "@assets/palettes"
+import { Project } from "@api/projects.api"
+import { Drawer } from "@api/drawers.api"
+import { Task } from "@api/tasks.api"
 
-export interface Project extends Base {
-    name: string
-    user: User
-    order: number
-    privacy: Privacy | null
-    color: PaletteColorName
-    type: ProjectType
-    completed_task_count: number
-    uncompleted_task_count: number
+type ResultBlock<T> = {
+    data: T[]
+    count: number
+}
+
+export interface SearchResponse {
+    project: ResultBlock<Project>
+    drawer: ResultBlock<Drawer>
+    task: ResultBlock<Task>
 }
 
 export type ProjectType = "inbox" | "regular" | "goal"
 
-//export const getSearchResults = async (query: string, page: string) => {
-export const getSearchResults = async (query: string) => {
-    const search = query
+//export const getGlobalSearchResults = async (query: string, page: string) => {
+export const getGlobalSearchResults = async (query: string) => {
+    const keyword = query
     const res = await client.get(`search/`, {
-        params: { search },
+        params: { keyword },
     })
 
     return res.data

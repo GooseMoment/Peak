@@ -6,6 +6,7 @@ from tasks.models import Task
 from .serializers import ProjectSearchSerializer, DrawerSearchSerializer, TaskSearchSerializer
 
 SCOPE_BITMASK = {"task": 1, "drawer": 2, "project": 4}
+SEARCH_PREVIEW_LIMIT = 4
 
 def global_search(query, scope):
     results = dict()
@@ -13,17 +14,22 @@ def global_search(query, scope):
     targets = {
         "task": {"model": Task, "serializer": TaskSearchSerializer},
         "drawer": {"model": Drawer, "serializer": DrawerSearchSerializer},
-        "project": {"model": Project, "serializer": ProjectSearchSerializer}
+        "project": {"model": Project, "serializer": ProjectSearchSerializer},
     }
 
-    for scope, value in targets.items():
-        if scope & SCOPE_BITMASK[scope]:
+    for key, value in targets.items():
+        if scope & SCOPE_BITMASK[key]:
             query_set = value["model"].objects.filter(
                 Q(name__icontains=query)
             )
-            data = value["serializer"](query_set, many=True).data
-            results[scope] = data
-        else:
-            results[scope] = []
+            count = query_set.count()
+            
+            if count > SEARCH_PREVIEW_LIMIT:
+                query_set = query_set[:SEARCH_PREVIEW_LIMIT]
 
+            data = value["serializer"](query_set, many=True).data
+            results[key] = {"data": data, "count": count}
+        else:
+            results[key] = {"data": [], "count": 0}
+    
     return results

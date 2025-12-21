@@ -10,7 +10,7 @@ import ProjectName from "@components/project/ProjectName"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
 import SkeletonProjectList from "@components/project/skeletons/SkeletonProjectList"
 
-import { getSearchResults } from "@api/search.api"
+import GlobalSearchResults from "@components/search/GlobalSearchResults"
 import {
     type Project,
     getProjectList,
@@ -28,6 +28,7 @@ import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
 import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
+import { getGlobalSearchResults, SearchResponse } from "@api/search.api"
 
 const SearchPage = () => {
     const { t } = useTranslation("translation")
@@ -127,13 +128,12 @@ const SearchPage = () => {
         enabled: searchQuery.length > 0,
         queryFn: ({queryKey}) => {
             const [, q] = queryKey
-            return getSearchResults(q)
+            return getGlobalSearchResults(q)
         }
     })
-
+    console.log(searchData)
     // const searchResults = searchData?.pages.flatMap((page) => page.results) ?? [];
-    const searchResults = searchData
-    console.log(searchResults)
+    const searchResults: SearchResponse = searchData
 
     return (
         <>
@@ -155,20 +155,7 @@ const SearchPage = () => {
 
             {/* Search 관련 부분 */}
             <SearchResultContainer>
-            {/*
-                {searchResults.map((project) =>
-                    <SearchResultBox key={project.id}>
-                        {project.name} + " " + {project.type}
-                    </SearchResultBox>
-                )}
-            */}
-                {searchResults && Object.entries(searchResults).map(([type, resultsArray]) => (
-                    resultsArray && resultsArray.map((result) => 
-                        <SearchResultBox key={result.id}>
-                            {type + ": " + result.name}
-                        </SearchResultBox>
-                    )
-                ))}
+                <GlobalSearchResults searchResults={searchResults} />
             </SearchResultContainer>
             {/* Search 관련 부분 끝 */}
 
