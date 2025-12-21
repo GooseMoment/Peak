@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react"
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 import { SearchResponse } from "@api/search.api"
+import { ProjectResultBox } from "@components/search/ResultBox"
 
 type InfoKey = "project" | "drawer" | "task"
 const sectionOrder: InfoKey[] = ["project", "drawer", "task"]
@@ -14,6 +15,10 @@ const GlobalSearchResults = ({ searchResults }: {searchResults: SearchResponse})
     ) : 0
 
     if(!searchResults?.project) return
+
+    const projectSection = searchResults["project"]
+    const drawerSection = searchResults["drawer"]
+    const taskSection = searchResults["task"]
 
     return (
         totalCount === 0 ? (
@@ -31,12 +36,23 @@ const GlobalSearchResults = ({ searchResults }: {searchResults: SearchResponse})
                         ))
                     )
                 })}
+
+                <SectionContainer>
+                    {projectSection?.data.map((project, index: number) => (
+                        <ProjectResultBox key={index} project={project} />
+                    ))}
+                </SectionContainer>
             </ResultsContainer>
         )
     )
 }
 
 const ResultsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+
+const SectionContainer = styled.div`
     display: flex;
     flex-direction: column;
 `

@@ -119,6 +119,8 @@ const SearchPage = () => {
         initialPageParam: "1",
         getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
     })
+        
+    // const searchResults = searchData?.pages.flatMap((page) => page.results) ?? [];
 */
     const {
         data: searchData
@@ -132,7 +134,6 @@ const SearchPage = () => {
         }
     })
     console.log(searchData)
-    // const searchResults = searchData?.pages.flatMap((page) => page.results) ?? [];
     const searchResults: SearchResponse = searchData
 
     return (
