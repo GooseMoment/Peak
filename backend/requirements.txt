@@ -1,16 +1,16 @@
-Django==4.2.26
+Django==4.2.27
 django-cors-headers==4.9.0
 django-types==0.22.0
 djangorestframework==3.16.1
 djangorestframework-types==0.9.0
-psycopg-binary==3.2.13
-psycopg==3.2.13
+psycopg-binary==3.3.2
+psycopg==3.3.2
 gunicorn==23.0.0
-boto3==1.41.3
+boto3==1.42.22
 django-storages==1.14.6
-pillow==12.0.0 # required by models.ImageField 
+pillow==12.1.0 # required by models.ImageField 
 django-redis==6.0.0
-pywebpush==2.1.0
+pywebpush==2.2.0
 django-rest-knox==5.0.2
 ua-parser[basic]>=1.0.1
 emoji==2.15.0
