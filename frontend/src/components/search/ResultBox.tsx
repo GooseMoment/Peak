@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 
 import styled from "styled-components"
@@ -8,8 +7,11 @@ import ProjectNameBox, {
     NameText,
     TypeText,
 } from "@components/project/ProjectNameBox"
+import DrawerBox, { DrawerName } from "@components/drawers/DrawerBox"
+import PrivacyIcon from "@components/project/common/PrivacyIcon"
 
-import { type Project } from "@api/projects.api"
+import { Project } from "@api/projects.api"
+import { DrawerSearchResult } from "@api/search.api"
 
 import { usePaletteColor } from "@assets/palettes"
 
@@ -50,5 +52,29 @@ export const ProjectResultBox = ({ project } : { project: Project }) => {
         </ProjectNameBox>
     )
 }
+
+export const DrawerResultBox = ({ drawer } : { drawer: DrawerSearchResult }) => {
+    const color = usePaletteColor(drawer.color)
+
+    return (
+        <DrawerBox
+            $color={color}
+            $isDragging={false}
+            $isDraggable={true}>
+            <DrawerTitleBox>
+                <DrawerName $color={color}>{drawer.name}</DrawerName>
+                <PrivacyIcon privacy={drawer.privacy} color={color} />
+            </DrawerTitleBox>
+            {/* DrawerIcons */}
+        </DrawerBox>
+    )
+}
+
+// TODO: components/drawers/DrawerBlock.tsx와 중복됨
+// -> DrawerBlock에서 export하는 방식 괜찮을까? 문제는 없는데 사소하단 느낌이 듦...
+const DrawerTitleBox = styled.div`
+    display: flex;
+    align-items: center;
+`
 
 export default ResultBox

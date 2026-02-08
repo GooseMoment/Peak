@@ -43,7 +43,7 @@ class ProjectSearchView(APIView):
             Q(name__icontains=q)
         )
 
-        drawer_qs = Drawer.objects.filter(
+        drawer_qs = Drawer.objects.select_related("project").filter(
             Q(name__icontains=q)
         )
 

@@ -10,6 +10,8 @@ class ProjectSearchSerializer(serializers.ModelSerializer):
         exclude = ()
 
 class DrawerSearchSerializer(serializers.ModelSerializer):
+    color = serializers.CharField(source="project.color", read_only=True)
+
     class Meta:
         model = Drawer
         exclude = ()

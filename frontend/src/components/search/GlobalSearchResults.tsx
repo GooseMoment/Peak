@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from "react"
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 import { SearchResponse } from "@api/search.api"
-import { ProjectResultBox } from "@components/search/ResultBox"
+import { ProjectResultBox, DrawerResultBox } from "@components/search/ResultBox"
 
 type InfoKey = "project" | "drawer" | "task"
 const sectionOrder: InfoKey[] = ["project", "drawer", "task"]
@@ -40,6 +40,12 @@ const GlobalSearchResults = ({ searchResults }: {searchResults: SearchResponse})
                 <SectionContainer>
                     {projectSection?.data.map((project, index: number) => (
                         <ProjectResultBox key={index} project={project} />
+                    ))}
+                </SectionContainer>
+
+                <SectionContainer>
+                    {drawerSection?.data.map((drawer, index: number) => (
+                        <DrawerResultBox key={index} drawer={drawer} />
                     ))}
                 </SectionContainer>
             </ResultsContainer>

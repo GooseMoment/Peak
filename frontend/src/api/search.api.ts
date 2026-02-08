@@ -7,6 +7,10 @@ import { Project } from "@api/projects.api"
 import { Drawer } from "@api/drawers.api"
 import { Task } from "@api/tasks.api"
 
+export interface DrawerSearchResult extends Project {
+    color: PaletteColorName
+}
+
 type ResultBlock<T> = {
     data: T[]
     count: number
@@ -14,7 +18,7 @@ type ResultBlock<T> = {
 
 export interface SearchResponse {
     project: ResultBlock<Project>
-    drawer: ResultBlock<Drawer>
+    drawer: ResultBlock<DrawerSearchResult>
     task: ResultBlock<Task>
 }
 
