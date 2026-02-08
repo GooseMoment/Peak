@@ -3,10 +3,7 @@ import { useCallback, useMemo, useState } from "react"
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 import { SearchResponse } from "@api/search.api"
-import { ProjectResultBox, DrawerResultBox } from "@components/search/ResultBox"
-
-type InfoKey = "project" | "drawer" | "task"
-const sectionOrder: InfoKey[] = ["project", "drawer", "task"]
+import { ProjectResultBox, DrawerResultBox, TaskResultBox } from "@components/search/ResultBox"
 
 const GlobalSearchResults = ({ searchResults }: {searchResults: SearchResponse}) => {
     const totalCount = searchResults ? Object.values(searchResults).reduce(
@@ -25,18 +22,6 @@ const GlobalSearchResults = ({ searchResults }: {searchResults: SearchResponse})
             "검색 결과가 없습니다."
         ):(
             <ResultsContainer>
-                {sectionOrder.map((key) => {
-                    const section = searchResults[key]
-                    if (section.count === 0) return <ResultBlockBox key={key}/>
-                    return (
-                        section.data.map((value, index: number) => (
-                            <ResultBox key={index}>
-                                {key + ": " + value.name}
-                            </ResultBox>
-                        ))
-                    )
-                })}
-
                 <SectionContainer>
                     {projectSection?.data.map((project, index: number) => (
                         <ProjectResultBox key={index} project={project} />
@@ -46,6 +31,12 @@ const GlobalSearchResults = ({ searchResults }: {searchResults: SearchResponse})
                 <SectionContainer>
                     {drawerSection?.data.map((drawer, index: number) => (
                         <DrawerResultBox key={index} drawer={drawer} />
+                    ))}
+                </SectionContainer>
+
+                <SectionContainer>
+                    {taskSection?.data.map((task, index: number) => (
+                        <TaskResultBox key={index} task={task} />
                     ))}
                 </SectionContainer>
             </ResultsContainer>

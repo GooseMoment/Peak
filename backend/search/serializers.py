@@ -17,6 +17,8 @@ class DrawerSearchSerializer(serializers.ModelSerializer):
         exclude = ()
 
 class TaskSearchSerializer(serializers.ModelSerializer):
+    color = serializers.CharField(source="drawer.project.color", read_only=True)
+
     class Meta:
         model = Task
         exclude = ()

@@ -7,7 +7,11 @@ import { Project } from "@api/projects.api"
 import { Drawer } from "@api/drawers.api"
 import { Task } from "@api/tasks.api"
 
-export interface DrawerSearchResult extends Project {
+export interface DrawerSearchResult extends Drawer {
+    color: PaletteColorName
+}
+
+export type TaskSearchResult = Task & {
     color: PaletteColorName
 }
 
@@ -19,7 +23,7 @@ type ResultBlock<T> = {
 export interface SearchResponse {
     project: ResultBlock<Project>
     drawer: ResultBlock<DrawerSearchResult>
-    task: ResultBlock<Task>
+    task: ResultBlock<TaskSearchResult>
 }
 
 export type ProjectType = "inbox" | "regular" | "goal"
@@ -27,7 +31,7 @@ export type ProjectType = "inbox" | "regular" | "goal"
 //export const getGlobalSearchResults = async (query: string, page: string) => {
 export const getGlobalSearchResults = async (query: string) => {
     const keyword = query
-    const res = await client.get(`search/`, {
+    const res = await client.get<SearchResponse>(`search/`, {
         params: { keyword },
     })
 

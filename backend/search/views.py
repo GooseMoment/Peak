@@ -47,7 +47,7 @@ class ProjectSearchView(APIView):
             Q(name__icontains=q)
         )
 
-        task_qs = Task.objects.filter(
+        task_qs = Task.objects.select_related("drawer__project").filter(
             Q(name__icontains=q)
         )
 
