@@ -133,7 +133,6 @@ const SearchPage = () => {
             return getGlobalSearchResults(q)
         }
     })
-    console.log(searchData)
     const searchResults: SearchResponse = searchData
 
     return (
@@ -200,10 +199,11 @@ const SearchPage = () => {
 
 const PageTitleBox = styled.div`
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 `
 
 const PlusBox = styled.div`
+    margin-top: 0.3em;
     margin-left: 0.8em;
     padding-bottom: 0.8em;
     cursor: pointer;

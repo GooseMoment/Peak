@@ -73,28 +73,44 @@ const Search = ({searchQuery, setSearchQuery}: SearchProps) => {
     }
 
     return (
-        <SearchWrapper>
-            <SearchIcon>
-                <FeatherIcon
-                    icon="search"
-                    onClick={handleClick}
-                />
-            </SearchIcon>
+        <SearchContainer>
+            <SearchBox>
+                <SearchIcon>
+                    <FeatherIcon
+                        icon="search"
+                        onClick={handleClick}
+                    />
+                </SearchIcon>
 
-            <InputBox
-                ref={inputRef}
-                type="text"
-                placeholder={t("placeholder")}
-                value={searchInput}
-                onChange={handleChange}
-                onKeyDown={handleKeyDown}
-                onBlur={handleBlur}
-            />
-        </SearchWrapper>
+                <InputBox
+                    ref={inputRef}
+                    type="text"
+                    placeholder={t("placeholder")}
+                    value={searchInput}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    onBlur={handleBlur}
+                />
+            </SearchBox>
+            <FiltersContainer>
+                <FilterBox>123</FilterBox>
+                <FilterBox>123</FilterBox>
+                <FilterBox>123</FilterBox>
+                <FilterBox>123</FilterBox>
+            </FiltersContainer>
+        </SearchContainer>
     )
 }
 
-const SearchWrapper = styled.div`
+const SearchContainer = styled.div`
+    flex: 1;
+    margin-top: 0.3em;
+
+    display: flex;
+    flex-direction: column;
+`
+
+const SearchBox = styled.div`
     flex: 1;
 
     display: flex;
@@ -118,6 +134,18 @@ const InputBox = styled.input`
 
     min-width: 0;
     font-size: 1em;
+`
+
+const FiltersContainer = styled.div`
+    margin-left: 0.5em;
+
+    display: flex;
+`
+
+const FilterBox = styled.div`
+    border: 1.5px solid ${(p) => p.theme.textColor};
+    border-radius: 16px;
+    padding: 0.5em 0.75em;
 `
 
 export default Search
