@@ -4,6 +4,7 @@ import styled, { useTheme } from "styled-components"
 
 import FeatherIcon from "feather-icons-react"
 import { useTranslation } from "react-i18next"
+import Filters, { type FilterValues } from "@components/search/Filters"
 
 interface SearchProps {
     searchQuery: string
@@ -19,6 +20,22 @@ const Search = ({searchQuery, setSearchQuery}: SearchProps) => {
     const inputRef = useRef<HTMLInputElement>(null)
     const debounceTimerRef = useRef<number | null>(null)
     const lastSearchRef = useRef<{ q: string; ts: number } | null>(null)
+
+    const [filterValues, setFilterValues] = useState<FilterValues>({ project: "", drawer: "", date: "" })
+
+//     const queryString = useMemo(() => {
+//   const params = new URLSearchParams()
+
+//   if (filters.keyword) {
+//     params.append("keyword", filters.keyword)
+//   }
+
+//   filters.tags.forEach(tag => {
+//     params.append("tag", tag)
+//   })
+
+//   return params.toString()
+// }, [filters])
 
     // temporary stub
     const handleExecuteSearch = (query: string) => {
@@ -92,12 +109,7 @@ const Search = ({searchQuery, setSearchQuery}: SearchProps) => {
                     onBlur={handleBlur}
                 />
             </SearchBox>
-            <FiltersContainer>
-                <FilterBox>123</FilterBox>
-                <FilterBox>123</FilterBox>
-                <FilterBox>123</FilterBox>
-                <FilterBox>123</FilterBox>
-            </FiltersContainer>
+            <Filters filterValues={filterValues} setFilterValues={setFilterValues} />
         </SearchContainer>
     )
 }
@@ -134,18 +146,6 @@ const InputBox = styled.input`
 
     min-width: 0;
     font-size: 1em;
-`
-
-const FiltersContainer = styled.div`
-    margin-left: 0.5em;
-
-    display: flex;
-`
-
-const FilterBox = styled.div`
-    border: 1.5px solid ${(p) => p.theme.textColor};
-    border-radius: 16px;
-    padding: 0.5em 0.75em;
 `
 
 export default Search
