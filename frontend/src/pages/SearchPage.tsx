@@ -1,14 +1,16 @@
 import { useCallback, useMemo, useState } from "react"
 
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 import styled from "styled-components"
 
+import Search from "@components/search/Search"
 import PageTitle from "@components/common/PageTitle"
 import ErrorProjectList from "@components/errors/ErrorProjectList"
 import ProjectName from "@components/project/ProjectName"
 import ProjectEdit from "@components/project/edit/ProjectEdit"
 import SkeletonProjectList from "@components/project/skeletons/SkeletonProjectList"
 
+import GlobalSearchResults from "@components/search/GlobalSearchResults"
 import {
     type Project,
     getProjectList,
@@ -26,8 +28,9 @@ import { ImpressionArea } from "@toss/impression-area"
 import FeatherIcon from "feather-icons-react"
 import { DndProvider } from "react-dnd-multi-backend"
 import { useTranslation } from "react-i18next"
+import { getGlobalSearchResults, SearchResponse } from "@api/search.api"
 
-const ProjectListPage = () => {
+const SearchPage = () => {
     const { t } = useTranslation("translation")
 
     const modal = useModal()
@@ -93,6 +96,45 @@ const ProjectListPage = () => {
         setTempProjectOrder([])
     }, [projects, displayProjects, mutateAsync])
 
+    // Search
+    const [searchQuery, setSearchQuery] = useState("")
+
+    /*
+    const {
+        data: searchData,
+        // isSearchPending,
+        // isSearchError,
+        // refetchSearch,
+        // fetchSearchNextPage,
+        // hasSearchNextPage,
+        // isSearchFetchingNextPage,
+    } = useInfiniteQuery({
+        queryKey: ["search", searchQuery],
+        enabled: false,//
+        // enabled: searchQuery.length > 0,    // TODO: searchQuery 타입에 따라 enable 조건이 변경되어야 함.
+        queryFn: ({pageParam, queryKey}) => {
+            const [, q] = queryKey
+            return getSearchResults(q, pageParam)
+        },
+        initialPageParam: "1",
+        getNextPageParam: (lastPage) => getPageFromURL(lastPage.next),
+    })
+        
+    // const searchResults = searchData?.pages.flatMap((page) => page.results) ?? [];
+*/
+    const {
+        data: searchData
+    } = useQuery({
+        queryKey: ["search", searchQuery],
+        // enabled: false,
+        enabled: searchQuery.length > 0,
+        queryFn: ({queryKey}) => {
+            const [, q] = queryKey
+            return getGlobalSearchResults(q)
+        }
+    })
+    const searchResults: SearchResponse = searchData
+
     return (
         <>
             <PageTitleBox>
@@ -105,10 +147,17 @@ const ProjectListPage = () => {
                         <FeatherIcon icon="plus" />
                     </PlusBox>
                 )}
+                <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
             </PageTitleBox>
 
             {isPending && <SkeletonProjectList />}
             {isError && <ErrorProjectList refetch={() => refetch()} />}
+
+            {/* Search 관련 부분 */}
+            <SearchResultContainer>
+                <GlobalSearchResults searchResults={searchResults} />
+            </SearchResultContainer>
+            {/* Search 관련 부분 끝 */}
 
             <DndProvider options={HTML5toTouch}>
                 {displayProjects.map((project) => (
@@ -150,10 +199,11 @@ const ProjectListPage = () => {
 
 const PageTitleBox = styled.div`
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 `
 
 const PlusBox = styled.div`
+    margin-top: 0.3em;
     margin-left: 0.8em;
     padding-bottom: 0.8em;
     cursor: pointer;
@@ -200,4 +250,14 @@ const ProjectCreateText = styled.div`
     margin-top: 0em;
 `
 
-export default ProjectListPage
+const SearchResultContainer = styled.div`
+    border: solid black;
+
+    display: flex;
+    flex-direction: column;
+`
+
+const SearchResultBox = styled.div`
+`
+
+export default SearchPage

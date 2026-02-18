@@ -427,6 +427,14 @@
             "results_title": "‘{{query}}’에 대한 검색 결과"
         }
     },
+    "search": {
+        "placeholder": "할 일을 검색해 보세요",
+        "filter": {
+            "project": "프로젝트",
+            "drawer": "서랍",
+            "date": "날짜"
+        }
+    },
     "update": {
         "message": "새로운 업데이트가 있습니다.",
         "update": "업데이트",

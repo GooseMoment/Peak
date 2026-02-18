@@ -427,6 +427,14 @@
             "results_title": "Search results for ‘{{query}}’"
         }
     },
+    "search": {
+        "placeholder": "Search your task",
+        "filter": {
+            "project": "project",
+            "drawer": "drawer",
+            "date": "date"
+        }
+    },
     "update": {
         "message": "New update available.",
         "update": "Update",

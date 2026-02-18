@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
 from .models import Project
+from drawers.models import Drawer
+from tasks.models import Task
 from users.serializers import UserSerializer
-
 
 class ProjectSerializer(serializers.ModelSerializer):
     user = UserSerializer(
@@ -49,3 +50,19 @@ class ProjectSerializerForUserProjectList(serializers.ModelSerializer):
     class Meta:  # pyright: ignore [reportIncompatibleVariableOverride] -- ModelSerializer.Meta
         model = Project
         exclude = ()
+
+class ProjectSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        exclude = ()
+
+class DrawerSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Drawer
+        exclude = ()
+
+class TaskSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        exclude = ()
+

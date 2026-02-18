@@ -72,6 +72,14 @@ const Middle = () => {
                 </ItemBox>
             </SidebarLink>
 
+            <SidebarLink to="search" key="search" end>
+                <ItemBox $collapsed={isCollapsed}>
+                    <FeatherIcon icon="archive" />
+                    {isCollapsed ? null : t("sidebar.projects")}
+                </ItemBox>
+            </SidebarLink>
+
+
             <SidebarLink to="projects" key="projects" end>
                 <ItemBox $collapsed={isCollapsed}>
                     <FeatherIcon icon="archive" />
